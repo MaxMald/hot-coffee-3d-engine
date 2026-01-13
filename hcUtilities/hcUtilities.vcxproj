@@ -161,6 +161,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcMatrix2.h" />
+    <ClInclude Include="include\hc\hcMatrix3.h" />
+    <ClInclude Include="include\hc\hcMatrix4.h" />
     <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcUtilitiesPrerequisites.h" />
     <ClInclude Include="include\hc\hcVector2.h" />
@@ -168,9 +171,7 @@
     <ClInclude Include="include\hc\hcUtilitiesLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcTypeAliases.h" />
     <ClInclude Include="include\hc\hcVector3.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\hkVector2.cpp" />
+    <ClInclude Include="include\hc\hcVector4.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

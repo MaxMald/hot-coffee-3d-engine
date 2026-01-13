@@ -17,7 +17,7 @@ namespace hc
    * (double).
    */
   template <typename T>
-  struct HC_UTILITY_EXPORT Vector3
+  struct Vector3
   {
     T x{};
     T y{};

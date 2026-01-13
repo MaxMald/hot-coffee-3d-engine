@@ -16,7 +16,7 @@ namespace hc
    * float).
    */
   template <typename T>
-  struct HC_UTILITY_EXPORT Rect
+  struct Rect
   {
     T x{};
     T y{};
