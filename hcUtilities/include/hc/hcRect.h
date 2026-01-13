@@ -24,19 +24,26 @@ namespace hc
     T height{};
 
     constexpr Rect();
+    constexpr Rect(const Rect& other);
     constexpr Rect(const Vector2<T>& position, const Vector2<T>& size);
     constexpr Rect(T xVal, T yVal, T widthVal, T heightVal);
+
+    constexpr bool operator==(const Rect& rhs) const;
+    constexpr bool operator!=(const Rect& rhs) const;
 
     constexpr T area() const;
     constexpr bool contains(T px, T py) const;
     constexpr bool contains(const Vector2<T>& point) const;
-    constexpr bool operator==(const Rect& rhs) const;
-    constexpr bool operator!=(const Rect& rhs) const;
   };
 
-  // Definitions (must remain in header for templates)
   template <typename T>
   constexpr Rect<T>::Rect() = default;
+
+  template<typename T>
+  inline constexpr Rect<T>::Rect(const Rect& other) :
+    x(other.x), y(other.y), width(other.width), height(other.height)
+  {
+  }
 
   template<typename T>
   inline constexpr Rect<T>::Rect(const Vector2<T>& position, const Vector2<T>& size)
