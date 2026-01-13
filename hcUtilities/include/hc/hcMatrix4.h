@@ -2,16 +2,13 @@
 
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcVector4.h"
-#include <cmath>
 
 namespace hc
 {
   /**
    * @brief 4x4 matrix class for linear algebra operations.
    *
-   * Represents a 4x4 matrix with float components. Provides arithmetic operations,
-   * matrix-vector multiplication, transposition, inversion, and determinant calculation.
-   * Includes static methods for common matrices (Identity, Zero).
+   * Represents a 4x4 matrix with float components.
    *
    * Members can be accessed via m[4][4], m00/m01/.../m33, or as four Vector4f rows.
    */

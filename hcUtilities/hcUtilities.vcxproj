@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcColor.h" />
     <ClInclude Include="include\hc\hcMatrix2.h" />
     <ClInclude Include="include\hc\hcMatrix3.h" />
     <ClInclude Include="include\hc\hcMatrix4.h" />

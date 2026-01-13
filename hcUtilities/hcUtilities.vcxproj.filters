@@ -51,5 +51,8 @@
     <ClInclude Include="include\hc\hcMatrix4.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

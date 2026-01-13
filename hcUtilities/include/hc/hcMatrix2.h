@@ -24,7 +24,7 @@ namespace hc
       struct
       {
         float m00, m01,
-          m10, m11;
+              m10, m11;
       };
 
       Vector2f mRow[2];
