@@ -145,7 +145,7 @@ namespace hc
   Vector3<T> Vector3<T>::normalized() const
   {
     T len = length();
-    if (len == T{}) 
+    if (len == T{})
       return *this;
     return *this / len;
   }
@@ -173,7 +173,7 @@ namespace hc
     return vec * scalar;
   }
 
-  using Vector3i = Vector3<int>;
+  using Vector3i = Vector3<Int32>;
   using Vector3f = Vector3<float>;
   using Vector3d = Vector3<double>;
 }

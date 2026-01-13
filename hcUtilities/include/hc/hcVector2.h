@@ -88,25 +88,29 @@ namespace hc
   template <typename T>
   constexpr Vector2<T>& Vector2<T>::operator+=(const Vector2& rhs)
   {
-    x += rhs.x; y += rhs.y; return *this;
+    x += rhs.x; y += rhs.y;
+    return *this;
   }
 
   template <typename T>
   constexpr Vector2<T>& Vector2<T>::operator-=(const Vector2& rhs)
   {
-    x -= rhs.x; y -= rhs.y; return *this;
+    x -= rhs.x; y -= rhs.y;
+    return *this;
   }
 
   template <typename T>
   constexpr Vector2<T>& Vector2<T>::operator*=(T scalar)
   {
-    x *= scalar; y *= scalar; return *this;
+    x *= scalar; y *= scalar;
+    return *this;
   }
 
   template <typename T>
   constexpr Vector2<T>& Vector2<T>::operator/=(T scalar)
   {
-    x /= scalar; y /= scalar; return *this;
+    x /= scalar; y /= scalar;
+    return *this;
   }
 
   template <typename T>
@@ -137,7 +141,7 @@ namespace hc
   Vector2<T> Vector2<T>::normalized() const
   {
     T len = length();
-    if (len == T{}) 
+    if (len == T{})
       return *this;
     return *this / len;
   }
@@ -152,7 +156,7 @@ namespace hc
     return vec * scalar;
   }
 
-  using Vector2i = Vector2<int>;
+  using Vector2i = Vector2<Int32>;
   using Vector2f = Vector2<float>;
   using Vector2d = Vector2<double>;
 }

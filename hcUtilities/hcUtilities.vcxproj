@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcUtilitiesPrerequisites.h" />
     <ClInclude Include="include\hc\hcVector2.h" />
     <ClInclude Include="include\hc\hcPlatformConfiguration.h" />
