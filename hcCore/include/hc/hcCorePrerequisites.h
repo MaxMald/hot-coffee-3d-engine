@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcPlatformConfiguration.h"
+#include "hc/hcCoreLibraryConfiguration.h"
 #include "hc/hcTypeAliases.h"
-#include "hc/hcUtilitiesLibraryConfiguration.h"
 #include "hc/hcExceptionsAliases.h"
+#include "hc/hcString.h"
