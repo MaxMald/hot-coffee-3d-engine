@@ -1,5 +1,8 @@
 #include "hc/hcHotCoffeeEngine.h"
 
+#include "hc/hcDependencyContainer.h"
+#include "hc/hcCoreDependenciesRegister.h"
+
 namespace hc
 {
   HotCoffeeEngine* HotCoffeeEngine::_Instance = nullptr;
@@ -40,10 +43,20 @@ namespace hc
 
   void HotCoffeeEngine::onPrepare()
   {
+    prepareAndResolveDependencyContainer();
   }
 
   void HotCoffeeEngine::onShutdown()
   {
+  }
+
+  void HotCoffeeEngine::prepareAndResolveDependencyContainer()
+  {
+    DependencyContainer dependencyContainer;
+    coreDependenciesRegister::registerDependencies(dependencyContainer);
+    // add more dependencies here if needed
+    
+    dependencyContainer.resolveAllDependencies();
   }
 
   HotCoffeeEngine::HotCoffeeEngine()

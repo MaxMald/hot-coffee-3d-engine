@@ -19,6 +19,9 @@ namespace hc
     void onPrepare();
     void onShutdown();
 
+    void prepareAndResolveDependencyContainer();
+    void resolveDependencies();
+
     HotCoffeeEngine();
     ~HotCoffeeEngine();
   };

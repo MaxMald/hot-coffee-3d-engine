@@ -22,10 +22,28 @@
     <Filter Include="Header Files\window">
       <UniqueIdentifier>{1e236cde-cb2b-4c69-a602-3a924b970546}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\plugin">
+      <UniqueIdentifier>{127ec7ae-2682-4f88-acab-06cf781d207c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\platform">
+      <UniqueIdentifier>{66bfa468-1b23-4155-8d58-8cd558be8d2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dependencyContainer">
+      <UniqueIdentifier>{7c027793-2bf4-4259-b710-e0a1a9143faa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dependencyContainer">
+      <UniqueIdentifier>{e19cd9ea-fcc7-42d8-9384-7c58832af58e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\plugin\factories">
+      <UniqueIdentifier>{37597108-ca52-476f-b324-63fded102584}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp">
+      <Filter>Source Files\dependencyContainer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +67,30 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcIWindowFactory.h">
       <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIPlugin.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIPluginSlot.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcPluginManager.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcPlatformType.h">
+      <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCoreDependenciesRegister.h">
+      <Filter>Header Files\dependencyContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIPluginSlotFactory.h">
+      <Filter>Header Files\plugin\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h">
+      <Filter>Header Files\plugin\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIDependencyResolvable.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -162,10 +162,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcColor.h" />
+    <ClInclude Include="include\hc\hcDependencyContainer.h" />
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
+    <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcMatrix2.h" />
     <ClInclude Include="include\hc\hcMatrix3.h" />
     <ClInclude Include="include\hc\hcMatrix4.h" />
+    <ClInclude Include="include\hc\hcNonCopyable.h" />
     <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcString.h" />
     <ClInclude Include="include\hc\hcUtilitiesPrerequisites.h" />

@@ -165,16 +165,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />
     <ClInclude Include="include\hc\hcCoreLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcCorePrerequisites.h" />
+    <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
+    <ClInclude Include="include\hc\hcIPlugin.h" />
+    <ClInclude Include="include\hc\hcIPluginSlot.h" />
+    <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
     <ClInclude Include="include\hc\hcIRendered.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
+    <ClInclude Include="include\hc\hcPlatformType.h" />
+    <ClInclude Include="include\hc\hcPluginManager.h" />
+    <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
