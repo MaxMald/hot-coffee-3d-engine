@@ -41,7 +41,11 @@ namespace hc::editor
     m_started = true;
 
     HotCoffeeEngine::Prepare();
-    HotCoffeeEngine::Instance().start();
+
+    HotCoffeeEngineSettings settings;
+    settings.windowSettings.title = "HotCoffee Editor";
+
+    HotCoffeeEngine::Instance().start(settings);
     HotCoffeeEngine::Shutdown();
   }
 

@@ -177,6 +177,7 @@
     <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />
     <ClInclude Include="include\hc\hcCoreLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcCorePrerequisites.h" />
+    <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />

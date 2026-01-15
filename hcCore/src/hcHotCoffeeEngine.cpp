@@ -4,6 +4,8 @@
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcCoreDependenciesRegister.h"
 #include "hc/hcPluginConnectionHelper.h"
+#include "hc/hcWindowManager.h"
+#include "hc/hcIWindow.h"
 
 namespace hc
 {
@@ -43,7 +45,19 @@ namespace hc
     return m_pluginManager;
   }
 
-  void HotCoffeeEngine::start()
+  WindowManager& HotCoffeeEngine::getWindowManager()
+  {
+    if (m_windowManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "WindowManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_windowManager;
+  }
+
+  void HotCoffeeEngine::start(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)
       return;
@@ -54,6 +68,12 @@ namespace hc
     pluginConnectionHelper::connectWindowSfmlPlugin(m_pluginManager);
 
     prepareAndResolveDependencyContainer();
+
+    m_windowManager->createWindow(settings.windowSettings);
+    SharedPtr<IWindow> window = m_windowManager->getWindow();
+
+    while (window->isOpen())
+    { }
   }
 
   void HotCoffeeEngine::onPrepare()
@@ -63,7 +83,10 @@ namespace hc
 
   void HotCoffeeEngine::onShutdown()
   {
-    // Clean up resources here if needed
+    m_dependencyContainer.clear();
+
+    m_windowManager = nullptr;
+
     m_pluginManager.closeAll();
     LogService::Shutdown();
   }
@@ -74,6 +97,8 @@ namespace hc
     m_pluginManager.addDependenciesFromPlugins(m_dependencyContainer);
 
     m_dependencyContainer.resolveAllDependencies();
+
+    m_windowManager = m_dependencyContainer.resolve<WindowManager>();
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :

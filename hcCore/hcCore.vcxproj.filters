@@ -128,5 +128,8 @@
     <ClInclude Include="include\hc\hcWindowManager.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
