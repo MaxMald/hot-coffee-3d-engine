@@ -8,6 +8,7 @@ namespace hc
   class IPlugin;
   class IPluginSlot;
   class IPluginSlotFactory;
+  class DependencyContainer;
 
   class PluginManager : public NonCopyable
   {
@@ -69,6 +70,12 @@ namespace hc
     * the plug-in doesn't exists.
     */
     SharedPtr<IPlugin> getPlugin(const String& _key);
+
+    /**
+    * Add dependencies provided by all connected plug-ins to the given
+    * container.
+    */
+    void addDependenciesFromPlugins(DependencyContainer& container);
 
   private:
     SharedPtr<IPluginSlotFactory> m_pluginSlotFactory;

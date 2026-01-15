@@ -1,6 +1,8 @@
 #include "hc/hcPluginManager.h"
 #include "hc/hcIPluginSlotFactory.h"
 #include "hc/hcIPluginSlot.h"
+#include "hc/hcIPlugin.h"
+#include "hc/hcDependencyContainer.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 #include "hc/hcWindowsPluginSlotFactory.h"
@@ -111,5 +113,20 @@ namespace hc
       return nullptr;
 
     return pPluginSlot->getPluginPtr();
+  }
+
+  void PluginManager::addDependenciesFromPlugins(DependencyContainer& container)
+  {
+    for (auto& [key, pPluginSlot] : m_pluginSlots)
+    {
+      if (pPluginSlot)
+      {
+        SharedPtr<IPlugin> pPlugin = pPluginSlot->getPluginPtr();
+        if (pPlugin)
+        {
+          pPlugin->addDependencies(container);
+        }
+      }
+    }
   }
 }

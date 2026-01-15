@@ -20,5 +20,6 @@ namespace hc
     void onConnect() override;
     void onClose() override;
     void* getData() override;
+    void addDependencies(DependencyContainer& container) override;
   };
 }

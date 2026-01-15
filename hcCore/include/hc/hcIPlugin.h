@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  class DependencyContainer;
+
   /**
   * Provides connection from a PluginManager to a DLL services.
   *
@@ -32,5 +34,10 @@ namespace hc
     * @return Wrapped data.
     */
     virtual void* getData() = 0;
+
+    /**
+    * Add dependencies provided by this plug-in to the given container.
+    */
+    virtual void addDependencies(DependencyContainer& container) = 0;
   };
 }

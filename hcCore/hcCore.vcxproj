@@ -189,6 +189,7 @@
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />
+    <ClInclude Include="include\hc\hcWindowSettings.h" />
     <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

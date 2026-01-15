@@ -116,5 +116,8 @@
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcWindowSettings.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

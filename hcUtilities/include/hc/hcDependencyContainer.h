@@ -68,6 +68,15 @@ namespace hc
       }
     }
 
+    /**
+     * @brief Clears all registered instances and resolvables.
+     */
+    void clear()
+    {
+      m_instances.clear();
+      m_resolvables.clear();
+    }
+
   private:
     UnorderedMap<TypeIndex, SharedPtr<void>> m_instances;
     Vector<SharedPtr<IDependencyResolvable>> m_resolvables;

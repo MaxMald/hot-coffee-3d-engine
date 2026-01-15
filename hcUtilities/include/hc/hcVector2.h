@@ -157,6 +157,7 @@ namespace hc
   }
 
   using Vector2i = Vector2<Int32>;
+  using Vector2u = Vector2<UInt32>;
   using Vector2f = Vector2<float>;
   using Vector2d = Vector2<double>;
 }

@@ -70,11 +70,10 @@ namespace hc
 
   void HotCoffeeEngine::prepareAndResolveDependencyContainer()
   {
-    DependencyContainer dependencyContainer;
-    coreDependenciesRegister::registerDependencies(dependencyContainer);
-    // add more dependencies here if needed
-    
-    dependencyContainer.resolveAllDependencies();
+    coreDependenciesRegister::registerDependencies(m_dependencyContainer);
+    m_pluginManager.addDependenciesFromPlugins(m_dependencyContainer);
+
+    m_dependencyContainer.resolveAllDependencies();
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :

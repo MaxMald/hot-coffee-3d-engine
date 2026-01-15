@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcPluginManager.h"
+#include "hc/hcDependencyContainer.h";
 
 namespace hc
 {
@@ -21,13 +22,14 @@ namespace hc
 
     bool m_started;
     PluginManager m_pluginManager;
+    DependencyContainer m_dependencyContainer;
+
+    HotCoffeeEngine();
+    ~HotCoffeeEngine();
 
     void onPrepare();
     void onShutdown();
 
-    void prepareAndResolveDependencyContainer();
-
-    HotCoffeeEngine();
-    ~HotCoffeeEngine();
+    void prepareAndResolveDependencyContainer();    
   };
 }

@@ -1,5 +1,7 @@
 #include "hc/hcWindowSfmlPlugin.h"
 #include "hc/hcLogService.h"
+#include "hc/hcDependencyContainer.h"
+#include "hc/hcSfmlWindowFactory.h"
 
 namespace hc
 {
@@ -33,5 +35,10 @@ namespace hc
   void* WindowSfmlPlugin::getData()
   {
     return nullptr;
+  }
+
+  void WindowSfmlPlugin::addDependencies(DependencyContainer& container)
+  {
+    container.registerType<SfmlWindowFactory>();
   }
 }
