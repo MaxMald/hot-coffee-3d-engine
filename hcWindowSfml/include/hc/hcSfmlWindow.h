@@ -10,19 +10,48 @@ namespace sf
 
 namespace hc
 {
+  /**
+   * @brief Implementation of IWindow using SFML's sf::Window.
+   */
   class SfmlWindow : public IWindow
   {
   public:
     SfmlWindow();
     virtual ~SfmlWindow();
 
+    /**
+     * @copydoc IWindow::create
+     */
     void create(const WindowSettings& settings) override;
+
+    /**
+     * @copydoc IWindow::destroy
+     */
     void destroy() override;
 
+    /**
+     * @copydoc IWindow::getSize
+     */
     Vector2u getSize() const override;
+
+    /**
+     * @copydoc IWindow::setSize
+     */
     void setSize(const Vector2u& size) override;
+
+    /**
+     * @copydoc IWindow::getPosition
+     */
     Vector2i getPosition() const override;
+
+    /**
+     * @copydoc IWindow::setPosition
+     */
     void setPosition(const Vector2i& position) override;
+
+    /**
+     * @copydoc IWindow::isOpen
+     */
     bool isOpen() const override;
 
   private:

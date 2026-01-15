@@ -52,7 +52,7 @@ namespace hc
       if (it != m_instances.end())
         return std::static_pointer_cast<T>(it->second);
 
-      return nullptr;
+      throw RuntimeErrorException("Type not registered in DependencyContainer.");
     }
 
     /**
