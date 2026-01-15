@@ -1,7 +1,10 @@
 #include "hc/hcPluginManager.h"
 #include "hc/hcIPluginSlotFactory.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcIPluginSlot.h"
+
+#if HC_PLATFORM == HC_PLATFORM_WIN32
+#include "hc/hcWindowsPluginSlotFactory.h"
+#endif
 
 namespace hc
 {
@@ -14,13 +17,13 @@ namespace hc
   {
   }
 
-  void PluginManager::resolveDependencies(DependencyContainer& container)
-  {
-    m_pluginSlotFactory = container.resolve<IPluginSlotFactory>();
-  }
-
   void PluginManager::init()
   {
+
+#if HC_PLATFORM == HC_PLATFORM_WIN32
+    m_pluginSlotFactory = MakeShared<WindowsPluginSlotFactory>();
+#endif
+
   }
 
   bool PluginManager::connectPlugin(

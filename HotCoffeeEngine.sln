@@ -19,6 +19,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcGraphicsOpenGL", "hcGraphicsOpenGL\hcGraphicsOpenGL.vcxproj", "{1DD701DE-F13F-483C-A0FE-BB034D4A953E}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcWindowSfml", "hcWindowSfml\hcWindowSfml.vcxproj", "{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1C9C9847-5705-44C7-AF7C-211C941411A9} = {1C9C9847-5705-44C7-AF7C-211C941411A9}
+		{FEB0E270-A347-437B-ADAC-6A910A8276B1} = {FEB0E270-A347-437B-ADAC-6A910A8276B1}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

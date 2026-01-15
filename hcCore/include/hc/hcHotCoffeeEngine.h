@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcPluginManager.h"
 
 namespace hc
 {
@@ -11,16 +12,20 @@ namespace hc
     static void Prepare();
     static void Shutdown();
 
+    const PluginManager& getPluginManager() const;
+
     void start();
 
   private:
     static HotCoffeeEngine* _Instance;
 
+    bool m_started;
+    PluginManager m_pluginManager;
+
     void onPrepare();
     void onShutdown();
 
     void prepareAndResolveDependencyContainer();
-    void resolveDependencies();
 
     HotCoffeeEngine();
     ~HotCoffeeEngine();

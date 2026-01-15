@@ -2,7 +2,7 @@
 #include "hc/hcDependencyContainer.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
-#include "hc/hcWindowsPluginSlotFactory.h"
+// include windows platform specific dependencies
 #endif
 
 #include "hc/hcPluginManager.h"
@@ -15,10 +15,10 @@ namespace hc
     {
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
-      dependencyContainer.registerType<WindowsPluginSlotFactory>();
+      // register windows specific dependencies
 #endif
 
-      dependencyContainer.registerType<PluginManager>();
+      // register common dependencies
     }
   }
 }

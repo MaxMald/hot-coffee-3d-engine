@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcNonCopyable.h"
-#include "hc/hcIDependencyResolvable.h"
 
 namespace hc
 {
@@ -10,15 +9,11 @@ namespace hc
   class IPluginSlot;
   class IPluginSlotFactory;
 
-  class PluginManager :
-    public NonCopyable,
-    public IDependencyResolvable
+  class PluginManager : public NonCopyable
   {
   public:
     PluginManager();
     ~PluginManager();
-
-    virtual void resolveDependencies(DependencyContainer& container) override;
 
     void init();
 

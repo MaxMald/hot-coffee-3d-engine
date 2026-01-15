@@ -3,6 +3,7 @@
 #include "hc/hcLogService.h"
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcCoreDependenciesRegister.h"
+#include "hc/hcPluginConnectionHelper.h"
 
 namespace hc
 {
@@ -37,20 +38,33 @@ namespace hc
     }
   }
 
+  const PluginManager& HotCoffeeEngine::getPluginManager() const
+  {
+    return m_pluginManager;
+  }
+
   void HotCoffeeEngine::start()
   {
+    if (m_started)
+      return;
 
+    m_started = true;
+
+    m_pluginManager.init();
+    pluginConnectionHelper::connectWindowSfmlPlugin(m_pluginManager);
+
+    prepareAndResolveDependencyContainer();
   }
 
   void HotCoffeeEngine::onPrepare()
   {
     LogService::Prepare();
-    prepareAndResolveDependencyContainer();
   }
 
   void HotCoffeeEngine::onShutdown()
   {
     // Clean up resources here if needed
+    m_pluginManager.closeAll();
     LogService::Shutdown();
   }
 
@@ -63,7 +77,8 @@ namespace hc
     dependencyContainer.resolveAllDependencies();
   }
 
-  HotCoffeeEngine::HotCoffeeEngine()
+  HotCoffeeEngine::HotCoffeeEngine() :
+    m_started(false)
   {
   }
 

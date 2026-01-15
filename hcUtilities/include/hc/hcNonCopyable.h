@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hc/hcUtilitiesPrerequisites.h"
+
 namespace hc
 {
   /**

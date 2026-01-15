@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
   </ItemGroup>
   <ItemGroup>

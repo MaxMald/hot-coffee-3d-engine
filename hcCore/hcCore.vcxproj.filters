@@ -60,6 +60,9 @@
     <ClCompile Include="src\hcPluginManager.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcPluginConnectionHelper.cpp">
+      <Filter>Source Files\plugin</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -104,10 +107,13 @@
     <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h">
       <Filter>Header Files\plugin\factories</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcIDependencyResolvable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcWindowPluginSlot.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIDependencyResolvable.h">
+      <Filter>Header Files\dependencyContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcPluginConnectionHelper.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
   </ItemGroup>

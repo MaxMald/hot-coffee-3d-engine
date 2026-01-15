@@ -1,5 +1,8 @@
 #pragma once
 
+#include "hc/hcCorePrerequisites.h"
+#include "hc/hcNonCopyable.h"
+
 namespace hc
 {
   /**
@@ -8,7 +11,7 @@ namespace hc
   * The IPlugin is in charge of initialize and provides access to the library
   * services, also closes and free the memory when the plug-in is been closed.
   */
-  class IPlugin
+  class HC_CORE_EXPORT IPlugin : public NonCopyable
   {
   public:
     virtual ~IPlugin() = default;
