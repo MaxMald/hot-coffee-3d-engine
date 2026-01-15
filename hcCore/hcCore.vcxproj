@@ -177,6 +177,7 @@
     <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />
     <ClInclude Include="include\hc\hcCoreLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcCorePrerequisites.h" />
+    <ClInclude Include="include\hc\hcEvent.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
@@ -187,6 +188,8 @@
     <ClInclude Include="include\hc\hcIRendered.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
+    <ClInclude Include="include\hc\hcKeyboardKey.h" />
+    <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />

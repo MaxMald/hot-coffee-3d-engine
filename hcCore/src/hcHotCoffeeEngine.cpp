@@ -73,7 +73,15 @@ namespace hc
     SharedPtr<IWindow> window = m_windowManager->getWindow();
 
     while (window->isOpen())
-    { }
+    {
+      while (Optional<Event> event = window->pollEvent())
+      {
+        if (event->is<Event::Closed>())
+        {
+          window->destroy();
+        }
+      }
+    }
   }
 
   void HotCoffeeEngine::onPrepare()

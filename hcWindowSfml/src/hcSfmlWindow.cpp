@@ -2,6 +2,8 @@
 
 #include <SFML/Window.hpp>
 
+#include "hc/hcLogService.h"
+
 namespace hc
 {
   SfmlWindow::SfmlWindow()
@@ -83,5 +85,77 @@ namespace hc
   bool SfmlWindow::isOpen() const
   {
     return m_sfmlWindow ? m_sfmlWindow->isOpen() : false;
+  }
+
+  Optional<Event> SfmlWindow::pollEvent()
+  {
+    if (!m_sfmlWindow)
+      return Optional<Event>();
+
+    Optional<sf::Event> optSfmlEvent = m_sfmlWindow->pollEvent();
+    if (!optSfmlEvent.has_value())
+      return Optional<Event>();
+
+    return convertSfmlEvent(optSfmlEvent.value());
+  }
+
+  Optional<Event> SfmlWindow::convertSfmlEvent(const sf::Event& sfmlEvent) const
+  {
+    if (sfmlEvent.is<sf::Event::Closed>())
+    {
+      return Event(Event::Closed{});
+    }
+    else if (sfmlEvent.is<sf::Event::Resized>())
+    {
+      const auto& resized = sfmlEvent.getIf<sf::Event::Resized>();
+      return Event(Event::Resized{ Vector2u(resized->size.x, resized->size.y) });
+    }
+    else if (sfmlEvent.is<sf::Event::KeyPressed>())
+    {
+      const auto& key = sfmlEvent.getIf<sf::Event::KeyPressed>();
+      return Event(Event::KeyPressed{
+        static_cast<keyboardKey::Type>(key->code),
+        key->alt,
+        key->control,
+        key->shift,
+        key->system
+      });
+    }
+    else if (sfmlEvent.is<sf::Event::KeyReleased>())
+    {
+      const auto& key = sfmlEvent.getIf<sf::Event::KeyReleased>();
+      return Event(Event::KeyReleased{
+        static_cast<keyboardKey::Type>(key->code),
+        key->alt,
+        key->control,
+        key->shift,
+        key->system
+      });
+    }
+    else if (sfmlEvent.is<sf::Event::MouseButtonPressed>())
+    {
+      const auto& btn = sfmlEvent.getIf<sf::Event::MouseButtonPressed>();
+      return Event(Event::MouseButtonPressed{
+        static_cast<mouseButtonKey::Type>(btn->button),
+        Vector2i(btn->position.x, btn->position.y)
+      });
+    }
+    else if (sfmlEvent.is<sf::Event::MouseButtonReleased>())
+    {
+      const auto& btn = sfmlEvent.getIf<sf::Event::MouseButtonReleased>();
+      return Event(Event::MouseButtonReleased{
+        static_cast<mouseButtonKey::Type>(btn->button),
+        Vector2i(btn->position.x, btn->position.y)
+      });
+    }
+    else if (sfmlEvent.is<sf::Event::MouseMoved>())
+    {
+      const auto& move = sfmlEvent.getIf<sf::Event::MouseMoved>();
+      return Event(Event::MouseMoved{
+        Vector2i(move->position.x, move->position.y)
+      });
+    }
+
+    return Optional<Event>();
   }
 }

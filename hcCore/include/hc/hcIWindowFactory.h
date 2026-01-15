@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hc/hcCorePrerequisites.h"
 #include "hc/hcIWindow.h"
 
 namespace hc
@@ -10,7 +11,7 @@ namespace hc
    * Provides an abstract interface for creating window instances.
    * Implementations should return platform- or backend-specific IWindow objects.
    */
-  class IWindowFactory
+  class HC_CORE_EXPORT IWindowFactory
   {
   public:
     /**

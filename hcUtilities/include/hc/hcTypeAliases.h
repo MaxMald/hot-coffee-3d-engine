@@ -11,6 +11,8 @@
 #include <typeindex>
 #include <type_traits>
 #include <cmath>
+#include <variant>
+#include <optional>
 
 namespace hc
 {
@@ -51,6 +53,13 @@ namespace hc
   // Priority queue alias (max-heap by default). Customize Container and Compare if needed.
   template<typename T, typename Container = std::vector<T>, typename Compare = std::less<T>>
   using PriorityQueue = std::priority_queue<T, Container, Compare>;
+
+  // Variant and Optional aliases
+  template<typename... Types>
+  using Variant = std::variant<Types...>;
+
+  template<typename T>
+  using Optional = std::optional<T>;
 
   template<typename T, typename... Args>
   inline UniquePtr<T> MakeUnique(Args&&... args)

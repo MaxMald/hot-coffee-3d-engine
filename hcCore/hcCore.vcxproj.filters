@@ -131,5 +131,14 @@
     <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcEvent.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcKeyboardKey.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMouseButtonKey.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

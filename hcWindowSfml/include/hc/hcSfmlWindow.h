@@ -6,6 +6,7 @@
 namespace sf
 {
   class Window;
+  class Event;
 }
 
 namespace hc
@@ -54,7 +55,17 @@ namespace hc
      */
     bool isOpen() const override;
 
+    /**
+     * @copydoc IWindow::pollEvent
+     */
+    Optional<Event> pollEvent() override;
+
   private:
     SharedPtr<sf::Window> m_sfmlWindow;
+
+    /**
+     * @brief Converts an sf::Event to a hc::Event.
+     */
+    Optional<Event> convertSfmlEvent(const sf::Event& sfmlEvent) const;
   };
 }

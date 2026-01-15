@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcVector2.h"
 #include "hc/hcWindowSettings.h"
+#include "hc/hcEvent.h"
 
 namespace hc
 {
@@ -64,5 +65,13 @@ namespace hc
      * @return True if the window is open, false otherwise.
      */
     virtual bool isOpen() const = 0;
+
+    /**
+     * @brief Polls for the next event from the window's event queue.
+     *
+     * @return An optional Event if an event is available, std::nullopt
+     * otherwise.
+     */
+    virtual Optional<Event> pollEvent() = 0;
   };
 }
