@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcEditor", "hcEditor\hcEdit
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcGraphicsOpenGL", "hcGraphicsOpenGL\hcGraphicsOpenGL.vcxproj", "{1DD701DE-F13F-483C-A0FE-BB034D4A953E}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcWindowSfml", "hcWindowSfml\hcWindowSfml.vcxproj", "{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -58,6 +60,14 @@ Global
 		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x64.Build.0 = Release|x64
 		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x86.ActiveCfg = Release|Win32
 		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x86.Build.0 = Release|Win32
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Debug|x64.ActiveCfg = Debug|x64
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Debug|x64.Build.0 = Debug|x64
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Debug|x86.ActiveCfg = Debug|Win32
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Debug|x86.Build.0 = Debug|Win32
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x64.ActiveCfg = Release|x64
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x64.Build.0 = Release|x64
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x86.ActiveCfg = Release|Win32
+		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
