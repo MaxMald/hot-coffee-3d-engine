@@ -10,6 +10,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcCore", "hcCore\hcCore.vcx
 		{1C9C9847-5705-44C7-AF7C-211C941411A9} = {1C9C9847-5705-44C7-AF7C-211C941411A9}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcEditor", "hcEditor\hcEditor.vcxproj", "{9EDA9334-28A1-435C-85F7-19863D40B2F9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1C9C9847-5705-44C7-AF7C-211C941411A9} = {1C9C9847-5705-44C7-AF7C-211C941411A9}
+		{FEB0E270-A347-437B-ADAC-6A910A8276B1} = {FEB0E270-A347-437B-ADAC-6A910A8276B1}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcGraphicsOpenGL", "hcGraphicsOpenGL\hcGraphicsOpenGL.vcxproj", "{1DD701DE-F13F-483C-A0FE-BB034D4A953E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -34,6 +42,22 @@ Global
 		{FEB0E270-A347-437B-ADAC-6A910A8276B1}.Release|x64.Build.0 = Release|x64
 		{FEB0E270-A347-437B-ADAC-6A910A8276B1}.Release|x86.ActiveCfg = Release|Win32
 		{FEB0E270-A347-437B-ADAC-6A910A8276B1}.Release|x86.Build.0 = Release|Win32
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Debug|x64.ActiveCfg = Debug|x64
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Debug|x64.Build.0 = Debug|x64
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Debug|x86.ActiveCfg = Debug|Win32
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Debug|x86.Build.0 = Debug|Win32
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Release|x64.ActiveCfg = Release|x64
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Release|x64.Build.0 = Release|x64
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Release|x86.ActiveCfg = Release|Win32
+		{9EDA9334-28A1-435C-85F7-19863D40B2F9}.Release|x86.Build.0 = Release|Win32
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Debug|x64.ActiveCfg = Debug|x64
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Debug|x64.Build.0 = Debug|x64
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Debug|x86.Build.0 = Debug|Win32
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x64.ActiveCfg = Release|x64
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x64.Build.0 = Release|x64
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x86.ActiveCfg = Release|Win32
+		{1DD701DE-F13F-483C-A0FE-BB034D4A953E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

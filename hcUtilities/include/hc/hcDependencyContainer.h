@@ -29,6 +29,14 @@ namespace hc
     {
       auto instance = MakeShared<T>(std::forward<Args>(args)...);
       m_instances[typeid(T)] = instance;
+
+      // If T is derived from IDependencyResolvable, also store in resolvables
+      if constexpr (std::is_base_of_v<IDependencyResolvable, T>)
+      {
+        m_resolvables.push_back(
+          std::static_pointer_cast<IDependencyResolvable>(instance)
+        );
+      }
     }
 
     /**
@@ -53,10 +61,8 @@ namespace hc
      */
     void resolveAllDependencies()
     {
-      for (auto& [type, instance] : m_instances)
+      for (auto& resolvable : m_resolvables)
       {
-        auto resolvable = std::dynamic_pointer_cast<IDependencyResolvable>(instance);
-
         if (resolvable)
           resolvable->resolveDependencies(*this);
       }
@@ -64,5 +70,6 @@ namespace hc
 
   private:
     UnorderedMap<TypeIndex, SharedPtr<void>> m_instances;
+    Vector<SharedPtr<IDependencyResolvable>> m_resolvables;
   };
 }

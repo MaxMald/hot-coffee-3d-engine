@@ -37,6 +37,12 @@
     <Filter Include="Header Files\plugin\factories">
       <UniqueIdentifier>{37597108-ca52-476f-b324-63fded102584}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\plugin">
+      <UniqueIdentifier>{de0925ca-42c1-42e0-b14e-cba257ada51b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\plugin\fatories">
+      <UniqueIdentifier>{22fd5d02-1677-493c-aec6-f7f7fa7f81da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -44,6 +50,15 @@
     </ClCompile>
     <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp">
       <Filter>Source Files\dependencyContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp">
+      <Filter>Source Files\plugin\fatories</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcWindowPluginSlot.cpp">
+      <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcPluginManager.cpp">
+      <Filter>Source Files\plugin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +106,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcIDependencyResolvable.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcWindowPluginSlot.h">
+      <Filter>Header Files\plugin</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

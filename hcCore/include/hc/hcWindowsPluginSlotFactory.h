@@ -1,7 +1,8 @@
+#if HC_PLATFORM == HC_PLATFORM_WIN32
+
 #pragma once
 
 #include "hc/hcIPluginSlotFactory.h"
-
 
 namespace hc
 {
@@ -14,3 +15,5 @@ namespace hc
     SharedPtr<IPluginSlot> createPluginSlot() override;
   };
 }
+
+#endif // HC_PLATFORM == HC_PLATFORM_WIN32

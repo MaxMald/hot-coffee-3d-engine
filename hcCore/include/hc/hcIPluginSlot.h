@@ -50,7 +50,7 @@ namespace hc
     *
     * @return The pointer of the wrapped plug-in.
     */
-    virtual IPlugin* getPluginPtr() = 0;
+    virtual SharedPtr<IPlugin> getPluginPtr() = 0;
 
     /**
     * Safely disconnect this plug-in.

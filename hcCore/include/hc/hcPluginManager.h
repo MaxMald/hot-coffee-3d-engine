@@ -2,23 +2,25 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcNonCopyable.h"
+#include "hc/hcIDependencyResolvable.h"
 
 namespace hc
 {
   class IPlugin;
   class IPluginSlot;
+  class IPluginSlotFactory;
 
-  /**
-  * Manage different plug-ins.
-  */
-  class HC_CORE_EXPORT PluginManager : public NonCopyable
+  class PluginManager :
+    public NonCopyable,
+    public IDependencyResolvable
   {
   public:
     PluginManager();
     ~PluginManager();
 
+    virtual void resolveDependencies(DependencyContainer& container) override;
+
     void init();
-    void destroy();
 
     /**
     * Attempts to connect to the specified plug-in.
@@ -71,22 +73,10 @@ namespace hc
     * @return The pointer of the plug-in. This could return a null pointer if
     * the plug-in doesn't exists.
     */
-    IPlugin* getPlugin(const String& _key);
+    SharedPtr<IPlugin> getPlugin(const String& _key);
 
   private:
-
-    PluginManager& operator=(const PluginManager&) = delete;
-
-    /**
-    * Create a plug-in slot instance, corresponding to the actual platform.
-    *
-    * @return Pointer to a new plug-in slot instance.
-    */
-    IPluginSlot* createPluginSlot();
-
-    /**
-    * Table of plug-in slots.
-    */
-    Map<String, IPluginSlot*> _m_hPluginSlots;
+    SharedPtr<IPluginSlotFactory> m_pluginSlotFactory;
+    UnorderedMap<String, SharedPtr<IPluginSlot>> m_pluginSlots;
   };
 }

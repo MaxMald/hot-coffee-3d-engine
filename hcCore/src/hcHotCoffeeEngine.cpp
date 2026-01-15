@@ -1,5 +1,6 @@
 #include "hc/hcHotCoffeeEngine.h"
 
+#include "hc/hcLogService.h"
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcCoreDependenciesRegister.h"
 
@@ -43,11 +44,14 @@ namespace hc
 
   void HotCoffeeEngine::onPrepare()
   {
+    LogService::Prepare();
     prepareAndResolveDependencyContainer();
   }
 
   void HotCoffeeEngine::onShutdown()
   {
+    // Clean up resources here if needed
+    LogService::Shutdown();
   }
 
   void HotCoffeeEngine::prepareAndResolveDependencyContainer()

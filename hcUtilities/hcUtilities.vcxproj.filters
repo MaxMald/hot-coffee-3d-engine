@@ -19,6 +19,12 @@
     <Filter Include="Header Files\dependencyContainer">
       <UniqueIdentifier>{2d503e28-5cb2-4168-bd0e-190dd3dc6ade}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\logger">
+      <UniqueIdentifier>{9485f91a-3f15-4171-9c77-980852689b33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logger">
+      <UniqueIdentifier>{6f2f715c-78fa-41b7-a997-f052289e388a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\HC\hcVector2.h">
@@ -72,5 +78,16 @@
     <ClInclude Include="include\hc\hcIDependencyResolvable.h">
       <Filter>Header Files\dependencyContainer</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcLogService.h">
+      <Filter>Header Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcILogServiceListener.h">
+      <Filter>Header Files\logger</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\hcLogService.cpp">
+      <Filter>Source Files\logger</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ namespace hc
    *
    * Inherit from NonCopyable to make a class non-copyable.
    */
-  class NonCopyable
+  class HC_UTILITY_EXPORT NonCopyable
   {
   protected:
     NonCopyable() = default;
