@@ -39,6 +39,8 @@ namespace hc
 
   void WindowSfmlPlugin::addDependencies(DependencyContainer& container)
   {
-    container.registerType<SfmlWindowFactory>();
+    container.registerInstanceAsInterface<IWindowFactory, SfmlWindowFactory>(
+      MakeShared<SfmlWindowFactory>()
+    );
   }
 }

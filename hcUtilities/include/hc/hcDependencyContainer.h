@@ -18,16 +18,15 @@ namespace hc
     ~DependencyContainer() = default;
 
     /**
-     * @brief Registers an instance of type T, constructed with the given arguments.
-     *
+     * @brief Registers an instance of type T.
+     * 
      * @tparam T Type to register.
-     * @tparam Args Constructor argument types.
-     * @param args Arguments forwarded to T's constructor.
+     * 
+     * @param instance SharedPtr<T> instance to register.
      */
-    template<typename T, typename... Args>
-    void registerType(Args&&... args)
+    template<typename T>
+    void registerInstance(const SharedPtr<T>& instance)
     {
-      auto instance = MakeShared<T>(std::forward<Args>(args)...);
       m_instances[typeid(T)] = instance;
 
       // If T is derived from IDependencyResolvable, also store in resolvables
@@ -36,6 +35,27 @@ namespace hc
         m_resolvables.push_back(
           std::static_pointer_cast<IDependencyResolvable>(instance)
         );
+      }
+    }
+
+    /**
+     * @brief Registers an instance as a specific interface type.
+     *
+     * @tparam Interface Interface type to register as.
+     * @tparam T Concrete type of the instance.
+     * 
+     * @param instance SharedPtr<T> instance to register.
+     */
+    template<typename Interface, typename T>
+    void registerInstanceAsInterface(const SharedPtr<T>& instance)
+    {
+      static_assert(std::is_base_of_v<Interface, T>, "T must derive from Interface");
+      m_instances[typeid(Interface)] = std::static_pointer_cast<Interface>(instance);
+
+      // If Interface is IDependencyResolvable, add to resolvables
+      if constexpr (std::is_base_of_v<IDependencyResolvable, Interface>)
+      {
+        m_resolvables.push_back(std::static_pointer_cast<IDependencyResolvable>(instance));
       }
     }
 

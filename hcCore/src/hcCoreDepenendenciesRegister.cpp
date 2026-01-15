@@ -5,7 +5,7 @@
 // include windows platform specific dependencies
 #endif
 
-#include "hc/hcPluginManager.h"
+#include "hc/hcWindowManager.h"
 
 namespace hc
 {
@@ -18,7 +18,7 @@ namespace hc
       // register windows specific dependencies
 #endif
 
-      // register common dependencies
+      dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
     }
   }
 }

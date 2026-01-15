@@ -43,6 +43,9 @@
     <Filter Include="Source Files\plugin\fatories">
       <UniqueIdentifier>{22fd5d02-1677-493c-aec6-f7f7fa7f81da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\window">
+      <UniqueIdentifier>{bab97b46-08b9-4783-ba58-6bc2c12305c5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -62,6 +65,9 @@
     </ClCompile>
     <ClCompile Include="src\hcPluginConnectionHelper.cpp">
       <Filter>Source Files\plugin</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcWindowManager.cpp">
+      <Filter>Source Files\window</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +123,9 @@
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcWindowSettings.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcWindowManager.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
   </ItemGroup>
