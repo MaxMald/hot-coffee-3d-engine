@@ -186,7 +186,7 @@
     <ClInclude Include="include\hc\hcIPlugin.h" />
     <ClInclude Include="include\hc\hcIPluginSlot.h" />
     <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
-    <ClInclude Include="include\hc\hcIRendered.h" />
+    <ClInclude Include="include\hc\hcIDrawable.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />

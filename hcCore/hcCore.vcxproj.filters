@@ -89,7 +89,7 @@
     <ClInclude Include="include\hc\hcCorePrerequisites.h">
       <Filter>Header Files\configuration</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcIRendered.h">
+    <ClInclude Include="include\hc\hcIDrawable.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIGraphicsManager.h">

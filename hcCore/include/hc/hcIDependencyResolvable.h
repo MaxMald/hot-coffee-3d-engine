@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class DependencyContainer;
+  class HC_CORE_EXPORT DependencyContainer;
 
   /**
    * @brief Interface for objects that require dependency resolution.

@@ -15,21 +15,29 @@ namespace hc
     virtual ~OpenGlGraphicsManager();
 
     /**
+     * @copydoc IGraphicsManager::beginFrame
+     */
+    void beginFrame() override;
+
+    /**
+     * @copydoc IGraphicsManager::draw
+     */
+    void draw(IDrawable&) override;
+
+    /**
+     * @copydoc IGraphicsManager::endFrame
+     */
+    void endFrame(IWindow&) override;
+
+  private:
+    /**
      * @copydoc IGraphicsManager::init
      */
     void init() override;
 
     /**
-     * @copydoc IGraphicsManager::draw
-     */
-    void draw(IWindow&) override;
-
-    /**
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
-
-  private:
-    SharedPtr<IWindow> m_window;
   };
 }

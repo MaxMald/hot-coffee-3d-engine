@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcIWindow.h"
+#include "hc/hcIDrawable.h"
 
 namespace hc
 {
@@ -25,18 +26,23 @@ namespace hc
       );
     }
 
+    // Set up basic OpenGL state
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
   }
 
-  void OpenGlGraphicsManager::draw(IWindow& window)
+  void OpenGlGraphicsManager::draw(IDrawable& drawable)
   {
-    // Begin frame
+    drawable.draw(*this);
+  }
+
+  void OpenGlGraphicsManager::beginFrame()
+  {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  }
 
-    // Draw stuff
-
-    // End frame
+  void OpenGlGraphicsManager::endFrame(IWindow& window)
+  {
     window.swapBuffers();
   }
 

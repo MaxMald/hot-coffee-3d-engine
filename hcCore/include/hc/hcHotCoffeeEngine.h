@@ -21,7 +21,7 @@ namespace hc
     WindowManager& getWindowManager();
     IGraphicsManager& getGraphicsManager();
 
-    void start(const HotCoffeeEngineSettings& settings);
+    void init(const HotCoffeeEngineSettings& settings);
 
   private:
     static HotCoffeeEngine* _Instance;

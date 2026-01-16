@@ -1,6 +1,8 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 
 #include "hc/hcHotCoffeeEngine.h"
+#include "hc/hcWindowManager.h"
+#include "hc/hcIGraphicsManager.h"
 
 namespace hc::editor
 {
@@ -45,7 +47,32 @@ namespace hc::editor
     HotCoffeeEngineSettings settings;
     settings.windowSettings.title = "HotCoffee Editor";
 
-    HotCoffeeEngine::Instance().start(settings);
+    HotCoffeeEngine& engine = HotCoffeeEngine::Instance();
+    engine.init(settings);
+
+    IGraphicsManager& graphicsManager = engine.getGraphicsManager();
+    WindowManager& windowManager = engine.getWindowManager();
+    
+    SharedPtr<IWindow> window = windowManager.getWindow();
+    if (!window)
+      throw RuntimeErrorException("Failed to get main window.");
+
+    while (window->isOpen())
+    {
+      Optional<Event> eventOpt;
+      while ((eventOpt = window->pollEvent()))
+      { 
+        if (eventOpt->is<Event::Closed>())
+        {
+          window->destroy();
+        }
+      }
+
+      graphicsManager.beginFrame();
+      // Render
+      graphicsManager.endFrame(*window);
+    }
+
     HotCoffeeEngine::Shutdown();
   }
 

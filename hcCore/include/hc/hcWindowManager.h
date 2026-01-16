@@ -10,7 +10,9 @@ namespace hc
   class IWindowFactory;
   class IWindow;
 
-  class WindowManager : public IDependencyResolvable, public NonCopyable
+  class HC_CORE_EXPORT WindowManager :
+    public IDependencyResolvable,
+    public NonCopyable
   {
   public:
 
@@ -20,7 +22,7 @@ namespace hc
     SharedPtr<IWindow> getWindow() const;
 
     void resolveDependencies(DependencyContainer& container) override;
-    
+
     SharedPtr<IWindow> createWindow(const WindowSettings& settings);
     void destroyWindow();
 

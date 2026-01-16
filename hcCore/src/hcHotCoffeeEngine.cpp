@@ -70,19 +70,21 @@ namespace hc
     return *m_graphicsManager;
   }
 
-  void HotCoffeeEngine::start(const HotCoffeeEngineSettings& settings)
+  void HotCoffeeEngine::init(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)
       return;
 
     m_started = true;
 
+    // Plugin Manager Init
     m_pluginManager.init();
     pluginConnectionHelper::connectToPluginsFromSettings(
       m_pluginManager,
       settings.pluginManagerSettings
     );
 
+    // Resolve Dependencies
     prepareAndResolveDependencyContainer();
 
     // Window Creation
@@ -93,20 +95,6 @@ namespace hc
 
     // Graphics Init
     m_graphicsManager->init();
-
-    // Game Loop
-    while (window->isOpen())
-    {
-      while (Optional<Event> event = window->pollEvent())
-      {
-        if (event->is<Event::Closed>())
-        {
-          window->destroy();
-        }
-      }
-
-      m_graphicsManager->draw(*window);
-    }
   }
 
   void HotCoffeeEngine::onPrepare()
