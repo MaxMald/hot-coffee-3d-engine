@@ -193,6 +193,7 @@
     <ClInclude Include="include\hc\hcPlatformType.h" />
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />
+    <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
     <ClInclude Include="include\hc\hcWindowManager.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />
     <ClInclude Include="include\hc\hcWindowSettings.h" />

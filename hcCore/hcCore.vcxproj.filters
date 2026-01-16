@@ -140,5 +140,8 @@
     <ClInclude Include="include\hc\hcMouseButtonKey.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcPluginManagerSettings.h">
+      <Filter>Header Files\plugin</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

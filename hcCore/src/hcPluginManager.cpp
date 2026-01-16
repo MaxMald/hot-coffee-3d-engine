@@ -21,11 +21,9 @@ namespace hc
 
   void PluginManager::init()
   {
-
 #if HC_PLATFORM == HC_PLATFORM_WIN32
     m_pluginSlotFactory = MakeShared<WindowsPluginSlotFactory>();
 #endif
-
   }
 
   bool PluginManager::connectPlugin(

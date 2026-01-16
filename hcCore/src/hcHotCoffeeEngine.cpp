@@ -65,12 +65,19 @@ namespace hc
     m_started = true;
 
     m_pluginManager.init();
-    pluginConnectionHelper::connectWindowSfmlPlugin(m_pluginManager);
+    pluginConnectionHelper::connectToPluginsFromSettings(
+      m_pluginManager,
+      settings.pluginManagerSettings
+    );
 
     prepareAndResolveDependencyContainer();
 
+    // Window Creation
+
     m_windowManager->createWindow(settings.windowSettings);
     SharedPtr<IWindow> window = m_windowManager->getWindow();
+
+    // Game Loop
 
     while (window->isOpen())
     {
@@ -92,9 +99,7 @@ namespace hc
   void HotCoffeeEngine::onShutdown()
   {
     m_dependencyContainer.clear();
-
     m_windowManager = nullptr;
-
     m_pluginManager.closeAll();
     LogService::Shutdown();
   }

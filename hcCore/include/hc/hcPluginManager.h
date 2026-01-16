@@ -10,12 +10,18 @@ namespace hc
   class IPluginSlotFactory;
   class DependencyContainer;
 
+  /**
+  * Manages the lifecycle and dependencies of plugins within the system.
+  */
   class PluginManager : public NonCopyable
   {
   public:
     PluginManager();
     ~PluginManager();
 
+    /**
+     * Initializes the PluginManager.
+     */
     void init();
 
     /**
