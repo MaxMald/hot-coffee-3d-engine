@@ -51,7 +51,6 @@ namespace hc::editor
     engine.init(settings);
 
     IGraphicsManager& graphicsManager = engine.getGraphicsManager();
-
     WindowManager& windowManager = engine.getWindowManager();
     IWindow& window = windowManager.getWindow();
 
