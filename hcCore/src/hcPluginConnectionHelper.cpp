@@ -14,7 +14,8 @@ namespace hc
       if (settings.windowType == PluginManagerSettings::windowPluginType::SFML)
         connectWindowSfmlPlugin(pluginManager);
 
-      // Future plugin types can be connected here.
+      if (settings.graphicsType == PluginManagerSettings::graphicsPluginType::OPENGL)
+        connectGraphicsOpenGLPlugin(pluginManager);
     }
 
     void connectWindowSfmlPlugin(PluginManager& pluginManager)
@@ -24,6 +25,16 @@ namespace hc
         "hcWindowSfml" + String(HC_DYN_LIB_SUFIX),
         "createWindowSfmlPlugin",
         "destroyWindowSfmlPlugin"
+      );
+    }
+
+    void connectGraphicsOpenGLPlugin(PluginManager& pluginManager)
+    {
+      pluginManager.connectPlugin(
+        "GraphicsPlugin",
+        "hcGraphicsOpenGL" + String(HC_DYN_LIB_SUFIX),
+        "createGraphicsOpenGLPlugin",
+        "destroyGraphicsOpenGLPlugin"
       );
     }
   }

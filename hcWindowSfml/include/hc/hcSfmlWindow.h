@@ -60,6 +60,16 @@ namespace hc
      */
     Optional<Event> pollEvent() override;
 
+    /**
+     * @copydoc IWindow::getNativeHandle
+     */
+    WindowHandle getNativeHandle() const override;
+
+    /**
+     * @copydoc IWindow::swapBuffers
+     */
+    void swapBuffers() override;
+
   private:
     SharedPtr<sf::Window> m_sfmlWindow;
 

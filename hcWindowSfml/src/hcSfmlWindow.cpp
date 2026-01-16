@@ -99,6 +99,19 @@ namespace hc
     return convertSfmlEvent(optSfmlEvent.value());
   }
 
+  WindowHandle SfmlWindow::getNativeHandle() const
+  {
+    if (m_sfmlWindow)
+      return reinterpret_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
+    return nullptr;
+  }
+
+  void SfmlWindow::swapBuffers()
+  {
+    if (m_sfmlWindow)
+      m_sfmlWindow->display();
+  }
+
   Optional<Event> SfmlWindow::convertSfmlEvent(const sf::Event& sfmlEvent) const
   {
     if (sfmlEvent.is<sf::Event::Closed>())

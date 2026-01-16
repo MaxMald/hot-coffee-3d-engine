@@ -46,6 +46,12 @@
     <Filter Include="Source Files\window">
       <UniqueIdentifier>{bab97b46-08b9-4783-ba58-6bc2c12305c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\assets">
+      <UniqueIdentifier>{fb6178cc-f6e5-4e58-9a9f-cda598089171}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics">
+      <UniqueIdentifier>{70878ad2-813d-4d1a-bedb-f842fa1aa85b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -68,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="src\hcWindowManager.cpp">
       <Filter>Source Files\window</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcIGraphicsManager.cpp">
+      <Filter>Source Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcPluginManagerSettings.h">
       <Filter>Header Files\plugin</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcWindowHandle.h">
+      <Filter>Header Files\window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

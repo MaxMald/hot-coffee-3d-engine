@@ -6,6 +6,7 @@
 #include "hc/hcPluginConnectionHelper.h"
 #include "hc/hcWindowManager.h"
 #include "hc/hcIWindow.h"
+#include "hc/hcIGraphicsManager.h"
 
 namespace hc
 {
@@ -57,6 +58,18 @@ namespace hc
     return *m_windowManager;
   }
 
+  IGraphicsManager& HotCoffeeEngine::getGraphicsManager()
+  {
+    if (m_graphicsManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "IGraphicsManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_graphicsManager;
+  }
+
   void HotCoffeeEngine::start(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)
@@ -73,12 +86,15 @@ namespace hc
     prepareAndResolveDependencyContainer();
 
     // Window Creation
-
     m_windowManager->createWindow(settings.windowSettings);
     SharedPtr<IWindow> window = m_windowManager->getWindow();
+    if (!window)
+      throw RuntimeErrorException("Failed to create main window.");
+
+    // Graphics Init
+    m_graphicsManager->init();
 
     // Game Loop
-
     while (window->isOpen())
     {
       while (Optional<Event> event = window->pollEvent())
@@ -88,6 +104,8 @@ namespace hc
           window->destroy();
         }
       }
+
+      m_graphicsManager->draw(*window);
     }
   }
 
@@ -99,6 +117,9 @@ namespace hc
   void HotCoffeeEngine::onShutdown()
   {
     m_dependencyContainer.clear();
+    m_graphicsManager->destroy();
+    m_graphicsManager = nullptr;
+    m_windowManager->destroyWindow();
     m_windowManager = nullptr;
     m_pluginManager.closeAll();
     LogService::Shutdown();
@@ -112,6 +133,7 @@ namespace hc
     m_dependencyContainer.resolveAllDependencies();
 
     m_windowManager = m_dependencyContainer.resolve<WindowManager>();
+    m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :

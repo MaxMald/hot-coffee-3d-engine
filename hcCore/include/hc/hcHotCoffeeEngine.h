@@ -8,6 +8,7 @@
 namespace hc
 {
   class WindowManager;
+  class IGraphicsManager;
 
   class HC_CORE_EXPORT HotCoffeeEngine
   {
@@ -18,6 +19,7 @@ namespace hc
 
     const PluginManager& getPluginManager() const;
     WindowManager& getWindowManager();
+    IGraphicsManager& getGraphicsManager();
 
     void start(const HotCoffeeEngineSettings& settings);
 
@@ -25,6 +27,7 @@ namespace hc
     static HotCoffeeEngine* _Instance;
 
     SharedPtr<WindowManager> m_windowManager;
+    SharedPtr<IGraphicsManager> m_graphicsManager;
 
     bool m_started;
     PluginManager m_pluginManager;

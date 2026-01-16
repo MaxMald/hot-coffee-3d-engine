@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcWindowHandle.h"
 #include "hc/hcVector2.h"
 #include "hc/hcWindowSettings.h"
 #include "hc/hcEvent.h"
@@ -73,5 +74,17 @@ namespace hc
      * otherwise.
      */
     virtual Optional<Event> pollEvent() = 0;
+
+    /**
+     * @brief Gets the native handle of the window.
+     * 
+     * @return The native window handle.
+     */
+    virtual WindowHandle getNativeHandle() const = 0;
+
+    /**
+     * @brief Swaps the front and back buffers of the window.
+     */
+    virtual void swapBuffers() = 0;
   };
 }

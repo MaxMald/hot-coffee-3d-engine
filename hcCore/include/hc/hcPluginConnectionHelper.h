@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class PluginManagerSettings;
+  struct PluginManagerSettings;
   class PluginManager;
 
   /**
@@ -33,5 +33,13 @@ namespace hc
      * will be connected.
      */
     void connectWindowSfmlPlugin(PluginManager& pluginManager);
+
+    /**
+     * @brief Connects the OpenGL graphics plugin to the given PluginManager.
+     * 
+     * @param pluginManager Reference to the PluginManager to which the plugin
+     * will be connected.
+     */
+    void connectGraphicsOpenGLPlugin(PluginManager& pluginManager);
   }
 }
