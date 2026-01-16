@@ -3,6 +3,7 @@
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/hcWindowManager.h"
 #include "hc/hcIGraphicsManager.h"
+#include "hc/editor/hcImguiHandler.h"
 
 namespace hc::editor
 {
@@ -54,7 +55,7 @@ namespace hc::editor
     WindowManager& windowManager = engine.getWindowManager();
     IWindow& window = windowManager.getWindow();
 
-    m_imguiManager.init(window);
+    hcImguiHandler::init(window);
 
     while (window.isOpen())
     {
@@ -64,21 +65,21 @@ namespace hc::editor
         if (eventOpt->is<Event::Closed>())
           window.destroy();
         
-        if (m_imguiManager.processEvent(*eventOpt))
+        if (hcImguiHandler::processEvent(*eventOpt))
           continue;
       }
 
       graphicsManager.beginFrame();
       // Render scene here
 
-      m_imguiManager.beginFrame();
+      hcImguiHandler::beginFrame();
       // Render Imgui elements here
-      m_imguiManager.endFrame();
+      hcImguiHandler::endFrame();
 
       graphicsManager.endFrame(window);
     }
 
-    m_imguiManager.destroy();
+    hcImguiHandler::destroy();
     HotCoffeeEngine::Shutdown();
   }
 

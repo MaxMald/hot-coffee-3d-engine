@@ -11,15 +11,8 @@ namespace hc
 
 namespace hc::editor
 {
-  /**
-   * @brief Manages the lifecycle and frame operations for the ImGui UI system.
-   */
-  class ImguiManager : public NonCopyable
+  namespace hcImguiHandler
   {
-  public:
-    ImguiManager();
-    ~ImguiManager();
-
     /**
      * @brief Initializes ImGui with the specified window.
      * 
@@ -50,5 +43,5 @@ namespace hc::editor
      * @brief Cleans up ImGui resources.
      */
     void destroy();
-  };
+  }
 }

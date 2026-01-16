@@ -19,12 +19,6 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{e4760635-5f13-4fbd-8741-ae30400b6907}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\imguiManager">
-      <UniqueIdentifier>{4ef6126d-6ca6-4d6c-9319-f31e66b47369}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\imguiManager">
-      <UniqueIdentifier>{0b74cbc3-cca3-4936-9621-a56663f0ea69}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -63,11 +57,11 @@
     <ClInclude Include="include\imgui_impl_opengl3_loader.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcImguiManager.h">
-      <Filter>Header Files\imguiManager</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h">
-      <Filter>Header Files\imguiManager</Filter>
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcImguiHandler.h">
+      <Filter>Header Files\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -98,11 +92,11 @@
     <ClCompile Include="src\imgui_impl_win32.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcImguiManager.cpp">
-      <Filter>Source Files\imguiManager</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp">
-      <Filter>Source Files\imguiManager</Filter>
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcImguiHandler.cpp">
+      <Filter>Source Files\imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
