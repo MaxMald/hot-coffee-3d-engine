@@ -44,7 +44,6 @@ namespace hc
     if (m_sfmlWindow)
     {
       m_sfmlWindow->close();
-      m_sfmlWindow.reset();
     }
   }
 

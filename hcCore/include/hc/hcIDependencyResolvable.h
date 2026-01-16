@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class HC_CORE_EXPORT DependencyContainer;
+  class DependencyContainer;
 
   /**
    * @brief Interface for objects that require dependency resolution.
@@ -12,7 +12,7 @@ namespace hc
    * Implement this interface in classes that need their dependencies resolved
    * via the dependency container.
    */
-  class IDependencyResolvable
+  class HC_CORE_EXPORT IDependencyResolvable
   {
   public:
     virtual ~IDependencyResolvable() = default;

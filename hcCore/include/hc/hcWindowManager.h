@@ -19,12 +19,11 @@ namespace hc
     WindowManager();
     ~WindowManager() override;
 
-    SharedPtr<IWindow> getWindow() const;
+    IWindow& getWindow() const;
 
     void resolveDependencies(DependencyContainer& container) override;
 
-    SharedPtr<IWindow> createWindow(const WindowSettings& settings);
-    void destroyWindow();
+    IWindow& createWindow(const WindowSettings& settings);
 
   private:
     SharedPtr<IWindowFactory> m_windowFactory;

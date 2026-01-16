@@ -18,12 +18,15 @@ namespace hc
     m_windowFactory = container.resolve<IWindowFactory>();
   }
 
-  SharedPtr<IWindow> WindowManager::getWindow() const
+  IWindow& WindowManager::getWindow() const
   {
-    return m_window;
+    if (!m_window)
+      throw RuntimeErrorException("No window has been created yet.");
+
+    return *m_window;
   }
 
-  SharedPtr<IWindow> WindowManager::createWindow(const WindowSettings& settings)
+  IWindow& WindowManager::createWindow(const WindowSettings& settings)
   {
     if (!m_windowFactory)
     {
@@ -33,15 +36,6 @@ namespace hc
     }
 
     m_window = m_windowFactory->createWindow(settings);
-    return m_window;
-  }
-
-  void WindowManager::destroyWindow()
-  {
-    if (m_window)
-    {
-      m_window->destroy();
-      m_window = nullptr;
-    }
+    return *m_window;
   }
 }

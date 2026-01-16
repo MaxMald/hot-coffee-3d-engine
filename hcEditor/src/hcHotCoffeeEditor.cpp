@@ -51,28 +51,35 @@ namespace hc::editor
     engine.init(settings);
 
     IGraphicsManager& graphicsManager = engine.getGraphicsManager();
-    WindowManager& windowManager = engine.getWindowManager();
-    
-    SharedPtr<IWindow> window = windowManager.getWindow();
-    if (!window)
-      throw RuntimeErrorException("Failed to get main window.");
 
-    while (window->isOpen())
+    WindowManager& windowManager = engine.getWindowManager();
+    IWindow& window = windowManager.getWindow();
+
+    m_imguiManager.init(window);
+
+    while (window.isOpen())
     {
       Optional<Event> eventOpt;
-      while ((eventOpt = window->pollEvent()))
+      while ((eventOpt = window.pollEvent()))
       { 
         if (eventOpt->is<Event::Closed>())
-        {
-          window->destroy();
-        }
+          window.destroy();
+        
+        if (m_imguiManager.processEvent(*eventOpt))
+          continue;
       }
 
       graphicsManager.beginFrame();
-      // Render
-      graphicsManager.endFrame(*window);
+      // Render scene here
+
+      m_imguiManager.beginFrame();
+      // Render Imgui elements here
+      m_imguiManager.endFrame();
+
+      graphicsManager.endFrame(window);
     }
 
+    m_imguiManager.destroy();
     HotCoffeeEngine::Shutdown();
   }
 

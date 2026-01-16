@@ -2,7 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcPluginManager.h"
-#include "hc/hcDependencyContainer.h";
+#include "hc/hcDependencyContainer.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
 
 namespace hc

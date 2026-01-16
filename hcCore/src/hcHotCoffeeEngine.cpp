@@ -89,9 +89,6 @@ namespace hc
 
     // Window Creation
     m_windowManager->createWindow(settings.windowSettings);
-    SharedPtr<IWindow> window = m_windowManager->getWindow();
-    if (!window)
-      throw RuntimeErrorException("Failed to create main window.");
 
     // Graphics Init
     m_graphicsManager->init();
@@ -107,7 +104,6 @@ namespace hc
     m_dependencyContainer.clear();
     m_graphicsManager->destroy();
     m_graphicsManager = nullptr;
-    m_windowManager->destroyWindow();
     m_windowManager = nullptr;
     m_pluginManager.closeAll();
     LogService::Shutdown();
