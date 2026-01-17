@@ -7,8 +7,12 @@
 
 namespace hc::editor
 {
-  MainMenuWindow::MainMenuWindow(HotCoffeeEngine& engine) :
-    m_pluginManagerWindow(engine.getPluginManager())
+  MainMenuWindow::MainMenuWindow(
+    HotCoffeeEngine& engine, 
+    EditorLogger& editorLogger
+  ) :
+    m_pluginManagerWindow(engine.getPluginManager()),
+    m_editorLoggerWindow(editorLogger)
   {
   }
 
@@ -55,6 +59,9 @@ namespace hc::editor
         if (ImGui::MenuItem("Plugin Manager"))
           m_pluginManagerWindow.setOpen(true);
 
+        if (ImGui::MenuItem("Logger"))
+          m_editorLoggerWindow.setOpen(true);
+
         ImGui::EndMenu();
       }
 
@@ -71,5 +78,6 @@ namespace hc::editor
     }
 
     m_pluginManagerWindow.draw();
+    m_editorLoggerWindow.draw();
   }
 }

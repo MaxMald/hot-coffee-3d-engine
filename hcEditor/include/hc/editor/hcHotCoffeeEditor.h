@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/hcEditorLogger.h"
 
 namespace hc::editor
 {
@@ -17,6 +18,7 @@ namespace hc::editor
     static HotCoffeeEditor* _Instance;
 
     bool m_started;
+    EditorLogger m_editorLogger;
 
     HotCoffeeEditor();
     ~HotCoffeeEditor();

@@ -1,14 +1,17 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 
-#include "hc/hcHotCoffeeEngine.h"
-#include "hc/hcWindowManager.h"
-#include "hc/hcIGraphicsManager.h"
+#include <hc/hcHotCoffeeEngine.h>
+#include <hc/hcWindowManager.h>
+#include <hc/hcIGraphicsManager.h>
+#include <hc/hcLogService.h>
 
 #include "hc/editor/hcImguiHandler.h"
 #include "hc/editor/hcMainMenuWindow.h"
 
 namespace hc::editor
 {
+  static constexpr UInt32 EDITOR_LOGGER_CAPACITY = 50;
+
   HotCoffeeEditor* HotCoffeeEditor::_Instance = nullptr;
 
   HotCoffeeEditor& HotCoffeeEditor::Instance()
@@ -46,8 +49,11 @@ namespace hc::editor
     m_started = true;
 
     HotCoffeeEngine::Prepare();
+    LogService::Instance().subscribe(&m_editorLogger);
 
     HotCoffeeEngineSettings settings;
+    settings.windowSettings.width = 1920;
+    settings.windowSettings.height = 1080;
     settings.windowSettings.title = "HotCoffee Editor";
 
     HotCoffeeEngine& engine = HotCoffeeEngine::Instance();
@@ -59,16 +65,16 @@ namespace hc::editor
 
     hcImguiHandler::init(window);
 
-    MainMenuWindow mainMenuWindow(engine);
+    MainMenuWindow mainMenuWindow(engine, m_editorLogger);
 
     while (window.isOpen())
     {
       Optional<Event> eventOpt;
       while ((eventOpt = window.pollEvent()))
-      { 
+      {
         if (eventOpt->is<Event::Closed>())
           window.destroy();
-        
+
         if (hcImguiHandler::processEvent(*eventOpt))
           continue;
       }
@@ -84,11 +90,14 @@ namespace hc::editor
     }
 
     hcImguiHandler::destroy();
+
+    LogService::Instance().unsubscribe(&m_editorLogger);
     HotCoffeeEngine::Shutdown();
   }
 
-  HotCoffeeEditor::HotCoffeeEditor()
-    : m_started(false)
+  HotCoffeeEditor::HotCoffeeEditor() :
+    m_started(false),
+    m_editorLogger(EDITOR_LOGGER_CAPACITY)
   {
   }
 

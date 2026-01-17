@@ -31,12 +31,18 @@
     <Filter Include="Source Files\views\windows">
       <UniqueIdentifier>{f6df8383-c4a7-4883-8051-21d4797f91d9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\logger">
+      <UniqueIdentifier>{1ff7cc39-2f40-4fa8-af7b-5286eaad200f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\logger">
+      <UniqueIdentifier>{abcb4c6b-81c9-437b-9b95-fec357ec1802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\configuration">
+      <UniqueIdentifier>{417f0e3c-3835-49bd-b9f9-0ff1c0d2208d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorInterfaceManager.h">
@@ -87,6 +93,21 @@
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorLogger.h">
+      <Filter>Header Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorLoggerEntry.h">
+      <Filter>Header Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorLoggerEntryType.h">
+      <Filter>Header Files\logger</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h">
+      <Filter>Header Files\configuration</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -129,6 +150,12 @@
       <Filter>Source Files\views</Filter>
     </ClCompile>
     <ClCompile Include="src\hcPluginManagerWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorLogger.cpp">
+      <Filter>Source Files\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorLoggerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,6 +2,7 @@
 
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcPluginManagerWindow.h"
+#include "hc/editor/hcEditorLoggerWindow.h"
 
 namespace hc
 {
@@ -10,6 +11,8 @@ namespace hc
 
 namespace hc::editor
 {
+  class EditorLogger;
+
   /**
    * @brief Main menu bar view for the Hot Coffee Editor.
    *
@@ -24,7 +27,7 @@ namespace hc::editor
      *
      * @param engine Reference to the HotCoffeeEngine instance.
      */
-    MainMenuWindow(HotCoffeeEngine& engine);
+    MainMenuWindow(HotCoffeeEngine& engine, EditorLogger& editorLogger);
 
     /**
      * @brief Virtual destructor.
@@ -40,5 +43,6 @@ namespace hc::editor
 
   protected:
     PluginManagerWindow m_pluginManagerWindow;
+    EditorLoggerWindow m_editorLoggerWindow;
   };
 }
