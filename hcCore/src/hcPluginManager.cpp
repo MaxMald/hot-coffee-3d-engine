@@ -127,4 +127,9 @@ namespace hc
       }
     }
   }
+
+  const UnorderedMap<String, SharedPtr<IPluginSlot>>& PluginManager::getPluginSlots() const
+  {
+    return m_pluginSlots;
+  }
 }

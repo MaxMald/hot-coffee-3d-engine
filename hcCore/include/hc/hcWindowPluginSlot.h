@@ -22,7 +22,10 @@ namespace hc
         const String& destructorFunctionName
       ) override;
 
-    virtual String getKey() override;
+    virtual const String& getKey() const override;
+    virtual const String& getLibraryName() const override;
+    virtual const String& getConstructorFunctionName() const override;
+    virtual const String& getDestructorFunctionName() const override;
     virtual SharedPtr<IPlugin> getPluginPtr() override;
     virtual void close() override;
 

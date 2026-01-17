@@ -3,7 +3,9 @@
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/hcWindowManager.h"
 #include "hc/hcIGraphicsManager.h"
+
 #include "hc/editor/hcImguiHandler.h"
+#include "hc/editor/hcMainMenuWindow.h"
 
 namespace hc::editor
 {
@@ -57,6 +59,8 @@ namespace hc::editor
 
     hcImguiHandler::init(window);
 
+    MainMenuWindow mainMenuWindow(engine);
+
     while (window.isOpen())
     {
       Optional<Event> eventOpt;
@@ -73,7 +77,7 @@ namespace hc::editor
       // Render scene here
 
       hcImguiHandler::beginFrame();
-      // Render Imgui elements here
+      mainMenuWindow.draw();
       hcImguiHandler::endFrame();
 
       graphicsManager.endFrame(window);

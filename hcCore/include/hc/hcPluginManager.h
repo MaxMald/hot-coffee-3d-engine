@@ -13,7 +13,7 @@ namespace hc
   /**
   * Manages the lifecycle and dependencies of plugins within the system.
   */
-  class PluginManager : public NonCopyable
+  class HC_CORE_EXPORT PluginManager : public NonCopyable
   {
   public:
     PluginManager();
@@ -82,6 +82,11 @@ namespace hc
     * container.
     */
     void addDependenciesFromPlugins(DependencyContainer& container);
+
+    /**
+    * @brief Gets the map of plugin slots.
+    */
+    const UnorderedMap<String, SharedPtr<IPluginSlot>>& getPluginSlots() const;
 
   private:
     SharedPtr<IPluginSlotFactory> m_pluginSlotFactory;

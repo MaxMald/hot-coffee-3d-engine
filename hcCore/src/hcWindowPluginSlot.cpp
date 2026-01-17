@@ -106,9 +106,24 @@ namespace hc
     return true;
   }
 
-  String WindowsPluginSlot::getKey()
+  const String& WindowsPluginSlot::getKey() const
   {
     return m_key;
+  }
+
+  const String& WindowsPluginSlot::getLibraryName() const
+  {
+    return m_libraryName;
+  }
+
+  const String& WindowsPluginSlot::getConstructorFunctionName() const
+  {
+    return m_constructorFunctionName;
+  }
+
+  const String& WindowsPluginSlot::getDestructorFunctionName() const
+  {
+    return m_destructorFunctionName;
   }
 
   SharedPtr<IPlugin> WindowsPluginSlot::getPluginPtr()

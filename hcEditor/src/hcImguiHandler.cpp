@@ -95,8 +95,6 @@ namespace hc::editor
       ImGui_ImplOpenGL3_NewFrame();
       ImGui_ImplWin32_NewFrame();
       ImGui::NewFrame();
-
-      ImGui::ShowDemoWindow();
     }
 
     void endFrame()

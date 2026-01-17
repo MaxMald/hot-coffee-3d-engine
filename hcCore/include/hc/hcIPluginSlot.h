@@ -14,7 +14,7 @@ namespace hc
   * IPlugin, also provides hints if something go wrong with the plug-in
   * connection.
   */
-  class IPluginSlot
+  class HC_CORE_EXPORT IPluginSlot
   {
   public:
     virtual ~IPluginSlot() = default;
@@ -43,7 +43,28 @@ namespace hc
     *
     * @return The identifier of this Plug-in slot.
     */
-    virtual String getKey() = 0;
+    virtual const String& getKey() const = 0;
+
+    /**
+    * Get the library name of this Plug-in slot.
+    * 
+    * @return The library name of this Plug-in slot.
+    */
+    virtual const String& getLibraryName() const = 0;
+
+    /**
+     * Get the constructor function name of this Plug-in slot.
+     * 
+     * @return The constructor function name of this Plug-in slot.
+     */
+    virtual const String& getConstructorFunctionName() const = 0;
+
+    /**
+     * Get the destructor function name of this Plug-in slot.
+     * 
+     * @return The destructor function name of this Plug-in slot.
+     */
+    virtual const String& getDestructorFunctionName() const = 0;
 
     /**
     * Get the pointer of the wrapped plug-in.

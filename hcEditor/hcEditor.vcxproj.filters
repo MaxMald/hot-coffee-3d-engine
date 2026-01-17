@@ -19,6 +19,18 @@
     <Filter Include="Source Files\imgui">
       <UniqueIdentifier>{e4760635-5f13-4fbd-8741-ae30400b6907}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\views">
+      <UniqueIdentifier>{e4b235d5-2b3c-4c61-920b-bba36757fe6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views">
+      <UniqueIdentifier>{61bdd702-20d4-4025-ab46-ea11f536c04e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows">
+      <UniqueIdentifier>{fa318d51-6339-492b-a504-d58846a9ce8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\windows">
+      <UniqueIdentifier>{f6df8383-c4a7-4883-8051-21d4797f91d9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -63,6 +75,18 @@
     <ClInclude Include="include\hc\editor\hcImguiHandler.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIView.h">
+      <Filter>Header Files\views</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcAWindowView.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMainMenuWindow.h">
+      <Filter>Header Files\views</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -97,6 +121,15 @@
     </ClCompile>
     <ClCompile Include="src\hcImguiHandler.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAWindowView.cpp">
+      <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMainMenuWindow.cpp">
+      <Filter>Source Files\views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcPluginManagerWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

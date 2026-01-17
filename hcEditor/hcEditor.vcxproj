@@ -166,6 +166,10 @@
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
+    <ClInclude Include="include\hc\editor\hcMainMenuWindow.h" />
+    <ClInclude Include="include\hc\editor\hcIView.h" />
+    <ClInclude Include="include\hc\editor\hcAWindowView.h" />
+    <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
     <ClInclude Include="include\imgui_impl_opengl3.h" />
@@ -177,10 +181,13 @@
     <ClInclude Include="include\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcAWindowView.cpp" />
     <ClCompile Include="src\hcHotCoffeeEditor.cpp" />
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp" />
     <ClCompile Include="src\hcImguiHandler.cpp" />
     <ClCompile Include="src\hcMain.cpp" />
+    <ClCompile Include="src\hcMainMenuWindow.cpp" />
+    <ClCompile Include="src\hcPluginManagerWindow.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
