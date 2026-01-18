@@ -37,11 +37,6 @@ namespace hc
     GameObject* getParent() const;
 
     /**
-     * @brief Removes this GameObject from its parent, if any.
-     */
-    void removeFromParent();
-
-    /**
      * @brief Adds a child GameObject. The parent will take ownership of the
      * child.
      */

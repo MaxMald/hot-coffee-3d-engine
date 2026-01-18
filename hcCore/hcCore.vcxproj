@@ -171,6 +171,7 @@
     <ClCompile Include="src\hcIGraphicsManager.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
     <ClCompile Include="src\hcPluginManager.cpp" />
+    <ClCompile Include="src\hcScene.cpp" />
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcWindowManager.cpp" />
     <ClCompile Include="src\hcWindowPluginSlot.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
+    <ClInclude Include="include\hc\hcScene.h" />
     <ClInclude Include="include\hc\hcSceneGraph.h" />
     <ClInclude Include="include\hc\hcWindowHandle.h" />
     <ClInclude Include="include\hc\hcWindowManager.h" />

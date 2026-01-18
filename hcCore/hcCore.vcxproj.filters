@@ -58,10 +58,16 @@
     <Filter Include="Source Files\gameObject">
       <UniqueIdentifier>{bb30691a-47bd-40f7-8afa-a567a1a01f39}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\sceneGraph">
+    <Filter Include="Header Files\scene">
+      <UniqueIdentifier>{8d030c4a-81ab-4513-83c7-02836a9f9738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\sceneGraph">
       <UniqueIdentifier>{0b4b8d81-02b0-4e38-8ad7-9c0343b0f7c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\sceneGraph">
+    <Filter Include="Source Files\scene">
+      <UniqueIdentifier>{b5074dce-c67b-4a1b-b5d1-6418050e0d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\sceneGraph">
       <UniqueIdentifier>{935dd6fe-ae2a-45c5-ab47-0f5ff7f2a012}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -94,7 +100,10 @@
       <Filter>Source Files\gameObject</Filter>
     </ClCompile>
     <ClCompile Include="src\hcSceneGraph.cpp">
-      <Filter>Source Files\sceneGraph</Filter>
+      <Filter>Source Files\scene\sceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcScene.cpp">
+      <Filter>Source Files\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,7 +186,10 @@
       <Filter>Header Files\gameObject</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcSceneGraph.h">
-      <Filter>Header Files\sceneGraph</Filter>
+      <Filter>Header Files\scene\sceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcScene.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
