@@ -146,6 +146,7 @@
 #if HC_COMPILER == HC_COMPILER_MSVC
 # define _CRT_SECURE_NO_WARNINGS
 # pragma warning(disable : 4251)
+# pragma warning(disable: 4201)
 #endif
 
 #if HC_DEBUG_MODE

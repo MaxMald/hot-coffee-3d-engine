@@ -58,6 +58,12 @@
     <Filter Include="Source Files\gameObject">
       <UniqueIdentifier>{bb30691a-47bd-40f7-8afa-a567a1a01f39}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\sceneGraph">
+      <UniqueIdentifier>{0b4b8d81-02b0-4e38-8ad7-9c0343b0f7c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sceneGraph">
+      <UniqueIdentifier>{935dd6fe-ae2a-45c5-ab47-0f5ff7f2a012}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -86,6 +92,9 @@
     </ClCompile>
     <ClCompile Include="src\hcGameObject.cpp">
       <Filter>Source Files\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcSceneGraph.cpp">
+      <Filter>Source Files\sceneGraph</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -166,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcGameObject.h">
       <Filter>Header Files\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcSceneGraph.h">
+      <Filter>Header Files\sceneGraph</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
