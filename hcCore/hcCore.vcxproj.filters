@@ -52,6 +52,12 @@
     <Filter Include="Source Files\graphics">
       <UniqueIdentifier>{70878ad2-813d-4d1a-bedb-f842fa1aa85b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gameObject">
+      <UniqueIdentifier>{bd229116-03e6-4eec-a2c7-909da475a41b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameObject">
+      <UniqueIdentifier>{bb30691a-47bd-40f7-8afa-a567a1a01f39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -77,6 +83,9 @@
     </ClCompile>
     <ClCompile Include="src\hcIGraphicsManager.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcGameObject.cpp">
+      <Filter>Source Files\gameObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcWindowHandle.h">
       <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcGameObject.h">
+      <Filter>Header Files\gameObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

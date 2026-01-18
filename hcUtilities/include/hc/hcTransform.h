@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Represents a 3D transformation (position, rotation, scale).
    */
-  class Transform
+  class HC_UTILITY_EXPORT Transform
   {
   public:
     Transform();

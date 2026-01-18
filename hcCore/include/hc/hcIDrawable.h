@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hc/hcCorePrerequisites.h"
+
 namespace hc
 {
   class IGraphicsManager;
@@ -11,7 +13,7 @@ namespace hc
    * method is called with a reference to an IGraphicsManager, which provides the
    * necessary context for rendering.
    */
-  class IDrawable
+  class HC_CORE_EXPORT IDrawable
   {
   public:
     virtual ~IDrawable() = default;
