@@ -1,3 +1,10 @@
+#include "hcTransform.h"
+#include "hcTransform.h"
+#include "hcTransform.h"
+#include "hcTransform.h"
+#include "hcTransform.h"
+#include "hcTransform.h"
+#include "hcTransform.h"
 #include "hc/hcSfmlWindow.h"
 
 #include <SFML/Window.hpp>

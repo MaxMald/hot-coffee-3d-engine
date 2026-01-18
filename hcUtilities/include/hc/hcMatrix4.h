@@ -2,6 +2,7 @@
 
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcVector4.h"
+#include "hc/hcVector3.h"
 
 namespace hc
 {
@@ -17,6 +18,15 @@ namespace hc
     // Common matrices
     static constexpr Matrix4 Identity();
     static constexpr Matrix4 Zero();
+
+    static constexpr Matrix4 Translate(float tx, float ty, float tz);
+    static constexpr Matrix4 Translate(const Vector3f& translation);
+    static constexpr Matrix4 Scale(float sx, float sy, float sz);
+    static constexpr Matrix4 Scale(const Vector3f& scaleFactors);
+    static Matrix4 Rotation(const Vector3f& eulerAngles);
+    static Matrix4 RotationX(float angleRadians);
+    static Matrix4 RotationY(float angleRadians);
+    static Matrix4 RotationZ(float angleRadians);
 
     union
     {
@@ -86,6 +96,84 @@ namespace hc
       0.0f, 0.0f, 0.0f, 0.0f,
       0.0f, 0.0f, 0.0f, 0.0f,
       0.0f, 0.0f, 0.0f, 0.0f
+    );
+  }
+
+  constexpr Matrix4 Matrix4::Translate(float tx, float ty, float tz)
+  {
+    return Matrix4(
+      1.0f, 0.0f, 0.0f, tx,
+      0.0f, 1.0f, 0.0f, ty,
+      0.0f, 0.0f, 1.0f, tz,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  constexpr Matrix4 Matrix4::Translate(const Vector3f& translation)
+  {
+    return Translate(translation.x, translation.y, translation.z);
+  }
+
+  constexpr Matrix4 Matrix4::Scale(float sx, float sy, float sz)
+  {
+    return Matrix4(
+      sx,   0.0f, 0.0f, 0.0f,
+      0.0f, sy,   0.0f, 0.0f,
+      0.0f, 0.0f, sz,   0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  constexpr Matrix4 Matrix4::Scale(const Vector3f& scaleFactors)
+  {
+    return Scale(scaleFactors.x, scaleFactors.y, scaleFactors.z);
+  }
+
+  inline Matrix4 Matrix4::Rotation(const Vector3f& eulerAngles)
+  {
+    Matrix4 rx = RotationX(eulerAngles.x);
+    Matrix4 ry = RotationY(eulerAngles.y);
+    Matrix4 rz = RotationZ(eulerAngles.z);
+
+    return ry * rx * rz;
+  }
+
+  inline Matrix4 Matrix4::RotationX(float angleRadians)
+  {
+    float c = cos(angleRadians);
+    float s = sin(angleRadians);
+
+    return Matrix4(
+      1.0f, 0.0f, 0.0f, 0.0f,
+      0.0f,   c,   -s, 0.0f,
+      0.0f,   s,    c, 0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  inline Matrix4 Matrix4::RotationY(float angleRadians)
+  {
+    float c = cos(angleRadians);
+    float s = sin(angleRadians);
+
+    return Matrix4(
+        c, 0.0f,   s, 0.0f,
+      0.0f, 1.0f, 0.0f, 0.0f,
+       -s, 0.0f,   c, 0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  inline Matrix4 Matrix4::RotationZ(float angleRadians)
+  {
+    float c = cos(angleRadians);
+    float s = sin(angleRadians);
+
+    return Matrix4(
+        c,   -s, 0.0f, 0.0f,
+        s,    c, 0.0f, 0.0f,
+      0.0f, 0.0f, 1.0f, 0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
     );
   }
 

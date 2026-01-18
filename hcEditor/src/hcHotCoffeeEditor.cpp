@@ -7,6 +7,7 @@
 
 #include "hc/editor/hcImguiHandler.h"
 #include "hc/editor/hcMainMenuWindow.h"
+#include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
 
 namespace hc::editor
 {
@@ -51,17 +52,13 @@ namespace hc::editor
     HotCoffeeEngine::Prepare();
     LogService::Instance().subscribe(&m_editorLogger);
 
-    HotCoffeeEngineSettings settings;
-    settings.windowSettings.width = 1920;
-    settings.windowSettings.height = 1080;
-    settings.windowSettings.title = "HotCoffee Editor";
-
     HotCoffeeEngine& engine = HotCoffeeEngine::Instance();
+
+    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
     engine.init(settings);
 
     IGraphicsManager& graphicsManager = engine.getGraphicsManager();
-    WindowManager& windowManager = engine.getWindowManager();
-    IWindow& window = windowManager.getWindow();
+    IWindow& window = engine.getWindowManager().getWindow();
 
     hcImguiHandler::init(window);
 

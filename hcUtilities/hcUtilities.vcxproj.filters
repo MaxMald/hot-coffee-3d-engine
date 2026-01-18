@@ -84,10 +84,22 @@
     <ClInclude Include="include\hc\hcILogServiceListener.h">
       <Filter>Header Files\logger</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcTransform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAngle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMath.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">
       <Filter>Source Files\logger</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTransform.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -40,6 +40,12 @@
     <Filter Include="Header Files\configuration">
       <UniqueIdentifier>{417f0e3c-3835-49bd-b9f9-0ff1c0d2208d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\utilities">
+      <UniqueIdentifier>{eae68a9a-a5cd-40c8-a50a-7453d3c2b694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utilities">
+      <UniqueIdentifier>{ee49daca-de28-4e83-9f3b-fe02e3d8908d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -108,6 +114,9 @@
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h">
       <Filter>Header Files\configuration</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -157,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="src\hcEditorLoggerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp">
+      <Filter>Source Files\utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

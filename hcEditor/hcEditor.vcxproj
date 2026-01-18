@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -167,6 +167,7 @@
     <ClInclude Include="include\hc\editor\hcEditorLoggerEntryType.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h" />
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
+    <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
@@ -189,6 +190,7 @@
     <ClCompile Include="src\hcEditorLogger.cpp" />
     <ClCompile Include="src\hcEditorLoggerWindow.cpp" />
     <ClCompile Include="src\hcHotCoffeeEditor.cpp" />
+    <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp" />
     <ClCompile Include="src\hcImguiHandler.cpp" />
     <ClCompile Include="src\hcMain.cpp" />
