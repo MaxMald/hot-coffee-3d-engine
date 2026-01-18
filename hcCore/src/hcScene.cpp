@@ -39,4 +39,9 @@ namespace hc
   {
     // TODO
   }
+
+  void Scene::onDestroy()
+  {
+    // TODO
+  }
 }

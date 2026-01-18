@@ -105,6 +105,9 @@
     <ClCompile Include="src\hcScene.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcSceneManager.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -189,6 +192,9 @@
       <Filter>Header Files\scene\sceneGraph</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcScene.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcSceneManager.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>

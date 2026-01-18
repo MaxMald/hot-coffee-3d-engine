@@ -62,6 +62,11 @@ namespace hc
      */
     void onDeactivate();
 
+    /**
+     * @brief Called when the scene is being destroyed.
+     */
+    void onDestroy();
+
     friend class SceneManager;
   };
 }
