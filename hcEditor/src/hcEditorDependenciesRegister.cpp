@@ -6,6 +6,7 @@
 
 // Services
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcProjectManager.h"
 
 // Views
 #include "hc/editor/hcMainMenuToolbar.h"
@@ -21,7 +22,8 @@ namespace hc::editor
     {
       // Services
       container.registerInstance<GameObjectSelectionService>(MakeShared<GameObjectSelectionService>());
-      
+      container.registerInstance<ProjectManager>(MakeShared<ProjectManager>());
+
       // Views
       container.registerInstance<EditorViewsManager>(MakeShared<EditorViewsManager>());
       container.registerInstance<MainMenuToolbar>(MakeShared<MainMenuToolbar>());
