@@ -183,6 +183,12 @@
     <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h">
       <Filter>Header Files\project\loader</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIProjectManagerListener.h">
+      <Filter>Header Files\project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectBrowserWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -259,6 +265,9 @@
     </ClCompile>
     <ClCompile Include="src\hcProjectFileContentLoader.cpp">
       <Filter>Source Files\project\loader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProjectBrowserWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

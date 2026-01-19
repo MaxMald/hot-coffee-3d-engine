@@ -13,6 +13,7 @@
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"
+#include "hc/editor/hcProjectBrowserWindow.h"
 
 namespace hc::editor
 {
@@ -30,6 +31,7 @@ namespace hc::editor
       container.registerInstance<PluginManagerWindow>(MakeShared<PluginManagerWindow>());
       container.registerInstance<EditorLoggerWindow>(MakeShared<EditorLoggerWindow>());
       container.registerInstance<SceneGraphWindow>(MakeShared<SceneGraphWindow>());
+      container.registerInstance<ProjectBrowserWindow>(MakeShared<ProjectBrowserWindow>());
     }
   }
 }

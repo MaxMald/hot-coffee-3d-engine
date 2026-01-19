@@ -175,11 +175,13 @@
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h" />
     <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
+    <ClInclude Include="include\hc\editor\hcIProjectManagerListener.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h" />
     <ClInclude Include="include\hc\editor\hcIView.h" />
     <ClInclude Include="include\hc\editor\hcAWindowView.h" />
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcProject.h" />
+    <ClInclude Include="include\hc\editor\hcProjectBrowserWindow.h" />
     <ClInclude Include="include\hc\editor\hcProjectConfiguration.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileContent.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h" />
@@ -212,6 +214,7 @@
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
     <ClCompile Include="src\hcProject.cpp" />
+    <ClCompile Include="src\hcProjectBrowserWindow.cpp" />
     <ClCompile Include="src\hcProjectFileContentLoader.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
