@@ -90,20 +90,10 @@ namespace hc
 
     m_started = true;
 
-    // Plugin Manager Init
-    m_pluginManager.init();
-    pluginConnectionHelper::connectToPluginsFromSettings(
-      m_pluginManager,
-      settings.pluginManagerSettings
-    );
-
-    // Resolve Dependencies
-    prepareAndResolveDependencyContainer();
-
-    // Window Creation
+    connectToPlugins(settings.pluginManagerSettings);
+    registerDependencies();
+    resolveDependencies();
     m_windowManager->createWindow(settings.windowSettings);
-
-    // Graphics Init
     m_graphicsManager->init();
   }
 
@@ -122,11 +112,23 @@ namespace hc
     LogService::Shutdown();
   }
 
-  void HotCoffeeEngine::prepareAndResolveDependencyContainer()
+  void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
+  {
+    m_pluginManager.init();
+    pluginConnectionHelper::connectToPluginsFromSettings(
+      m_pluginManager,
+      settings
+    );
+  }
+
+  void HotCoffeeEngine::registerDependencies()
   {
     coreDependenciesRegister::registerDependencies(m_dependencyContainer);
     m_pluginManager.addDependenciesFromPlugins(m_dependencyContainer);
+  }
 
+  void HotCoffeeEngine::resolveDependencies()
+  {
     m_dependencyContainer.resolveAllDependencies();
 
     m_windowManager = m_dependencyContainer.resolve<WindowManager>();

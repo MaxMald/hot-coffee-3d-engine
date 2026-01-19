@@ -42,6 +42,8 @@ namespace hc
     void onPrepare();
     void onShutdown();
 
-    void prepareAndResolveDependencyContainer();
+    void connectToPlugins(const PluginManagerSettings& settings);
+    void registerDependencies();
+    void resolveDependencies();
   };
 }
