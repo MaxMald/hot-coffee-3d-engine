@@ -3,6 +3,7 @@
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
+#include "hc/editor/hcSceneGraphWindow.h"
 
 namespace hc
 {
@@ -44,5 +45,6 @@ namespace hc::editor
   protected:
     PluginManagerWindow m_pluginManagerWindow;
     EditorLoggerWindow m_editorLoggerWindow;
+    SceneGraphWindow m_sceneGraphWindow;
   };
 }

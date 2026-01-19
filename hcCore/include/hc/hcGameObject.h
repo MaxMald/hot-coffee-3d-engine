@@ -17,6 +17,7 @@ namespace hc
   {
   public:
     GameObject();
+    GameObject(const String& name);
     virtual ~GameObject();
 
     /**
@@ -30,6 +31,16 @@ namespace hc
      * @param deltaTime Time elapsed since last frame (in seconds).
      */
     void update(float deltaTime);
+
+    /**
+     * @brief Sets the GameObject name
+     */
+    void setName(const String& name);
+
+    /**
+     * @brief Gets the GameObject name
+     */
+    const String& getName() const;
 
     /**
      * @brief Gets the parent GameObject.
@@ -60,6 +71,7 @@ namespace hc
     Matrix4 getWorldMatrix() const;
 
   private:
+    String m_name;
     GameObject* m_parent = nullptr;
     Vector<UniquePtr<GameObject>> m_children;
   };

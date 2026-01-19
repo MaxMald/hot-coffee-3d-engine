@@ -1,9 +1,9 @@
 #include "hc/editor/hcMainMenuWindow.h"
 
 #include <hc/hcHotCoffeeEngine.h>
+#include <hc/hcSceneManager.h>
 
 #include "imgui.h"
-
 
 namespace hc::editor
 {
@@ -12,8 +12,10 @@ namespace hc::editor
     EditorLogger& editorLogger
   ) :
     m_pluginManagerWindow(engine.getPluginManager()),
-    m_editorLoggerWindow(editorLogger)
+    m_editorLoggerWindow(editorLogger),
+    m_sceneGraphWindow()
   {
+    m_sceneGraphWindow.setSceneManager(&engine.getSceneManager());
   }
 
   MainMenuWindow::~MainMenuWindow()
@@ -62,6 +64,9 @@ namespace hc::editor
         if (ImGui::MenuItem("Logger"))
           m_editorLoggerWindow.setOpen(true);
 
+        if (ImGui::MenuItem("Scene Graph"))
+          m_sceneGraphWindow.setOpen(true);
+
         ImGui::EndMenu();
       }
 
@@ -79,5 +84,6 @@ namespace hc::editor
 
     m_pluginManagerWindow.draw();
     m_editorLoggerWindow.draw();
+    m_sceneGraphWindow.draw();
   }
 }

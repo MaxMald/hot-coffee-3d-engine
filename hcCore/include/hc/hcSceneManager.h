@@ -7,6 +7,9 @@
 
 namespace hc
 {
+  /**
+   * @brief Manages multiple scenes and controls the active scene.
+   */
   class HC_CORE_EXPORT SceneManager :
     public NonCopyable,
     public IDrawable

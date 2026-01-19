@@ -3,8 +3,15 @@
 
 namespace hc
 {
-  GameObject::GameObject()
-    : m_parent(nullptr)
+  GameObject::GameObject() : 
+    m_parent(nullptr),
+    m_name("")
+  {
+  }
+
+  GameObject::GameObject(const String& name) :
+    m_parent(nullptr),
+    m_name(name)
   {
   }
 
@@ -24,6 +31,16 @@ namespace hc
   {
     for (auto& child : m_children)
       child->update(deltaTime);
+  }
+
+  void GameObject::setName(const String& name)
+  {
+    m_name = name;
+  }
+
+  const String& GameObject::getName() const
+  {
+    return m_name;
   }
 
   GameObject* GameObject::getParent() const

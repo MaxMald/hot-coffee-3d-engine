@@ -4,6 +4,7 @@
 #include <hc/hcWindowManager.h>
 #include <hc/hcIGraphicsManager.h>
 #include <hc/hcLogService.h>
+#include <hc/hcSceneManager.h>
 
 #include "hc/editor/hcImguiHandler.h"
 #include "hc/editor/hcMainMenuWindow.h"
@@ -63,6 +64,9 @@ namespace hc::editor
     hcImguiHandler::init(window);
 
     MainMenuWindow mainMenuWindow(engine, m_editorLogger);
+
+    engine.getSceneManager().createScene("Editor Scene");
+    engine.getSceneManager().setActiveScene("Editor Scene");
 
     while (window.isOpen())
     {

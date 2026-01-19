@@ -6,6 +6,7 @@
 #endif
 
 #include "hc/hcWindowManager.h"
+#include "hc/hcSceneManager.h"
 
 namespace hc
 {
@@ -19,6 +20,7 @@ namespace hc
 #endif
 
       dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
+      dependencyContainer.registerInstance<SceneManager>(MakeShared<SceneManager>());
     }
   }
 }

@@ -46,6 +46,9 @@
     <Filter Include="Source Files\utilities">
       <UniqueIdentifier>{ee49daca-de28-4e83-9f3b-fe02e3d8908d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\controllers">
+      <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -117,6 +120,15 @@
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcGameObjectSelectionManager.h">
+      <Filter>Header Files\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionManagerListener.h">
+      <Filter>Header Files\controllers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -169,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp">
       <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcSceneGraphWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

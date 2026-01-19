@@ -7,6 +7,7 @@
 #include "hc/hcWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
+#include "hc/hcSceneManager.h"
 
 namespace hc
 {
@@ -70,6 +71,18 @@ namespace hc
     return *m_graphicsManager;
   }
 
+  SceneManager& HotCoffeeEngine::getSceneManager()
+  {
+    if (m_sceneManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "SceneManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_sceneManager;
+  }
+
   void HotCoffeeEngine::init(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)
@@ -118,6 +131,7 @@ namespace hc
 
     m_windowManager = m_dependencyContainer.resolve<WindowManager>();
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
+    m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :

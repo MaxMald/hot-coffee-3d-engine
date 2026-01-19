@@ -167,14 +167,17 @@
     <ClInclude Include="include\hc\editor\hcEditorLoggerEntryType.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h" />
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
+    <ClInclude Include="include\hc\editor\hcGameObjectSelectionManager.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h" />
+    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionManagerListener.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuWindow.h" />
     <ClInclude Include="include\hc\editor\hcIView.h" />
     <ClInclude Include="include\hc\editor\hcAWindowView.h" />
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h" />
+    <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
     <ClInclude Include="include\imgui_impl_opengl3.h" />
@@ -196,6 +199,7 @@
     <ClCompile Include="src\hcMain.cpp" />
     <ClCompile Include="src\hcMainMenuWindow.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
+    <ClCompile Include="src\hcSceneGraphWindow.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />

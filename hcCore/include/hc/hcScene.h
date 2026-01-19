@@ -13,7 +13,7 @@ namespace hc
    * @brief Represents a scene containing a scene graph and providing update and
    * draw functionality.
    */
-  class Scene :
+  class HC_CORE_EXPORT Scene :
     public NonCopyable,
     public IDrawable
   {
