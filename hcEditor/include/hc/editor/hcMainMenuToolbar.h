@@ -20,13 +20,13 @@ namespace hc::editor
    * Implements the main menu bar using ImGui, providing access to
    * various editor functionalities.
    */
-  class  MainMenuWindow :
+  class  MainMenuToolbar :
     public IView,
     public IDependencyResolvable
   {
   public:
-    MainMenuWindow();
-    virtual ~MainMenuWindow();
+    MainMenuToolbar();
+    virtual ~MainMenuToolbar();
 
     /**
      * @brief Draws the main menu bar contents.

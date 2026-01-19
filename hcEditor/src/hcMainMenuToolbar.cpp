@@ -1,4 +1,4 @@
-#include "hc/editor/hcMainMenuWindow.h"
+#include "hc/editor/hcMainMenuToolbar.h"
 
 #include <hc/hcHotCoffeeEngine.h>
 #include <hc/hcSceneManager.h>
@@ -10,18 +10,18 @@
 
 namespace hc::editor
 {
-  MainMenuWindow::MainMenuWindow() :
+  MainMenuToolbar::MainMenuToolbar() :
     m_pluginManagerWindow(nullptr),
     m_editorLoggerWindow(nullptr),
     m_sceneGraphWindow(nullptr)
   {
   }
 
-  MainMenuWindow::~MainMenuWindow()
+  MainMenuToolbar::~MainMenuToolbar()
   {
   }
 
-  void MainMenuWindow::draw()
+  void MainMenuToolbar::draw()
   {
     if (ImGui::BeginMainMenuBar())
     {
@@ -82,7 +82,7 @@ namespace hc::editor
     }
   }
 
-  void MainMenuWindow::resolveDependencies(DependencyContainer& container)
+  void MainMenuToolbar::resolveDependencies(DependencyContainer& container)
   {
     SharedPtr<EditorViewsManager> editorViewsManager = container.resolve<EditorViewsManager>();
     editorViewsManager->registerView(this);

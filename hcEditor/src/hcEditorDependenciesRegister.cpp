@@ -3,8 +3,12 @@
 #include <hc/hcDependencyContainer.h>
 
 #include "hc/editor/hcGameObjectSelectionService.h"
+
+// Services
 #include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcMainMenuWindow.h"
+
+// Views
+#include "hc/editor/hcMainMenuToolbar.h"
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"
@@ -20,7 +24,7 @@ namespace hc::editor
       
       // Views
       container.registerInstance<EditorViewsManager>(MakeShared<EditorViewsManager>());
-      container.registerInstance<MainMenuWindow>(MakeShared<MainMenuWindow>());
+      container.registerInstance<MainMenuToolbar>(MakeShared<MainMenuToolbar>());
       container.registerInstance<PluginManagerWindow>(MakeShared<PluginManagerWindow>());
       container.registerInstance<EditorLoggerWindow>(MakeShared<EditorLoggerWindow>());
       container.registerInstance<SceneGraphWindow>(MakeShared<SceneGraphWindow>());

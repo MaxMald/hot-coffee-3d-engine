@@ -141,7 +141,7 @@
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcMainMenuWindow.h">
+    <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,7 +182,7 @@
     <ClCompile Include="src\hcAWindowView.cpp">
       <Filter>Source Files\views\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcMainMenuWindow.cpp">
+    <ClCompile Include="src\hcMainMenuToolbar.cpp">
       <Filter>Source Files\views</Filter>
     </ClCompile>
     <ClCompile Include="src\hcPluginManagerWindow.cpp">
