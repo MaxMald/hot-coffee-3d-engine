@@ -1,9 +1,7 @@
 #pragma once
 
+#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcIView.h"
-#include "hc/editor/hcPluginManagerWindow.h"
-#include "hc/editor/hcEditorLoggerWindow.h"
-#include "hc/editor/hcSceneGraphWindow.h"
 
 namespace hc
 {
@@ -12,7 +10,9 @@ namespace hc
 
 namespace hc::editor
 {
-  class EditorLogger;
+  class EditorLoggerWindow;
+  class PluginManagerWindow;
+  class SceneGraphWindow;
 
   /**
    * @brief Main menu bar view for the Hot Coffee Editor.
@@ -20,19 +20,12 @@ namespace hc::editor
    * Implements the main menu bar using ImGui, providing access to
    * various editor functionalities.
    */
-  class  MainMenuWindow : public IView
+  class  MainMenuWindow :
+    public IView,
+    public IDependencyResolvable
   {
   public:
-    /**
-     * @brief Constructs the MainMenu view.
-     *
-     * @param engine Reference to the HotCoffeeEngine instance.
-     */
-    MainMenuWindow(HotCoffeeEngine& engine, EditorLogger& editorLogger);
-
-    /**
-     * @brief Virtual destructor.
-     */
+    MainMenuWindow();
     virtual ~MainMenuWindow();
 
     /**
@@ -40,11 +33,18 @@ namespace hc::editor
      *
      * Overrides the base class method to implement the main menu UI.
      */
-    virtual void draw() override;
+    void draw() override;
+
+    /**
+     * @brief Resolves dependencies for the MainMenuWindow.
+     *
+     * @param container Reference to the dependency container.
+     */
+    void resolveDependencies(DependencyContainer& container) override;
 
   protected:
-    PluginManagerWindow m_pluginManagerWindow;
-    EditorLoggerWindow m_editorLoggerWindow;
-    SceneGraphWindow m_sceneGraphWindow;
+    SharedPtr<PluginManagerWindow> m_pluginManagerWindow;
+    SharedPtr<EditorLoggerWindow> m_editorLoggerWindow;
+    SharedPtr<SceneGraphWindow> m_sceneGraphWindow;
   };
 }

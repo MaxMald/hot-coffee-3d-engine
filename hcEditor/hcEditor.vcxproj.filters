@@ -49,6 +49,15 @@
     <Filter Include="Header Files\controllers">
       <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\services">
+      <UniqueIdentifier>{b12310e8-d6fa-4d00-867f-a55dad192f78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dependencyContainer">
+      <UniqueIdentifier>{98ee2239-54e3-40f2-99ed-a830a88e643e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dependencyContainer">
+      <UniqueIdentifier>{c830fdea-a0a2-4351-9faf-05b3e285e5f4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -96,9 +105,6 @@
     <ClInclude Include="include\hc\editor\hcAWindowView.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcMainMenuWindow.h">
-      <Filter>Header Files\views</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
@@ -123,11 +129,20 @@
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcGameObjectSelectionManager.h">
+    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h">
       <Filter>Header Files\controllers</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionManagerListener.h">
+    <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h">
       <Filter>Header Files\controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorDependenciesRegister.h">
+      <Filter>Header Files\dependencyContainer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorViewsManager.h">
+      <Filter>Header Files\views</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMainMenuWindow.h">
+      <Filter>Header Files\views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +199,15 @@
     </ClCompile>
     <ClCompile Include="src\hcSceneGraphWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcGameObjectSelectionService.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorDependenciesRegister.cpp">
+      <Filter>Source Files\dependencyContainer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorViewsManager.cpp">
+      <Filter>Source Files\views</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -6,9 +6,9 @@
 #include <hc/hcLogService.h>
 #include <hc/hcSceneManager.h>
 
-#include "hc/editor/hcImguiHandler.h"
-#include "hc/editor/hcMainMenuWindow.h"
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
+#include "hc/editor/hcEditorDependenciesRegister.h"
+#include "hc/editor/hcEditorViewsManager.h"
 
 namespace hc::editor
 {
@@ -51,54 +51,19 @@ namespace hc::editor
     m_started = true;
 
     HotCoffeeEngine::Prepare();
-    LogService::Instance().subscribe(&m_editorLogger);
-
-    HotCoffeeEngine& engine = HotCoffeeEngine::Instance();
-
-    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
-    engine.init(settings);
-
-    IGraphicsManager& graphicsManager = engine.getGraphicsManager();
-    IWindow& window = engine.getWindowManager().getWindow();
-
-    hcImguiHandler::init(window);
-
-    MainMenuWindow mainMenuWindow(engine, m_editorLogger);
-
-    engine.getSceneManager().createScene("Editor Scene");
-    engine.getSceneManager().setActiveScene("Editor Scene");
-
-    while (window.isOpen())
-    {
-      Optional<Event> eventOpt;
-      while ((eventOpt = window.pollEvent()))
-      {
-        if (eventOpt->is<Event::Closed>())
-          window.destroy();
-
-        if (hcImguiHandler::processEvent(*eventOpt))
-          continue;
-      }
-
-      graphicsManager.beginFrame();
-      // Render scene here
-
-      hcImguiHandler::beginFrame();
-      mainMenuWindow.draw();
-      hcImguiHandler::endFrame();
-
-      graphicsManager.endFrame(window);
-    }
-
-    hcImguiHandler::destroy();
-
-    LogService::Instance().unsubscribe(&m_editorLogger);
+    prepareEditorLogger();
+    initEngine();
+    registerDependencies();
+    resolveDependencies();
+    prepareEditorScene();
+    runMainLoop();
+    unsubscribeEditorLogger();
     HotCoffeeEngine::Shutdown();
   }
 
   HotCoffeeEditor::HotCoffeeEditor() :
     m_started(false),
-    m_editorLogger(EDITOR_LOGGER_CAPACITY)
+    m_editorLogger(nullptr)
   {
   }
 
@@ -113,6 +78,68 @@ namespace hc::editor
 
   void HotCoffeeEditor::onShutdown()
   {
-    // Shutdown logic goes here
+    m_dependencyContainer.clear();
+  }
+
+  void HotCoffeeEditor::prepareEditorLogger()
+  {
+    m_editorLogger = MakeShared<EditorLogger>(EDITOR_LOGGER_CAPACITY);
+    LogService::Instance().subscribe(m_editorLogger.get());
+  }
+
+  void HotCoffeeEditor::unsubscribeEditorLogger()
+  {
+    LogService::Instance().unsubscribe(m_editorLogger.get());
+  }
+
+  void HotCoffeeEditor::registerDependencies()
+  {
+    editorDependenciesRegister::registerDependencies(m_dependencyContainer);
+    m_dependencyContainer.registerInstance<EditorLogger>(m_editorLogger);
+  }
+
+  void HotCoffeeEditor::resolveDependencies()
+  {
+    m_dependencyContainer.resolveAllDependencies();
+
+    m_editorViewsManager = m_dependencyContainer.resolve<EditorViewsManager>();
+  }
+
+  void HotCoffeeEditor::initEngine()
+  {
+    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
+    HotCoffeeEngine::Instance().init(settings);
+  }
+
+  void HotCoffeeEditor::prepareEditorScene()
+  {
+    HotCoffeeEngine::Instance().getSceneManager().createScene("Editor Scene");
+    HotCoffeeEngine::Instance().getSceneManager().setActiveScene("Editor Scene");
+  }
+
+  void HotCoffeeEditor::runMainLoop()
+  {
+    IGraphicsManager& graphicsManager = HotCoffeeEngine::Instance().getGraphicsManager();
+    IWindow& window = HotCoffeeEngine::Instance().getWindowManager().getWindow();
+
+    m_editorViewsManager->initialize();
+    while (window.isOpen())
+    {
+      Optional<Event> eventOpt;
+      while ((eventOpt = window.pollEvent()))
+      {
+        if (eventOpt->is<Event::Closed>())
+          window.destroy();
+
+        if (m_editorViewsManager->processEvent(*eventOpt))
+          continue;
+      }
+
+      graphicsManager.beginFrame();
+      // Render scene here
+      m_editorViewsManager->draw();
+      graphicsManager.endFrame(window);
+    }
+    m_editorViewsManager->shutdown();
   }
 }

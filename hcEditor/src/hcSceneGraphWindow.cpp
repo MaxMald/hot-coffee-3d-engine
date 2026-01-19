@@ -1,16 +1,21 @@
 #include "hc/editor/hcSceneGraphWindow.h"
 
+#include <hc/hcHotCoffeeEngine.h>
 #include <hc/hcSceneManager.h>
 #include <hc/hcSceneGraph.h>
 #include <hc/hcScene.h>
 #include <hc/hcGameObject.h>
+#include <hc/hcDependencyContainer.h>
+#include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcGameObjectSelectionService.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
   SceneGraphWindow::SceneGraphWindow() :
     AWindowView("Scene Graph", true),
-    m_sceneManager(nullptr)
+    m_sceneManager(nullptr),
+    m_selectionService(nullptr)
   {
   }
 
@@ -18,9 +23,13 @@ namespace hc::editor
   {
   }
 
-  void SceneGraphWindow::setSceneManager(SceneManager* sceneManager)
+  void SceneGraphWindow::resolveDependencies(DependencyContainer& container)
   {
-    m_sceneManager = sceneManager;
+    SharedPtr<EditorViewsManager> viewsManager = container.resolve<EditorViewsManager>();
+    viewsManager->registerView(this);
+
+    m_selectionService = container.resolve<GameObjectSelectionService>();
+    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   void SceneGraphWindow::onDraw()

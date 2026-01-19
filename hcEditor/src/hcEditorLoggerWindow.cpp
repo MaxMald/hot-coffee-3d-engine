@@ -1,12 +1,14 @@
 #include "hc/editor/hcEditorLoggerWindow.h"
+
+#include <hc/hcDependencyContainer.h>
+#include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcEditorLogger.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  EditorLoggerWindow::EditorLoggerWindow(EditorLogger& editorLogger) :
+  EditorLoggerWindow::EditorLoggerWindow() :
     AWindowView("Logger", true),
-    m_editorLogger(editorLogger),
     m_autoScroll(true)
   {
   }
@@ -15,12 +17,20 @@ namespace hc::editor
   {
   }
 
+  void EditorLoggerWindow::resolveDependencies(DependencyContainer& container)
+  {
+    SharedPtr<EditorViewsManager> editorViewsManager = container.resolve<EditorViewsManager>();
+    editorViewsManager->registerView(this);
+
+    m_editorLogger = container.resolve<EditorLogger>();
+  }
+
   void EditorLoggerWindow::onDraw()
   {
     ImGui::Begin("Logger", &m_isOpen);
 
     if (ImGui::Button("Clear"))
-      m_editorLogger.clear();
+      m_editorLogger->clear();
 
     ImGui::SameLine();
     ImGui::Checkbox("Auto-scroll", &m_autoScroll);
@@ -28,7 +38,7 @@ namespace hc::editor
     ImGui::Separator();
     ImGui::BeginChild("LogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
-    const auto& entries = m_editorLogger.getEntries();
+    const auto& entries = m_editorLogger->getEntries();
     for (const auto& entry : entries)
     {
       ImVec4 color;
@@ -36,21 +46,21 @@ namespace hc::editor
 
       switch (entry.type)
       {
-        case editorLoggerEntryType::Type::Message:
-          color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-          prefix = "[Message] ";
-          break;
-        case editorLoggerEntryType::Type::Warning:
-          color = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
-          prefix = "[Warning] ";
-          break;
-        case editorLoggerEntryType::Type::Error:
-          color = ImVec4(1.0f, 0.3f, 0.3f, 1.0f);
-          prefix = "[Error] ";
-          break;
-        default:
-          color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-          break;
+      case editorLoggerEntryType::Type::Message:
+        color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+        prefix = "[Message] ";
+        break;
+      case editorLoggerEntryType::Type::Warning:
+        color = ImVec4(1.0f, 1.0f, 0.0f, 1.0f);
+        prefix = "[Warning] ";
+        break;
+      case editorLoggerEntryType::Type::Error:
+        color = ImVec4(1.0f, 0.3f, 0.3f, 1.0f);
+        prefix = "[Error] ";
+        break;
+      default:
+        color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+        break;
       }
 
       String formattedMessage = prefix + entry.message;

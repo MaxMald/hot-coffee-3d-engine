@@ -1,19 +1,25 @@
 #pragma once
 
+#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcAWindowView.h"
 
 namespace hc::editor
 {
   class EditorLogger;
 
-  class EditorLoggerWindow : public AWindowView
+  /**
+   * @brief Window view for displaying editor log messages.
+   */
+  class EditorLoggerWindow : public AWindowView, public IDependencyResolvable
   {
   public:
-    EditorLoggerWindow(EditorLogger&);
+    EditorLoggerWindow();
     virtual ~EditorLoggerWindow();
 
+    void resolveDependencies(DependencyContainer& container) override;
+
   protected:
-    EditorLogger& m_editorLogger;
+    SharedPtr<EditorLogger> m_editorLogger;
     bool m_autoScroll;
 
     virtual void onDraw() override;

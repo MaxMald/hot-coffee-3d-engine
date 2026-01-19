@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcAWindowView.h"
 
@@ -11,20 +12,24 @@ namespace hc
 
 namespace hc::editor
 {
-  class SceneGraphWindow : public AWindowView
+  class GameObjectSelectionService;
+
+  /**
+   * @brief Scene Graph window view for the Hot Coffee Editor.
+   */
+  class SceneGraphWindow : public AWindowView, public IDependencyResolvable
   {
   public:
     SceneGraphWindow();
     virtual ~SceneGraphWindow();
 
-    void setSceneManager(SceneManager* sceneManager);
+    void resolveDependencies(DependencyContainer& container) override;
 
   protected:
-    virtual void onDraw() override;
-
-  private:
+    SharedPtr<GameObjectSelectionService> m_selectionService;
     SceneManager* m_sceneManager;
 
+    void onDraw() override;
     void drawGameObjectNode(GameObject* gameObject);
   };
 }

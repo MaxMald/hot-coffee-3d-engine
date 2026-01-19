@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcAWindowView.h"
 
 namespace hc
@@ -15,34 +16,18 @@ namespace hc::editor
    *
    * Implements a window that displays and manages plugins within the editor.
    */
-  class  PluginManagerWindow : public AWindowView
+  class  PluginManagerWindow : public AWindowView, public IDependencyResolvable
   {
   public:
-    /**
-     * @brief Constructs the Plugin Manager window.
-     * 
-     * @param pluginManager Reference to the PluginManager instance.
-     */
-    PluginManagerWindow(const PluginManager& pluginManager);
-
-    /**
-     * @brief Virtual destructor.
-     */
+    PluginManagerWindow();
     virtual ~PluginManagerWindow();
 
+    void resolveDependencies(DependencyContainer& container) override;
+
   protected:
-    const PluginManager& m_pluginManager;
+    const PluginManager* m_pluginManager;
 
-    /**
-     * @brief Draws the contents of the Plugin Manager window.
-     */
     void onDraw() override;
-
-    /**
-     * @brief Draws information for a specific plugin slot.
-     *
-     * @param plugin Reference to the plugin slot to display information for.
-     */
     void drawPluginSlotInfo(const IPluginSlot& plugin);
   };
 }

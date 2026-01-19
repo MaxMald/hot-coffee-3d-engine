@@ -1,15 +1,17 @@
 #include "hc/editor/hcPluginManagerWindow.h"
 
-#include "imgui.h"
+#include <hc/hcHotCoffeeEngine.h>
 #include <hc/hcPluginManager.h>
 #include <hc/hcIPluginSlot.h>
 #include <hc/hcIPlugin.h>
+#include "hc/editor/hcEditorViewsManager.h"
+#include "imgui.h"
 
 namespace hc::editor
 {
-  PluginManagerWindow::PluginManagerWindow(const PluginManager& pluginManager) :
+  PluginManagerWindow::PluginManagerWindow() :
     AWindowView("Plugin Manager"),
-    m_pluginManager(pluginManager)
+    m_pluginManager(nullptr)
   {
   }
 
@@ -17,10 +19,18 @@ namespace hc::editor
   {
   }
 
+  void PluginManagerWindow::resolveDependencies(DependencyContainer& container)
+  {
+    SharedPtr<EditorViewsManager> viewsManager = container.resolve<EditorViewsManager>();
+    viewsManager->registerView(this);
+
+    m_pluginManager = &(HotCoffeeEngine::Instance().getPluginManager());
+  }
+
   void PluginManagerWindow::onDraw()
   {
     UnorderedMap<String, SharedPtr<IPluginSlot>> pluginSlots =
-      m_pluginManager.getPluginSlots();
+      m_pluginManager->getPluginSlots();
 
     if (ImGui::TreeNode("Plugins"))
     {

@@ -2,20 +2,19 @@
 
 #include <hc/hcHotCoffeeEngine.h>
 #include <hc/hcSceneManager.h>
-
+#include "hc/editor/hcPluginManagerWindow.h"
+#include "hc/editor/hcEditorLoggerWindow.h"
+#include "hc/editor/hcSceneGraphWindow.h"
+#include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  MainMenuWindow::MainMenuWindow(
-    HotCoffeeEngine& engine, 
-    EditorLogger& editorLogger
-  ) :
-    m_pluginManagerWindow(engine.getPluginManager()),
-    m_editorLoggerWindow(editorLogger),
-    m_sceneGraphWindow()
+  MainMenuWindow::MainMenuWindow() :
+    m_pluginManagerWindow(nullptr),
+    m_editorLoggerWindow(nullptr),
+    m_sceneGraphWindow(nullptr)
   {
-    m_sceneGraphWindow.setSceneManager(&engine.getSceneManager());
   }
 
   MainMenuWindow::~MainMenuWindow()
@@ -59,13 +58,13 @@ namespace hc::editor
       if (ImGui::BeginMenu("Windows"))
       {
         if (ImGui::MenuItem("Plugin Manager"))
-          m_pluginManagerWindow.setOpen(true);
+          m_pluginManagerWindow->setOpen(true);
 
         if (ImGui::MenuItem("Logger"))
-          m_editorLoggerWindow.setOpen(true);
+          m_editorLoggerWindow->setOpen(true);
 
         if (ImGui::MenuItem("Scene Graph"))
-          m_sceneGraphWindow.setOpen(true);
+          m_sceneGraphWindow->setOpen(true);
 
         ImGui::EndMenu();
       }
@@ -81,9 +80,15 @@ namespace hc::editor
 
       ImGui::EndMainMenuBar();
     }
+  }
 
-    m_pluginManagerWindow.draw();
-    m_editorLoggerWindow.draw();
-    m_sceneGraphWindow.draw();
+  void MainMenuWindow::resolveDependencies(DependencyContainer& container)
+  {
+    SharedPtr<EditorViewsManager> editorViewsManager = container.resolve<EditorViewsManager>();
+    editorViewsManager->registerView(this);
+
+    m_pluginManagerWindow = container.resolve<PluginManagerWindow>();
+    m_editorLoggerWindow = container.resolve<EditorLoggerWindow>();
+    m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
   }
 }

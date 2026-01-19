@@ -161,17 +161,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\editor\hcEditorDependenciesRegister.h" />
     <ClInclude Include="include\hc\editor\hcEditorInterfaceManager.h" />
     <ClInclude Include="include\hc\editor\hcEditorLogger.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerEntry.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerEntryType.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h" />
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
-    <ClInclude Include="include\hc\editor\hcGameObjectSelectionManager.h" />
+    <ClInclude Include="include\hc\editor\hcEditorViewsManager.h" />
+    <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeToImguiMappings.h" />
-    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionManagerListener.h" />
+    <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuWindow.h" />
     <ClInclude Include="include\hc\editor\hcIView.h" />
@@ -190,8 +192,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcAWindowView.cpp" />
+    <ClCompile Include="src\hcEditorDependenciesRegister.cpp" />
     <ClCompile Include="src\hcEditorLogger.cpp" />
     <ClCompile Include="src\hcEditorLoggerWindow.cpp" />
+    <ClCompile Include="src\hcEditorViewsManager.cpp" />
+    <ClCompile Include="src\hcGameObjectSelectionService.cpp" />
     <ClCompile Include="src\hcHotCoffeeEditor.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp" />

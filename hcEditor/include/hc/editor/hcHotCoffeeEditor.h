@@ -1,10 +1,14 @@
 #pragma once
 
+#include <hc/hcDependencyContainer.h>
+
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcEditorLogger.h"
 
 namespace hc::editor
 {
+  class EditorViewsManager;
+
   class HotCoffeeEditor
   {
   public:
@@ -18,12 +22,22 @@ namespace hc::editor
     static HotCoffeeEditor* _Instance;
 
     bool m_started;
-    EditorLogger m_editorLogger;
+    DependencyContainer m_dependencyContainer;
+    SharedPtr<EditorLogger> m_editorLogger;
+    SharedPtr<EditorViewsManager> m_editorViewsManager;
 
     HotCoffeeEditor();
     ~HotCoffeeEditor();
 
     void onPrepare();
     void onShutdown();
+
+    void prepareEditorLogger();
+    void registerDependencies();
+    void resolveDependencies();
+    void initEngine();
+    void prepareEditorScene();
+    void runMainLoop();
+    void unsubscribeEditorLogger();
   };
 }
