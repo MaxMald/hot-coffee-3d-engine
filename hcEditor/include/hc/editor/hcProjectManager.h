@@ -5,6 +5,7 @@
 namespace hc::editor
 {
   class Project;
+  class IProjectManagerListener;
 
   /**
    * @brief Manages the lifecycle and state of editor projects.
@@ -54,9 +55,20 @@ namespace hc::editor
      */
     Project* getCurrentProject();
 
+    /**
+    * @brief Subscribes a listener to project manager events.
+    */
+    void subscribeListener(IProjectManagerListener* listener);
+
+    /**
+    * @brief Unsubscribes a listener from project manager events.
+    */
+    void unsubscribeListener(IProjectManagerListener* listener);
+
   private:
     Path m_currentProjectPath;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
+    Vector<IProjectManagerListener*> m_listeners;
   };
 }

@@ -1,6 +1,7 @@
 #include "hc/editor/hcProjectManager.h"
 
 #include "hc/editor/hcProject.h"
+#include "hc/editor/hcIProjectManagerListener.h"
 
 namespace hc::editor
 {
@@ -24,6 +25,10 @@ namespace hc::editor
     {
       m_currentProjectPath = projectPath;
       m_isProjectOpen = true;
+
+      for (auto* listener : m_listeners)
+        listener->onProjectOpened();
+
       return true;
     }
 
@@ -38,6 +43,10 @@ namespace hc::editor
       m_currentProject = nullptr;
       m_isProjectOpen = false;
       m_currentProjectPath.clear();
+
+      for (auto* listener : m_listeners)
+        listener->onProjectClosed();
+
       return true;
     }
 
@@ -57,5 +66,29 @@ namespace hc::editor
   Project* ProjectManager::getCurrentProject()
   {
     return m_currentProject.get();
+  }
+
+  void ProjectManager::subscribeListener(IProjectManagerListener* listener)
+  {
+    auto item = std::find(
+      m_listeners.begin(),
+      m_listeners.end(),
+      listener
+    );
+
+    if (item == m_listeners.end())
+      m_listeners.push_back(listener);
+  }
+
+  void ProjectManager::unsubscribeListener(IProjectManagerListener* listener)
+  {
+    auto item = std::find(
+      m_listeners.begin(),
+      m_listeners.end(),
+      listener
+    );
+
+    if (item != m_listeners.end())
+      m_listeners.erase(item);
   }
 }
