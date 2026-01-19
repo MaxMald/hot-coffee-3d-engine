@@ -76,6 +76,12 @@
     <Filter Include="Source Files\project\loader">
       <UniqueIdentifier>{3ee3c9d5-01f9-49e2-bb06-619f07d1a0a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\windows\projectBrowser">
+      <UniqueIdentifier>{f9c982e7-cd01-40e9-9f38-fbfee722c712}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\projectBrowser">
+      <UniqueIdentifier>{6a67e190-053f-4692-8cb1-b383551c0dd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -186,8 +192,17 @@
     <ClInclude Include="include\hc\editor\hcIProjectManagerListener.h">
       <Filter>Header Files\project</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcDirectoryNavigator.h">
+      <Filter>Header Files\views\windows\projectBrowser</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcDirectoryReference.h">
+      <Filter>Header Files\views\windows\projectBrowser</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcFileReference.h">
+      <Filter>Header Files\views\windows\projectBrowser</Filter>
+    </ClInclude>
     <ClInclude Include="include\hc\editor\hcProjectBrowserWindow.h">
-      <Filter>Header Files\views\windows</Filter>
+      <Filter>Header Files\views\windows\projectBrowser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,8 +281,17 @@
     <ClCompile Include="src\hcProjectFileContentLoader.cpp">
       <Filter>Source Files\project\loader</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcDirectoryReference.cpp">
+      <Filter>Source Files\views\windows\projectBrowser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcFileReference.cpp">
+      <Filter>Source Files\views\windows\projectBrowser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcDirectoryNavigator.cpp">
+      <Filter>Source Files\views\windows\projectBrowser</Filter>
+    </ClCompile>
     <ClCompile Include="src\hcProjectBrowserWindow.cpp">
-      <Filter>Source Files\views\windows</Filter>
+      <Filter>Source Files\views\windows\projectBrowser</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -161,6 +161,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\editor\hcDirectoryReference.h" />
+    <ClInclude Include="include\hc\editor\hcDirectoryNavigator.h" />
     <ClInclude Include="include\hc\editor\hcEditorDependenciesRegister.h" />
     <ClInclude Include="include\hc\editor\hcEditorInterfaceManager.h" />
     <ClInclude Include="include\hc\editor\hcEditorLogger.h" />
@@ -169,6 +171,7 @@
     <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h" />
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h" />
+    <ClInclude Include="include\hc\editor\hcFileReference.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h" />
@@ -201,10 +204,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcAWindowView.cpp" />
+    <ClCompile Include="src\hcDirectoryNavigator.cpp" />
+    <ClCompile Include="src\hcDirectoryReference.cpp" />
     <ClCompile Include="src\hcEditorDependenciesRegister.cpp" />
     <ClCompile Include="src\hcEditorLogger.cpp" />
     <ClCompile Include="src\hcEditorLoggerWindow.cpp" />
     <ClCompile Include="src\hcEditorViewsManager.cpp" />
+    <ClCompile Include="src\hcFileReference.cpp" />
     <ClCompile Include="src\hcGameObjectSelectionService.cpp" />
     <ClCompile Include="src\hcHotCoffeeEditor.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp" />
