@@ -70,6 +70,12 @@
     <Filter Include="Source Files\imguiFileDialog">
       <UniqueIdentifier>{d4facd98-5b01-424d-82b3-05fabba5a4fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\project\loader">
+      <UniqueIdentifier>{079ba831-a0d0-498b-bc1a-ca86ef23fddb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\project\loader">
+      <UniqueIdentifier>{3ee3c9d5-01f9-49e2-bb06-619f07d1a0a9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -174,6 +180,9 @@
     <ClInclude Include="include\ImGuiFileDialogConfig.h">
       <Filter>Header Files\imguiFileDialog</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h">
+      <Filter>Header Files\project\loader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -247,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="src\ImGuiFileDialog.cpp">
       <Filter>Source Files\imguiFileDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProjectFileContentLoader.cpp">
+      <Filter>Source Files\project\loader</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

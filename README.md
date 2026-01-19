@@ -1,6 +1,9 @@
 # hot-coffee
 Hot Coffee is a 3D engine
 
+# Utilities Dependencies
+- nlohmann json
+
 # Graphics Open GL Dependencies
 - GLEW 2.3.0
 

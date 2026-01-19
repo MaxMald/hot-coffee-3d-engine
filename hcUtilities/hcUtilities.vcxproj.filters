@@ -93,12 +93,18 @@
     <ClInclude Include="include\hc\hcMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcJson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">
       <Filter>Source Files\logger</Filter>
     </ClCompile>
     <ClCompile Include="src\hcTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcJson.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

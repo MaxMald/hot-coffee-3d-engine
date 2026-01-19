@@ -182,6 +182,7 @@
     <ClInclude Include="include\hc\editor\hcProject.h" />
     <ClInclude Include="include\hc\editor\hcProjectConfiguration.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileContent.h" />
+    <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h" />
     <ClInclude Include="include\hc\editor\hcProjectManager.h" />
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
     <ClInclude Include="include\imconfig.h" />
@@ -211,6 +212,7 @@
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
     <ClCompile Include="src\hcProject.cpp" />
+    <ClCompile Include="src\hcProjectFileContentLoader.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
     <ClCompile Include="src\imgui.cpp" />

@@ -1,5 +1,8 @@
 #include "hc/editor/hcProject.h"
 
+#include <hc/hcJson.h>
+#include "hc/editor/hcProjectFileContentLoader.h"
+
 namespace hc::editor
 {
   Project::Project() :
@@ -13,7 +16,16 @@ namespace hc::editor
 
   bool Project::loadFromFile(const Path& filePath)
   {
-    return false;
+    Json json = Json::loadFromFile(filePath);
+    if (json.isNull())
+      return false;
+
+    auto optionalContent = projectFileContentLoader::loadFromJson(json);
+    if (!optionalContent.has_value())
+      return false;
+
+    m_projectFileContent = optionalContent.value();
+    return true;
   }
 
   bool Project::saveToFile(const Path& filePath) const
