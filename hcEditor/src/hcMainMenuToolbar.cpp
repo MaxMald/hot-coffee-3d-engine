@@ -115,7 +115,7 @@ namespace hc::editor
       {
         String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        m_projectManager->openProject(Path(filePath.c_str()));
+        m_projectManager->openProject(Path(filePathName.c_str()));
       }
 
       ImGuiFileDialog::Instance()->Close();

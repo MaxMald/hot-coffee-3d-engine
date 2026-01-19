@@ -19,10 +19,16 @@ namespace hc::editor
   {
     closeProject();
 
-    // TODO load project
-    m_currentProjectPath = projectPath;
-    m_isProjectOpen = true;
-    return true;
+    m_currentProject = MakeUnique<Project>();
+    if (m_currentProject->loadFromFile(projectPath))
+    {
+      m_currentProjectPath = projectPath;
+      m_isProjectOpen = true;
+      return true;
+    }
+
+    m_currentProject = nullptr;
+    return false;
   }
 
   bool ProjectManager::closeProject()
