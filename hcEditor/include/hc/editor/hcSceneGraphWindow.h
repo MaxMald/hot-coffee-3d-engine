@@ -7,6 +7,7 @@
 namespace hc
 {
   class SceneManager;
+  class SceneGraph;
   class GameObject;
 }
 
@@ -17,7 +18,9 @@ namespace hc::editor
   /**
    * @brief Scene Graph window view for the Hot Coffee Editor.
    */
-  class SceneGraphWindow : public AWindowView, public IDependencyResolvable
+  class SceneGraphWindow :
+    public AWindowView,
+    public IDependencyResolvable
   {
   public:
     SceneGraphWindow();
@@ -30,6 +33,8 @@ namespace hc::editor
     SceneManager* m_sceneManager;
 
     void onDraw() override;
+    void drawCreateLayerSection(SceneGraph& sceneGraph);
+    void drawSceneGraph(const SceneGraph& sceneGraph);
     void drawGameObjectNode(GameObject* gameObject);
   };
 }

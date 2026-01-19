@@ -60,6 +60,17 @@ namespace hc::editor
     m_selectedGameObjects.clear();
   }
 
+  bool GameObjectSelectionService::isGameObjectSelected(GameObject* gameObject) const
+  {
+    auto item = std::find(
+      m_selectedGameObjects.begin(),
+      m_selectedGameObjects.end(),
+      gameObject
+    );
+
+    return item != m_selectedGameObjects.end();
+  }
+
   void GameObjectSelectionService::subscribe(
     IGameObjectSelectionServiceListener* listener
   )

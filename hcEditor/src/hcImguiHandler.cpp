@@ -61,6 +61,16 @@ namespace hc::editor
         }
       }
 
+      else if (evt.is<Event::TextEntered>())
+      {
+        const auto* e = evt.getIf<Event::TextEntered>();
+        if (e)
+        {
+          ImGui::GetIO().AddInputCharacter(static_cast<ImWchar>(e->unicode));
+          handled = true;
+        }
+      }
+
       else if (evt.is<Event::KeyPressed>())
       {
         const auto* e = evt.getIf<Event::KeyPressed>();

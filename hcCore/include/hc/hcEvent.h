@@ -13,6 +13,11 @@ namespace hc
   class Event
   {
   public:
+    struct TextEntered
+    {
+      Char32 unicode{};
+    };
+
     struct KeyPressed
     {
       keyboardKey::Type keyCode{};
@@ -61,6 +66,7 @@ namespace hc
      * @brief Variant type that holds any supported event data structure.
      */
     using EventVariant = Variant<
+      TextEntered,
       KeyPressed,
       KeyReleased,
       MouseButtonPressed,

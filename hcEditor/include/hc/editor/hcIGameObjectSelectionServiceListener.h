@@ -9,6 +9,8 @@ namespace hc
 
 namespace hc::editor
 {
+  class GameObjectSelectionService;
+
   /**
    * @brief Interface for listening to game object selection events in the editor.
    */
@@ -17,6 +19,7 @@ namespace hc::editor
   public:
     virtual ~IGameObjectSelectionServiceListener() = default;
 
+  protected:
     /**
      * @brief Called when a game object is selected in the editor.
      *
@@ -30,5 +33,7 @@ namespace hc::editor
      * @param gameObject Pointer to the deselected GameObject instance.
      */
     virtual void onGameObjectDeselected(GameObject* gameObject) = 0;
+
+    friend class GameObjectSelectionService;
   };
 }

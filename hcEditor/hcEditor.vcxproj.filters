@@ -46,9 +46,6 @@
     <Filter Include="Source Files\utilities">
       <UniqueIdentifier>{ee49daca-de28-4e83-9f3b-fe02e3d8908d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\controllers">
-      <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\services">
       <UniqueIdentifier>{b12310e8-d6fa-4d00-867f-a55dad192f78}</UniqueIdentifier>
     </Filter>
@@ -57,6 +54,9 @@
     </Filter>
     <Filter Include="Source Files\dependencyContainer">
       <UniqueIdentifier>{c830fdea-a0a2-4351-9faf-05b3e285e5f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\services">
+      <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -130,10 +130,10 @@
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h">
-      <Filter>Header Files\controllers</Filter>
+      <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h">
-      <Filter>Header Files\controllers</Filter>
+      <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorDependenciesRegister.h">
       <Filter>Header Files\dependencyContainer</Filter>

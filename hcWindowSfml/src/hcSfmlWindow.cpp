@@ -122,6 +122,11 @@ namespace hc
       const auto& resized = sfmlEvent.getIf<sf::Event::Resized>();
       return Event(Event::Resized{ Vector2u(resized->size.x, resized->size.y) });
     }
+    else if (sfmlEvent.is<sf::Event::TextEntered>())
+    {
+      const auto& text = sfmlEvent.getIf<sf::Event::TextEntered>();
+      return Event(Event::TextEntered{ static_cast<Char32>(text->unicode) });
+    }
     else if (sfmlEvent.is<sf::Event::KeyPressed>())
     {
       const auto& key = sfmlEvent.getIf<sf::Event::KeyPressed>();

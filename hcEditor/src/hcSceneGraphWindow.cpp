@@ -48,6 +48,32 @@ namespace hc::editor
     }
 
     hc::SceneGraph& sceneGraph = scene->getSceneGraph();
+    drawCreateLayerSection(sceneGraph);
+    drawSceneGraph(sceneGraph);
+  }
+
+  void SceneGraphWindow::drawCreateLayerSection(SceneGraph& sceneGraph)
+  {
+    if (ImGui::CollapsingHeader("Create Layer"))
+    {
+      static char layerNameBuffer[128] = "";
+      ImGui::InputText("Layer Name", layerNameBuffer, sizeof(layerNameBuffer));
+
+      if (ImGui::Button("Create"))
+      {
+        String layerName(layerNameBuffer);
+        if (!layerName.empty() && sceneGraph.getRoot(layerName) == nullptr)
+        {
+          UniquePtr<GameObject> newLayer = MakeUnique<GameObject>(layerName);
+          sceneGraph.setRoot(layerName, std::move(newLayer));
+          layerNameBuffer[0] = '\0';
+        }
+      }
+    }
+  }
+
+  void SceneGraphWindow::drawSceneGraph(const SceneGraph& sceneGraph)
+  {
     const auto& roots = sceneGraph.getRoots();
 
     if (roots.empty())
@@ -71,7 +97,18 @@ namespace hc::editor
       gameObjectName = "<unnamed>";
 
     ImGui::PushID(gameObject);
-    if (ImGui::TreeNode(gameObjectName.c_str()))
+
+    bool isSelected = m_selectionService->isGameObjectSelected(gameObject);
+    ImGuiTreeNodeFlags flags = isSelected ? ImGuiTreeNodeFlags_Selected : 0;
+    bool open = ImGui::TreeNodeEx(gameObjectName.c_str(), flags);
+
+    if (ImGui::IsItemClicked())
+    {
+      m_selectionService->clearSelection();
+      m_selectionService->selectGameObject(gameObject);
+    }
+    
+    if (open)
     {
       const auto& children = gameObject->getChildren();
       for (const auto& child : children)

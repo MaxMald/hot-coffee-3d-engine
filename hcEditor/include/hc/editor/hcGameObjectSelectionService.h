@@ -47,6 +47,15 @@ namespace hc::editor
     void clearSelection();
 
     /**
+     * @brief Checks if a GameObject is currently selected.
+     * 
+     * @param gameObject The GameObject to check.
+     * 
+     * @return true if the GameObject is selected, false otherwise.
+     */
+    bool isGameObjectSelected(GameObject* gameObject) const;
+
+    /**
      * @brief Subscribes a listener to selection change events.
      * 
      * @param listener The listener to subscribe.
