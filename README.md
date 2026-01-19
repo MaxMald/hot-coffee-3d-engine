@@ -8,4 +8,5 @@ Hot Coffee is a 3D engine
 - SFML 3.0.2
 
 # Editor Project Dependencies
-- Imgui v1.92.5
+- Imgui 1.92.5
+- ImGuiFileDialog 0.6.8

@@ -58,6 +58,18 @@
     <Filter Include="Header Files\services">
       <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\project">
+      <UniqueIdentifier>{50969101-a828-4063-9023-6e4d492a9348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\project">
+      <UniqueIdentifier>{5ffe1bee-7652-4166-aef7-cd2b55789594}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\imguiFileDialog">
+      <UniqueIdentifier>{2bd77174-9cfe-449f-b118-0951450a22c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imguiFileDialog">
+      <UniqueIdentifier>{d4facd98-5b01-424d-82b3-05fabba5a4fb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -144,6 +156,24 @@
     <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectConfiguration.h">
+      <Filter>Header Files\project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectFileContent.h">
+      <Filter>Header Files\project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProject.h">
+      <Filter>Header Files\project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectManager.h">
+      <Filter>Header Files\project</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGuiFileDialog.h">
+      <Filter>Header Files\imguiFileDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ImGuiFileDialogConfig.h">
+      <Filter>Header Files\imguiFileDialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -208,6 +238,15 @@
     </ClCompile>
     <ClCompile Include="src\hcEditorViewsManager.cpp">
       <Filter>Source Files\views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProject.cpp">
+      <Filter>Source Files\project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProjectManager.cpp">
+      <Filter>Source Files\project</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ImGuiFileDialog.cpp">
+      <Filter>Source Files\imguiFileDialog</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

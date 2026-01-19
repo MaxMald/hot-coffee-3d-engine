@@ -13,10 +13,12 @@ namespace hc::editor
 
   bool Project::loadFromFile(const Path& filePath)
   {
+    return false;
   }
 
   bool Project::saveToFile(const Path& filePath) const
   {
+    return false;
   }
 
   ProjectFileContent& Project::getProjectFileContent()

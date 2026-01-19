@@ -5,11 +5,16 @@
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"
+#include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
+#include "ImGuiFileDialog.h"
 
 namespace hc::editor
 {
+  static constexpr const char* PROJECT_FILE_EXTENSION = ".hotCoffeeProj";
+  static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
+
   MainMenuToolbar::MainMenuToolbar() :
     m_pluginManagerWindow(nullptr),
     m_editorLoggerWindow(nullptr),
@@ -33,7 +38,15 @@ namespace hc::editor
         }
         if (ImGui::MenuItem("Open Project"))
         {
-          // Handle open project action
+          IGFD::FileDialogConfig config;
+          config.path = ".";
+
+          ImGuiFileDialog::Instance()->OpenDialog(
+            OPEN_PROJECT_DIALOG_KEY,
+            "Choose Project",
+            PROJECT_FILE_EXTENSION,
+            config
+          );
         }
         if (ImGui::MenuItem("Save Project"))
         {
@@ -80,6 +93,8 @@ namespace hc::editor
 
       ImGui::EndMainMenuBar();
     }
+
+    displayOpenProjectDialog();
   }
 
   void MainMenuToolbar::resolveDependencies(DependencyContainer& container)
@@ -90,5 +105,20 @@ namespace hc::editor
     m_pluginManagerWindow = container.resolve<PluginManagerWindow>();
     m_editorLoggerWindow = container.resolve<EditorLoggerWindow>();
     m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
+    m_projectManager = container.resolve<ProjectManager>();
+  }
+
+  void MainMenuToolbar::displayOpenProjectDialog()
+  {
+    if (ImGuiFileDialog::Instance()->Display(OPEN_PROJECT_DIALOG_KEY)) {
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+        String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        m_projectManager->openProject(Path(filePath.c_str()));
+      }
+
+      ImGuiFileDialog::Instance()->Close();
+    }
   }
 }

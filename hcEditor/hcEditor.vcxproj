@@ -92,7 +92,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_STD_FILESYSTEM</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_STD_FILESYSTEM</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -128,7 +128,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_STD_FILESYSTEM</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -147,7 +147,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);USE_STD_FILESYSTEM</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -179,9 +179,15 @@
     <ClInclude Include="include\hc\editor\hcIView.h" />
     <ClInclude Include="include\hc\editor\hcAWindowView.h" />
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h" />
+    <ClInclude Include="include\hc\editor\hcProject.h" />
+    <ClInclude Include="include\hc\editor\hcProjectConfiguration.h" />
+    <ClInclude Include="include\hc\editor\hcProjectFileContent.h" />
+    <ClInclude Include="include\hc\editor\hcProjectManager.h" />
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
+    <ClInclude Include="include\ImGuiFileDialog.h" />
+    <ClInclude Include="include\ImGuiFileDialogConfig.h" />
     <ClInclude Include="include\imgui_impl_opengl3.h" />
     <ClInclude Include="include\imgui_impl_opengl3_loader.h" />
     <ClInclude Include="include\imgui_impl_win32.h" />
@@ -204,8 +210,11 @@
     <ClCompile Include="src\hcMain.cpp" />
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
+    <ClCompile Include="src\hcProject.cpp" />
+    <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
     <ClCompile Include="src\imgui.cpp" />
+    <ClCompile Include="src\ImGuiFileDialog.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />
     <ClCompile Include="src\imgui_draw.cpp" />
     <ClCompile Include="src\imgui_impl_opengl3.cpp" />

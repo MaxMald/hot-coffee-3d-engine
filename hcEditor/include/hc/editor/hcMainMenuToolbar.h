@@ -13,6 +13,7 @@ namespace hc::editor
   class EditorLoggerWindow;
   class PluginManagerWindow;
   class SceneGraphWindow;
+  class ProjectManager;
 
   /**
    * @brief Main menu bar view for the Hot Coffee Editor.
@@ -46,5 +47,8 @@ namespace hc::editor
     SharedPtr<PluginManagerWindow> m_pluginManagerWindow;
     SharedPtr<EditorLoggerWindow> m_editorLoggerWindow;
     SharedPtr<SceneGraphWindow> m_sceneGraphWindow;
+    SharedPtr<ProjectManager> m_projectManager;
+
+    void displayOpenProjectDialog();
   };
 }
