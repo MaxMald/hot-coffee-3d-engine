@@ -102,12 +102,26 @@ namespace hc::editor
     ImGuiTreeNodeFlags flags = isSelected ? ImGuiTreeNodeFlags_Selected : 0;
     bool open = ImGui::TreeNodeEx(gameObjectName.c_str(), flags);
 
-    if (ImGui::IsItemClicked())
+    // Show popup menu on left click
+    if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
     {
       m_selectionService->clearSelection();
       m_selectionService->selectGameObject(gameObject);
+      ImGui::OpenPopup("GameObjectMenu");
     }
-    
+
+    // Popup menu for creating a child
+    if (ImGui::BeginPopup("GameObjectMenu"))
+    {
+      if (ImGui::MenuItem("Create Child"))
+      {
+        // Create a new child GameObject with a default name
+        UniquePtr<GameObject> newChild = MakeUnique<GameObject>("New Child");
+        gameObject->addChild(std::move(newChild));
+      }
+      ImGui::EndPopup();
+    }
+
     if (open)
     {
       const auto& children = gameObject->getChildren();
