@@ -58,6 +58,15 @@ namespace hc::editor
       return;
     }
 
+    ImGui::SameLine();
+
+    // Refresh button
+    if (ImGui::Button("Refresh"))
+    {
+      refresh();
+      return;
+    }
+
     ImGui::Separator();
 
     // Folders
