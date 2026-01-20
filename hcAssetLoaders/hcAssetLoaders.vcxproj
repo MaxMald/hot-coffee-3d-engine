@@ -172,7 +172,7 @@
     <ClInclude Include="include\hc\hcAssetLoadersLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcAssetLoadersPlugin.h" />
     <ClInclude Include="include\hc\hcAssetLoadersPrerequisites.h" />
-    <ClInclude Include="include\hc\hcTextureLoader.h" />
+    <ClInclude Include="include\hc\hcImageLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

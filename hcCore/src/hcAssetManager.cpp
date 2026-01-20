@@ -1,7 +1,7 @@
 #include "hc/hcAssetManager.h"
 
 #include "hc/hcDependencyContainer.h"
-#include "hc/hcITextureLoader.h"
+#include "hc/hcIImageLoader.h"
 
 namespace hc
 {
@@ -16,8 +16,8 @@ namespace hc
 
   void AssetManager::resolveDependencies(DependencyContainer& container)
   {
-    SharedPtr<ITextureLoader> textureLoader = container.resolve<ITextureLoader>();
-    m_assetLoaders[typeid(Texture)] = textureLoader;
+    SharedPtr<IImageLoader> imageLoader = container.resolve<IImageLoader>();
+    m_assetLoaders[typeid(Image)] = imageLoader;
   }
 
   void AssetManager::clear()

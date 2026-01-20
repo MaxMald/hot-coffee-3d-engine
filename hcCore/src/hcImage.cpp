@@ -1,39 +1,39 @@
-#include "hc/hcTexture.h"
+#include "hc/hcImage.h"
 
 namespace hc
 {
-  Texture::Texture() :
+  Image::Image() :
     m_width(0),
     m_height(0),
     m_data(0)
   {
   }
 
-  Texture::~Texture()
+  Image::~Image()
   {
   }
 
-  UInt32 Texture::getWidth() const
+  UInt32 Image::getWidth() const
   {
     return m_width;
   }
 
-  UInt32 Texture::getHeight() const
+  UInt32 Image::getHeight() const
   {
     return m_height;
   }
 
-  BufferByte& Texture::getBuffer()
+  BufferByte& Image::getBuffer()
   {
     return m_data;
   }
 
-  const BufferByte& Texture::getBuffer() const
+  const BufferByte& Image::getBuffer() const
   {
     return m_data;
   }
 
-  void Texture::initialize(
+  void Image::initialize(
     UInt32 width,
     UInt32 height,
     BufferByte&& buffer

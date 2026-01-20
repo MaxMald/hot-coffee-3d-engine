@@ -1,6 +1,6 @@
 #include "hc/hcAssetLoadersPlugin.h"
 #include "hc/hcDependencyContainer.h"
-#include "hc/hcTextureLoader.h"
+#include "hc/hcImageLoader.h"
 
 namespace hc
 {
@@ -33,8 +33,8 @@ namespace hc
 
   void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
   {
-    container.registerInstanceAsInterface<ITextureLoader, TextureLoader>(
-      MakeShared<TextureLoader>()
+    container.registerInstanceAsInterface<IImageLoader, ImageLoader>(
+      MakeShared<ImageLoader>()
     );
   }
 }

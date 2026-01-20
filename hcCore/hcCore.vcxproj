@@ -181,7 +181,7 @@
     <ClCompile Include="src\hcScene.cpp" />
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
-    <ClCompile Include="src\hcTexture.cpp" />
+    <ClCompile Include="src\hcImage.cpp" />
     <ClCompile Include="src\hcWindowManager.cpp" />
     <ClCompile Include="src\hcWindowPluginSlot.cpp" />
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
@@ -206,7 +206,7 @@
     <ClInclude Include="include\hc\hcIPluginSlot.h" />
     <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
     <ClInclude Include="include\hc\hcIDrawable.h" />
-    <ClInclude Include="include\hc\hcITextureLoader.h" />
+    <ClInclude Include="include\hc\hcIImageLoader.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />
@@ -221,7 +221,7 @@
     <ClInclude Include="include\hc\hcScene.h" />
     <ClInclude Include="include\hc\hcSceneGraph.h" />
     <ClInclude Include="include\hc\hcSceneManager.h" />
-    <ClInclude Include="include\hc\hcTexture.h" />
+    <ClInclude Include="include\hc\hcImage.h" />
     <ClInclude Include="include\hc\hcWindowHandle.h" />
     <ClInclude Include="include\hc\hcWindowManager.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />

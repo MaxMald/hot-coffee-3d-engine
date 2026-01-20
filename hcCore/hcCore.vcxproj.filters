@@ -132,7 +132,7 @@
     <ClCompile Include="src\hcAsset.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcTexture.cpp">
+    <ClCompile Include="src\hcImage.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
   </ItemGroup>
@@ -248,10 +248,10 @@
     <ClInclude Include="include\hc\hcAssetGroup.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcTexture.h">
+    <ClInclude Include="include\hc\hcImage.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcITextureLoader.h">
+    <ClInclude Include="include\hc\hcIImageLoader.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIAssetLoader.h">
