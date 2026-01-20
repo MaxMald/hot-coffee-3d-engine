@@ -117,6 +117,12 @@
     <ClCompile Include="src\hcLightManager.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcCamera.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCameraManager.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -213,6 +219,12 @@
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcLightManager.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCamera.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraManager.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
