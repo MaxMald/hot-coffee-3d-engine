@@ -35,8 +35,10 @@ namespace hc::editor
 
     GameObject* gameObject = selectedGameObjects.front();
 
-    ImGui::Text("Name: %p", static_cast<void*>(gameObject));
+    String label = String::Format("Game Object: %s", gameObject->getName().c_str());
+    ImGui::Text(label.c_str());
     ImGui::Separator();
+
     drawTransform(gameObject);
   }
 
@@ -55,7 +57,7 @@ namespace hc::editor
     if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
       gameObject->setScale(scale);
 
-    if (ImGui::CollapsingHeader("Matrix"))
+    if (ImGui::CollapsingHeader("World Matrix"))
     {
       const Matrix4 worldMatrix = gameObject->getWorldMatrix();
       for (int row = 0; row < 4; ++row)
