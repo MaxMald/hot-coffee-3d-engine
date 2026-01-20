@@ -102,11 +102,14 @@ namespace hc::editor
     ImGuiTreeNodeFlags flags = isSelected ? ImGuiTreeNodeFlags_Selected : 0;
     bool open = ImGui::TreeNodeEx(gameObjectName.c_str(), flags);
 
-    // Show popup menu on left click
-    if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+    if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
     {
       m_selectionService->clearSelection();
       m_selectionService->selectGameObject(gameObject);
+    }
+
+    if (ImGui::IsItemClicked(ImGuiMouseButton_Right))
+    {
       ImGui::OpenPopup("GameObjectMenu");
     }
 
