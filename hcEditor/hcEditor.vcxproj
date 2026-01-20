@@ -180,6 +180,7 @@
     <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h" />
     <ClInclude Include="include\hc\editor\hcImguiHandler.h" />
     <ClInclude Include="include\hc\editor\hcIProjectManagerListener.h" />
+    <ClInclude Include="include\hc\editor\hcLightManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h" />
     <ClInclude Include="include\hc\editor\hcIView.h" />
     <ClInclude Include="include\hc\editor\hcAWindowView.h" />
@@ -218,6 +219,7 @@
     <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp" />
     <ClCompile Include="src\hcImguiHandler.cpp" />
+    <ClCompile Include="src\hcLightManagerWindow.cpp" />
     <ClCompile Include="src\hcMain.cpp" />
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />

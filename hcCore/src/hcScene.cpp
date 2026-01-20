@@ -30,6 +30,16 @@ namespace hc
     return m_sceneGraph;
   }
 
+  LightManager& Scene::getLightManager()
+  {
+    return m_lightManager;
+  }
+
+  const LightManager& Scene::getLightManager() const
+  {
+    return m_lightManager;
+  }
+
   void Scene::onActivate()
   {
     // TODO
@@ -42,6 +52,6 @@ namespace hc
 
   void Scene::onDestroy()
   {
-    // TODO
+    m_lightManager.clear();
   }
 }

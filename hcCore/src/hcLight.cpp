@@ -6,7 +6,8 @@ namespace hc
       m_color{1.0f, 1.0f, 1.0f},
       m_intensity(1.0f),
       m_position{0.0f, 0.0f, 0.0f},
-      m_direction{0.0f, -1.0f, 0.0f}
+      m_direction{0.0f, -1.0f, 0.0f},
+      enabled(true)
   {
   }
 
@@ -23,6 +24,11 @@ namespace hc
   void Light::setColor(const Color& color)
   {
     m_color = color;
+  }
+
+  void Light::setColor(float r, float g, float b)
+  {
+    m_color = Color(r, g, b);
   }
 
   const Color& Light::getColor() const
@@ -58,5 +64,15 @@ namespace hc
   const Vector3f& Light::getDirection() const
   {
     return m_direction;
+  }
+
+  void Light::setEnabled(bool isEnabled)
+  {
+    enabled = isEnabled;
+  }
+
+  bool Light::isEnabled() const
+  {
+    return enabled;
   }
 }

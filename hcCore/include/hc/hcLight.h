@@ -42,6 +42,15 @@ namespace hc
     void setColor(const Color& color);
 
     /**
+     * @brief Sets the color of the light using RGBA components.
+     * 
+     * @param r Red component.
+     * @param g Green component.
+     * @param b Blue component.
+     */
+    void setColor(float r, float g, float b);
+
+    /**
      * @brief Gets the color of the light.
      * 
      * @return The current color.
@@ -90,7 +99,20 @@ namespace hc
      */
     const Vector3f& getDirection() const;
 
+    /**
+     * @brief Enables or disables the light.
+     */
+    void setEnabled(bool isEnabled);
+
+    /**
+     * @brief Checks if the light is enabled.
+     * 
+     * @return True if the light is enabled, false otherwise.
+     */
+    bool isEnabled() const;
+
   private:
+    bool enabled;
     lightType::Type m_type;
     Color m_color;
     float m_intensity;

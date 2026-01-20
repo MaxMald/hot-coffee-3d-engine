@@ -21,6 +21,7 @@ namespace hc
 
       dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
       dependencyContainer.registerInstance<SceneManager>(MakeShared<SceneManager>());
+
     }
   }
 }

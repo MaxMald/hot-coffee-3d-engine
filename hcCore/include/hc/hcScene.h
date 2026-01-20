@@ -4,6 +4,7 @@
 #include "hc/hcSceneGraph.h"
 #include "hc/hcNonCopyable.h"
 #include "hc/hcIDrawable.h"
+#include "hc/hcLightManager.h"
 
 namespace hc
 {
@@ -49,8 +50,24 @@ namespace hc
      */
     const SceneGraph& getSceneGraph() const;
 
+    /**
+     * @brief Gets a reference to the light manager for managing lights in the
+     * scene.
+     * 
+     * @return Reference to the LightManager.
+     */
+    LightManager& getLightManager();
+
+    /**
+     * @brief Gets a const reference to the light manager.
+     * 
+     * @return Const reference to the LightManager.
+     */
+    const LightManager& getLightManager() const;
+
   private:
     SceneGraph m_sceneGraph;
+    LightManager m_lightManager;
 
     /**
      * @brief Called when the scene becomes active.

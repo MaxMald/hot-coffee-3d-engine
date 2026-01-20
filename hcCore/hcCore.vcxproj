@@ -169,6 +169,9 @@
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
     <ClCompile Include="src\hcIGraphicsManager.cpp" />
+    <ClCompile Include="src\hcLight.cpp" />
+    <ClCompile Include="src\hcLightManager.cpp" />
+    <ClCompile Include="src\hcLightType.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
     <ClCompile Include="src\hcPluginManager.cpp" />
     <ClCompile Include="src\hcScene.cpp" />
@@ -195,6 +198,9 @@
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />
+    <ClInclude Include="include\hc\hcLight.h" />
+    <ClInclude Include="include\hc\hcLightManager.h" />
+    <ClInclude Include="include\hc\hcLightType.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />

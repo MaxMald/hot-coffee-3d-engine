@@ -207,6 +207,9 @@
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcLightManagerWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -297,6 +300,9 @@
       <Filter>Source Files\views\windows\projectBrowser</Filter>
     </ClCompile>
     <ClCompile Include="src\hcGameObjectEditorWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLightManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>

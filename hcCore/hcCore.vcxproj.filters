@@ -108,6 +108,15 @@
     <ClCompile Include="src\hcSceneManager.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcLightType.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLight.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLightManager.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -196,6 +205,15 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcSceneManager.h">
       <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLight.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLightType.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLightManager.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

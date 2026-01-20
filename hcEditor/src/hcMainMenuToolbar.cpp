@@ -7,6 +7,7 @@
 #include "hc/editor/hcSceneGraphWindow.h"
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcLightManagerWindow.h"
 #include "imgui.h"
 #include "ImGuiFileDialog.h"
 
@@ -79,6 +80,9 @@ namespace hc::editor
         if (ImGui::MenuItem("Scene Graph"))
           m_sceneGraphWindow->setOpen(true);
 
+        if (ImGui::MenuItem("Light Manager"))
+          m_lightManagerWindow->setOpen(true);
+
         ImGui::EndMenu();
       }
 
@@ -106,6 +110,7 @@ namespace hc::editor
     m_editorLoggerWindow = container.resolve<EditorLoggerWindow>();
     m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
     m_projectManager = container.resolve<ProjectManager>();
+    m_lightManagerWindow = container.resolve<LightManagerWindow>();
   }
 
   void MainMenuToolbar::displayOpenProjectDialog()
