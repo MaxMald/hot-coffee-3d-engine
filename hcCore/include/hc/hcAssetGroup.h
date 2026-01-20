@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcAsset.h"
+#include "hc/hcNonCopyable.h"
 
 namespace hc
 {
@@ -12,11 +13,15 @@ namespace hc
    * @tparam T Asset type, must derive from Asset.
    */
   template <typename T>
-  class HC_CORE_EXPORT AssetGroup
+  class HC_CORE_EXPORT AssetGroup :
+    public NonCopyable
   {
     static_assert(std::is_base_of_v<Asset, T>, "T must derive from Asset");
 
   public:
+    AssetGroup() = default;
+    ~AssetGroup() = default;
+
     /**
      * @brief Adds an asset to the group.
      *
