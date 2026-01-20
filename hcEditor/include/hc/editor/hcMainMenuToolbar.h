@@ -15,6 +15,7 @@ namespace hc::editor
   class SceneGraphWindow;
   class ProjectManager;
   class LightManagerWindow;
+  class CameraManagerWindow;
 
   /**
    * @brief Main menu bar view for the Hot Coffee Editor.
@@ -50,6 +51,7 @@ namespace hc::editor
     SharedPtr<SceneGraphWindow> m_sceneGraphWindow;
     SharedPtr<ProjectManager> m_projectManager;
     SharedPtr<LightManagerWindow> m_lightManagerWindow;
+    SharedPtr<CameraManagerWindow> m_cameraManagerWindow;
 
     void displayOpenProjectDialog();
   };

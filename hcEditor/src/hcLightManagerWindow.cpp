@@ -5,6 +5,7 @@
 #include <hc/hcScene.h>
 #include <hc/hcLightManager.h>
 #include <hc/hcLight.h>
+#include <hc/hcHotCoffeeEngine.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
 
@@ -20,7 +21,7 @@ namespace hc::editor
   void LightManagerWindow::resolveDependencies(DependencyContainer& container)
   {
     container.resolve<EditorViewsManager>()->registerView(this);
-    m_sceneManager = container.resolve<SceneManager>();
+    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   void LightManagerWindow::onDraw()

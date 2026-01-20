@@ -6,25 +6,25 @@
 namespace hc
 {
   class SceneManager;
-  class Light;
+  class Camera;
 }
 
 namespace hc::editor
 {
-  class LightManagerWindow :
+  class CameraManagerWindow :
     public AWindowView,
     public IDependencyResolvable
   {
   public:
-    LightManagerWindow();
-    ~LightManagerWindow();
+    CameraManagerWindow();
+    ~CameraManagerWindow();
 
     void resolveDependencies(DependencyContainer& container) override;
 
-  protected:
+  private:
     SceneManager* m_sceneManager;
 
     void onDraw() override;
-    void drawLightController(Light* light);
+    void drawCameraController(Camera* camera);
   };
 }

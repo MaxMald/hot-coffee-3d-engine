@@ -8,6 +8,7 @@
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcLightManagerWindow.h"
+#include "hc/editor/hcCameraManagerWindow.h"
 #include "imgui.h"
 #include "ImGuiFileDialog.h"
 
@@ -83,6 +84,9 @@ namespace hc::editor
         if (ImGui::MenuItem("Light Manager"))
           m_lightManagerWindow->setOpen(true);
 
+        if (ImGui::MenuItem("Camera Manager"))
+          m_cameraManagerWindow->setOpen(true);
+
         ImGui::EndMenu();
       }
 
@@ -111,6 +115,7 @@ namespace hc::editor
     m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
     m_projectManager = container.resolve<ProjectManager>();
     m_lightManagerWindow = container.resolve<LightManagerWindow>();
+    m_cameraManagerWindow = container.resolve<CameraManagerWindow>();
   }
 
   void MainMenuToolbar::displayOpenProjectDialog()
