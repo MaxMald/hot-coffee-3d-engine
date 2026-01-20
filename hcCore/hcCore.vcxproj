@@ -165,6 +165,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcAsset.cpp" />
+    <ClCompile Include="src\hcAssetManager.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
     <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
@@ -184,6 +186,9 @@
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcAsset.h" />
+    <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcAssetManager.h" />
     <ClInclude Include="include\hc\hcCamera.h" />
     <ClInclude Include="include\hc\hcCameraManager.h" />
     <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />

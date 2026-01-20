@@ -70,6 +70,9 @@
     <Filter Include="Source Files\scene\sceneGraph">
       <UniqueIdentifier>{935dd6fe-ae2a-45c5-ab47-0f5ff7f2a012}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\assets">
+      <UniqueIdentifier>{2a0e8c01-cd04-4888-99e6-5e80ff8a6c6e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -122,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="src\hcCameraManager.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAssetManager.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAsset.cpp">
+      <Filter>Source Files\assets</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +235,15 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcCameraManager.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAsset.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetManager.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetGroup.h">
+      <Filter>Header Files\assets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
