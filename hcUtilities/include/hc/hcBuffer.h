@@ -13,7 +13,7 @@ namespace hc
    * @tparam T Element type.
    */
   template<typename T>
-  class HC_UTILITY_EXPORT Buffer
+  class Buffer
   {
   public:
     /**

@@ -132,6 +132,9 @@
     <ClCompile Include="src\hcAsset.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcTexture.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -243,6 +246,9 @@
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcAssetGroup.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcTexture.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
   </ItemGroup>
