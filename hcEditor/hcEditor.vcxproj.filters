@@ -204,6 +204,9 @@
     <ClInclude Include="include\hc\editor\hcProjectBrowserWindow.h">
       <Filter>Header Files\views\windows\projectBrowser</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -292,6 +295,9 @@
     </ClCompile>
     <ClCompile Include="src\hcProjectBrowserWindow.cpp">
       <Filter>Source Files\views\windows\projectBrowser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcGameObjectEditorWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

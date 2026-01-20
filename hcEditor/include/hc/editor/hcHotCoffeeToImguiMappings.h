@@ -2,6 +2,7 @@
 
 #include <hc/hcMouseButtonKey.h>
 #include <hc/hcKeyboardKey.h>
+#include <hc/hcVector3.h>
 
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "imgui.h"
@@ -27,5 +28,7 @@ namespace hc::editor
      * @return The corresponding ImGui key code.
      */
     ImGuiKey mapKeyboardCode(const keyboardKey::Type& key);
+
+    
   }
 }
