@@ -5,6 +5,7 @@
 #include "hc/hcNonCopyable.h"
 #include "hc/hcIDrawable.h"
 #include "hc/hcLightManager.h"
+#include "hc/hcCameraManager.h"
 
 namespace hc
 {
@@ -65,9 +66,25 @@ namespace hc
      */
     const LightManager& getLightManager() const;
 
+    /*
+    * @brief Gets a reference to the camera manager for managing cameras in the
+    * scene.
+    *
+    * @return Reference to the CameraManager.
+    */
+    CameraManager& getCameraManager();
+
+    /**
+     * @brief Gets a const reference to the camera manager.
+     * 
+     * @return Const reference to the CameraManager.
+     */
+    const CameraManager& getCameraManager() const;
+
   private:
     SceneGraph m_sceneGraph;
     LightManager m_lightManager;
+    CameraManager m_cameraManager;
 
     /**
      * @brief Called when the scene becomes active.

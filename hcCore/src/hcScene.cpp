@@ -40,6 +40,16 @@ namespace hc
     return m_lightManager;
   }
 
+  CameraManager& Scene::getCameraManager()
+  {
+    return m_cameraManager;
+  }
+
+  const CameraManager& Scene::getCameraManager() const
+  {
+    return m_cameraManager;
+  }
+
   void Scene::onActivate()
   {
     // TODO
