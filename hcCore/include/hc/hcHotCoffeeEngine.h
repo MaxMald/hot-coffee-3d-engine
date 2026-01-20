@@ -10,6 +10,7 @@ namespace hc
   class WindowManager;
   class IGraphicsManager;
   class SceneManager;
+  class AssetManager;
 
   class HC_CORE_EXPORT HotCoffeeEngine
   {
@@ -22,6 +23,7 @@ namespace hc
     WindowManager& getWindowManager();
     IGraphicsManager& getGraphicsManager();
     SceneManager& getSceneManager();
+    AssetManager& getAssetManager();
 
     void init(const HotCoffeeEngineSettings& settings);
 
@@ -31,6 +33,7 @@ namespace hc
     SharedPtr<WindowManager> m_windowManager;
     SharedPtr<IGraphicsManager> m_graphicsManager;
     SharedPtr<SceneManager> m_sceneManager;
+    SharedPtr<AssetManager> m_assetManager;
 
     bool m_started;
     PluginManager m_pluginManager;

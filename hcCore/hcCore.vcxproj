@@ -189,6 +189,7 @@
   <ItemGroup>
     <ClInclude Include="include\hc\hcAsset.h" />
     <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcIAssetLoader.h" />
     <ClInclude Include="include\hc\hcAssetManager.h" />
     <ClInclude Include="include\hc\hcCamera.h" />
     <ClInclude Include="include\hc\hcCameraManager.h" />
@@ -205,6 +206,7 @@
     <ClInclude Include="include\hc\hcIPluginSlot.h" />
     <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
     <ClInclude Include="include\hc\hcIDrawable.h" />
+    <ClInclude Include="include\hc\hcITextureLoader.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcIWindowFactory.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />

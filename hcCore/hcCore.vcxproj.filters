@@ -251,5 +251,11 @@
     <ClInclude Include="include\hc\hcTexture.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcITextureLoader.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIAssetLoader.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

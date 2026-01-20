@@ -2,8 +2,7 @@
 
 namespace hc
 {
-  Texture::Texture(const String& key) :
-    Asset(key),
+  Texture::Texture() :
     m_width(0),
     m_height(0),
     m_data(0)

@@ -12,16 +12,7 @@ namespace hc
     public Asset
   {
   public:
-    /**
-     * @brief Constructs a texture asset with the given key.
-     * 
-     * @param key Unique identifier for the texture.
-     */
-    Texture(const String& key);
-
-    /**
-     * @brief Virtual destructor for safe polymorphic deletion.
-     */
+    Texture();
     virtual ~Texture();
 
     /**

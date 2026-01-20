@@ -1,18 +1,16 @@
 #include "hc/hcAssetLoadersPlugin.h"
 #include "hc/hcDependencyContainer.h"
+#include "hc/hcTextureLoader.h"
 
 namespace hc
 {
-  extern "C"
+  HC_ASSET_LOADERS_EXPORT IPlugin* createAssetLoadersPlugin()
   {
-    HC_ASSET_LOADERS_EXPORT IPlugin* createAssetLoadersPlugin()
-    {
-      return new AssetLoadersPlugin();
-    }
+    return new AssetLoadersPlugin();
+  }
 
-    HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin(IPlugin* plugin)
-    {
-    }
+  HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin(IPlugin* plugin)
+  {
   }
 
   AssetLoadersPlugin::AssetLoadersPlugin()
@@ -35,6 +33,6 @@ namespace hc
 
   void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
   {
-    // TODO
+    container.registerInstanceAsInterface<ITextureLoader, TextureLoader>(MakeShared<TextureLoader>());
   }
 }

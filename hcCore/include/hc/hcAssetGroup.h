@@ -27,7 +27,7 @@ namespace hc
      *
      * @param asset Shared pointer to the asset.
      */
-    void add(const SharedPtr<T>& asset);
+    void add(const String& key, const SharedPtr<T>& asset);
 
     /**
      * @brief Retrieves an asset by key.
@@ -78,12 +78,11 @@ namespace hc
   };
 
   template <typename T>
-  void AssetGroup<T>::add(const SharedPtr<T>& asset)
+  void AssetGroup<T>::add(const String& key, const SharedPtr<T>& asset)
   {
     if (!asset)
       return;
 
-    const String& key = asset->getKey();
     m_assets.emplace(key, asset);
   }
 

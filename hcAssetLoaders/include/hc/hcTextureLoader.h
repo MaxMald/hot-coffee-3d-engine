@@ -12,8 +12,8 @@ namespace hc
     virtual ~TextureLoader() override;
 
     /**
-     * @copydoc ITextureLoader::loadTexture
+     * @copydoc ITextureLoader::load
      */
-    virtual SharedPtr<Texture> loadTexture(const Path& filePath) override;
+    SharedPtr<Texture> load(const Path& filePath) override;
   };
 }

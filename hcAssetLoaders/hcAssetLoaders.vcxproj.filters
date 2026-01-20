@@ -13,5 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\configuration">
+      <UniqueIdentifier>{ec2d61c4-23bb-4577-9e6f-5176aaddc9e6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\hcAssetLoadersPlugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\hc\hcAssetLoadersLibraryConfiguration.h">
+      <Filter>Header Files\configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetLoadersPrerequisites.h">
+      <Filter>Header Files\configuration</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetLoadersPlugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcTextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

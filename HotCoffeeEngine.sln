@@ -30,6 +30,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcWindowSfml", "hcWindowSfm
 		{FEB0E270-A347-437B-ADAC-6A910A8276B1} = {FEB0E270-A347-437B-ADAC-6A910A8276B1}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "hcAssetLoaders", "hcAssetLoaders\hcAssetLoaders.vcxproj", "{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -78,6 +80,14 @@ Global
 		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x64.Build.0 = Release|x64
 		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x86.ActiveCfg = Release|Win32
 		{4F03D6E5-24C8-4D58-9A25-ABA123FAD908}.Release|x86.Build.0 = Release|Win32
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Debug|x64.ActiveCfg = Debug|x64
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Debug|x64.Build.0 = Debug|x64
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Debug|x86.ActiveCfg = Debug|Win32
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Debug|x86.Build.0 = Debug|Win32
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Release|x64.ActiveCfg = Release|x64
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Release|x64.Build.0 = Release|x64
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Release|x86.ActiveCfg = Release|Win32
+		{76C26B0D-36E6-42A6-B19A-F8B54D7E541D}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

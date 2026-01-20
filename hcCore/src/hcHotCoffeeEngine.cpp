@@ -8,6 +8,7 @@
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcSceneManager.h"
+#include "hc/hcAssetManager.h"
 
 namespace hc
 {
@@ -83,6 +84,18 @@ namespace hc
     return *m_sceneManager;
   }
 
+  AssetManager& HotCoffeeEngine::getAssetManager()
+  {
+    if (m_assetManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "AssetManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_assetManager;
+  }
+
   void HotCoffeeEngine::init(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)
@@ -134,6 +147,7 @@ namespace hc
     m_windowManager = m_dependencyContainer.resolve<WindowManager>();
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
+    m_assetManager = m_dependencyContainer.resolve<AssetManager>();
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :

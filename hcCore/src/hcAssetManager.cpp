@@ -15,7 +15,7 @@ namespace hc
 
   void AssetManager::resolveDependencies(DependencyContainer& container)
   {
-    // TODO
+
   }
 
   void AssetManager::clear()

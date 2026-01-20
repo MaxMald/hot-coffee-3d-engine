@@ -16,6 +16,8 @@ namespace hc
 
       if (settings.graphicsType == PluginManagerSettings::graphicsPluginType::OPENGL)
         connectGraphicsOpenGLPlugin(pluginManager);
+
+      connectAssetLoadersPlugin(pluginManager);
     }
 
     void connectWindowSfmlPlugin(PluginManager& pluginManager)
@@ -35,6 +37,16 @@ namespace hc
         "hcGraphicsOpenGL" + String(HC_DYN_LIB_SUFIX),
         "createGraphicsOpenGLPlugin",
         "destroyGraphicsOpenGLPlugin"
+      );
+    }
+
+    void connectAssetLoadersPlugin(PluginManager& pluginManager)
+    {
+      pluginManager.connectPlugin(
+        "AssetLoadersPlugin",
+        "hcAssetLoaders" + String(HC_DYN_LIB_SUFIX),
+        "createAssetLoadersPlugin",
+        "destroyAssetLoadersPlugin"
       );
     }
   }

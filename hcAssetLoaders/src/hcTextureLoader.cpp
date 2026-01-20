@@ -10,7 +10,7 @@ namespace hc
   {
   }
 
-  SharedPtr<Texture> TextureLoader::loadTexture(const Path& filePath)
+  SharedPtr<Texture> TextureLoader::load(const Path& filePath)
   {
     // TODO
     return nullptr;

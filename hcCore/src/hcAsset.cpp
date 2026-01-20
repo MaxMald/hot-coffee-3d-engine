@@ -2,19 +2,13 @@
 
 namespace hc
 {
-  Asset::Asset(const String& key) :
-    m_key(key),
+  Asset::Asset() :
     m_path()
   {
   }
 
   Asset::~Asset()
   {
-  }
-
-  const String& Asset::getKey() const
-  {
-    return m_key;
   }
 
   const Path& Asset::getPath() const
