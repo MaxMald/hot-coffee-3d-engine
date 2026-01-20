@@ -33,6 +33,8 @@ namespace hc
 
   void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
   {
-    container.registerInstanceAsInterface<ITextureLoader, TextureLoader>(MakeShared<TextureLoader>());
+    container.registerInstanceAsInterface<ITextureLoader, TextureLoader>(
+      MakeShared<TextureLoader>()
+    );
   }
 }
