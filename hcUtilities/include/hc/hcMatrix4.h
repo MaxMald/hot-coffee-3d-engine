@@ -27,6 +27,7 @@ namespace hc
     static Matrix4 RotationX(float angleRadians);
     static Matrix4 RotationY(float angleRadians);
     static Matrix4 RotationZ(float angleRadians);
+    static Matrix4 LookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up);
 
     union
     {
@@ -35,9 +36,9 @@ namespace hc
       struct
       {
         float m00, m01, m02, m03,
-              m10, m11, m12, m13,
-              m20, m21, m22, m23,
-              m30, m31, m32, m33;
+          m10, m11, m12, m13,
+          m20, m21, m22, m23,
+          m30, m31, m32, m33;
       };
 
       Vector4f mRow[4];
@@ -117,9 +118,9 @@ namespace hc
   constexpr Matrix4 Matrix4::Scale(float sx, float sy, float sz)
   {
     return Matrix4(
-      sx,   0.0f, 0.0f, 0.0f,
-      0.0f, sy,   0.0f, 0.0f,
-      0.0f, 0.0f, sz,   0.0f,
+      sx, 0.0f, 0.0f, 0.0f,
+      0.0f, sy, 0.0f, 0.0f,
+      0.0f, 0.0f, sz, 0.0f,
       0.0f, 0.0f, 0.0f, 1.0f
     );
   }
@@ -145,8 +146,8 @@ namespace hc
 
     return Matrix4(
       1.0f, 0.0f, 0.0f, 0.0f,
-      0.0f,   c,   -s, 0.0f,
-      0.0f,   s,    c, 0.0f,
+      0.0f, c, -s, 0.0f,
+      0.0f, s, c, 0.0f,
       0.0f, 0.0f, 0.0f, 1.0f
     );
   }
@@ -157,9 +158,9 @@ namespace hc
     float s = sin(angleRadians);
 
     return Matrix4(
-        c, 0.0f,   s, 0.0f,
+      c, 0.0f, s, 0.0f,
       0.0f, 1.0f, 0.0f, 0.0f,
-       -s, 0.0f,   c, 0.0f,
+      -s, 0.0f, c, 0.0f,
       0.0f, 0.0f, 0.0f, 1.0f
     );
   }
@@ -170,20 +171,39 @@ namespace hc
     float s = sin(angleRadians);
 
     return Matrix4(
-        c,   -s, 0.0f, 0.0f,
-        s,    c, 0.0f, 0.0f,
+      c, -s, 0.0f, 0.0f,
+      s, c, 0.0f, 0.0f,
       0.0f, 0.0f, 1.0f, 0.0f,
       0.0f, 0.0f, 0.0f, 1.0f
     );
   }
 
+  inline Matrix4 Matrix4::LookAt(
+    const Vector3f& position,
+    const Vector3f& target,
+    const Vector3f& up
+  )
+  {
+    Vector3f zaxis = (position - target).normalized();
+    Vector3f xaxis = up.cross(zaxis).normalized();
+    Vector3f yaxis = zaxis.cross(xaxis);
+
+    return Matrix4(
+      xaxis.x, yaxis.x, zaxis.x, position.x,
+      xaxis.y, yaxis.y, zaxis.y, position.y,
+      xaxis.z, yaxis.z, zaxis.z, position.z,
+      0.0f, 0.0f, 0.0f, 1.0f
+    ).inverted();
+  }
+
   // Constructors
   constexpr Matrix4::Matrix4()
     : m00(0.0f), m01(0.0f), m02(0.0f), m03(0.0f),
-      m10(0.0f), m11(0.0f), m12(0.0f), m13(0.0f),
-      m20(0.0f), m21(0.0f), m22(0.0f), m23(0.0f),
-      m30(0.0f), m31(0.0f), m32(0.0f), m33(0.0f)
-  {}
+    m10(0.0f), m11(0.0f), m12(0.0f), m13(0.0f),
+    m20(0.0f), m21(0.0f), m22(0.0f), m23(0.0f),
+    m30(0.0f), m31(0.0f), m32(0.0f), m33(0.0f)
+  {
+  }
 
   constexpr Matrix4::Matrix4(
     float m00, float m01, float m02, float m03,
@@ -192,17 +212,19 @@ namespace hc
     float m30, float m31, float m32, float m33
   )
     : m00(m00), m01(m01), m02(m02), m03(m03),
-      m10(m10), m11(m11), m12(m12), m13(m13),
-      m20(m20), m21(m21), m22(m22), m23(m23),
-      m30(m30), m31(m31), m32(m32), m33(m33)
-  {}
+    m10(m10), m11(m11), m12(m12), m13(m13),
+    m20(m20), m21(m21), m22(m22), m23(m23),
+    m30(m30), m31(m31), m32(m32), m33(m33)
+  {
+  }
 
   constexpr Matrix4::Matrix4(const Matrix4& other)
     : m00(other.m00), m01(other.m01), m02(other.m02), m03(other.m03),
-      m10(other.m10), m11(other.m11), m12(other.m12), m13(other.m13),
-      m20(other.m20), m21(other.m21), m22(other.m22), m23(other.m23),
-      m30(other.m30), m31(other.m31), m32(other.m32), m33(other.m33)
-  {}
+    m10(other.m10), m11(other.m11), m12(other.m12), m13(other.m13),
+    m20(other.m20), m21(other.m21), m22(other.m22), m23(other.m23),
+    m30(other.m30), m31(other.m31), m32(other.m32), m33(other.m33)
+  {
+  }
 
   constexpr Matrix4& Matrix4::operator=(const Matrix4& other)
   {
@@ -314,9 +336,9 @@ namespace hc
   constexpr bool Matrix4::operator==(const Matrix4& rhs) const
   {
     return m00 == rhs.m00 && m01 == rhs.m01 && m02 == rhs.m02 && m03 == rhs.m03 &&
-           m10 == rhs.m10 && m11 == rhs.m11 && m12 == rhs.m12 && m13 == rhs.m13 &&
-           m20 == rhs.m20 && m21 == rhs.m21 && m22 == rhs.m22 && m23 == rhs.m23 &&
-           m30 == rhs.m30 && m31 == rhs.m31 && m32 == rhs.m32 && m33 == rhs.m33;
+      m10 == rhs.m10 && m11 == rhs.m11 && m12 == rhs.m12 && m13 == rhs.m13 &&
+      m20 == rhs.m20 && m21 == rhs.m21 && m22 == rhs.m22 && m23 == rhs.m23 &&
+      m30 == rhs.m30 && m31 == rhs.m31 && m32 == rhs.m32 && m33 == rhs.m33;
   }
 
   constexpr bool Matrix4::operator!=(const Matrix4& rhs) const
@@ -343,22 +365,22 @@ namespace hc
         m11 * (m22 * m33 - m23 * m32) -
         m12 * (m21 * m33 - m23 * m31) +
         m13 * (m21 * m32 - m22 * m31)
-      )
+        )
       - m01 * (
         m10 * (m22 * m33 - m23 * m32) -
         m12 * (m20 * m33 - m23 * m30) +
         m13 * (m20 * m32 - m22 * m30)
-      )
+        )
       + m02 * (
         m10 * (m21 * m33 - m23 * m31) -
         m11 * (m20 * m33 - m23 * m30) +
         m13 * (m20 * m31 - m21 * m30)
-      )
+        )
       - m03 * (
         m10 * (m21 * m32 - m22 * m31) -
         m11 * (m20 * m32 - m22 * m30) +
         m12 * (m20 * m31 - m21 * m30)
-      );
+        );
 
     return det;
   }
@@ -374,25 +396,25 @@ namespace hc
     // Compute cofactors
     Matrix4 cof;
 
-    cof.m00 =  m11 * (m22 * m33 - m23 * m32) - m12 * (m21 * m33 - m23 * m31) + m13 * (m21 * m32 - m22 * m31);
+    cof.m00 = m11 * (m22 * m33 - m23 * m32) - m12 * (m21 * m33 - m23 * m31) + m13 * (m21 * m32 - m22 * m31);
     cof.m01 = -m01 * (m22 * m33 - m23 * m32) + m02 * (m21 * m33 - m23 * m31) - m03 * (m21 * m32 - m22 * m31);
-    cof.m02 =  m01 * (m12 * m33 - m13 * m32) - m02 * (m11 * m33 - m13 * m31) + m03 * (m11 * m32 - m12 * m31);
+    cof.m02 = m01 * (m12 * m33 - m13 * m32) - m02 * (m11 * m33 - m13 * m31) + m03 * (m11 * m32 - m12 * m31);
     cof.m03 = -m01 * (m12 * m23 - m13 * m22) + m02 * (m11 * m23 - m13 * m21) - m03 * (m11 * m22 - m12 * m21);
 
     cof.m10 = -m10 * (m22 * m33 - m23 * m32) + m12 * (m20 * m33 - m23 * m30) - m13 * (m20 * m32 - m22 * m30);
-    cof.m11 =  m00 * (m22 * m33 - m23 * m32) - m02 * (m20 * m33 - m23 * m30) + m03 * (m20 * m32 - m22 * m30);
+    cof.m11 = m00 * (m22 * m33 - m23 * m32) - m02 * (m20 * m33 - m23 * m30) + m03 * (m20 * m32 - m22 * m30);
     cof.m12 = -m00 * (m12 * m33 - m13 * m32) + m02 * (m10 * m33 - m13 * m30) - m03 * (m10 * m32 - m12 * m30);
-    cof.m13 =  m00 * (m12 * m23 - m13 * m22) - m02 * (m10 * m23 - m13 * m20) + m03 * (m10 * m22 - m12 * m20);
+    cof.m13 = m00 * (m12 * m23 - m13 * m22) - m02 * (m10 * m23 - m13 * m20) + m03 * (m10 * m22 - m12 * m20);
 
-    cof.m20 =  m10 * (m21 * m33 - m23 * m31) - m11 * (m20 * m33 - m23 * m30) + m13 * (m20 * m31 - m21 * m30);
+    cof.m20 = m10 * (m21 * m33 - m23 * m31) - m11 * (m20 * m33 - m23 * m30) + m13 * (m20 * m31 - m21 * m30);
     cof.m21 = -m00 * (m21 * m33 - m23 * m31) + m01 * (m20 * m33 - m23 * m30) - m03 * (m20 * m31 - m21 * m30);
-    cof.m22 =  m00 * (m11 * m33 - m13 * m31) - m01 * (m10 * m33 - m13 * m30) + m03 * (m10 * m31 - m11 * m30);
+    cof.m22 = m00 * (m11 * m33 - m13 * m31) - m01 * (m10 * m33 - m13 * m30) + m03 * (m10 * m31 - m11 * m30);
     cof.m23 = -m00 * (m11 * m23 - m13 * m21) + m01 * (m10 * m23 - m13 * m20) - m03 * (m10 * m21 - m11 * m20);
 
     cof.m30 = -m10 * (m21 * m32 - m22 * m31) + m11 * (m20 * m32 - m22 * m30) - m12 * (m20 * m31 - m21 * m30);
-    cof.m31 =  m00 * (m21 * m32 - m22 * m31) - m01 * (m20 * m32 - m22 * m30) + m02 * (m20 * m31 - m21 * m30);
+    cof.m31 = m00 * (m21 * m32 - m22 * m31) - m01 * (m20 * m32 - m22 * m30) + m02 * (m20 * m31 - m21 * m30);
     cof.m32 = -m00 * (m11 * m32 - m12 * m31) + m01 * (m10 * m32 - m12 * m30) - m02 * (m10 * m31 - m11 * m30);
-    cof.m33 =  m00 * (m11 * m22 - m12 * m21) - m01 * (m10 * m22 - m12 * m20) + m02 * (m10 * m21 - m11 * m20);
+    cof.m33 = m00 * (m11 * m22 - m12 * m21) - m01 * (m10 * m22 - m12 * m20) + m02 * (m10 * m21 - m11 * m20);
 
     // Get adjugate
     Matrix4 adj = cof.transposed();
