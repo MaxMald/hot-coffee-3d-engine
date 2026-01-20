@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  class IImageLoader;
+
   /**
    * @brief Represents a image asset in the engine.
    */
@@ -14,6 +16,19 @@ namespace hc
   public:
     Image();
     virtual ~Image();
+
+    /**
+     * @brief Initializes the image with dimensions and image data.
+     *
+     * @param width Image width.
+     * @param height Image height.
+     * @param buffer Buffer containing image data. Ownership is transferred.
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      BufferByte&& buffer
+    );
 
     /**
      * @brief Gets the width of the image in pixels.
@@ -44,19 +59,6 @@ namespace hc
     const BufferByte& getBuffer() const;
 
   private:
-    /**
-     * @brief Initializes the image with dimensions and image data.
-     * 
-     * @param width Image width.
-     * @param height Image height.
-     * @param buffer Buffer containing image data. Ownership is transferred.
-     */
-    void initialize(
-      UInt32 width,
-      UInt32 height,
-      BufferByte&& buffer
-    );
-
     UInt32 m_width;
     UInt32 m_height;
     BufferByte m_data;

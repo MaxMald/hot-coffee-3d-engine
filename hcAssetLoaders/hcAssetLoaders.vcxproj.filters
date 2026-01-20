@@ -21,7 +21,7 @@
     <ClCompile Include="src\hcAssetLoadersPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcTextureLoader.cpp">
+    <ClCompile Include="src\hcImageLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -29,3 +29,5 @@
 # define HC_PLUGIN_EXPORT __attribute__ ((visibility("default")))
 # define HC_PLUGIN_HIDDEN __attribute__ ((visibility("hidden")))
 #endif
+
+#define STB_IMAGE_IMPLEMENTATION

@@ -13,3 +13,6 @@ Hot Coffee is a 3D engine
 # Editor Project Dependencies
 - Imgui 1.92.5
 - ImGuiFileDialog 0.6.8
+
+# Asset Loaders Dependencies
+- nothings stb

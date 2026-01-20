@@ -13,6 +13,17 @@ namespace hc
   {
   }
 
+  void Image::initialize(
+    UInt32 width,
+    UInt32 height,
+    BufferByte&& buffer
+  )
+  {
+    m_width = width;
+    m_height = height;
+    m_data = std::move(buffer);
+  }
+
   UInt32 Image::getWidth() const
   {
     return m_width;
@@ -31,16 +42,5 @@ namespace hc
   const BufferByte& Image::getBuffer() const
   {
     return m_data;
-  }
-
-  void Image::initialize(
-    UInt32 width,
-    UInt32 height,
-    BufferByte&& buffer
-  )
-  {
-    m_width = width;
-    m_height = height;
-    m_data = std::move(buffer);
   }
 }
