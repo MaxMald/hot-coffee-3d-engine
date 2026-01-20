@@ -8,6 +8,7 @@
 #include "hc/hcWindowManager.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
+#include "hc/hcMaterialManager.h"
 
 namespace hc
 {
@@ -23,6 +24,7 @@ namespace hc
       dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
       dependencyContainer.registerInstance<SceneManager>(MakeShared<SceneManager>());
       dependencyContainer.registerInstance<AssetManager>(MakeShared<AssetManager>());
+      dependencyContainer.registerInstance<MaterialManager>(MakeShared<MaterialManager>());
     }
   }
 }

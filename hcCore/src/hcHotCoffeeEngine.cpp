@@ -96,6 +96,18 @@ namespace hc
     return *m_assetManager;
   }
 
+  MaterialManager& HotCoffeeEngine::getMaterialManager()
+  {
+    if (m_materialManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "MaterialManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_materialManager;
+  }
+
   void HotCoffeeEngine::init(const HotCoffeeEngineSettings& settings)
   {
     if (m_started)

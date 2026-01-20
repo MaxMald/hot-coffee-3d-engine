@@ -38,6 +38,30 @@ namespace hc
     SharedPtr<T> load(const String& key, const Path& path);
 
     /**
+     * @brief Retrieves an asset of type T by its unique key.
+     * 
+     * @tparam T Asset type.
+     * 
+     * @param key Unique identifier for the asset.
+     * 
+     * @return Shared pointer to the asset, or nullptr if not found.
+     */
+    template<typename T>
+    SharedPtr<T> get(const String& key);
+
+    /**
+     * @brief Checks if an asset of type T exists for the given key.
+     * 
+     * @tparam T Asset type.
+     * 
+     * @param key Unique identifier for the asset.
+     * 
+     * @return True if the asset exists, false otherwise.
+     */
+    template<typename T>
+    bool contains(const String& key);
+
+    /**
      * @brief Gets the asset group for the specified type. If the group does not
      * exist, it is created.
      * 
@@ -89,6 +113,20 @@ namespace hc
     assetGroup.add(key, loadedAsset);
 
     return loadedAsset;
+  }
+
+  template<typename T>
+  inline SharedPtr<T> AssetManager::get(const String& key)
+  {
+    AssetGroup<T>& assetGroup = getGroup<T>();
+    return assetGroup.get(key);
+  }
+
+  template<typename T>
+  inline bool AssetManager::contains(const String& key)
+  {
+    AssetGroup<T>& assetGroup = getGroup<T>();
+    return assetGroup.contains(key);
   }
 
   template<typename T>

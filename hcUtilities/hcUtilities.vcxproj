@@ -168,6 +168,7 @@
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcJson.h" />
+    <ClInclude Include="include\hc\hcJsonParsers.h" />
     <ClInclude Include="include\hc\hcLogService.h" />
     <ClInclude Include="include\hc\hcMath.h" />
     <ClInclude Include="include\hc\hcMatrix2.h" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcJson.cpp" />
+    <ClCompile Include="src\hcJsonParsers.cpp" />
     <ClCompile Include="src\hcLogService.cpp" />
     <ClCompile Include="src\hcTransform.cpp" />
   </ItemGroup>

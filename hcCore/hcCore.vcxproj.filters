@@ -73,6 +73,24 @@
     <Filter Include="Source Files\assets">
       <UniqueIdentifier>{2a0e8c01-cd04-4888-99e6-5e80ff8a6c6e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\assets\materials">
+      <UniqueIdentifier>{c23f9574-f981-4a4e-b7ee-9270e2dc43ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\assets\loaders">
+      <UniqueIdentifier>{ac609978-a258-47f4-8231-b67235910c61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets\materials">
+      <UniqueIdentifier>{741b85a1-c530-4cb6-b382-6e689aab0258}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assets\loaders">
+      <UniqueIdentifier>{313daf0a-b560-4433-8bb4-24edea1c5ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\material">
+      <UniqueIdentifier>{abd929a5-a437-4c84-b8db-ce2ed9c79135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\material">
+      <UniqueIdentifier>{80b027d1-744f-44bf-8675-dcf816586ae3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -134,6 +152,24 @@
     </ClCompile>
     <ClCompile Include="src\hcImage.cpp">
       <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptor.cpp">
+      <Filter>Source Files\assets\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp">
+      <Filter>Source Files\assets\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptorLoader.cpp">
+      <Filter>Source Files\assets\loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderType.cpp">
+      <Filter>Source Files\assets\materials</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterial.cpp">
+      <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialManager.cpp">
+      <Filter>Source Files\graphics\material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,11 +287,35 @@
     <ClInclude Include="include\hc\hcImage.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h">
+      <Filter>Header Files\assets\materials</Filter>
+    </ClInclude>
     <ClInclude Include="include\hc\hcIImageLoader.h">
-      <Filter>Header Files\assets</Filter>
+      <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIAssetLoader.h">
-      <Filter>Header Files\assets</Filter>
+      <Filter>Header Files\assets\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderType.h">
+      <Filter>Header Files\assets\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialDescriptorLoader.h">
+      <Filter>Header Files\assets\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialDescriptor.h">
+      <Filter>Header Files\assets\materials</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialManager.h">
+      <Filter>Header Files\graphics\material</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIMaterial.h">
+      <Filter>Header Files\graphics\material</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcUnlitMaterial.h">
+      <Filter>Header Files\graphics\material</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcITexture.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
