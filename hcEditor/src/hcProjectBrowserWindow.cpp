@@ -60,10 +60,15 @@ namespace hc::editor
 
   void ProjectBrowserWindow::drawDirectoryNavigator()
   {
+    ImGui::Text("Project Navigator");
     DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
     if (!currentDir)
+    {
+      ImGui::Text("No directory selected. Load a Project first.");
       return;
+    }
 
+    
     ImGui::Text("Current Directory: %s", currentDir->getFullPath().string().c_str());
     if (ImGui::Button("Back"))
     {
@@ -104,45 +109,47 @@ namespace hc::editor
     static Char fileName[256] = "";
     static Int32 selectedAssetType = 0;
 
-    ImGui::SetNextItemWidth(150.0f);
-    ImGui::InputText("File Name", fileName, IM_ARRAYSIZE(fileName));
-    ImGui::SameLine();
-    ImGui::SetNextItemWidth(120.0f);
-    ImGui::Combo("Asset Type", &selectedAssetType, ASSET_TYPES, IM_ARRAYSIZE(ASSET_TYPES));
-    ImGui::SameLine();
-
-    if (ImGui::Button("Create Asset"))
+    if (ImGui::CollapsingHeader("Asset Creator", ImGuiTreeNodeFlags_DefaultOpen))
     {
-      DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
-      if (!currentDir)
-        return;
+      ImGui::SetNextItemWidth(150.0f);
+      ImGui::InputText("File Name", fileName, IM_ARRAYSIZE(fileName));
+      ImGui::SameLine();
+      ImGui::SetNextItemWidth(120.0f);
+      ImGui::Combo("Asset Type", &selectedAssetType, ASSET_TYPES, IM_ARRAYSIZE(ASSET_TYPES));
+      ImGui::SameLine();
 
-      if (strlen(fileName) <= 0)
-        return;
-
-      String assetType = ASSET_TYPES[selectedAssetType];
-      if (assetType == "Material")
+      if (ImGui::Button("Create Asset"))
       {
-        assetCreator::createMaterialDescriptor(
-          combineDirectoryWithFileName(
-            currentDir->getFullPath(),
-            String(fileName),
-            assetFileExtensions::MATERIAL_DESCRIPTOR
-          )
-        );
-      }
-      else
-      {
-        LogService::Error(
-          String::Format(
-            "Couldn't create asset. Unsupported asset type '%s' requested.",
-            assetType.c_str()
-          )
-        );
-      }
+        DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
+        if (!currentDir)
+          return;
 
-      refresh();
-    }
+        if (strlen(fileName) <= 0)
+          return;
+
+        String assetType = ASSET_TYPES[selectedAssetType];
+        if (assetType == "Material")
+        {
+          assetCreator::createMaterialDescriptor(
+            combineDirectoryWithFileName(
+              currentDir->getFullPath(),
+              String(fileName),
+              assetFileExtensions::MATERIAL_DESCRIPTOR
+            )
+          );
+        }
+        else
+        {
+          LogService::Error(
+            String::Format(
+              "Couldn't create asset. Unsupported asset type '%s' requested.",
+              assetType.c_str()
+            )
+          );
+        }
+        refresh();
+      }
+    } // Collapsing Header
   }
 
   Path ProjectBrowserWindow::combineDirectoryWithFileName(
