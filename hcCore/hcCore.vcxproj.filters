@@ -341,5 +341,8 @@
     <ClInclude Include="include\hc\hcAssetFileExtensions.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcMouseWheelType.h">
+      <Filter>Header Files\window</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

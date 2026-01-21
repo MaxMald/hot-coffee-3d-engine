@@ -165,6 +165,15 @@ namespace hc
         Vector2i(btn->position.x, btn->position.y)
       });
     }
+    else if (sfmlEvent.is<sf::Event::MouseWheelScrolled>())
+    {
+      const auto& wheel = sfmlEvent.getIf<sf::Event::MouseWheelScrolled>();
+      return Event(Event::MouseWheelScrolled{
+        static_cast<mouseWheelType::Type>(wheel->wheel),
+        wheel->delta,
+        Vector2i(wheel->position.x, wheel->position.y)
+      });
+    }
     else if (sfmlEvent.is<sf::Event::MouseMoved>())
     {
       const auto& move = sfmlEvent.getIf<sf::Event::MouseMoved>();

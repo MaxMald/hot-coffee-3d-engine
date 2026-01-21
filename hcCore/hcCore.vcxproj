@@ -229,6 +229,7 @@
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialManager.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
+    <ClInclude Include="include\hc\hcMouseWheelType.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />

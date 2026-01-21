@@ -51,6 +51,24 @@ namespace hc::editor
         }
       }
 
+      else if (evt.is<Event::MouseWheelScrolled>())
+      {
+        const auto* e = evt.getIf<Event::MouseWheelScrolled>();
+        if (e)
+        {
+          if (e->wheel == mouseWheelType::Vertical)
+          {
+            ImGui::GetIO().AddMouseWheelEvent(0.0f, e->delta);
+          }
+          else if (e->wheel == mouseWheelType::Horizontal)
+          {
+            ImGui::GetIO().AddMouseWheelEvent(e->delta, 0.0f);
+          }
+          ImGui::GetIO().AddMousePosEvent(static_cast<float>(e->position.x), static_cast<float>(e->position.y));
+          handled = true;
+        }
+      }
+
       else if (evt.is<Event::MouseMoved>())
       {
         const auto* e = evt.getIf<Event::MouseMoved>();

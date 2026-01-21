@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcKeyboardKey.h"
 #include "hc/hcMouseButtonKey.h"
+#include "hc/hcMouseWheelType.h"
 #include "hc/hcVector2.h"
 
 namespace hc
@@ -48,6 +49,13 @@ namespace hc
       Vector2i position{};
     };
 
+    struct MouseWheelScrolled
+    {
+      mouseWheelType::Type wheel{};
+      float delta{};
+      Vector2i position{};
+    };
+
     struct MouseMoved
     {
       Vector2i position{};
@@ -71,6 +79,7 @@ namespace hc
       KeyReleased,
       MouseButtonPressed,
       MouseButtonReleased,
+      MouseWheelScrolled,
       MouseMoved,
       Closed,
       Resized
