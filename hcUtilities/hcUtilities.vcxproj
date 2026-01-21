@@ -166,7 +166,7 @@
     <ClInclude Include="include\hc\hcColor.h" />
     <ClInclude Include="include\hc\hcDependencyContainer.h" />
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
-    <ClInclude Include="include\hc\hcFileIO.h" />
+    <ClInclude Include="include\hc\hcFileUtilities.h" />
     <ClInclude Include="include\hc\hcJsonFromattedValue.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcJson.h" />
@@ -193,7 +193,7 @@
     <ClInclude Include="include\hc\hcJsonObjectBuilder.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\hcFileIO.cpp" />
+    <ClCompile Include="src\hcFileUtilities.cpp" />
     <ClCompile Include="src\hcJson.cpp" />
     <ClCompile Include="src\hcJsonArrayBuilder.cpp" />
     <ClCompile Include="src\hcJsonFormattedValue.cpp" />

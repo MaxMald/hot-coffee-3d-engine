@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Descriptor for an unlit material asset.
    */
-  class UnlitMaterialDescriptor :
+  class HC_CORE_EXPORT UnlitMaterialDescriptor :
     public MaterialDescriptor
   {
   public:

@@ -1,9 +1,9 @@
-#include "hc/hcFileIO.h"
+#include "hc/hcFileUtilities.h"
 #include <fstream>
 
 namespace hc
 {
-  namespace fileIO
+  namespace fileUtilities
   {
     bool SaveStringToFile(const Path& path, const String& content)
     {

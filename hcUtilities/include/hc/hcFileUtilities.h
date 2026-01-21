@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  namespace fileIO
+  namespace fileUtilities
   {
     /**
      * @brief Saves a string to a file at the specified path.

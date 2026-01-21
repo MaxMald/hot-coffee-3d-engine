@@ -88,6 +88,12 @@
     <Filter Include="Source Files\serializers">
       <UniqueIdentifier>{fd5087e5-2b07-4f86-8fdd-2de17a458421}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\assetCreator">
+      <UniqueIdentifier>{d4657962-9700-4488-8c82-e7b12314dddd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\assetCreator">
+      <UniqueIdentifier>{1cb9f57b-35bf-4683-a77e-af97a843df1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -219,6 +225,9 @@
     <ClInclude Include="include\hc\editor\hcCameraManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcAssetCreator.h">
+      <Filter>Header Files\assetCreator</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -316,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="src\hcCameraManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAssetCreator.cpp">
+      <Filter>Source Files\assetCreator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

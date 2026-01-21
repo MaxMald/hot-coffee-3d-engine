@@ -195,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcAsset.h" />
+    <ClInclude Include="include\hc\hcAssetFileExtensions.h" />
     <ClInclude Include="include\hc\hcAssetGroup.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
     <ClInclude Include="include\hc\hcAssetManager.h" />

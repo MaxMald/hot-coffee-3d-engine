@@ -2,14 +2,23 @@
 
 #include <filesystem>
 #include <hc/hcDependencyContainer.h>
+#include <hc/hcAssetFileExtensions.h>
+#include <hc/hcLogService.h>
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcDirectoryReference.h"
 #include "hc/editor/hcFileReference.h"
+#include "hc/editor/hcAssetCreator.h"
 #include "imgui.h"
+
+namespace 
+{
+  constexpr const hc::Char* ASSET_TYPES[] = { "Material" };
+}
 
 namespace hc::editor
 {
+
   ProjectBrowserWindow::ProjectBrowserWindow() :
     AWindowView("Project Browser", true),
     m_projectManager(nullptr)
@@ -44,29 +53,29 @@ namespace hc::editor
 
   void ProjectBrowserWindow::onDraw()
   {
+    drawAssetCreatorInterface();
+    ImGui::Separator();
+    drawDirectoryNavigator();
+  }
+
+  void ProjectBrowserWindow::drawDirectoryNavigator()
+  {
     DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
     if (!currentDir)
       return;
 
-
     ImGui::Text("Current Directory: %s", currentDir->getFullPath().string().c_str());
-
-    // Back button
     if (ImGui::Button("Back"))
     {
       m_directoryNavigator.navigateToParentDirectory();
       return;
     }
-
     ImGui::SameLine();
-
-    // Refresh button
     if (ImGui::Button("Refresh"))
     {
       refresh();
       return;
     }
-
     ImGui::Separator();
 
     // Folders
@@ -88,6 +97,62 @@ namespace hc::editor
         // TODO
       }
     }
+  }
+
+  void ProjectBrowserWindow::drawAssetCreatorInterface()
+  {
+    static Char fileName[256] = "";
+    static Int32 selectedAssetType = 0;
+
+    ImGui::SetNextItemWidth(150.0f);
+    ImGui::InputText("File Name", fileName, IM_ARRAYSIZE(fileName));
+    ImGui::SameLine();
+    ImGui::SetNextItemWidth(120.0f);
+    ImGui::Combo("Asset Type", &selectedAssetType, ASSET_TYPES, IM_ARRAYSIZE(ASSET_TYPES));
+    ImGui::SameLine();
+
+    if (ImGui::Button("Create Asset"))
+    {
+      DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
+      if (!currentDir)
+        return;
+
+      if (strlen(fileName) <= 0)
+        return;
+
+      String assetType = ASSET_TYPES[selectedAssetType];
+      if (assetType == "Material")
+      {
+        assetCreator::createMaterialDescriptor(
+          combineDirectoryWithFileName(
+            currentDir->getFullPath(),
+            String(fileName),
+            assetFileExtensions::MATERIAL_DESCRIPTOR
+          )
+        );
+      }
+      else
+      {
+        LogService::Error(
+          String::Format(
+            "Couldn't create asset. Unsupported asset type '%s' requested.",
+            assetType.c_str()
+          )
+        );
+      }
+
+      refresh();
+    }
+  }
+
+  Path ProjectBrowserWindow::combineDirectoryWithFileName(
+    const Path& directoryPath,
+    const String& fileName,
+    const String& extension
+  )
+  {
+    Path fullPath = directoryPath / (fileName + extension);
+    return fullPath;
   }
 
   void ProjectBrowserWindow::refresh()

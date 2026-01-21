@@ -28,5 +28,13 @@ namespace hc::editor
     DirectoryNavigator m_directoryNavigator;
 
     void onDraw() override;
+    void drawDirectoryNavigator();
+    void drawAssetCreatorInterface();
+
+    Path combineDirectoryWithFileName(
+      const Path& directoryPath,
+      const String& fileName,
+      const String& extension
+    );
   };
 }

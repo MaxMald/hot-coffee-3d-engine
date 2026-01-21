@@ -13,8 +13,7 @@ namespace hc
       Unknown = 255
     };
 
-    String toString(Type type);
-
-    Type fromString(const String& str);
+    HC_CORE_EXPORT String toString(Type type);
+    HC_CORE_EXPORT Type fromString(const String& str);
   }
 }

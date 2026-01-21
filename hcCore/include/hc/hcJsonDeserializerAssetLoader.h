@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/hcIAssetLoader.h"
-#include "hc/hcFileIO.h"
+#include "hc/hcFileUtilities.h"
 #include "hc/hcJsonSerializer.h"
 
 namespace hc
@@ -37,7 +37,7 @@ namespace hc
   template <typename T>
   SharedPtr<T> JsonDeserializerAssetLoader<T>::load(const Path& path)
   {
-    Optional<String> fileContent = fileIO::LoadStringFromFile(path);
+    Optional<String> fileContent = fileUtilities::LoadStringFromFile(path);
     if (!fileContent.has_value())
       return nullptr;
 

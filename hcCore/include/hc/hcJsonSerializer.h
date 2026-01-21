@@ -10,7 +10,7 @@ namespace hc
    * @brief Singleton utility for registering and using JSON serializers for
    * various types.
    */
-  class JsonSerializer : public NonCopyable
+  class HC_CORE_EXPORT JsonSerializer : public NonCopyable
   {
   public:
     /*

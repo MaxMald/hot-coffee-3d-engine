@@ -24,6 +24,8 @@ namespace hc
   using UInt16 = std::uint16_t;
   using UInt32 = std::uint32_t;
   using UInt64 = std::uint64_t;
+  using Char = char;
+  using Char16 = char16_t;
   using Char32 = char32_t;
   using UChar = unsigned char;
   using Byte = UInt8;

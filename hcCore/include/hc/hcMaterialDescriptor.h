@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Describes the properties and configuration for a material asset.
    */
-  class MaterialDescriptor :
+  class HC_CORE_EXPORT MaterialDescriptor :
     public Asset
   {
   public:
