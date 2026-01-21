@@ -7,6 +7,7 @@
 #include "hc/hcUnlitMaterialDescriptor.h"
 #include "hc/hcUnlitMaterial.h"
 #include "hc/hcLogService.h"
+#include "hc/hcImage.h"
 
 namespace hc
 {
@@ -83,9 +84,7 @@ namespace hc
   {
     SharedPtr<ITexture> mainTexture = nullptr;
     if (!descriptor->getMainImageKey().empty())
-    {
-      // TODO create texture from graphics
-    }
+      mainTexture = createTextureFromImageKey(descriptor->getMainImageKey());
 
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
     material->initialize(descriptor, mainTexture);
@@ -116,5 +115,27 @@ namespace hc
   void MaterialManager::clear()
   {
     m_materials.clear();
+  }
+
+  SharedPtr<ITexture> MaterialManager::createTextureFromImageKey(
+    const String& imageKey
+  ) const
+  {
+    if (m_assetManager->contains<Image>(imageKey))
+    {
+      SharedPtr<Image> image =
+        m_assetManager->get<Image>(imageKey);
+
+      return m_graphicsManager->createTexture(image);
+    }
+
+    LogService::Error(
+      String::Format(
+        "Texture creation was not possible. Image with key '%s' not found.",
+        imageKey.c_str()
+      )
+    );
+
+    return nullptr;
   }
 }

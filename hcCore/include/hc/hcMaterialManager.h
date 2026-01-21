@@ -12,6 +12,7 @@ namespace hc
   class MaterialDescriptor;
   class UnlitMaterialDescriptor;
   class UnlitMaterial;
+  class ITexture;
 
   class MaterialManager :
     public NonCopyable,
@@ -47,5 +48,9 @@ namespace hc
     SharedPtr<AssetManager> m_assetManager;
     SharedPtr<IGraphicsManager> m_graphicsManager;
     UnorderedMap<String, SharedPtr<IMaterial>> m_materials;
+
+    SharedPtr<ITexture> createTextureFromImageKey(
+      const String& imageKey
+    ) const;
   };
 }

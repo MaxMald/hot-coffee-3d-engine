@@ -46,6 +46,12 @@ namespace hc
     window.swapBuffers();
   }
 
+  SharedPtr<ITexture> OpenGlGraphicsManager::createTexture(SharedPtr<Image> image) const
+  {
+    // TODO Texture creation
+    return nullptr;
+  }
+
   void OpenGlGraphicsManager::destroy()
   {
   }

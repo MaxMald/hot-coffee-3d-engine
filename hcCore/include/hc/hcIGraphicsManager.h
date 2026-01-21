@@ -6,6 +6,8 @@
 
 namespace hc
 {
+  class ITexture;
+  class Image;
   class IDrawable;
   class HotCoffeeEngine;
 
@@ -17,6 +19,7 @@ namespace hc
     virtual void beginFrame() = 0;
     virtual void draw(IDrawable&) = 0;
     virtual void endFrame(IWindow&) = 0;
+    virtual SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const = 0;
 
   protected:
     IGraphicsManager();

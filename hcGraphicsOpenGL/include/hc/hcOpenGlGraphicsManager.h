@@ -29,6 +29,11 @@ namespace hc
      */
     void endFrame(IWindow&) override;
 
+    /**
+     * @copydoc IGraphicsManager::createTexture
+     */
+    SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const override;
+
   private:
     /**
      * @copydoc IGraphicsManager::init
