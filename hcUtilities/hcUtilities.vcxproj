@@ -166,8 +166,10 @@
     <ClInclude Include="include\hc\hcColor.h" />
     <ClInclude Include="include\hc\hcDependencyContainer.h" />
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
+    <ClInclude Include="include\hc\hcJsonFromattedValue.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcJson.h" />
+    <ClInclude Include="include\hc\hcJsonArrayBuilder.h" />
     <ClInclude Include="include\hc\hcJsonParsers.h" />
     <ClInclude Include="include\hc\hcLogService.h" />
     <ClInclude Include="include\hc\hcMath.h" />
@@ -186,9 +188,14 @@
     <ClInclude Include="include\hc\hcVector3.h" />
     <ClInclude Include="include\hc\hcVector4.h" />
     <ClInclude Include="include\hc\hcILogServiceListener.h" />
+    <ClInclude Include="include\hc\hcIJsonProperty.h" />
+    <ClInclude Include="include\hc\hcJsonObjectBuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcJson.cpp" />
+    <ClCompile Include="src\hcJsonArrayBuilder.cpp" />
+    <ClCompile Include="src\hcJsonFormattedValue.cpp" />
+    <ClCompile Include="src\hcJsonObjectBuilder.cpp" />
     <ClCompile Include="src\hcJsonParsers.cpp" />
     <ClCompile Include="src\hcLogService.cpp" />
     <ClCompile Include="src\hcTransform.cpp" />

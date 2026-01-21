@@ -25,6 +25,12 @@
     <Filter Include="Source Files\logger">
       <UniqueIdentifier>{6f2f715c-78fa-41b7-a997-f052289e388a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\jsonBuilder">
+      <UniqueIdentifier>{c665a31a-4be5-4fec-8f1a-67f22748443d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jsonBuilder">
+      <UniqueIdentifier>{ab8cce09-f319-47e8-9c49-ed606f38e427}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\HC\hcVector2.h">
@@ -102,6 +108,18 @@
     <ClInclude Include="include\hc\hcJsonParsers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcJsonObjectBuilder.h">
+      <Filter>Header Files\jsonBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIJsonProperty.h">
+      <Filter>Header Files\jsonBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcJsonArrayBuilder.h">
+      <Filter>Header Files\jsonBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcJsonFromattedValue.h">
+      <Filter>Header Files\jsonBuilder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">
@@ -115,6 +133,15 @@
     </ClCompile>
     <ClCompile Include="src\hcJsonParsers.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcJsonArrayBuilder.cpp">
+      <Filter>Source Files\jsonBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcJsonObjectBuilder.cpp">
+      <Filter>Source Files\jsonBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcJsonFormattedValue.cpp">
+      <Filter>Source Files\jsonBuilder</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
