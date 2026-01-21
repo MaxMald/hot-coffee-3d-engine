@@ -91,6 +91,15 @@
     <Filter Include="Source Files\graphics\material">
       <UniqueIdentifier>{80b027d1-744f-44bf-8675-dcf816586ae3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\jsonSerializer">
+      <UniqueIdentifier>{5b99308c-9b9c-46fb-bc97-0e56052df71a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\jsonSerializer">
+      <UniqueIdentifier>{fb99f85c-e8b3-4b4b-ac4f-7e1a44d6eef0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\jsonSerializer\serializers">
+      <UniqueIdentifier>{eb0267b1-f140-4f54-8aea-d4a2bf52f182}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -159,9 +168,6 @@
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp">
       <Filter>Source Files\assets\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcMaterialDescriptorLoader.cpp">
-      <Filter>Source Files\assets\loaders</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcShaderType.cpp">
       <Filter>Source Files\assets\materials</Filter>
     </ClCompile>
@@ -170,6 +176,12 @@
     </ClCompile>
     <ClCompile Include="src\hcMaterialManager.cpp">
       <Filter>Source Files\graphics\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcJsonSerializer.cpp">
+      <Filter>Source Files\jsonSerializer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp">
+      <Filter>Source Files\jsonSerializer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +311,6 @@
     <ClInclude Include="include\hc\hcShaderType.h">
       <Filter>Header Files\assets\materials</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcMaterialDescriptorLoader.h">
-      <Filter>Header Files\assets\loaders</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcMaterialDescriptor.h">
       <Filter>Header Files\assets\materials</Filter>
     </ClInclude>
@@ -316,6 +325,18 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcITexture.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcJsonSerializer.h">
+      <Filter>Header Files\jsonSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIJsonSerializer.h">
+      <Filter>Header Files\jsonSerializer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h">
+      <Filter>Header Files\jsonSerializer\serializers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcJsonDeserializerAssetLoader.h">
+      <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #include "hc/hcHotCoffeeEngine.h"
 
 #include "hc/hcLogService.h"
+#include "hc/hcJsonSerializer.h"
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcCoreDependenciesRegister.h"
 #include "hc/hcPluginConnectionHelper.h"
@@ -125,6 +126,7 @@ namespace hc
   void HotCoffeeEngine::onPrepare()
   {
     LogService::Prepare();
+    JsonSerializer::Prepare();
   }
 
   void HotCoffeeEngine::onShutdown()
@@ -134,6 +136,7 @@ namespace hc
     m_graphicsManager = nullptr;
     m_windowManager = nullptr;
     m_pluginManager.closeAll();
+    JsonSerializer::Shutdown();
     LogService::Shutdown();
   }
 

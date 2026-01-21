@@ -3,6 +3,7 @@
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcString.h"
 #include "hc/hcIJsonProperty.h"
+#include "hc/hcNonCopyable.h"
 
 namespace hc
 {
@@ -16,7 +17,9 @@ namespace hc
    * code, allowing the addition of various property types, nested objects, and
    * arrays.
    */
-  class JsonObjectBuilder : public IJsonProperty
+  class HC_UTILITY_EXPORT JsonObjectBuilder :
+    public IJsonProperty,
+    public NonCopyable
   {
   public:
     JsonObjectBuilder();
@@ -32,21 +35,21 @@ namespace hc
     /**
      * @brief Converts the object and its contents to a JSON string
      * representation.
-     * 
+     *
      * @return The JSON-formatted string.
      */
     virtual String toString() const override;
 
     /**
      * @brief Sets the property name for this object.
-     * 
+     *
      * @param name The property name to set.
      */
     void setPropertyName(const String& name);
 
     /**
      * @brief Adds a float value to the object with the specified property name.
-     * 
+     *
      * @param name The property name for the value.
      * @param value The float value to add.
      */
@@ -64,7 +67,7 @@ namespace hc
     /**
      * @brief Adds an unsigned integer value to the object with the specified
      * property name.
-     * 
+     *
      * @param name The property name for the value.
      * @param value The UInt32 value to add.
      */
@@ -72,7 +75,7 @@ namespace hc
 
     /**
      * @brief Adds a string value to the object with the specified property name.
-     * 
+     *
      * @param name The property name for the value.
      * @param value The string value to add.
      */
@@ -81,7 +84,7 @@ namespace hc
     /**
      * @brief Adds a boolean value to the object with the specified property
      * name.
-     * 
+     *
      * @param name The property name for the value.
      * @param value The boolean value to add.
      */
@@ -89,7 +92,7 @@ namespace hc
 
     /**
      * @brief Adds a color value to the object with the specified property name.
-     * 
+     *
      * @param name The property name for the value.
      * @param color The Color value to add.
      */

@@ -18,7 +18,7 @@ namespace hc
     m_color = color;
   }
 
-  const Color& UnlitMaterialDescriptor::getColor()
+  const Color& UnlitMaterialDescriptor::getColor() const
   {
     return m_color;
   }
@@ -28,7 +28,7 @@ namespace hc
     m_mainImageKey = key;
   }
 
-  const String& UnlitMaterialDescriptor::getMainImageKey()
+  const String& UnlitMaterialDescriptor::getMainImageKey() const
   {
     return m_mainImageKey;
   }

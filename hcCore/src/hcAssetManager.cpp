@@ -2,15 +2,15 @@
 
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcIImageLoader.h"
-#include "hc/hcMaterialDescriptorLoader.h"
 #include "hc/hcMaterialDescriptor.h"
+#include "hc/hcJsonDeserializerAssetLoader.h"
 
 namespace hc
 {
   AssetManager::AssetManager()
   {
     m_assetLoaders[typeid(MaterialDescriptor)] = 
-      MakeShared<MaterialDescriptorLoader>();
+      MakeShared<JsonDeserializerAssetLoader<MaterialDescriptor>>();
   }
 
   AssetManager::~AssetManager()

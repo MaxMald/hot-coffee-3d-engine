@@ -82,6 +82,12 @@
     <Filter Include="Header Files\views\windows\projectBrowser">
       <UniqueIdentifier>{6a67e190-053f-4692-8cb1-b383551c0dd3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\serializers">
+      <UniqueIdentifier>{533f009d-7344-4b56-b2ad-373ab02c9d79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\serializers">
+      <UniqueIdentifier>{fd5087e5-2b07-4f86-8fdd-2de17a458421}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">

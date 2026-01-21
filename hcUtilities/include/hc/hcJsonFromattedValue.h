@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Represents a formatted JSON value property.
    */
-  class JsonFormattedValue : public IJsonProperty
+  class HC_UTILITY_EXPORT JsonFormattedValue : public IJsonProperty
   {
   public:
     /**

@@ -13,7 +13,7 @@ namespace hc
    * Implementations may represent primitive values, objects, arrays, or other
    * JSON-compatible structures.
    */
-  class IJsonProperty
+  class HC_UTILITY_EXPORT IJsonProperty
   {
   public:
     virtual ~IJsonProperty() = default;

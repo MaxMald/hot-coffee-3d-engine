@@ -120,6 +120,9 @@
     <ClInclude Include="include\hc\hcJsonFromattedValue.h">
       <Filter>Header Files\jsonBuilder</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcFileIO.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">
@@ -142,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="src\hcJsonFormattedValue.cpp">
       <Filter>Source Files\jsonBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcFileIO.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -3,6 +3,7 @@
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcString.h"
 #include "hc/hcIJsonProperty.h"
+#include "hc/hcNonCopyable.h"
 
 namespace hc
 {
@@ -15,7 +16,9 @@ namespace hc
    * JsonArrayBuilder provides a fluent interface to construct JSON arrays by
    * code.
    */
-  class JsonArrayBuilder : public IJsonProperty
+  class HC_UTILITY_EXPORT JsonArrayBuilder : 
+    public IJsonProperty,
+    public NonCopyable
   {
   public:
     JsonArrayBuilder();

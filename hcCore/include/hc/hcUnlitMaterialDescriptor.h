@@ -27,7 +27,7 @@ namespace hc
      *
      * @return The current color value.
      */
-    const Color& getColor();
+    const Color& getColor() const;
 
     /**
      * @brief Sets the key for the main image used by the unlit material.
@@ -41,7 +41,7 @@ namespace hc
      * 
      * @return The asset key or identifier for the main image.
      */
-    const String& getMainImageKey();
+    const String& getMainImageKey() const;
 
   private:
     Color m_color;
