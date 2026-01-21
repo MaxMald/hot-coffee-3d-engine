@@ -9,6 +9,7 @@
 #include "hc/editor/hcDirectoryReference.h"
 #include "hc/editor/hcFileReference.h"
 #include "hc/editor/hcAssetCreator.h"
+#include "hc/editor/hcMaterialDescriptorEditorWindow.h"
 #include "imgui.h"
 
 namespace 
@@ -32,7 +33,8 @@ namespace hc::editor
   void ProjectBrowserWindow::resolveDependencies(DependencyContainer& container)
   {
     container.resolve<EditorViewsManager>()->registerView(this);
-    m_projectManager = container.resolve<ProjectManager>().get();
+    m_materialDescriptorEditorWindow = container.resolve<MaterialDescriptorEditorWindow>();
+    m_projectManager = container.resolve<ProjectManager>();
     m_projectManager->subscribeListener(this);
   }
 
@@ -99,7 +101,7 @@ namespace hc::editor
     {
       if (ImGui::Selectable(file->getNameWithExtension().c_str()))
       {
-        // TODO
+        tryOpenEditorForFile(*file);
       }
     }
   }
@@ -150,6 +152,18 @@ namespace hc::editor
         refresh();
       }
     } // Collapsing Header
+  }
+
+  void ProjectBrowserWindow::tryOpenEditorForFile(
+    const FileReference& fileReference
+  )
+  {
+    String extension = fileReference.getExtension();
+    if (extension == assetFileExtensions::MATERIAL_DESCRIPTOR)
+    {
+      if (m_materialDescriptorEditorWindow)
+        m_materialDescriptorEditorWindow->open(fileReference.getFullPath());
+    }
   }
 
   Path ProjectBrowserWindow::combineDirectoryWithFileName(

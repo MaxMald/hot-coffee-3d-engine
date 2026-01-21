@@ -228,6 +228,15 @@
     <ClInclude Include="include\hc\editor\hcAssetCreator.h">
       <Filter>Header Files\assetCreator</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialDescriptorEditorWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcAssetFileReference.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcImguiUtilities.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -328,6 +337,12 @@
     </ClCompile>
     <ClCompile Include="src\hcAssetCreator.cpp">
       <Filter>Source Files\assetCreator</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcImguiUtilities.cpp">
+      <Filter>Source Files\imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

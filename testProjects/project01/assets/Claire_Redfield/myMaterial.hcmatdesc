@@ -1,10 +1,1 @@
-{
-  "shaderType": "Unlit",
-  "color": {
-    "r": 1.000000,
-    "g": 1.000000,
-    "b": 1.000000,
-    "a": 1.000000
-  },
-  "mainImageKey": ""
-}
+{"shaderType": "Unlit","color": { "r": 0.838235, "g": 0.168469, "b": 0.168469, "a": 1.000000 },"mainImageKey": ""}

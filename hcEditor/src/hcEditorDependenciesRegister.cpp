@@ -17,6 +17,7 @@
 #include "hc/editor/hcGameObjectEditorWindow.h"
 #include "hc/editor/hcLightManagerWindow.h"
 #include "hc/editor/hcCameraManagerWindow.h"
+#include "hc/editor/hcMaterialDescriptorEditorWindow.h"
 
 namespace hc::editor
 {
@@ -38,6 +39,7 @@ namespace hc::editor
       container.registerInstance<GameObjectEditorWindow>(MakeShared<GameObjectEditorWindow>());
       container.registerInstance<LightManagerWindow>(MakeShared<LightManagerWindow>());
       container.registerInstance<CameraManagerWindow>(MakeShared<CameraManagerWindow>());
+      container.registerInstance<MaterialDescriptorEditorWindow>(MakeShared<MaterialDescriptorEditorWindow>());
     }
   }
 }

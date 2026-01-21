@@ -26,7 +26,7 @@ namespace hc::editor
      * @param filePath The file path associated with the asset.
      * @param asset The shared pointer to the asset.
      */
-    AssetFileReference(const String& filePath, const SharedPtr<T>& asset);
+    AssetFileReference(const Path& filePath, const SharedPtr<T>& asset);
 
     /**
      * @brief Copy constructor.
@@ -66,16 +66,16 @@ namespace hc::editor
     /**
      * @brief Gets the file path associated with the asset.
      * 
-     * @return const String& The file path.
+     * @return const Path& The file path.
      */
-    const String& getFilePath() const;
+    const Path& getFilePath() const;
 
     /**
      * @brief Sets the file path associated with the asset.
      * 
      * @param filePath The new file path.
      */
-    void setFilePath(const String& filePath);
+    void setFilePath(const Path& filePath);
 
     /**
      * @brief Gets the shared pointer to the asset.
@@ -92,7 +92,7 @@ namespace hc::editor
     void setAsset(const SharedPtr<T>& asset);
 
   private:
-    String m_filePath;
+    Path m_filePath;
     SharedPtr<T> m_asset = nullptr;
   };
 
@@ -104,7 +104,7 @@ namespace hc::editor
 
   template<typename T>
   AssetFileReference<T>::AssetFileReference(
-    const String& filePath,
+    const Path& filePath,
     const SharedPtr<T>& asset
   )
     : m_filePath(filePath), m_asset(asset)
@@ -149,13 +149,13 @@ namespace hc::editor
   AssetFileReference<T>::~AssetFileReference() = default;
 
   template<typename T>
-  const String& AssetFileReference<T>::getFilePath() const
+  const Path& AssetFileReference<T>::getFilePath() const
   {
     return m_filePath;
   }
 
   template<typename T>
-  void AssetFileReference<T>::setFilePath(const String& filePath)
+  void AssetFileReference<T>::setFilePath(const Path& filePath)
   {
     m_filePath = filePath;
   }

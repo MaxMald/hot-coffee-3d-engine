@@ -1,14 +1,10 @@
 #pragma once
 
 #include <hc/hcIDependencyResolvable.h>
-#include <hc/hcUnlitMaterialDescriptor.h>
+#include <hc/hcMaterialDescriptor.h>
+#include <hc/hcColor.h>
 #include "hc/editor/hcAWindowView.h"
 #include "hc/editor/hcAssetFileReference.h"
-
-namespace hc
-{
-  class UnlitMaterialDescriptor;
-}
 
 namespace hc::editor
 {
@@ -20,20 +16,24 @@ namespace hc::editor
     MaterialDescriptorEditorWindow();
     virtual ~MaterialDescriptorEditorWindow();
 
+    void open(const Path& materialDescriptorPath);
     void resolveDependencies(DependencyContainer& container) override;
-    void setMaterialDescriptor(const AssetFileReference<MaterialDescriptor>& materialDescriptor);
     void clear();
 
   private:
     AssetFileReference<MaterialDescriptor> m_materialDescriptor;
     shaderType::Type m_currentShaderType = shaderType::Type::Unknown;
+    Int32 m_selectedShaderTypeIndex = 0;
 
     // Unlit Properties
     Color m_unlitColor;
     String m_unlitMainImageKey;
 
     void onDraw() override;
+    void drawShaderTypeSelector();
     void drawUnlitMaterialDescriptorEditor();
+    void updateShaderTypeCombo();
     void saveToFile();
+    SharedPtr<MaterialDescriptor> createMaterialFromCurrentSettings();
   };
 }
