@@ -1,9 +1,10 @@
 #include "hc/editor/hcMaterialDescriptorEditorWindow.h"
-#include <hc/hcUnlitMaterialDescriptor.h>
-#include <hc/hcJsonSerializer.h>
+
+#include <hc/hcMaterialDescriptor.h>
 #include <hc/hcLogService.h>
 #include <hc/hcDependencyContainer.h>
-#include <hc/hcFileUtilities.h>
+#include <hc/hcHotCoffeeEngine.h>
+#include <hc/hcAssetManager.h>
 #include "hc/editor/hcImguiUtilities.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
@@ -39,14 +40,9 @@ namespace hc::editor
 
     try
     {
-      Optional<String> fileContent =
-        fileUtilities::LoadStringFromFile(materialDescriptorPath);
-
-      if (!fileContent.has_value())
-        return;
-
-      MaterialDescriptor* materialDescriptor =
-        JsonSerializer::Deserialize<MaterialDescriptor>(fileContent.value());
+      SharedPtr<MaterialDescriptor> materialDescriptor = HotCoffeeEngine::Instance()
+        .getAssetManager()
+        .loadDirect<MaterialDescriptor>(materialDescriptorPath);
 
       if (!materialDescriptor)
         return;

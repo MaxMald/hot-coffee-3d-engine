@@ -13,7 +13,7 @@ namespace hc
    * @tparam T Asset type, must derive from Asset.
    */
   template <typename T>
-  class HC_CORE_EXPORT AssetGroup :
+  class AssetGroup :
     public NonCopyable
   {
     static_assert(std::is_base_of_v<Asset, T>, "T must derive from Asset");
