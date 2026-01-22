@@ -43,6 +43,11 @@ namespace hc
      */
     const String& getMainImageKey() const;
 
+    /**
+     * @copydoc hc::MaterialDescriptor::getImagesKeys
+     */
+    Vector<String> getImagesKeys() const override;
+
   private:
     Color m_color;
     String m_mainImageKey;

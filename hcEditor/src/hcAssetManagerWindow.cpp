@@ -11,6 +11,7 @@
 #include "hc/editor/hcIAssetGroupDrawer.h"
 #include "hc/editor/hcImageAssetGroupDrawer.h"
 #include "hc/editor/hcMaterialDescriptorAssetGroupDrawer.h"
+#include "hc/editor/hcAssetDependenciesLoader.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -69,9 +70,17 @@ namespace hc::editor
   {
     AssetManager& assetManager = HotCoffeeEngine::Instance().getAssetManager();
     if (assetFileExtensions::IsImageExtension(path))
+    {
       assetManager.load<Image>(path.generic_string(), path);
+    }
     else if (assetFileExtensions::IsMaterialDescriptorExtension(path))
-      assetManager.load<MaterialDescriptor>(path.generic_string(), path);
+    {
+      SharedPtr<MaterialDescriptor> mat = assetManager
+        .load<MaterialDescriptor>(path.generic_string(), path);
+
+      if (mat)
+        assetDependenciesLoader::loadDependenciesForMaterialDescriptor(path, mat);
+    }
     else
     {
       LogService::Warning(

@@ -32,4 +32,15 @@ namespace hc
   {
     return m_mainImageKey;
   }
+
+  Vector<String> UnlitMaterialDescriptor::getImagesKeys() const
+  {
+    if (m_mainImageKey.empty()) 
+    {
+      return Vector<String>();
+    } else 
+    {
+      return Vector<String>{ m_mainImageKey };
+    }
+  }
 }
