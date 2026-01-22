@@ -68,8 +68,7 @@ namespace hc
       return false;
 
     objectBuilder.setColor("color", data->getColor());
-    String pathStr = data->getMainImagePath().generic_string();
-    objectBuilder.setString("mainImagePath", pathStr.c_str());
+    objectBuilder.setPath("mainImagePath", data->getMainImagePath());
     return true;
   }
 

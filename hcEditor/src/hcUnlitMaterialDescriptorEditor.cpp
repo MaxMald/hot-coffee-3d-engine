@@ -41,9 +41,7 @@ namespace hc::editor
 
   void UnlitMaterialDescriptorEditor::draw()
   {
-    imguiUtilities::DrawColorEdit3("Color", m_color);
-
-    ImGui::Text("Main Image Path: %s", m_mainImagePath.c_str());
+    imguiUtilities::DrawColorEdit3("Tint: ", m_color);
     if (ImGui::Button("Select Main Image"))
     {
       if (!m_projectFileSelector)
@@ -56,6 +54,10 @@ namespace hc::editor
         }
       );
     }
+
+    ImGui::SameLine();
+    String mainImagePathStr = m_mainImagePath.string();
+    ImGui::Text("Current Main Image Path: %s", mainImagePathStr.c_str());
   }
 
   void UnlitMaterialDescriptorEditor::save(const Path& path)
