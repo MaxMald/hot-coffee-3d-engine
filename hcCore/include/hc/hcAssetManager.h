@@ -38,6 +38,22 @@ namespace hc
     SharedPtr<T> load(const String& key, const Path& path);
 
     /**
+     * @brief Loads an asset of type T directly from the specified path using the
+     * appropriate asset loader.
+     *
+     * This method does not add the loaded asset to any asset group or cache. It
+     * simply loads the asset from disk and returns it.
+     *
+     * @tparam T Asset type to load.
+     * 
+     * @param path Path to the asset resource.
+     * 
+     * @return Shared pointer to the loaded asset, or nullptr on failure.
+     */
+    template<typename T>
+    SharedPtr<T> loadDirect(const Path& path);
+
+    /**
      * @brief Retrieves an asset of type T by its unique key.
      * 
      * @tparam T Asset type.
@@ -96,6 +112,20 @@ namespace hc
   template<typename T>
   inline SharedPtr<T> AssetManager::load(const String& key, const Path& path)
   {
+    SharedPtr<T> loadedAsset = loadDirect(path);
+
+    if (!loadedAsset)
+      return nullptr;
+
+    AssetGroup<T>& assetGroup = getGroup<T>();
+    assetGroup.add(key, loadedAsset);
+
+    return loadedAsset;
+  }
+
+  template<typename T>
+  inline SharedPtr<T> AssetManager::loadDirect(const Path& path)
+  {
     TypeIndex typeIdx(typeid(T));
 
     if(m_assetLoaders.find(typeIdx) == m_assetLoaders.end())
@@ -105,12 +135,6 @@ namespace hc
 
     auto loader = static_cast<IAssetLoader<T>*>(m_assetLoaders[typeIdx].get());
     SharedPtr<T> loadedAsset = loader->load(path);
-
-    if (!loadedAsset)
-      return nullptr;
-
-    AssetGroup<T>& assetGroup = getGroup<T>();
-    assetGroup.add(key, loadedAsset);
 
     return loadedAsset;
   }
