@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcAssetManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcCameraManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcDirectoryReference.h" />
     <ClInclude Include="include\hc\editor\hcDirectoryNavigator.h" />
@@ -215,6 +216,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcAssetCreator.cpp" />
+    <ClCompile Include="src\hcAssetManagerWindow.cpp" />
     <ClCompile Include="src\hcAWindowView.cpp" />
     <ClCompile Include="src\hcCameraManagerWindow.cpp" />
     <ClCompile Include="src\hcDirectoryNavigator.cpp" />

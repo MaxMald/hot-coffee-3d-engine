@@ -19,6 +19,7 @@
 #include "hc/editor/hcCameraManagerWindow.h"
 #include "hc/editor/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcAssetManagerWindow.h"
 
 namespace hc::editor
 {
@@ -42,6 +43,7 @@ namespace hc::editor
       container.registerInstance<CameraManagerWindow>(MakeShared<CameraManagerWindow>());
       container.registerInstance<MaterialDescriptorEditorWindow>(MakeShared<MaterialDescriptorEditorWindow>());
       container.registerInstance<ProjectFileSelectorView>(MakeShared<ProjectFileSelectorView>());
+      container.registerInstance<AssetManagerWindow>(MakeShared<AssetManagerWindow>());
     }
   }
 }

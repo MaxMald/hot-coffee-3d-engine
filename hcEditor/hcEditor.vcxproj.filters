@@ -100,6 +100,12 @@
     <Filter Include="Header Files\views\windows\materialDescriptorEditor">
       <UniqueIdentifier>{226e01de-d1d3-4afe-b9b9-6f2cd227d351}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\windows\assetManager">
+      <UniqueIdentifier>{f07445e5-d5a3-46c6-8334-eae302dc6512}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\assetManager">
+      <UniqueIdentifier>{4e124b1e-d6fb-49b3-b27f-9c2be972b39c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -255,6 +261,9 @@
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h">
       <Filter>Header Files\views\windows\materialDescriptorEditor</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcAssetManagerWindow.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -370,6 +379,9 @@
     </ClCompile>
     <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp">
       <Filter>Source Files\views\windows\materialDescriptorEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAssetManagerWindow.cpp">
+      <Filter>Source Files\views\windows\assetManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
