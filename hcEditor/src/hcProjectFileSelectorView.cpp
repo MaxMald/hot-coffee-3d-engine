@@ -36,9 +36,6 @@ namespace hc::editor
     }
     else if (m_isFileSelectorOpen)
     {
-      if (drawBackAndRefreshButtons())
-        return;
-
       drawFileSelectionInterface();
 
       if (ImGui::Button("Cancel"))
@@ -91,6 +88,7 @@ namespace hc::editor
     const std::function<void(const Path&)>& onFileSelected
   )
   {
+    logWarningIfAlreadyOpen();
     clear();
     m_isFileSelectorOpen = true;
     m_currentTitle = (title.empty() ? "Select File" : title);
@@ -103,6 +101,7 @@ namespace hc::editor
     const std::function<void(const Path&)>& onDirectorySelected
   )
   {
+    logWarningIfAlreadyOpen();
     clear();
     m_isDirectorySelectorOpen = true;
     m_currentTitle = (title.empty() ? "Select Directory" : title);
@@ -200,8 +199,6 @@ namespace hc::editor
 
   void ProjectFileSelectorView::clear()
   {
-    logWarningIfAlreadyOpen();
-
     m_isFileSelectorOpen = false;
     m_isDirectorySelectorOpen = false;
     m_selectionCallback = nullptr;
