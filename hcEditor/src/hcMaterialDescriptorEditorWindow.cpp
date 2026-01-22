@@ -6,6 +6,7 @@
 #include <hc/hcFileUtilities.h>
 #include "hc/editor/hcImguiUtilities.h"
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcProjectFileSelectorView.h"
 #include "imgui.h"
 
 namespace
@@ -60,6 +61,7 @@ namespace hc::editor
   )
   {
     container.resolve<EditorViewsManager>()->registerView(this);
+    m_projectFileSelectorView = container.resolve<ProjectFileSelectorView>();
   }
 
   void MaterialDescriptorEditorWindow::clear()
@@ -99,6 +101,11 @@ namespace hc::editor
   void MaterialDescriptorEditorWindow::drawUnlitMaterialDescriptorEditor()
   {
     imguiUtilities::DrawColorEdit3("Color", m_unlitColor);
+
+    if (!m_projectFileSelectorView)
+      return;
+
+    // file selection for main image
   }
 
   void MaterialDescriptorEditorWindow::updateShaderTypeCombo()

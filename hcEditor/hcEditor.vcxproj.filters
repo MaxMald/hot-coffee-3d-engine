@@ -237,6 +237,9 @@
     <ClInclude Include="include\hc\editor\hcImguiUtilities.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h">
+      <Filter>Header Files\views</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -343,6 +346,9 @@
     </ClCompile>
     <ClCompile Include="src\hcImguiUtilities.cpp">
       <Filter>Source Files\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProjectFileSelectorView.cpp">
+      <Filter>Source Files\views</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -13,6 +13,7 @@
 #include <cmath>
 #include <variant>
 #include <optional>
+#include <array>
 
 namespace hc
 {
@@ -46,6 +47,9 @@ namespace hc
 
   template<typename T>
   using SharedPtr = std::shared_ptr<T>;
+
+  template<typename T, std::size_t N>
+  using Array = std::array<T, N>;
 
   template<typename T>
   using WeakPtr = std::weak_ptr<T>;

@@ -41,6 +41,14 @@ namespace hc::editor
     Path getCurrentProjectPath() const;
 
     /**
+     * @brief Gets the directory of the currently open project.
+     *
+     * @return The directory path of the current project, or an empty path if no
+     * project is open.
+     */
+    Path getCurrentProjectDirectory() const;
+
+    /**
      * @brief Checks if a project is currently open.
      * 
      * @return True if a project is open, false otherwise.

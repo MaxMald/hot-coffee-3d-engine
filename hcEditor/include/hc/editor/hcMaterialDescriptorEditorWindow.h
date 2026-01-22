@@ -8,6 +8,8 @@
 
 namespace hc::editor
 {
+  class ProjectFileSelectorView;
+
   class MaterialDescriptorEditorWindow :
     public AWindowView,
     public IDependencyResolvable
@@ -16,11 +18,12 @@ namespace hc::editor
     MaterialDescriptorEditorWindow();
     virtual ~MaterialDescriptorEditorWindow();
 
-    void open(const Path& materialDescriptorPath);
     void resolveDependencies(DependencyContainer& container) override;
+    void open(const Path& materialDescriptorPath);
     void clear();
 
   private:
+    SharedPtr<ProjectFileSelectorView> m_projectFileSelectorView;
     AssetFileReference<MaterialDescriptor> m_materialDescriptor;
     shaderType::Type m_currentShaderType = shaderType::Type::Unknown;
     Int32 m_selectedShaderTypeIndex = 0;

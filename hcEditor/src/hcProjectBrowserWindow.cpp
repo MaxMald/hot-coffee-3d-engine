@@ -69,7 +69,6 @@ namespace hc::editor
       ImGui::Text("No directory selected. Load a Project first.");
       return;
     }
-
     
     ImGui::Text("Current Directory: %s", currentDir->getFullPath().string().c_str());
     if (ImGui::Button("Back"))

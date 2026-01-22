@@ -58,6 +58,13 @@ namespace hc::editor
     return m_currentProjectPath;
   }
 
+  Path ProjectManager::getCurrentProjectDirectory() const
+  {
+    if (m_isProjectOpen)
+      return m_currentProjectPath.parent_path();
+    return Path();
+  }
+
   bool ProjectManager::isProjectOpen() const
   {
     return m_isProjectOpen;

@@ -175,6 +175,7 @@
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h" />
     <ClInclude Include="include\hc\editor\hcFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
@@ -235,6 +236,7 @@
     <ClCompile Include="src\hcProject.cpp" />
     <ClCompile Include="src\hcProjectBrowserWindow.cpp" />
     <ClCompile Include="src\hcProjectFileContentLoader.cpp" />
+    <ClCompile Include="src\hcProjectFileSelectorView.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
     <ClCompile Include="src\imgui.cpp" />
