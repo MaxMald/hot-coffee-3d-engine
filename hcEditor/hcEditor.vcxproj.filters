@@ -94,6 +94,12 @@
     <Filter Include="Source Files\assetCreator">
       <UniqueIdentifier>{1cb9f57b-35bf-4683-a77e-af97a843df1e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\windows\materialDescriptorEditor">
+      <UniqueIdentifier>{d8517c88-2cf3-48c6-a7a1-f6c9f1ca0323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\materialDescriptorEditor">
+      <UniqueIdentifier>{226e01de-d1d3-4afe-b9b9-6f2cd227d351}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -228,9 +234,6 @@
     <ClInclude Include="include\hc\editor\hcAssetCreator.h">
       <Filter>Header Files\assetCreator</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcMaterialDescriptorEditorWindow.h">
-      <Filter>Header Files\views\windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
@@ -239,6 +242,18 @@
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h">
       <Filter>Header Files\views</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialDescriptorEditorWindow.h">
+      <Filter>Header Files\views\windows\materialDescriptorEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h">
+      <Filter>Header Files\views\windows\materialDescriptorEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcUnlitMaterialDescriptorEditor.h">
+      <Filter>Header Files\views\windows\materialDescriptorEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h">
+      <Filter>Header Files\views\windows\materialDescriptorEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -341,14 +356,20 @@
     <ClCompile Include="src\hcAssetCreator.cpp">
       <Filter>Source Files\assetCreator</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp">
-      <Filter>Source Files\views\windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcImguiUtilities.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
     <ClCompile Include="src\hcProjectFileSelectorView.cpp">
       <Filter>Source Files\views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp">
+      <Filter>Source Files\views\windows\materialDescriptorEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterialDescriptorEditor.cpp">
+      <Filter>Source Files\views\windows\materialDescriptorEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp">
+      <Filter>Source Files\views\windows\materialDescriptorEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

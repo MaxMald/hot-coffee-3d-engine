@@ -76,6 +76,14 @@ namespace hc
     );
   }
 
+  void JsonObjectBuilder::setPath(const String& name, const Path& value)
+  {
+    String formattedValue = String::Format("\"%s\": \"%s\"", name.c_str(), value.generic_string().c_str());
+    m_properties.push_back(
+      MakeUnique<JsonFormattedValue>(formattedValue)
+    );
+  }
+
   void JsonObjectBuilder::setBool(const String& name, bool value)
   {
     String formattedValue = String::Format("\"%s\": %s", name.c_str(), value ? "true" : "false");

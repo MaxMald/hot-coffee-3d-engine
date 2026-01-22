@@ -33,8 +33,8 @@ namespace hc
 
   using Bool = bool;
   using SizeT = std::size_t;
-  using Path = std::filesystem::path;
   using TypeIndex = std::type_index;
+  using Path = std::filesystem::path;
 
   template<typename K, typename V>
   using UnorderedMap = std::unordered_map<K, V>;

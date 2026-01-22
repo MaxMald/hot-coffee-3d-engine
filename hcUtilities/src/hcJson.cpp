@@ -48,6 +48,7 @@ namespace hc
     std::ifstream file(filePath);
     if (!file)
       throw std::runtime_error("Failed to open JSON file");
+
     return Json(new Impl(nlohmann::json::parse(file, nullptr, true, true)));
   }
 

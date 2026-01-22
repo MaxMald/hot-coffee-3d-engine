@@ -71,6 +71,13 @@ namespace hc
     void setString(const String& value);
 
     /**
+     * @brief Adds a file path value to the array.
+     * 
+     * @param value The file path value to add.
+     */
+    void setPath(const Path& value);
+
+    /**
      * @brief Adds a boolean value to the array.
      * 
      * @param value The boolean value to add.

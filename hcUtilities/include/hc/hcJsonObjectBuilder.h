@@ -82,6 +82,14 @@ namespace hc
     void setString(const String& name, const String& value);
 
     /**
+     * @brief Adds a file path value to the object with the specified property name.
+     *
+     * @param name The property name for the value.
+     * @param value The file path value to add.
+     */
+    void setPath(const String& name, const Path& value);
+
+    /**
      * @brief Adds a boolean value to the object with the specified property
      * name.
      *

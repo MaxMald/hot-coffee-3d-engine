@@ -4,6 +4,7 @@
 #include "hc/hcJsonObjectBuilder.h"
 #include "hc/hcJson.h"
 #include "hc/hcJsonParsers.h"
+#include "hc/hcLogService.h"
 
 namespace hc
 {

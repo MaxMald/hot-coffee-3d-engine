@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  class IImageLoader : public IAssetLoader<Image>
+  class HC_CORE_EXPORT IImageLoader : public IAssetLoader<Image>
   {
   };
 }

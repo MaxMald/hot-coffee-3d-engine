@@ -175,6 +175,8 @@
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h" />
     <ClInclude Include="include\hc\editor\hcFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
@@ -198,6 +200,7 @@
     <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h" />
     <ClInclude Include="include\hc\editor\hcProjectManager.h" />
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
+    <ClInclude Include="include\hc\editor\hcUnlitMaterialDescriptorEditor.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
     <ClInclude Include="include\ImGuiFileDialog.h" />
@@ -232,6 +235,7 @@
     <ClCompile Include="src\hcMain.cpp" />
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp" />
+    <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
     <ClCompile Include="src\hcProject.cpp" />
     <ClCompile Include="src\hcProjectBrowserWindow.cpp" />
@@ -239,6 +243,7 @@
     <ClCompile Include="src\hcProjectFileSelectorView.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
+    <ClCompile Include="src\hcUnlitMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\ImGuiFileDialog.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />

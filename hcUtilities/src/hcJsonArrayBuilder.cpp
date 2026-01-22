@@ -76,6 +76,14 @@ namespace hc
     );
   }
 
+  void JsonArrayBuilder::setPath(const Path& value)
+  {
+    String formattedValue = String::Format("\"%s\"", value.generic_string().c_str());
+    m_properties.push_back(
+      MakeUnique<JsonFormattedValue>(formattedValue)
+    );
+  }
+
   void JsonArrayBuilder::setBool(bool value)
   {
     String formattedValue = value ? "true" : "false";

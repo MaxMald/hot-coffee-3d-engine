@@ -2,6 +2,7 @@
 
 #include <hc/hcDependencyContainer.h>
 #include <hc/hcLogService.h>
+#include <hc/hcAssetFileExtensions.h>
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcFileReference.h"
@@ -14,6 +15,10 @@ namespace hc::editor
     m_isFileSelectorOpen(false),
     m_isDirectorySelectorOpen(false)
   {
+    m_imageFileExtensions = Vector<String>(
+      assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.begin(),
+      assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.end()
+    );
   }
 
   ProjectFileSelectorView::~ProjectFileSelectorView()
@@ -28,7 +33,7 @@ namespace hc::editor
 
       if (ImGui::Button("Cancel"))
         clear();
-    } 
+    }
     else if (m_isFileSelectorOpen)
     {
       if (drawBackAndRefreshButtons())
@@ -50,6 +55,7 @@ namespace hc::editor
 
   void ProjectFileSelectorView::onProjectOpened()
   {
+    clear();
     m_directoryNavigator.clear();
 
     if (!m_projectManager->isProjectOpen())
@@ -64,7 +70,19 @@ namespace hc::editor
 
   void ProjectFileSelectorView::onProjectClosed()
   {
+    clear();
     m_directoryNavigator.clear();
+  }
+
+  void ProjectFileSelectorView::openImageFileSelector(
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    clear();
+    m_isFileSelectorOpen = true;
+    m_currentTitle = "Select Image File";
+    m_fileFilters = m_imageFileExtensions;
+    m_selectionCallback = onFileSelected;
   }
 
   void ProjectFileSelectorView::openFileSelector(
@@ -73,9 +91,8 @@ namespace hc::editor
     const std::function<void(const Path&)>& onFileSelected
   )
   {
-    logWarningIfAlreadyOpen();
     clear();
-
+    m_isFileSelectorOpen = true;
     m_currentTitle = (title.empty() ? "Select File" : title);
     m_fileFilters = filters;
     m_selectionCallback = onFileSelected;
@@ -86,9 +103,8 @@ namespace hc::editor
     const std::function<void(const Path&)>& onDirectorySelected
   )
   {
-    logWarningIfAlreadyOpen();
     clear();
-
+    m_isDirectorySelectorOpen = true;
     m_currentTitle = (title.empty() ? "Select Directory" : title);
     m_selectionCallback = onDirectorySelected;
   }
@@ -184,6 +200,8 @@ namespace hc::editor
 
   void ProjectFileSelectorView::clear()
   {
+    logWarningIfAlreadyOpen();
+
     m_isFileSelectorOpen = false;
     m_isDirectorySelectorOpen = false;
     m_selectionCallback = nullptr;

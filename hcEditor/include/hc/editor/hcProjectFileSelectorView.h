@@ -44,6 +44,15 @@ namespace hc::editor
     void onProjectClosed() override;
 
     /**
+     * @brief Opens the image file selector dialog.
+     * 
+     * @param onFileSelected Callback invoked when an image file is selected.
+     */
+    void openImageFileSelector(
+      const std::function<void(const Path&)>& onFileSelected
+    );
+
+    /**
      * @brief Opens the file selector dialog.
      * 
      * @param title Dialog title.
@@ -73,6 +82,7 @@ namespace hc::editor
     std::function<void(const Path&)> m_selectionCallback;
     String m_currentTitle;
     Vector<String> m_fileFilters;
+    Vector<String> m_imageFileExtensions;
     bool m_isFileSelectorOpen;
     bool m_isDirectorySelectorOpen;
 

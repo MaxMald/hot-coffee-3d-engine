@@ -9,7 +9,7 @@ namespace hc
     return new AssetLoadersPlugin();
   }
 
-  HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin(IPlugin* plugin)
+  HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin(IPlugin*)
   {
   }
 

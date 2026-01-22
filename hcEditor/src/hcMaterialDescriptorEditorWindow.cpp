@@ -7,6 +7,8 @@
 #include "hc/editor/hcImguiUtilities.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
+#include "hc/editor/hcNullMaterialDescriptorEditor.h"
 #include "imgui.h"
 
 namespace
@@ -21,11 +23,10 @@ namespace hc::editor
 {
   MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow() :
     AWindowView("Material Descriptor Editor", false),
-    m_materialDescriptor(),
-    m_currentShaderType(shaderType::Type::Unknown),
-    m_unlitColor(0.0f, 0.0f, 0.0f, 1.0f),
-    m_unlitMainImageKey()
+    m_assetReference(),
+    m_currentShaderType(shaderType::Type::Unknown)
   {
+    registerEditors();
   }
 
   MaterialDescriptorEditorWindow::~MaterialDescriptorEditorWindow()
@@ -36,24 +37,41 @@ namespace hc::editor
   {
     clear();
 
-    Optional<String> fileContent =
-      fileUtilities::LoadStringFromFile(materialDescriptorPath);
+    try
+    {
+      Optional<String> fileContent =
+        fileUtilities::LoadStringFromFile(materialDescriptorPath);
 
-    if (!fileContent.has_value())
-      return;
+      if (!fileContent.has_value())
+        return;
 
-    MaterialDescriptor* materialDescriptor =
-      JsonSerializer::Deserialize<MaterialDescriptor>(fileContent.value());
+      MaterialDescriptor* materialDescriptor =
+        JsonSerializer::Deserialize<MaterialDescriptor>(fileContent.value());
 
-    if (!materialDescriptor)
-      return;
+      if (!materialDescriptor)
+        return;
 
-    m_materialDescriptor.setFilePath(materialDescriptorPath);
-    m_materialDescriptor.setAsset(SharedPtr<MaterialDescriptor>(materialDescriptor));
-    m_currentShaderType = materialDescriptor->getShaderType();
-    updateShaderTypeCombo();
+      m_assetReference.setFilePath(materialDescriptorPath);
+      m_assetReference.setAsset(SharedPtr<MaterialDescriptor>(materialDescriptor));
+      m_currentShaderType = materialDescriptor->getShaderType();
 
-    m_isOpen = true;
+      updateShaderTypeCombo();
+
+      m_activeEditor = getEditor(m_currentShaderType);
+      m_activeEditor->copyValuesFrom(m_assetReference.getAsset());
+
+      m_isOpen = true;
+    }
+    catch (const std::exception& ex)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to open material descriptor file '%s': %s",
+          materialDescriptorPath.string().c_str(),
+          ex.what()
+        )
+      );
+    }
   }
 
   void MaterialDescriptorEditorWindow::resolveDependencies(
@@ -62,50 +80,62 @@ namespace hc::editor
   {
     container.resolve<EditorViewsManager>()->registerView(this);
     m_projectFileSelectorView = container.resolve<ProjectFileSelectorView>();
+    initializeEditors(m_projectFileSelectorView);
   }
 
   void MaterialDescriptorEditorWindow::clear()
   {
-    m_materialDescriptor = AssetFileReference<MaterialDescriptor>();
+    m_assetReference = AssetFileReference<MaterialDescriptor>();
     m_currentShaderType = shaderType::Type::Unknown;
+    m_activeEditor = nullptr;
+
+    for (auto& [type, editor] : m_editors)
+      editor->clear();
+  }
+
+  void MaterialDescriptorEditorWindow::registerEditors()
+  {
+    m_editors[shaderType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>();
+    m_nullEditor = MakeUnique<NullMaterialDescriptorEditor>();
+  }
+
+  void MaterialDescriptorEditorWindow::initializeEditors(
+    SharedPtr<ProjectFileSelectorView> projectFileSelector
+  )
+  {
+    for (auto& [type, editor] : m_editors)
+      editor->init(projectFileSelector);
+  }
+
+  IMaterialDescriptorEditor* MaterialDescriptorEditorWindow::getEditor(
+    shaderType::Type type
+  )
+  {
+    auto it = m_editors.find(type);
+    if (it != m_editors.end())
+      return it->second.get();
+
+    return m_nullEditor.get();
   }
 
   void MaterialDescriptorEditorWindow::onDraw()
   {
-    if (!m_materialDescriptor.getAsset())
-    {
-      ImGui::Text("No material descriptor loaded.");
-      return;
-    }
-
     drawShaderTypeSelector();
-
-    if (m_currentShaderType == shaderType::Type::Unlit)
-      drawUnlitMaterialDescriptorEditor();
-    else
-    {
-      String shaderTypeStr = shaderType::toString(m_currentShaderType);
-      ImGui::Text("Unsupported material descriptor type: %s.", shaderTypeStr.c_str());
-    }
-
-    if (ImGui::Button("Save"))
+    ImGui::SameLine();
+    if (ImGui::Button("Save Changes"))
       saveToFile();
+    ImGui::Separator();
+    ImGui::Text("Material Properties:");
+
+    if (m_activeEditor)
+      m_activeEditor->draw();
   }
 
   void MaterialDescriptorEditorWindow::drawShaderTypeSelector()
   {
+    ImGui::SetNextItemWidth(120.0f);
     if (ImGui::Combo("Shader Type", &m_selectedShaderTypeIndex, SHADER_TYPES, IM_ARRAYSIZE(SHADER_TYPES)))
       m_currentShaderType = shaderType::fromString(SHADER_TYPES[m_selectedShaderTypeIndex]);
-  }
-
-  void MaterialDescriptorEditorWindow::drawUnlitMaterialDescriptorEditor()
-  {
-    imguiUtilities::DrawColorEdit3("Color", m_unlitColor);
-
-    if (!m_projectFileSelectorView)
-      return;
-
-    // file selection for main image
   }
 
   void MaterialDescriptorEditorWindow::updateShaderTypeCombo()
@@ -118,63 +148,9 @@ namespace hc::editor
 
   void MaterialDescriptorEditorWindow::saveToFile()
   {
-    SharedPtr<MaterialDescriptor> materialDesc = createMaterialFromCurrentSettings();
-
-    if (!materialDesc)
-    {
-      LogService::Error("Failed to create material descriptor from current settings.");
+    if (!m_activeEditor)
       return;
-    }
 
-    Optional<String> serializedContent =
-      JsonSerializer::Serialize<MaterialDescriptor>(materialDesc.get());
-
-    if (!serializedContent.has_value())
-    {
-      LogService::Error("Failed to serialize material descriptor to JSON.");
-      return;
-    }
-
-    bool saveResult = fileUtilities::SaveStringToFile(
-      m_materialDescriptor.getFilePath(),
-      serializedContent.value()
-    );
-
-    if (!saveResult)
-    {
-      LogService::Error(
-        String::Format(
-          "Failed to save material descriptor to file: %s",
-          m_materialDescriptor.getFilePath().string().c_str()
-        )
-      );
-    }
-  }
-
-  SharedPtr<MaterialDescriptor> 
-    MaterialDescriptorEditorWindow::createMaterialFromCurrentSettings()
-  {
-    if (m_currentShaderType == shaderType::Type::Unlit)
-    {
-      SharedPtr<UnlitMaterialDescriptor> unlitDesc =
-        MakeShared<UnlitMaterialDescriptor>();
-
-      unlitDesc->setColor(m_unlitColor);
-      unlitDesc->setMainImageKey(m_unlitMainImageKey);
-
-      return unlitDesc;
-    }
-    else
-    {
-      String shaderTypeStr = shaderType::toString(m_currentShaderType);
-      LogService::Error(
-        String::Format(
-          "Couldn't create material descriptor. Unsupported shader type '%s'.",
-          shaderTypeStr.c_str()
-        )
-      );
-
-      return nullptr;
-    }
+    m_activeEditor->save(m_assetReference.getFilePath());
   }
 }
