@@ -112,7 +112,7 @@ namespace hc
   template<typename T>
   inline SharedPtr<T> AssetManager::load(const String& key, const Path& path)
   {
-    SharedPtr<T> loadedAsset = loadDirect(path);
+    SharedPtr<T> loadedAsset = loadDirect<T>(path);
 
     if (!loadedAsset)
       return nullptr;

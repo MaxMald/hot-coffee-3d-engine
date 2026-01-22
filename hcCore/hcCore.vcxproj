@@ -166,6 +166,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\hcAsset.cpp" />
+    <ClCompile Include="src\hcAssetFileExtensions.cpp" />
     <ClCompile Include="src\hcAssetManager.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />

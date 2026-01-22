@@ -183,6 +183,9 @@
     <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp">
       <Filter>Source Files\jsonSerializer</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcAssetFileExtensions.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
