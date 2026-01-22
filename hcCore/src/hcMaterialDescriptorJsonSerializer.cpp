@@ -68,7 +68,8 @@ namespace hc
       return false;
 
     objectBuilder.setColor("color", data->getColor());
-    objectBuilder.setString("mainImageKey", data->getMainImageKey());
+    String pathStr = data->getMainImagePath().generic_string();
+    objectBuilder.setString("mainImagePath", pathStr.c_str());
     return true;
   }
 
@@ -83,8 +84,8 @@ namespace hc
     {
       Color color = jsonParsers::parseColor(json["color"]);
       descriptor->setColor(color);
-      String mainImageKey = json["mainImageKey"].getString();
-      descriptor->setMainImageKey(mainImageKey);
+      String mainImagePath = json["mainImagePath"].getString();
+      descriptor->setMainImagePath(Path(mainImagePath.c_str()));
     }
     catch (...)
     {

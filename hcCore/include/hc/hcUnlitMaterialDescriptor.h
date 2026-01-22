@@ -16,6 +16,11 @@ namespace hc
     virtual ~UnlitMaterialDescriptor();
 
     /**
+     * @copydoc hc::MaterialDescriptor::getImagesPaths
+     */
+    Vector<Path> getImagesPaths() const override;
+
+    /**
      * @brief Sets the color property of the unlit material.
      *
      * @param color The color to set.
@@ -34,22 +39,17 @@ namespace hc
      * 
      * @param key The asset key or identifier for the main image.
      */
-    void setMainImageKey(const String& key);
+    void setMainImagePath(const Path& path);
 
     /**
      * @brief Gets the key for the main image used by the unlit material.
      * 
      * @return The asset key or identifier for the main image.
      */
-    const String& getMainImageKey() const;
-
-    /**
-     * @copydoc hc::MaterialDescriptor::getImagesKeys
-     */
-    Vector<String> getImagesKeys() const override;
+    const Path& getMainImagePath() const;
 
   private:
     Color m_color;
-    String m_mainImageKey;
+    Path m_mainImagePath;
   };
 }

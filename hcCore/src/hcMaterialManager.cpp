@@ -2,7 +2,7 @@
 
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcAssetManager.h"
-#include "hc/hcIGraphicsManager.h"
+#include "hc/hcTextureManager.h"
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
 #include "hc/hcUnlitMaterial.h"
@@ -11,92 +11,94 @@
 
 namespace hc
 {
-  MaterialManager::MaterialManager()
-  {
-  }
-
-  MaterialManager::~MaterialManager()
-  {
-  }
-
   void MaterialManager::resolveDependencies(DependencyContainer& container)
   {
     m_assetManager = container.resolve<AssetManager>();
-    m_graphicsManager = container.resolve<IGraphicsManager>();
+    m_textureManager = container.resolve<TextureManager>();
   }
 
-  SharedPtr<IMaterial> MaterialManager::createMaterial(
-    const String& key,
+  SharedPtr<IMaterial> MaterialManager::createMaterialFromFile(
+    const Path& materialDescriptorPath
+  )
+  {
+    SharedPtr<MaterialDescriptor> mat = m_assetManager->loadDirect<MaterialDescriptor>(
+      materialDescriptorPath
+    );
+
+    return createMaterialFromDescriptor(mat);
+  }
+
+  SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
     const String& materialDescriptorKey
   )
   {
-    if (m_assetManager->contains<MaterialDescriptor>(materialDescriptorKey))
+    SharedPtr<MaterialDescriptor> mat = m_assetManager->get<MaterialDescriptor>(
+      materialDescriptorKey
+    );
+
+    if (!mat)
     {
-      SharedPtr<MaterialDescriptor> descriptor =
-        m_assetManager->get<MaterialDescriptor>(materialDescriptorKey);
-      return createMaterial(key, descriptor);
+      LogService::Error(
+        String::Format(
+          "MaterialDescriptor with key '%s' not found.",
+          materialDescriptorKey.c_str()
+        )
+      );
+
+      return nullptr;
     }
 
+    return createMaterialFromDescriptor(mat);
+  }
+
+  SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
+    SharedPtr<MaterialDescriptor> descriptor
+  )
+  {
+    if (!descriptor)
+    {
+      LogService::Error(
+        String::Format("Invalid MaterialDescriptor provided.")
+      );
+      return nullptr;
+    }
+
+    String cacheKey = getCacheKey(descriptor);
+    auto it = m_cacheMaterials.find(cacheKey);
+    if (it != m_cacheMaterials.end())
+      return it->second;
+
+    shaderType::Type shaderType = descriptor->getShaderType();
+    if (shaderType == shaderType::Type::Unlit)
+    {
+      return createUnlitMaterial(cacheKey, descriptor);
+    }
+
+    String shaderTypeStr = shaderType::toString(descriptor->getShaderType());
     LogService::Error(
       String::Format(
-        "MaterialDescriptor with key '%s' not found.",
-        materialDescriptorKey.c_str()
+        "Unsupported shader type '%s' in MaterialDescriptor for key.",
+        shaderTypeStr.c_str()
       )
     );
 
     return nullptr;
   }
 
-  SharedPtr<IMaterial> MaterialManager::createMaterial(
-    const String& key,
+  String MaterialManager::getCacheKey(
     SharedPtr<MaterialDescriptor> descriptor
-  )
+  ) const
   {
-    switch (descriptor->getShaderType())
-    {
-    case shaderType::Unlit:
-    {
-      SharedPtr<UnlitMaterialDescriptor> unlitDescriptor =
-        std::static_pointer_cast<UnlitMaterialDescriptor>(descriptor);
-      return createUnlitMaterial(key, unlitDescriptor);
-    }
+    if (!descriptor)
+      return String();
 
-    default:
-    {
-      String shaderTypeStr = shaderType::toString(descriptor->getShaderType());
-      LogService::Error(
-        String::Format(
-          "Unsupported shader type '%s' in MaterialDescriptor for key '%s'.",
-          shaderTypeStr.c_str(),
-          key.c_str()
-        )
-      );
-
-      return nullptr;
-    }
-    }
-  }
-
-  SharedPtr<UnlitMaterial> MaterialManager::createUnlitMaterial(
-    const String& key,
-    SharedPtr<UnlitMaterialDescriptor> descriptor
-  )
-  {
-    SharedPtr<ITexture> mainTexture = nullptr;
-    if (!descriptor->getMainImageKey().empty())
-      mainTexture = createTextureFromImageKey(descriptor->getMainImageKey());
-
-    SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
-    material->initialize(descriptor, mainTexture);
-    m_materials[key] = material;
-
-    return material;
+    return descriptor->getPath().string();
   }
 
   SharedPtr<IMaterial> MaterialManager::get(const String& key) const
   {
-    auto it = m_materials.find(key);
-    if (it != m_materials.end())
+    auto it = m_cacheMaterials.find(key);
+    if (it != m_cacheMaterials.end())
       return it->second;
 
     return nullptr;
@@ -104,38 +106,45 @@ namespace hc
 
   bool MaterialManager::contains(const String& key) const
   {
-    return m_materials.find(key) != m_materials.end();
+    return m_cacheMaterials.find(key) != m_cacheMaterials.end();
   }
 
-  const UnorderedMap<String, SharedPtr<IMaterial>>& MaterialManager::getMaterials() const
+  const UnorderedMap<String, SharedPtr<IMaterial>>& MaterialManager::getCacheMaterials() const
   {
-    return m_materials;
+    return m_cacheMaterials;
   }
 
   void MaterialManager::clear()
   {
-    m_materials.clear();
+    m_cacheMaterials.clear();
   }
 
-  SharedPtr<ITexture> MaterialManager::createTextureFromImageKey(
-    const String& imageKey
-  ) const
+  SharedPtr<UnlitMaterial> MaterialManager::createUnlitMaterial(
+    const String& cacheKey,
+    SharedPtr<MaterialDescriptor> descriptor
+  )
   {
-    if (m_assetManager->contains<Image>(imageKey))
-    {
-      SharedPtr<Image> image =
-        m_assetManager->get<Image>(imageKey);
+    SharedPtr<UnlitMaterialDescriptor> unlitDescriptor =
+      std::static_pointer_cast<UnlitMaterialDescriptor>(descriptor);
 
-      return m_graphicsManager->createTexture(image);
+    if (!unlitDescriptor)
+    {
+      LogService::Error(String::Format("Invalid UnlitMaterialDescriptor provided."));
+      return nullptr;
     }
 
-    LogService::Error(
-      String::Format(
-        "Texture creation was not possible. Image with key '%s' not found.",
-        imageKey.c_str()
-      )
-    );
+    SharedPtr<ITexture> mainTexture = nullptr;
+    if (!unlitDescriptor->getMainImagePath().empty())
+    {
+      mainTexture = m_textureManager->createTextureFromFile(
+        unlitDescriptor->getMainImagePath()
+      );
+    }
 
-    return nullptr;
+    SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
+    material->initialize(unlitDescriptor, mainTexture);
+
+    m_cacheMaterials[cacheKey] = material;
+    return material;
   }
 }

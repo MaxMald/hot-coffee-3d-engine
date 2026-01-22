@@ -28,11 +28,11 @@ namespace hc
     shaderType::Type getShaderType() const;
 
     /**
-     * @brief Gets the keys of images used by this material descriptor.
+     * @brief Gets the paths of images used by this material descriptor.
      *
-     * @return A vector of image keys.
+     * @return A vector of image paths.
      */
-    virtual Vector<String> getImagesKeys() const = 0;
+    virtual Vector<Path> getImagesPaths() const = 0;
 
   protected:
     shaderType::Type m_shaderType;

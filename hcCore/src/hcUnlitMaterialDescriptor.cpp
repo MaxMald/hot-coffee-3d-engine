@@ -5,7 +5,7 @@ namespace hc
   UnlitMaterialDescriptor::UnlitMaterialDescriptor() :
     MaterialDescriptor(shaderType::Unlit),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
-    m_mainImageKey()
+    m_mainImagePath()
   {
   }
 
@@ -23,24 +23,24 @@ namespace hc
     return m_color;
   }
 
-  void UnlitMaterialDescriptor::setMainImageKey(const String& key)
+  void UnlitMaterialDescriptor::setMainImagePath(const Path& path)
   {
-    m_mainImageKey = key;
+    m_mainImagePath = path;
   }
 
-  const String& UnlitMaterialDescriptor::getMainImageKey() const
+  const Path& UnlitMaterialDescriptor::getMainImagePath() const
   {
-    return m_mainImageKey;
+    return m_mainImagePath;
   }
 
-  Vector<String> UnlitMaterialDescriptor::getImagesKeys() const
+  Vector<Path> UnlitMaterialDescriptor::getImagesPaths() const
   {
-    if (m_mainImageKey.empty()) 
+    if (m_mainImagePath.empty()) 
     {
-      return Vector<String>();
+      return Vector<Path>();
     } else 
     {
-      return Vector<String>{ m_mainImageKey };
+      return Vector<Path>{ m_mainImagePath };
     }
   }
 }

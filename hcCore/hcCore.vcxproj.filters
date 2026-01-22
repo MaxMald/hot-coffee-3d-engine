@@ -100,6 +100,9 @@
     <Filter Include="Header Files\jsonSerializer\serializers">
       <UniqueIdentifier>{eb0267b1-f140-4f54-8aea-d4a2bf52f182}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\texture">
+      <UniqueIdentifier>{5f9cf296-764d-489e-962e-26a178c19a3d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -185,6 +188,9 @@
     </ClCompile>
     <ClCompile Include="src\hcAssetFileExtensions.cpp">
       <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTextureManager.cpp">
+      <Filter>Source Files\graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +332,6 @@
     <ClInclude Include="include\hc\hcUnlitMaterial.h">
       <Filter>Header Files\graphics\material</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcITexture.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcJsonSerializer.h">
       <Filter>Header Files\jsonSerializer</Filter>
     </ClInclude>
@@ -346,6 +349,12 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcMouseWheelType.h">
       <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcITexture.h">
+      <Filter>Header Files\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcTextureManager.h">
+      <Filter>Header Files\graphics\texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
