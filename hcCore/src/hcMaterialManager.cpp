@@ -21,7 +21,7 @@ namespace hc
     const Path& materialDescriptorPath
   )
   {
-    SharedPtr<MaterialDescriptor> mat = m_assetManager->loadDirect<MaterialDescriptor>(
+    SharedPtr<MaterialDescriptor> mat = m_assetManager->load<MaterialDescriptor>(
       materialDescriptorPath
     );
 

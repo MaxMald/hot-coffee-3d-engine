@@ -39,6 +39,19 @@ namespace hc
     SharedPtr<T> load(const String& key, const Path& path);
 
     /**
+     * @brief Loads an asset of type T using the appropriate asset loader. The
+     * key of the asset is derived from the path.
+     *
+     * @tparam T Asset type to load.
+     * 
+     * @param path Path to the asset resource.
+     * 
+     * @return Shared pointer to the loaded asset, or nullptr on failure.
+     */
+    template<typename T>
+    SharedPtr<T> load(const Path& path);
+
+    /**
      * @brief Loads an asset of type T directly from the specified path using the
      * appropriate asset loader.
      *
@@ -113,6 +126,9 @@ namespace hc
   template<typename T>
   inline SharedPtr<T> AssetManager::load(const String& key, const Path& path)
   {
+    if (contains<T>(key))
+      return get<T>(key);
+
     SharedPtr<T> loadedAsset = loadDirect<T>(path);
 
     if (!loadedAsset)
@@ -130,6 +146,13 @@ namespace hc
     );
 
     return loadedAsset;
+  }
+
+  template <typename T>
+  inline SharedPtr<T> AssetManager::load(const Path& path)
+  {
+    String key = path.generic_string();
+    return load<T>(key, path);
   }
 
   template<typename T>

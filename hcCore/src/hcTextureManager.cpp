@@ -67,7 +67,7 @@ namespace hc
     const Path& filePath
   )
   {
-    SharedPtr<Image> image = m_assetManager->loadDirect<Image>(filePath);
+    SharedPtr<Image> image = m_assetManager->load<Image>(filePath);
     if (!image)
     {
       LogService::Error(
