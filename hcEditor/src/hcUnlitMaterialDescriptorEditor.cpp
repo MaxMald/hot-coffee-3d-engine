@@ -11,7 +11,7 @@ namespace hc::editor
 {
   UnlitMaterialDescriptorEditor::UnlitMaterialDescriptorEditor()
     : m_color(0.0f, 0.0f, 0.0f, 1.0f),
-    m_mainImageKey(),
+    m_mainImagePath(),
     m_projectFileSelector(nullptr)
   {
   }
@@ -36,14 +36,14 @@ namespace hc::editor
       return;
 
     m_color = unlitDesc->getColor();
-    m_mainImageKey = unlitDesc->getMainImageKey();
+    m_mainImagePath = unlitDesc->getMainImagePath();
   }
 
   void UnlitMaterialDescriptorEditor::draw()
   {
     imguiUtilities::DrawColorEdit3("Color", m_color);
 
-    ImGui::Text("Main Image Key: %s", m_mainImageKey.c_str());
+    ImGui::Text("Main Image Path: %s", m_mainImagePath.c_str());
     if (ImGui::Button("Select Main Image"))
     {
       if (!m_projectFileSelector)
@@ -52,7 +52,7 @@ namespace hc::editor
       m_projectFileSelector->openImageFileSelector(
         [this](const Path& selectedPath)
         {
-          m_mainImageKey = selectedPath.generic_string();
+          m_mainImagePath = selectedPath;
         }
       );
     }
@@ -62,7 +62,7 @@ namespace hc::editor
   {
     auto unlitDesc = MakeUnique<UnlitMaterialDescriptor>();
     unlitDesc->setColor(m_color);
-    unlitDesc->setMainImageKey(m_mainImageKey);
+    unlitDesc->setMainImagePath(m_mainImagePath);
 
     auto serialized = JsonSerializer::Serialize<MaterialDescriptor>(unlitDesc.get());
     if (!serialized.has_value())
@@ -92,6 +92,6 @@ namespace hc::editor
   void UnlitMaterialDescriptorEditor::clear()
   {
     m_color = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    m_mainImageKey.clear();
+    m_mainImagePath.clear();
   }
 }

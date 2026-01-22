@@ -42,6 +42,6 @@ namespace hc::editor
   private:
     SharedPtr<ProjectFileSelectorView> m_projectFileSelector;
     Color m_color;
-    String m_mainImageKey;
+    Path m_mainImagePath;
   };
 }

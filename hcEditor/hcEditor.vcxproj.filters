@@ -276,9 +276,6 @@
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h">
       <Filter>Header Files\views\windows\assetManager</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcAssetDependenciesLoader.h">
-      <Filter>Header Files\assetCreator</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -403,9 +400,6 @@
     </ClCompile>
     <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp">
       <Filter>Source Files\views\windows\assetManager</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcAssetDependenciesLoader.cpp">
-      <Filter>Source Files\assetCreator</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

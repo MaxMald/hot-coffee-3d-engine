@@ -162,7 +162,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
-    <ClInclude Include="include\hc\editor\hcAssetDependenciesLoader.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
     <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIAssetGroupDrawer.h" />
@@ -221,7 +220,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcAssetCreator.cpp" />
-    <ClCompile Include="src\hcAssetDependenciesLoader.cpp" />
     <ClCompile Include="src\hcAssetManagerWindow.cpp" />
     <ClCompile Include="src\hcAWindowView.cpp" />
     <ClCompile Include="src\hcCameraManagerWindow.cpp" />

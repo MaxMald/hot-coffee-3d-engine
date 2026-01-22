@@ -26,7 +26,5 @@ namespace hc::editor
 
     void onDraw() override;
     void registerAssetGroupDrawers();
-    void drawAssetLoadingSection();
-    void loadAssetFromPath(const Path& path);
   };
 }
