@@ -264,6 +264,18 @@
     <ClInclude Include="include\hc\editor\hcAssetManagerWindow.h">
       <Filter>Header Files\views\windows\assetManager</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIAssetGroupDrawer.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcImageAssetGroupDrawer.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -381,6 +393,12 @@
       <Filter>Source Files\views\windows\materialDescriptorEditor</Filter>
     </ClCompile>
     <ClCompile Include="src\hcAssetManagerWindow.cpp">
+      <Filter>Source Files\views\windows\assetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcImageAssetGroupDrawer.cpp">
+      <Filter>Source Files\views\windows\assetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp">
       <Filter>Source Files\views\windows\assetManager</Filter>
     </ClCompile>
   </ItemGroup>

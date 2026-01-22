@@ -8,6 +8,9 @@
 #include <hc/hcLogService.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcIAssetGroupDrawer.h"
+#include "hc/editor/hcImageAssetGroupDrawer.h"
+#include "hc/editor/hcMaterialDescriptorAssetGroupDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -28,6 +31,8 @@ namespace hc::editor
 
     m_allAssetExtensions.clear();
     assetFileExtensions::GetAllAssetExtensions(m_allAssetExtensions);
+
+    registerAssetGroupDrawers();
   }
 
   void AssetManagerWindow::onDraw()
@@ -35,35 +40,14 @@ namespace hc::editor
     drawAssetLoadingSection();
     ImGui::Separator();
 
-    AssetManager& assetManager = HotCoffeeEngine::Instance().getAssetManager();
-    AssetGroup<Image>& imageGroup = assetManager.getGroup<Image>();
-    if (ImGui::CollapsingHeader("Images"))
-    {
-      for (const auto& [key, imagePtr] : imageGroup.getAll())
-      {
-        if (ImGui::TreeNode(key.c_str()))
-        {
-          String path = imagePtr->getPath().generic_string();
-          ImGui::Text("Path: %s", path.c_str());
-          ImGui::Text("Dimensions: %ux%u", imagePtr->getWidth(), imagePtr->getHeight());
-          ImGui::TreePop();
-        }
-      }
-    }
+    for (const SharedPtr<IAssetGroupDrawer>& drawer : m_assetGroupDrawers)
+      drawer->draw();
+  }
 
-    AssetGroup<MaterialDescriptor>& materialGroup = assetManager.getGroup<MaterialDescriptor>();
-    if (ImGui::CollapsingHeader("Materials"))
-    {
-      for (const auto& [key, materialPtr] : materialGroup.getAll())
-      {
-        if (ImGui::TreeNode(key.c_str()))
-        {
-          String path = materialPtr->getPath().generic_string();
-          ImGui::Text("Path: %s", path.c_str());
-          ImGui::TreePop();
-        }
-      }
-    }
+  void AssetManagerWindow::registerAssetGroupDrawers()
+  {
+    m_assetGroupDrawers.push_back(MakeShared<ImageAssetGroupDrawer>());
+    m_assetGroupDrawers.push_back(MakeShared<MaterialDescriptorAssetGroupDrawer>());
   }
 
   void AssetManagerWindow::drawAssetLoadingSection()
@@ -90,7 +74,7 @@ namespace hc::editor
       {
         LogService::Error(
           String::Format(
-            "Failed to load image asset from path: %s", 
+            "Failed to load image asset from path: %s",
             path.generic_string().c_str()
           )
         );
@@ -102,7 +86,7 @@ namespace hc::editor
       {
         LogService::Error(
           String::Format(
-            "Failed to load material descriptor asset from path: %s", 
+            "Failed to load material descriptor asset from path: %s",
             path.generic_string().c_str()
           )
         );
@@ -112,7 +96,7 @@ namespace hc::editor
     {
       LogService::Warning(
         String::Format(
-          "Unsupported asset type for path: %s", 
+          "Unsupported asset type for path: %s",
           path.generic_string().c_str()
         )
       );

@@ -163,6 +163,8 @@
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcIAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcAssetManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcCameraManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcDirectoryReference.h" />
@@ -176,7 +178,9 @@
     <ClInclude Include="include\hc\editor\hcEditorPrerequisites.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h" />
     <ClInclude Include="include\hc\editor\hcFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcImageAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h" />
@@ -231,11 +235,13 @@
     <ClCompile Include="src\hcHotCoffeeEditor.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngineSettingsFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeToImguiMappings.cpp" />
+    <ClCompile Include="src\hcImageAssetGroupDrawer.cpp" />
     <ClCompile Include="src\hcImguiHandler.cpp" />
     <ClCompile Include="src\hcImguiUtilities.cpp" />
     <ClCompile Include="src\hcLightManagerWindow.cpp" />
     <ClCompile Include="src\hcMain.cpp" />
     <ClCompile Include="src\hcMainMenuToolbar.cpp" />
+    <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp" />
     <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
