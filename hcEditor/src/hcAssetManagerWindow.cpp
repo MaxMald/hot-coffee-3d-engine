@@ -1,11 +1,11 @@
 #include "hc/editor/hcAssetManagerWindow.h"
+
 #include <hc/hcHotCoffeeEngine.h>
 #include <hc/hcAssetManager.h>
 #include <hc/hcDependencyContainer.h>
 #include <hc/hcImage.h>
 #include <hc/hcMaterialDescriptor.h>
 #include <hc/hcAssetFileExtensions.h>
-#include <hc/hcLogService.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
 #include "hc/editor/hcIAssetGroupDrawer.h"
@@ -69,29 +69,9 @@ namespace hc::editor
   {
     AssetManager& assetManager = HotCoffeeEngine::Instance().getAssetManager();
     if (assetFileExtensions::IsImageExtension(path))
-    {
-      if (!assetManager.load<Image>(path.generic_string(), path))
-      {
-        LogService::Error(
-          String::Format(
-            "Failed to load image asset from path: %s",
-            path.generic_string().c_str()
-          )
-        );
-      }
-    }
+      assetManager.load<Image>(path.generic_string(), path);
     else if (assetFileExtensions::IsMaterialDescriptorExtension(path))
-    {
-      if (!assetManager.load<MaterialDescriptor>(path.generic_string(), path))
-      {
-        LogService::Error(
-          String::Format(
-            "Failed to load material descriptor asset from path: %s",
-            path.generic_string().c_str()
-          )
-        );
-      }
-    }
+      assetManager.load<MaterialDescriptor>(path.generic_string(), path);
     else
     {
       LogService::Warning(

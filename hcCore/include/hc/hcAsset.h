@@ -24,5 +24,7 @@ namespace hc
 
   protected:
     Path m_path;
+
+    friend class AssetManager;
   };
 }

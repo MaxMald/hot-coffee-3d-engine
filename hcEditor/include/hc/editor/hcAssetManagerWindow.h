@@ -1,6 +1,7 @@
 #pragma once
 
 #include <hc/hcIDependencyResolvable.h>
+#include <hc/hcLogService.h>
 #include "hc/editor/hcAWindowView.h"
 
 namespace hc::editor

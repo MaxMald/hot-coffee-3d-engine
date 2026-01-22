@@ -38,8 +38,8 @@ namespace hc::editor
       {
         if (ImGui::TreeNode(key.c_str()))
         {
-          Path path = assetPtr->getPath();
-          ImGui::Text("Path: %s", path.c_str());
+          String pathStr = assetPtr->getPath().string();
+          ImGui::Text("Path: %s", pathStr.c_str());
           drawAssetDetails(assetPtr);
           ImGui::TreePop();
         }

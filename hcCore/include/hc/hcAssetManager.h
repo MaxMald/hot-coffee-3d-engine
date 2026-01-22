@@ -5,6 +5,7 @@
 #include "hc/hcIDependencyResolvable.h"
 #include "hc/hcAssetGroup.h"
 #include "hc/hcIAssetLoader.h"
+#include "hc/hcLogService.h"
 
 namespace hc
 {
@@ -120,6 +121,14 @@ namespace hc
     AssetGroup<T>& assetGroup = getGroup<T>();
     assetGroup.add(key, loadedAsset);
 
+    LogService::Message(
+      String::Format(
+        "Asset of type %s loaded and added to group with key: %s",
+        typeid(T).name(),
+        key.c_str()
+      )
+    );
+
     return loadedAsset;
   }
 
@@ -135,6 +144,29 @@ namespace hc
 
     auto loader = static_cast<IAssetLoader<T>*>(m_assetLoaders[typeIdx].get());
     SharedPtr<T> loadedAsset = loader->load(path);
+
+    if (loadedAsset)
+    {
+      SharedPtr<Asset> genericAsset = std::static_pointer_cast<Asset>(loadedAsset);
+      if (genericAsset)
+        genericAsset->m_path = path;
+
+      LogService::Message(
+        String::Format("Successfully loaded asset of type %s from path: %s",
+          typeid(T).name(),
+          path.generic_string().c_str()
+        )
+      );
+    }
+    else
+    {
+      LogService::Error(
+        String::Format("Failed to load asset of type %s from path: %s",
+          typeid(T).name(),
+          path.generic_string().c_str()
+        )
+      );
+    }
 
     return loadedAsset;
   }
