@@ -46,7 +46,12 @@ namespace hc
       return it->second;
     }
 
-    SharedPtr<IShader> shader = nullptr; // TODO
+    if (!m_graphicsManager)
+      return nullptr;
+
+    SharedPtr<IShader> shader = m_graphicsManager->createShaderFromString(
+      shaderCode
+    );
 
     if (!shader)
       return nullptr;

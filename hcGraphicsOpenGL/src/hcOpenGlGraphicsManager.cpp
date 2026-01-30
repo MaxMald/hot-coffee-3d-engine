@@ -52,6 +52,14 @@ namespace hc
     return nullptr;
   }
 
+  SharedPtr<IShader> OpenGlGraphicsManager::createShaderFromString(
+    const String& shaderCode
+  ) const
+  {
+    // TODO Shader creation
+    return SharedPtr<IShader>();
+  }
+
   void OpenGlGraphicsManager::destroy()
   {
   }

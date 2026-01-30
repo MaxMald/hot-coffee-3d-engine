@@ -34,6 +34,13 @@ namespace hc
      */
     SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const override;
 
+    /**
+     * @copydoc IGraphicsManager::createShaderFromString
+     */
+    SharedPtr<IShader> createShaderFromString(
+      const String& shaderCode
+    ) const override;
+
   private:
     /**
      * @copydoc IGraphicsManager::init
