@@ -9,7 +9,7 @@ namespace hc
   class OpenGlShaderProgram : public IShaderProgram
   {
   public:
-    OpenGlShaderProgram(const String& key);
+    OpenGlShaderProgram();
     ~OpenGlShaderProgram() override;
 
     /**
@@ -21,11 +21,6 @@ namespace hc
      * @copydoc IShaderProgram::isValid
      */
     bool isValid() const override;
-
-    /**
-     * @copydoc IShaderProgram::getKey
-     */
-    const String& getKey() const override;
 
     /**
      * @copydoc IShaderProgram::attachShader
@@ -56,7 +51,6 @@ namespace hc
 
   private:
     GLuint m_programId;
-    String m_key;
     bool m_linked;
     UnorderedMap<String, GLint> m_uniformLocationCache;
 

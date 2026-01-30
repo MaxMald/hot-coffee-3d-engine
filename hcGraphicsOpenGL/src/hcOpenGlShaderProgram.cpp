@@ -4,9 +4,8 @@
 
 namespace hc
 {
-  OpenGlShaderProgram::OpenGlShaderProgram(const String& key) :
+  OpenGlShaderProgram::OpenGlShaderProgram() :
     m_programId(glCreateProgram()),
-    m_key(key),
     m_linked(false)
   {
   }
@@ -25,11 +24,6 @@ namespace hc
   bool OpenGlShaderProgram::isValid() const 
   {
     return m_linked;
-  }
-
-  const String& OpenGlShaderProgram::getKey() const
-  {
-    return m_key;
   }
 
   void OpenGlShaderProgram::attachShader(SharedPtr<IShader> shader)

@@ -26,11 +26,6 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Gets the name or key of this program.
-     */
-    virtual const String& getKey() const = 0;
-
-    /**
      * @brief Attaches a shader to this program.
      */
     virtual void attachShader(SharedPtr<IShader> shader) = 0;

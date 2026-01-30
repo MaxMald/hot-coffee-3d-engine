@@ -83,7 +83,7 @@ namespace hc
     if (!fragmentShader->isCompiled())
       return nullptr;
 
-    auto program = MakeShared<OpenGlShaderProgram>("HC_PREDEFINED_UNLIT_SHADER");
+    auto program = MakeShared<OpenGlShaderProgram>();
     program->attachShader(vertexShader);
     program->attachShader(fragmentShader);
 
