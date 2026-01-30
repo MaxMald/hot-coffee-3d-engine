@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcNonCopyable.h"
 #include "hc/hcIWindow.h"
+#include "hc/hcShaderStageType.h"
 
 namespace hc
 {
@@ -23,7 +24,10 @@ namespace hc
     virtual void endFrame(IWindow&) = 0;
 
     virtual SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const = 0;
-    virtual SharedPtr<IShader> createShaderFromString(const String& shaderCode) const = 0;
+    virtual SharedPtr<IShader> createShaderFromString(
+      shaderStageType::Type stageType,
+      const String& shaderCode
+    ) const = 0;
     virtual SharedPtr<IShaderProgram> createUnlitShaderProgram() const = 0;
 
   protected:

@@ -38,6 +38,7 @@ namespace hc
      * @copydoc IGraphicsManager::createShaderFromString
      */
     SharedPtr<IShader> createShaderFromString(
+      shaderStageType::Type stageType,
       const String& shaderCode
     ) const override;
 

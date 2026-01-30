@@ -1,8 +1,13 @@
 #include "hc/hcOpenGlGraphicsManager.h"
 #include <GL/glew.h>
+
+#include <hc/hcLogService.h>
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIDrawable.h"
+#include "hc/hcOpenGlShader.h"
+#include "hc/hcOpenGlShaderProgram.h"
+#include "hc/hcBuiltInShaders.h"
 
 namespace hc
 {
@@ -53,17 +58,39 @@ namespace hc
   }
 
   SharedPtr<IShader> OpenGlGraphicsManager::createShaderFromString(
+    shaderStageType::Type stageType,
     const String& shaderCode
   ) const
   {
-    // TODO Shader creation
-    return SharedPtr<IShader>();
+    return MakeShared<OpenGlShader>(stageType, shaderCode);
   }
 
   SharedPtr<IShaderProgram> OpenGlGraphicsManager::createUnlitShaderProgram() const
   {
-    // TODO Shader program creation
-    return SharedPtr<IShaderProgram>();
+    auto vertexShader = MakeShared<OpenGlShader>(
+      shaderStageType::Vertex,
+      builtInShaders::UnlitVertex
+    );
+    vertexShader->compile();
+    if (!vertexShader->isCompiled())
+      return nullptr;
+
+    auto fragmentShader = MakeShared<OpenGlShader>(
+      shaderStageType::Fragment,
+      builtInShaders::UnlitFragment
+    );
+    fragmentShader->compile();
+    if (!fragmentShader->isCompiled())
+      return nullptr;
+
+    auto program = MakeShared<OpenGlShaderProgram>("HC_PREDEFINED_UNLIT_SHADER");
+    program->attachShader(vertexShader);
+    program->attachShader(fragmentShader);
+
+    if (!program->link())
+      return nullptr;
+
+    return program;
   }
 
   void OpenGlGraphicsManager::destroy()
