@@ -39,7 +39,12 @@ namespace hc
      */
     SharedPtr<IShader> createShaderFromString(
       const String& shaderCode
-    ) const override
+    ) const override;
+
+    /**
+     * @copydoc IGraphicsManager::createUnlitShaderProgram
+     */
+    SharedPtr<IShaderProgram> createUnlitShaderProgram() const override;
 
   private:
     /**

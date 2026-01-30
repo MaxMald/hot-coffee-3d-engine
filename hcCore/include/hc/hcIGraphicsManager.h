@@ -7,6 +7,7 @@
 namespace hc
 {
   class ITexture;
+  class IShaderProgram;
   class IShader;
   class Image;
   class IDrawable;
@@ -23,6 +24,7 @@ namespace hc
 
     virtual SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const = 0;
     virtual SharedPtr<IShader> createShaderFromString(const String& shaderCode) const = 0;
+    virtual SharedPtr<IShaderProgram> createUnlitShaderProgram() const = 0;
 
   protected:
     IGraphicsManager();

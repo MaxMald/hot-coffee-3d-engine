@@ -60,6 +60,12 @@ namespace hc
     return SharedPtr<IShader>();
   }
 
+  SharedPtr<IShaderProgram> OpenGlGraphicsManager::createUnlitShaderProgram() const
+  {
+    // TODO Shader program creation
+    return SharedPtr<IShaderProgram>();
+  }
+
   void OpenGlGraphicsManager::destroy()
   {
   }
