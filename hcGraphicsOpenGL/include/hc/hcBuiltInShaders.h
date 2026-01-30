@@ -6,21 +6,39 @@ namespace hc
 {
   namespace builtInShaders
   {
-    inline const char* vertexShaderSource = R"(
+    inline const String UnlitVertex = R"(
       #version 330 core
-      layout(location = 0) in vec3 aPos;
+      layout(location = 0) in vec3 aPosition;
+      layout(location = 1) in vec2 aTexCoord;
+
+      uniform mat4 uModel;
+      uniform mat4 uView;
+      uniform mat4 uProjection;
+
+      out vec2 vTexCoord;
+
       void main()
       {
-          gl_Position = vec4(aPos, 1.0);
+        vTexCoord = aTexCoord;
+        gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
       }
     )";
 
-    inline const char* fragmentShaderSource = R"(
+    inline const String UnlitFragment = R"(
       #version 330 core
+      in vec2 vTexCoord;
       out vec4 FragColor;
+
+      uniform vec4 uColor;
+      uniform sampler2D uTexture;
+      uniform bool uUseTexture;
+
       void main()
       {
-          FragColor = vec4(1.0, 0.5, 0.2, 1.0);
+        vec4 baseColor = uColor;
+        if (uUseTexture)
+          baseColor *= texture(uTexture, vTexCoord);
+        FragColor = baseColor;
       }
     )";
   }
