@@ -39,7 +39,7 @@ namespace hc
      */
     SharedPtr<IShader> createShaderFromString(
       const String& shaderCode
-    ) const override;
+    ) const override
 
   private:
     /**

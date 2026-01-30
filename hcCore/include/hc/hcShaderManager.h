@@ -14,6 +14,8 @@ namespace hc
     public IDependencyResolvable
   {
   public:
+    static constexpr const char* UNLIT_SHADER_KEY = "HC_PREDEFINED_UNLIT_SHADER";
+
     ShaderManager() = default;
     ~ShaderManager() = default;
 

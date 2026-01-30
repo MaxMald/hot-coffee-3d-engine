@@ -20,6 +20,7 @@ namespace hc
     virtual void beginFrame() = 0;
     virtual void draw(IDrawable&) = 0;
     virtual void endFrame(IWindow&) = 0;
+
     virtual SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const = 0;
     virtual SharedPtr<IShader> createShaderFromString(const String& shaderCode) const = 0;
 
