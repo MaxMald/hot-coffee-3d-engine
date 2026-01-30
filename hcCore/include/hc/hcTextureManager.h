@@ -26,10 +26,7 @@ namespace hc
     ~TextureManager() = default;
 
     /**
-     * @brief Resolves dependencies required by the TextureManager.
-     *
-     * @param container Dependency container used to resolve AssetManager and
-     * IGraphicsManager.
+     * @copydoc IDependencyResolvable::resolveDependencies
      */
     void resolveDependencies(DependencyContainer& container) override;
 
@@ -56,10 +53,13 @@ namespace hc
     SharedPtr<ITexture> createTextureFromImage(const String& imageKey);
 
     /**
-     * @brief Creates a texture from an image file path.
-     *        Loads the image directly from the file and creates or retrieves the corresponding texture.
+     * @brief Creates a texture from an image file path. Loads the image directly
+     * from the file and creates or retrieves the corresponding texture.
+     * 
      * @param filePath Path to the image file.
-     * @return Shared pointer to the created or cached texture, or nullptr on failure.
+     * 
+     * @return Shared pointer to the created or cached texture, or nullptr on
+     * failure.
      */
     SharedPtr<ITexture> createTextureFromFile(const Path& filePath);
 
