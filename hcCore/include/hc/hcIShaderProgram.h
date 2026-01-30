@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  class IShader;
+
   /**
    * @brief Interface for a linked shader program (multi-stage).
    */
@@ -29,6 +31,11 @@ namespace hc
     virtual const String& getKey() const = 0;
 
     /**
+     * @brief Attaches a shader to this program.
+     */
+    virtual void attachShader(SharedPtr<IShader> shader) = 0;
+
+    /**
      * @brief Sets a float uniform variable.
      */
     virtual void setUniform(const String& name, float value) = 0;
@@ -36,11 +43,16 @@ namespace hc
     /**
      * @brief Sets an integer uniform variable.
      */
-    virtual void setUniform(const String& name, int value) = 0;
+    virtual void setUniform(const String& name, Int32 value) = 0;
 
     /**
      * @brief Sets a 4x4 matrix uniform variable.
      */
     virtual void setUniform(const String& name, const float* matrix4x4) = 0;
+
+    /**
+     * @brief Destroys the shader program and releases resources.
+     */
+    virtual void destroy();
   };
 }
