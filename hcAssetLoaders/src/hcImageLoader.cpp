@@ -40,6 +40,7 @@ namespace hc
     image->initialize(
       static_cast<UInt32>(width),
       static_cast<UInt32>(height),
+      NUM_CHANNELS,
       std::move(buffer)
     );
 

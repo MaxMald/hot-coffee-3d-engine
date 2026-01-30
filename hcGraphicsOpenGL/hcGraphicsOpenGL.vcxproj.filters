@@ -39,6 +39,9 @@
     <ClInclude Include="include\hc\hcOpenGlShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\hcOpenGlShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

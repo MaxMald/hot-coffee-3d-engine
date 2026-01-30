@@ -172,12 +172,14 @@
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h" />
     <ClInclude Include="include\hc\hcOpenGlShader.h" />
     <ClInclude Include="include\hc\hcOpenGlShaderProgram.h" />
+    <ClInclude Include="include\hc\hcOpenGlTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
     <ClCompile Include="src\hcOpenGlShader.cpp" />
     <ClCompile Include="src\hcOpenGlShaderProgram.cpp" />
+    <ClCompile Include="src\hcOpenGlTexture.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -46,5 +46,17 @@ namespace hc
      * @return True if the texture is valid, false otherwise.
      */
     virtual bool isValid() const = 0;
+
+    /**
+     * @brief Destroys the texture and releases resources.
+     */
+    virtual void destroy() = 0;
+
+    /**
+     * @brief Gets the native graphics API handle for the texture.
+     * 
+     * @return Pointer to the native texture handle.
+     */
+    virtual void* getNativeHandle() const = 0;
   };
 }

@@ -22,11 +22,13 @@ namespace hc
      *
      * @param width Image width.
      * @param height Image height.
+     * @param channels Number of color channels in the image.
      * @param buffer Buffer containing image data. Ownership is transferred.
      */
     void initialize(
       UInt32 width,
       UInt32 height,
+      UInt32 channels,
       BufferByte&& buffer
     );
 
@@ -45,6 +47,13 @@ namespace hc
     UInt32 getHeight() const;
 
     /**
+     * @brief Gets the number of color channels in the image.
+     * 
+     * @return Number of channels.
+     */
+    UInt32 getChannels() const;
+
+    /**
      * @brief Gets the buffer containing the image's image data.
      *
      * @return Reference to the image's image data buffer.
@@ -61,6 +70,7 @@ namespace hc
   private:
     UInt32 m_width;
     UInt32 m_height;
+    UInt32 m_channels;
     BufferByte m_data;
   };
 }

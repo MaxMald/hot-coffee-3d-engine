@@ -8,6 +8,7 @@
 #include "hc/hcOpenGlShader.h"
 #include "hc/hcOpenGlShaderProgram.h"
 #include "hc/hcBuiltInShaders.h"
+#include "hc/hcOpenGlTexture.h"
 
 namespace hc
 {
@@ -51,10 +52,11 @@ namespace hc
     window.swapBuffers();
   }
 
-  SharedPtr<ITexture> OpenGlGraphicsManager::createTexture(SharedPtr<Image> image) const
+  SharedPtr<ITexture> OpenGlGraphicsManager::createTexture(
+    SharedPtr<Image> image
+  ) const
   {
-    // TODO Texture creation
-    return nullptr;
+    return MakeShared<OpenGlTexture>(image);
   }
 
   SharedPtr<IShader> OpenGlGraphicsManager::createShaderFromString(
