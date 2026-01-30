@@ -12,7 +12,8 @@ namespace hc
   }
 
   SharedPtr<IShader> ShaderManager::createShaderFromFile(
-    const Path& shaderPath
+    const Path& shaderPath,
+    shaderStageType::Type type
   )
   {
     String shaderKey = shaderPath.string();
@@ -31,13 +32,15 @@ namespace hc
 
     return createShaderFromString(
       shaderKey,
-      shaderCode.value()
+      shaderCode.value(),
+      type
     );
   }
 
   SharedPtr<IShader> ShaderManager::createShaderFromString(
     const String& shaderKey,
-    const String& shaderCode
+    const String& shaderCode,
+    shaderStageType::Type type
   )
   {
     auto it = m_shaderCache.find(shaderKey);
@@ -50,6 +53,7 @@ namespace hc
       return nullptr;
 
     SharedPtr<IShader> shader = m_graphicsManager->createShaderFromString(
+      type,
       shaderCode
     );
 

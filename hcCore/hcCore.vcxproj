@@ -187,6 +187,9 @@
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
     <ClCompile Include="src\hcImage.cpp" />
+    <ClCompile Include="src\hcShaderManager.cpp" />
+    <ClCompile Include="src\hcShaderProgramManager.cpp" />
+    <ClCompile Include="src\hcShaderStageType.cpp" />
     <ClCompile Include="src\hcShaderType.cpp" />
     <ClCompile Include="src\hcTextureManager.cpp" />
     <ClCompile Include="src\hcUnlitMaterial.cpp" />
@@ -214,6 +217,8 @@
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterial.h" />
+    <ClInclude Include="include\hc\hcIShader.h" />
+    <ClInclude Include="include\hc\hcIShaderProgram.h" />
     <ClInclude Include="include\hc\hcJsonDeserializerAssetLoader.h" />
     <ClInclude Include="include\hc\hcJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptor.h" />
@@ -240,6 +245,9 @@
     <ClInclude Include="include\hc\hcSceneGraph.h" />
     <ClInclude Include="include\hc\hcSceneManager.h" />
     <ClInclude Include="include\hc\hcImage.h" />
+    <ClInclude Include="include\hc\hcShaderManager.h" />
+    <ClInclude Include="include\hc\hcShaderProgramManager.h" />
+    <ClInclude Include="include\hc\hcShaderStageType.h" />
     <ClInclude Include="include\hc\hcShaderType.h" />
     <ClInclude Include="include\hc\hcITexture.h" />
     <ClInclude Include="include\hc\hcTextureManager.h" />

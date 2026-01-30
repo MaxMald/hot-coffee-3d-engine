@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcIDependencyResolvable.h"
 #include "hc/hcNonCopyable.h"
+#include "hc/hcShaderStageType.h"
 
 namespace hc
 {
@@ -27,15 +28,16 @@ namespace hc
     /**
      * @brief Creates a shader from a given file path. If a shader for the file
      * already exists, returns the cached instance.
-     *
-     * @param key Asset key identifying the shader.
+     * 
      * @param shaderPath Path to the shader file.
+     * @param type The type of the shader stage.
      *
      * @return Shared pointer to the created or cached shader, or nullptr on
      * failure.
      */
     SharedPtr<IShader> createShaderFromFile(
-      const Path& shaderPath
+      const Path& shaderPath,
+      shaderStageType::Type type
     );
 
     /**
@@ -44,13 +46,15 @@ namespace hc
      *
      * @param shaderKey Unique key identifying the shader.
      * @param shaderCode The source code of the shader.
+     * @param type The type of the shader stage.
      *
      * @return Shared pointer to the created or cached shader, or nullptr on
      * failure.
      */
     SharedPtr<IShader> createShaderFromString(
       const String& shaderKey,
-      const String& shaderCode
+      const String& shaderCode,
+      shaderStageType::Type type
     );
 
     /**

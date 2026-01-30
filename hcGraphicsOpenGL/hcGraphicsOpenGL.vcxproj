@@ -165,14 +165,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcBuiltInShaders.h" />
     <ClInclude Include="include\hc\hcGraphicsOpenGlLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcGraphicsOpenGlPrerequisites.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsManager.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h" />
+    <ClInclude Include="include\hc\hcOpenGlShader.h" />
+    <ClInclude Include="include\hc\hcOpenGlShaderProgram.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
+    <ClCompile Include="src\hcOpenGlShader.cpp" />
+    <ClCompile Include="src\hcOpenGlShaderProgram.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -48,6 +48,6 @@ namespace hc
     /**
      * @brief Destroys the shader program and releases resources.
      */
-    virtual void destroy();
+    virtual void destroy() = 0;
   };
 }

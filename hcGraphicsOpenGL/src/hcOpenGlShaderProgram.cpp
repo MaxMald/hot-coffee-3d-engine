@@ -67,17 +67,6 @@ namespace hc
       glUniformMatrix4fv(location, 1, GL_FALSE, matrix4x4);
   }
 
-  GLint OpenGlShaderProgram::getUniformLocation(const String& name)
-  {
-    auto it = m_uniformLocationCache.find(name);
-    if (it != m_uniformLocationCache.end())
-      return it->second;
-
-    GLint location = glGetUniformLocation(m_programId, name.c_str());
-    m_uniformLocationCache[name] = location;
-    return location;
-  }
-
   void OpenGlShaderProgram::destroy()
   {
     if (m_programId != 0)
@@ -107,5 +96,16 @@ namespace hc
 
     m_linked = true;
     return true;
+  }
+
+  GLint OpenGlShaderProgram::getUniformLocation(const String& name)
+  {
+    auto it = m_uniformLocationCache.find(name);
+    if (it != m_uniformLocationCache.end())
+      return it->second;
+
+    GLint location = glGetUniformLocation(m_programId, name.c_str());
+    m_uniformLocationCache[name] = location;
+    return location;
   }
 }

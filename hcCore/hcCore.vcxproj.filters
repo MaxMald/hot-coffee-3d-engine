@@ -103,6 +103,18 @@
     <Filter Include="Header Files\graphics\texture">
       <UniqueIdentifier>{5f9cf296-764d-489e-962e-26a178c19a3d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\shaders">
+      <UniqueIdentifier>{d06cc074-84b6-4ffc-85af-31a263b83309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\shaders">
+      <UniqueIdentifier>{121242e0-ce2d-4a2a-a082-6f229d97b477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\shaderPrograms">
+      <UniqueIdentifier>{bf1a93c1-d2e9-4b41-8d48-9387b2faad34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\shaderProgram">
+      <UniqueIdentifier>{48903825-8528-40f5-bde7-ae607327c0d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -191,6 +203,15 @@
     </ClCompile>
     <ClCompile Include="src\hcTextureManager.cpp">
       <Filter>Source Files\graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderManager.cpp">
+      <Filter>Source Files\graphics\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderStageType.cpp">
+      <Filter>Source Files\graphics\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderProgramManager.cpp">
+      <Filter>Source Files\graphics\shaderProgram</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -355,6 +376,21 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcTextureManager.h">
       <Filter>Header Files\graphics\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShader.h">
+      <Filter>Header Files\graphics\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderManager.h">
+      <Filter>Header Files\graphics\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShaderProgram.h">
+      <Filter>Header Files\graphics\shaderPrograms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderStageType.h">
+      <Filter>Header Files\graphics\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderProgramManager.h">
+      <Filter>Header Files\graphics\shaderPrograms</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
