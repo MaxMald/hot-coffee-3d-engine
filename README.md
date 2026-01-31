@@ -16,3 +16,4 @@ Hot Coffee is a 3D engine
 
 # Asset Loaders Dependencies
 - nothings stb
+- assimp 6.0.4
