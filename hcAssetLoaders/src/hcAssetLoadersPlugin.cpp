@@ -1,6 +1,7 @@
 #include "hc/hcAssetLoadersPlugin.h"
 #include "hc/hcDependencyContainer.h"
 #include "hc/hcImageLoader.h"
+#include "hc/hcModelLoader.h"
 
 namespace hc
 {
@@ -35,6 +36,9 @@ namespace hc
   {
     container.registerInstanceAsInterface<IImageLoader, ImageLoader>(
       MakeShared<ImageLoader>()
+    );
+    container.registerInstanceAsInterface<IModelLoader, ModelLoader>(
+      MakeShared<ModelLoader>()
     );
   }
 }
