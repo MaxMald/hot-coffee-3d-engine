@@ -7,7 +7,7 @@
 
 namespace hc
 {
-  struct Vertex
+  struct HC_CORE_EXPORT Vertex
   {
     Vertex() = default;
     Vertex(

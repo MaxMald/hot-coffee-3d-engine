@@ -194,6 +194,7 @@
     <ClCompile Include="src\hcTextureManager.cpp" />
     <ClCompile Include="src\hcUnlitMaterial.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp" />
+    <ClCompile Include="src\hcVertex.cpp" />
     <ClCompile Include="src\hcWindowManager.cpp" />
     <ClCompile Include="src\hcWindowPluginSlot.cpp" />
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="include\hc\hcLightType.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialManager.h" />
+    <ClInclude Include="include\hc\hcModel.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcMouseWheelType.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />
@@ -253,6 +255,7 @@
     <ClInclude Include="include\hc\hcTextureManager.h" />
     <ClInclude Include="include\hc\hcUnlitMaterial.h" />
     <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h" />
+    <ClInclude Include="include\hc\hcVertex.h" />
     <ClInclude Include="include\hc\hcWindowHandle.h" />
     <ClInclude Include="include\hc\hcWindowManager.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />
