@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcIShader.h>
 #include <GL/glew.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 

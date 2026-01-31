@@ -222,6 +222,9 @@
     <ClCompile Include="src\hcVertex.cpp">
       <Filter>Source Files\assets\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcModel.cpp">
+      <Filter>Source Files\assets\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -268,9 +271,6 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcWindowPluginSlot.h">
       <Filter>Header Files\plugin</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcIDependencyResolvable.h">
-      <Filter>Header Files\dependencyContainer</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h">
       <Filter>Header Files\plugin</Filter>
@@ -406,6 +406,12 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcModel.h">
       <Filter>Header Files\assets\model</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIModelLoader.h">
+      <Filter>Header Files\assets\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcHotCoffeeCore.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

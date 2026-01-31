@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcAsset.h"
-#include "hc/hcBuffer.h"
 
 namespace hc
 {

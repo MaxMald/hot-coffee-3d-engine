@@ -1,8 +1,6 @@
 #include "hc/hcShaderManager.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcIShader.h"
-#include "hc/hcFileUtilities.h"
 
 namespace hc
 {

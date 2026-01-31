@@ -1,9 +1,6 @@
 #include "hc/editor/hcProjectBrowserWindow.h"
 
 #include <filesystem>
-#include <hc/hcDependencyContainer.h>
-#include <hc/hcAssetFileExtensions.h>
-#include <hc/hcLogService.h>
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcDirectoryReference.h"

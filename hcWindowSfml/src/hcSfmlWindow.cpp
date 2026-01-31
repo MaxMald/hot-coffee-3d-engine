@@ -2,8 +2,6 @@
 
 #include <SFML/Window.hpp>
 
-#include "hc/hcLogService.h"
-
 namespace hc
 {
   SfmlWindow::SfmlWindow()

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcAWindowView.h"
 #include "hc/editor/hcIGameObjectSelectionServiceListener.h"
 

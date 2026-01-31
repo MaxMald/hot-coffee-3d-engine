@@ -1,9 +1,5 @@
 #pragma once
 
-#include <hc/hcMouseButtonKey.h>
-#include <hc/hcKeyboardKey.h>
-#include <hc/hcVector3.h>
-
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "imgui.h"
 

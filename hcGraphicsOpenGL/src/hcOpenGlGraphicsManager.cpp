@@ -1,10 +1,6 @@
 #include "hc/hcOpenGlGraphicsManager.h"
-#include <GL/glew.h>
 
-#include <hc/hcLogService.h>
-#include "hc/hcDependencyContainer.h"
-#include "hc/hcIWindow.h"
-#include "hc/hcIDrawable.h"
+#include <GL/glew.h>
 #include "hc/hcOpenGlShader.h"
 #include "hc/hcOpenGlShaderProgram.h"
 #include "hc/hcBuiltInShaders.h"

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcIDependencyResolvable.h"
-#include "hc/hcNonCopyable.h"
 
 namespace hc
 {

@@ -1,9 +1,5 @@
 #include "hc/editor/hcPluginManagerWindow.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcPluginManager.h>
-#include <hc/hcIPluginSlot.h>
-#include <hc/hcIPlugin.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
 

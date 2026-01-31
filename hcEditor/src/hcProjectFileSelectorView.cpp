@@ -1,8 +1,5 @@
 #include "hc/editor/hcProjectFileSelectorView.h"
 
-#include <hc/hcDependencyContainer.h>
-#include <hc/hcLogService.h>
-#include <hc/hcAssetFileExtensions.h>
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcFileReference.h"

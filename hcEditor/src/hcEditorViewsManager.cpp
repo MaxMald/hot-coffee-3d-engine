@@ -1,8 +1,5 @@
 #include "hc/editor/hcEditorViewsManager.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcWindowManager.h>
-#include <hc/hcIWindow.h>
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcImguiHandler.h"
 

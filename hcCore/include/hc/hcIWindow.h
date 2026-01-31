@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcWindowHandle.h"
-#include "hc/hcVector2.h"
 #include "hc/hcWindowSettings.h"
 #include "hc/hcEvent.h"
 

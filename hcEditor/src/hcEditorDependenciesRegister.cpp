@@ -1,7 +1,4 @@
 #include "hc/editor/hcEditorDependenciesRegister.h"
-
-#include <hc/hcDependencyContainer.h>
-
 #include "hc/editor/hcGameObjectSelectionService.h"
 
 // Services

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcWindowSfmlPrerequisites.h"
-#include "hc/hcIWindow.h"
 
 namespace sf
 {

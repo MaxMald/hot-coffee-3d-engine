@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcILogServiceListener.h>
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcEditorLoggerEntry.h"
 

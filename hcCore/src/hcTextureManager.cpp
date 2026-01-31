@@ -1,9 +1,7 @@
 #include "hc/hcTextureManager.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcAssetManager.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcImage.h"
-#include "hc/hcLogService.h"
 
 namespace hc
 {

@@ -1,5 +1,4 @@
 #include "hc/hcCoreDependenciesRegister.h"
-#include "hc/hcDependencyContainer.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 // include windows platform specific dependencies

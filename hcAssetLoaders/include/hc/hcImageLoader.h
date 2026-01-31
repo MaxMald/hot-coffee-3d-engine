@@ -1,6 +1,5 @@
 #pragma once
 
-#include "hc/hcIImageLoader.h"
 #include "hc/hcAssetLoadersPrerequisites.h"
 
 namespace hc

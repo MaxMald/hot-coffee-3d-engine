@@ -1,7 +1,5 @@
 #include "hc/editor/hcGameObjectEditorWindow.h"
 
-#include <hc/hcGameObject.h>
-#include <hc/hcDependencyContainer.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 #include "imgui.h"

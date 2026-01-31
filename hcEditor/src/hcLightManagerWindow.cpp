@@ -1,11 +1,5 @@
 #include "hc/editor/hcLightManagerWindow.h"
 
-#include <hc/hcDependencyContainer.h>
-#include <hc/hcSceneManager.h>
-#include <hc/hcScene.h>
-#include <hc/hcLightManager.h>
-#include <hc/hcLight.h>
-#include <hc/hcHotCoffeeEngine.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
 

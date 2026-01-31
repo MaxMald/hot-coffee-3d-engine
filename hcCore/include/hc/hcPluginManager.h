@@ -1,14 +1,12 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcNonCopyable.h"
 
 namespace hc
 {
   class IPlugin;
   class IPluginSlot;
   class IPluginSlotFactory;
-  class DependencyContainer;
 
   /**
   * Manages the lifecycle and dependencies of plugins within the system.

@@ -2,8 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcAsset.h"
-#include "hc/hcNonCopyable.h"
-#include "hc/hcLogService.h"
 
 namespace hc
 {

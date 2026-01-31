@@ -1,9 +1,5 @@
 #include "hc/editor/hcAssetCreator.h"
 
-#include <hc/hcJsonSerializer.h>
-#include <hc/hcUnlitMaterialDescriptor.h>
-#include <hc/hcFileUtilities.h>
-
 namespace hc::editor
 {
   namespace assetCreator

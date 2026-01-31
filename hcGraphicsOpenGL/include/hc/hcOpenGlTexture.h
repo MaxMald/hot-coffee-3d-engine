@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcITexture.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <GL/glew.h>
 

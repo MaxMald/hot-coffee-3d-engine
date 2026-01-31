@@ -1,11 +1,5 @@
 #include "hc/editor/hcAssetManagerWindow.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcAssetManager.h>
-#include <hc/hcDependencyContainer.h>
-#include <hc/hcImage.h>
-#include <hc/hcMaterialDescriptor.h>
-#include <hc/hcAssetFileExtensions.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelectorView.h"
 #include "hc/editor/hcIAssetGroupDrawer.h"

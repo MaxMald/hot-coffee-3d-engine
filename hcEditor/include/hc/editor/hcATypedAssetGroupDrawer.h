@@ -1,7 +1,5 @@
 #pragma once
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcAssetManager.h>
 #include "hc/editor/hcIAssetGroupDrawer.h"
 #include "imgui.h"
 

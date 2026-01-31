@@ -1,6 +1,5 @@
 #include "hc/hcAssetManager.h"
 
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcIImageLoader.h"
 #include "hc/hcIModelLoader.h"
 #include "hc/hcMaterialDescriptor.h"

@@ -1,13 +1,6 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcAWindowView.h"
-
-namespace hc
-{
-  class SceneManager;
-  class Camera;
-}
 
 namespace hc::editor
 {

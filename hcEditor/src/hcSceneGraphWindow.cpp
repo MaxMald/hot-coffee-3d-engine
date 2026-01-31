@@ -1,11 +1,5 @@
 #include "hc/editor/hcSceneGraphWindow.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcSceneManager.h>
-#include <hc/hcSceneGraph.h>
-#include <hc/hcScene.h>
-#include <hc/hcGameObject.h>
-#include <hc/hcDependencyContainer.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 #include "imgui.h"

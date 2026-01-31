@@ -1,5 +1,4 @@
 #include "hc/hcAssetLoadersPlugin.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcImageLoader.h"
 #include "hc/hcModelLoader.h"
 

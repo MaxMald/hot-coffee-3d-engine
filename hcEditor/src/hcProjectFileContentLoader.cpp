@@ -1,5 +1,4 @@
 #include "hc/editor/hcProjectFileContentLoader.h"
-#include <hc/hcJson.h>
 
 namespace hc::editor
 {

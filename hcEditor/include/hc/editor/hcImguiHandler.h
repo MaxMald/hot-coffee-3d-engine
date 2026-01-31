@@ -1,6 +1,5 @@
 #pragma once
 
-#include "hc/hcNonCopyable.h"
 #include "hc/editor/hcEditorPrerequisites.h"
 
 namespace hc

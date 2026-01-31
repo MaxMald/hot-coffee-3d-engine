@@ -1,6 +1,5 @@
 #include "hc/hcImageLoader.h"
 
-#include "hc/hcImage.h"
 #include "stb_image.h"
 
 namespace hc

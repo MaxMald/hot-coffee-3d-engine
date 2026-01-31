@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcColor.h>
 #include "hc/editor/hcEditorPrerequisites.h"
 
 namespace hc::editor

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
-#include <hc/hcMaterialDescriptor.h>
 #include "hc/editor/hcAWindowView.h"
 #include "hc/editor/hcAssetFileReference.h"
 #include "hc/editor/hcIMaterialDescriptorEditor.h"

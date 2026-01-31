@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcIAssetLoader.h"
-#include "hc/hcFileUtilities.h"
 #include "hc/hcJsonSerializer.h"
 
 namespace hc

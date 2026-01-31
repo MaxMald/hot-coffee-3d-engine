@@ -1,6 +1,5 @@
 #include "hc/hcOpenGlGraphicsPlugin.h"
 
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcOpenGlGraphicsManager.h"
 
 namespace hc

@@ -1,12 +1,10 @@
 #include "hc/hcMaterialManager.h"
 
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcAssetManager.h"
 #include "hc/hcTextureManager.h"
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
 #include "hc/hcUnlitMaterial.h"
-#include "hc/hcLogService.h"
 #include "hc/hcImage.h"
 
 namespace hc

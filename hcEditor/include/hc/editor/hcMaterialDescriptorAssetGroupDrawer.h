@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcMaterialDescriptor.h>
 #include "hc/editor/hcATypedAssetGroupDrawer.h"
 
 namespace hc::editor

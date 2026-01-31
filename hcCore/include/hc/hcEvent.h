@@ -4,7 +4,6 @@
 #include "hc/hcKeyboardKey.h"
 #include "hc/hcMouseButtonKey.h"
 #include "hc/hcMouseWheelType.h"
-#include "hc/hcVector2.h"
 
 namespace hc
 {

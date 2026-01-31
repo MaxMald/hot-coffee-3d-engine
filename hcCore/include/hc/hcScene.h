@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcSceneGraph.h"
-#include "hc/hcNonCopyable.h"
 #include "hc/hcIDrawable.h"
 #include "hc/hcLightManager.h"
 #include "hc/hcCameraManager.h"

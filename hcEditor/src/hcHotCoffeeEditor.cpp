@@ -1,11 +1,5 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcWindowManager.h>
-#include <hc/hcIGraphicsManager.h>
-#include <hc/hcLogService.h>
-#include <hc/hcSceneManager.h>
-
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
 #include "hc/editor/hcEditorDependenciesRegister.h"
 #include "hc/editor/hcEditorViewsManager.h"

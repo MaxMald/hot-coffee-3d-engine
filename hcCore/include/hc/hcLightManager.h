@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcLightType.h"
-#include "hc/hcNonCopyable.h"
 
 namespace hc
 {

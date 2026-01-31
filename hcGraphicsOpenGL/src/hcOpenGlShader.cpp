@@ -1,5 +1,4 @@
 #include "hc/hcOpenGlShader.h"
-#include <hc/hcLogService.h>
 
 namespace hc
 {

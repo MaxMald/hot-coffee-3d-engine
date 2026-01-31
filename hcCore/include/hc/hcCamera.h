@@ -1,8 +1,6 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcVector3.h"
-#include "hc/hcMatrix4.h"
 
 namespace hc
 {

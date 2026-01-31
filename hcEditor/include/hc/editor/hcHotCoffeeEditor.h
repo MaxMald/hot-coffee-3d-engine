@@ -1,7 +1,5 @@
 #pragma once
 
-#include <hc/hcDependencyContainer.h>
-
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcEditorLogger.h"
 

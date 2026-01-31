@@ -1,7 +1,5 @@
 #pragma once
 
-#include <hc/hcNonCopyable.h>
-#include <hc/hcMaterialDescriptor.h>
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcAssetFileReference.h"
 

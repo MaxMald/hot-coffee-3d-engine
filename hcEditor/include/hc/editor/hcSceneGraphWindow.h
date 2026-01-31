@@ -1,15 +1,7 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcAWindowView.h"
-
-namespace hc
-{
-  class SceneManager;
-  class SceneGraph;
-  class GameObject;
-}
 
 namespace hc::editor
 {

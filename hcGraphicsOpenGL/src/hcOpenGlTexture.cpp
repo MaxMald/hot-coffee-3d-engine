@@ -1,5 +1,4 @@
 #include "hc/hcOpenGlTexture.h"
-#include "hc/hcImage.h"
 
 namespace hc
 {

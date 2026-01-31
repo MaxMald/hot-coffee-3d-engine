@@ -1,11 +1,5 @@
 #include "hc/editor/hcCameraManagerWindow.h"
 
-#include <hc/hcDependencyContainer.h>
-#include <hc/hcSceneManager.h>
-#include <hc/hcScene.h>
-#include <hc/hcCameraManager.h>
-#include <hc/hcCamera.h>
-#include <hc/hcHotCoffeeEngine.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "imgui.h"
 

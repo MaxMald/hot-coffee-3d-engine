@@ -2,7 +2,6 @@
 #include "hc/hcIPluginSlotFactory.h"
 #include "hc/hcIPluginSlot.h"
 #include "hc/hcIPlugin.h"
-#include "hc/hcDependencyContainer.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 #include "hc/hcWindowsPluginSlotFactory.h"

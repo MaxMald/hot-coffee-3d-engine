@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcIModelLoader.h>
 #include "hc/hcAssetLoadersPrerequisites.h"
 
 namespace hc

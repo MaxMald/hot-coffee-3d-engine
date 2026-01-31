@@ -1,12 +1,6 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcIView.h"
-
-namespace hc
-{
-  class HotCoffeeEngine;
-}
 
 namespace hc::editor
 {

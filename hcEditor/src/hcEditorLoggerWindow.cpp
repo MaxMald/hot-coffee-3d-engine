@@ -1,6 +1,5 @@
 #include "hc/editor/hcEditorLoggerWindow.h"
 
-#include <hc/hcDependencyContainer.h>
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcEditorLogger.h"
 #include "imgui.h"

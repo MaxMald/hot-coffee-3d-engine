@@ -1,7 +1,6 @@
 #include "hc/hcWindowManager.h"
 #include "hc/hcIWindowFactory.h"
 #include "hc/hcIWindow.h"
-#include "hc/hcDependencyContainer.h"
 
 namespace hc
 {

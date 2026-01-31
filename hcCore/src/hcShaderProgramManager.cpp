@@ -1,5 +1,4 @@
 #include "hc/hcShaderProgramManager.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcIShaderProgram.h"
 

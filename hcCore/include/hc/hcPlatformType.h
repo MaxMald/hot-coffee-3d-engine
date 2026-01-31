@@ -7,7 +7,7 @@ namespace hc
 {
   namespace platformType
   {
-    enum Type
+    enum Type : UInt8
     {
       UNKNOWN = 0,
       WINDOWS

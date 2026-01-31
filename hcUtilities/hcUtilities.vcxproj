@@ -181,6 +181,7 @@
     <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcString.h" />
     <ClInclude Include="include\hc\hcTransform.h" />
+    <ClInclude Include="include\hc\hcUtilities.h" />
     <ClInclude Include="include\hc\hcUtilitiesPrerequisites.h" />
     <ClInclude Include="include\hc\hcVector2.h" />
     <ClInclude Include="include\hc\hcPlatformConfiguration.h" />

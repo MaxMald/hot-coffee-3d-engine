@@ -181,6 +181,7 @@
     <ClCompile Include="src\hcMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp" />
     <ClCompile Include="src\hcMaterialManager.cpp" />
+    <ClCompile Include="src\hcModel.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
     <ClCompile Include="src\hcPluginManager.cpp" />
     <ClCompile Include="src\hcScene.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="include\hc\hcAsset.h" />
     <ClInclude Include="include\hc\hcAssetFileExtensions.h" />
     <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
     <ClInclude Include="include\hc\hcAssetManager.h" />
     <ClInclude Include="include\hc\hcCamera.h" />
@@ -213,7 +215,6 @@
     <ClInclude Include="include\hc\hcEvent.h" />
     <ClInclude Include="include\hc\hcGameObject.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h" />
-    <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
@@ -237,6 +238,7 @@
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialManager.h" />
     <ClInclude Include="include\hc\hcModel.h" />
+    <ClInclude Include="include\hc\hcIModelLoader.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcMouseWheelType.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />

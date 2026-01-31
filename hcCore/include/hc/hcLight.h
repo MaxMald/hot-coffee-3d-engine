@@ -1,8 +1,6 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcColor.h"
-#include "hc/hcVector3.h"
 #include "hc/hcLightType.h"
 
 namespace hc

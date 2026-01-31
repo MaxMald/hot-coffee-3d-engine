@@ -1,8 +1,4 @@
 #include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
-#include <hc/hcUnlitMaterialDescriptor.h>
-#include <hc/hcJsonSerializer.h>
-#include <hc/hcLogService.h>
-#include <hc/hcFileUtilities.h>
 #include "hc/editor/hcProjectFileSelectorView.h"
 #include "hc/editor/hcImguiUtilities.h"
 #include "imgui.h"

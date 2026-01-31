@@ -3,7 +3,6 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcAsset.h"
 #include "hc/hcVertex.h"
-#include "hc/hcBuffer.h"
 
 namespace hc
 {

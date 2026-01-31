@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include "hc/hcIPlugin.h"
 
 namespace hc
 {

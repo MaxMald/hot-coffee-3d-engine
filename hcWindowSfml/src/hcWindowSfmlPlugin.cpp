@@ -1,6 +1,4 @@
 #include "hc/hcWindowSfmlPlugin.h"
-#include "hc/hcLogService.h"
-#include "hc/hcDependencyContainer.h"
 #include "hc/hcSfmlWindowFactory.h"
 
 namespace hc

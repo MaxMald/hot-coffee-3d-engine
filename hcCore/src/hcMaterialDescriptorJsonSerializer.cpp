@@ -1,10 +1,6 @@
 #include "hc/hcMaterialDescriptorJsonSerializer.h"
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
-#include "hc/hcJsonObjectBuilder.h"
-#include "hc/hcJson.h"
-#include "hc/hcJsonParsers.h"
-#include "hc/hcLogService.h"
 
 namespace hc
 {

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcMaterialDescriptor.h"
-#include "hc/hcColor.h"
 
 namespace hc
 {

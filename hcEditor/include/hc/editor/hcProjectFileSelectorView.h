@@ -1,6 +1,5 @@
 #pragma once
 
-#include <hc/hcIDependencyResolvable.h>
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcDirectoryNavigator.h"
 #include "hc/editor/hcIProjectManagerListener.h"

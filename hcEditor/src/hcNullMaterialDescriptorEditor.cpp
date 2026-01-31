@@ -1,5 +1,4 @@
 #include "hc/editor/hcNullMaterialDescriptorEditor.h"
-#include <hc/hcLogService.h>
 #include "imgui.h"
 
 namespace hc::editor

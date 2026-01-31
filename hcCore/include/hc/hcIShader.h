@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcNonCopyable.h"
 #include "hc/hcShaderStageType.h"
 
 namespace hc

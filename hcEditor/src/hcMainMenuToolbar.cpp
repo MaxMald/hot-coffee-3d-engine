@@ -1,7 +1,5 @@
 #include "hc/editor/hcMainMenuToolbar.h"
 
-#include <hc/hcHotCoffeeEngine.h>
-#include <hc/hcSceneManager.h>
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"

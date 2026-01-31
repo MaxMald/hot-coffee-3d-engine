@@ -1,11 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcNonCopyable.h"
-#include "hc/hcIDependencyResolvable.h"
 #include "hc/hcAssetGroup.h"
 #include "hc/hcIAssetLoader.h"
-#include "hc/hcLogService.h"
 
 namespace hc
 {

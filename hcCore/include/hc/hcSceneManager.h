@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcScene.h"
-#include "hc/hcNonCopyable.h"
 #include "hc/hcIDrawable.h"
 
 namespace hc

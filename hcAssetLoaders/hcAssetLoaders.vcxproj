@@ -167,12 +167,14 @@
   <ItemGroup>
     <ClCompile Include="src\hcAssetLoadersPlugin.cpp" />
     <ClCompile Include="src\hcImageLoader.cpp" />
+    <ClCompile Include="src\hcModelLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcAssetLoadersLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcAssetLoadersPlugin.h" />
     <ClInclude Include="include\hc\hcAssetLoadersPrerequisites.h" />
     <ClInclude Include="include\hc\hcImageLoader.h" />
+    <ClInclude Include="include\hc\hcModelLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
