@@ -95,14 +95,14 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HC_ASSET_LOADERS_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;$(SolutionDir)dependencies\ASSIMP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hcCore-d.lib;hcUtilities-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget);$(SolutionDir)dependencies\ASSIMP\lib\$(Configuration)\$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hcCore-d.lib;hcUtilities-d.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -115,14 +115,14 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HC_ASSET_LOADERS_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;$(SolutionDir)dependencies\ASSIMP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hcCore.lib;hcUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget);$(SolutionDir)dependencies\ASSIMP\lib\$(Configuration)\$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hcCore.lib;hcUtilities.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -133,14 +133,14 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HC_ASSET_LOADERS_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;$(SolutionDir)dependencies\ASSIMP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hcCore-d.lib;hcUtilities-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget);$(SolutionDir)dependencies\ASSIMP\lib\$(Configuration)\$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hcCore-d.lib;hcUtilities-d.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
@@ -153,14 +153,14 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HC_ASSET_LOADERS_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)hcCore\include;$(SolutionDir)hcUtilities\include;$(SolutionDir)dependencies\NOTHINGS_STB\include;$(SolutionDir)dependencies\ASSIMP\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>hcCore.lib;hcUtilities.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget);$(SolutionDir)dependencies\ASSIMP\lib\$(Configuration)\$(PlatformTarget)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>hcCore.lib;hcUtilities.lib;assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(PlatformTarget)\$(TargetName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
