@@ -22,4 +22,14 @@ namespace hc
   {
     return m_indices;
   }
+
+  const Vector<ModelSubMesh>& Model::getSubMeshes() const
+  {
+    return m_subMeshes;
+  }
+
+  const Vector<SharedPtr<MaterialDescriptor>>& Model::getMaterials() const
+  {
+    return m_materials;
+  }
 }
