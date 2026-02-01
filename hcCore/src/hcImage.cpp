@@ -54,4 +54,9 @@ namespace hc
   {
     return m_data;
   }
+
+  UInt64 Image::getId() const
+  {
+    return m_id;
+  }
 }
