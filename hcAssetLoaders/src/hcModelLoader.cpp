@@ -1,4 +1,5 @@
 #include "hc/hcModelLoader.h"
+#include <assimp/Importer.hpp>
 
 namespace hc
 {

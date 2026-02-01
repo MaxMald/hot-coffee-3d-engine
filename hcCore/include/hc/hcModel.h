@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcAsset.h"
 #include "hc/hcVertex.h"
+#include "hc/hcModelSubMesh.h"
 
 namespace hc
 {
@@ -13,9 +14,11 @@ namespace hc
 
     const Buffer<Vertex>& getVertices() const;
     const BufferUInt32& getIndices() const;
+    const Vector<ModelSubMesh>& getSubMeshes() const;
 
   private:
     Buffer<Vertex> m_vertices;
     BufferUInt32 m_indices;
+    Vector<ModelSubMesh> m_subMeshes;
   };
 }
