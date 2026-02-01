@@ -12,6 +12,12 @@ namespace hc
   class HC_CORE_EXPORT Model : public Asset
   {
     Model();
+    Model(
+      const Buffer<Vertex>& vertices,
+      const BufferUInt32& indices,
+      const Vector<ModelSubMesh>& subMeshes,
+      const Vector<SharedPtr<MaterialDescriptor>>& materials
+    );
     ~Model() override;
 
     const Buffer<Vertex>& getVertices() const;

@@ -2,10 +2,24 @@
 
 namespace hc
 {
-  Model::Model()
-    : Asset(),
-      m_vertices(0),
-      m_indices(0)
+  Model::Model() :
+    Asset(),
+    m_vertices(0),
+    m_indices(0)
+  {
+  }
+
+  Model::Model(
+    const Buffer<Vertex>& vertices,
+    const BufferUInt32& indices,
+    const Vector<ModelSubMesh>& subMeshes,
+    const Vector<SharedPtr<MaterialDescriptor>>& materials
+  ) :
+    Asset(),
+    m_vertices(vertices),
+    m_indices(indices),
+    m_subMeshes(subMeshes),
+    m_materials(materials)
   {
   }
 
