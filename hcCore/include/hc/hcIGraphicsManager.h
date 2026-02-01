@@ -12,6 +12,7 @@ namespace hc
   class Image;
   class IDrawable;
   class HotCoffeeEngine;
+  class ITextureManager;
 
   class HC_CORE_EXPORT IGraphicsManager : public NonCopyable
   {
@@ -21,7 +22,7 @@ namespace hc
     virtual void beginFrame() = 0;
     virtual void draw(IDrawable&) = 0;
     virtual void endFrame(IWindow&) = 0;
-    virtual SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const = 0;
+    virtual ITextureManager& getTextureManager() = 0;
     virtual SharedPtr<IShader> createShaderFromString(
       shaderStageType::Type stageType,
       const String& shaderCode

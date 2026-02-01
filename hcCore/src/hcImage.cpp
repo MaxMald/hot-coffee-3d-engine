@@ -9,7 +9,7 @@ namespace hc
     m_height(0),
     m_channels(0),
     m_data(0),
-    m_id(s_nextId++)
+    m_id(Id::Create())
   {
   }
 
@@ -55,7 +55,7 @@ namespace hc
     return m_data;
   }
 
-  UInt64 Image::getId() const
+  Id Image::getId() const
   {
     return m_id;
   }

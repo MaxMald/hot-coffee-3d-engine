@@ -48,11 +48,9 @@ namespace hc
     window.swapBuffers();
   }
 
-  SharedPtr<ITexture> OpenGlGraphicsManager::createTexture(
-    SharedPtr<Image> image
-  ) const
+  ITextureManager& OpenGlGraphicsManager::getTextureManager()
   {
-    return MakeShared<OpenGlTexture>(image);
+    return m_textureManager;
   }
 
   SharedPtr<IShader> OpenGlGraphicsManager::createShaderFromString(
@@ -89,6 +87,13 @@ namespace hc
       return nullptr;
 
     return program;
+  }
+
+  void OpenGlGraphicsManager::resolveDependencies(DependencyContainer& container)
+  {
+    m_textureManager.initialize(
+      container.resolve<AssetManager>()
+    );
   }
 
   void OpenGlGraphicsManager::destroy()

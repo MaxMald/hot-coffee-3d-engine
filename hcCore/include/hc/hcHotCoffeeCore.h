@@ -37,4 +37,4 @@
 #include "hc/hcShaderManager.h"
 #include "hc/hcShaderProgramManager.h"
 #include "hc/hcITexture.h"
-#include "hc/hcTextureManager.h"
+#include "hc/hcITextureManager.h"

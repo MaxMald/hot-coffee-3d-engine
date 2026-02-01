@@ -167,6 +167,7 @@
     <ClInclude Include="include\hc\hcDependencyContainer.h" />
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
     <ClInclude Include="include\hc\hcFileUtilities.h" />
+    <ClInclude Include="include\hc\hcId.h" />
     <ClInclude Include="include\hc\hcJsonFromattedValue.h" />
     <ClInclude Include="include\hc\hcIDependencyResolvable.h" />
     <ClInclude Include="include\hc\hcJson.h" />

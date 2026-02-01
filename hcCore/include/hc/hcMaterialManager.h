@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  class TextureManager;
+  class IGraphicsManager;
   class AssetManager;
   class MaterialDescriptor;
   class UnlitMaterialDescriptor;
@@ -87,7 +87,7 @@ namespace hc
 
   private:
     SharedPtr<AssetManager> m_assetManager;
-    SharedPtr<TextureManager> m_textureManager;
+    SharedPtr<IGraphicsManager> m_graphicsManager;
     UnorderedMap<String, SharedPtr<IMaterial>> m_cacheMaterials;
 
     /**

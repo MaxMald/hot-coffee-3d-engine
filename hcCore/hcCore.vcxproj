@@ -192,7 +192,6 @@
     <ClCompile Include="src\hcShaderProgramManager.cpp" />
     <ClCompile Include="src\hcShaderStageType.cpp" />
     <ClCompile Include="src\hcShaderType.cpp" />
-    <ClCompile Include="src\hcTextureManager.cpp" />
     <ClCompile Include="src\hcUnlitMaterial.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcVertex.cpp" />
@@ -254,7 +253,7 @@
     <ClInclude Include="include\hc\hcShaderStageType.h" />
     <ClInclude Include="include\hc\hcShaderType.h" />
     <ClInclude Include="include\hc\hcITexture.h" />
-    <ClInclude Include="include\hc\hcTextureManager.h" />
+    <ClInclude Include="include\hc\hcITextureManager.h" />
     <ClInclude Include="include\hc\hcUnlitMaterial.h" />
     <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h" />
     <ClInclude Include="include\hc\hcVertex.h" />

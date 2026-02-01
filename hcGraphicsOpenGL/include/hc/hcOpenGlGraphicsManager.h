@@ -1,13 +1,14 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/hcOpenGlTextureManager.h"
+#include "hc/hcIDependencyResolvable.h"
 
 namespace hc
 {
-  class WindowManager;
-
   class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsManager :
-    public IGraphicsManager
+    public IGraphicsManager,
+    public IDependencyResolvable
   {
   public:
     OpenGlGraphicsManager();
@@ -26,12 +27,12 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::endFrame
      */
-    void endFrame(IWindow&) override;
+    void endFrame(IWindow&) override; 
 
     /**
-     * @copydoc IGraphicsManager::createTexture
+     * @copydoc IGraphicsManager::getTextureManager
      */
-    SharedPtr<ITexture> createTexture(SharedPtr<Image> image) const override;
+    ITextureManager& getTextureManager() override;
 
     /**
      * @copydoc IGraphicsManager::createShaderFromString
@@ -46,7 +47,14 @@ namespace hc
      */
     SharedPtr<IShaderProgram> createUnlitShaderProgram() const override;
 
+    /**
+     * @copydoc IDependencyResolvable::resolveDependencies
+     */
+    void resolveDependencies(DependencyContainer& container) override;
+
   private:
+    OpenGlTextureManager m_textureManager;
+
     /**
      * @copydoc IGraphicsManager::init
      */

@@ -71,7 +71,7 @@ namespace hc
      * 
      * @return Image unique ID.
      */
-    UInt64 getId() const;
+    Id getId() const;
 
   private:
     static UInt64 s_nextId;
@@ -80,6 +80,6 @@ namespace hc
     UInt32 m_height;
     UInt32 m_channels;
     BufferByte m_data;
-    UInt64 m_id;
+    Id m_id;
   };
 }

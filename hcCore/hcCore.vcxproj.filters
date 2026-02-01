@@ -207,9 +207,6 @@
     <ClCompile Include="src\hcAssetFileExtensions.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcTextureManager.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcShaderManager.cpp">
       <Filter>Source Files\graphics\shaders</Filter>
     </ClCompile>
@@ -383,7 +380,7 @@
     <ClInclude Include="include\hc\hcITexture.h">
       <Filter>Header Files\graphics\texture</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcTextureManager.h">
+    <ClInclude Include="include\hc\hcITextureManager.h">
       <Filter>Header Files\graphics\texture</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShader.h">

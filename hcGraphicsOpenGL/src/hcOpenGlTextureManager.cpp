@@ -1,17 +1,17 @@
-#include "hc/hcTextureManager.h"
-#include "hc/hcAssetManager.h"
-#include "hc/hcIGraphicsManager.h"
-#include "hc/hcImage.h"
+#include "hc/hcOpenGlTextureManager.h"
+#include "hc/hcOpenGlTexture.h"
 
 namespace hc
 {
-  void TextureManager::resolveDependencies(DependencyContainer& container)
+  OpenGlTextureManager::OpenGlTextureManager()
   {
-    m_assetManager = container.resolve<AssetManager>();
-    m_graphicsManager = container.resolve<IGraphicsManager>();
   }
 
-  SharedPtr<ITexture> TextureManager::createTextureFromImage(SharedPtr<Image> image)
+  OpenGlTextureManager::~OpenGlTextureManager()
+  {
+  }
+
+  SharedPtr<ITexture> OpenGlTextureManager::createTextureFromImage(SharedPtr<Image> image)
   {
     if (!image)
     {
@@ -19,15 +19,14 @@ namespace hc
       return nullptr;
     }
 
-    String cacheKey = image->getPath().string();
-
-    auto it = m_textureCache.find(cacheKey);
-    if (it != m_textureCache.end())
+    Id imageId = image->getId();
+    auto it = m_cachedTextures.find(imageId);
+    if (it != m_cachedTextures.end())
     {
       return it->second;
     }
 
-    SharedPtr<ITexture> texture = m_graphicsManager->createTexture(image);
+    SharedPtr<OpenGlTexture> texture = MakeShared<OpenGlTexture>(image);
     if (!texture)
     {
       LogService::Error(
@@ -39,11 +38,11 @@ namespace hc
       return nullptr;
     }
 
-    m_textureCache[cacheKey] = texture;
+    m_cachedTextures[imageId] = texture;
     return texture;
   }
 
-  SharedPtr<ITexture> TextureManager::createTextureFromImage(const String& imageKey)
+  SharedPtr<ITexture> OpenGlTextureManager::createTextureFromImage(const String& imageKey)
   {
     SharedPtr<Image> image = m_assetManager->get<Image>(imageKey);
     if (!image)
@@ -61,9 +60,7 @@ namespace hc
     return createTextureFromImage(image);
   }
 
-  SharedPtr<ITexture> TextureManager::createTextureFromFile(
-    const Path& filePath
-  )
+  SharedPtr<ITexture> OpenGlTextureManager::createTextureFromFile(const Path& filePath)
   {
     SharedPtr<Image> image = m_assetManager->load<Image>(filePath);
     if (!image)
@@ -81,8 +78,13 @@ namespace hc
     return createTextureFromImage(image);
   }
 
-  void TextureManager::clear()
+  void OpenGlTextureManager::clear()
   {
-    m_textureCache.clear();
+    m_cachedTextures.clear();
+  }
+
+  void OpenGlTextureManager::initialize(SharedPtr<AssetManager> assetManager)
+  {
+    m_assetManager = assetManager;
   }
 }

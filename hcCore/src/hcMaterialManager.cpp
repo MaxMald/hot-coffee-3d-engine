@@ -1,18 +1,19 @@
 #include "hc/hcMaterialManager.h"
 
 #include "hc/hcAssetManager.h"
-#include "hc/hcTextureManager.h"
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
 #include "hc/hcUnlitMaterial.h"
 #include "hc/hcImage.h"
+#include "hc/hcIGraphicsManager.h"
+#include "hc/hcITextureManager.h"
 
 namespace hc
 {
   void MaterialManager::resolveDependencies(DependencyContainer& container)
   {
     m_assetManager = container.resolve<AssetManager>();
-    m_textureManager = container.resolve<TextureManager>();
+    m_graphicsManager = container.resolve<IGraphicsManager>();
   }
 
   SharedPtr<IMaterial> MaterialManager::createMaterialFromFile(
@@ -134,7 +135,7 @@ namespace hc
     SharedPtr<ITexture> mainTexture = nullptr;
     if (!unlitDescriptor->getMainImagePath().empty())
     {
-      mainTexture = m_textureManager->createTextureFromFile(
+      mainTexture = m_graphicsManager->getTextureManager().createTextureFromFile(
         unlitDescriptor->getMainImagePath()
       );
     }

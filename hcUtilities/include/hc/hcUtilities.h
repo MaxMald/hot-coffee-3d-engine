@@ -23,3 +23,4 @@
 #include "hc/hcLogService.h"
 #include "hc/hcILogServiceListener.h"
 #include "hc/hcNonCopyable.h"
+#include "hc/hcId.h"
