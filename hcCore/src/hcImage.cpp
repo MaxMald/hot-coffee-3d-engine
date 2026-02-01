@@ -2,11 +2,14 @@
 
 namespace hc
 {
+  UInt64 Image::s_nextId = 1;
+
   Image::Image() :
     m_width(0),
     m_height(0),
     m_channels(0),
-    m_data(0)
+    m_data(0),
+    m_id(s_nextId++)
   {
   }
 

@@ -66,10 +66,20 @@ namespace hc
      */
     const BufferByte& getBuffer() const;
 
+    /**
+     * @brief Gets the unique identifier of the image.
+     * 
+     * @return Image unique ID.
+     */
+    UInt64 getId() const;
+
   private:
+    static UInt64 s_nextId;
+
     UInt32 m_width;
     UInt32 m_height;
     UInt32 m_channels;
     BufferByte m_data;
+    UInt64 m_id;
   };
 }
