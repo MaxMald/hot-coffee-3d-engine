@@ -4,7 +4,6 @@
 // include windows platform specific dependencies
 #endif
 
-#include "hc/hcWindowManager.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
 
@@ -19,7 +18,6 @@ namespace hc
       // register windows specific dependencies
 #endif
 
-      dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
       dependencyContainer.registerInstance<SceneManager>(MakeShared<SceneManager>());
       dependencyContainer.registerInstance<AssetManager>(MakeShared<AssetManager>());
     }

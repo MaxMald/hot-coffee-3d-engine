@@ -1,5 +1,5 @@
 #include "hc/hcWindowSfmlPlugin.h"
-#include "hc/hcSfmlWindowFactory.h"
+#include "hc/hcSfmlWindowManager.h"
 
 namespace hc
 {
@@ -37,8 +37,8 @@ namespace hc
 
   void WindowSfmlPlugin::addDependencies(DependencyContainer& container)
   {
-    container.registerInstanceAsInterface<IWindowFactory, SfmlWindowFactory>(
-      MakeShared<SfmlWindowFactory>()
+    container.registerInstanceAsInterface<IWindowManager, SfmlWindowManager>(
+      MakeShared<SfmlWindowManager>()
     );
   }
 }

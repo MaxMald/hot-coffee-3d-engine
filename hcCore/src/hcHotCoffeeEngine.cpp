@@ -3,7 +3,7 @@
 #include "hc/hcJsonSerializer.h"
 #include "hc/hcCoreDependenciesRegister.h"
 #include "hc/hcPluginConnectionHelper.h"
-#include "hc/hcWindowManager.h"
+#include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcSceneManager.h"
@@ -47,7 +47,7 @@ namespace hc
     return m_pluginManager;
   }
 
-  WindowManager& HotCoffeeEngine::getWindowManager()
+  IWindowManager& HotCoffeeEngine::getWindowManager()
   {
     if (m_windowManager == nullptr)
     {
@@ -145,7 +145,7 @@ namespace hc
   {
     m_dependencyContainer.resolveAllDependencies();
 
-    m_windowManager = m_dependencyContainer.resolve<WindowManager>();
+    m_windowManager = m_dependencyContainer.resolve<IWindowManager>();
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();

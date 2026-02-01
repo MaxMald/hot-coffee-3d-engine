@@ -6,7 +6,7 @@
 
 namespace hc
 {
-  class WindowManager;
+  class IWindowManager;
   class IGraphicsManager;
   class SceneManager;
   class AssetManager;
@@ -19,7 +19,7 @@ namespace hc
     static void Shutdown();
 
     const PluginManager& getPluginManager() const;
-    WindowManager& getWindowManager();
+    IWindowManager& getWindowManager();
     IGraphicsManager& getGraphicsManager();
     SceneManager& getSceneManager();
     AssetManager& getAssetManager();
@@ -29,7 +29,7 @@ namespace hc
   private:
     static HotCoffeeEngine* _Instance;
 
-    SharedPtr<WindowManager> m_windowManager;
+    SharedPtr<IWindowManager> m_windowManager;
     SharedPtr<IGraphicsManager> m_graphicsManager;
     SharedPtr<SceneManager> m_sceneManager;
     SharedPtr<AssetManager> m_assetManager;
