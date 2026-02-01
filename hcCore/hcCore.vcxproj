@@ -180,7 +180,6 @@
     <ClCompile Include="src\hcLightType.cpp" />
     <ClCompile Include="src\hcMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp" />
-    <ClCompile Include="src\hcMaterialManager.cpp" />
     <ClCompile Include="src\hcModel.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
     <ClCompile Include="src\hcPluginManager.cpp" />
@@ -188,7 +187,6 @@
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
     <ClCompile Include="src\hcImage.cpp" />
-    <ClCompile Include="src\hcShaderManager.cpp" />
     <ClCompile Include="src\hcShaderProgramManager.cpp" />
     <ClCompile Include="src\hcShaderStageType.cpp" />
     <ClCompile Include="src\hcShaderType.cpp" />
@@ -235,7 +233,7 @@
     <ClInclude Include="include\hc\hcLightManager.h" />
     <ClInclude Include="include\hc\hcLightType.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
-    <ClInclude Include="include\hc\hcMaterialManager.h" />
+    <ClInclude Include="include\hc\hcIMaterialManager.h" />
     <ClInclude Include="include\hc\hcModel.h" />
     <ClInclude Include="include\hc\hcIModelLoader.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
@@ -248,7 +246,7 @@
     <ClInclude Include="include\hc\hcSceneGraph.h" />
     <ClInclude Include="include\hc\hcSceneManager.h" />
     <ClInclude Include="include\hc\hcImage.h" />
-    <ClInclude Include="include\hc\hcShaderManager.h" />
+    <ClInclude Include="include\hc\hcIShaderManager.h" />
     <ClInclude Include="include\hc\hcShaderProgramManager.h" />
     <ClInclude Include="include\hc\hcShaderStageType.h" />
     <ClInclude Include="include\hc\hcShaderType.h" />

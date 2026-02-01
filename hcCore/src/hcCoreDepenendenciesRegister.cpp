@@ -7,8 +7,6 @@
 #include "hc/hcWindowManager.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
-#include "hc/hcMaterialManager.h"
-#include "hc/hcShaderManager.h"
 #include "hc/hcShaderProgramManager.h"
 
 namespace hc
@@ -25,8 +23,6 @@ namespace hc
       dependencyContainer.registerInstance<WindowManager>(MakeShared<WindowManager>());
       dependencyContainer.registerInstance<SceneManager>(MakeShared<SceneManager>());
       dependencyContainer.registerInstance<AssetManager>(MakeShared<AssetManager>());
-      dependencyContainer.registerInstance<MaterialManager>(MakeShared<MaterialManager>());
-      dependencyContainer.registerInstance<ShaderManager>(MakeShared<ShaderManager>());
       dependencyContainer.registerInstance<ShaderProgramManager>(MakeShared<ShaderProgramManager>());
     }
   }

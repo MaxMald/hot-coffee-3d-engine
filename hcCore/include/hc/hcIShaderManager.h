@@ -6,22 +6,11 @@
 namespace hc
 {
   class IShader;
-  class IGraphicsManager;
 
-  class ShaderManager :
-    public NonCopyable,
-    public IDependencyResolvable
+  class IShaderManager : public NonCopyable
   {
   public:
-    static constexpr const char* UNLIT_SHADER_KEY = "HC_PREDEFINED_UNLIT_SHADER";
-
-    ShaderManager() = default;
-    ~ShaderManager() = default;
-
-    /**
-     * @copydoc IDependencyResolvable::resolveDependencies
-     */
-    void resolveDependencies(DependencyContainer& container) override;
+    virtual ~IShaderManager() = default;
 
     /**
      * @brief Creates a shader from a given file path. If a shader for the file
@@ -33,10 +22,10 @@ namespace hc
      * @return Shared pointer to the created or cached shader, or nullptr on
      * failure.
      */
-    SharedPtr<IShader> createShaderFromFile(
+    virtual SharedPtr<IShader> createShaderFromFile(
       const Path& shaderPath,
       shaderStageType::Type type
-    );
+    ) = 0;
 
     /**
      * @brief Creates a shader from given shader code. If a shader for the code
@@ -49,11 +38,11 @@ namespace hc
      * @return Shared pointer to the created or cached shader, or nullptr on
      * failure.
      */
-    SharedPtr<IShader> createShaderFromString(
+    virtual SharedPtr<IShader> createShaderFromString(
       const String& shaderKey,
       const String& shaderCode,
       shaderStageType::Type type
-    );
+    ) = 0;
 
     /**
      * @brief Retrieves a cached shader by its key.
@@ -62,12 +51,13 @@ namespace hc
      *
      * @return Shared pointer to the cached shader, or nullptr if not found.
      */
-    SharedPtr<IShader> getShader(
+    virtual SharedPtr<IShader> getShader(
       const String& shaderKey
-    ) const;
+    ) const = 0;
 
-  private:
-    SharedPtr<IGraphicsManager> m_graphicsManager;
-    UnorderedMap<String, SharedPtr<IShader>> m_shaderCache;
+    /**
+     * @brief Clears all cached shaders from the manager.
+     */
+    virtual void clear() = 0;
   };
 }

@@ -170,7 +170,9 @@
     <ClInclude Include="include\hc\hcGraphicsOpenGlPrerequisites.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsManager.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h" />
+    <ClInclude Include="include\hc\hcOpenGlMaterialManager.h" />
     <ClInclude Include="include\hc\hcOpenGlShader.h" />
+    <ClInclude Include="include\hc\hcOpenGlShaderManager.h" />
     <ClInclude Include="include\hc\hcOpenGlShaderProgram.h" />
     <ClInclude Include="include\hc\hcOpenGlTexture.h" />
     <ClInclude Include="include\hc\hcOpenGlTextureManager.h" />
@@ -178,7 +180,9 @@
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
+    <ClCompile Include="src\hcOpenGlMaterialManager.cpp" />
     <ClCompile Include="src\hcOpenGlShader.cpp" />
+    <ClCompile Include="src\hcOpenGlShaderManager.cpp" />
     <ClCompile Include="src\hcOpenGlShaderProgram.cpp" />
     <ClCompile Include="src\hcOpenGlTexture.cpp" />
     <ClCompile Include="src\hcOpenGlTextureManager.cpp" />

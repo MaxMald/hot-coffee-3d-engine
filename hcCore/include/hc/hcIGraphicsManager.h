@@ -8,11 +8,12 @@ namespace hc
 {
   class ITexture;
   class IShaderProgram;
-  class IShader;
   class Image;
   class IDrawable;
   class HotCoffeeEngine;
   class ITextureManager;
+  class IMaterialManager;
+  class IShaderManager;
 
   class HC_CORE_EXPORT IGraphicsManager : public NonCopyable
   {
@@ -23,10 +24,8 @@ namespace hc
     virtual void draw(IDrawable&) = 0;
     virtual void endFrame(IWindow&) = 0;
     virtual ITextureManager& getTextureManager() = 0;
-    virtual SharedPtr<IShader> createShaderFromString(
-      shaderStageType::Type stageType,
-      const String& shaderCode
-    ) const = 0;
+    virtual IMaterialManager& getMaterialManager() = 0;
+    virtual IShaderManager& getShaderManager() = 0;
     virtual SharedPtr<IShaderProgram> createUnlitShaderProgram() const = 0;
 
   protected:

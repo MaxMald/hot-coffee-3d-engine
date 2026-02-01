@@ -28,6 +28,13 @@ namespace hc
     shaderType::Type getShaderType() const;
 
     /**
+     * @brief Gets the unique identifier of this material descriptor.
+     *
+     * @return The Id of the material descriptor.
+     */
+    Id getId() const;
+
+    /**
      * @brief Gets the paths of images used by this material descriptor.
      *
      * @return A vector of image paths.
@@ -36,5 +43,6 @@ namespace hc
 
   protected:
     shaderType::Type m_shaderType;
+    Id m_id;
   };
 }

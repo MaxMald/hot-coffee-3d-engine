@@ -195,9 +195,6 @@
     <ClCompile Include="src\hcUnlitMaterial.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcMaterialManager.cpp">
-      <Filter>Source Files\graphics\material</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcJsonSerializer.cpp">
       <Filter>Source Files\jsonSerializer</Filter>
     </ClCompile>
@@ -206,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="src\hcAssetFileExtensions.cpp">
       <Filter>Source Files\assets</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcShaderManager.cpp">
-      <Filter>Source Files\graphics\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\hcShaderStageType.cpp">
       <Filter>Source Files\graphics\shaders</Filter>
@@ -350,7 +344,7 @@
     <ClInclude Include="include\hc\hcMaterialDescriptor.h">
       <Filter>Header Files\assets\materials</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcMaterialManager.h">
+    <ClInclude Include="include\hc\hcIMaterialManager.h">
       <Filter>Header Files\graphics\material</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMaterial.h">
@@ -386,7 +380,7 @@
     <ClInclude Include="include\hc\hcIShader.h">
       <Filter>Header Files\graphics\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcShaderManager.h">
+    <ClInclude Include="include\hc\hcIShaderManager.h">
       <Filter>Header Files\graphics\shaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShaderProgram.h">

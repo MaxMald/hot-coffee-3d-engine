@@ -1,22 +1,18 @@
-#include "hc/hcMaterialManager.h"
-
-#include "hc/hcAssetManager.h"
-#include "hc/hcMaterialDescriptor.h"
-#include "hc/hcUnlitMaterialDescriptor.h"
-#include "hc/hcUnlitMaterial.h"
-#include "hc/hcImage.h"
-#include "hc/hcIGraphicsManager.h"
-#include "hc/hcITextureManager.h"
+#include "hc/hcOpenGlMaterialManager.h"
 
 namespace hc
 {
-  void MaterialManager::resolveDependencies(DependencyContainer& container)
+  OpenGlMaterialManager::OpenGlMaterialManager() :
+    m_textureManager(nullptr),
+    m_assetManager(nullptr)
   {
-    m_assetManager = container.resolve<AssetManager>();
-    m_graphicsManager = container.resolve<IGraphicsManager>();
   }
 
-  SharedPtr<IMaterial> MaterialManager::createMaterialFromFile(
+  OpenGlMaterialManager::~OpenGlMaterialManager()
+  {
+  }
+
+  SharedPtr<IMaterial> OpenGlMaterialManager::createMaterialFromFile(
     const Path& materialDescriptorPath
   )
   {
@@ -27,7 +23,7 @@ namespace hc
     return createMaterialFromDescriptor(mat);
   }
 
-  SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
+  SharedPtr<IMaterial> OpenGlMaterialManager::createMaterialFromDescriptor(
     const String& materialDescriptorKey
   )
   {
@@ -50,7 +46,7 @@ namespace hc
     return createMaterialFromDescriptor(mat);
   }
 
-  SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
+  SharedPtr<IMaterial> OpenGlMaterialManager::createMaterialFromDescriptor(
     SharedPtr<MaterialDescriptor> descriptor
   )
   {
@@ -62,15 +58,14 @@ namespace hc
       return nullptr;
     }
 
-    String cacheKey = getCacheKey(descriptor);
-    auto it = m_cacheMaterials.find(cacheKey);
-    if (it != m_cacheMaterials.end())
+    auto it = m_cachedMaterials.find(descriptor->getId());
+    if (it != m_cachedMaterials.end())
       return it->second;
 
     shaderType::Type shaderType = descriptor->getShaderType();
     if (shaderType == shaderType::Type::Unlit)
     {
-      return createUnlitMaterial(cacheKey, descriptor);
+      return createUnlitMaterial(descriptor);
     }
 
     String shaderTypeStr = shaderType::toString(descriptor->getShaderType());
@@ -84,42 +79,21 @@ namespace hc
     return nullptr;
   }
 
-  String MaterialManager::getCacheKey(
-    SharedPtr<MaterialDescriptor> descriptor
-  ) const
+  void OpenGlMaterialManager::clear()
   {
-    if (!descriptor)
-      return String();
-
-    return descriptor->getPath().string();
+    m_cachedMaterials.clear();
   }
 
-  SharedPtr<IMaterial> MaterialManager::get(const String& key) const
+  void OpenGlMaterialManager::initialize(
+    SharedPtr<AssetManager> assetManager,
+    ITextureManager* textureManager
+  )
   {
-    auto it = m_cacheMaterials.find(key);
-    if (it != m_cacheMaterials.end())
-      return it->second;
-
-    return nullptr;
+    m_textureManager = textureManager;
+    m_assetManager = assetManager;
   }
 
-  bool MaterialManager::contains(const String& key) const
-  {
-    return m_cacheMaterials.find(key) != m_cacheMaterials.end();
-  }
-
-  const UnorderedMap<String, SharedPtr<IMaterial>>& MaterialManager::getCacheMaterials() const
-  {
-    return m_cacheMaterials;
-  }
-
-  void MaterialManager::clear()
-  {
-    m_cacheMaterials.clear();
-  }
-
-  SharedPtr<UnlitMaterial> MaterialManager::createUnlitMaterial(
-    const String& cacheKey,
+  SharedPtr<UnlitMaterial> OpenGlMaterialManager::createUnlitMaterial(
     SharedPtr<MaterialDescriptor> descriptor
   )
   {
@@ -135,7 +109,7 @@ namespace hc
     SharedPtr<ITexture> mainTexture = nullptr;
     if (!unlitDescriptor->getMainImagePath().empty())
     {
-      mainTexture = m_graphicsManager->getTextureManager().createTextureFromFile(
+      mainTexture = m_textureManager->createTextureFromFile(
         unlitDescriptor->getMainImagePath()
       );
     }
@@ -143,7 +117,7 @@ namespace hc
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
     material->initialize(unlitDescriptor, mainTexture);
 
-    m_cacheMaterials[cacheKey] = material;
+    m_cachedMaterials[descriptor->getId()] = material;
     return material;
   }
 }

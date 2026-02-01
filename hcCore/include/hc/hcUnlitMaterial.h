@@ -10,7 +10,7 @@ namespace hc
   /**
    * @brief Represents a material that is rendered without lighting effects.
    */
-  class UnlitMaterial : public IMaterial
+  class HC_CORE_EXPORT UnlitMaterial : public IMaterial
   {
   public:
     UnlitMaterial();

@@ -53,12 +53,14 @@ namespace hc
     return m_textureManager;
   }
 
-  SharedPtr<IShader> OpenGlGraphicsManager::createShaderFromString(
-    shaderStageType::Type stageType,
-    const String& shaderCode
-  ) const
+  IMaterialManager& OpenGlGraphicsManager::getMaterialManager()
   {
-    return MakeShared<OpenGlShader>(stageType, shaderCode);
+    return m_materialManager;
+  }
+
+  IShaderManager& OpenGlGraphicsManager::getShaderManager()
+  {
+    return m_shaderManager;
   }
 
   SharedPtr<IShaderProgram> OpenGlGraphicsManager::createUnlitShaderProgram() const
@@ -93,6 +95,10 @@ namespace hc
   {
     m_textureManager.initialize(
       container.resolve<AssetManager>()
+    );
+    m_materialManager.initialize(
+      container.resolve<AssetManager>(),
+      &m_textureManager
     );
   }
 

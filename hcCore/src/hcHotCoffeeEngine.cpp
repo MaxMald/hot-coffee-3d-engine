@@ -8,8 +8,6 @@
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
-#include "hc/hcMaterialManager.h"
-#include "hc/hcShaderManager.h"
 #include "hc/hcShaderProgramManager.h"
 
 namespace hc
@@ -98,30 +96,6 @@ namespace hc
     return *m_assetManager;
   }
 
-  MaterialManager& HotCoffeeEngine::getMaterialManager()
-  {
-    if (m_materialManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "MaterialManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
-      );
-    }
-
-    return *m_materialManager;
-  }
-
-  ShaderManager& HotCoffeeEngine::getShaderManager()
-  {
-    if (m_shaderManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "ShaderManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
-      );
-    }
-
-    return *m_shaderManager;
-  }
-
   ShaderProgramManager& HotCoffeeEngine::getShaderProgramManager()
   {
     if (m_shaderProgramManager == nullptr)
@@ -189,8 +163,6 @@ namespace hc
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();
-    m_materialManager = m_dependencyContainer.resolve<MaterialManager>();
-    m_shaderManager = m_dependencyContainer.resolve<ShaderManager>();
     m_shaderProgramManager = m_dependencyContainer.resolve<ShaderProgramManager>();
   }
 
