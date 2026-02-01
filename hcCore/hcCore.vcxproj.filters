@@ -88,9 +88,6 @@
     <Filter Include="Header Files\graphics\material">
       <UniqueIdentifier>{abd929a5-a437-4c84-b8db-ce2ed9c79135}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\graphics\material">
-      <UniqueIdentifier>{80b027d1-744f-44bf-8675-dcf816586ae3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\jsonSerializer">
       <UniqueIdentifier>{5b99308c-9b9c-46fb-bc97-0e56052df71a}</UniqueIdentifier>
     </Filter>
@@ -111,9 +108,6 @@
     </Filter>
     <Filter Include="Header Files\graphics\shaderPrograms">
       <UniqueIdentifier>{bf1a93c1-d2e9-4b41-8d48-9387b2faad34}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\graphics\shaderProgram">
-      <UniqueIdentifier>{48903825-8528-40f5-bde7-ae607327c0d2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\assets\model">
       <UniqueIdentifier>{733da4d8-e0a5-4490-b7e0-c8d5129435d2}</UniqueIdentifier>
@@ -206,9 +200,6 @@
     </ClCompile>
     <ClCompile Include="src\hcShaderStageType.cpp">
       <Filter>Source Files\graphics\shaders</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcShaderProgramManager.cpp">
-      <Filter>Source Files\graphics\shaderProgram</Filter>
     </ClCompile>
     <ClCompile Include="src\hcVertex.cpp">
       <Filter>Source Files\assets\model</Filter>
@@ -389,7 +380,7 @@
     <ClInclude Include="include\hc\hcShaderStageType.h">
       <Filter>Header Files\graphics\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcShaderProgramManager.h">
+    <ClInclude Include="include\hc\hcIShaderProgramManager.h">
       <Filter>Header Files\graphics\shaderPrograms</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcVertex.h">

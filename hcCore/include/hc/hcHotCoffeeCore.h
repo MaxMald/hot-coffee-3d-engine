@@ -33,7 +33,7 @@
 #include "hc/hcIShader.h"
 #include "hc/hcIShaderProgram.h"
 #include "hc/hcIShaderManager.h"
-#include "hc/hcShaderProgramManager.h"
+#include "hc/hcIShaderProgramManager.h"
 #include "hc/hcITexture.h"
 #include "hc/hcITextureManager.h"
 #include "hc/hcIMaterialManager.h"

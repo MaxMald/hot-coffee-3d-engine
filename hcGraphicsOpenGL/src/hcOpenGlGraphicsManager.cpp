@@ -63,32 +63,9 @@ namespace hc
     return m_shaderManager;
   }
 
-  SharedPtr<IShaderProgram> OpenGlGraphicsManager::createUnlitShaderProgram() const
+  IShaderProgramManager& OpenGlGraphicsManager::getShaderProgramManager()
   {
-    auto vertexShader = MakeShared<OpenGlShader>(
-      shaderStageType::Vertex,
-      builtInShaders::UnlitVertex
-    );
-    vertexShader->compile();
-    if (!vertexShader->isCompiled())
-      return nullptr;
-
-    auto fragmentShader = MakeShared<OpenGlShader>(
-      shaderStageType::Fragment,
-      builtInShaders::UnlitFragment
-    );
-    fragmentShader->compile();
-    if (!fragmentShader->isCompiled())
-      return nullptr;
-
-    auto program = MakeShared<OpenGlShaderProgram>();
-    program->attachShader(vertexShader);
-    program->attachShader(fragmentShader);
-
-    if (!program->link())
-      return nullptr;
-
-    return program;
+    return m_shaderProgramManager;
   }
 
   void OpenGlGraphicsManager::resolveDependencies(DependencyContainer& container)
@@ -99,6 +76,9 @@ namespace hc
     m_materialManager.initialize(
       container.resolve<AssetManager>(),
       &m_textureManager
+    );
+    m_shaderProgramManager.initialize(
+      &m_shaderManager
     );
   }
 

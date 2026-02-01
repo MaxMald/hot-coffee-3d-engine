@@ -4,6 +4,7 @@
 #include "hc/hcOpenGlTextureManager.h"
 #include "hc/hcOpenGlMaterialManager.h"
 #include "hc/hcOpenGlShaderManager.h"
+#include "hc/hcOpenGlShaderProgramManager.h"
 
 namespace hc
 {
@@ -46,9 +47,9 @@ namespace hc
     IShaderManager& getShaderManager() override;
 
     /**
-     * @copydoc IGraphicsManager::createUnlitShaderProgram
+     * @copydoc IGraphicsManager::getShaderProgramManager
      */
-    SharedPtr<IShaderProgram> createUnlitShaderProgram() const override;
+    IShaderProgramManager& getShaderProgramManager() override;
 
     /**
      * @copydoc IDependencyResolvable::resolveDependencies
@@ -59,6 +60,7 @@ namespace hc
     OpenGlTextureManager m_textureManager;
     OpenGlMaterialManager m_materialManager;
     OpenGlShaderManager m_shaderManager;
+    OpenGlShaderProgramManager m_shaderProgramManager;
 
     /**
      * @copydoc IGraphicsManager::init

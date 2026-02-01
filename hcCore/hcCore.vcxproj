@@ -187,7 +187,6 @@
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
     <ClCompile Include="src\hcImage.cpp" />
-    <ClCompile Include="src\hcShaderProgramManager.cpp" />
     <ClCompile Include="src\hcShaderStageType.cpp" />
     <ClCompile Include="src\hcShaderType.cpp" />
     <ClCompile Include="src\hcUnlitMaterial.cpp" />
@@ -247,7 +246,7 @@
     <ClInclude Include="include\hc\hcSceneManager.h" />
     <ClInclude Include="include\hc\hcImage.h" />
     <ClInclude Include="include\hc\hcIShaderManager.h" />
-    <ClInclude Include="include\hc\hcShaderProgramManager.h" />
+    <ClInclude Include="include\hc\hcIShaderProgramManager.h" />
     <ClInclude Include="include\hc\hcShaderStageType.h" />
     <ClInclude Include="include\hc\hcShaderType.h" />
     <ClInclude Include="include\hc\hcITexture.h" />
