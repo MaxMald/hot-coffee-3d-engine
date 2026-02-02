@@ -28,6 +28,8 @@ namespace hc
 
     Buffer& operator= (const Buffer& other);
     Buffer& operator= (Buffer&& other) noexcept;
+    T& operator[](SizeT index);
+    const T& operator[](SizeT index) const;
 
     /**
      * @brief Initializes the buffer with data from a source pointer. Allocates
@@ -121,6 +123,18 @@ namespace hc
     }
 
     return *this;
+  }
+
+  template<typename T>
+  T& Buffer<T>::operator[](SizeT index)
+  {
+    return m_data[index];
+  }
+
+  template<typename T>
+  const T& Buffer<T>::operator[](SizeT index) const
+  {
+    return m_data[index];
   }
 
   template<typename T>

@@ -8,8 +8,7 @@ namespace hc
     m_width(0),
     m_height(0),
     m_channels(0),
-    m_data(0),
-    m_id(Id::Create())
+    m_data(0)
   {
   }
 
@@ -53,10 +52,5 @@ namespace hc
   const BufferByte& Image::getBuffer() const
   {
     return m_data;
-  }
-
-  Id Image::getId() const
-  {
-    return m_id;
   }
 }

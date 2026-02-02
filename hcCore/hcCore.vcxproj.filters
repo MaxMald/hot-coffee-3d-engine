@@ -201,6 +201,9 @@
     <ClCompile Include="src\hcModel.cpp">
       <Filter>Source Files\assets\model</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcModelSubMesh.cpp">
+      <Filter>Source Files\assets\model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcHotCoffeeCore.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcModelSubMesh.h">
+      <Filter>Header Files\assets\model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

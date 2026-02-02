@@ -2,6 +2,9 @@
 
 #include "hc/hcAssetLoadersPrerequisites.h"
 
+class aiScene;
+class aiMesh;
+
 namespace hc
 {
   class HC_ASSET_LOADERS_EXPORT ModelLoader : public IModelLoader
@@ -14,5 +17,10 @@ namespace hc
      * @copydoc IAssetLoader::load
      */
     SharedPtr<Model> load(const Path& filePath) override;
+
+  private:
+    UInt32 calculateTotalVertices(const aiScene* scene);
+    UInt32 calculateTotalIndices(const aiScene* scene);
+    void copyAssimpVertex(const aiMesh* mesh, UInt32 vertexIndex, Vertex& outVertex);
   };
 }

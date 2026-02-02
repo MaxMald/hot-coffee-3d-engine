@@ -8,16 +8,9 @@ namespace hc
   /**
    * @brief Describes the properties and configuration for a material asset.
    */
-  class HC_CORE_EXPORT MaterialDescriptor :
-    public Asset
+  class HC_CORE_EXPORT MaterialDescriptor : public Asset
   {
   public:
-    /**
-     * @brief Constructs a MaterialDescriptor with the specified shader type.
-     * 
-     * @param type The shader type associated with this material descriptor.
-     */
-    MaterialDescriptor(shaderType::Type type);
     virtual ~MaterialDescriptor() = default;
 
     /**
@@ -28,13 +21,6 @@ namespace hc
     shaderType::Type getShaderType() const;
 
     /**
-     * @brief Gets the unique identifier of this material descriptor.
-     *
-     * @return The Id of the material descriptor.
-     */
-    Id getId() const;
-
-    /**
      * @brief Gets the paths of images used by this material descriptor.
      *
      * @return A vector of image paths.
@@ -43,6 +29,7 @@ namespace hc
 
   protected:
     shaderType::Type m_shaderType;
-    Id m_id;
+    
+    MaterialDescriptor(shaderType::Type type);
   };
 }
