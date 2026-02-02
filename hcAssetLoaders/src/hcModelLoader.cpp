@@ -44,6 +44,7 @@ namespace hc
       subMesh.firstVertexIndex = vertexOffset;
       subMesh.firstIndexIndex = indexOffset;
       subMesh.vertexCount = mesh->mNumVertices;
+      subMesh.materialIndex = mesh->mMaterialIndex;
 
       for (UInt32 v = 0; v < mesh->mNumVertices; ++v)
       {
@@ -67,7 +68,18 @@ namespace hc
       subMeshes.push_back(subMesh);
     }
 
-    return nullptr;
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors;
+    for (UInt32 i = 0; i < scene->mNumMaterials; ++i)
+    {
+      // TODO
+    }
+
+    return MakeShared<Model>(
+      std::move(vertices),
+      std::move(indices),
+      std::move(subMeshes),
+      std::move(materialDescriptors)
+    );
   }
 
   UInt32 ModelLoader::calculateTotalVertices(const aiScene* scene)
@@ -131,6 +143,16 @@ namespace hc
         mesh->mTangents[assimpVertexIndex].x,
         mesh->mTangents[assimpVertexIndex].y,
         mesh->mTangents[assimpVertexIndex].z
+      );
+    }
+
+    if (mesh->mColors[0])
+    {
+      outVertex.color = Color(
+        mesh->mColors[0][assimpVertexIndex].r,
+        mesh->mColors[0][assimpVertexIndex].g,
+        mesh->mColors[0][assimpVertexIndex].b,
+        mesh->mColors[0][assimpVertexIndex].a
       );
     }
   }

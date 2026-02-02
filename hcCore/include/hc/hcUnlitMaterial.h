@@ -19,7 +19,7 @@ namespace hc
     /**
      * @copydoc IMaterial::getShaderType
      */
-    shaderType::Type getShaderType() const override;
+    shadingType::Type getShaderType() const override;
 
     /**
      * @brief Initializes the unlit material with a descriptor and main texture.

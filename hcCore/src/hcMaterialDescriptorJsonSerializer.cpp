@@ -13,12 +13,12 @@ namespace hc
 
     JsonObjectBuilder builder;
 
-    String shaderTypeStr = shaderType::toString(data->getShaderType());
+    String shaderTypeStr = shadingType::toString(data->getShaderType());
     builder.setString("shaderType", shaderTypeStr);
 
     switch (data->getShaderType())
     {
-    case shaderType::Type::Unlit:
+    case shadingType::Type::Unlit:
     {
       const UnlitMaterialDescriptor* unlitMaterialDescriptor =
         static_cast<const UnlitMaterialDescriptor*>(data);

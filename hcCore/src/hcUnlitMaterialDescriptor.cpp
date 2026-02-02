@@ -3,7 +3,7 @@
 namespace hc
 {
   UnlitMaterialDescriptor::UnlitMaterialDescriptor() :
-    MaterialDescriptor(shaderType::Unlit),
+    MaterialDescriptor(shadingType::Unlit),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_mainImagePath()
   {

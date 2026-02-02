@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  namespace shaderType
+  namespace shadingType
   {
     enum Type : UInt8
     {

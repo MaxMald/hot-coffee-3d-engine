@@ -2,7 +2,7 @@
 
 namespace hc
 {
-  namespace shaderType
+  namespace shadingType
   {
     String toString(Type type)
     {

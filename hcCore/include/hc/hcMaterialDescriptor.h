@@ -18,7 +18,7 @@ namespace hc
      * 
      * @return The shader type.
      */
-    shaderType::Type getShaderType() const;
+    shadingType::Type getShaderType() const;
 
     /**
      * @brief Gets the paths of images used by this material descriptor.
@@ -28,8 +28,8 @@ namespace hc
     virtual Vector<Path> getImagesPaths() const = 0;
 
   protected:
-    shaderType::Type m_shaderType;
+    shadingType::Type m_shaderType;
     
-    MaterialDescriptor(shaderType::Type type);
+    MaterialDescriptor(shadingType::Type type);
   };
 }

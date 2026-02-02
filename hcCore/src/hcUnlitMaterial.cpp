@@ -11,9 +11,9 @@ namespace hc
   {
   }
 
-  shaderType::Type UnlitMaterial::getShaderType() const
+  shadingType::Type UnlitMaterial::getShaderType() const
   {
-    return shaderType::Unlit;
+    return shadingType::Unlit;
   }
 
   void UnlitMaterial::initialize(

@@ -2,12 +2,12 @@
 
 namespace hc
 {
-  MaterialDescriptor::MaterialDescriptor(shaderType::Type type) :
+  MaterialDescriptor::MaterialDescriptor(shadingType::Type type) :
     m_shaderType(type)
   {
   }
 
-  shaderType::Type MaterialDescriptor::getShaderType() const
+  shadingType::Type MaterialDescriptor::getShaderType() const
   {
     return m_shaderType;
   }

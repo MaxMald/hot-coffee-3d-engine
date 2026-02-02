@@ -18,6 +18,6 @@ namespace hc
      * 
      * @return The shader type.
      */
-    virtual shaderType::Type getShaderType() const = 0;
+    virtual shadingType::Type getShaderType() const = 0;
   };
 }
