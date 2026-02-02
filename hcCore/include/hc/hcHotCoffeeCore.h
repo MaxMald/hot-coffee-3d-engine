@@ -40,3 +40,5 @@
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
 #include "hc/hcUnlitMaterial.h"
+#include "hc/hcIMeshManager.h"
+#include "hc/hcIMesh.h"

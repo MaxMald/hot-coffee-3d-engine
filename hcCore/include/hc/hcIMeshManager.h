@@ -9,6 +9,7 @@ namespace hc
 
   class IMeshManager : public NonCopyable
   {
+  public:
     virtual ~IMeshManager() = default;
 
     virtual SharedPtr<IMesh> createMeshFromPath(const Path& path) = 0;

@@ -68,6 +68,11 @@ namespace hc
     return m_shaderProgramManager;
   }
 
+  IMeshManager& OpenGlGraphicsManager::getMeshManager()
+  {
+    return m_meshManager;
+  }
+
   void OpenGlGraphicsManager::resolveDependencies(DependencyContainer& container)
   {
     m_textureManager.initialize(

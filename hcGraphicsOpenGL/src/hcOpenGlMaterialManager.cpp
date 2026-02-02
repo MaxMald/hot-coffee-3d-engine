@@ -62,13 +62,13 @@ namespace hc
     if (it != m_cachedMaterials.end())
       return it->second;
 
-    shaderType::Type shaderType = descriptor->getShaderType();
-    if (shaderType == shaderType::Type::Unlit)
+    shadingType::Type shaderType = descriptor->getShaderType();
+    if (shaderType == shadingType::Type::Unlit)
     {
       return createUnlitMaterial(descriptor);
     }
 
-    String shaderTypeStr = shaderType::toString(descriptor->getShaderType());
+    String shaderTypeStr = shadingType::toString(descriptor->getShaderType());
     LogService::Error(
       String::Format(
         "Unsupported shader type '%s' in MaterialDescriptor for key.",

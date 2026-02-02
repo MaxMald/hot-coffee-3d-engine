@@ -179,6 +179,7 @@
     <ClInclude Include="include\hc\hcMatrix3.h" />
     <ClInclude Include="include\hc\hcMatrix4.h" />
     <ClInclude Include="include\hc\hcNonCopyable.h" />
+    <ClInclude Include="include\hc\hcNonMovable.h" />
     <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcString.h" />
     <ClInclude Include="include\hc\hcTransform.h" />

@@ -5,7 +5,7 @@
 namespace hc
 {
   /**
-   * @brief Utility base class to prevent copy construction and copy assignment.
+   * @brief Utility base class to prevent copy construction.
    *
    * Inherit from NonCopyable to make a class non-copyable.
    */

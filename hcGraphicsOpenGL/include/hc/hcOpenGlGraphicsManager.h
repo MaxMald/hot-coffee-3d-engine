@@ -5,6 +5,7 @@
 #include "hc/hcOpenGlMaterialManager.h"
 #include "hc/hcOpenGlShaderManager.h"
 #include "hc/hcOpenGlShaderProgramManager.h"
+#include "hc/hcOpenGlMeshManager.h"
 
 namespace hc
 {
@@ -52,6 +53,11 @@ namespace hc
     IShaderProgramManager& getShaderProgramManager() override;
 
     /**
+     * @copydoc IGraphicsManager::getMeshManager
+     */
+    IMeshManager& getMeshManager() override;
+
+    /**
      * @copydoc IDependencyResolvable::resolveDependencies
      */
     void resolveDependencies(DependencyContainer& container) override;
@@ -61,6 +67,7 @@ namespace hc
     OpenGlMaterialManager m_materialManager;
     OpenGlShaderManager m_shaderManager;
     OpenGlShaderProgramManager m_shaderProgramManager;
+    OpenGlMeshManager m_meshManager;
 
     /**
      * @copydoc IGraphicsManager::init
