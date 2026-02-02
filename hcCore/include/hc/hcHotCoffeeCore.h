@@ -42,3 +42,10 @@
 #include "hc/hcUnlitMaterial.h"
 #include "hc/hcIMeshManager.h"
 #include "hc/hcIMesh.h"
+
+// GameObject Components
+
+#include "hc/hcComponentType.h"
+#include "hc/hcIComponent.h"
+#include "hc/hcABaseComponent.h"
+#include "hc/hcMeshComponent.h"

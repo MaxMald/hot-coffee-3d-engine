@@ -96,4 +96,12 @@ namespace hc
     else
       return getMatrix();
   }
+
+  void GameObject::addComponent(UniquePtr<IComponent> component)
+  {
+    if (!component)
+      return;
+
+    m_components.push_back(std::move(component));
+  }
 }

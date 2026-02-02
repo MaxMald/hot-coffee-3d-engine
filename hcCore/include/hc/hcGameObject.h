@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  class IComponent;
+
   /**
    * @brief Base class for all game objects in the engine.
    */
@@ -68,9 +70,21 @@ namespace hc
      */
     Matrix4 getWorldMatrix() const;
 
+    /**
+     * @brief Adds a component to this GameObject. The GameObject takes
+     * ownership of the component.
+     */
+    void addComponent(UniquePtr<IComponent> component);
+
+    /**
+     * @brief Gets the components attached to this GameObject.
+     */
+    const Vector<UniquePtr<IComponent>>& getComponents() const;
+
   private:
     String m_name;
     GameObject* m_parent = nullptr;
     Vector<UniquePtr<GameObject>> m_children;
+    Vector<UniquePtr<IComponent>> m_components;
   };
 }
