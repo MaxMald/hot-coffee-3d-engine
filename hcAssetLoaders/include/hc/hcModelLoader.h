@@ -4,6 +4,7 @@
 
 class aiScene;
 class aiMesh;
+class aiMaterial;
 
 namespace hc
 {
@@ -21,6 +22,6 @@ namespace hc
   private:
     UInt32 calculateTotalVertices(const aiScene* scene);
     UInt32 calculateTotalIndices(const aiScene* scene);
-    void copyAssimpVertex(const aiMesh* mesh, UInt32 vertexIndex, Vertex& outVertex);
+    void copyAssimpVertex(const aiMesh* mesh, UInt32 vertexIndex, Vertex& outVertex);    
   };
 }

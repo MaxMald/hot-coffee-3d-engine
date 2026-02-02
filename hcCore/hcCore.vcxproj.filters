@@ -177,7 +177,7 @@
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp">
       <Filter>Source Files\assets\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcShaderType.cpp">
+    <ClCompile Include="src\hcShadingType.cpp">
       <Filter>Source Files\assets\materials</Filter>
     </ClCompile>
     <ClCompile Include="src\hcUnlitMaterial.cpp">
@@ -323,7 +323,7 @@
     <ClInclude Include="include\hc\hcIAssetLoader.h">
       <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcShaderType.h">
+    <ClInclude Include="include\hc\hcShadingType.h">
       <Filter>Header Files\assets\materials</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcMaterialDescriptor.h">
@@ -391,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcModelSubMesh.h">
       <Filter>Header Files\assets\model</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcTextureType.h">
+      <Filter>Header Files\graphics\texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

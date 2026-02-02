@@ -3,6 +3,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "hc/hcMaterialParser.h"
 
 namespace hc
 {
@@ -71,7 +72,11 @@ namespace hc
     Vector<SharedPtr<MaterialDescriptor>> materialDescriptors;
     for (UInt32 i = 0; i < scene->mNumMaterials; ++i)
     {
-      // TODO
+      materialDescriptors.push_back(
+        materialParser::ParseMaterialDescriptorFromAssimpMaterial(
+          scene->mMaterials[i]
+        )
+      );
     }
 
     return MakeShared<Model>(
@@ -156,5 +161,4 @@ namespace hc
       );
     }
   }
-
 }
