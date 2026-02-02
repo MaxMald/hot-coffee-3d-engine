@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -165,11 +165,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcABaseComponent.cpp" />
     <ClCompile Include="src\hcAsset.cpp" />
     <ClCompile Include="src\hcAssetFileExtensions.cpp" />
     <ClCompile Include="src\hcAssetManager.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
+    <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
@@ -180,6 +182,7 @@
     <ClCompile Include="src\hcLightType.cpp" />
     <ClCompile Include="src\hcMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp" />
+    <ClCompile Include="src\hcMeshComponent.cpp" />
     <ClCompile Include="src\hcModel.cpp" />
     <ClCompile Include="src\hcModelSubMesh.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
@@ -197,9 +200,11 @@
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcABaseComponent.h" />
     <ClInclude Include="include\hc\hcAsset.h" />
     <ClInclude Include="include\hc\hcAssetFileExtensions.h" />
     <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcComponentType.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
     <ClInclude Include="include\hc\hcAssetManager.h" />
@@ -212,6 +217,7 @@
     <ClInclude Include="include\hc\hcGameObject.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
+    <ClInclude Include="include\hc\hcIComponent.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterial.h" />
@@ -234,6 +240,7 @@
     <ClInclude Include="include\hc\hcLightType.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterialManager.h" />
+    <ClInclude Include="include\hc\hcMeshComponent.h" />
     <ClInclude Include="include\hc\hcModel.h" />
     <ClInclude Include="include\hc\hcIModelLoader.h" />
     <ClInclude Include="include\hc\hcModelSubMesh.h" />

@@ -3,6 +3,7 @@
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
 #include "hc/editor/hcEditorDependenciesRegister.h"
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcComponentViewManager.h"
 
 namespace hc::editor
 {
@@ -67,12 +68,13 @@ namespace hc::editor
 
   void HotCoffeeEditor::onPrepare()
   {
-    // Preparation logic goes here
+    ComponentViewManager::Prepare();
   }
 
   void HotCoffeeEditor::onShutdown()
   {
     m_dependencyContainer.clear();
+    ComponentViewManager::Shutdown();
   }
 
   void HotCoffeeEditor::prepareEditorLogger()

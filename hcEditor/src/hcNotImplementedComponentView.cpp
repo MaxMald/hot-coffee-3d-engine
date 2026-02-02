@@ -1,0 +1,23 @@
+#include "hc/editor/hcNotImplementedComponentView.h"
+#include "imgui.h"
+
+namespace hc::editor
+{
+  componentType::Type NotImplementedComponentView::getComponentType() const
+  {
+    return componentType::Unknown;
+  }
+
+  void NotImplementedComponentView::drawComponent(IComponent* component)
+  {
+    if (!component)
+      return;
+
+    String componentStr = componentType::ToString(component->getType());
+    String header = String::Format("%s component (View Not Implemented)", componentStr.c_str());
+    if (ImGui::CollapsingHeader(header.c_str()))
+    {
+      ImGui::Text("Component View Not Implemented");
+    }
+  }
+}
