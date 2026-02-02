@@ -6,7 +6,7 @@ namespace hc::editor
     const SharedPtr<MaterialDescriptor>& asset
   )
   {
-    String shaderTypeStr = shaderType::toString(asset->getShaderType());
+    String shaderTypeStr = shadingType::toString(asset->getShaderType());
     ImGui::Text("Shader Type: %s", shaderTypeStr.c_str());
   }
 }

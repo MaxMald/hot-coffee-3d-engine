@@ -185,6 +185,7 @@
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
     <ClCompile Include="src\hcOpenGlMaterialManager.cpp" />
     <ClCompile Include="src\hcOpenGlMesh.cpp" />
+    <ClCompile Include="src\hcOpenGlMeshManager.cpp" />
     <ClCompile Include="src\hcOpenGlShader.cpp" />
     <ClCompile Include="src\hcOpenGlShaderManager.cpp" />
     <ClCompile Include="src\hcOpenGlShaderProgram.cpp" />

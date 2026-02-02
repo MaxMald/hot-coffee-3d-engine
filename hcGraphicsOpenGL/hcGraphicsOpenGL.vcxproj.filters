@@ -92,5 +92,8 @@
     <ClCompile Include="src\hcOpenGlMesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcOpenGlMeshManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

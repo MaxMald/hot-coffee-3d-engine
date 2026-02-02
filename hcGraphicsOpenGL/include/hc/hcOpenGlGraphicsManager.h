@@ -78,5 +78,7 @@ namespace hc
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
+
+    void prepareVertexAttributes();
   };
 }

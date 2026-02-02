@@ -42,9 +42,9 @@ namespace hc::editor
 
   private:
     SharedPtr<ProjectFileSelectorView> m_projectFileSelectorView;
-    UnorderedMap<shaderType::Type, UniquePtr<IMaterialDescriptorEditor>> m_editors;
+    UnorderedMap<shadingType::Type, UniquePtr<IMaterialDescriptorEditor>> m_editors;
     UniquePtr<IMaterialDescriptorEditor> m_nullEditor;
-    shaderType::Type m_currentShaderType = shaderType::Type::Unknown;
+    shadingType::Type m_currentShaderType = shadingType::Type::Unknown;
     IMaterialDescriptorEditor* m_activeEditor = nullptr;
     AssetFileReference<MaterialDescriptor> m_assetReference;
     Int32 m_selectedShaderTypeIndex = 0;
@@ -52,7 +52,7 @@ namespace hc::editor
     void onDraw() override;
     void registerEditors();
     void initializeEditors(SharedPtr<ProjectFileSelectorView> projectFileSelector);
-    IMaterialDescriptorEditor* getEditor(shaderType::Type type);
+    IMaterialDescriptorEditor* getEditor(shadingType::Type type);
     void drawShaderTypeSelector();
     void updateShaderTypeCombo();
     void saveToFile();

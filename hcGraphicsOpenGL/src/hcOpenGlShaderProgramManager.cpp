@@ -39,7 +39,7 @@ namespace hc
   {
     auto vertexShader = MakeShared<OpenGlShader>(
       shaderStageType::Vertex,
-      builtInShaders::UnlitVertex
+      builtInShaders::VertexShader
     );
     vertexShader->compile();
     if (!vertexShader->isCompiled())

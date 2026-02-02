@@ -20,7 +20,7 @@ namespace hc::editor
   MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow() :
     AWindowView("Material Descriptor Editor", false),
     m_assetReference(),
-    m_currentShaderType(shaderType::Type::Unknown)
+    m_currentShaderType(shadingType::Type::Unknown)
   {
     registerEditors();
   }
@@ -77,7 +77,7 @@ namespace hc::editor
   void MaterialDescriptorEditorWindow::clear()
   {
     m_assetReference = AssetFileReference<MaterialDescriptor>();
-    m_currentShaderType = shaderType::Type::Unknown;
+    m_currentShaderType = shadingType::Type::Unknown;
     m_activeEditor = nullptr;
 
     for (auto& [type, editor] : m_editors)
@@ -86,7 +86,7 @@ namespace hc::editor
 
   void MaterialDescriptorEditorWindow::registerEditors()
   {
-    m_editors[shaderType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>();
+    m_editors[shadingType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>();
     m_nullEditor = MakeUnique<NullMaterialDescriptorEditor>();
   }
 
@@ -99,7 +99,7 @@ namespace hc::editor
   }
 
   IMaterialDescriptorEditor* MaterialDescriptorEditorWindow::getEditor(
-    shaderType::Type type
+    shadingType::Type type
   )
   {
     auto it = m_editors.find(type);
@@ -126,12 +126,12 @@ namespace hc::editor
   {
     ImGui::SetNextItemWidth(120.0f);
     if (ImGui::Combo("Shader Type", &m_selectedShaderTypeIndex, SHADER_TYPES, IM_ARRAYSIZE(SHADER_TYPES)))
-      m_currentShaderType = shaderType::fromString(SHADER_TYPES[m_selectedShaderTypeIndex]);
+      m_currentShaderType = shadingType::fromString(SHADER_TYPES[m_selectedShaderTypeIndex]);
   }
 
   void MaterialDescriptorEditorWindow::updateShaderTypeCombo()
   {
-    if (m_currentShaderType == shaderType::Type::Unlit)
+    if (m_currentShaderType == shadingType::Type::Unlit)
       m_selectedShaderTypeIndex = 0;
     else
       m_selectedShaderTypeIndex = -1;

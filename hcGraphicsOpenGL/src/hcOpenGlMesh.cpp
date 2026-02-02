@@ -45,11 +45,25 @@ namespace hc
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexBufferSize, indices.data(), GL_STATIC_DRAW);
 
-    // Example: set up vertex attributes (adjust to your vertex format)
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offset);
-    // glEnableVertexAttribArray(0);
+    // Attribute 0: position
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
+    glEnableVertexAttribArray(0);
 
-    // Esto creo que lo hace el material?
+    // Attribute 1: normal
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
+    glEnableVertexAttribArray(1);
+
+    // Attribute 2: tangent
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+    glEnableVertexAttribArray(2);
+
+    // Attribute 3: texCoord
+    glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+    glEnableVertexAttribArray(3);
+
+    // Attribute 4: color
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(4);
 
     glBindVertexArray(0);
 

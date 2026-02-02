@@ -31,6 +31,8 @@ namespace hc
     // Set up basic OpenGL state
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+
+    prepareVertexAttributes();
   }
 
   void OpenGlGraphicsManager::draw(IDrawable& drawable)
@@ -88,6 +90,10 @@ namespace hc
   }
 
   void OpenGlGraphicsManager::destroy()
+  {
+  }
+
+  void OpenGlGraphicsManager::prepareVertexAttributes()
   {
   }
 }
