@@ -11,6 +11,7 @@ namespace hc
 
   class HC_CORE_EXPORT Model : public Asset
   {
+  public:
     Model();
     Model(
       const Buffer<Vertex>& vertices,

@@ -2,7 +2,7 @@
 
 #include "hc/hcAssetLoadersPrerequisites.h"
 
-class aiMaterial;
+struct aiMaterial;
 
 namespace hc
 {

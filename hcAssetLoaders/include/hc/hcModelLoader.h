@@ -2,9 +2,9 @@
 
 #include "hc/hcAssetLoadersPrerequisites.h"
 
-class aiScene;
-class aiMesh;
-class aiMaterial;
+struct aiScene;
+struct aiMesh;
+struct aiMaterial;
 
 namespace hc
 {

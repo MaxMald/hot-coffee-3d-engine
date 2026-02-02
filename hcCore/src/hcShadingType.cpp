@@ -1,4 +1,4 @@
-#include "hc/hcShaderType.h"
+#include "hc/hcShadingType.h"
 
 namespace hc
 {

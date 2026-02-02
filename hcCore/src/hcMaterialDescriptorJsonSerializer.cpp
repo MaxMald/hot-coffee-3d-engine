@@ -44,11 +44,11 @@ namespace hc
       return nullptr;
 
     String shaderTypeStr = json["shaderType"].getString();
-    shaderType::Type shaderType = shaderType::fromString(shaderTypeStr);
+    shadingType::Type shaderType = shadingType::fromString(shaderTypeStr);
 
     switch (shaderType)
     {
-    case shaderType::Unlit:
+    case shadingType::Unlit:
       return deserializeUnlitMaterialDescriptor(json);
     default:
       return nullptr;

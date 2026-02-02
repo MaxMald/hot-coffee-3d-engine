@@ -27,6 +27,9 @@
     <ClCompile Include="src\hcModelLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcMaterialParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcAssetLoadersLibraryConfiguration.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcModelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialParser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
