@@ -12,6 +12,7 @@ namespace hc
   class IMaterialManager;
   class IShaderManager;
   class IShaderProgramManager;
+  class IMeshManager;
 
   class HC_CORE_EXPORT IGraphicsManager : public NonCopyable
   {
@@ -25,6 +26,7 @@ namespace hc
     virtual IMaterialManager& getMaterialManager() = 0;
     virtual IShaderManager& getShaderManager() = 0;
     virtual IShaderProgramManager& getShaderProgramManager() = 0;
+    virtual IMeshManager& getMeshManager() = 0;
 
   protected:
     IGraphicsManager();

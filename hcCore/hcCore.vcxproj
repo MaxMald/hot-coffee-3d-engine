@@ -215,6 +215,8 @@
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterial.h" />
+    <ClInclude Include="include\hc\hcIMesh.h" />
+    <ClInclude Include="include\hc\hcIMeshManager.h" />
     <ClInclude Include="include\hc\hcIShader.h" />
     <ClInclude Include="include\hc\hcIShaderProgram.h" />
     <ClInclude Include="include\hc\hcJsonDeserializerAssetLoader.h" />
