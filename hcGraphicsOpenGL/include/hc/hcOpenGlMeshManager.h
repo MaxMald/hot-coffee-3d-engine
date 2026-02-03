@@ -4,6 +4,10 @@
 
 namespace hc
 {
+  class OpenGlMesh;
+  class OpenGlGraphicsManager;
+  class OpenGlMaterialManager;
+
   class OpenGlMeshManager : public IMeshManager
   {
   public:
@@ -14,5 +18,15 @@ namespace hc
     SharedPtr<IMesh> createMeshFromModel(const SharedPtr<Model>& model) override;
 
   private:
+    SharedPtr<AssetManager> m_assetManager;
+    OpenGlMaterialManager* m_materialManager;
+    UnorderedMap<Id, SharedPtr<OpenGlMesh>> m_cachedMeshes;
+
+    void initialize(
+      SharedPtr<AssetManager> assetManager,
+      OpenGlMaterialManager* materialManager
+    );
+
+    friend class OpenGlGraphicsManager;
   };
 }

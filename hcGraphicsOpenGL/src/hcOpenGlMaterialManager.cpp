@@ -55,7 +55,7 @@ namespace hc
       LogService::Error(
         String::Format("Invalid MaterialDescriptor provided.")
       );
-      return nullptr;
+      return m_defaultUnlitMaterial;
     }
 
     auto it = m_cachedMaterials.find(descriptor->getId());
@@ -76,7 +76,7 @@ namespace hc
       )
     );
 
-    return nullptr;
+    return m_defaultUnlitMaterial;
   }
 
   void OpenGlMaterialManager::clear()
@@ -91,6 +91,9 @@ namespace hc
   {
     m_textureManager = textureManager;
     m_assetManager = assetManager;
+    m_defaultUnlitMaterial = createUnlitMaterial(
+      MakeShared<UnlitMaterialDescriptor>()
+    );
   }
 
   SharedPtr<UnlitMaterial> OpenGlMaterialManager::createUnlitMaterial(

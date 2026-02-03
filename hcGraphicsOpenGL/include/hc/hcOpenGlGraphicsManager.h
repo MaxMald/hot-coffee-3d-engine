@@ -63,6 +63,7 @@ namespace hc
     void resolveDependencies(DependencyContainer& container) override;
 
   private:
+    SharedPtr<AssetManager> m_assetManager;
     OpenGlTextureManager m_textureManager;
     OpenGlMaterialManager m_materialManager;
     OpenGlShaderManager m_shaderManager;
@@ -79,6 +80,6 @@ namespace hc
      */
     void destroy() override;
 
-    void prepareVertexAttributes();
+    void prepareManagers();
   };
 }

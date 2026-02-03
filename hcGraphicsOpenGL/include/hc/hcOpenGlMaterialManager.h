@@ -30,6 +30,7 @@ namespace hc
     ITextureManager* m_textureManager;
     SharedPtr<AssetManager> m_assetManager;
     UnorderedMap<Id, SharedPtr<IMaterial>> m_cachedMaterials;
+    SharedPtr<UnlitMaterial> m_defaultUnlitMaterial;
 
     void initialize(
       SharedPtr<AssetManager> assetManager,

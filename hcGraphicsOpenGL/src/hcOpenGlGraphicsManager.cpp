@@ -32,7 +32,7 @@ namespace hc
     glEnable(GL_DEPTH_TEST);
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
-    prepareVertexAttributes();
+    prepareManagers();
   }
 
   void OpenGlGraphicsManager::draw(IDrawable& drawable)
@@ -77,23 +77,28 @@ namespace hc
 
   void OpenGlGraphicsManager::resolveDependencies(DependencyContainer& container)
   {
-    m_textureManager.initialize(
-      container.resolve<AssetManager>()
-    );
-    m_materialManager.initialize(
-      container.resolve<AssetManager>(),
-      &m_textureManager
-    );
-    m_shaderProgramManager.initialize(
-      &m_shaderManager
-    );
+    m_assetManager = container.resolve<AssetManager>();
   }
 
   void OpenGlGraphicsManager::destroy()
   {
   }
 
-  void OpenGlGraphicsManager::prepareVertexAttributes()
+  void OpenGlGraphicsManager::prepareManagers()
   {
+    m_textureManager.initialize(
+      m_assetManager
+    );
+    m_materialManager.initialize(
+      m_assetManager,
+      &m_textureManager
+    );
+    m_shaderProgramManager.initialize(
+      &m_shaderManager
+    );
+    m_meshManager.initialize(
+      m_assetManager,
+      &m_materialManager
+    );
   }
 }

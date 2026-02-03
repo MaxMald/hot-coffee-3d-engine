@@ -53,7 +53,7 @@ namespace hc
       m_instances[typeid(Interface)] = std::static_pointer_cast<Interface>(instance);
 
       // If Interface is IDependencyResolvable, add to resolvables
-      if constexpr (std::is_base_of_v<IDependencyResolvable, Interface>)
+      if constexpr (std::is_base_of_v<IDependencyResolvable, T>)
       {
         m_resolvables.push_back(std::static_pointer_cast<IDependencyResolvable>(instance));
       }
