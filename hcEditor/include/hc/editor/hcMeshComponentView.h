@@ -11,6 +11,6 @@ namespace hc::editor
     virtual ~MeshComponentView();
 
   protected:
-    virtual void onDrawComponent(MeshComponent* component) override;
+    void onDrawComponent(MeshComponent* component) override;
   };
 }

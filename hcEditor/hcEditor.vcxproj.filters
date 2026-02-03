@@ -106,6 +106,18 @@
     <Filter Include="Header Files\views\windows\assetManager">
       <UniqueIdentifier>{4e124b1e-d6fb-49b3-b27f-9c2be972b39c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\views\components">
+      <UniqueIdentifier>{0f9272a5-1286-4ff9-ba8c-b427e286278f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\components">
+      <UniqueIdentifier>{9115cfab-f8ee-477c-a359-317fd9a1907f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\windows\gameObjectEditor">
+      <UniqueIdentifier>{1ebfe29a-ddc1-4b12-81a7-26289f601a45}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\gameObjectEditor">
+      <UniqueIdentifier>{b07e4af0-82b2-4efa-b546-74a6f7ef580d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -228,9 +240,6 @@
     <ClInclude Include="include\hc\editor\hcProjectBrowserWindow.h">
       <Filter>Header Files\views\windows\projectBrowser</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h">
-      <Filter>Header Files\views\windows</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\editor\hcLightManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
@@ -275,6 +284,27 @@
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h">
       <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIComponentView.h">
+      <Filter>Header Files\views\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMeshComponentView.h">
+      <Filter>Header Files\views\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcNotImplementedComponentView.h">
+      <Filter>Header Files\views\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcABaseComponentView.h">
+      <Filter>Header Files\views\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcComponentViewManager.h">
+      <Filter>Header Files\views\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h">
+      <Filter>Header Files\views\windows\gameObjectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcCreateComponentSection.h">
+      <Filter>Header Files\views\windows\gameObjectEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -365,9 +395,6 @@
     <ClCompile Include="src\hcProjectBrowserWindow.cpp">
       <Filter>Source Files\views\windows\projectBrowser</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcGameObjectEditorWindow.cpp">
-      <Filter>Source Files\views\windows</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcLightManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
     </ClCompile>
@@ -400,6 +427,21 @@
     </ClCompile>
     <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp">
       <Filter>Source Files\views\windows\assetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcNotImplementedComponentView.cpp">
+      <Filter>Source Files\views\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMeshComponentView.cpp">
+      <Filter>Source Files\views\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentViewManager.cpp">
+      <Filter>Source Files\views\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcGameObjectEditorWindow.cpp">
+      <Filter>Source Files\views\windows\gameObjectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCreateComponentSection.cpp">
+      <Filter>Source Files\views\windows\gameObjectEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

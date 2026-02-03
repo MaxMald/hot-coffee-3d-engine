@@ -1,5 +1,6 @@
 #include "hc/hcGameObject.h"
 #include <algorithm>
+#include "hc/hcIComponent.h"
 
 namespace hc
 {
@@ -103,5 +104,10 @@ namespace hc
       return;
 
     m_components.push_back(std::move(component));
+  }
+
+  const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
+  {
+    return m_components;
   }
 }

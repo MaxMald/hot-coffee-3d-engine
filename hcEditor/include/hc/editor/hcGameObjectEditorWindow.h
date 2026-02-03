@@ -2,6 +2,7 @@
 
 #include "hc/editor/hcAWindowView.h"
 #include "hc/editor/hcIGameObjectSelectionServiceListener.h"
+#include "hc/editor/hcCreateComponentSection.h"
 
 namespace hc::editor
 {
@@ -17,8 +18,11 @@ namespace hc::editor
 
   protected:
     GameObjectSelectionService* m_gameObjectSelectionService;
+    CreateComponentSection m_createComponentSection;
 
     void onDraw() override;
     void drawTransform(GameObject* gameObject);
+    void drawCreateComponentSection(GameObject* gameObject);
+    void drawComponents(GameObject* gameObject);
   };
 }

@@ -6,7 +6,7 @@ namespace hc
 {
   class IMesh;
 
-  class MeshComponent : public ABaseComponent
+  class HC_CORE_EXPORT MeshComponent : public ABaseComponent
   {
   public:
     MeshComponent();

@@ -115,6 +115,12 @@
     <Filter Include="Header Files\graphics\mesh">
       <UniqueIdentifier>{593fe603-a4ea-4146-afc4-62839dd3216f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gameObject\components">
+      <UniqueIdentifier>{2a2af49c-e55d-46e6-bf0e-2a588a47aec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameObject\components">
+      <UniqueIdentifier>{2ce1052b-a6dd-48b5-9f9f-6ac8b6136d3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -206,6 +212,15 @@
     </ClCompile>
     <ClCompile Include="src\hcModelSubMesh.cpp">
       <Filter>Source Files\assets\model</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcABaseComponent.cpp">
+      <Filter>Source Files\gameObject\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentType.cpp">
+      <Filter>Source Files\gameObject\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMeshComponent.cpp">
+      <Filter>Source Files\gameObject\components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +418,18 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcIMeshManager.h">
       <Filter>Header Files\graphics\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcABaseComponent.h">
+      <Filter>Header Files\gameObject\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcComponentType.h">
+      <Filter>Header Files\gameObject\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIComponent.h">
+      <Filter>Header Files\gameObject\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMeshComponent.h">
+      <Filter>Header Files\gameObject\components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
