@@ -58,6 +58,7 @@ namespace hc
 
   private:
     Vector<UniquePtr<Camera>> m_cameras;
+    UniquePtr<Camera> m_default;
     Camera* m_activeCamera;
   };
 }

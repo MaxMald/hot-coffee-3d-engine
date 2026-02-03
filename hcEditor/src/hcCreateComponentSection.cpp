@@ -5,7 +5,8 @@ namespace
 {
   constexpr const hc::Char* COMPONENT_TYPES[] =
   {
-    "Mesh"
+    "Mesh",
+    "Camera"
   };
 }
 
@@ -49,6 +50,8 @@ namespace hc::editor
     {
     case componentType::Type::Mesh:
       return MakeUnique<MeshComponent>();
+    case componentType::Type::Camera:
+      return MakeUnique<CameraComponent>();
 
     default:
     {
