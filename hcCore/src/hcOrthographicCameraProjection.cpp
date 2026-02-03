@@ -2,8 +2,7 @@
 
 namespace hc
 {
-  OrthographicCameraProjection::OrthographicCameraProjection(Camera* camera) :
-    m_camera(camera),
+  OrthographicCameraProjection::OrthographicCameraProjection() :
     m_left(-1.0f),
     m_right(1.0f),
     m_top(1.0f),

@@ -4,8 +4,6 @@
 
 namespace hc
 {
-  class Camera;
-
   /**
    * @brief Implements an orthographic projection for a camera.
    */
@@ -13,7 +11,7 @@ namespace hc
     public ICameraProjection
   {
   public:
-    OrthographicCameraProjection(Camera* camera);
+    OrthographicCameraProjection();
     ~OrthographicCameraProjection() override;
 
     /**
@@ -123,7 +121,6 @@ namespace hc
     float getFar() const;
 
   private:
-    Camera* m_camera;
     float m_left;
     float m_right;
     float m_top;
