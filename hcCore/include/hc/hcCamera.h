@@ -2,6 +2,8 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcProjectionType.h"
+#include "hc/hcPerspectiveCameraProjection.h"
+#include "hc/hcOrthographicCameraProjection.h"
 
 namespace hc
 {
@@ -72,34 +74,6 @@ namespace hc
     projectionType::Type getProjection() const;
 
     /**
-     * @brief Sets the near clipping plane distance.
-     * 
-     * @param nearPlane The near clipping plane distance.
-     */
-    void setNear(float nearPlane);
-
-    /**
-     * @brief Gets the near clipping plane distance.
-     * 
-     * @return The near clipping plane distance.
-     */
-    float getNear() const;
-
-    /**
-     * @brief Sets the far clipping plane distance.
-     * 
-     * @param farPlane The far clipping plane distance.
-     */
-    void setFar(float farPlane);
-
-    /**
-     * @brief Gets the far clipping plane distance.
-     * 
-     * @return The far clipping plane distance.
-     */
-    float getFar() const;
-
-    /**
      * @brief Computes and returns the view matrix of the camera.
      *
      * @return The view matrix.
@@ -111,15 +85,22 @@ namespace hc
      * 
      * @return The projection matrix.
      */
-    Matrix4 getProjectionMatrix() const;
+    Matrix4 getProjectionMatrix();
+
+    /**
+     * @brief Gets the active camera projection implementation.
+     * 
+     * @return Pointer to the active ICameraProjection.
+     */
+    ICameraProjection* getActiveProjection();
 
   private:
     Vector3f m_position;
     Vector3f m_direction;
     Vector3f m_up;
     projectionType::Type m_projectionType;
-    float m_near;
-    float m_far;
+    PerspectiveCameraProjection m_perspectiveProjection;
+    OrthographicCameraProjection m_orthographicProjection;
 
     Camera();
 

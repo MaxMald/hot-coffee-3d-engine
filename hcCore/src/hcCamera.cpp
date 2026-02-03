@@ -6,9 +6,7 @@ namespace hc
     m_position(0.0f, 0.0f, 0.0f),
     m_direction(0.0f, 0.0f, -1.0f),
     m_up(0.0f, 1.0f, 0.0f),
-    m_projectionType(projectionType::Perspective),
-    m_near(0.1f),
-    m_far(1000.0f)
+    m_projectionType(projectionType::Perspective)
   {
   }
 
@@ -56,33 +54,32 @@ namespace hc
     return m_projectionType;
   }
 
-  void Camera::setNear(float nearPlane)
-  {
-    m_near = nearPlane;
-  }
-
-  float Camera::getNear() const
-  {
-    return m_near;
-  }
-
-  void Camera::setFar(float farPlane)
-  {
-    m_far = farPlane;
-  }
-
-  float Camera::getFar() const
-  {
-    return m_far;
-  }
-
   Matrix4 Camera::getViewMatrix() const
   {
     return Matrix4::LookAt(m_position, m_position + m_direction, m_up);
   }
 
-  Matrix4 Camera::getProjectionMatrix() const
+  Matrix4 Camera::getProjectionMatrix()
   {
-    // TODO Create the projection matrix based on the projection type
+    if (m_projectionType == projectionType::Perspective)
+    {
+      return m_perspectiveProjection.getProjectionMatrix();
+    }
+    else // Orthographic
+    {
+      return m_orthographicProjection.getProjectionMatrix();
+    }
+  }
+
+  ICameraProjection* Camera::getActiveProjection()
+  {
+    if (m_projectionType == projectionType::Perspective)
+    {
+      return &m_perspectiveProjection;
+    }
+    else // Orthographic
+    {
+      return &m_orthographicProjection;
+    }
   }
 }
