@@ -2,12 +2,6 @@
 
 #include "hc/editor/hcAWindowView.h"
 
-namespace hc
-{
-  class PluginManager;
-  class IPluginSlot;
-}
-
 namespace hc::editor
 {
    /**
@@ -15,13 +9,11 @@ namespace hc::editor
    *
    * Implements a window that displays and manages plugins within the editor.
    */
-  class  PluginManagerWindow : public AWindowView, public IDependencyResolvable
+  class  PluginManagerWindow : public AWindowView
   {
   public:
     PluginManagerWindow();
     virtual ~PluginManagerWindow();
-
-    void resolveDependencies(DependencyContainer& container) override;
 
   protected:
     const PluginManager* m_pluginManager;

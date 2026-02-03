@@ -3,9 +3,7 @@
 
 namespace hc::editor
 {
-  void NullMaterialDescriptorEditor::init(
-    SharedPtr<ProjectFileSelectorView>
-  )
+  void NullMaterialDescriptorEditor::init()
   {
   }
 

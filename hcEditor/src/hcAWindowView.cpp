@@ -4,6 +4,7 @@
 namespace hc::editor
 {
   AWindowView::AWindowView(const String& name, bool isOpen) :
+    ABaseView(),
     m_windowName(name),
     m_isOpen(isOpen)
   {

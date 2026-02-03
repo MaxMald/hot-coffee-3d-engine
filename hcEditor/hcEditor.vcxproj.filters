@@ -255,7 +255,7 @@
     <ClInclude Include="include\hc\editor\hcImguiUtilities.h">
       <Filter>Header Files\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h">
+    <ClInclude Include="include\hc\editor\hcProjectFileSelector.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorEditorWindow.h">
@@ -305,6 +305,9 @@
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcCreateComponentSection.h">
       <Filter>Header Files\views\windows\gameObjectEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcABaseView.h">
+      <Filter>Header Files\views</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -442,6 +445,9 @@
     </ClCompile>
     <ClCompile Include="src\hcCreateComponentSection.cpp">
       <Filter>Source Files\views\windows\gameObjectEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcABaseView.cpp">
+      <Filter>Source Files\views</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

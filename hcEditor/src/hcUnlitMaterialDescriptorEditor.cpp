@@ -1,5 +1,5 @@
 #include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
-#include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcProjectFileSelector.h"
 #include "hc/editor/hcImguiUtilities.h"
 #include "imgui.h"
 
@@ -7,8 +7,7 @@ namespace hc::editor
 {
   UnlitMaterialDescriptorEditor::UnlitMaterialDescriptorEditor()
     : m_color(0.0f, 0.0f, 0.0f, 1.0f),
-    m_mainImagePath(),
-    m_projectFileSelector(nullptr)
+    m_mainImagePath()
   {
   }
 
@@ -16,11 +15,8 @@ namespace hc::editor
   {
   }
 
-  void UnlitMaterialDescriptorEditor::init(
-    SharedPtr<ProjectFileSelectorView> projectFileSelector
-  )
+  void UnlitMaterialDescriptorEditor::init()
   {
-    m_projectFileSelector = projectFileSelector;
   }
 
   void UnlitMaterialDescriptorEditor::copyValuesFrom(
@@ -40,10 +36,7 @@ namespace hc::editor
     imguiUtilities::DrawColorEdit3("Tint: ", m_color);
     if (ImGui::Button("Select Main Image"))
     {
-      if (!m_projectFileSelector)
-        return;
-
-      m_projectFileSelector->openImageFileSelector(
+      ProjectFileSelector::OpenImageFile(
         [this](const Path& selectedPath)
         {
           m_mainImagePath = selectedPath;

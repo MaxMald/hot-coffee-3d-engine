@@ -1,10 +1,6 @@
 #include "hc/editor/hcEditorDependenciesRegister.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 
-// Services
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcProjectManager.h"
-
 // Views
 #include "hc/editor/hcMainMenuToolbar.h"
 #include "hc/editor/hcPluginManagerWindow.h"
@@ -15,7 +11,6 @@
 #include "hc/editor/hcLightManagerWindow.h"
 #include "hc/editor/hcCameraManagerWindow.h"
 #include "hc/editor/hcMaterialDescriptorEditorWindow.h"
-#include "hc/editor/hcProjectFileSelectorView.h"
 #include "hc/editor/hcAssetManagerWindow.h"
 
 namespace hc::editor
@@ -26,10 +21,8 @@ namespace hc::editor
     {
       // Services
       container.registerInstance<GameObjectSelectionService>(MakeShared<GameObjectSelectionService>());
-      container.registerInstance<ProjectManager>(MakeShared<ProjectManager>());
 
       // Views
-      container.registerInstance<EditorViewsManager>(MakeShared<EditorViewsManager>());
       container.registerInstance<MainMenuToolbar>(MakeShared<MainMenuToolbar>());
       container.registerInstance<PluginManagerWindow>(MakeShared<PluginManagerWindow>());
       container.registerInstance<EditorLoggerWindow>(MakeShared<EditorLoggerWindow>());
@@ -38,8 +31,7 @@ namespace hc::editor
       container.registerInstance<GameObjectEditorWindow>(MakeShared<GameObjectEditorWindow>());
       container.registerInstance<LightManagerWindow>(MakeShared<LightManagerWindow>());
       container.registerInstance<CameraManagerWindow>(MakeShared<CameraManagerWindow>());
-      container.registerInstance<MaterialDescriptorEditorWindow>(MakeShared<MaterialDescriptorEditorWindow>());
-      container.registerInstance<ProjectFileSelectorView>(MakeShared<ProjectFileSelectorView>());
+      container.registerInstance<MaterialDescriptorEditorWindow>(MakeShared<MaterialDescriptorEditorWindow>());      
       container.registerInstance<AssetManagerWindow>(MakeShared<AssetManagerWindow>());
     }
   }

@@ -22,7 +22,6 @@ namespace hc::editor
     bool m_started;
     DependencyContainer m_dependencyContainer;
     SharedPtr<EditorLogger> m_editorLogger;
-    SharedPtr<EditorViewsManager> m_editorViewsManager;
 
     HotCoffeeEditor();
     ~HotCoffeeEditor();

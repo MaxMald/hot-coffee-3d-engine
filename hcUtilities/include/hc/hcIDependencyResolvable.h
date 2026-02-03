@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hc/hcUtilitiesPrerequisites.h"
+
 namespace hc
 {
   class DependencyContainer;
@@ -20,6 +22,9 @@ namespace hc
      * @param container Reference to the dependency container.
      */
     virtual void resolveDependencies(DependencyContainer& container) = 0;
+
+  protected:
+    IDependencyResolvable() = default;
   };
 }
 

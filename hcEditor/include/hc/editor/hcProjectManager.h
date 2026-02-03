@@ -13,8 +13,9 @@ namespace hc::editor
   class ProjectManager
   {
   public:
-    ProjectManager();
-    ~ProjectManager();
+    static ProjectManager& Instance();
+    static void Prepare();
+    static void Shutdown();
 
     /**
      * @brief Opens a project from the specified path.
@@ -74,9 +75,14 @@ namespace hc::editor
     void unsubscribeListener(IProjectManagerListener* listener);
 
   private:
+    static ProjectManager* s_instance;
+
     Path m_currentProjectPath;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
     Vector<IProjectManagerListener*> m_listeners;
+
+    ProjectManager();
+    ~ProjectManager();
   };
 }

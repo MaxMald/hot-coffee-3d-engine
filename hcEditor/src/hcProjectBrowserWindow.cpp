@@ -16,10 +16,8 @@ namespace
 
 namespace hc::editor
 {
-
   ProjectBrowserWindow::ProjectBrowserWindow() :
-    AWindowView("Project Browser", true),
-    m_projectManager(nullptr)
+    AWindowView("Project Browser", true)
   {
   }
 
@@ -29,18 +27,16 @@ namespace hc::editor
 
   void ProjectBrowserWindow::resolveDependencies(DependencyContainer& container)
   {
-    container.resolve<EditorViewsManager>()->registerView(this);
     m_materialDescriptorEditorWindow = container.resolve<MaterialDescriptorEditorWindow>();
-    m_projectManager = container.resolve<ProjectManager>();
-    m_projectManager->subscribeListener(this);
+    ProjectManager::Instance().subscribeListener(this);
   }
 
   void ProjectBrowserWindow::onProjectOpened()
   {
-    if (!m_projectManager->isProjectOpen())
+    if (!ProjectManager::Instance().isProjectOpen())
       return;
 
-    Path projectPath = m_projectManager->getCurrentProjectPath();
+    Path projectPath = ProjectManager::Instance().getCurrentProjectPath();
     Path projectDir = projectPath.parent_path();
     m_directoryNavigator.initialize(projectDir);
   }

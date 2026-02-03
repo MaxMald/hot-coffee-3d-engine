@@ -4,15 +4,11 @@
 
 namespace hc::editor
 {
-  class LightManagerWindow :
-    public AWindowView,
-    public IDependencyResolvable
+  class LightManagerWindow : public AWindowView
   {
   public:
     LightManagerWindow();
     ~LightManagerWindow();
-
-    void resolveDependencies(DependencyContainer& container) override;
 
   protected:
     SceneManager* m_sceneManager;

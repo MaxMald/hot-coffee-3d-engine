@@ -1,13 +1,12 @@
 #pragma once
 
-#include "hc/editor/hcIView.h"
+#include "hc/editor/hcABaseView.h"
 
 namespace hc::editor
 {
   class EditorLoggerWindow;
   class PluginManagerWindow;
   class SceneGraphWindow;
-  class ProjectManager;
   class LightManagerWindow;
   class CameraManagerWindow;
   class AssetManagerWindow;
@@ -19,7 +18,7 @@ namespace hc::editor
    * various editor functionalities.
    */
   class  MainMenuToolbar :
-    public IView,
+    public ABaseView,
     public IDependencyResolvable
   {
   public:
@@ -44,7 +43,6 @@ namespace hc::editor
     SharedPtr<PluginManagerWindow> m_pluginManagerWindow;
     SharedPtr<EditorLoggerWindow> m_editorLoggerWindow;
     SharedPtr<SceneGraphWindow> m_sceneGraphWindow;
-    SharedPtr<ProjectManager> m_projectManager;
     SharedPtr<LightManagerWindow> m_lightManagerWindow;
     SharedPtr<CameraManagerWindow> m_cameraManagerWindow;
     SharedPtr<AssetManagerWindow> m_assetManagerWindow;

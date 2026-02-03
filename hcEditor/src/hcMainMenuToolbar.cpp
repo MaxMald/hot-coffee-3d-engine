@@ -17,6 +17,7 @@ namespace hc::editor
   static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
 
   MainMenuToolbar::MainMenuToolbar() :
+    ABaseView(),
     m_pluginManagerWindow(nullptr),
     m_editorLoggerWindow(nullptr),
     m_sceneGraphWindow(nullptr)
@@ -109,13 +110,9 @@ namespace hc::editor
 
   void MainMenuToolbar::resolveDependencies(DependencyContainer& container)
   {
-    SharedPtr<EditorViewsManager> editorViewsManager = container.resolve<EditorViewsManager>();
-    editorViewsManager->registerView(this);
-
     m_pluginManagerWindow = container.resolve<PluginManagerWindow>();
     m_editorLoggerWindow = container.resolve<EditorLoggerWindow>();
     m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
-    m_projectManager = container.resolve<ProjectManager>();
     m_lightManagerWindow = container.resolve<LightManagerWindow>();
     m_cameraManagerWindow = container.resolve<CameraManagerWindow>();
     m_assetManagerWindow = container.resolve<AssetManagerWindow>();
@@ -128,7 +125,7 @@ namespace hc::editor
       {
         String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        m_projectManager->openProject(Path(filePathName.c_str()));
+        ProjectManager::Instance().openProject(Path(filePathName.c_str()));
       }
 
       ImGuiFileDialog::Instance()->Close();

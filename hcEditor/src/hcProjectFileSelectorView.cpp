@@ -1,4 +1,4 @@
-#include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcProjectFileSelector.h"
 
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcEditorViewsManager.h"
@@ -8,7 +8,92 @@
 
 namespace hc::editor
 {
-  ProjectFileSelectorView::ProjectFileSelectorView() :
+  ProjectFileSelector* ProjectFileSelector::s_instance = nullptr;
+
+  ProjectFileSelector& ProjectFileSelector::Instance()
+  {
+    if (!s_instance)
+    {
+      throw RuntimeErrorException(
+        "ProjectFileSelectorView instance is not prepared. Call Prepare() before accessing the instance."
+      );
+    }
+
+    return *s_instance;
+  }
+
+  void ProjectFileSelector::Prepare()
+  {
+    if (!s_instance)
+    {
+      s_instance = new ProjectFileSelector();
+      ProjectManager::Instance().subscribeListener(s_instance);
+    }
+  }
+
+  void ProjectFileSelector::Shutdown()
+  {
+    if (s_instance)
+    {
+      ProjectManager::Instance().unsubscribeListener(s_instance);
+      delete s_instance;
+      s_instance = nullptr;
+    }
+  }
+
+  void ProjectFileSelector::OpenImageFile(
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    if (s_instance)
+    {
+      s_instance->openFileSelector(
+        "Select Image",
+        s_instance->m_imageFileExtensions,
+        onFileSelected
+      );
+    }
+  }
+
+  void ProjectFileSelector::OpenModelFile(
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    if (s_instance)
+    {
+      s_instance->openFileSelector(
+        "Select Model",
+        s_instance->m_modelFileExtensions,
+        onFileSelected
+      );
+    }
+  }
+
+  void ProjectFileSelector::OpenFile(
+    const String& title, 
+    const Vector<String>& filters, 
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    if (s_instance)
+    {
+      s_instance->openFileSelector(title, filters, onFileSelected);
+    }
+  }
+
+  void ProjectFileSelector::OpenDirectory(
+    const String& title, 
+    const std::function<void(const Path&)>& onDirectorySelected
+  )
+  {
+    if (s_instance)
+    {
+      s_instance->openDirectorySelector(title, onDirectorySelected);
+    }
+  }
+
+  ProjectFileSelector::ProjectFileSelector() :
+    ABaseView(),
     m_isFileSelectorOpen(false),
     m_isDirectorySelectorOpen(false)
   {
@@ -16,70 +101,65 @@ namespace hc::editor
       assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.begin(),
       assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.end()
     );
+
+    m_modelFileExtensions = Vector<String>(
+      assetFileExtensions::SUPPORTED_MODEL_EXTENSIONS.begin(),
+      assetFileExtensions::SUPPORTED_MODEL_EXTENSIONS.end()
+    );
   }
 
-  ProjectFileSelectorView::~ProjectFileSelectorView()
+  ProjectFileSelector::~ProjectFileSelector()
   {
   }
 
-  void ProjectFileSelectorView::draw()
+  void ProjectFileSelector::draw()
   {
-    if (m_isDirectorySelectorOpen)
+    if (!m_isDirectorySelectorOpen && !m_isFileSelectorOpen)
+      return;
+
+    if (ImGui::Begin(m_currentTitle.c_str()))
     {
-      drawDirectorySelectionInterface();
+      if (m_isDirectorySelectorOpen)
+      {
+        drawDirectorySelectionInterface();
 
-      if (ImGui::Button("Cancel"))
-        clear();
-    }
-    else if (m_isFileSelectorOpen)
-    {
-      drawFileSelectionInterface();
+        if (ImGui::Button("Cancel"))
+          clear();
+      }
+      else if (m_isFileSelectorOpen)
+      {
+        drawFileSelectionInterface();
 
-      if (ImGui::Button("Cancel"))
-        clear();
+        if (ImGui::Button("Cancel"))
+          clear();
+      }
+
+      ImGui::End();
     }
   }
 
-  void ProjectFileSelectorView::resolveDependencies(DependencyContainer& container)
-  {
-    container.resolve<EditorViewsManager>()->registerView(this);
-    m_projectManager = container.resolve<ProjectManager>();
-    m_projectManager->subscribeListener(this);
-  }
-
-  void ProjectFileSelectorView::onProjectOpened()
+  void ProjectFileSelector::onProjectOpened()
   {
     clear();
     m_directoryNavigator.clear();
 
-    if (!m_projectManager->isProjectOpen())
+    if (!ProjectManager::Instance().isProjectOpen())
       return;
 
-    Path currentProjectDirectory = m_projectManager->getCurrentProjectDirectory();
+    Path currentProjectDirectory = ProjectManager::Instance().getCurrentProjectDirectory();
     if (currentProjectDirectory.empty())
       return;
 
     m_directoryNavigator.initialize(currentProjectDirectory);
   }
 
-  void ProjectFileSelectorView::onProjectClosed()
+  void ProjectFileSelector::onProjectClosed()
   {
     clear();
     m_directoryNavigator.clear();
   }
 
-  void ProjectFileSelectorView::openImageFileSelector(
-    const std::function<void(const Path&)>& onFileSelected
-  )
-  {
-    clear();
-    m_isFileSelectorOpen = true;
-    m_currentTitle = "Select Image File";
-    m_fileFilters = m_imageFileExtensions;
-    m_selectionCallback = onFileSelected;
-  }
-
-  void ProjectFileSelectorView::openFileSelector(
+  void ProjectFileSelector::openFileSelector(
     const String& title,
     const Vector<String>& filters,
     const std::function<void(const Path&)>& onFileSelected
@@ -93,7 +173,7 @@ namespace hc::editor
     m_selectionCallback = onFileSelected;
   }
 
-  void ProjectFileSelectorView::openDirectorySelector(
+  void ProjectFileSelector::openDirectorySelector(
     const String& title,
     const std::function<void(const Path&)>& onDirectorySelected
   )
@@ -105,7 +185,7 @@ namespace hc::editor
     m_selectionCallback = onDirectorySelected;
   }
 
-  void ProjectFileSelectorView::drawDirectorySelectionInterface()
+  void ProjectFileSelector::drawDirectorySelectionInterface()
   {
     if (drawBackAndRefreshButtons())
       return;
@@ -136,7 +216,7 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelectorView::drawFileSelectionInterface()
+  void ProjectFileSelector::drawFileSelectionInterface()
   {
     if (drawBackAndRefreshButtons())
       return;
@@ -173,7 +253,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelectorView::drawBackAndRefreshButtons()
+  bool ProjectFileSelector::drawBackAndRefreshButtons()
   {
     DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
     if (!currentDir)
@@ -194,7 +274,7 @@ namespace hc::editor
     return false;
   }
 
-  void ProjectFileSelectorView::clear()
+  void ProjectFileSelector::clear()
   {
     m_isFileSelectorOpen = false;
     m_isDirectorySelectorOpen = false;
@@ -203,7 +283,7 @@ namespace hc::editor
     m_fileFilters.clear();
   }
 
-  void ProjectFileSelectorView::logWarningIfAlreadyOpen()
+  void ProjectFileSelector::logWarningIfAlreadyOpen()
   {
     if (m_isFileSelectorOpen)
     {
@@ -226,7 +306,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelectorView::isValidFile(const FileReference& file) const
+  bool ProjectFileSelector::isValidFile(const FileReference& file) const
   {
     if (m_fileFilters.empty())
       return true;
@@ -241,7 +321,7 @@ namespace hc::editor
     return false;
   }
 
-  bool ProjectFileSelectorView::onDirectorySelected(
+  bool ProjectFileSelector::onDirectorySelected(
     const DirectoryReference& directory
   )
   {
@@ -255,7 +335,7 @@ namespace hc::editor
     return true;
   }
 
-  bool ProjectFileSelectorView::onFileSelected(
+  bool ProjectFileSelector::onFileSelected(
     const FileReference& file
   )
   {

@@ -5,8 +5,6 @@
 
 namespace hc::editor
 {
-  class ProjectFileSelectorView;
-
   /**
    * @brief Interface for material descriptor editors.
    */
@@ -18,11 +16,8 @@ namespace hc::editor
 
     /**
      * @brief Initializes the editor with a project file selector view.
-     *
-     * @param projectFileSelector Shared pointer to the project file selector
-     * view.
      */
-    virtual void init(SharedPtr<ProjectFileSelectorView> projectFileSelector) = 0;
+    virtual void init() = 0;
 
     /**
      * @brief Copies values from the given material descriptor asset.

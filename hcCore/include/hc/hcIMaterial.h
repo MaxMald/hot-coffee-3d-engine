@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Interface for material objects in the engine.
    */
-  class IMaterial
+  class HC_CORE_EXPORT IMaterial
   {
   public:
     virtual ~IMaterial() = default;
@@ -19,5 +19,8 @@ namespace hc
      * @return The shader type.
      */
     virtual shadingType::Type getShaderType() const = 0;
+
+  protected:
+    IMaterial() = default;
   };
 }

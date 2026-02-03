@@ -11,6 +11,7 @@ namespace hc::editor
     m_sceneManager(nullptr),
     m_selectionService(nullptr)
   {
+    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   SceneGraphWindow::~SceneGraphWindow()
@@ -19,11 +20,7 @@ namespace hc::editor
 
   void SceneGraphWindow::resolveDependencies(DependencyContainer& container)
   {
-    SharedPtr<EditorViewsManager> viewsManager = container.resolve<EditorViewsManager>();
-    viewsManager->registerView(this);
-
     m_selectionService = container.resolve<GameObjectSelectionService>();
-    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   void SceneGraphWindow::onDraw()

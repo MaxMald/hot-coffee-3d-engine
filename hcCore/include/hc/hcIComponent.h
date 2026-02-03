@@ -7,7 +7,7 @@ namespace hc
 {
   class GameObject;
 
-  class IComponent : public NonCopyable
+  class HC_CORE_EXPORT IComponent : public NonCopyable
   {
   public:
     virtual ~IComponent() = default;

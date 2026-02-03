@@ -6,17 +6,13 @@
 namespace hc::editor
 {
   LightManagerWindow::LightManagerWindow() :
-    AWindowView("Light Manager", false)
+    AWindowView("Light Manager", false),
+    m_sceneManager(nullptr)
   {
+    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   LightManagerWindow::~LightManagerWindow() = default;
-
-  void LightManagerWindow::resolveDependencies(DependencyContainer& container)
-  {
-    container.resolve<EditorViewsManager>()->registerView(this);
-    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
-  }
 
   void LightManagerWindow::onDraw()
   {

@@ -12,5 +12,7 @@ namespace hc::editor
 
   protected:
     void onDrawComponent(MeshComponent* component) override;
+    void drawLoadMeshButton(MeshComponent* component);
+    void onMeshFileSelected(MeshComponent* component, const Path& selectedPath);
   };
 }

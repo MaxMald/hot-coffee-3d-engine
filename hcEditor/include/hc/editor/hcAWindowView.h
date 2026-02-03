@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/hcIView.h"
+#include "hc/editor/hcABaseView.h"
 
 namespace hc::editor
 {
@@ -10,26 +10,15 @@ namespace hc::editor
    * Provides a common interface and state for ImGui windows, including
    * open/close management.
    */
-  class AWindowView : public IView
+  class AWindowView : public ABaseView
   {
   public:
-    /**
-     * @brief Constructs a WindowView with the given name.
-     * 
-     * @param name The window's display name.
-     * @param isOpen Initial open state of the window.
-     */
-    AWindowView(const String& name, bool isOpen = false);
-
-    /**
-     * @brief Virtual destructor.
-     */
     virtual ~AWindowView();
 
     /**
      * @brief Draws the window contents.
      */
-    virtual void draw() override;
+    void draw() override;
 
     /**
      * @brief Returns whether the window is currently open.
@@ -53,6 +42,14 @@ namespace hc::editor
   protected:
     String m_windowName;
     bool m_isOpen = true;
+
+    /**
+     * @brief Constructs a WindowView with the given name.
+     *
+     * @param name The window's display name.
+     * @param isOpen Initial open state of the window.
+     */
+    AWindowView(const String& name, bool isOpen = false);
 
     /**
      * @brief Pure virtual method for drawing the window's specific contents.

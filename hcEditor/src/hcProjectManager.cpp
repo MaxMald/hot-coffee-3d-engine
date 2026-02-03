@@ -5,6 +5,37 @@
 
 namespace hc::editor
 {
+  ProjectManager* ProjectManager::s_instance = nullptr;
+
+  ProjectManager& ProjectManager::Instance()
+  {
+    if (!s_instance)
+    {
+      throw RuntimeErrorException(
+        "ProjectManager instance is not prepared. Call Prepare() before accessing the instance."
+      );
+    }
+
+    return *s_instance;
+  }
+
+  void ProjectManager::Prepare()
+  {
+    if (!s_instance)
+    {
+      s_instance = new ProjectManager();
+    }
+  }
+
+  void ProjectManager::Shutdown()
+  {
+    if (s_instance)
+    {
+      delete s_instance;
+      s_instance = nullptr;
+    }
+  }
+
   ProjectManager::ProjectManager() :
     m_currentProjectPath(),
     m_isProjectOpen(false),

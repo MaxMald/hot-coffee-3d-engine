@@ -17,6 +17,13 @@ namespace hc
       ".tga"
     };
 
+    inline const Array<const Char*, 3> SUPPORTED_MODEL_EXTENSIONS =
+    {
+      ".fbx",
+      ".obj",
+      ".gltf"
+    };
+
     void HC_CORE_EXPORT GetAllAssetExtensions(Vector<String>& outExtensions);
 
     bool HC_CORE_EXPORT IsMaterialDescriptorExtension(const Path& path);

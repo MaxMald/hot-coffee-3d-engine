@@ -2,7 +2,7 @@
 
 #include "hc/editor/hcImguiUtilities.h"
 #include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcProjectFileSelectorView.h"
+#include "hc/editor/hcProjectFileSelector.h"
 #include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
 #include "hc/editor/hcNullMaterialDescriptorEditor.h"
 #include "imgui.h"
@@ -65,15 +65,6 @@ namespace hc::editor
     }
   }
 
-  void MaterialDescriptorEditorWindow::resolveDependencies(
-    DependencyContainer& container
-  )
-  {
-    container.resolve<EditorViewsManager>()->registerView(this);
-    m_projectFileSelectorView = container.resolve<ProjectFileSelectorView>();
-    initializeEditors(m_projectFileSelectorView);
-  }
-
   void MaterialDescriptorEditorWindow::clear()
   {
     m_assetReference = AssetFileReference<MaterialDescriptor>();
@@ -90,12 +81,10 @@ namespace hc::editor
     m_nullEditor = MakeUnique<NullMaterialDescriptorEditor>();
   }
 
-  void MaterialDescriptorEditorWindow::initializeEditors(
-    SharedPtr<ProjectFileSelectorView> projectFileSelector
-  )
+  void MaterialDescriptorEditorWindow::initializeEditors()
   {
     for (auto& [type, editor] : m_editors)
-      editor->init(projectFileSelector);
+      editor->init();
   }
 
   IMaterialDescriptorEditor* MaterialDescriptorEditorWindow::getEditor(

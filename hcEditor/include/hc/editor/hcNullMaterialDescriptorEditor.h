@@ -17,7 +17,7 @@ namespace hc::editor
     /**
      * @copydoc IMaterialDescriptorEditor::init
      */
-    void init(SharedPtr<ProjectFileSelectorView> projectFileSelector) override;
+    void init() override;
 
     /**
      * @copydoc IMaterialDescriptorEditor::copyValuesFrom

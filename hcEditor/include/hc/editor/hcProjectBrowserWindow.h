@@ -25,7 +25,6 @@ namespace hc::editor
     void refresh();
 
   protected:
-    SharedPtr<ProjectManager> m_projectManager;
     SharedPtr<MaterialDescriptorEditorWindow> m_materialDescriptorEditorWindow;
     DirectoryNavigator m_directoryNavigator;
 

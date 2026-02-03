@@ -5,21 +5,15 @@
 namespace hc::editor
 {
   class IAssetGroupDrawer;
-  class ProjectFileSelectorView;
 
-  class AssetManagerWindow :
-    public AWindowView,
-    public IDependencyResolvable
+  class AssetManagerWindow : public AWindowView
   {
   public:
     AssetManagerWindow();
     virtual ~AssetManagerWindow();
 
-    void resolveDependencies(DependencyContainer& container) override;
-
   private:
     Vector<SharedPtr<IAssetGroupDrawer>> m_assetGroupDrawers;
-    SharedPtr<ProjectFileSelectorView> m_fileSelectorView;
     Vector<String> m_allAssetExtensions;
 
     void onDraw() override;

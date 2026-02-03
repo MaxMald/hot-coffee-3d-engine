@@ -17,7 +17,7 @@ namespace hc::editor
     /**
      * @copydoc IMaterialDescriptorEditor::init
      */
-    void init(SharedPtr<ProjectFileSelectorView> projectFileSelector) override;
+    void init() override;
 
     /**
      * @copydoc IMaterialDescriptorEditor::copyValuesFrom
@@ -40,7 +40,6 @@ namespace hc::editor
     void clear() override;
 
   private:
-    SharedPtr<ProjectFileSelectorView> m_projectFileSelector;
     Color m_color;
     Path m_mainImagePath;
   };

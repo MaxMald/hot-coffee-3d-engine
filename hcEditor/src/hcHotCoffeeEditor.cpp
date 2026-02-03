@@ -4,6 +4,8 @@
 #include "hc/editor/hcEditorDependenciesRegister.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcComponentViewManager.h"
+#include "hc/editor/hcProjectFileSelector.h"
+#include "hc/editor/hcProjectManager.h"
 
 namespace hc::editor
 {
@@ -68,13 +70,19 @@ namespace hc::editor
 
   void HotCoffeeEditor::onPrepare()
   {
+    ProjectManager::Prepare();
+    EditorViewsManager::Prepare();
+    ProjectFileSelector::Prepare();
     ComponentViewManager::Prepare();
   }
 
   void HotCoffeeEditor::onShutdown()
   {
-    m_dependencyContainer.clear();
     ComponentViewManager::Shutdown();
+    EditorViewsManager::Shutdown();
+    ProjectFileSelector::Shutdown();
+    m_dependencyContainer.clear();
+    ProjectManager::Shutdown();
   }
 
   void HotCoffeeEditor::prepareEditorLogger()
@@ -97,8 +105,6 @@ namespace hc::editor
   void HotCoffeeEditor::resolveDependencies()
   {
     m_dependencyContainer.resolveAllDependencies();
-
-    m_editorViewsManager = m_dependencyContainer.resolve<EditorViewsManager>();
   }
 
   void HotCoffeeEditor::initEngine()
@@ -118,7 +124,7 @@ namespace hc::editor
     IGraphicsManager& graphicsManager = HotCoffeeEngine::Instance().getGraphicsManager();
     IWindow& window = HotCoffeeEngine::Instance().getWindowManager().getWindow();
 
-    m_editorViewsManager->initialize();
+    EditorViewsManager::Instance().initialize();
     while (window.isOpen())
     {
       Optional<Event> eventOpt;
@@ -127,15 +133,14 @@ namespace hc::editor
         if (eventOpt->is<Event::Closed>())
           window.destroy();
 
-        if (m_editorViewsManager->processEvent(*eventOpt))
+        if (EditorViewsManager::Instance().processEvent(*eventOpt))
           continue;
       }
 
       graphicsManager.beginFrame();
       // Render scene here
-      m_editorViewsManager->draw();
+      EditorViewsManager::Instance().draw();
       graphicsManager.endFrame(window);
     }
-    m_editorViewsManager->shutdown();
   }
 }

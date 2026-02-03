@@ -18,9 +18,6 @@ namespace hc::editor
 
   void EditorLoggerWindow::resolveDependencies(DependencyContainer& container)
   {
-    SharedPtr<EditorViewsManager> editorViewsManager = container.resolve<EditorViewsManager>();
-    editorViewsManager->registerView(this);
-
     m_editorLogger = container.resolve<EditorLogger>();
   }
 

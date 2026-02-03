@@ -17,7 +17,6 @@ namespace hc::editor
 
   void GameObjectEditorWindow::resolveDependencies(DependencyContainer& container)
   {
-    container.resolve<EditorViewsManager>()->registerView(this);
     m_gameObjectSelectionService = container.resolve<GameObjectSelectionService>().get();
   }
 

@@ -14,17 +14,25 @@ namespace hc::editor
   class EditorViewsManager
   {
   public:
-    EditorViewsManager();
-    ~EditorViewsManager();
+    static EditorViewsManager& Instance();
+    static void Prepare();
+    static void Shutdown();
 
     void initialize();
     bool processEvent(const Event& event);
     void draw();
-    void shutdown();
     void registerView(IView* view);
+    void unregisterView(IView* view);
     void clearViews();
 
   private:
+    static EditorViewsManager* s_instance;
+
     Vector<IView*> m_views;
+
+    EditorViewsManager();
+    ~EditorViewsManager();
+
+    void destroy();
   };
 }

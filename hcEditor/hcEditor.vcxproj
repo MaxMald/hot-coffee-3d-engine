@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcABaseComponentView.h" />
+    <ClInclude Include="include\hc\editor\hcABaseView.h" />
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
     <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
@@ -188,7 +189,7 @@
     <ClInclude Include="include\hc\editor\hcMeshComponentView.h" />
     <ClInclude Include="include\hc\editor\hcNotImplementedComponentView.h" />
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
-    <ClInclude Include="include\hc\editor\hcProjectFileSelectorView.h" />
+    <ClInclude Include="include\hc\editor\hcProjectFileSelector.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
     <ClInclude Include="include\hc\editor\hcHotCoffeeEngineSettingsFactory.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="include\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcABaseView.cpp" />
     <ClCompile Include="src\hcAssetCreator.cpp" />
     <ClCompile Include="src\hcAssetManagerWindow.cpp" />
     <ClCompile Include="src\hcAWindowView.cpp" />

@@ -9,18 +9,11 @@ namespace hc::editor
     AWindowView("Plugin Manager"),
     m_pluginManager(nullptr)
   {
+    m_pluginManager = &(HotCoffeeEngine::Instance().getPluginManager());
   }
 
   PluginManagerWindow::~PluginManagerWindow()
   {
-  }
-
-  void PluginManagerWindow::resolveDependencies(DependencyContainer& container)
-  {
-    SharedPtr<EditorViewsManager> viewsManager = container.resolve<EditorViewsManager>();
-    viewsManager->registerView(this);
-
-    m_pluginManager = &(HotCoffeeEngine::Instance().getPluginManager());
   }
 
   void PluginManagerWindow::onDraw()

@@ -6,8 +6,6 @@
 
 namespace hc::editor
 {
-  class ProjectFileSelectorView;
-
   /**
    * @brief Window for editing material descriptors.
    *
@@ -15,18 +13,11 @@ namespace hc::editor
    * assets. Supports multiple shader types and delegates editing to the
    * appropriate editor.
    */
-  class MaterialDescriptorEditorWindow :
-    public AWindowView,
-    public IDependencyResolvable
+  class MaterialDescriptorEditorWindow : public AWindowView
   {
   public:
     MaterialDescriptorEditorWindow();
     virtual ~MaterialDescriptorEditorWindow();
-
-    /**
-     * @copydoc IDependencyResolvable::resolveDependencies
-     */
-    void resolveDependencies(DependencyContainer& container) override;
 
     /**
      * @brief Opens a material descriptor for editing.
@@ -41,7 +32,6 @@ namespace hc::editor
     void clear();
 
   private:
-    SharedPtr<ProjectFileSelectorView> m_projectFileSelectorView;
     UnorderedMap<shadingType::Type, UniquePtr<IMaterialDescriptorEditor>> m_editors;
     UniquePtr<IMaterialDescriptorEditor> m_nullEditor;
     shadingType::Type m_currentShaderType = shadingType::Type::Unknown;
@@ -51,7 +41,7 @@ namespace hc::editor
 
     void onDraw() override;
     void registerEditors();
-    void initializeEditors(SharedPtr<ProjectFileSelectorView> projectFileSelector);
+    void initializeEditors();
     IMaterialDescriptorEditor* getEditor(shadingType::Type type);
     void drawShaderTypeSelector();
     void updateShaderTypeCombo();

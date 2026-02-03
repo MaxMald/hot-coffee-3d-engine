@@ -6,17 +6,13 @@
 namespace hc::editor
 {
   CameraManagerWindow::CameraManagerWindow() :
-    AWindowView("Camera Manager", false)
+    AWindowView("Camera Manager", false),
+    m_sceneManager(nullptr)
   {
+    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   CameraManagerWindow::~CameraManagerWindow() = default;
-
-  void CameraManagerWindow::resolveDependencies(DependencyContainer& container)
-  {
-    container.resolve<EditorViewsManager>()->registerView(this);
-    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
-  }
 
   void CameraManagerWindow::onDraw()
   {
