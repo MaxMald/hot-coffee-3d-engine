@@ -35,11 +35,6 @@ namespace hc
     prepareManagers();
   }
 
-  void OpenGlGraphicsManager::draw(IDrawable& drawable)
-  {
-    drawable.draw(*this);
-  }
-
   void OpenGlGraphicsManager::beginFrame()
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

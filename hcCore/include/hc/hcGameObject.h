@@ -23,7 +23,15 @@ namespace hc
     /**
      * @brief Renders the game object and its children.
      */
-    virtual void draw(IGraphicsManager& graphicsManager) override;
+    virtual void draw() override;
+
+    /**
+     * @brief Renders the game object and its children with a parent
+     * transformation applied.
+     * 
+     * @param parentTransform The transformation of the parent object.
+     */
+    virtual void draw(const Transform& parentTransform) override;
 
     /**
      * @brief Updates the game object and its children.

@@ -22,10 +22,38 @@ namespace hc
       m_parent->removeChild(this);
   }
 
-  void GameObject::draw(IGraphicsManager& graphicsManager)
+  void GameObject::draw()
   {
+    // TODO draw drawable components
+
     for (auto& child : m_children)
-      child->draw(graphicsManager);
+      child->draw(*this);
+  }
+
+  void GameObject::draw(const Transform& parentTransform)
+  {
+    Transform combinedTransform;
+    
+    combinedTransform.setPosition(
+      parentTransform.getPosition() + getPosition()
+    );
+    
+    combinedTransform.setRotation(
+      parentTransform.getRotation() + getRotation()
+    );
+    
+    combinedTransform.setScale(
+      Vector3f(
+        parentTransform.getScale().x * getScale().x,
+        parentTransform.getScale().y * getScale().y,
+        parentTransform.getScale().z * getScale().z
+      )
+    );
+
+    // TODO draw drawable components with combinedTransform
+
+    for (auto& child : m_children)
+      child->draw(combinedTransform);
   }
 
   void GameObject::update(float deltaTime)

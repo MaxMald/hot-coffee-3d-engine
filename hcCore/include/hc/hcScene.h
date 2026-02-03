@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcSceneGraph.h"
-#include "hc/hcIDrawable.h"
 #include "hc/hcLightManager.h"
 #include "hc/hcCameraManager.h"
 
@@ -14,9 +13,7 @@ namespace hc
    * @brief Represents a scene containing a scene graph and providing update and
    * draw functionality.
    */
-  class HC_CORE_EXPORT Scene :
-    public NonCopyable,
-    public IDrawable
+  class HC_CORE_EXPORT Scene : public NonCopyable
   {
   public:
     Scene();
@@ -27,7 +24,7 @@ namespace hc
      *
      * @param graphicsManager The graphics manager used for rendering.
      */
-    virtual void draw(IGraphicsManager& graphicsManager) override;
+    void draw();
 
     /**
      * @brief Updates the scene and all contained game objects.

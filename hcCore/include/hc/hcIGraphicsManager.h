@@ -20,7 +20,6 @@ namespace hc
     virtual ~IGraphicsManager();
 
     virtual void beginFrame() = 0;
-    virtual void draw(IDrawable&) = 0;
     virtual void endFrame(IWindow&) = 0;
     virtual ITextureManager& getTextureManager() = 0;
     virtual IMaterialManager& getMaterialManager() = 0;

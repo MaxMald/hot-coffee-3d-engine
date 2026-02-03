@@ -2,16 +2,13 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcScene.h"
-#include "hc/hcIDrawable.h"
 
 namespace hc
 {
   /**
    * @brief Manages multiple scenes and controls the active scene.
    */
-  class HC_CORE_EXPORT SceneManager :
-    public NonCopyable,
-    public IDrawable
+  class HC_CORE_EXPORT SceneManager : public NonCopyable
   {
   public:
     SceneManager();
@@ -22,7 +19,7 @@ namespace hc
      *
      * @param graphicsManager The graphics manager used for rendering.
      */
-    virtual void draw(IGraphicsManager& graphicsManager) override;
+    void draw();
 
     /**
      * @brief Creates and adds a new scene with the given name. If a scene with

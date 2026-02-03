@@ -29,6 +29,16 @@ namespace hc
     destroy();
   }
 
+  void OpenGlMesh::draw()
+  {
+    // TODO draw mesh
+  }
+
+  void OpenGlMesh::draw(const Transform& parentTransform)
+  {
+    // TODO draw mesh
+  }
+
   SharedPtr<Model> OpenGlMesh::getModel() const
   {
     return m_model;

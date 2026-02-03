@@ -1,12 +1,13 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcIDrawable.h"
 
 namespace hc
 {
   class Model;
 
-  class IMesh : public NonCopyable
+  class IMesh : public NonCopyable, public IDrawable
   {
   public:
     virtual ~IMesh() = default;

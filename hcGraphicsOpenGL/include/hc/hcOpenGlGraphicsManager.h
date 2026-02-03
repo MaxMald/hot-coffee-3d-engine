@@ -23,11 +23,6 @@ namespace hc
     void beginFrame() override;
 
     /**
-     * @copydoc IGraphicsManager::draw
-     */
-    void draw(IDrawable&) override;
-
-    /**
      * @copydoc IGraphicsManager::endFrame
      */
     void endFrame(IWindow&) override; 

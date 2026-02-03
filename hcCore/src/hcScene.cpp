@@ -10,9 +10,9 @@ namespace hc
   {
   }
 
-  void Scene::draw(IGraphicsManager& graphicsManager)
+  void Scene::draw()
   {
-    m_sceneGraph.draw(graphicsManager);
+    m_sceneGraph.draw();
   }
 
   void Scene::update(float deltaTime)

@@ -9,9 +9,7 @@ namespace hc
   /**
    * @brief Interface for drawable objects.
    *
-   * Classes implementing this interface can be rendered by the engine. The draw
-   * method is called with a reference to an IGraphicsManager, which provides the
-   * necessary context for rendering.
+   * Classes implementing this interface can be rendered by the engine.
    */
   class HC_CORE_EXPORT IDrawable
   {
@@ -20,10 +18,17 @@ namespace hc
 
     /**
      * @brief Draw the object using the provided graphics manager.
-     * 
-     * @param graphicsManager Reference to the graphics manager responsible for
-     * rendering.
      */
-    virtual void draw(IGraphicsManager& graphicsManager) = 0;
+    virtual void draw() = 0;
+
+    /**
+     * @brief Draw the object with a parent transformation applied.
+     * 
+     * @param parentTransform The transformation of the parent object.
+     */
+    virtual void draw(const Transform& parentTransform) = 0;
+
+  protected:
+    IDrawable() = default;
   };
 }

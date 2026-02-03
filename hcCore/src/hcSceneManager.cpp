@@ -13,10 +13,10 @@ namespace hc
     m_scenes.clear();
   }
 
-  void SceneManager::draw(IGraphicsManager& graphicsManager)
+  void SceneManager::draw()
   {
     if (m_activeScene)
-      m_activeScene->draw(graphicsManager);
+      m_activeScene->draw();
   }
 
   Scene* SceneManager::createScene(const String& name)

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcIDrawable.h"
 #include "hc/hcGameObject.h"
 
 namespace hc
@@ -15,9 +14,7 @@ namespace hc
    * name). It is responsible for updating and rendering all root objects and
    * their hierarchies.
    */
-  class HC_CORE_EXPORT SceneGraph :
-    public NonCopyable,
-    public IDrawable
+  class HC_CORE_EXPORT SceneGraph : public NonCopyable
   {
   public:
     /**
@@ -35,7 +32,7 @@ namespace hc
      *
      * @param graphicsManager The graphics manager used for rendering.
      */
-    virtual void draw(IGraphicsManager& graphicsManager) override;
+    void draw();
 
     /**
      * @brief Updates all root GameObjects and their children.

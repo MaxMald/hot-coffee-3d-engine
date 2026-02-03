@@ -16,6 +16,8 @@ namespace hc
     );
     ~OpenGlMesh() override;
 
+    void draw() override;
+    void draw(const Transform& parentTransform) override;
     SharedPtr<Model> getModel() const override;
     void update() override;
     void destroy() override;
