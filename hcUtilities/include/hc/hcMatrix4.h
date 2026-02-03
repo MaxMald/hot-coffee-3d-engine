@@ -28,6 +28,17 @@ namespace hc
     static Matrix4 RotationY(float angleRadians);
     static Matrix4 RotationZ(float angleRadians);
     static Matrix4 LookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up);
+    static Matrix4 Orthographic(
+      float left, float right,
+      float bottom, float top,
+      float nearPlane, float farPlane
+    );
+    static Matrix4 Perspective(
+      float fovYRadians,
+      float aspectRatio,
+      float nearPlane,
+      float farPlane
+    );
 
     union
     {
@@ -194,6 +205,41 @@ namespace hc
       xaxis.z, yaxis.z, zaxis.z, position.z,
       0.0f, 0.0f, 0.0f, 1.0f
     ).inverted();
+  }
+
+  inline Matrix4 Matrix4::Orthographic(
+    float left, float right,
+    float bottom, float top,
+    float nearPlane, float farPlane
+  )
+  {
+    float rl = right - left;
+    float tb = top - bottom;
+    float fn = farPlane - nearPlane;
+
+    return Matrix4(
+      2.0f / rl, 0.0f, 0.0f, -(right + left) / rl,
+      0.0f, 2.0f / tb, 0.0f, -(top + bottom) / tb,
+      0.0f, 0.0f, -2.0f / fn, -(farPlane + nearPlane) / fn,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  inline Matrix4 Matrix4::Perspective(
+    float fovYRadians,
+    float aspectRatio,
+    float nearPlane, float farPlane
+  )
+  {
+    float f = 1.0f / tan(fovYRadians * 0.5f);
+    float fn = farPlane - nearPlane;
+
+    return Matrix4(
+      f / aspectRatio, 0.0f, 0.0f, 0.0f,
+      0.0f, f, 0.0f, 0.0f,
+      0.0f, 0.0f, -(farPlane + nearPlane) / fn, -(2.0f * nearPlane * farPlane) / fn,
+      0.0f, 0.0f, -1.0f, 0.0f
+    );
   }
 
   // Constructors
