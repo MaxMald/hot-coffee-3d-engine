@@ -59,6 +59,7 @@ namespace hc
 
   private:
     SharedPtr<AssetManager> m_assetManager;
+    SharedPtr<SceneManager> m_sceneManager;
     OpenGlTextureManager m_textureManager;
     OpenGlMaterialManager m_materialManager;
     OpenGlShaderManager m_shaderManager;

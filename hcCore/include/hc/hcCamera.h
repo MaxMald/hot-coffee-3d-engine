@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcProjectionType.h"
 
 namespace hc
 {
@@ -57,16 +58,68 @@ namespace hc
     const Vector3f& getUp() const;
 
     /**
+     * @brief Sets the projection type of the camera.
+     * 
+     * @param type The new projection type.
+     */
+    void setProjection(projectionType::Type type);
+
+    /*
+    * @brief Gets the projection type of the camera.
+    * 
+    * @returns The current projection type.
+    */
+    projectionType::Type getProjection() const;
+
+    /**
+     * @brief Sets the near clipping plane distance.
+     * 
+     * @param nearPlane The near clipping plane distance.
+     */
+    void setNear(float nearPlane);
+
+    /**
+     * @brief Gets the near clipping plane distance.
+     * 
+     * @return The near clipping plane distance.
+     */
+    float getNear() const;
+
+    /**
+     * @brief Sets the far clipping plane distance.
+     * 
+     * @param farPlane The far clipping plane distance.
+     */
+    void setFar(float farPlane);
+
+    /**
+     * @brief Gets the far clipping plane distance.
+     * 
+     * @return The far clipping plane distance.
+     */
+    float getFar() const;
+
+    /**
      * @brief Computes and returns the view matrix of the camera.
      *
      * @return The view matrix.
      */
     Matrix4 getViewMatrix() const;
 
+    /**
+     * @brief Computes and returns the projection matrix of the camera.
+     * 
+     * @return The projection matrix.
+     */
+    Matrix4 getProjectionMatrix() const;
+
   private:
     Vector3f m_position;
     Vector3f m_direction;
     Vector3f m_up;
+    projectionType::Type m_projectionType;
+    float m_near;
+    float m_far;
 
     Camera();
 
