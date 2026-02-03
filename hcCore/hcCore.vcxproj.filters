@@ -222,6 +222,9 @@
     <ClCompile Include="src\hcMeshComponent.cpp">
       <Filter>Source Files\gameObject\components</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcCameraComponent.cpp">
+      <Filter>Source Files\gameObject\components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -429,6 +432,9 @@
       <Filter>Header Files\gameObject\components</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcMeshComponent.h">
+      <Filter>Header Files\gameObject\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraComponent.h">
       <Filter>Header Files\gameObject\components</Filter>
     </ClInclude>
   </ItemGroup>

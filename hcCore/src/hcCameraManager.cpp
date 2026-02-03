@@ -3,7 +3,8 @@
 
 namespace hc
 {
-  CameraManager::CameraManager()
+  CameraManager::CameraManager() :
+    m_activeCamera(nullptr)
   {
   }
 
@@ -13,7 +14,7 @@ namespace hc
 
   Camera* CameraManager::createCamera()
   {
-    UniquePtr<Camera> camera = MakeUnique<Camera>();
+    UniquePtr<Camera> camera = UniquePtr<Camera>(new Camera());
     Camera* cameraPtr = camera.get();
     m_cameras.push_back(std::move(camera));
     return cameraPtr;
@@ -34,6 +35,11 @@ namespace hc
     {
       m_cameras.erase(it, m_cameras.end());
     }
+  }
+
+  void CameraManager::setActiveCamera(Camera* camera)
+  {
+    m_activeCamera = camera;
   }
 
   void CameraManager::clear()

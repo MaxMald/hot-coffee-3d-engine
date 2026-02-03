@@ -49,3 +49,4 @@
 #include "hc/hcIComponent.h"
 #include "hc/hcABaseComponent.h"
 #include "hc/hcMeshComponent.h"
+#include "hc/hcCameraComponent.h"

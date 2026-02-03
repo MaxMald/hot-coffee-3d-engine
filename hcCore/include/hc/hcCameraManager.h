@@ -31,6 +31,20 @@ namespace hc
     void destroyCamera(Camera* camera);
 
     /**
+     * @brief Sets the active Camera.
+     * 
+     * @return Pointer to the active Camera, or nullptr if none is set.
+     */
+    void setActiveCamera(Camera* camera);
+
+    /**
+     * @brief Gets the active Camera.
+     * 
+     * @return Pointer to the active Camera, or nullptr if none is set.
+     */
+    Camera* getActiveCamera() const;
+
+    /**
      * @brief Removes and destroys all managed cameras.
      */
     void clear();
@@ -44,5 +58,6 @@ namespace hc
 
   private:
     Vector<UniquePtr<Camera>> m_cameras;
+    Camera* m_activeCamera;
   };
 }
