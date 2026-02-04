@@ -7,6 +7,7 @@ namespace hc::editor
   namespace imguiUtilities
   {
     bool DrawColorEdit3(const String& label, Color& color);
+    void DrawMatrix(const String& label, const Matrix4& matrix);
   }
 }
 

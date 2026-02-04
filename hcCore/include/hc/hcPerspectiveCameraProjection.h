@@ -7,7 +7,7 @@ namespace hc
   /**
    * @brief Implements a perspective projection for a camera.
    */
-  class PerspectiveCameraProjection : public ICameraProjection
+  class HC_CORE_EXPORT PerspectiveCameraProjection : public ICameraProjection
   {
   public:
     PerspectiveCameraProjection();

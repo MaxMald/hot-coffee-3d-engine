@@ -30,5 +30,21 @@ namespace hc::editor
       ImGui::EndTable();
       return changed;
     }
+
+    void DrawMatrix(const String& label, const Matrix4& matrix)
+    {
+      ImGui::BeginTable(label.c_str(), 4, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit);
+      for (int row = 0; row < 4; ++row)
+      {
+        ImGui::TableNextRow();
+        for (int col = 0; col < 4; ++col)
+        {
+          ImGui::TableSetColumnIndex(col);
+          float value = matrix.m[row][col];
+          ImGui::Text("%.3f", value);
+        }
+      }
+      ImGui::EndTable();
+    }
   }
 }

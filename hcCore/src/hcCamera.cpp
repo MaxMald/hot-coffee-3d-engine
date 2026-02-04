@@ -3,7 +3,7 @@
 namespace hc
 {
   Camera::Camera() :
-    m_position(0.0f, 0.0f, 0.0f),
+    m_position(0.0f, 0.0f, 100.0f),
     m_direction(0.0f, 0.0f, -1.0f),
     m_up(0.0f, 1.0f, 0.0f),
     m_projectionType(projectionType::Perspective)

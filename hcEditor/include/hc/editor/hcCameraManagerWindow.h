@@ -15,5 +15,8 @@ namespace hc::editor
 
     void onDraw() override;
     void drawCameraController(Camera* camera);
+    void drawCameraProjectionController(ICameraProjection* projection);
+    void drawPerspectiveProjectionController(PerspectiveCameraProjection* projection);
+    void drawOrthographicProjectionController(OrthographicCameraProjection* projection);
   };
 }

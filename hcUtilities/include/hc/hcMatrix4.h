@@ -232,12 +232,12 @@ namespace hc
   )
   {
     float f = 1.0f / tan(fovYRadians * 0.5f);
-    float fn = farPlane - nearPlane;
+    //float fn = farPlane - nearPlane;
 
     return Matrix4(
       f / aspectRatio, 0.0f, 0.0f, 0.0f,
       0.0f, f, 0.0f, 0.0f,
-      0.0f, 0.0f, -(farPlane + nearPlane) / fn, -(2.0f * nearPlane * farPlane) / fn,
+      0.0f, 0.0f, (farPlane + nearPlane) / (nearPlane - farPlane), (2.0f * nearPlane * farPlane) / (nearPlane - farPlane),
       0.0f, 0.0f, -1.0f, 0.0f
     );
   }
