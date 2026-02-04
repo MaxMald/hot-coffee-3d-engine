@@ -30,7 +30,7 @@ namespace hc
   protected:
     IGraphicsManager();
 
-    virtual void init() = 0;
+    virtual void init(IWindow&) = 0;
     virtual void destroy() = 0;
 
     friend HotCoffeeEngine;

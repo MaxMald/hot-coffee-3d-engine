@@ -121,6 +121,7 @@ namespace hc::editor
 
   void HotCoffeeEditor::runMainLoop()
   {
+    SceneManager& sceneManager = HotCoffeeEngine::Instance().getSceneManager();
     IGraphicsManager& graphicsManager = HotCoffeeEngine::Instance().getGraphicsManager();
     IWindow& window = HotCoffeeEngine::Instance().getWindowManager().getWindow();
 
@@ -138,7 +139,7 @@ namespace hc::editor
       }
 
       graphicsManager.beginFrame();
-      // Render scene here
+      sceneManager.draw();
       EditorViewsManager::Instance().draw();
       graphicsManager.endFrame(window);
     }

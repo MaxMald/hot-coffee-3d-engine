@@ -44,6 +44,7 @@ namespace hc
      * @param mainTexture Shared pointer to the main texture (can be nullptr).
      */
     void initialize(
+      const SharedPtr<IShaderProgram>& shaderProgram,
       const SharedPtr<UnlitMaterialDescriptor>& descriptor,
       const SharedPtr<ITexture>& mainTexture
     );

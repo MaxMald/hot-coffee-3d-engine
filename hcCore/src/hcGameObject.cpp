@@ -28,7 +28,11 @@ namespace hc
     RenderContext localRenderContext = renderContext;
     localRenderContext.transform *= getMatrix();
 
-    // TODO draw drawable components
+    for (IDrawable* drawableComponent : m_drawableComponents)
+    {
+      if (drawableComponent)
+        drawableComponent->draw(localRenderContext);
+    }
 
     for (auto& child : m_children)
       child->draw(localRenderContext);
@@ -108,8 +112,14 @@ namespace hc
   {
     if (!component)
       return;
-
     m_components.push_back(std::move(component));
+
+    IDrawable* drawableComponent = dynamic_cast<IDrawable*>(
+      m_components.back().get()
+    );
+
+    if (drawableComponent)
+      m_drawableComponents.push_back(drawableComponent);
   }
 
   const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const

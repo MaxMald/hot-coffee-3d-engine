@@ -28,13 +28,15 @@ namespace hc
 
   private:
     ITextureManager* m_textureManager;
+    IShaderProgramManager* m_shaderProgramManager;
     SharedPtr<AssetManager> m_assetManager;
     UnorderedMap<Id, SharedPtr<IMaterial>> m_cachedMaterials;
     SharedPtr<UnlitMaterial> m_defaultUnlitMaterial;
 
     void initialize(
       SharedPtr<AssetManager> assetManager,
-      ITextureManager* textureManager
+      ITextureManager* textureManager,
+      IShaderProgramManager* shaderProgramManager
     );
 
     SharedPtr<UnlitMaterial> createUnlitMaterial(

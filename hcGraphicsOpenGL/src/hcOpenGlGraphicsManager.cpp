@@ -16,25 +16,6 @@ namespace hc
   {
   }
 
-  void OpenGlGraphicsManager::init()
-  {
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-      throw RuntimeErrorException(
-        "Failed to initialize GLEW: " +
-        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
-      );
-    }
-
-    // Set up basic OpenGL state
-    glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
-
-    prepareManagers();
-  }
-
   void OpenGlGraphicsManager::beginFrame()
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -75,6 +56,29 @@ namespace hc
     m_assetManager = container.resolve<AssetManager>();
   }
 
+  void OpenGlGraphicsManager::init(IWindow& window)
+  {
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+      throw RuntimeErrorException(
+        "Failed to initialize GLEW: " +
+        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
+      );
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glViewport(
+      0, 0,
+      static_cast<GLsizei>(window.getSize().x),
+      static_cast<GLsizei>(window.getSize().y)
+    );
+
+    prepareManagers();
+  }
+
   void OpenGlGraphicsManager::destroy()
   {
   }
@@ -84,12 +88,13 @@ namespace hc
     m_textureManager.initialize(
       m_assetManager
     );
-    m_materialManager.initialize(
-      m_assetManager,
-      &m_textureManager
-    );
     m_shaderProgramManager.initialize(
       &m_shaderManager
+    );
+    m_materialManager.initialize(
+      m_assetManager,
+      &m_textureManager,
+      &m_shaderProgramManager
     );
     m_meshManager.initialize(
       m_assetManager,

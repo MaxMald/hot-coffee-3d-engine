@@ -86,5 +86,6 @@ namespace hc
     GameObject* m_parent = nullptr;
     Vector<UniquePtr<GameObject>> m_children;
     Vector<UniquePtr<IComponent>> m_components;
+    Vector<IDrawable*> m_drawableComponents;
   };
 }

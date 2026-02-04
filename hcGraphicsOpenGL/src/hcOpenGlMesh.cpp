@@ -152,7 +152,7 @@ namespace hc
   {
     SharedPtr<IMaterial> material;
 
-    Int32 materialIndex = submesh.materialIndex - 0;
+    Int32 materialIndex = submesh.materialIndex;
     if (submesh.materialIndex < m_materials.size())
       material = m_materials[submesh.materialIndex];
 

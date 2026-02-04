@@ -21,6 +21,9 @@ namespace hc
 
   void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
   {
+    if (!m_shaderProgram)
+      return;
+
     m_shaderProgram->bind();
 
     m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
@@ -50,10 +53,12 @@ namespace hc
   }
 
   void UnlitMaterial::initialize(
-    const SharedPtr<UnlitMaterialDescriptor>& descriptor, 
+    const SharedPtr<IShaderProgram>& shaderProgram,
+    const SharedPtr<UnlitMaterialDescriptor>& descriptor,
     const SharedPtr<ITexture>& mainTexture
   )
   {
+    m_shaderProgram = shaderProgram;
     m_descriptor = descriptor;
     m_mainTexture = mainTexture;
   }

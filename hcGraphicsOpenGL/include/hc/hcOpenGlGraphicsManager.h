@@ -69,7 +69,7 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::init
      */
-    void init() override;
+    void init(IWindow& window) override;
 
     /**
      * @copydoc IGraphicsManager::destroy

@@ -86,10 +86,12 @@ namespace hc
 
   void OpenGlMaterialManager::initialize(
     SharedPtr<AssetManager> assetManager,
-    ITextureManager* textureManager
+    ITextureManager* textureManager,
+    IShaderProgramManager* shaderProgramManager
   )
   {
     m_textureManager = textureManager;
+    m_shaderProgramManager = shaderProgramManager;
     m_assetManager = assetManager;
     m_defaultUnlitMaterial = createUnlitMaterial(
       MakeShared<UnlitMaterialDescriptor>()
@@ -118,7 +120,11 @@ namespace hc
     }
 
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
-    material->initialize(unlitDescriptor, mainTexture);
+    material->initialize(
+      m_shaderProgramManager->getUnlit(),
+      unlitDescriptor,
+      mainTexture
+    );
 
     m_cachedMaterials[descriptor->getId()] = material;
     return material;
