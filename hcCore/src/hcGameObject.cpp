@@ -1,10 +1,11 @@
 #include "hc/hcGameObject.h"
 #include <algorithm>
 #include "hc/hcIComponent.h"
+#include "hc/hcRenderContext.h"
 
 namespace hc
 {
-  GameObject::GameObject() : 
+  GameObject::GameObject() :
     m_parent(nullptr),
     m_name("")
   {
@@ -22,38 +23,15 @@ namespace hc
       m_parent->removeChild(this);
   }
 
-  void GameObject::draw()
+  void GameObject::draw(const RenderContext& renderContext)
   {
+    RenderContext localRenderContext = renderContext;
+    localRenderContext.transform *= getMatrix();
+
     // TODO draw drawable components
 
     for (auto& child : m_children)
-      child->draw(*this);
-  }
-
-  void GameObject::draw(const Transform& parentTransform)
-  {
-    Transform combinedTransform;
-    
-    combinedTransform.setPosition(
-      parentTransform.getPosition() + getPosition()
-    );
-    
-    combinedTransform.setRotation(
-      parentTransform.getRotation() + getRotation()
-    );
-    
-    combinedTransform.setScale(
-      Vector3f(
-        parentTransform.getScale().x * getScale().x,
-        parentTransform.getScale().y * getScale().y,
-        parentTransform.getScale().z * getScale().z
-      )
-    );
-
-    // TODO draw drawable components with combinedTransform
-
-    for (auto& child : m_children)
-      child->draw(combinedTransform);
+      child->draw(localRenderContext);
   }
 
   void GameObject::update(float deltaTime)

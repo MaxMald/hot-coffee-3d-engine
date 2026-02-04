@@ -121,6 +121,12 @@
     <Filter Include="Source Files\gameObject\components">
       <UniqueIdentifier>{2ce1052b-a6dd-48b5-9f9f-6ac8b6136d3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\scene\camera">
+      <UniqueIdentifier>{1043d349-cf71-42a8-951c-510eebd8f3aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\camera">
+      <UniqueIdentifier>{439fa8d9-3caa-4608-b497-5444d7bfb003}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -163,12 +169,6 @@
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\hcLightManager.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcCamera.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcCameraManager.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\hcAssetManager.cpp">
@@ -224,6 +224,21 @@
     </ClCompile>
     <ClCompile Include="src\hcCameraComponent.cpp">
       <Filter>Source Files\gameObject\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcProjectionType.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCamera.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCameraManager.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOrthographicCameraProjection.cpp">
+      <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcPerspectiveCameraProjection.cpp">
+      <Filter>Source Files\scene\camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,12 +330,6 @@
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcLightManager.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcCamera.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcCameraManager.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcAsset.h">
@@ -436,6 +445,30 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcCameraComponent.h">
       <Filter>Header Files\gameObject\components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcProjectionType.h">
+      <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCamera.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraManager.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcICameraProjection.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcPerspectiveCameraProjection.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOrthographicCameraProjection.h">
+      <Filter>Header Files\scene\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraMatrices.h">
+      <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcRenderContext.h">
+      <Filter>Header Files\graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

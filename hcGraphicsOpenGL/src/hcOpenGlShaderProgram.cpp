@@ -1,5 +1,6 @@
 #include "hc/hcOpenGlShaderProgram.h"
 #include "hc/hcOpenGlShader.h"
+#include "hc/hcOpenGlTexture.h"
 
 namespace hc
 {
@@ -59,11 +60,39 @@ namespace hc
       glUniform1i(location, value);
   }
 
-  void OpenGlShaderProgram::setUniform(const String& name, const float* matrix4x4)
+  void OpenGlShaderProgram::setUniform(const String& name, bool value)
   {
     GLint location = getUniformLocation(name);
     if (location != -1)
-      glUniformMatrix4fv(location, 1, GL_FALSE, matrix4x4);
+      glUniform1i(location, value ? 1 : 0);
+  }
+
+  void OpenGlShaderProgram::setUniform(const String& name, const Vector3f& v3f)
+  {
+    GLint location = getUniformLocation(name);
+    if (location != -1)
+      glUniform3f(location, v3f.x, v3f.y, v3f.z);
+  }
+
+  void OpenGlShaderProgram::setUniform(const String& name, const Color& color)
+  {
+    GLint location = getUniformLocation(name);
+    if (location != -1)
+      glUniform4f(location, color.r, color.g, color.b, color.a);
+  }
+
+  void OpenGlShaderProgram::setUniform(const String& name, const Matrix4& matrix4x4)
+  {
+    GLint location = getUniformLocation(name);
+    if (location != -1)
+      glUniformMatrix4fv(location, 1, GL_FALSE, matrix4x4.m[0]);
+  }
+
+  void OpenGlShaderProgram::setUniformTexture(const String& name, Int32 slotLocation)
+  {
+    GLint location = getUniformLocation(name);
+    if (location != -1)
+      glUniform1i(location, slotLocation);
   }
 
   void OpenGlShaderProgram::destroy()

@@ -5,9 +5,11 @@ namespace hc
 {
   CameraManager::CameraManager() :
     m_activeCamera(nullptr),
-    m_default(MakeUnique<Camera>(new Camera()))
+    m_default(nullptr)
   {
-    m_activeCamera = m_default.get();
+    Camera* defaultCameraPtr = new Camera();
+    m_default.reset(defaultCameraPtr);
+    m_activeCamera = defaultCameraPtr;
   }
 
   CameraManager::~CameraManager()
@@ -16,8 +18,8 @@ namespace hc
 
   Camera* CameraManager::createCamera()
   {
-    UniquePtr<Camera> camera = UniquePtr<Camera>(new Camera());
-    Camera* cameraPtr = camera.get();
+    Camera* cameraPtr = new Camera();
+    UniquePtr<Camera> camera(cameraPtr);
     m_cameras.push_back(std::move(camera));
     return cameraPtr;
   }
@@ -50,6 +52,11 @@ namespace hc
   Camera* CameraManager::getActiveCamera() const
   {
     return m_activeCamera;
+  }
+
+  Camera& CameraManager::getDefaultCamera() const
+  {
+    return *m_default;
   }
 
   void CameraManager::clear()

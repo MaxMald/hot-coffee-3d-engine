@@ -1,4 +1,6 @@
 #include "hc/hcScene.h"
+#include "hc/hcRenderContext.h"
+#include "hc/hcCamera.h"
 
 namespace hc
 {
@@ -12,7 +14,24 @@ namespace hc
 
   void Scene::draw()
   {
-    m_sceneGraph.draw();
+    RenderContext renderContext;
+
+    Camera* activeCamera = m_cameraManager.getActiveCamera();
+    if (activeCamera)
+    {
+      renderContext.cameraMatrices.viewMatrix = activeCamera->getViewMatrix();
+      renderContext.cameraMatrices.projectionMatrix = activeCamera->getProjectionMatrix();
+    }
+    else
+    {
+      Camera& defaultCamera = m_cameraManager.getDefaultCamera();
+      renderContext.cameraMatrices.viewMatrix = defaultCamera.getViewMatrix();
+      renderContext.cameraMatrices.projectionMatrix = defaultCamera.getProjectionMatrix();
+    }
+
+    renderContext.transform = Matrix4::Identity();
+
+    m_sceneGraph.draw(renderContext);
   }
 
   void Scene::update(float deltaTime)

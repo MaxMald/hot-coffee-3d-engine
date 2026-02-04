@@ -39,10 +39,13 @@ namespace hc
 
     /**
      * @brief Gets the active Camera.
-     * 
-     * @return Pointer to the active Camera, or nullptr if none is set.
      */
     Camera* getActiveCamera() const;
+
+    /**
+     * @brief Sets the default Camera.
+     */
+    Camera& getDefaultCamera() const;
 
     /**
      * @brief Removes and destroys all managed cameras.

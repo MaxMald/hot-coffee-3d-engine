@@ -42,6 +42,8 @@
 #include "hc/hcUnlitMaterial.h"
 #include "hc/hcIMeshManager.h"
 #include "hc/hcIMesh.h"
+#include "hc/hcCameraMatrices.h"
+#include "hc/hcRenderContext.h"
 
 // GameObject Components
 

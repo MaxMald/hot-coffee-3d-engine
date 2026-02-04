@@ -16,8 +16,7 @@ namespace hc
     );
     ~OpenGlMesh() override;
 
-    void draw() override;
-    void draw(const Transform& parentTransform) override;
+    void draw(const RenderContext& renderContext) override;
     SharedPtr<Model> getModel() const override;
     void update() override;
     void destroy() override;
@@ -34,5 +33,6 @@ namespace hc
     UInt32 m_ebo;
 
     void createMaterials(OpenGlMaterialManager* materialManager);
+    void drawModelSubMesh(const RenderContext& renderContext, const ModelSubMesh& submesh);
   };
 }

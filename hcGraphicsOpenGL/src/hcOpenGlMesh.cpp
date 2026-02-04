@@ -29,14 +29,18 @@ namespace hc
     destroy();
   }
 
-  void OpenGlMesh::draw()
+  void OpenGlMesh::draw(const RenderContext& renderContext)
   {
-    // TODO draw mesh
-  }
+    if (!m_model)
+      return;
 
-  void OpenGlMesh::draw(const Transform& parentTransform)
-  {
-    // TODO draw mesh
+    glBindVertexArray(m_vao);
+
+    const Vector<ModelSubMesh>& subMeshes = m_model->getSubMeshes();
+    for (const ModelSubMesh& submesh : subMeshes)
+      drawModelSubMesh(renderContext, submesh);
+
+    glBindVertexArray(0);
   }
 
   SharedPtr<Model> OpenGlMesh::getModel() const
@@ -139,5 +143,33 @@ namespace hc
         materialManager->createMaterialFromDescriptor(materialDesc)
       );
     }
+  }
+
+  void OpenGlMesh::drawModelSubMesh(
+    const RenderContext& renderContext,
+    const ModelSubMesh& submesh
+  )
+  {
+    SharedPtr<IMaterial> material;
+
+    Int32 materialIndex = submesh.materialIndex - 0;
+    if (submesh.materialIndex < m_materials.size())
+      material = m_materials[submesh.materialIndex];
+
+    if (material)
+    {
+      material->bind(renderContext.cameraMatrices);
+      material->updateModelMatrix(renderContext.transform);
+    }
+
+    glDrawElements(
+      GL_TRIANGLES,
+      static_cast<GLsizei>(submesh.indexCount),
+      GL_UNSIGNED_INT,
+      reinterpret_cast<void*>(submesh.firstIndexIndex * sizeof(UInt32))
+    );
+
+    if (material)
+      material->unbind();
   }
 }

@@ -6,6 +6,7 @@ namespace hc
 {
   class UnlitMaterialDescriptor;
   class ITexture;
+  class IShaderProgram;
 
   /**
    * @brief Represents a material that is rendered without lighting effects.
@@ -20,6 +21,21 @@ namespace hc
      * @copydoc IMaterial::getShaderType
      */
     shadingType::Type getShaderType() const override;
+
+    /**
+     * @copydoc IMaterial::bind
+     */
+    void bind(const CameraMatrices& cameraMatrices) override;
+
+    /**
+     * @copydoc IMaterial::updateModelMatrix
+     */
+    void updateModelMatrix(const Matrix4& modelMatrix) override;
+
+    /**
+     * @copydoc IMaterial::unbind
+     */
+    void unbind() override;
 
     /**
      * @brief Initializes the unlit material with a descriptor and main texture.
@@ -55,6 +71,7 @@ namespace hc
 
   private:
     SharedPtr<UnlitMaterialDescriptor> m_descriptor;
+    SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;
   };
 }

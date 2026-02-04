@@ -186,8 +186,11 @@
     <ClCompile Include="src\hcMeshComponent.cpp" />
     <ClCompile Include="src\hcModel.cpp" />
     <ClCompile Include="src\hcModelSubMesh.cpp" />
+    <ClCompile Include="src\hcOrthographicCameraProjection.cpp" />
+    <ClCompile Include="src\hcPerspectiveCameraProjection.cpp" />
     <ClCompile Include="src\hcPluginConnectionHelper.cpp" />
     <ClCompile Include="src\hcPluginManager.cpp" />
+    <ClCompile Include="src\hcProjectionType.cpp" />
     <ClCompile Include="src\hcScene.cpp" />
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
@@ -219,6 +222,7 @@
     <ClInclude Include="include\hc\hcGameObject.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngineSettings.h" />
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h" />
+    <ClInclude Include="include\hc\hcICameraProjection.h" />
     <ClInclude Include="include\hc\hcIComponent.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
@@ -248,10 +252,15 @@
     <ClInclude Include="include\hc\hcModelSubMesh.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcMouseWheelType.h" />
+    <ClInclude Include="include\hc\hcOrthographicCameraProjection.h" />
+    <ClInclude Include="include\hc\hcPerspectiveCameraProjection.h" />
     <ClInclude Include="include\hc\hcPlatformType.h" />
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
+    <ClInclude Include="include\hc\hcProjectionType.h" />
+    <ClInclude Include="include\hc\hcCameraMatrices.h" />
+    <ClInclude Include="include\hc\hcRenderContext.h" />
     <ClInclude Include="include\hc\hcScene.h" />
     <ClInclude Include="include\hc\hcSceneGraph.h" />
     <ClInclude Include="include\hc\hcSceneManager.h" />

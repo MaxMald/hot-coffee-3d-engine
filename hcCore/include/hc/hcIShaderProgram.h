@@ -40,9 +40,29 @@ namespace hc
     virtual void setUniform(const String& name, Int32 value) = 0;
 
     /**
+     * @brief Sets a boolean uniform variable.
+     */
+    virtual void setUniform(const String& name, bool value) = 0;
+
+    /**
+     * @brief Sets a 3D vector uniform variable.
+     */
+    virtual void setUniform(const String& name, const Vector3f& v3f) = 0;
+
+    /**
+     * @brief Sets a color uniform variable.
+     */
+    virtual void setUniform(const String& name, const Color& color) = 0;
+
+    /**
      * @brief Sets a 4x4 matrix uniform variable.
      */
-    virtual void setUniform(const String& name, const float* matrix4x4) = 0;
+    virtual void setUniform(const String& name, const Matrix4& matrix4x4) = 0;
+
+    /**
+     * @brief Sets a texture uniform variable.
+     */
+    virtual void setUniformTexture(const String& name, Int32 slotLocation) = 0;
 
     /**
      * @brief Destroys the shader program and releases resources.

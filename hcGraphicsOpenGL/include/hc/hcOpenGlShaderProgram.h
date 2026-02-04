@@ -37,9 +37,29 @@ namespace hc
     void setUniform(const String& name, Int32 value) override;
 
     /**
+    * @copydoc IShaderProgram::setUniform
+    */
+    void setUniform(const String& name, bool value) override;
+
+    /*
+    * @copydoc IShaderProgram::setUniform
+    */
+    void setUniform(const String& name, const Vector3f& v3f) override;
+
+    /**
      * @copydoc IShaderProgram::setUniform
      */
-    void setUniform(const String& name, const float* matrix4x4) override;
+    void setUniform(const String& name, const Color& color) override;
+
+    /**
+     * @copydoc IShaderProgram::setUniform
+     */
+    void setUniform(const String& name, const Matrix4& matrix4x4) override;
+
+    /**
+     * @copydoc IShaderProgram::setUniform
+     */
+    void setUniformTexture(const String& name, Int32 slotLocation) override;
 
     /**
      * @copydoc IShaderProgram::destroy

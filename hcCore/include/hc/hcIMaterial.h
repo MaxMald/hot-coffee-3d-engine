@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  struct CameraMatrices;
+
   /**
    * @brief Interface for material objects in the engine.
    */
@@ -19,6 +21,23 @@ namespace hc
      * @return The shader type.
      */
     virtual shadingType::Type getShaderType() const = 0;
+
+    /**
+     * @brief Binds the material for rendering.
+     */
+    virtual void bind(const CameraMatrices& cameraMatrices) = 0;
+
+    /**
+     * @brief Updates the model matrix uniform in the shader.
+     * 
+     * @param modelMatrix The model matrix to set.
+     */
+    virtual void updateModelMatrix(const Matrix4& modelMatrix) = 0;
+
+    /**
+     * @brief Unbinds the material after rendering.
+     */
+    virtual void unbind() = 0;
 
   protected:
     IMaterial() = default;

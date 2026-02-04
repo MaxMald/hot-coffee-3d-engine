@@ -1,5 +1,8 @@
 #include "hc/hcUnlitMaterial.h"
 #include "hc/hcUnlitMaterialDescriptor.h"
+#include "hc/hcIShaderProgram.h"
+#include "hc/hcCameraMatrices.h"
+#include "hc/hcITexture.h"
 
 namespace hc
 {
@@ -16,6 +19,36 @@ namespace hc
     return shadingType::Unlit;
   }
 
+  void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
+  {
+    m_shaderProgram->bind();
+
+    m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
+    m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
+    m_shaderProgram->setUniform("uColor", getColor());
+
+    if (m_mainTexture)
+    {
+      m_shaderProgram->setUniform("uUseTexture", true);
+      m_mainTexture->bind(0);
+      m_shaderProgram->setUniformTexture("uTexture", 0);
+    }
+    else
+    {
+      // TODO Bind to a default white texture
+      m_shaderProgram->setUniform("uUseTexture", false);
+    }
+  }
+
+  void UnlitMaterial::updateModelMatrix(const Matrix4& modelMatrix)
+  {
+    m_shaderProgram->setUniform("uModel", modelMatrix);
+  }
+
+  void UnlitMaterial::unbind()
+  {
+  }
+
   void UnlitMaterial::initialize(
     const SharedPtr<UnlitMaterialDescriptor>& descriptor, 
     const SharedPtr<ITexture>& mainTexture
@@ -27,7 +60,10 @@ namespace hc
 
   const Color& UnlitMaterial::getColor() const
   {
-    return m_descriptor->getColor();
+    if (m_descriptor)
+      return m_descriptor->getColor();
+    else
+      return Color::White();
   }
 
   const SharedPtr<ITexture>& UnlitMaterial::getMainTexture() const

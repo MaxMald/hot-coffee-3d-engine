@@ -10,12 +10,12 @@ namespace hc
   {
   }
 
-  void SceneGraph::draw()
+  void SceneGraph::draw(const RenderContext& renderContext)
   {
     for (const auto& pair : m_roots)
     {
       if (pair.second)
-        pair.second->draw();
+        pair.second->draw(renderContext);
     }
   }
 

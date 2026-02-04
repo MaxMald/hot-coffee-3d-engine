@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class IGraphicsManager;
+  struct RenderContext;
 
   /**
    * @brief Interface for drawable objects.
@@ -17,16 +17,11 @@ namespace hc
     virtual ~IDrawable() = default;
 
     /**
-     * @brief Draw the object using the provided graphics manager.
-     */
-    virtual void draw() = 0;
-
-    /**
      * @brief Draw the object with a parent transformation applied.
-     * 
-     * @param parentTransform The transformation of the parent object.
+     *
+     * @param renderContext The rendering context containing transformation data.
      */
-    virtual void draw(const Transform& parentTransform) = 0;
+    virtual void draw(const RenderContext& renderContext) = 0;
 
   protected:
     IDrawable() = default;
