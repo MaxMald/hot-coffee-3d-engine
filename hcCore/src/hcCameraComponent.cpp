@@ -76,7 +76,8 @@ namespace hc
 
   CameraManager& CameraComponent::getCameraManager()
   {
-    Scene* activeScene = SceneManager::GetActiveScene();
+    SceneManager& sceneManager = HotCoffeeEngine::Instance().getSceneManager();
+    Scene* activeScene = sceneManager.getActiveScene();
     if (!activeScene)
       throw RuntimeErrorException(
         "Cannot get CameraManager because there is no active scene."

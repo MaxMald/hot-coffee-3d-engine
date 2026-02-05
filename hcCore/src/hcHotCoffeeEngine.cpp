@@ -21,6 +21,11 @@ namespace hc
     return HotCoffeeEngine::Instance().getGraphicsManager();
   }
 
+  SceneManager& HotCoffeeEngine::GetSceneManager()
+  {
+    return HotCoffeeEngine::Instance().getSceneManager();
+  }
+
   AssetManager& HotCoffeeEngine::GetAssetManager()
   {
     return HotCoffeeEngine::Instance().getAssetManager();
@@ -69,6 +74,18 @@ namespace hc
     return *m_graphicsManager;
   }
 
+  SceneManager& HotCoffeeEngine::getSceneManager()
+  {
+    if (m_sceneManager == nullptr)
+    {
+      throw RuntimeErrorException(
+        "SceneManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
+    return *m_sceneManager;
+  }
+
   AssetManager& HotCoffeeEngine::getAssetManager()
   {
     if (m_assetManager == nullptr)
@@ -88,7 +105,6 @@ namespace hc
 
     m_initialized = true;
 
-    SceneManager::Prepare();
     connectToPlugins(settings.pluginManagerSettings);
     registerDependencies();
     resolveDependencies();
@@ -106,7 +122,7 @@ namespace hc
   {
     if (m_initialized)
     {
-      SceneManager::Shutdown();
+      m_sceneManager->destroy();
       m_graphicsManager->destroy();
       m_graphicsManager = nullptr;
       m_windowManager = nullptr;
@@ -143,6 +159,7 @@ namespace hc
 
     m_windowManager = m_dependencyContainer.resolve<IWindowManager>();
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
+    m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();
   }
 }

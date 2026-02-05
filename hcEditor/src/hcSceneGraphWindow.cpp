@@ -17,7 +17,7 @@ namespace hc::editor
 
   void SceneGraphWindow::onDraw()
   {
-    hc::Scene* scene = SceneManager::GetActiveScene();
+    hc::Scene* scene = HotCoffeeEngine::GetSceneManager().getActiveScene();
     if (!scene)
     {
       ImGui::Text("No active scene.");

@@ -2,16 +2,6 @@
 
 namespace hc
 {
-  Scene* SceneManager::GetActiveScene()
-  {
-    return SceneManager::Instance().getActiveScene();
-  }
-
-  bool SceneManager::SetActiveScene(const String& sceneKey)
-  {
-    return SceneManager::Instance().setActiveScene(sceneKey);
-  }
-
   SceneManager::SceneManager()
     : m_activeScene(nullptr)
   {
@@ -93,12 +83,7 @@ namespace hc
       m_activeScene->update(deltaTime);
   }
 
-  void SceneManager::onPrepare()
-  {
-    // intentionally left blank
-  }
-
-  void SceneManager::onShutdown()
+  void SceneManager::destroy()
   {
     if (m_activeScene)
     {

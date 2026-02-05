@@ -8,27 +8,9 @@ namespace hc
   /**
    * @brief Manages multiple scenes and controls the active scene.
    */
-  class HC_CORE_EXPORT SceneManager : public AModule<SceneManager>
+  class HC_CORE_EXPORT SceneManager : public NonCopyable
   {
   public:
-    /**
-     * @brief Sets the active scene by name.
-     *
-     * @param name The name of the scene to activate.
-     *
-     * @return True if the scene was set as active, false if not found.
-     */
-    static Scene* GetActiveScene();
-
-    /**
-     * @brief Sets the active scene by name.
-     *
-     * @param name The name of the scene to activate.
-     *
-     * @return True if the scene was set as active, false if not found.
-     */
-    static bool SetActiveScene(const String& sceneKey);
-
     SceneManager();
     ~SceneManager();
 
@@ -98,8 +80,5 @@ namespace hc
   private:
     UnorderedMap<String, UniquePtr<Scene>> m_scenes;
     Scene* m_activeScene;
-
-    void onPrepare() override;
-    void onShutdown() override;
   };
 }
