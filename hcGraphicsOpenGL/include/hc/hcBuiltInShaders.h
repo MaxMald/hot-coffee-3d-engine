@@ -48,7 +48,7 @@ namespace hc
         vec4 baseColor = uColor * vColor;
         if (uUseTexture)
           baseColor *= texture(uTexture, vTexCoord);
-        FragColor = vec4(0,0,1,1);
+        FragColor = baseColor;
       }
     )";
   }
