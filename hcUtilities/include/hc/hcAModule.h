@@ -1,0 +1,105 @@
+#pragma once
+
+#include "hc/hcUtilitiesPrerequisites.h"
+#include "hc/hcNonCopyable.h"
+
+namespace hc
+{
+  /**
+   * @brief Abstract base class for singleton modules.
+   *
+   * Inherit from this class to implement a singleton module with controlled
+   * initialization and shutdown. The derived class must implement the
+   * onPrepare() and onShutdown() methods for custom setup and cleanup logic.
+   *
+   * @tparam T The derived module type.
+   */
+  template<typename T>
+  class AModule : public NonCopyable
+  {
+  public:
+    /**
+     * @brief Get the singleton instance of the module.
+     *
+     * @return Reference to the singleton instance.
+     * @throws hc::RuntimeErrorException if the module has not been prepared.
+     */
+    static T& Instance();
+
+    /**
+     * @brief Prepare and initialize the module singleton.
+     *
+     * Allocates the singleton instance and calls onPrepare().
+     * Safe to call multiple times; only the first call has effect.
+     */
+    static void Prepare();
+
+    /**
+     * @brief Shutdown and destroy the module singleton.
+     *
+     * Calls onShutdown() and deletes the singleton instance.
+     * Safe to call multiple times; only the first call after Prepare() has effect.
+     */
+    static void Shutdown();
+
+  protected:
+    /**
+     * @brief Pointer to the singleton instance.
+     */
+    static T* s_instance;
+
+    /**
+     * @brief Custom initialization logic for the module.
+     *
+     * Must be implemented by the derived class.
+     */
+    virtual void onPrepare() = 0;
+
+    /**
+     * @brief Custom cleanup logic for the module.
+     *
+     * Must be implemented by the derived class.
+     */
+    virtual void onShutdown() = 0;
+
+  private:
+    AModule() = default;
+    virtual ~AModule() = default;
+  };
+
+  template<typename T>
+  T* AModule<T>::s_instance = nullptr;
+
+  template<typename T>
+  T& AModule<T>::Instance()
+  {
+    if (s_instance == nullptr)
+    {
+      throw hc::RuntimeErrorException(
+        "Module not prepared. Call Prepare() before accessing the instance."
+      );
+    }
+    return *s_instance;
+  }
+
+  template<typename T>
+  void AModule<T>::Prepare()
+  {
+    if (s_instance == nullptr)
+    {
+      s_instance = new T();
+      s_instance->onPrepare();
+    }
+  }
+
+  template<typename T>
+  void AModule<T>::Shutdown()
+  {
+    if (s_instance != nullptr)
+    {
+      s_instance->onShutdown();
+      delete s_instance;
+      s_instance = nullptr;
+    }
+  }
+}

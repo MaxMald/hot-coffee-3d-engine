@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcAModule.h" />
     <ClInclude Include="include\hc\hcAngle.h" />
     <ClInclude Include="include\hc\hcBuffer.h" />
     <ClInclude Include="include\hc\hcColor.h" />
