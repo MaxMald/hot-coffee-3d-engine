@@ -168,13 +168,13 @@
     <ClInclude Include="include\hc\editor\hcPluginManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcEditorLogger.h">
+    <ClInclude Include="include\hc\editor\hcEditorLogHistory.h">
       <Filter>Header Files\logger</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcEditorLoggerEntry.h">
+    <ClInclude Include="include\hc\editor\hcEditorLogHistoryEntry.h">
       <Filter>Header Files\logger</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcEditorLoggerEntryType.h">
+    <ClInclude Include="include\hc\editor\hcEditorLogHistoryEntryType.h">
       <Filter>Header Files\logger</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorLoggerWindow.h">
@@ -356,7 +356,7 @@
     <ClCompile Include="src\hcPluginManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcEditorLogger.cpp">
+    <ClCompile Include="src\hcEditorLogHistory.cpp">
       <Filter>Source Files\logger</Filter>
     </ClCompile>
     <ClCompile Include="src\hcEditorLoggerWindow.cpp">

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
-#include "hc/editor/hcEditorLogger.h"
+#include "hc/editor/hcEditorLogHistory.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 #include "hc/editor/hcProjectManager.h"
@@ -20,6 +20,7 @@ namespace hc::editor
     ~HotCoffeeEditor() override = default;
 
   private:
+    EditorLogHistory m_editorLogHistory;
     EditorViewsManager m_viewsManager;
     GameObjectSelectionService m_gameObjectSelectionService;
     ProjectManager m_projectManager;

@@ -12,6 +12,7 @@
 #include "hc/editor/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/hcAssetManagerWindow.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
+#include "hc/editor/hcEditorLogHistory.h"
 
 namespace hc::editor
 {
@@ -20,12 +21,13 @@ namespace hc::editor
     void registerDefaultViews(
       EditorViewsManager& viewsManager,
       GameObjectSelectionService& gameObjectSelectionService,
-      ProjectManager& projectManager
+      ProjectManager& projectManager,
+      EditorLogHistory& editorLogHistory
     )
     {
       viewsManager.registerView(MakeUnique<MainMenuToolbar>(viewsManager, projectManager));
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
-      viewsManager.registerView(MakeUnique<EditorLoggerWindow>());
+      viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
       viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());

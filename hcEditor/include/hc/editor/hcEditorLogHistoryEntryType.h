@@ -4,7 +4,7 @@
 
 namespace hc::editor
 {
-  namespace editorLoggerEntryType
+  namespace editorLogHistoryEntryType
   {
     enum Type
     {

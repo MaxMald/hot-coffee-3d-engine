@@ -21,7 +21,8 @@ namespace hc::editor
   HotCoffeeEditor::HotCoffeeEditor() :
     m_initialized(false),
     m_viewsManager(),
-    m_gameObjectSelectionService()
+    m_gameObjectSelectionService(),
+    m_editorLogHistory()
   {
   }
 
@@ -45,7 +46,8 @@ namespace hc::editor
     editorViewsRegistry::registerDefaultViews(
       m_viewsManager,
       m_gameObjectSelectionService,
-      m_projectManager
+      m_projectManager,
+      m_editorLogHistory
     );
 
     while (window.isOpen())
@@ -75,12 +77,12 @@ namespace hc::editor
   void HotCoffeeEditor::onPrepare()
   {
     HotCoffeeEngine::Prepare();
-    EditorLogger::Prepare();
+    LogService::Instance().subscribe(&m_editorLogHistory);
   }
 
   void HotCoffeeEditor::onShutdown()
   {
-    EditorLogger::Shutdown();
+    LogService::Instance().unsubscribe(&m_editorLogHistory);
     HotCoffeeEngine::Shutdown();
   }
 

@@ -1,17 +1,15 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
-#include "hc/editor/hcEditorLoggerEntry.h"
+#include "hc/editor/hcEditorLogHistoryEntry.h"
 
 namespace hc::editor
 {
-  class EditorLogger :
-    public ILogServiceListener,
-    public AModule<EditorLogger>
+  class EditorLogHistory : public ILogServiceListener
   {
   public:
-    EditorLogger();
-    ~EditorLogger() override;
+    EditorLogHistory();
+    virtual ~EditorLogHistory();
 
     void onMessageLogged(const String& message) override;
     void onWarningLogged(const String& message) override;
@@ -19,15 +17,13 @@ namespace hc::editor
 
     UInt32 getCapacity() const;
     SizeT getEntryCount() const;
-    const Vector<EditorLoggerEntry>& getEntries() const;
+    const Vector<EditorLogHistoryEntry>& getEntries() const;
     void clear();
 
   private:
     UInt32 m_capacity;
-    Vector<EditorLoggerEntry> m_entries;
+    Vector<EditorLogHistoryEntry> m_entries;
 
-    void onPrepare() override;
-    void onShutdown() override;
-    void addEntry(const EditorLoggerEntry& entry);
+    void addEntry(const EditorLogHistoryEntry& entry);
   };
 }
