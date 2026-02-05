@@ -6,8 +6,11 @@
 
 namespace hc::editor
 {
-  SceneGraphWindow::SceneGraphWindow() :
-    AWindowView("Scene Graph", true)
+  SceneGraphWindow::SceneGraphWindow(
+    GameObjectSelectionService& gameObjectSelectionService
+  ) :
+    AWindowView("Scene Graph", true),
+    m_gameObjectSelectionService(gameObjectSelectionService)
   {
   }
 
@@ -75,14 +78,14 @@ namespace hc::editor
 
     ImGui::PushID(gameObject);
 
-    bool isSelected = GameObjectSelectionService::Instance().isGameObjectSelected(gameObject);
+    bool isSelected = m_gameObjectSelectionService.isGameObjectSelected(gameObject);
     ImGuiTreeNodeFlags flags = isSelected ? ImGuiTreeNodeFlags_Selected : 0;
     bool open = ImGui::TreeNodeEx(gameObjectName.c_str(), flags);
 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
     {
-      GameObjectSelectionService::Instance().clearSelection();
-      GameObjectSelectionService::Instance().selectGameObject(gameObject);
+      m_gameObjectSelectionService.clearSelection();
+      m_gameObjectSelectionService.selectGameObject(gameObject);
     }
 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Right))

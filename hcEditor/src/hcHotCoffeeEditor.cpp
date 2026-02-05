@@ -2,6 +2,7 @@
 
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcProjectManager.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 
@@ -18,7 +19,9 @@ namespace hc::editor
   }
 
   HotCoffeeEditor::HotCoffeeEditor() :
-    m_initialized(false)
+    m_initialized(false),
+    m_viewsManager(),
+    m_gameObjectSelectionService()
   {
   }
 
@@ -39,6 +42,10 @@ namespace hc::editor
     IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
     
     m_viewsManager.initialize(window);
+    editorViewsRegistry::registerDefaultViews(
+      m_viewsManager,
+      m_gameObjectSelectionService
+    );
 
     while (window.isOpen())
     {
@@ -69,12 +76,10 @@ namespace hc::editor
     HotCoffeeEngine::Prepare();
     EditorLogger::Prepare();
     ProjectManager::Prepare();
-    GameObjectSelectionService::Prepare();
   }
 
   void HotCoffeeEditor::onShutdown()
   {
-    GameObjectSelectionService::Shutdown();
     ProjectManager::Shutdown();
     EditorLogger::Shutdown();
     HotCoffeeEngine::Shutdown();

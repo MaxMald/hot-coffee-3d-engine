@@ -15,13 +15,13 @@ namespace hc::editor
   class  MainMenuToolbar : public ABaseView
   {
   public:
-    MainMenuToolbar(EditorViewsManager* editorViewsManager);
+    MainMenuToolbar(EditorViewsManager& editorViewsManager);
     virtual ~MainMenuToolbar();
 
     void draw() override;
 
   protected:
-    EditorViewsManager* m_editorViewsManager;
+    EditorViewsManager& m_editorViewsManager;
     void displayOpenProjectDialog();
   };
 }

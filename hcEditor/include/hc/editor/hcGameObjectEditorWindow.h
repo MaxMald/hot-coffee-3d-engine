@@ -8,14 +8,19 @@
 namespace hc::editor
 {
   class ProjectFileSelector;
+  class GameObjectSelectionService;
 
   class GameObjectEditorWindow : public AWindowView
   {
   public:
-    GameObjectEditorWindow(ProjectFileSelector& projectFileSelector);
+    GameObjectEditorWindow(
+      ProjectFileSelector& projectFileSelector,
+      GameObjectSelectionService& gameObjectSelectionService
+    );
     virtual ~GameObjectEditorWindow();
 
   protected:
+    GameObjectSelectionService& m_gameObjectSelectionService;
     CreateComponentSection m_createComponentSection;
     ComponentDrawersManager m_componentDrawersManager;
 

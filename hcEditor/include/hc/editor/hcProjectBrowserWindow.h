@@ -22,7 +22,7 @@ namespace hc::editor
     void refresh();
 
   protected:
-    MaterialDescriptorEditorWindow* m_matDescEditorWindow;
+    MaterialDescriptorEditorWindow& m_matDescEditorWindow;
     DirectoryNavigator m_directoryNavigator;
 
     void onDraw() override;

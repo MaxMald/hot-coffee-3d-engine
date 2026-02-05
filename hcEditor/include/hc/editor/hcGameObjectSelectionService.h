@@ -9,11 +9,11 @@ namespace hc::editor
   /**
    * @brief Manages the selection state of GameObjects in the editor.
    */
-  class GameObjectSelectionService : public AModule<GameObjectSelectionService>
+  class GameObjectSelectionService
   {
   public:
     GameObjectSelectionService();
-    ~GameObjectSelectionService() override;
+    ~GameObjectSelectionService();
 
     /**
      * @brief Returns the currently selected GameObjects.
@@ -67,8 +67,5 @@ namespace hc::editor
   private:
     Vector<GameObject*> m_selectedGameObjects;
     Vector<IGameObjectSelectionServiceListener*> m_listeners;
-
-    void onPrepare() override;
-    void onShutdown() override;
   };
 }

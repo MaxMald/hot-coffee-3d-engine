@@ -16,7 +16,7 @@ namespace hc::editor
   static constexpr const char* PROJECT_FILE_EXTENSION = ".hotCoffeeProj";
   static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
 
-  MainMenuToolbar::MainMenuToolbar(EditorViewsManager* editorViewsManager) :
+  MainMenuToolbar::MainMenuToolbar(EditorViewsManager& editorViewsManager) :
     ABaseView(),
     m_editorViewsManager(editorViewsManager)
   {
@@ -71,22 +71,22 @@ namespace hc::editor
       if (ImGui::BeginMenu("Windows"))
       {
         if (ImGui::MenuItem("Plugin Manager"))
-          m_editorViewsManager->getView<PluginManagerWindow>()->setOpen(true);
+          m_editorViewsManager.getView<PluginManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Logger"))
-          m_editorViewsManager->getView<EditorLoggerWindow>()->setOpen(true);
+          m_editorViewsManager.getView<EditorLoggerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Scene Graph"))
-          m_editorViewsManager->getView<SceneGraphWindow>()->setOpen(true);
+          m_editorViewsManager.getView<SceneGraphWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Light Manager"))
-          m_editorViewsManager->getView<LightManagerWindow>()->setOpen(true);
+          m_editorViewsManager.getView<LightManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Camera Manager"))
-          m_editorViewsManager->getView<CameraManagerWindow>()->setOpen(true);
+          m_editorViewsManager.getView<CameraManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Asset Manager"))
-          m_editorViewsManager->getView<AssetManagerWindow>()->setOpen(true);
+          m_editorViewsManager.getView<AssetManagerWindow>()->setOpen(true);
 
         ImGui::EndMenu();
       }

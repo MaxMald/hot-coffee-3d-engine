@@ -10,10 +10,12 @@
 namespace hc::editor
 {
   GameObjectEditorWindow::GameObjectEditorWindow(
-    ProjectFileSelector& projectFileSelector
+    ProjectFileSelector& projectFileSelector,
+    GameObjectSelectionService& gameObjectSelectionService
   ) :
     AWindowView("Game Object Editor", true),
-    m_componentDrawersManager()
+    m_componentDrawersManager(),
+    m_gameObjectSelectionService(gameObjectSelectionService)
   {
     componentDrawersRegistry::registryDefaultComponentDrawers(
       m_componentDrawersManager,
@@ -26,7 +28,7 @@ namespace hc::editor
   void GameObjectEditorWindow::onDraw()
   {
     const Vector<GameObject*> selectedGameObjects =
-      GameObjectSelectionService::Instance().getSelectedGameObjects();
+      m_gameObjectSelectionService.getSelectedGameObjects();
 
     if (selectedGameObjects.empty())
     {

@@ -16,7 +16,7 @@ namespace hc::editor
     virtual ~MeshComponentDrawer();
 
   protected:
-    ProjectFileSelector* m_projectFileSelector;
+    ProjectFileSelector& m_projectFileSelector;
 
     void onDrawComponent(MeshComponent* component) override;
     void drawLoadMeshButton(MeshComponent* component);

@@ -3,6 +3,7 @@
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcEditorLogger.h"
 #include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/hcGameObjectSelectionService.h"
 
 namespace hc::editor
 {
@@ -19,6 +20,7 @@ namespace hc::editor
 
   private:
     EditorViewsManager m_viewsManager;
+    GameObjectSelectionService m_gameObjectSelectionService;
     bool m_initialized;
 
     void onPrepare() override;

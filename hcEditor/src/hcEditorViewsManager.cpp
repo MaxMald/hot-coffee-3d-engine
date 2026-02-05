@@ -2,7 +2,6 @@
 
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcImguiHandler.h"
-#include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcProjectFileSelector.h"
 
 namespace hc::editor
@@ -18,7 +17,6 @@ namespace hc::editor
       return;
 
     hcImguiHandler::init(window);
-    editorViewsRegistry::registerDefaultViews(*this);
     m_initialized = true;
   }
 

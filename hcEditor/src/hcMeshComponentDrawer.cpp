@@ -8,7 +8,7 @@ namespace hc::editor
     ProjectFileSelector& projectFileSelector
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
-    m_projectFileSelector(&projectFileSelector)
+    m_projectFileSelector(projectFileSelector)
   {
   }
 
@@ -28,7 +28,7 @@ namespace hc::editor
   {
     if (ImGui::Button("Load Mesh"))
     {
-      m_projectFileSelector->openModelFile(
+      m_projectFileSelector.openModelFile(
         [this, component](const Path& selectedPath)
         {
           onMeshFileSelected(component, selectedPath);

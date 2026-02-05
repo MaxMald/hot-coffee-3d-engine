@@ -42,7 +42,7 @@ namespace hc::editor
     void clear() override;
 
   private:
-    ProjectFileSelector* m_projectFileSelector;
+    ProjectFileSelector& m_projectFileSelector;
     Color m_color;
     Path m_mainImagePath;
   };
