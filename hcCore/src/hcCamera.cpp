@@ -3,7 +3,7 @@
 namespace hc
 {
   Camera::Camera() :
-    m_position(0.0f, 0.0f, 100.0f),
+    m_position(0.0f, 0.0f, 0.0f),
     m_direction(0.0f, 0.0f, -1.0f),
     m_up(0.0f, 1.0f, 0.0f),
     m_projectionType(projectionType::Perspective)
@@ -44,7 +44,7 @@ namespace hc
     return m_up;
   }
 
-  void Camera::setProjection(projectionType::Type type)
+  void Camera::setProjectionType(projectionType::Type type)
   {
     m_projectionType = type;
   }
@@ -71,7 +71,7 @@ namespace hc
     }
   }
 
-  ICameraProjection* Camera::getActiveProjection()
+  ICameraProjection* Camera::getCameraProjection()
   {
     if (m_projectionType == projectionType::Perspective)
     {

@@ -69,7 +69,7 @@ namespace hc::editor
     ImGui::Text("Up: %.2f, %.2f, %.2f", up.x, up.y, up.z);
 
     ImGui::Separator();
-    drawCameraProjectionController(camera->getActiveProjection());
+    drawCameraProjectionController(camera->getCameraProjection());
     ImGui::Separator();
 
     if (ImGui::CollapsingHeader("Projection Matrix"))

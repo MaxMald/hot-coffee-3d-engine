@@ -1,6 +1,7 @@
 #include "hc/hcOpenGlShaderProgram.h"
 #include "hc/hcOpenGlShader.h"
 #include "hc/hcOpenGlTexture.h"
+#include "hc/hcOpenGlGraphicsUtilitites.h"
 
 namespace hc
 {
@@ -51,6 +52,8 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform1f(location, value);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, Int32 value)
@@ -58,6 +61,8 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform1i(location, value);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, bool value)
@@ -65,6 +70,8 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform1i(location, value ? 1 : 0);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Vector3f& v3f)
@@ -72,6 +79,8 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform3f(location, v3f.x, v3f.y, v3f.z);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Color& color)
@@ -79,13 +88,17 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform4f(location, color.r, color.g, color.b, color.a);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Matrix4& matrix4x4)
   {
     GLint location = getUniformLocation(name);
     if (location != -1)
-      glUniformMatrix4fv(location, 1, GL_FALSE, matrix4x4.m[0]);
+      glUniformMatrix4fv(location, 1, GL_TRUE, matrix4x4.m[0]);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::setUniformTexture(const String& name, Int32 slotLocation)
@@ -93,6 +106,8 @@ namespace hc
     GLint location = getUniformLocation(name);
     if (location != -1)
       glUniform1i(location, slotLocation);
+
+    openGlGraphicsUtilities::checkAndLogPosibleError();
   }
 
   void OpenGlShaderProgram::destroy()

@@ -170,6 +170,7 @@
     <ClInclude Include="include\hc\hcGraphicsOpenGlPrerequisites.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsManager.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h" />
+    <ClInclude Include="include\hc\hcOpenGlGraphicsUtilitites.h" />
     <ClInclude Include="include\hc\hcOpenGlMaterialManager.h" />
     <ClInclude Include="include\hc\hcOpenGlMesh.h" />
     <ClInclude Include="include\hc\hcOpenGlMeshManager.h" />
@@ -183,6 +184,7 @@
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
+    <ClCompile Include="src\hcOpenGlGraphicsUtilities.cpp" />
     <ClCompile Include="src\hcOpenGlMaterialManager.cpp" />
     <ClCompile Include="src\hcOpenGlMesh.cpp" />
     <ClCompile Include="src\hcOpenGlMeshManager.cpp" />

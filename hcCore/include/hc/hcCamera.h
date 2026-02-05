@@ -64,7 +64,7 @@ namespace hc
      * 
      * @param type The new projection type.
      */
-    void setProjection(projectionType::Type type);
+    void setProjectionType(projectionType::Type type);
 
     /*
     * @brief Gets the projection type of the camera.
@@ -92,7 +92,7 @@ namespace hc
      * 
      * @return Pointer to the active ICameraProjection.
      */
-    ICameraProjection* getActiveProjection();
+    ICameraProjection* getCameraProjection();
 
   private:
     Vector3f m_position;

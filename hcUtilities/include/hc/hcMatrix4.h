@@ -200,11 +200,11 @@ namespace hc
     Vector3f yaxis = zaxis.cross(xaxis);
 
     return Matrix4(
-      xaxis.x, yaxis.x, zaxis.x, position.x,
-      xaxis.y, yaxis.y, zaxis.y, position.y,
-      xaxis.z, yaxis.z, zaxis.z, position.z,
+      xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(position),
+      yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(position),
+      zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(position),
       0.0f, 0.0f, 0.0f, 1.0f
-    ).inverted();
+    );
   }
 
   inline Matrix4 Matrix4::Orthographic(
@@ -232,12 +232,12 @@ namespace hc
   )
   {
     float f = 1.0f / tan(fovYRadians * 0.5f);
-    //float fn = farPlane - nearPlane;
+    float nminusf = 1.0f / (nearPlane - farPlane);
 
     return Matrix4(
       f / aspectRatio, 0.0f, 0.0f, 0.0f,
       0.0f, f, 0.0f, 0.0f,
-      0.0f, 0.0f, (farPlane + nearPlane) / (nearPlane - farPlane), (2.0f * nearPlane * farPlane) / (nearPlane - farPlane),
+      0.0f, 0.0f, (nearPlane + farPlane) * nminusf, 2.0f * farPlane * nearPlane * nminusf,
       0.0f, 0.0f, -1.0f, 0.0f
     );
   }
