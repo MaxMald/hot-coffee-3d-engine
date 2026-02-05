@@ -34,7 +34,7 @@ namespace hc::editor
 
   void HotCoffeeEditor::run()
   {
-    SceneManager& sceneManager = HotCoffeeEngine::GetSceneManager();
+    SceneManager& sceneManager = SceneManager::Instance();
     IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
     IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
     
@@ -89,7 +89,7 @@ namespace hc::editor
 
   void HotCoffeeEditor::prepareEditorScene()
   {
-    HotCoffeeEngine::GetSceneManager().createScene("Editor Scene");
-    HotCoffeeEngine::GetSceneManager().setActiveScene("Editor Scene");
+    SceneManager::Instance().createScene("Editor Scene");
+    SceneManager::Instance().setActiveScene("Editor Scene");
   }
 }
