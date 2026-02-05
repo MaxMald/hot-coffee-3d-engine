@@ -5,9 +5,12 @@
 
 namespace hc::editor
 {
-  UnlitMaterialDescriptorEditor::UnlitMaterialDescriptorEditor()
-    : m_color(0.0f, 0.0f, 0.0f, 1.0f),
-    m_mainImagePath()
+  UnlitMaterialDescriptorEditor::UnlitMaterialDescriptorEditor(
+    ProjectFileSelector& projectFileSelector
+  ) : 
+    m_color(0.0f, 0.0f, 0.0f, 1.0f),
+    m_mainImagePath(),
+    m_projectFileSelector(&projectFileSelector)
   {
   }
 
@@ -36,7 +39,7 @@ namespace hc::editor
     imguiUtilities::DrawColorEdit3("Tint: ", m_color);
     if (ImGui::Button("Select Main Image"))
     {
-      ProjectFileSelector::OpenImageFile(
+      m_projectFileSelector->openImageFile(
         [this](const Path& selectedPath)
         {
           m_mainImagePath = selectedPath;

@@ -17,12 +17,14 @@ namespace
 
 namespace hc::editor
 {
-  MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow() :
+  MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow(
+    ProjectFileSelector& projectFileSelector
+  ) :
     AWindowView("Material Descriptor Editor", false),
     m_assetReference(),
     m_currentShaderType(shadingType::Type::Unknown)
   {
-    registerEditors();
+    registerEditors(projectFileSelector);
   }
 
   MaterialDescriptorEditorWindow::~MaterialDescriptorEditorWindow()
@@ -75,9 +77,11 @@ namespace hc::editor
       editor->clear();
   }
 
-  void MaterialDescriptorEditorWindow::registerEditors()
+  void MaterialDescriptorEditorWindow::registerEditors(ProjectFileSelector& projectFileSelector)
   {
-    m_editors[shadingType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>();
+    m_editors[shadingType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>(
+      projectFileSelector
+    );
     m_nullEditor = MakeUnique<NullMaterialDescriptorEditor>();
   }
 

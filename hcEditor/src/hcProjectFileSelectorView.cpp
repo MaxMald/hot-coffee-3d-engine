@@ -8,69 +8,6 @@
 
 namespace hc::editor
 {
-  void ProjectFileSelector::OpenImageFile(
-    const std::function<void(const Path&)>& onFileSelected
-  )
-  {
-    ProjectFileSelector* instance = 
-      EditorViewsManager::GetView<ProjectFileSelector>();
-
-    if (instance)
-    {
-      instance->openFileSelector(
-        "Select Image",
-        instance->m_imageFileExtensions,
-        onFileSelected
-      );
-    }
-  }
-
-  void ProjectFileSelector::OpenModelFile(
-    const std::function<void(const Path&)>& onFileSelected
-  )
-  {
-    ProjectFileSelector* instance =
-      EditorViewsManager::GetView<ProjectFileSelector>();
-
-    if (instance)
-    {
-      instance->openFileSelector(
-        "Select Model",
-        instance->m_modelFileExtensions,
-        onFileSelected
-      );
-    }
-  }
-
-  void ProjectFileSelector::OpenFile(
-    const String& title,
-    const Vector<String>& filters,
-    const std::function<void(const Path&)>& onFileSelected
-  )
-  {
-    ProjectFileSelector* instance =
-      EditorViewsManager::GetView<ProjectFileSelector>();
-
-    if (instance)
-    {
-      instance->openFileSelector(title, filters, onFileSelected);
-    }
-  }
-
-  void ProjectFileSelector::OpenDirectory(
-    const String& title,
-    const std::function<void(const Path&)>& onDirectorySelected
-  )
-  {
-    ProjectFileSelector* instance =
-      EditorViewsManager::GetView<ProjectFileSelector>();
-
-    if (instance)
-    {
-      instance->openDirectorySelector(title, onDirectorySelected);
-    }
-  }
-
   ProjectFileSelector::ProjectFileSelector() :
     ABaseView(),
     m_isFileSelectorOpen(false),
@@ -119,6 +56,28 @@ namespace hc::editor
     }
   }
 
+  void ProjectFileSelector::openImageFile(
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    openFileSelector(
+      "Select Image",
+      m_imageFileExtensions,
+      onFileSelected
+    );
+  }
+
+  void ProjectFileSelector::openModelFile(
+    const std::function<void(const Path&)>& onFileSelected
+  )
+  {
+    openFileSelector(
+      "Select Model",
+      m_modelFileExtensions,
+      onFileSelected
+    );
+  }
+
   void ProjectFileSelector::onDestroy()
   {
     ProjectManager::Instance().unsubscribeListener(this);
@@ -133,7 +92,9 @@ namespace hc::editor
     if (!ProjectManager::Instance().isProjectOpen())
       return;
 
-    Path currentProjectDirectory = ProjectManager::Instance().getCurrentProjectDirectory();
+    Path currentProjectDirectory = ProjectManager::Instance()
+      .getCurrentProjectDirectory();
+
     if (currentProjectDirectory.empty())
       return;
 

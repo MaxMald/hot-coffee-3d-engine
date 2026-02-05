@@ -38,8 +38,7 @@ namespace hc::editor
     IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
     IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
     
-    EditorViewsManager::Prepare();
-    EditorViewsManager::Initialize();
+    m_viewsManager.initialize(window);
 
     while (window.isOpen())
     {
@@ -52,17 +51,17 @@ namespace hc::editor
           return;
         }
 
-        if (EditorViewsManager::ProcessEvent(*eventOpt))
+        if (m_viewsManager.processEvent(*eventOpt))
           continue;
       }
 
       graphicsManager.beginFrame();
       sceneManager.draw();
-      EditorViewsManager::Draw();
+      m_viewsManager.draw();
       graphicsManager.endFrame(window);
     }
 
-    EditorViewsManager::Shutdown();
+    m_viewsManager.clear();
   }
 
   void HotCoffeeEditor::onPrepare()

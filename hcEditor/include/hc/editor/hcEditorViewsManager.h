@@ -1,58 +1,25 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
-
-namespace hc
-{
-  class Event;
-}
+#include "hc/editor/hcIView.h"
 
 namespace hc::editor
 {
-  class IView;
-
   /**
    * @brief Manages editor views and their lifecycle in the editor.
    */
-  class EditorViewsManager : public AModule<EditorViewsManager>
+  class EditorViewsManager
   {
   public:
-    /**
-     * @brief Initialize the editor views manager singleton.
-     */
-    static void Initialize();
-
-    /**
-     * @brief Process an event for all registered views.
-     *
-     * @param event The event to process.
-     *
-     * @return True if the event was handled by any view, false otherwise.
-     */
-    static bool ProcessEvent(const Event& event);
-
-    /**
-     * @brief Draw all registered views.
-     */
-    static void Draw();
-    
-    /**
-     * @brief Retrieve a view of the specified type from the singleton instance.
-     * 
-     * @tparam T The view type to retrieve. Must derive from IView.
-     * 
-     * @return Pointer to the view if found, nullptr otherwise.
-     */
-    template<typename T>
-    static T* GetView();
-
     EditorViewsManager();
-    ~EditorViewsManager() override = default;
+    ~EditorViewsManager() = default;
 
     /**
      * @brief Initialize the manager and register default views.
+     * 
+     * @param window Reference to the main application window.
      */
-    void initialize();
+    void initialize(IWindow& window);
 
     /**
      * @brief Retrieve a view of the specified type.
@@ -85,19 +52,15 @@ namespace hc::editor
      */
     void registerView(UniquePtr<IView> view);
 
+    /**
+     * @brief Clear all registered views.
+     */
+    void clear();
+
   private:
     bool m_initialized;
     Vector<UniquePtr<IView>> m_views;
-
-    void onPrepare() override;
-    void onShutdown() override;
   };
-
-  template<typename T>
-  inline T* editor::EditorViewsManager::GetView()
-  {
-    return EditorViewsManager::Instance().getView<T>();
-  }
 
   template<typename T>
   inline T* editor::EditorViewsManager::getView() const

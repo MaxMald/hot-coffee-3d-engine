@@ -1,4 +1,4 @@
-#include "hc/editor/hcEditorViewsInitializer.h"
+#include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelector.h"
 #include "hc/editor/hcMainMenuToolbar.h"
@@ -14,23 +14,28 @@
 
 namespace hc::editor
 {
-  namespace editorViewsInitializer
+  namespace editorViewsRegistry
   {
-    void registerDefaultViews()
+    void registerDefaultViews(EditorViewsManager& viewsManager)
     {
-      EditorViewsManager& viewsManager = EditorViewsManager::Instance();
-
-      viewsManager.registerView(MakeUnique<ProjectFileSelector>());
-      viewsManager.registerView(MakeUnique<MainMenuToolbar>());
+      viewsManager.registerView(MakeUnique<MainMenuToolbar>(&viewsManager));
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>());
       viewsManager.registerView(MakeUnique<SceneGraphWindow>());
-      viewsManager.registerView(MakeUnique<ProjectBrowserWindow>());
-      viewsManager.registerView(MakeUnique<GameObjectEditorWindow>());
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());
-      viewsManager.registerView(MakeUnique<MaterialDescriptorEditorWindow>());
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+
+      UniquePtr<ProjectFileSelector> projectFileSelector =
+        MakeUnique<ProjectFileSelector>();
+
+      UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
+        MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
+
+      viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(*matDescEditorWindow));
+      viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(*projectFileSelector));
+      viewsManager.registerView(std::move(matDescEditorWindow));
+      viewsManager.registerView(std::move(projectFileSelector));
     }
   }
 }

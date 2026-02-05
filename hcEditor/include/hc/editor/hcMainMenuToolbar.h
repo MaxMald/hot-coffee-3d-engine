@@ -4,6 +4,8 @@
 
 namespace hc::editor
 {
+  class EditorViewsManager;
+
   /**
    * @brief Main menu bar view for the Hot Coffee Editor.
    *
@@ -13,12 +15,13 @@ namespace hc::editor
   class  MainMenuToolbar : public ABaseView
   {
   public:
-    MainMenuToolbar();
+    MainMenuToolbar(EditorViewsManager* editorViewsManager);
     virtual ~MainMenuToolbar();
 
     void draw() override;
 
   protected:
+    EditorViewsManager* m_editorViewsManager;
     void displayOpenProjectDialog();
   };
 }

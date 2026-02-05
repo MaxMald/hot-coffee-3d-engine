@@ -112,6 +112,12 @@
     <Filter Include="Header Files\views\windows\gameObjectEditor">
       <UniqueIdentifier>{b07e4af0-82b2-4efa-b546-74a6f7ef580d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\views\components\drawers">
+      <UniqueIdentifier>{0f7f992d-68d5-404c-89e4-7b6712590602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\components\drawers">
+      <UniqueIdentifier>{e6b79ec8-e983-4323-864c-fdaf30952bed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -276,19 +282,7 @@
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h">
       <Filter>Header Files\views\windows\assetManager</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcIComponentView.h">
-      <Filter>Header Files\views\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcMeshComponentView.h">
-      <Filter>Header Files\views\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcNotImplementedComponentView.h">
-      <Filter>Header Files\views\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcABaseComponentView.h">
-      <Filter>Header Files\views\components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcComponentViewManager.h">
+    <ClInclude Include="include\hc\editor\hcComponentDrawersManager.h">
       <Filter>Header Files\views\components</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h">
@@ -300,8 +294,23 @@
     <ClInclude Include="include\hc\editor\hcABaseView.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\editor\hcEditorViewsInitializer.h">
+    <ClInclude Include="include\hc\editor\hcEditorViewsRegistry.h">
       <Filter>Header Files\views</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMeshComponentDrawer.h">
+      <Filter>Header Files\views\components\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcABaseComponentDrawer.h">
+      <Filter>Header Files\views\components\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcNotImplementedComponentDrawer.h">
+      <Filter>Header Files\views\components\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIComponentDrawer.h">
+      <Filter>Header Files\views\components\drawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcComponentDrawersRegistry.h">
+      <Filter>Header Files\views\components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -422,13 +431,7 @@
     <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp">
       <Filter>Source Files\views\windows\assetManager</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcNotImplementedComponentView.cpp">
-      <Filter>Source Files\views\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcMeshComponentView.cpp">
-      <Filter>Source Files\views\components</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcComponentViewManager.cpp">
+    <ClCompile Include="src\hcComponentDrawersManager.cpp">
       <Filter>Source Files\views\components</Filter>
     </ClCompile>
     <ClCompile Include="src\hcGameObjectEditorWindow.cpp">
@@ -440,8 +443,17 @@
     <ClCompile Include="src\hcABaseView.cpp">
       <Filter>Source Files\views</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcEditorViewsInitializer.cpp">
+    <ClCompile Include="src\hcEditorViewsRegistry.cpp">
       <Filter>Source Files\views</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMeshComponentDrawer.cpp">
+      <Filter>Source Files\views\components\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcNotImplementedComponentDrawer.cpp">
+      <Filter>Source Files\views\components\drawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentDrawersRegistry.cpp">
+      <Filter>Source Files\views\components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,28 +1,28 @@
 #pragma once
 
-#include "hc/editor/hcIComponentView.h"
+#include "hc/editor/hcIComponentDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
   /**
-   * @brief Abstract base class for component views in the editor.
+   * @brief Abstract base class for component drawers in the editor.
    *
    * This template class provides a common interface and base functionality for
-   * all component views. It enforces type safety by requiring derived classes to
-   * implement the onDrawComponent method for a specific component type.
+   * all component drawers. It enforces type safety by requiring derived classes
+   * to implement the onDrawComponent method for a specific component type.
    *
-   * @tparam T The specific component type this view handles.
+   * @tparam T The specific component type this drawer handles.
    */
   template<typename T>
-  class ABaseComponentView : public IComponentView
+  class ABaseComponentDrawer : public IComponentDrawer
   {
   public:
-    virtual ~ABaseComponentView() override = default;
+    virtual ~ABaseComponentDrawer() override = default;
 
     /**
-     * @brief Gets the type of the component associated with this view.
-     * 
+     * @brief Gets the type of the component associated with this drawer.
+     *
      * @return The component type.
      */
     componentType::Type getComponentType() const override;
@@ -40,33 +40,33 @@ namespace hc::editor
   protected:
     componentType::Type m_componentType;
 
-    ABaseComponentView(componentType::Type type);
+    ABaseComponentDrawer(componentType::Type type);
 
     /**
      * @brief Draws the specific component of type T.
-     * 
-     * This method must be implemented by derived classes to provide
-     * custom drawing logic for the component.
-     * 
+     *
+     * This method must be implemented by derived classes to provide custom
+     * drawing logic for the component.
+     *
      * @param component Pointer to the component of type T.
      */
     virtual void onDrawComponent(T* component) = 0;
   };
 
   template<typename T>
-  ABaseComponentView<T>::ABaseComponentView(componentType::Type type)
+  ABaseComponentDrawer<T>::ABaseComponentDrawer(componentType::Type type)
     : m_componentType(type)
   {
   }
 
   template<typename T>
-  componentType::Type ABaseComponentView<T>::getComponentType() const
+  componentType::Type ABaseComponentDrawer<T>::getComponentType() const
   {
     return m_componentType;
   }
 
   template<typename T>
-  void ABaseComponentView<T>::drawComponent(IComponent* component)
+  void ABaseComponentDrawer<T>::drawComponent(IComponent* component)
   {
     String componentStr = componentType::ToString(m_componentType);
     if (ImGui::CollapsingHeader(
@@ -81,7 +81,7 @@ namespace hc::editor
       else
       {
         ImGui::Text(
-          "Error: Component type mismatch in ABaseComponentView::drawComponent"
+          "Error: Component ertype mismatch in drawer"
         );
       }
     }

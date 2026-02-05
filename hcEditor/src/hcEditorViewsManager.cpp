@@ -2,42 +2,23 @@
 
 #include "hc/editor/hcIView.h"
 #include "hc/editor/hcImguiHandler.h"
-#include "hc/editor/hcEditorViewsInitializer.h"
-#include "hc/editor/hcComponentViewManager.h"
+#include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcProjectFileSelector.h"
 
 namespace hc::editor
 {
-  void EditorViewsManager::Initialize()
-  {
-    EditorViewsManager::Instance().initialize();
-  }
-
-  bool EditorViewsManager::ProcessEvent(const Event& event)
-  {
-    return EditorViewsManager::Instance().processEvent(event);
-  }
-
-  void EditorViewsManager::Draw()
-  {
-    EditorViewsManager::Instance().draw();
-  }
-
   EditorViewsManager::EditorViewsManager() :
     m_initialized(false)
   {
   }
 
-  void EditorViewsManager::initialize()
+  void EditorViewsManager::initialize(IWindow& window)
   {
     if (m_initialized)
       return;
 
-    hcImguiHandler::init(HotCoffeeEngine::GetWindowManager().getWindow());
-
-    ComponentViewManager::Prepare();
-    editorViewsInitializer::registerDefaultViews();
-
+    hcImguiHandler::init(window);
+    editorViewsRegistry::registerDefaultViews(*this);
     m_initialized = true;
   }
 
@@ -59,23 +40,10 @@ namespace hc::editor
     m_views.push_back(std::move(view));
   }
 
-  void EditorViewsManager::onPrepare()
-  {
-    // Intentionally left blank
-  }
-
-  void EditorViewsManager::onShutdown()
+  void EditorViewsManager::clear()
   {
     for (const UniquePtr<IView>& view : m_views)
       view->destroy();
     m_views.clear();
-
-    if (m_initialized)
-    {
-      ComponentViewManager::Shutdown();
-
-      hcImguiHandler::destroy();
-      m_initialized = false;
-    }
   }
 }

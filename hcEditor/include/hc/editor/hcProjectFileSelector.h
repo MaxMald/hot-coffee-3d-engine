@@ -17,55 +17,31 @@ namespace hc::editor
     public IProjectManagerListener
   {
   public:
-    /**
-     * @brief Opens an image file selector dialog.
-     * 
-     * @param onFileSelected Callback invoked when an image file is selected.
-     */
-    static void OpenImageFile(
-      const std::function<void(const Path&)>& onFileSelected
-    );
-
-    /**
-     * @brief Opens a model file selector dialog.
-     * 
-     * @param onFileSelected Callback invoked when a model file is selected.
-     */
-    static void OpenModelFile(
-      const std::function<void(const Path&)>& onFileSelected
-    );
-
-    /**
-     * @brief Opens a file selector dialog with custom title and filters.
-     *
-     * @param title Dialog title.
-     * @param filters List of file extension filters.
-     * @param onFileSelected Callback invoked when a file is selected.
-     */
-    static void OpenFile(
-      const String& title,
-      const Vector<String>& filters,
-      const std::function<void(const Path&)>& onFileSelected
-    );
-
-    /**
-     * @brief Opens a directory selector dialog with custom title.
-     * 
-     * @param title Dialog title.
-     * @param onDirectorySelected Callback invoked when a directory is selected.
-     */
-    static void OpenDirectory(
-      const String& title,
-      const std::function<void(const Path&)>& onDirectorySelected
-    );
-
     ProjectFileSelector();
-    ~ProjectFileSelector() override;
+    virtual ~ProjectFileSelector();
 
     /**
      * @copydoc ABaseView::draw
      */
     void draw() override;
+
+    /**
+     * @brief Opens the image file selector dialog.
+     * 
+     * @param onFileSelected Callback invoked when an image file is selected.
+     */
+    void openImageFile(
+      const std::function<void(const Path&)>& onFileSelected
+    );
+
+    /**
+     * @brief Opens the model file selector dialog.
+     *
+     * @param onFileSelected Callback invoked when a model file is selected.
+     */
+    void openModelFile(
+      const std::function<void(const Path&)>& onFileSelected
+    );
 
     /**
      * @brief Opens the file selector dialog.

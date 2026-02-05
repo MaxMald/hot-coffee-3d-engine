@@ -1,19 +1,22 @@
-#include "hc/editor/hcMeshComponentView.h"
+#include "hc/editor/hcMeshComponentDrawer.h"
 #include "hc/editor/hcProjectFileSelector.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  MeshComponentView::MeshComponentView()
-    : ABaseComponentView<MeshComponent>(componentType::Mesh)
+  MeshComponentDrawer::MeshComponentDrawer(
+    ProjectFileSelector& projectFileSelector
+  ) : 
+    ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
+    m_projectFileSelector(&projectFileSelector)
   {
   }
 
-  MeshComponentView::~MeshComponentView()
+  MeshComponentDrawer::~MeshComponentDrawer()
   {
   }
 
-  void MeshComponentView::onDrawComponent(MeshComponent* component)
+  void MeshComponentDrawer::onDrawComponent(MeshComponent* component)
   {
     if (!component)
       return;
@@ -21,11 +24,11 @@ namespace hc::editor
     drawLoadMeshButton(component);
   }
 
-  void MeshComponentView::drawLoadMeshButton(MeshComponent* component)
+  void MeshComponentDrawer::drawLoadMeshButton(MeshComponent* component)
   {
     if (ImGui::Button("Load Mesh"))
     {
-      ProjectFileSelector::OpenModelFile(
+      m_projectFileSelector->openModelFile(
         [this, component](const Path& selectedPath)
         {
           onMeshFileSelected(component, selectedPath);
@@ -34,7 +37,7 @@ namespace hc::editor
     }
   }
 
-  void MeshComponentView::onMeshFileSelected(
+  void MeshComponentDrawer::onMeshFileSelected(
     MeshComponent* component,
     const Path& selectedPath
   )

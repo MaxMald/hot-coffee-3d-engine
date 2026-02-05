@@ -5,19 +5,16 @@
 namespace hc::editor
 {
   /**
-   * @brief Interface for editor component views.
+   * @brief Interface for editor component drawers.
    *
-   * Provides the contract for all component view classes in the editor.
+   * Provides the contract for all component drawer classes in the editor.
    * Implementations must provide the component type and a method to draw the
    * component.
    */
-  class IComponentView
+  class IComponentDrawer
   {
   public:
-    /**
-     * @brief Virtual destructor.
-     */
-    virtual ~IComponentView() = default;
+    virtual ~IComponentDrawer() = default;
 
     /**
      * @brief Gets the type of the component associated with this view.
@@ -34,6 +31,6 @@ namespace hc::editor
     virtual void drawComponent(IComponent* component) = 0;
 
   protected:
-    IComponentView() = default;
+    IComponentDrawer() = default;
   };
 }

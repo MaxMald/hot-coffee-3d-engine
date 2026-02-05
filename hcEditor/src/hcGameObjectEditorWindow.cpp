@@ -2,14 +2,23 @@
 
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
-#include "hc/editor/hcComponentViewManager.h"
+#include "hc/editor/hcComponentDrawersManager.h"
+#include "hc/editor/hcComponentDrawersRegistry.h"
+#include "hc/editor/hcProjectFileSelector.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  GameObjectEditorWindow::GameObjectEditorWindow() :
-    AWindowView("Game Object Editor", true)
+  GameObjectEditorWindow::GameObjectEditorWindow(
+    ProjectFileSelector& projectFileSelector
+  ) :
+    AWindowView("Game Object Editor", true),
+    m_componentDrawersManager()
   {
+    componentDrawersRegistry::registryDefaultComponentDrawers(
+      m_componentDrawersManager,
+      projectFileSelector
+    );
   }
 
   GameObjectEditorWindow::~GameObjectEditorWindow() = default;
@@ -32,7 +41,6 @@ namespace hc::editor
     String label = String::Format("Game Object: %s", gameObject->getName().c_str());
     ImGui::Text(label.c_str());
     ImGui::Separator();
-
     drawTransform(gameObject);
     ImGui::Separator();
     drawCreateComponentSection(gameObject);
@@ -40,8 +48,16 @@ namespace hc::editor
     drawComponents(gameObject);
   }
 
+  void GameObjectEditorWindow::onDestroy()
+  {
+    m_componentDrawersManager.clear();
+  }
+
   void GameObjectEditorWindow::drawTransform(GameObject* gameObject)
   {
+    if (!gameObject)
+      return;
+
     Vector3f position = gameObject->getPosition();
     Vector3f rotation = gameObject->getRotation();
     Vector3f scale = gameObject->getScale();
@@ -89,11 +105,16 @@ namespace hc::editor
 
   void GameObjectEditorWindow::drawComponents(GameObject* gameObject)
   {
-    const Vector<UniquePtr<IComponent>>& components = gameObject->getComponents();
+    if (!gameObject)
+      return;
+
+    const Vector<UniquePtr<IComponent>>& components = 
+      gameObject->getComponents();
+
     for (const UniquePtr<IComponent>& component : components)
     {
       ImGui::PushID(component.get());
-      ComponentViewManager::Instance().drawComponent(component.get());
+      m_componentDrawersManager.drawComponent(component.get());
       ImGui::PopID();
     }
   }

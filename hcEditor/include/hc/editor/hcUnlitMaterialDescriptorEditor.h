@@ -4,6 +4,8 @@
 
 namespace hc::editor
 {
+  class ProjectFileSelector;
+
   /**
    * @brief Editor for unlit material descriptors.
    */
@@ -11,7 +13,7 @@ namespace hc::editor
     public IMaterialDescriptorEditor
   {
   public:
-    UnlitMaterialDescriptorEditor();
+    UnlitMaterialDescriptorEditor(ProjectFileSelector& projectFileSelector);
     virtual ~UnlitMaterialDescriptorEditor();
 
     /**
@@ -40,6 +42,7 @@ namespace hc::editor
     void clear() override;
 
   private:
+    ProjectFileSelector* m_projectFileSelector;
     Color m_color;
     Path m_mainImagePath;
   };

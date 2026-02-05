@@ -1,14 +1,14 @@
-#include "hc/editor/hcNotImplementedComponentView.h"
+#include "hc/editor/hcNotImplementedComponentDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  componentType::Type NotImplementedComponentView::getComponentType() const
+  componentType::Type NotImplementedComponentDrawer::getComponentType() const
   {
     return componentType::Unknown;
   }
 
-  void NotImplementedComponentView::drawComponent(IComponent* component)
+  void NotImplementedComponentDrawer::drawComponent(IComponent* component)
   {
     if (!component)
       return;

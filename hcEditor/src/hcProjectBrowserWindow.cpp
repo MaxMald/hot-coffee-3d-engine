@@ -16,8 +16,11 @@ namespace
 
 namespace hc::editor
 {
-  ProjectBrowserWindow::ProjectBrowserWindow() :
-    AWindowView("Project Browser", true)
+  ProjectBrowserWindow::ProjectBrowserWindow(
+    MaterialDescriptorEditorWindow& matDescEditorWindow
+  ) :
+    AWindowView("Project Browser", true),
+    m_matDescEditorWindow(&matDescEditorWindow)
   {
     ProjectManager::Instance().subscribeListener(this);
   }
@@ -153,9 +156,7 @@ namespace hc::editor
     String extension = fileReference.getExtension();
     if (extension == assetFileExtensions::MATERIAL_DESCRIPTOR)
     {
-      EditorViewsManager::GetView<MaterialDescriptorEditorWindow>()->open(
-        fileReference.getFullPath()
-      );
+      m_matDescEditorWindow->open(fileReference.getFullPath());
     }
   }
 

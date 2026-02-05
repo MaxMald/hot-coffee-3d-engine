@@ -2,6 +2,7 @@
 
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcEditorLogger.h"
+#include "hc/editor/hcEditorViewsManager.h"
 
 namespace hc::editor
 {
@@ -17,6 +18,7 @@ namespace hc::editor
     ~HotCoffeeEditor() override = default;
 
   private:
+    EditorViewsManager m_viewsManager;
     bool m_initialized;
 
     void onPrepare() override;
