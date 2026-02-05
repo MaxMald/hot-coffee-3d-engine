@@ -94,14 +94,4 @@ namespace hc::editor
     if (item != m_listeners.end())
       m_listeners.erase(item);
   }
-
-  void ProjectManager::onPrepare()
-  {
-    // intentionally left blank
-  }
-
-  void ProjectManager::onShutdown()
-  {
-    // intentionally left blank
-  }
 }

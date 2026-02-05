@@ -1,20 +1,20 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/hcProject.h"
 
 namespace hc::editor
 {
-  class Project;
   class IProjectManagerListener;
 
   /**
    * @brief Manages the lifecycle and state of editor projects.
    */
-  class ProjectManager : public AModule<ProjectManager>
+  class ProjectManager
   {
   public:
     ProjectManager();
-    ~ProjectManager() override = default;
+    ~ProjectManager() = default;
 
     /**
      * @brief Opens a project from the specified path.
@@ -78,8 +78,5 @@ namespace hc::editor
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
     Vector<IProjectManagerListener*> m_listeners;
-
-    void onPrepare() override;
-    void onShutdown() override;
   };
 }

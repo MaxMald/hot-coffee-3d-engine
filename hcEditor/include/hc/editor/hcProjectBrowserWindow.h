@@ -8,13 +8,17 @@ namespace hc::editor
 {
   class FileReference;
   class MaterialDescriptorEditorWindow;
+  class ProjectManager;
 
   class ProjectBrowserWindow :
     public AWindowView,
     public IProjectManagerListener
   {
   public:
-    ProjectBrowserWindow(MaterialDescriptorEditorWindow& matDescEditorWindow);
+    ProjectBrowserWindow(
+      ProjectManager& projectManager,
+      MaterialDescriptorEditorWindow& matDescEditorWindow
+    );
     virtual ~ProjectBrowserWindow();
 
     void onProjectOpened() override;
@@ -23,10 +27,10 @@ namespace hc::editor
 
   protected:
     MaterialDescriptorEditorWindow& m_matDescEditorWindow;
+    ProjectManager& m_projectManager;
     DirectoryNavigator m_directoryNavigator;
 
     void onDraw() override;
-    void onDestroy() override;
     void drawDirectoryNavigator();
     void drawAssetCreatorInterface();
     void tryOpenEditorForFile(const FileReference& fileReference);

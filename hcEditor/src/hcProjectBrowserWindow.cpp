@@ -17,24 +17,27 @@ namespace
 namespace hc::editor
 {
   ProjectBrowserWindow::ProjectBrowserWindow(
+    ProjectManager& projectManager,
     MaterialDescriptorEditorWindow& matDescEditorWindow
   ) :
     AWindowView("Project Browser", true),
+    m_projectManager(projectManager),
     m_matDescEditorWindow(matDescEditorWindow)
   {
-    ProjectManager::Instance().subscribeListener(this);
+    m_projectManager.subscribeListener(this);
   }
 
   ProjectBrowserWindow::~ProjectBrowserWindow()
   {
+    m_projectManager.unsubscribeListener(this);
   }
 
   void ProjectBrowserWindow::onProjectOpened()
   {
-    if (!ProjectManager::Instance().isProjectOpen())
+    if (!m_projectManager.isProjectOpen())
       return;
 
-    Path projectPath = ProjectManager::Instance().getCurrentProjectPath();
+    Path projectPath = m_projectManager.getCurrentProjectPath();
     Path projectDir = projectPath.parent_path();
     m_directoryNavigator.initialize(projectDir);
   }
@@ -49,11 +52,6 @@ namespace hc::editor
     drawAssetCreatorInterface();
     ImGui::Separator();
     drawDirectoryNavigator();
-  }
-
-  void ProjectBrowserWindow::onDestroy()
-  {
-    ProjectManager::Instance().unsubscribeListener(this);
   }
 
   void ProjectBrowserWindow::drawDirectoryNavigator()

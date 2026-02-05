@@ -16,9 +16,13 @@ namespace hc::editor
   static constexpr const char* PROJECT_FILE_EXTENSION = ".hotCoffeeProj";
   static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
 
-  MainMenuToolbar::MainMenuToolbar(EditorViewsManager& editorViewsManager) :
+  MainMenuToolbar::MainMenuToolbar(
+    EditorViewsManager& editorViewsManager,
+    ProjectManager& projectManager
+  ) :
     ABaseView(),
-    m_editorViewsManager(editorViewsManager)
+    m_editorViewsManager(editorViewsManager),
+    m_projectManager(projectManager)
   {
   }
 
@@ -113,7 +117,7 @@ namespace hc::editor
       {
         String filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
         String filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-        ProjectManager::Instance().openProject(Path(filePathName.c_str()));
+        m_projectManager.openProject(Path(filePathName.c_str()));
       }
 
       ImGuiFileDialog::Instance()->Close();

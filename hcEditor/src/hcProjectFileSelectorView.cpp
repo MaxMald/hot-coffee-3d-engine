@@ -8,10 +8,13 @@
 
 namespace hc::editor
 {
-  ProjectFileSelector::ProjectFileSelector() :
+  ProjectFileSelector::ProjectFileSelector(
+    ProjectManager& projectManager
+  ) :
     ABaseView(),
     m_isFileSelectorOpen(false),
-    m_isDirectorySelectorOpen(false)
+    m_isDirectorySelectorOpen(false),
+    m_projectManager(projectManager)
   {
     m_imageFileExtensions = Vector<String>(
       assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.begin(),
@@ -23,11 +26,12 @@ namespace hc::editor
       assetFileExtensions::SUPPORTED_MODEL_EXTENSIONS.end()
     );
 
-    ProjectManager::Instance().subscribeListener(this);
+    m_projectManager.subscribeListener(this);
   }
 
   ProjectFileSelector::~ProjectFileSelector()
   {
+    m_projectManager.unsubscribeListener(this);
   }
 
   void ProjectFileSelector::draw()
@@ -80,7 +84,6 @@ namespace hc::editor
 
   void ProjectFileSelector::onDestroy()
   {
-    ProjectManager::Instance().unsubscribeListener(this);
     clear();
   }
 
@@ -89,12 +92,10 @@ namespace hc::editor
     clear();
     m_directoryNavigator.clear();
 
-    if (!ProjectManager::Instance().isProjectOpen())
+    if (!m_projectManager.isProjectOpen())
       return;
 
-    Path currentProjectDirectory = ProjectManager::Instance()
-      .getCurrentProjectDirectory();
-
+    Path currentProjectDirectory = m_projectManager.getCurrentProjectDirectory();
     if (currentProjectDirectory.empty())
       return;
 

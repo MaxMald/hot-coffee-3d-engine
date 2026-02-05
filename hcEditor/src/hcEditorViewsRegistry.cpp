@@ -19,10 +19,11 @@ namespace hc::editor
   {
     void registerDefaultViews(
       EditorViewsManager& viewsManager,
-      GameObjectSelectionService& gameObjectSelectionService
+      GameObjectSelectionService& gameObjectSelectionService,
+      ProjectManager& projectManager
     )
     {
-      viewsManager.registerView(MakeUnique<MainMenuToolbar>(viewsManager));
+      viewsManager.registerView(MakeUnique<MainMenuToolbar>(viewsManager, projectManager));
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>());
       viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
@@ -31,12 +32,15 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
 
       UniquePtr<ProjectFileSelector> projectFileSelector =
-        MakeUnique<ProjectFileSelector>();
+        MakeUnique<ProjectFileSelector>(projectManager);
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
         MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
 
-      viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(*matDescEditorWindow));
+      viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
+        projectManager,
+        *matDescEditorWindow
+      ));
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
         *projectFileSelector,
         gameObjectSelectionService

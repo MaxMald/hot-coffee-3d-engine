@@ -8,6 +8,7 @@ namespace hc::editor
 {
   class DirectoryReference;
   class FileReference;
+  class ProjectManager;
 
   /**
    * @brief View for selecting files or directories within a project.
@@ -17,7 +18,7 @@ namespace hc::editor
     public IProjectManagerListener
   {
   public:
-    ProjectFileSelector();
+    ProjectFileSelector(ProjectManager& projectManager);
     virtual ~ProjectFileSelector();
 
     /**
@@ -68,6 +69,7 @@ namespace hc::editor
     );
 
   private:
+    ProjectManager& m_projectManager;
     DirectoryNavigator m_directoryNavigator;
     std::function<void(const Path&)> m_selectionCallback;
     String m_currentTitle;

@@ -44,7 +44,8 @@ namespace hc::editor
     m_viewsManager.initialize(window);
     editorViewsRegistry::registerDefaultViews(
       m_viewsManager,
-      m_gameObjectSelectionService
+      m_gameObjectSelectionService,
+      m_projectManager
     );
 
     while (window.isOpen())
@@ -75,12 +76,10 @@ namespace hc::editor
   {
     HotCoffeeEngine::Prepare();
     EditorLogger::Prepare();
-    ProjectManager::Prepare();
   }
 
   void HotCoffeeEditor::onShutdown()
   {
-    ProjectManager::Shutdown();
     EditorLogger::Shutdown();
     HotCoffeeEngine::Shutdown();
   }
