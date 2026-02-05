@@ -9,26 +9,9 @@ namespace hc
    * @brief Singleton utility for registering and using JSON serializers for
    * various types.
    */
-  class HC_CORE_EXPORT JsonSerializer : public NonCopyable
+  class HC_CORE_EXPORT JsonSerializer : public AModule<JsonSerializer>
   {
   public:
-    /*
-    * @brief Gets the singleton instance of the JsonSerializer.
-    * 
-    * @return Reference to the JsonSerializer instance.
-    */
-    static JsonSerializer& Instance();
-
-    /*
-    * @brief Prepares the JsonSerializer for use.
-    */
-    static void Prepare();
-
-    /*
-    * @brief Shuts down the JsonSerializer.
-    */
-    static void Shutdown();
-
     /**
      * @brief Serializes an object to a JSON string using the registered serializer.
      *
@@ -54,7 +37,8 @@ namespace hc
     template<typename T>
     static T* Deserialize(const String& json);
 
-    ~JsonSerializer() = default;
+    JsonSerializer() = default;
+    ~JsonSerializer() override = default;
 
     /**
      * @brief Registers a JSON serializer for a specific type.
@@ -94,12 +78,10 @@ namespace hc
     T* deserialize(const String& json) const;
 
   private:
-    static JsonSerializer* s_instance;
-
     UnorderedMap<TypeIndex, UniquePtr<IJsonSerializer<void>>> m_serializers;
 
-    JsonSerializer();
-    void onPrepare();
+    void onPrepare() override;
+    void onShutdown() override;
   };
 
   template<typename T>
