@@ -11,12 +11,11 @@ namespace hc
   class SceneManager;
   class AssetManager;
 
-  class HC_CORE_EXPORT HotCoffeeEngine
+  class HC_CORE_EXPORT HotCoffeeEngine : public AModule<HotCoffeeEngine>
   {
   public:
-    static HotCoffeeEngine& Instance();
-    static void Prepare();
-    static void Shutdown();
+    HotCoffeeEngine();
+    ~HotCoffeeEngine() override;
 
     const PluginManager& getPluginManager() const;
     IWindowManager& getWindowManager();
@@ -26,23 +25,18 @@ namespace hc
 
     void init(const HotCoffeeEngineSettings& settings);
 
-  private:
-    static HotCoffeeEngine* _Instance;
+  protected:
+    void onPrepare() override;
+    void onShutdown() override;
 
+  private:
     SharedPtr<IWindowManager> m_windowManager;
     SharedPtr<IGraphicsManager> m_graphicsManager;
     SharedPtr<SceneManager> m_sceneManager;
     SharedPtr<AssetManager> m_assetManager;
-
-    bool m_started;
     PluginManager m_pluginManager;
     DependencyContainer m_dependencyContainer;
-
-    HotCoffeeEngine();
-    ~HotCoffeeEngine();
-
-    void onPrepare();
-    void onShutdown();
+    bool m_started;
 
     void connectToPlugins(const PluginManagerSettings& settings);
     void registerDependencies();

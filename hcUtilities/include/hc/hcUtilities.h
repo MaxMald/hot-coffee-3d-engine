@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcUtilitiesPrerequisites.h"
+#include "hc/hcAModule.h"
 #include "hc/hcAngle.h"
 #include "hc/hcColor.h"
 #include "hc/hcBuffer.h"

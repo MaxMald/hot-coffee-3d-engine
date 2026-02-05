@@ -48,6 +48,9 @@ namespace hc
      */
     static T* s_instance;
 
+    AModule() = default;
+    virtual ~AModule() = default;
+
     /**
      * @brief Custom initialization logic for the module.
      *
@@ -61,10 +64,6 @@ namespace hc
      * Must be implemented by the derived class.
      */
     virtual void onShutdown() = 0;
-
-  private:
-    AModule() = default;
-    virtual ~AModule() = default;
   };
 
   template<typename T>
@@ -88,7 +87,9 @@ namespace hc
     if (s_instance == nullptr)
     {
       s_instance = new T();
-      s_instance->onPrepare();
+
+      AModule* module = static_cast<AModule*>(s_instance);
+      module->onPrepare();
     }
   }
 
@@ -97,7 +98,9 @@ namespace hc
   {
     if (s_instance != nullptr)
     {
-      s_instance->onShutdown();
+      AModule* module = static_cast<AModule*>(s_instance);
+      module->onShutdown();
+
       delete s_instance;
       s_instance = nullptr;
     }
