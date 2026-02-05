@@ -2,11 +2,10 @@
 
 #include "hc/editor/hcEditorPrerequisites.h"
 #include "hc/editor/hcIComponentView.h"
+#include "hc/editor/hcNotImplementedComponentView.h"
 
 namespace hc::editor
 {
-  class NotImplementedComponentView;
-
   /**
    * @brief Manages registration and retrieval of component views in the editor.
    *
@@ -15,24 +14,23 @@ namespace hc::editor
    * default view for unimplemented components, and handles drawing of components
    * via their views.
    */
-  class ComponentViewManager
+  class ComponentViewManager : public AModule<ComponentViewManager>
   {
   public:
-    static ComponentViewManager& Instance();
-    static void Prepare();
-    static void Shutdown();
+    static void DrawComponent(IComponent* component);
+
+    ComponentViewManager() = default;
+    ~ComponentViewManager() override = default;
 
     void drawComponent(IComponent* component);
     void registerComponentView(UniquePtr<IComponentView> componentView);
 
   private:
-    static ComponentViewManager* s_instance;
-
     UniquePtr<NotImplementedComponentView> m_notImplementedView;
     UnorderedMap<componentType::Type, UniquePtr<IComponentView>> m_componentViews;
 
-    ComponentViewManager();
-    ~ComponentViewManager();
+    void onPrepare() override;
+    void onShutdown() override;
 
     void registerDefaultComponentViews();
   };

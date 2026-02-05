@@ -19,16 +19,11 @@ namespace hc::editor
   ProjectBrowserWindow::ProjectBrowserWindow() :
     AWindowView("Project Browser", true)
   {
+    ProjectManager::Instance().subscribeListener(this);
   }
 
   ProjectBrowserWindow::~ProjectBrowserWindow()
   {
-  }
-
-  void ProjectBrowserWindow::resolveDependencies(DependencyContainer& container)
-  {
-    m_materialDescriptorEditorWindow = container.resolve<MaterialDescriptorEditorWindow>();
-    ProjectManager::Instance().subscribeListener(this);
   }
 
   void ProjectBrowserWindow::onProjectOpened()
@@ -51,6 +46,11 @@ namespace hc::editor
     drawAssetCreatorInterface();
     ImGui::Separator();
     drawDirectoryNavigator();
+  }
+
+  void ProjectBrowserWindow::onDestroy()
+  {
+    ProjectManager::Instance().unsubscribeListener(this);
   }
 
   void ProjectBrowserWindow::drawDirectoryNavigator()
@@ -153,8 +153,9 @@ namespace hc::editor
     String extension = fileReference.getExtension();
     if (extension == assetFileExtensions::MATERIAL_DESCRIPTOR)
     {
-      if (m_materialDescriptorEditorWindow)
-        m_materialDescriptorEditorWindow->open(fileReference.getFullPath());
+      EditorViewsManager::GetView<MaterialDescriptorEditorWindow>()->open(
+        fileReference.getFullPath()
+      );
     }
   }
 

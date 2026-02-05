@@ -7,31 +7,17 @@
 namespace hc::editor
 {
   SceneGraphWindow::SceneGraphWindow() :
-    AWindowView("Scene Graph", true),
-    m_sceneManager(nullptr),
-    m_selectionService(nullptr)
+    AWindowView("Scene Graph", true)
   {
-    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   SceneGraphWindow::~SceneGraphWindow()
   {
   }
 
-  void SceneGraphWindow::resolveDependencies(DependencyContainer& container)
-  {
-    m_selectionService = container.resolve<GameObjectSelectionService>();
-  }
-
   void SceneGraphWindow::onDraw()
   {
-    if (m_sceneManager == nullptr)
-    {
-      ImGui::Text("No SceneManager assigned.");
-      return;
-    }
-
-    hc::Scene* scene = m_sceneManager->getActiveScene();
+    hc::Scene* scene = HotCoffeeEngine::GetSceneManager().getActiveScene();
     if (!scene)
     {
       ImGui::Text("No active scene.");
@@ -89,14 +75,14 @@ namespace hc::editor
 
     ImGui::PushID(gameObject);
 
-    bool isSelected = m_selectionService->isGameObjectSelected(gameObject);
+    bool isSelected = GameObjectSelectionService::Instance().isGameObjectSelected(gameObject);
     ImGuiTreeNodeFlags flags = isSelected ? ImGuiTreeNodeFlags_Selected : 0;
     bool open = ImGui::TreeNodeEx(gameObjectName.c_str(), flags);
 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Left))
     {
-      m_selectionService->clearSelection();
-      m_selectionService->selectGameObject(gameObject);
+      GameObjectSelectionService::Instance().clearSelection();
+      GameObjectSelectionService::Instance().selectGameObject(gameObject);
     }
 
     if (ImGui::IsItemClicked(ImGuiMouseButton_Right))

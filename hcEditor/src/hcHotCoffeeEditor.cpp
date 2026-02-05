@@ -1,147 +1,95 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
-#include "hc/editor/hcEditorDependenciesRegister.h"
 #include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcComponentViewManager.h"
-#include "hc/editor/hcProjectFileSelector.h"
 #include "hc/editor/hcProjectManager.h"
+#include "hc/editor/hcGameObjectSelectionService.h"
 
 namespace hc::editor
-{
-  static constexpr UInt32 EDITOR_LOGGER_CAPACITY = 50;
-
-  HotCoffeeEditor* HotCoffeeEditor::_Instance = nullptr;
-
-  HotCoffeeEditor& HotCoffeeEditor::Instance()
+{ 
+  void HotCoffeeEditor::Initialize()
   {
-    if (_Instance == nullptr)
-    {
-      throw RuntimeErrorException(
-        "HotCoffeeEditor instance is not prepared. Call HotCoffeeEditor::Prepare() before accessing the instance."
-      );
-    }
-
-    return *_Instance;
-  }
-  void HotCoffeeEditor::Prepare()
-  {
-    if (_Instance == nullptr)
-    {
-      _Instance = new HotCoffeeEditor();
-      _Instance->onPrepare();
-    }
-  }
-  void HotCoffeeEditor::Shutdown()
-  {
-    if (_Instance != nullptr)
-    {
-      _Instance->onShutdown();
-      _Instance = nullptr;
-    }
+    HotCoffeeEditor::Instance().initialize();
   }
 
-  void HotCoffeeEditor::start()
+  void HotCoffeeEditor::Run()
   {
-    if (m_started)
-      return;
-    m_started = true;
-
-    HotCoffeeEngine::Prepare();
-    prepareEditorLogger();
-    initEngine();
-    registerDependencies();
-    resolveDependencies();
-    prepareEditorScene();
-    runMainLoop();
-    unsubscribeEditorLogger();
-    HotCoffeeEngine::Shutdown();
+    HotCoffeeEditor::Instance().run();
   }
 
   HotCoffeeEditor::HotCoffeeEditor() :
-    m_started(false),
-    m_editorLogger(nullptr)
+    m_initialized(false)
   {
   }
 
-  HotCoffeeEditor::~HotCoffeeEditor()
+  void HotCoffeeEditor::initialize()
   {
+    if (m_initialized)
+      return;
+    m_initialized = true;
+    
+    initEngine();
+    prepareEditorScene();
   }
 
-  void HotCoffeeEditor::onPrepare()
+  void HotCoffeeEditor::run()
   {
-    ProjectManager::Prepare();
+    SceneManager& sceneManager = HotCoffeeEngine::GetSceneManager();
+    IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
+    IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
+    
     EditorViewsManager::Prepare();
-    ProjectFileSelector::Prepare();
-    ComponentViewManager::Prepare();
-  }
+    EditorViewsManager::Initialize();
 
-  void HotCoffeeEditor::onShutdown()
-  {
-    ComponentViewManager::Shutdown();
-    EditorViewsManager::Shutdown();
-    ProjectFileSelector::Shutdown();
-    m_dependencyContainer.clear();
-    ProjectManager::Shutdown();
-  }
-
-  void HotCoffeeEditor::prepareEditorLogger()
-  {
-    m_editorLogger = MakeShared<EditorLogger>(EDITOR_LOGGER_CAPACITY);
-    LogService::Instance().subscribe(m_editorLogger.get());
-  }
-
-  void HotCoffeeEditor::unsubscribeEditorLogger()
-  {
-    LogService::Instance().unsubscribe(m_editorLogger.get());
-  }
-
-  void HotCoffeeEditor::registerDependencies()
-  {
-    editorDependenciesRegister::registerDependencies(m_dependencyContainer);
-    m_dependencyContainer.registerInstance<EditorLogger>(m_editorLogger);
-  }
-
-  void HotCoffeeEditor::resolveDependencies()
-  {
-    m_dependencyContainer.resolveAllDependencies();
-  }
-
-  void HotCoffeeEditor::initEngine()
-  {
-    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
-    HotCoffeeEngine::Instance().init(settings);
-  }
-
-  void HotCoffeeEditor::prepareEditorScene()
-  {
-    HotCoffeeEngine::Instance().getSceneManager().createScene("Editor Scene");
-    HotCoffeeEngine::Instance().getSceneManager().setActiveScene("Editor Scene");
-  }
-
-  void HotCoffeeEditor::runMainLoop()
-  {
-    SceneManager& sceneManager = HotCoffeeEngine::Instance().getSceneManager();
-    IGraphicsManager& graphicsManager = HotCoffeeEngine::Instance().getGraphicsManager();
-    IWindow& window = HotCoffeeEngine::Instance().getWindowManager().getWindow();
-
-    EditorViewsManager::Instance().initialize();
     while (window.isOpen())
     {
       Optional<Event> eventOpt;
       while ((eventOpt = window.pollEvent()))
       {
         if (eventOpt->is<Event::Closed>())
+        {
           window.destroy();
+          return;
+        }
 
-        if (EditorViewsManager::Instance().processEvent(*eventOpt))
+        if (EditorViewsManager::ProcessEvent(*eventOpt))
           continue;
       }
 
       graphicsManager.beginFrame();
       sceneManager.draw();
-      EditorViewsManager::Instance().draw();
+      EditorViewsManager::Draw();
       graphicsManager.endFrame(window);
     }
+
+    EditorViewsManager::Shutdown();
+  }
+
+  void HotCoffeeEditor::onPrepare()
+  {
+    HotCoffeeEngine::Prepare();
+    EditorLogger::Prepare();
+    ProjectManager::Prepare();
+    GameObjectSelectionService::Prepare();
+  }
+
+  void HotCoffeeEditor::onShutdown()
+  {
+    GameObjectSelectionService::Shutdown();
+    ProjectManager::Shutdown();
+    EditorLogger::Shutdown();
+    HotCoffeeEngine::Shutdown();
+  }
+
+  void HotCoffeeEditor::initEngine()
+  {
+    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
+    HotCoffeeEngine::Initialize(settings);
+  }
+
+  void HotCoffeeEditor::prepareEditorScene()
+  {
+    HotCoffeeEngine::GetSceneManager().createScene("Editor Scene");
+    HotCoffeeEngine::GetSceneManager().setActiveScene("Editor Scene");
   }
 }

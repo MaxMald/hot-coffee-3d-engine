@@ -2,11 +2,6 @@
 
 #include "hc/editor/hcEditorPrerequisites.h"
 
-namespace hc
-{
-  class GameObject;
-}
-
 namespace hc::editor
 {
   class IGameObjectSelectionServiceListener;
@@ -14,11 +9,11 @@ namespace hc::editor
   /**
    * @brief Manages the selection state of GameObjects in the editor.
    */
-  class GameObjectSelectionService
+  class GameObjectSelectionService : public AModule<GameObjectSelectionService>
   {
   public:
     GameObjectSelectionService();
-    ~GameObjectSelectionService();
+    ~GameObjectSelectionService() override;
 
     /**
      * @brief Returns the currently selected GameObjects.
@@ -72,5 +67,8 @@ namespace hc::editor
   private:
     Vector<GameObject*> m_selectedGameObjects;
     Vector<IGameObjectSelectionServiceListener*> m_listeners;
+
+    void onPrepare() override;
+    void onShutdown() override;
   };
 }

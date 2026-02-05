@@ -11,8 +11,6 @@ namespace hc::editor
     ~CameraManagerWindow();
 
   private:
-    SceneManager* m_sceneManager;
-
     void onDraw() override;
     void drawCameraController(Camera* camera);
     void drawCameraProjectionController(ICameraProjection* projection);

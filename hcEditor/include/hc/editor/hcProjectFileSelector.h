@@ -14,8 +14,7 @@ namespace hc::editor
    */
   class ProjectFileSelector :
     public ABaseView,
-    public IProjectManagerListener,
-    public AModule<ProjectFileSelector>
+    public IProjectManagerListener
   {
   public:
     /**
@@ -102,8 +101,7 @@ namespace hc::editor
     bool m_isFileSelectorOpen;
     bool m_isDirectorySelectorOpen;
 
-    void onPrepare() override;
-    void onShutdown() override;
+    void onDestroy() override;
     void onProjectOpened() override;
     void onProjectClosed() override;
 

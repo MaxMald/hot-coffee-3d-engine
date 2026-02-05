@@ -5,8 +5,8 @@ using hc::editor::HotCoffeeEditor;
 int main()
 {
   HotCoffeeEditor::Prepare();
-  HotCoffeeEditor::Instance().start();
+  HotCoffeeEditor::Initialize();
+  HotCoffeeEditor::Run();
   HotCoffeeEditor::Shutdown();
-
   return 0;
 }

@@ -5,13 +5,11 @@ namespace hc::editor
 {
   ABaseView::ABaseView()
   {
-    EditorViewsManager::Instance().registerView(this);
   }
   
   void ABaseView::destroy()
   {
     onDestroy();
-    EditorViewsManager::Instance().unregisterView(this);
   }
 
   void ABaseView::onDestroy()

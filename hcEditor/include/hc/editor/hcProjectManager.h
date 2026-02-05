@@ -10,12 +10,11 @@ namespace hc::editor
   /**
    * @brief Manages the lifecycle and state of editor projects.
    */
-  class ProjectManager
+  class ProjectManager : public AModule<ProjectManager>
   {
   public:
-    static ProjectManager& Instance();
-    static void Prepare();
-    static void Shutdown();
+    ProjectManager();
+    ~ProjectManager() override = default;
 
     /**
      * @brief Opens a project from the specified path.
@@ -75,14 +74,12 @@ namespace hc::editor
     void unsubscribeListener(IProjectManagerListener* listener);
 
   private:
-    static ProjectManager* s_instance;
-
     Path m_currentProjectPath;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
     Vector<IProjectManagerListener*> m_listeners;
 
-    ProjectManager();
-    ~ProjectManager();
+    void onPrepare() override;
+    void onShutdown() override;
   };
 }

@@ -82,4 +82,21 @@ namespace hc
     if (m_activeScene)
       m_activeScene->update(deltaTime);
   }
+
+  void SceneManager::destroy()
+  {
+    if (m_activeScene)
+    {
+      m_activeScene->onDeactivate();
+      m_activeScene = nullptr;
+    }
+
+    for (auto& pair : m_scenes)
+    {
+      if (pair.second)
+        pair.second->onDestroy();
+    }
+
+    m_scenes.clear();
+  }
 }

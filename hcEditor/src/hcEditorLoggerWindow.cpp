@@ -16,17 +16,12 @@ namespace hc::editor
   {
   }
 
-  void EditorLoggerWindow::resolveDependencies(DependencyContainer& container)
-  {
-    m_editorLogger = container.resolve<EditorLogger>();
-  }
-
   void EditorLoggerWindow::onDraw()
   {
     ImGui::Begin("Logger", &m_isOpen);
 
     if (ImGui::Button("Clear"))
-      m_editorLogger->clear();
+      EditorLogger::Instance().clear();
 
     ImGui::SameLine();
     ImGui::Checkbox("Auto-scroll", &m_autoScroll);
@@ -34,7 +29,7 @@ namespace hc::editor
     ImGui::Separator();
     ImGui::BeginChild("LogRegion", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar);
 
-    const auto& entries = m_editorLogger->getEntries();
+    const auto& entries = EditorLogger::Instance().getEntries();
     for (const auto& entry : entries)
     {
       ImVec4 color;

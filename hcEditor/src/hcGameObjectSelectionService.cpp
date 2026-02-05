@@ -98,4 +98,14 @@ namespace hc::editor
     if (item != m_listeners.end())
       m_listeners.erase(item);
   }
+
+  void GameObjectSelectionService::onPrepare()
+  {
+  }
+
+  void GameObjectSelectionService::onShutdown()
+  {
+    m_selectedGameObjects.clear();
+    m_listeners.clear();
+  }
 }

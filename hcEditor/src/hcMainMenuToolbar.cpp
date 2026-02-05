@@ -17,10 +17,7 @@ namespace hc::editor
   static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
 
   MainMenuToolbar::MainMenuToolbar() :
-    ABaseView(),
-    m_pluginManagerWindow(nullptr),
-    m_editorLoggerWindow(nullptr),
-    m_sceneGraphWindow(nullptr)
+    ABaseView()
   {
   }
 
@@ -73,22 +70,22 @@ namespace hc::editor
       if (ImGui::BeginMenu("Windows"))
       {
         if (ImGui::MenuItem("Plugin Manager"))
-          m_pluginManagerWindow->setOpen(true);
+          EditorViewsManager::GetView<PluginManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Logger"))
-          m_editorLoggerWindow->setOpen(true);
+          EditorViewsManager::GetView<EditorLoggerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Scene Graph"))
-          m_sceneGraphWindow->setOpen(true);
+          EditorViewsManager::GetView<SceneGraphWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Light Manager"))
-          m_lightManagerWindow->setOpen(true);
+          EditorViewsManager::GetView<LightManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Camera Manager"))
-          m_cameraManagerWindow->setOpen(true);
+          EditorViewsManager::GetView<CameraManagerWindow>()->setOpen(true);
 
         if (ImGui::MenuItem("Asset Manager"))
-          m_assetManagerWindow->setOpen(true);
+          EditorViewsManager::GetView<AssetManagerWindow>()->setOpen(true);
 
         ImGui::EndMenu();
       }
@@ -106,16 +103,6 @@ namespace hc::editor
     }
 
     displayOpenProjectDialog();
-  }
-
-  void MainMenuToolbar::resolveDependencies(DependencyContainer& container)
-  {
-    m_pluginManagerWindow = container.resolve<PluginManagerWindow>();
-    m_editorLoggerWindow = container.resolve<EditorLoggerWindow>();
-    m_sceneGraphWindow = container.resolve<SceneGraphWindow>();
-    m_lightManagerWindow = container.resolve<LightManagerWindow>();
-    m_cameraManagerWindow = container.resolve<CameraManagerWindow>();
-    m_assetManagerWindow = container.resolve<AssetManagerWindow>();
   }
 
   void MainMenuToolbar::displayOpenProjectDialog()

@@ -4,21 +4,16 @@
 
 namespace hc::editor
 {
-  class EditorLogger;
-
   /**
    * @brief Window view for displaying editor log messages.
    */
-  class EditorLoggerWindow : public AWindowView, public IDependencyResolvable
+  class EditorLoggerWindow : public AWindowView
   {
   public:
     EditorLoggerWindow();
     virtual ~EditorLoggerWindow();
 
-    void resolveDependencies(DependencyContainer& container) override;
-
   protected:
-    SharedPtr<EditorLogger> m_editorLogger;
     bool m_autoScroll;
 
     virtual void onDraw() override;

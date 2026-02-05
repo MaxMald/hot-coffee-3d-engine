@@ -7,20 +7,15 @@
 namespace hc::editor
 {
   CameraManagerWindow::CameraManagerWindow() :
-    AWindowView("Camera Manager", false),
-    m_sceneManager(nullptr)
+    AWindowView("Camera Manager", false)
   {
-    m_sceneManager = &(HotCoffeeEngine::Instance().getSceneManager());
   }
 
   CameraManagerWindow::~CameraManagerWindow() = default;
 
   void CameraManagerWindow::onDraw()
   {
-    if (!m_sceneManager)
-      return;
-
-    Scene* activeScene = m_sceneManager->getActiveScene();
+    Scene* activeScene = HotCoffeeEngine::GetSceneManager().getActiveScene();
     if (!activeScene)
     {
       ImGui::Text("No active scene.");

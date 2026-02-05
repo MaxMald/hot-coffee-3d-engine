@@ -6,18 +6,13 @@
 
 namespace hc::editor
 {
-  class GameObjectEditorWindow :
-    public AWindowView,
-    public IDependencyResolvable
+  class GameObjectEditorWindow : public AWindowView
   {
   public:
     GameObjectEditorWindow();
     virtual ~GameObjectEditorWindow();
 
-    void resolveDependencies(DependencyContainer& container) override;
-
   protected:
-    GameObjectSelectionService* m_gameObjectSelectionService;
     CreateComponentSection m_createComponentSection;
 
     void onDraw() override;

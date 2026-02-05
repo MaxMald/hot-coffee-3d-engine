@@ -168,12 +168,12 @@
     <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcComponentViewManager.h" />
     <ClInclude Include="include\hc\editor\hcCreateComponentSection.h" />
+    <ClInclude Include="include\hc\editor\hcEditorViewsInitializer.h" />
     <ClInclude Include="include\hc\editor\hcIAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcAssetManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcCameraManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcDirectoryReference.h" />
     <ClInclude Include="include\hc\editor\hcDirectoryNavigator.h" />
-    <ClInclude Include="include\hc\editor\hcEditorDependenciesRegister.h" />
     <ClInclude Include="include\hc\editor\hcEditorInterfaceManager.h" />
     <ClInclude Include="include\hc\editor\hcEditorLogger.h" />
     <ClInclude Include="include\hc\editor\hcEditorLoggerEntry.h" />
@@ -235,9 +235,9 @@
     <ClCompile Include="src\hcCreateComponentSection.cpp" />
     <ClCompile Include="src\hcDirectoryNavigator.cpp" />
     <ClCompile Include="src\hcDirectoryReference.cpp" />
-    <ClCompile Include="src\hcEditorDependenciesRegister.cpp" />
     <ClCompile Include="src\hcEditorLogger.cpp" />
     <ClCompile Include="src\hcEditorLoggerWindow.cpp" />
+    <ClCompile Include="src\hcEditorViewsInitializer.cpp" />
     <ClCompile Include="src\hcEditorViewsManager.cpp" />
     <ClCompile Include="src\hcFileReference.cpp" />
     <ClCompile Include="src\hcGameObjectEditorWindow.cpp" />

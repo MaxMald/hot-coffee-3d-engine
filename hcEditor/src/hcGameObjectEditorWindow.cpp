@@ -8,22 +8,16 @@
 namespace hc::editor
 {
   GameObjectEditorWindow::GameObjectEditorWindow() :
-    AWindowView("Game Object Editor", true),
-    m_gameObjectSelectionService(nullptr)
+    AWindowView("Game Object Editor", true)
   {
   }
 
   GameObjectEditorWindow::~GameObjectEditorWindow() = default;
 
-  void GameObjectEditorWindow::resolveDependencies(DependencyContainer& container)
-  {
-    m_gameObjectSelectionService = container.resolve<GameObjectSelectionService>().get();
-  }
-
   void GameObjectEditorWindow::onDraw()
   {
     const Vector<GameObject*> selectedGameObjects =
-      m_gameObjectSelectionService->getSelectedGameObjects();
+      GameObjectSelectionService::Instance().getSelectedGameObjects();
 
     if (selectedGameObjects.empty())
     {

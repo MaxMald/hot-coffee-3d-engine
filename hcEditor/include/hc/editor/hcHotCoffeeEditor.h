@@ -7,34 +7,24 @@ namespace hc::editor
 {
   class EditorViewsManager;
 
-  class HotCoffeeEditor
+  class HotCoffeeEditor : public AModule<HotCoffeeEditor>
   {
   public:
-    static HotCoffeeEditor& Instance();
-    static void Prepare();
-    static void Shutdown();
-
-    void start();
-
-  private:
-    static HotCoffeeEditor* _Instance;
-
-    bool m_started;
-    DependencyContainer m_dependencyContainer;
-    SharedPtr<EditorLogger> m_editorLogger;
+    static void Initialize();
+    static void Run();
 
     HotCoffeeEditor();
-    ~HotCoffeeEditor();
+    ~HotCoffeeEditor() override = default;
 
-    void onPrepare();
-    void onShutdown();
+  private:
+    bool m_initialized;
 
-    void prepareEditorLogger();
-    void registerDependencies();
-    void resolveDependencies();
+    void onPrepare() override;
+    void onShutdown() override;
+
+    void initialize();
+    void run();
     void initEngine();
     void prepareEditorScene();
-    void runMainLoop();
-    void unsubscribeEditorLogger();
   };
 }

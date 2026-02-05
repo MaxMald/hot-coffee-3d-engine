@@ -72,6 +72,11 @@ namespace hc
      */
     void update(float deltaTime);
 
+    /**
+     * @brief Destroys all scenes and clears the scene manager.
+     */
+    void destroy();
+
   private:
     UnorderedMap<String, UniquePtr<Scene>> m_scenes;
     Scene* m_activeScene;

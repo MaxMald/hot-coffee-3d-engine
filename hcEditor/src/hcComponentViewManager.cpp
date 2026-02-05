@@ -1,47 +1,11 @@
 #include "hc/editor/hcComponentViewManager.h"
-#include "hc/editor/hcNotImplementedComponentView.h"
 #include "hc/editor/hcMeshComponentView.h"
 
 namespace hc::editor
 {
-  ComponentViewManager* ComponentViewManager::s_instance = nullptr;
-
-  ComponentViewManager& ComponentViewManager::Instance()
+  void ComponentViewManager::DrawComponent(IComponent* component)
   {
-    if (!s_instance)
-    {
-      throw RuntimeErrorException(
-        "ComponentViewManager instance is not prepared. Call Prepare() before accessing the instance."
-      );
-    }
-
-    return *s_instance;
-  }
-
-  void ComponentViewManager::Prepare()
-  {
-    if (!s_instance)
-    {
-      s_instance = new ComponentViewManager();
-    }
-  }
-
-  void ComponentViewManager::Shutdown()
-  {
-    if (s_instance)
-    {
-      delete s_instance;
-      s_instance = nullptr;
-    }
-  }
-
-  ComponentViewManager::ComponentViewManager()
-  {
-    registerDefaultComponentViews();
-  }
-
-  ComponentViewManager::~ComponentViewManager()
-  {
+    ComponentViewManager::Instance().drawComponent(component);
   }
 
   void ComponentViewManager::drawComponent(IComponent* component)
@@ -70,6 +34,15 @@ namespace hc::editor
 
     componentType::Type type = componentView->getComponentType();
     m_componentViews[type] = std::move(componentView);
+  }
+
+  void ComponentViewManager::onPrepare()
+  {
+    registerDefaultComponentViews();
+  }
+
+  void ComponentViewManager::onShutdown()
+  {
   }
 
   void ComponentViewManager::registerDefaultComponentViews()

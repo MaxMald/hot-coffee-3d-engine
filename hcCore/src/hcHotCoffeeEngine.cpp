@@ -11,6 +11,40 @@
 
 namespace hc
 {
+  void HotCoffeeEngine::Initialize(const HotCoffeeEngineSettings& settings)
+  {
+    HotCoffeeEngine::Instance().initialize(settings);
+  }
+
+  IGraphicsManager& HotCoffeeEngine::GetGraphicsManager()
+  {
+    return HotCoffeeEngine::Instance().getGraphicsManager();
+  }
+
+  SceneManager& HotCoffeeEngine::GetSceneManager()
+  {
+    return HotCoffeeEngine::Instance().getSceneManager();
+  }
+
+  AssetManager& HotCoffeeEngine::GetAssetManager()
+  {
+    return HotCoffeeEngine::Instance().getAssetManager();
+  }
+
+  IWindowManager& HotCoffeeEngine::GetWindowManager()
+  {
+    return HotCoffeeEngine::Instance().getWindowManager();
+  }
+
+  HotCoffeeEngine::HotCoffeeEngine() :
+    m_initialized(false)
+  {
+  }
+
+  HotCoffeeEngine::~HotCoffeeEngine()
+  {
+  }
+
   const PluginManager& HotCoffeeEngine::getPluginManager() const
   {
     return m_pluginManager;
@@ -64,12 +98,12 @@ namespace hc
     return *m_assetManager;
   }
 
-  void HotCoffeeEngine::init(const HotCoffeeEngineSettings& settings)
+  void HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
   {
-    if (m_started)
+    if (m_initialized)
       return;
 
-    m_started = true;
+    m_initialized = true;
 
     connectToPlugins(settings.pluginManagerSettings);
     registerDependencies();
@@ -86,11 +120,20 @@ namespace hc
 
   void HotCoffeeEngine::onShutdown()
   {
-    m_dependencyContainer.clear();
-    m_graphicsManager->destroy();
-    m_graphicsManager = nullptr;
-    m_windowManager = nullptr;
-    m_pluginManager.closeAll();
+    if (m_initialized)
+    {
+      m_sceneManager->destroy();
+      m_graphicsManager->destroy();
+      m_graphicsManager = nullptr;
+      m_windowManager = nullptr;
+      m_assetManager->clear();
+      m_assetManager = nullptr;
+      m_dependencyContainer.clear();
+      m_pluginManager.closeAll();
+
+      m_initialized = false;
+    }
+
     JsonSerializer::Shutdown();
     LogService::Shutdown();
   }
@@ -118,14 +161,5 @@ namespace hc
     m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();
-  }
-
-  HotCoffeeEngine::HotCoffeeEngine() :
-    m_started(false)
-  {
-  }
-
-  HotCoffeeEngine::~HotCoffeeEngine()
-  {
   }
 }

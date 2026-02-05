@@ -12,11 +12,14 @@ namespace hc::editor
     const std::function<void(const Path&)>& onFileSelected
   )
   {
-    if (s_instance)
+    ProjectFileSelector* instance = 
+      EditorViewsManager::GetView<ProjectFileSelector>();
+
+    if (instance)
     {
-      s_instance->openFileSelector(
+      instance->openFileSelector(
         "Select Image",
-        s_instance->m_imageFileExtensions,
+        instance->m_imageFileExtensions,
         onFileSelected
       );
     }
@@ -26,11 +29,14 @@ namespace hc::editor
     const std::function<void(const Path&)>& onFileSelected
   )
   {
-    if (s_instance)
+    ProjectFileSelector* instance =
+      EditorViewsManager::GetView<ProjectFileSelector>();
+
+    if (instance)
     {
-      s_instance->openFileSelector(
+      instance->openFileSelector(
         "Select Model",
-        s_instance->m_modelFileExtensions,
+        instance->m_modelFileExtensions,
         onFileSelected
       );
     }
@@ -42,9 +48,12 @@ namespace hc::editor
     const std::function<void(const Path&)>& onFileSelected
   )
   {
-    if (s_instance)
+    ProjectFileSelector* instance =
+      EditorViewsManager::GetView<ProjectFileSelector>();
+
+    if (instance)
     {
-      s_instance->openFileSelector(title, filters, onFileSelected);
+      instance->openFileSelector(title, filters, onFileSelected);
     }
   }
 
@@ -53,9 +62,12 @@ namespace hc::editor
     const std::function<void(const Path&)>& onDirectorySelected
   )
   {
-    if (s_instance)
+    ProjectFileSelector* instance =
+      EditorViewsManager::GetView<ProjectFileSelector>();
+
+    if (instance)
     {
-      s_instance->openDirectorySelector(title, onDirectorySelected);
+      instance->openDirectorySelector(title, onDirectorySelected);
     }
   }
 
@@ -73,6 +85,8 @@ namespace hc::editor
       assetFileExtensions::SUPPORTED_MODEL_EXTENSIONS.begin(),
       assetFileExtensions::SUPPORTED_MODEL_EXTENSIONS.end()
     );
+
+    ProjectManager::Instance().subscribeListener(this);
   }
 
   ProjectFileSelector::~ProjectFileSelector()
@@ -105,14 +119,10 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelector::onPrepare()
+  void ProjectFileSelector::onDestroy()
   {
-    // intentionally left blank
-  }
-
-  void ProjectFileSelector::onShutdown()
-  {
-    // intentionally left blank
+    ProjectManager::Instance().unsubscribeListener(this);
+    clear();
   }
 
   void ProjectFileSelector::onProjectOpened()

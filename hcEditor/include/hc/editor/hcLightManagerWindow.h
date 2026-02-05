@@ -11,8 +11,6 @@ namespace hc::editor
     ~LightManagerWindow();
 
   protected:
-    SceneManager* m_sceneManager;
-
     void onDraw() override;
     void drawLightController(Light* light);
   };

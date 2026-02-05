@@ -5,45 +5,10 @@
 
 namespace hc::editor
 {
-  ProjectManager* ProjectManager::s_instance = nullptr;
-
-  ProjectManager& ProjectManager::Instance()
-  {
-    if (!s_instance)
-    {
-      throw RuntimeErrorException(
-        "ProjectManager instance is not prepared. Call Prepare() before accessing the instance."
-      );
-    }
-
-    return *s_instance;
-  }
-
-  void ProjectManager::Prepare()
-  {
-    if (!s_instance)
-    {
-      s_instance = new ProjectManager();
-    }
-  }
-
-  void ProjectManager::Shutdown()
-  {
-    if (s_instance)
-    {
-      delete s_instance;
-      s_instance = nullptr;
-    }
-  }
-
   ProjectManager::ProjectManager() :
     m_currentProjectPath(),
     m_isProjectOpen(false),
     m_currentProject(nullptr)
-  {
-  }
-
-  ProjectManager::~ProjectManager()
   {
   }
 
@@ -128,5 +93,15 @@ namespace hc::editor
 
     if (item != m_listeners.end())
       m_listeners.erase(item);
+  }
+
+  void ProjectManager::onPrepare()
+  {
+    // intentionally left blank
+  }
+
+  void ProjectManager::onShutdown()
+  {
+    // intentionally left blank
   }
 }

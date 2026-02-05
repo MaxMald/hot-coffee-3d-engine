@@ -16,8 +16,6 @@ namespace hc::editor
     virtual ~PluginManagerWindow();
 
   protected:
-    const PluginManager* m_pluginManager;
-
     void onDraw() override;
     void drawPluginSlotInfo(const IPluginSlot& plugin);
   };

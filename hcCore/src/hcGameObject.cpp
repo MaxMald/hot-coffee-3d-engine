@@ -19,6 +19,8 @@ namespace hc
 
   GameObject::~GameObject()
   {
+    m_components.clear();
+
     if (m_parent)
       m_parent->removeChild(this);
   }

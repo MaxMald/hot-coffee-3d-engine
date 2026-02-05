@@ -5,10 +5,12 @@
 
 namespace hc::editor
 {
-  class EditorLogger : public ILogServiceListener
+  class EditorLogger :
+    public ILogServiceListener,
+    public AModule<EditorLogger>
   {
   public:
-    EditorLogger(UInt32 m_capacity);
+    EditorLogger();
     ~EditorLogger() override;
 
     void onMessageLogged(const String& message) override;
@@ -24,6 +26,8 @@ namespace hc::editor
     UInt32 m_capacity;
     Vector<EditorLoggerEntry> m_entries;
 
+    void onPrepare() override;
+    void onShutdown() override;
     void addEntry(const EditorLoggerEntry& entry);
   };
 }

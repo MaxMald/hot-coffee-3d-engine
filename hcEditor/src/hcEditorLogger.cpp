@@ -2,8 +2,10 @@
 
 namespace hc::editor
 {
-  EditorLogger::EditorLogger(UInt32 capacity) :
-    m_capacity(capacity),
+  static constexpr UInt32 EDITOR_LOGGER_CAPACITY = 50;
+
+  EditorLogger::EditorLogger() :
+    m_capacity(EDITOR_LOGGER_CAPACITY),
     m_entries()
   {
   }
@@ -49,6 +51,16 @@ namespace hc::editor
   const Vector<EditorLoggerEntry>& EditorLogger::getEntries() const
   {
     return m_entries;
+  }
+
+  void EditorLogger::onPrepare()
+  {
+    LogService::Instance().subscribe(this);
+  }
+
+  void EditorLogger::onShutdown()
+  {
+    LogService::Instance().unsubscribe(this);
   }
 
   void EditorLogger::addEntry(const EditorLoggerEntry& entry)
