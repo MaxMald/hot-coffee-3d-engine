@@ -3,38 +3,11 @@
 
 namespace hc
 {
-  LogService* LogService::_Instance = nullptr;
-
-  LogService& LogService::Instance()
-  {
-    if (!_Instance)
-      throw RuntimeErrorException(
-        "LogService is not prepared. Call LogService::Prepare() before using it."
-      );
-
-    return *_Instance;
-  }
-
-  void LogService::Prepare()
-  {
-    if (!_Instance)
-      _Instance = new LogService();
-  }
-
-  void LogService::Shutdown()
-  {
-    if (_Instance)
-    {
-      delete _Instance;
-      _Instance = nullptr;
-    }
-  }
-
   void LogService::Message(const String& message)
   {
-    if (_Instance)
+    if (s_instance)
     {
-      for (auto* listener : _Instance->m_listeners)
+      for (auto* listener : s_instance->m_listeners)
       {
         if (listener)
           listener->onMessageLogged(message);
@@ -44,9 +17,9 @@ namespace hc
 
   void LogService::Warning(const String& message)
   {
-    if (_Instance)
+    if (s_instance)
     {
-      for (auto* listener : _Instance->m_listeners)
+      for (auto* listener : s_instance->m_listeners)
       {
         if (listener)
           listener->onWarningLogged(message);
@@ -56,15 +29,19 @@ namespace hc
 
   void LogService::Error(const String& message)
   {
-    if (_Instance)
+    if (s_instance)
     {
-      for (auto* listener : _Instance->m_listeners)
+      for (auto* listener : s_instance->m_listeners)
       {
         if (listener)
           listener->onErrorLogged(message);
       }
     }
   }
+
+  LogService::LogService() = default;
+
+  LogService::~LogService() = default;
 
   void LogService::subscribe(ILogServiceListener* listener)
   {
@@ -87,7 +64,13 @@ namespace hc
     }
   }
 
-  LogService::LogService() = default;
+  void LogService::onPrepare()
+  {
+    // intentional left blank
+  }
 
-  LogService::~LogService() = default;
+  void LogService::onShutdown()
+  {
+    // intentional left blank
+  }
 }

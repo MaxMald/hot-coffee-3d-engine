@@ -2,32 +2,60 @@
 
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcString.h"
-#include "hc/hcNonCopyable.h"
+#include "hc/hcAModule.h"
 
 namespace hc
 {
   class ILogServiceListener;
 
-  class HC_UTILITY_EXPORT LogService : public NonCopyable
+  /**
+   * @brief Singleton service for logging messages, warnings, and errors.
+   */
+  class HC_UTILITY_EXPORT LogService : public AModule<LogService>
   {
   public:
-    static LogService& Instance();
-    static void Prepare();
-    static void Shutdown();
-
+    /**
+     * @brief Log a general message.
+     * 
+     * @param message The message to log.
+     */
     static void Message(const String& message);
+
+    /**
+     * @brief Log a warning message.
+     * 
+     * @param message The warning message to log.
+     */
     static void Warning(const String& message);
+
+    /**
+     * @brief Log an error message.
+     * 
+     * @param message The error message to log.
+     */
     static void Error(const String& message);
 
+    LogService();
+    ~LogService() override;
+
+    /**
+     * @brief Subscribe a listener to receive log events.
+     * 
+     * @param listener Pointer to the listener to subscribe.
+     */
     void subscribe(ILogServiceListener* listener);
+
+    /**
+     * @brief Unsubscribe a listener from receiving log events.
+     * 
+     * @param listener Pointer to the listener to unsubscribe.
+     */
     void unsubscribe(ILogServiceListener* listener);
 
   private:
-    static LogService* _Instance;
-
     Vector<ILogServiceListener*> m_listeners;
 
-    LogService();
-    ~LogService();
+    void onPrepare() override;
+    void onShutdown() override;
   };
 }
