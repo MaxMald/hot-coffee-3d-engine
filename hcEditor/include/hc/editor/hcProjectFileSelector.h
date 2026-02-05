@@ -14,27 +14,10 @@ namespace hc::editor
    */
   class ProjectFileSelector :
     public ABaseView,
-    public IProjectManagerListener
+    public IProjectManagerListener,
+    public AModule<ProjectFileSelector>
   {
   public:
-    /**
-     * @brief Gets the singleton instance of the ProjectFileSelector.
-     *
-     * @return Reference to the singleton instance.
-     */
-    static ProjectFileSelector& Instance();
-
-    /**
-     * @brief Prepares the file selector view for use. Should be called before
-     * any file selection operations.
-     */
-    static void Prepare();
-
-    /**
-     * @brief Shuts down the file selector view and releases resources.
-     */
-    static void Shutdown();
-
     /**
      * @brief Opens an image file selector dialog.
      * 
@@ -77,6 +60,9 @@ namespace hc::editor
       const std::function<void(const Path&)>& onDirectorySelected
     );
 
+    ProjectFileSelector();
+    ~ProjectFileSelector() override;
+
     /**
      * @copydoc ABaseView::draw
      */
@@ -107,8 +93,6 @@ namespace hc::editor
     );
 
   private:
-    static ProjectFileSelector* s_instance;
-
     DirectoryNavigator m_directoryNavigator;
     std::function<void(const Path&)> m_selectionCallback;
     String m_currentTitle;
@@ -118,9 +102,8 @@ namespace hc::editor
     bool m_isFileSelectorOpen;
     bool m_isDirectorySelectorOpen;
 
-    ProjectFileSelector();
-    ~ProjectFileSelector();
-
+    void onPrepare() override;
+    void onShutdown() override;
     void onProjectOpened() override;
     void onProjectClosed() override;
 

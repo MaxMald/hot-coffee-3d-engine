@@ -11,27 +11,23 @@ namespace hc::editor
 {
   class IView;
 
-  class EditorViewsManager
+  class EditorViewsManager : public AModule<EditorViewsManager>
   {
   public:
-    static EditorViewsManager& Instance();
-    static void Prepare();
-    static void Shutdown();
+    EditorViewsManager() = default;
+    ~EditorViewsManager() override = default;
 
     void initialize();
     bool processEvent(const Event& event);
     void draw();
     void registerView(IView* view);
     void unregisterView(IView* view);
-    void clearViews();
 
   private:
-    static EditorViewsManager* s_instance;
-
     Vector<IView*> m_views;
 
-    EditorViewsManager();
-    ~EditorViewsManager();
+    void onPrepare() override;
+    void onShutdown() override;
 
     void destroy();
   };

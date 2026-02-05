@@ -5,45 +5,6 @@
 
 namespace hc::editor
 {
-  EditorViewsManager* EditorViewsManager::s_instance = nullptr;
-
-  EditorViewsManager& EditorViewsManager::Instance()
-  {
-    if (!s_instance)
-    {
-      throw RuntimeErrorException(
-        "EditorViewsManager instance is not prepared. Call Prepare() before accessing the instance."
-      );
-    }
-    return *s_instance;
-  }
-
-  void EditorViewsManager::Prepare()
-  {
-    if (!s_instance)
-    {
-      s_instance = new EditorViewsManager();
-    }
-  }
-
-  void EditorViewsManager::Shutdown()
-  {
-    if (s_instance)
-    {
-      s_instance->destroy();
-      delete s_instance;
-      s_instance = nullptr;
-    }
-  }
-
-  EditorViewsManager::EditorViewsManager()
-  {
-  }
-
-  EditorViewsManager::~EditorViewsManager()
-  {
-  }
-
   void EditorViewsManager::initialize()
   {
     hcImguiHandler::init(
@@ -77,16 +38,12 @@ namespace hc::editor
     );
   }
 
-  void EditorViewsManager::clearViews()
+  void EditorViewsManager::destroy()
   {
     for (IView* view : m_views)
       view->destroy();
     m_views.clear();
-  }
 
-  void EditorViewsManager::destroy()
-  {
-    clearViews();
     hcImguiHandler::destroy();
   }
 }

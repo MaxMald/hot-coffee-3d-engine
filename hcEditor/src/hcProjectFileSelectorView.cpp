@@ -8,39 +8,6 @@
 
 namespace hc::editor
 {
-  ProjectFileSelector* ProjectFileSelector::s_instance = nullptr;
-
-  ProjectFileSelector& ProjectFileSelector::Instance()
-  {
-    if (!s_instance)
-    {
-      throw RuntimeErrorException(
-        "ProjectFileSelectorView instance is not prepared. Call Prepare() before accessing the instance."
-      );
-    }
-
-    return *s_instance;
-  }
-
-  void ProjectFileSelector::Prepare()
-  {
-    if (!s_instance)
-    {
-      s_instance = new ProjectFileSelector();
-      ProjectManager::Instance().subscribeListener(s_instance);
-    }
-  }
-
-  void ProjectFileSelector::Shutdown()
-  {
-    if (s_instance)
-    {
-      ProjectManager::Instance().unsubscribeListener(s_instance);
-      delete s_instance;
-      s_instance = nullptr;
-    }
-  }
-
   void ProjectFileSelector::OpenImageFile(
     const std::function<void(const Path&)>& onFileSelected
   )
@@ -70,8 +37,8 @@ namespace hc::editor
   }
 
   void ProjectFileSelector::OpenFile(
-    const String& title, 
-    const Vector<String>& filters, 
+    const String& title,
+    const Vector<String>& filters,
     const std::function<void(const Path&)>& onFileSelected
   )
   {
@@ -82,7 +49,7 @@ namespace hc::editor
   }
 
   void ProjectFileSelector::OpenDirectory(
-    const String& title, 
+    const String& title,
     const std::function<void(const Path&)>& onDirectorySelected
   )
   {
@@ -136,6 +103,16 @@ namespace hc::editor
 
       ImGui::End();
     }
+  }
+
+  void ProjectFileSelector::onPrepare()
+  {
+    // intentionally left blank
+  }
+
+  void ProjectFileSelector::onShutdown()
+  {
+    // intentionally left blank
   }
 
   void ProjectFileSelector::onProjectOpened()
