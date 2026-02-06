@@ -21,6 +21,16 @@ namespace hc::editor
     void draw() override;
 
     /**
+     * @brief Returns the display name of the window.
+     *
+     * This name is used as the title in the ImGui window and should be
+     * unique for each window type.
+     *
+     * @return The window's display name.
+     */
+    const String& getWindowName() const;
+
+    /**
      * @brief Returns whether the window is currently open.
      */
     bool isOpen() const;

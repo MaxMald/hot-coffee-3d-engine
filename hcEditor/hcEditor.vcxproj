@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcABaseComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcABaseView.h" />
+    <ClInclude Include="include\hc\editor\hcActionExecutionMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
     <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
@@ -186,10 +187,17 @@
     <ClInclude Include="include\hc\editor\hcIComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcImageAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcMainMenuBar.h" />
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcIMenuItem.h" />
+    <ClInclude Include="include\hc\editor\hcMenu.h" />
+    <ClInclude Include="include\hc\editor\hcIMenuItemAction.h" />
+    <ClInclude Include="include\hc\editor\hcMenuBuilder.h" />
+    <ClInclude Include="include\hc\editor\hcMainMenuBarFactory.h" />
     <ClInclude Include="include\hc\editor\hcMeshComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcNotImplementedComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcOpenProjectMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileSelector.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectEditorWindow.h" />
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h" />
@@ -201,7 +209,6 @@
     <ClInclude Include="include\hc\editor\hcImguiUtilities.h" />
     <ClInclude Include="include\hc\editor\hcIProjectManagerListener.h" />
     <ClInclude Include="include\hc\editor\hcLightManagerWindow.h" />
-    <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h" />
     <ClInclude Include="include\hc\editor\hcIView.h" />
     <ClInclude Include="include\hc\editor\hcAWindowView.h" />
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorEditorWindow.h" />
@@ -213,6 +220,7 @@
     <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h" />
     <ClInclude Include="include\hc\editor\hcProjectManager.h" />
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
+    <ClInclude Include="include\hc\editor\hcToggleWindowMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcUnlitMaterialDescriptorEditor.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
@@ -228,6 +236,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcABaseView.cpp" />
+    <ClCompile Include="src\hcActionExecutionMenuItem.cpp" />
     <ClCompile Include="src\hcAssetCreator.cpp" />
     <ClCompile Include="src\hcAssetManagerWindow.cpp" />
     <ClCompile Include="src\hcAWindowView.cpp" />
@@ -252,12 +261,16 @@
     <ClCompile Include="src\hcImguiUtilities.cpp" />
     <ClCompile Include="src\hcLightManagerWindow.cpp" />
     <ClCompile Include="src\hcMain.cpp" />
-    <ClCompile Include="src\hcMainMenuToolbar.cpp" />
+    <ClCompile Include="src\hcMainMenuBar.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp" />
+    <ClCompile Include="src\hcMenu.cpp" />
+    <ClCompile Include="src\hcMenuBuilder.cpp" />
+    <ClCompile Include="src\hcMainMenuFactory.cpp" />
     <ClCompile Include="src\hcMeshComponentDrawer.cpp" />
     <ClCompile Include="src\hcNotImplementedComponentDrawer.cpp" />
     <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp" />
+    <ClCompile Include="src\hcOpenProjectMenuItem.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
     <ClCompile Include="src\hcProject.cpp" />
     <ClCompile Include="src\hcProjectBrowserWindow.cpp" />
@@ -265,6 +278,7 @@
     <ClCompile Include="src\hcProjectFileSelectorView.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
+    <ClCompile Include="src\hcToggleWindowMenuItem.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\ImGuiFileDialog.cpp" />

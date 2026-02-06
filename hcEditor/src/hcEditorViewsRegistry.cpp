@@ -1,7 +1,6 @@
 #include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcProjectFileSelector.h"
-#include "hc/editor/hcMainMenuToolbar.h"
 #include "hc/editor/hcPluginManagerWindow.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"
@@ -13,6 +12,8 @@
 #include "hc/editor/hcAssetManagerWindow.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 #include "hc/editor/hcEditorLogHistory.h"
+#include "hc/editor/hcMainMenuBarFactory.h"
+#include "hc/editor/hcMainMenuBar.h"
 
 namespace hc::editor
 {
@@ -25,7 +26,6 @@ namespace hc::editor
       EditorLogHistory& editorLogHistory
     )
     {
-      viewsManager.registerView(MakeUnique<MainMenuToolbar>(viewsManager, projectManager));
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
       viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
@@ -47,9 +47,12 @@ namespace hc::editor
         *projectFileSelector,
         gameObjectSelectionService
       ));
-
       viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
+
+      viewsManager.registerView(
+        mainMenuBarFactory::create(viewsManager, projectManager)
+      );
     }
   }
 }

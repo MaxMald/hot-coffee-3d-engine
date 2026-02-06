@@ -24,6 +24,11 @@ namespace hc::editor
     ImGui::End();
   }
 
+  const String& AWindowView::getWindowName() const
+  {
+    return m_windowName;
+  }
+
   bool AWindowView::isOpen() const
   {
     return m_isOpen;

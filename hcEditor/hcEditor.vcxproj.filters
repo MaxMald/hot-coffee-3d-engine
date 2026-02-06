@@ -118,6 +118,27 @@
     <Filter Include="Source Files\views\components\drawers">
       <UniqueIdentifier>{e6b79ec8-e983-4323-864c-fdaf30952bed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\mainMenuBar">
+      <UniqueIdentifier>{bf1031b7-0783-45f5-8ef7-f4125b33082e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\mainMenuBar\actions">
+      <UniqueIdentifier>{9a3ec1a4-9758-4b67-a3a9-16aa7987b2a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\mainMenuBar\items">
+      <UniqueIdentifier>{659f9650-1be6-4c93-83cf-0bbc23646020}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar">
+      <UniqueIdentifier>{234489cf-f5f0-4d03-8c11-e471fb4fa653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\actions">
+      <UniqueIdentifier>{7caf10f9-f12f-413a-9004-788b3a65a7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\items">
+      <UniqueIdentifier>{f9ebd635-8693-496d-81c0-7cfe547e3f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\factories">
+      <UniqueIdentifier>{a71ce9b1-c495-4992-8bfa-3ffb44b90526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -196,9 +217,6 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h">
-      <Filter>Header Files\views</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\editor\hcMainMenuToolbar.h">
       <Filter>Header Files\views</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcProjectConfiguration.h">
@@ -312,6 +330,33 @@
     <ClInclude Include="include\hc\editor\hcComponentDrawersRegistry.h">
       <Filter>Header Files\views\components</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMenu.h">
+      <Filter>Header Files\views\mainMenuBar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIMenuItemAction.h">
+      <Filter>Header Files\views\mainMenuBar\actions</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIMenuItem.h">
+      <Filter>Header Files\views\mainMenuBar\items</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcToggleWindowMenuItem.h">
+      <Filter>Header Files\views\mainMenuBar\items</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcActionExecutionMenuItem.h">
+      <Filter>Header Files\views\mainMenuBar\items</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcOpenProjectMenuItem.h">
+      <Filter>Header Files\views\mainMenuBar\items</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMenuBuilder.h">
+      <Filter>Header Files\views\mainMenuBar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMainMenuBarFactory.h">
+      <Filter>Header Files\views\mainMenuBar</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMainMenuBar.h">
+      <Filter>Header Files\views\mainMenuBar</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -349,9 +394,6 @@
     </ClCompile>
     <ClCompile Include="src\hcAWindowView.cpp">
       <Filter>Source Files\views\windows</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcMainMenuToolbar.cpp">
-      <Filter>Source Files\views</Filter>
     </ClCompile>
     <ClCompile Include="src\hcPluginManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
@@ -454,6 +496,27 @@
     </ClCompile>
     <ClCompile Include="src\hcComponentDrawersRegistry.cpp">
       <Filter>Source Files\views\components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMenu.cpp">
+      <Filter>Source Files\views\mainMenuBar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcToggleWindowMenuItem.cpp">
+      <Filter>Source Files\views\mainMenuBar\items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcActionExecutionMenuItem.cpp">
+      <Filter>Source Files\views\mainMenuBar\items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenProjectMenuItem.cpp">
+      <Filter>Source Files\views\mainMenuBar\items</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMenuBuilder.cpp">
+      <Filter>Source Files\views\mainMenuBar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMainMenuFactory.cpp">
+      <Filter>Source Files\views\mainMenuBar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMainMenuBar.cpp">
+      <Filter>Source Files\views\mainMenuBar</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
