@@ -6,6 +6,7 @@
 namespace hc
 {
   struct CameraMatrices;
+  class MaterialDescriptor;
 
   /**
    * @brief Interface for material objects in the engine.
@@ -14,6 +15,13 @@ namespace hc
   {
   public:
     virtual ~IMaterial() = default;
+
+    /**
+     * @brief Gets the unique identifier of the material.
+     * 
+     * @return The unique Id of the material.
+     */
+    virtual const Id& getId() const = 0;
 
     /**
      * @brief Gets the shader type associated with this material.
@@ -38,6 +46,13 @@ namespace hc
      * @brief Unbinds the material after rendering.
      */
     virtual void unbind() = 0;
+
+    /**
+      * @brief Gets the material descriptor associated with this material.
+      * 
+      * @return Shared pointer to the material descriptor.
+     */
+    virtual SharedPtr<MaterialDescriptor> getDescriptor() const = 0;
 
   protected:
     IMaterial() = default;

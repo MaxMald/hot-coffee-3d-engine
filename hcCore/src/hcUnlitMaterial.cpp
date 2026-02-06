@@ -6,12 +6,18 @@
 
 namespace hc
 {
-  UnlitMaterial::UnlitMaterial()
+  UnlitMaterial::UnlitMaterial() :
+    m_id(Id::Create())
   {
   }
 
   UnlitMaterial::~UnlitMaterial()
   {
+  }
+
+  const Id& UnlitMaterial::getId() const
+  {
+    return m_id;
   }
 
   shadingType::Type UnlitMaterial::getShaderType() const
@@ -52,6 +58,11 @@ namespace hc
   {
   }
 
+  SharedPtr<MaterialDescriptor> UnlitMaterial::getDescriptor() const
+  {
+    return m_descriptor;
+  }
+
   void UnlitMaterial::initialize(
     const SharedPtr<IShaderProgram>& shaderProgram,
     const SharedPtr<UnlitMaterialDescriptor>& descriptor,
@@ -75,10 +86,4 @@ namespace hc
   {
     return m_mainTexture;
   }
-
-  const SharedPtr<UnlitMaterialDescriptor> UnlitMaterial::getDescriptor() const
-  {
-    return m_descriptor;
-  }
-
 }

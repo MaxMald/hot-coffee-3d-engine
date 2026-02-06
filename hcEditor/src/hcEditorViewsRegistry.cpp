@@ -15,12 +15,14 @@
 #include "hc/editor/hcMainMenuBarFactory.h"
 #include "hc/editor/hcMainMenuBar.h"
 #include "hc/editor/hcFileDialogView.h"
+#include "hc/editor/hcMeshManagerWindow.h"
 
 namespace hc::editor
 {
   namespace editorViewsRegistry
   {
     void registerDefaultViews(
+      HotCoffeeEngine& hotCoffeeEngine,
       EditorViewsManager& viewsManager,
       GameObjectSelectionService& gameObjectSelectionService,
       ProjectManager& projectManager,
@@ -34,6 +36,9 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+      viewsManager.registerView(MakeUnique<MeshManagerWindow>(
+        hotCoffeeEngine.getGraphicsManager().getMeshManager()
+      ));
 
       UniquePtr<ProjectFileSelector> projectFileSelector =
         MakeUnique<ProjectFileSelector>(projectManager);

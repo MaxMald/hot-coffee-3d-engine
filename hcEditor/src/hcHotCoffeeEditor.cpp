@@ -44,6 +44,7 @@ namespace hc::editor
     
     m_viewsManager.initialize(window);
     editorViewsRegistry::registerDefaultViews(
+      HotCoffeeEngine::Instance(),
       m_viewsManager,
       m_gameObjectSelectionService,
       m_projectManager,

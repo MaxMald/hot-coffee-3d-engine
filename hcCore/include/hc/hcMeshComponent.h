@@ -17,6 +17,7 @@ namespace hc
 
     void draw(const RenderContext& renderContext) override;
     void setMesh(SharedPtr<IMesh> mesh);
+    SharedPtr<IMesh> getMesh() const;
 
   private:
     SharedPtr<IMesh> m_mesh;

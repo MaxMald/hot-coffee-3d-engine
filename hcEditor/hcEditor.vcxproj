@@ -198,6 +198,7 @@
     <ClInclude Include="include\hc\editor\hcMenuBuilder.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuBarFactory.h" />
     <ClInclude Include="include\hc\editor\hcMeshComponentDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcMeshManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcNotImplementedComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcOpenProjectMenuItem.h" />
@@ -272,6 +273,7 @@
     <ClCompile Include="src\hcMenuBuilder.cpp" />
     <ClCompile Include="src\hcMainMenuFactory.cpp" />
     <ClCompile Include="src\hcMeshComponentDrawer.cpp" />
+    <ClCompile Include="src\hcMeshManagerWindow.cpp" />
     <ClCompile Include="src\hcNotImplementedComponentDrawer.cpp" />
     <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\hcOpenProjectMenuItem.cpp" />

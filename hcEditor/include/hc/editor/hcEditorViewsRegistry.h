@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hc/editor/hcEditorPrerequisites.h"
+
 namespace hc::editor
 {
   class EditorViewsManager;
@@ -10,6 +12,7 @@ namespace hc::editor
   namespace editorViewsRegistry
   {
     void registerDefaultViews(
+      HotCoffeeEngine& hotCoffeeEngine,
       EditorViewsManager& manager,
       GameObjectSelectionService& gameObjectSelectionService,
       ProjectManager& projectManager,

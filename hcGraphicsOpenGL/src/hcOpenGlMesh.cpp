@@ -8,6 +8,7 @@ namespace hc
     SharedPtr<Model> model,
     OpenGlMaterialManager* materialManager
   ) :
+    m_id(Id::Create()),
     m_vao(0),
     m_vbo(0),
     m_ebo(0),
@@ -27,6 +28,11 @@ namespace hc
   OpenGlMesh::~OpenGlMesh()
   {
     destroy();
+  }
+
+  const Id& OpenGlMesh::getId() const 
+  {
+    return m_id;
   }
 
   void OpenGlMesh::draw(const RenderContext& renderContext)
@@ -109,6 +115,11 @@ namespace hc
       glDeleteVertexArrays(1, &m_vao);
       m_vao = 0;
     }
+  }
+
+  const Vector<SharedPtr<IMaterial>> OpenGlMesh::getMaterials()
+  {
+    return m_materials;
   }
 
   void OpenGlMesh::bind()

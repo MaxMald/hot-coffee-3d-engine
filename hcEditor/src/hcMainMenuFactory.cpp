@@ -13,6 +13,7 @@
 #include "hc/editor/hcCameraManagerWindow.h"
 #include "hc/editor/hcAssetManagerWindow.h"
 #include "hc/editor/hcFileDialogView.h"
+#include "hc/editor/hcMeshManagerWindow.h"
 
 // Menu Items
 #include "hc/editor/hcOpenProjectMenuItem.h"
@@ -61,6 +62,9 @@ namespace hc::editor
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<AssetManagerWindow>()
+            ))
+            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+              *editorViewsManager.getView<MeshManagerWindow>()
             ))
           .endMenu()
           .build()

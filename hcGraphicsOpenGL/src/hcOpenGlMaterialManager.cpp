@@ -58,8 +58,8 @@ namespace hc
       return m_defaultUnlitMaterial;
     }
 
-    auto it = m_cachedMaterials.find(descriptor->getId());
-    if (it != m_cachedMaterials.end())
+    auto it = m_cachedMaterialsByDescriptorId.find(descriptor->getId());
+    if (it != m_cachedMaterialsByDescriptorId.end())
       return it->second;
 
     shadingType::Type shaderType = descriptor->getShaderType();
@@ -79,9 +79,15 @@ namespace hc
     return m_defaultUnlitMaterial;
   }
 
+  const Vector<SharedPtr<IMaterial>>& OpenGlMaterialManager::getMaterials() const
+  {
+    return m_materials;
+  }
+
   void OpenGlMaterialManager::clear()
   {
-    m_cachedMaterials.clear();
+    m_materials.clear();
+    m_cachedMaterialsByDescriptorId.clear();
   }
 
   void OpenGlMaterialManager::initialize(
@@ -126,7 +132,21 @@ namespace hc
       mainTexture
     );
 
-    m_cachedMaterials[descriptor->getId()] = material;
+    m_cachedMaterialsByDescriptorId[descriptor->getId()] = material;
     return material;
+  }
+
+  bool OpenGlMaterialManager::hasCachedMaterialForDescriptorId(
+    const Id& descriptorId
+  ) const
+  {
+    return m_cachedMaterialsByDescriptorId.find(descriptorId) !=
+      m_cachedMaterialsByDescriptorId.end();
+  }
+
+  void OpenGlMaterialManager::addMaterial(SharedPtr<IMaterial> material)
+  {
+    m_materials.push_back(material);
+    m_cachedMaterialsByDescriptorId[material->getDescriptor()->getId()] = material;
   }
 }

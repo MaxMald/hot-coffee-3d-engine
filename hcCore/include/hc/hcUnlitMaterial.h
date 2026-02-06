@@ -18,6 +18,11 @@ namespace hc
     ~UnlitMaterial() override;
 
     /**
+     * @copydoc IMaterial::getId
+     */
+    const Id& getId() const override;
+
+    /**
      * @copydoc IMaterial::getShaderType
      */
     shadingType::Type getShaderType() const override;
@@ -36,6 +41,11 @@ namespace hc
      * @copydoc IMaterial::unbind
      */
     void unbind() override;
+
+    /**
+     * @copydoc IMaterial::getDescriptor
+     */
+    SharedPtr<MaterialDescriptor> getDescriptor() const override;
 
     /**
      * @brief Initializes the unlit material with a descriptor and main texture.
@@ -63,14 +73,8 @@ namespace hc
      */
     const SharedPtr<ITexture>& getMainTexture() const;
 
-    /**
-     * @brief Gets the descriptor associated with this material.
-     * 
-     * @return Shared pointer to the unlit material descriptor.
-     */
-    const SharedPtr<UnlitMaterialDescriptor> getDescriptor() const;
-
   private:
+    Id m_id;
     SharedPtr<UnlitMaterialDescriptor> m_descriptor;
     SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;

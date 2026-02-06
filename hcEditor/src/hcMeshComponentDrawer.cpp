@@ -35,6 +35,17 @@ namespace hc::editor
         }
       );
     }
+    ImGui::SameLine();
+    SharedPtr<IMesh> mesh = component->getMesh();
+    if (!mesh)
+    {
+      ImGui::Text("No mesh loaded");
+      return;
+    }
+    else
+    {
+      ImGui::Text("Mesh ID: %s", mesh->getId().toString().c_str());
+    }
   }
 
   void MeshComponentDrawer::onMeshFileSelected(

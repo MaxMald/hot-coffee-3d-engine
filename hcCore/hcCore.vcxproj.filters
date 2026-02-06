@@ -70,9 +70,6 @@
     <Filter Include="Source Files\assets">
       <UniqueIdentifier>{2a0e8c01-cd04-4888-99e6-5e80ff8a6c6e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\assets\materials">
-      <UniqueIdentifier>{c23f9574-f981-4a4e-b7ee-9270e2dc43ab}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\assets\loaders">
       <UniqueIdentifier>{ac609978-a258-47f4-8231-b67235910c61}</UniqueIdentifier>
     </Filter>
@@ -126,6 +123,9 @@
     </Filter>
     <Filter Include="Source Files\scene\camera">
       <UniqueIdentifier>{439fa8d9-3caa-4608-b497-5444d7bfb003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\assets\materialDescriptors">
+      <UniqueIdentifier>{c23f9574-f981-4a4e-b7ee-9270e2dc43ab}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -345,7 +345,7 @@
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h">
-      <Filter>Header Files\assets\materials</Filter>
+      <Filter>Header Files\assets\materialDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIImageLoader.h">
       <Filter>Header Files\assets\loaders</Filter>
@@ -354,10 +354,10 @@
       <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcShadingType.h">
-      <Filter>Header Files\assets\materials</Filter>
+      <Filter>Header Files\assets\materialDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcMaterialDescriptor.h">
-      <Filter>Header Files\assets\materials</Filter>
+      <Filter>Header Files\assets\materialDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMaterialManager.h">
       <Filter>Header Files\graphics\material</Filter>

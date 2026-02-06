@@ -5,6 +5,9 @@
 
 namespace hc
 {
+  /**
+   * @brief A simple unique identifier class for engine objects.
+   */
   class Id
   {
   public:
@@ -38,6 +41,14 @@ namespace hc
     UInt64 value() const
     {
       return m_id;
+    }
+
+    /**
+     * @brief Returns a string representation of the Id.
+     */
+    String toString() const
+    {
+      return String::Format("%llu", m_id);
     }
 
   private:

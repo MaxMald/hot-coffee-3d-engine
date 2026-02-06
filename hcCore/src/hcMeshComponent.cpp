@@ -22,4 +22,9 @@ namespace hc
   {
     m_mesh = mesh;
   }
+
+  SharedPtr<IMesh> MeshComponent::getMesh() const
+  {
+    return m_mesh;
+  }
 }

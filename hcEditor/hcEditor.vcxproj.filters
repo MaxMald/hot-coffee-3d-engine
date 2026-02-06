@@ -372,6 +372,9 @@
     <ClInclude Include="include\hc\editor\hcIFileDialogCallback.h">
       <Filter>Header Files\views\fileDialogView</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMeshManagerWindow.h">
+      <Filter>Header Files\views\windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -535,6 +538,9 @@
     </ClCompile>
     <ClCompile Include="src\hcFileDialogView.cpp">
       <Filter>Source Files\views\fileDialogView</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMeshManagerWindow.cpp">
+      <Filter>Source Files\views\windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

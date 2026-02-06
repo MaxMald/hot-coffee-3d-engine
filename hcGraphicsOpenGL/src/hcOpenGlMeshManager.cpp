@@ -26,18 +26,30 @@ namespace hc
     const SharedPtr<Model>& model
   )
   {
-    Id modelId = model->getId();
-    auto it = m_cachedMeshes.find(modelId);
-    if (it != m_cachedMeshes.end())
-      return it->second;
+    if (!model)
+      return SharedPtr<IMesh>();
+
+    if (hasCachedMeshForModelId(model->getId()))
+      return m_cachedMeshesByModelId[model->getId()];
 
     SharedPtr<OpenGlMesh> mesh = MakeShared<OpenGlMesh>(
       model,
       m_materialManager
     );
 
-    m_cachedMeshes[modelId] = mesh;
+    addMesh(mesh);
     return mesh;
+  }
+
+  const Vector<SharedPtr<IMesh>>& OpenGlMeshManager::getMeshes() const
+  {
+    return m_meshes;
+  }
+
+  void OpenGlMeshManager::clear()
+  {
+    m_meshes.clear();
+    m_cachedMeshesByModelId.clear();
   }
 
   void OpenGlMeshManager::initialize(
@@ -47,5 +59,17 @@ namespace hc
   {
     m_assetManager = assetManager;
     m_materialManager = materialManager;
+  }
+
+  bool OpenGlMeshManager::hasCachedMeshForModelId(const Id& modelId) const
+  {
+    return m_cachedMeshesByModelId.find(modelId) != 
+      m_cachedMeshesByModelId.end();
+  }
+
+  void OpenGlMeshManager::addMesh(const SharedPtr<OpenGlMesh>& mesh)
+  {
+    m_meshes.push_back(mesh);
+    m_cachedMeshesByModelId[mesh->getModel()->getId()] = mesh;
   }
 }
