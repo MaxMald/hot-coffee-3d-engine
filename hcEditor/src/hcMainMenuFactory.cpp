@@ -7,15 +7,16 @@
 // Windows
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcPluginManagerWindow.h"
-
-// Menu Items
-#include "hc/editor/hcOpenProjectMenuItem.h"
-#include "hc/editor/hcToggleWindowMenuItem.h"
 #include "hc/editor/hcEditorLoggerWindow.h"
 #include "hc/editor/hcSceneGraphWindow.h"
 #include "hc/editor/hcLightManagerWindow.h"
 #include "hc/editor/hcCameraManagerWindow.h"
 #include "hc/editor/hcAssetManagerWindow.h"
+#include "hc/editor/hcFileDialogView.h"
+
+// Menu Items
+#include "hc/editor/hcOpenProjectMenuItem.h"
+#include "hc/editor/hcToggleWindowMenuItem.h"
 
 namespace hc::editor
 {
@@ -32,7 +33,10 @@ namespace hc::editor
       mainMenuBar->addMenu(
         menuBuilder
           .beginMenu("File")
-            .addMenuItem(MakeUnique<OpenProjectMenuItem>(projectManager))
+            .addMenuItem(MakeUnique<OpenProjectMenuItem>(
+              projectManager,
+              *editorViewsManager.getView<FileDialogView>()
+            ))
           .endMenu()
           .build()
       );

@@ -139,6 +139,12 @@
     <Filter Include="Header Files\views\mainMenuBar\factories">
       <UniqueIdentifier>{a71ce9b1-c495-4992-8bfa-3ffb44b90526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\fileDialogView">
+      <UniqueIdentifier>{ea51fbe5-8c1d-4d8b-ae71-cb2a544e52fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\fileDialogView">
+      <UniqueIdentifier>{5f8bc127-162d-43a3-888b-a6a857086b99}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -357,6 +363,15 @@
     <ClInclude Include="include\hc\editor\hcMainMenuBar.h">
       <Filter>Header Files\views\mainMenuBar</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcFileDialogView.h">
+      <Filter>Header Files\views\fileDialogView</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcFileDialogRequest.h">
+      <Filter>Header Files\views\fileDialogView</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIFileDialogCallback.h">
+      <Filter>Header Files\views\fileDialogView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -517,6 +532,9 @@
     </ClCompile>
     <ClCompile Include="src\hcMainMenuBar.cpp">
       <Filter>Source Files\views\mainMenuBar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcFileDialogView.cpp">
+      <Filter>Source Files\views\fileDialogView</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

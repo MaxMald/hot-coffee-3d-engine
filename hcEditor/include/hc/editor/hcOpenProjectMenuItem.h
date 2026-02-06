@@ -1,15 +1,19 @@
 #pragma once
 
 #include "hc/editor/hcIMenuItem.h"
+#include "hc/editor/hcIFileDialogCallback.h"
 
 namespace hc::editor
 {
   class ProjectManager;
+  class FileDialogView;
 
   /**
    * @brief Menu item that opens a project selection dialog.
    */
-  class OpenProjectMenuItem : public IMenuItem
+  class OpenProjectMenuItem :
+    public IMenuItem,
+    public IFileDialogCallback
   {
   public:
     /**
@@ -17,8 +21,10 @@ namespace hc::editor
      *
      * @param projectManager Reference to the ProjectManager used to open
      * projects.
+     * @param fileDialogView Reference to the FileDialogView for displaying file
+     * dialogs.
      */
-    OpenProjectMenuItem(ProjectManager& projectManager);
+    OpenProjectMenuItem(ProjectManager& projectManager, FileDialogView& fileDialogView);
     ~OpenProjectMenuItem() override = default;
 
     /**
@@ -28,8 +34,12 @@ namespace hc::editor
 
   private:
     ProjectManager& m_projectManager;
-
-    bool shouldDrawDialog() const;
-    void drawDialog();
+    FileDialogView& m_fileDialogView;
+        
+    void onFileSelected(
+      const String& dialogKey,
+      const Path& filePathName,
+      const Path& currentPath
+    ) override;
   };
 }

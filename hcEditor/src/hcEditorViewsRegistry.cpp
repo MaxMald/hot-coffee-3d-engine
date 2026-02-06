@@ -14,6 +14,7 @@
 #include "hc/editor/hcEditorLogHistory.h"
 #include "hc/editor/hcMainMenuBarFactory.h"
 #include "hc/editor/hcMainMenuBar.h"
+#include "hc/editor/hcFileDialogView.h"
 
 namespace hc::editor
 {
@@ -26,6 +27,7 @@ namespace hc::editor
       EditorLogHistory& editorLogHistory
     )
     {
+      viewsManager.registerView(MakeUnique<FileDialogView>());
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
       viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
