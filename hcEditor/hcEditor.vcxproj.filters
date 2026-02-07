@@ -127,18 +127,6 @@
     <Filter Include="Source Files\views\mainMenuBar\items">
       <UniqueIdentifier>{659f9650-1be6-4c93-83cf-0bbc23646020}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\views\mainMenuBar">
-      <UniqueIdentifier>{234489cf-f5f0-4d03-8c11-e471fb4fa653}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\views\mainMenuBar\actions">
-      <UniqueIdentifier>{7caf10f9-f12f-413a-9004-788b3a65a7ea}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\views\mainMenuBar\items">
-      <UniqueIdentifier>{f9ebd635-8693-496d-81c0-7cfe547e3f96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\views\mainMenuBar\factories">
-      <UniqueIdentifier>{a71ce9b1-c495-4992-8bfa-3ffb44b90526}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\views\fileDialogView">
       <UniqueIdentifier>{ea51fbe5-8c1d-4d8b-ae71-cb2a544e52fc}</UniqueIdentifier>
     </Filter>
@@ -156,6 +144,24 @@
     </Filter>
     <Filter Include="Header Files\views\windows\materialManagerWindow\materialDrawers">
       <UniqueIdentifier>{9dfda0c2-b355-4548-aa85-7cc487fb5247}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar">
+      <UniqueIdentifier>{234489cf-f5f0-4d03-8c11-e471fb4fa653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\actions">
+      <UniqueIdentifier>{7caf10f9-f12f-413a-9004-788b3a65a7ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\items">
+      <UniqueIdentifier>{f9ebd635-8693-496d-81c0-7cfe547e3f96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\mainMenuBar\factories">
+      <UniqueIdentifier>{a71ce9b1-c495-4992-8bfa-3ffb44b90526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\textureManagerWindow">
+      <UniqueIdentifier>{d4855262-b9e5-42be-a67b-be506f85d29b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\windows\textureManagerWindow">
+      <UniqueIdentifier>{5f353795-bdc6-4014-888d-68ee107814ea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -408,6 +414,9 @@
     <ClInclude Include="include\hc\editor\hcMaterialDrawersManagerFactory.h">
       <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcTextureManagerWindow.h">
+      <Filter>Header Files\views\windows\textureManagerWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -589,6 +598,9 @@
     </ClCompile>
     <ClCompile Include="src\hcMaterialDrawersManagerFactory.cpp">
       <Filter>Source Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTextureManagerWindow.cpp">
+      <Filter>Source Files\views\windows\textureManagerWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

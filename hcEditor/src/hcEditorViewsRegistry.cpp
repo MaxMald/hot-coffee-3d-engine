@@ -18,6 +18,7 @@
 #include "hc/editor/hcMeshManagerWindow.h"
 #include "hc/editor/hcMaterialManagerWindow.h"
 #include "hc/editor/hcMaterialDrawersManagerFactory.h"
+#include "hc/editor/hcTextureManagerWindow.h"
 
 namespace hc::editor
 {
@@ -38,6 +39,9 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+      viewsManager.registerView(MakeUnique<TextureManagerWindow>(
+        hotCoffeeEngine.getGraphicsManager().getTextureManager()
+      ));
       viewsManager.registerView(MakeUnique<MeshManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getMeshManager()
       ));

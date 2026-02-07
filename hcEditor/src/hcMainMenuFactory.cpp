@@ -15,6 +15,7 @@
 #include "hc/editor/hcFileDialogView.h"
 #include "hc/editor/hcMeshManagerWindow.h"
 #include "hc/editor/hcMaterialManagerWindow.h"
+#include "hc/editor/hcTextureManagerWindow.h"
 
 // Menu Items
 #include "hc/editor/hcOpenProjectMenuItem.h"
@@ -63,6 +64,9 @@ namespace hc::editor
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<AssetManagerWindow>()
+            ))
+            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+              *editorViewsManager.getView<TextureManagerWindow>()
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<MaterialManagerWindow>()

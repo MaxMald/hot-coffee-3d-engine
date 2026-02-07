@@ -230,6 +230,7 @@
     <ClInclude Include="include\hc\editor\hcProjectFileContentLoader.h" />
     <ClInclude Include="include\hc\editor\hcProjectManager.h" />
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
+    <ClInclude Include="include\hc\editor\hcTextureManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcToggleWindowMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcUnlitMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcUnlitMaterialDrawer.h" />
@@ -295,6 +296,7 @@
     <ClCompile Include="src\hcProjectFileSelectorView.cpp" />
     <ClCompile Include="src\hcProjectManager.cpp" />
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
+    <ClCompile Include="src\hcTextureManagerWindow.cpp" />
     <ClCompile Include="src\hcToggleWindowMenuItem.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDrawer.cpp" />

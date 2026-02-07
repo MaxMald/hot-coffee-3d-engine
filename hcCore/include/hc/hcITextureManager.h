@@ -13,8 +13,6 @@ namespace hc
    * The ITextureManager is responsible for creating, managing, and clearing
    * textures. It provides methods to create textures from images, image keys, or
    * files, and to clear all managed textures.
-   *
-   * This interface is non-copyable.
    */
   class ITextureManager : public NonCopyable
   {
@@ -50,6 +48,13 @@ namespace hc
      * @return Shared pointer to the created texture.
      */
     virtual SharedPtr<ITexture> createTextureFromFile(const Path& filePath) = 0;
+
+    /**
+     * @brief Gets a list of all managed textures.
+     *
+     * @return Vector of shared pointers to the managed textures.
+     */
+    virtual const Vector<SharedPtr<ITexture>>& getTextures() = 0;
 
     /**
      * @brief Clears all managed textures.

@@ -19,12 +19,8 @@ namespace hc
       return nullptr;
     }
 
-    Id imageId = image->getId();
-    auto it = m_cachedTextures.find(imageId);
-    if (it != m_cachedTextures.end())
-    {
-      return it->second;
-    }
+    if (hasCachedTextureForImageId(image->getId()))
+      return m_cachedTexturesByImageId[image->getId()];
 
     SharedPtr<OpenGlTexture> texture = MakeShared<OpenGlTexture>(image);
     if (!texture)
@@ -38,7 +34,7 @@ namespace hc
       return nullptr;
     }
 
-    m_cachedTextures[imageId] = texture;
+    addTexture(texture);
     return texture;
   }
 
@@ -78,13 +74,35 @@ namespace hc
     return createTextureFromImage(image);
   }
 
+  const Vector<SharedPtr<ITexture>>& OpenGlTextureManager::getTextures()
+  {
+    return m_textures;
+  }
+
   void OpenGlTextureManager::clear()
   {
-    m_cachedTextures.clear();
+    for (const auto& texture : m_textures)
+    {
+      if (texture)
+        texture->destroy();
+    }
+    m_textures.clear();
+    m_cachedTexturesByImageId.clear();
   }
 
   void OpenGlTextureManager::initialize(SharedPtr<AssetManager> assetManager)
   {
     m_assetManager = assetManager;
+  }
+
+  void OpenGlTextureManager::addTexture(SharedPtr<OpenGlTexture> texture)
+  {
+    m_textures.push_back(texture);
+    m_cachedTexturesByImageId[texture->getImage()->getId()] = texture;
+  }
+
+  bool OpenGlTextureManager::hasCachedTextureForImageId(const Id& imageId) const
+  {
+    return false;
   }
 }

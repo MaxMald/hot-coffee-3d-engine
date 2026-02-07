@@ -62,5 +62,24 @@ namespace hc::editor
       }
       ImGui::EndTable();
     }
+
+    void DrawTexture(
+      ITexture* texture,
+      float width,
+      float height
+    )
+    {
+      if (texture)
+      {
+        ImGui::Image(
+          texture->getNativeHandle(),
+          ImVec2(width, height)
+        );
+      }
+      else
+      {
+        ImGui::TextDisabled("[No Texture]");
+      }
+    }
   }
 }

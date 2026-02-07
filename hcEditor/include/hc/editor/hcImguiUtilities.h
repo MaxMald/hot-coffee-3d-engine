@@ -10,10 +10,10 @@ namespace hc::editor
      * @brief Draws a 3-component color editor widget in ImGui.
      *
      * Allows the user to edit the RGB values of the provided color.
-     * 
+     *
      * @param label The label to display next to the widget.
      * @param color Reference to the color to be edited.
-     * 
+     *
      * @return True if the color was modified, false otherwise.
      */
     bool DrawColorEdit3(const String& label, Color& color);
@@ -32,11 +32,26 @@ namespace hc::editor
      * @brief Draws a matrix display widget in ImGui.
      *
      * Shows the contents of a 4x4 matrix for inspection.
-     * 
+     *
      * @param label The label to display next to the widget.
      * @param matrix The matrix to display.
      */
     void DrawMatrix(const String& label, const Matrix4& matrix);
+
+    /**
+     * @brief Draws a texture in ImGui.
+     *
+     * Displays the given texture at the specified dimensions.
+     *
+     * @param texture Pointer to the texture to be drawn.
+     * @param width The width to display the texture.
+     * @param height The height to display the texture.
+     */
+    void DrawTexture(
+      ITexture* texture,
+      float width,
+      float height
+    );
   }
 }
 

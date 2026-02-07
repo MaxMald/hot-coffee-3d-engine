@@ -4,6 +4,7 @@ namespace hc
 {
   OpenGlTexture::OpenGlTexture(SharedPtr<Image> image) :
     m_id(Id::Create()),
+    m_image(image),
     m_textureId(0),
     m_width(0),
     m_height(0),
@@ -90,6 +91,11 @@ namespace hc
       m_textureId = 0;
       m_created = false;
     }
+  }
+
+  SharedPtr<Image> OpenGlTexture::getImage()
+  {
+    return m_image;
   }
 
   void* OpenGlTexture::getNativeHandle() const

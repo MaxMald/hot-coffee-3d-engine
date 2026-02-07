@@ -4,6 +4,8 @@
 
 namespace hc
 {
+  class Image;
+
   /**
    * @brief Interface for texture resources in the graphics module.
    */
@@ -58,6 +60,13 @@ namespace hc
      * @brief Destroys the texture and releases resources.
      */
     virtual void destroy() = 0;
+
+    /**
+     * @brief Gets the image associated with the texture.
+     * 
+     * @return Shared pointer to the image used to create the texture.
+     */
+    virtual SharedPtr<Image> getImage() = 0;
 
     /**
      * @brief Gets the native graphics API handle for the texture.
