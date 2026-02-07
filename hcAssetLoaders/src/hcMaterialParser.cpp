@@ -8,6 +8,7 @@ namespace hc
   namespace materialParser
   {
     SharedPtr<MaterialDescriptor> ParseMaterialDescriptorFromAssimpMaterial(
+      const Path& fileDirectory,
       const aiMaterial* material
     )
     {
@@ -15,10 +16,8 @@ namespace hc
 
       switch (type)
       {
-      case shadingType::Unlit:
-        return ParseUnlitMaterialDescriptor(material);
       default:
-        return CreateDefaultMaterial();
+        return ParseUnlitMaterialDescriptor(fileDirectory, material);
       }
     }
 
@@ -48,6 +47,7 @@ namespace hc
     }
 
     SharedPtr<MaterialDescriptor> ParseUnlitMaterialDescriptor(
+      const Path& fileDirectory,
       const aiMaterial* material
     )
     {
@@ -63,7 +63,8 @@ namespace hc
       aiString texturePath;
       if (material->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath) == aiReturn_SUCCESS)
       {
-        descriptor->setMainImagePath(Path(texturePath.C_Str()));
+        Path textureRelativePath(texturePath.C_Str());
+        descriptor->setMainImagePath(fileDirectory / textureRelativePath);
       }
 
       return descriptor;

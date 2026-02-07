@@ -74,6 +74,7 @@ namespace hc
     {
       materialDescriptors.push_back(
         materialParser::ParseMaterialDescriptorFromAssimpMaterial(
+          filePath.parent_path(),
           scene->mMaterials[i]
         )
       );
