@@ -13,6 +13,7 @@ namespace hc
     OpenGlTexture(SharedPtr<Image> image);
     ~OpenGlTexture() override;
 
+    const Id& getId() const override;
     UInt32 getWidth() const override;
     UInt32 getHeight() const override;
     void bind(UInt32 slot = 0) const override;
@@ -24,6 +25,7 @@ namespace hc
     GLuint getTextureId() const;
 
   private:
+    Id m_id;
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;

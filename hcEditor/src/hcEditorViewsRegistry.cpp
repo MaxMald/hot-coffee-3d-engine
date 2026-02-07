@@ -16,6 +16,8 @@
 #include "hc/editor/hcMainMenuBar.h"
 #include "hc/editor/hcFileDialogView.h"
 #include "hc/editor/hcMeshManagerWindow.h"
+#include "hc/editor/hcMaterialManagerWindow.h"
+#include "hc/editor/hcMaterialDrawersManagerFactory.h"
 
 namespace hc::editor
 {
@@ -56,6 +58,11 @@ namespace hc::editor
       ));
       viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
+
+      viewsManager.registerView(MakeUnique<MaterialManagerWindow>(
+        hotCoffeeEngine.getGraphicsManager().getMaterialManager(),
+        materialDrawerManagerFactory::create()
+      ));
 
       viewsManager.registerView(
         mainMenuBarFactory::create(viewsManager, projectManager)

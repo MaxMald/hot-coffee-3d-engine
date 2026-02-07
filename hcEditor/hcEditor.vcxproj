@@ -162,6 +162,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcABaseComponentDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcABaseMaterialDrawer.h" />
     <ClInclude Include="include\hc\editor\hcABaseView.h" />
     <ClInclude Include="include\hc\editor\hcActionExecutionMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
@@ -190,9 +191,13 @@
     <ClInclude Include="include\hc\editor\hcIFileDialogCallback.h" />
     <ClInclude Include="include\hc\editor\hcImageAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcIMaterialDrawer.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuBar.h" />
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMenuItem.h" />
+    <ClInclude Include="include\hc\editor\hcMaterialDrawersManagerFactory.h" />
+    <ClInclude Include="include\hc\editor\hcMaterialDrawersManager.h" />
+    <ClInclude Include="include\hc\editor\hcMaterialManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcMenu.h" />
     <ClInclude Include="include\hc\editor\hcIMenuItemAction.h" />
     <ClInclude Include="include\hc\editor\hcMenuBuilder.h" />
@@ -200,6 +205,7 @@
     <ClInclude Include="include\hc\editor\hcMeshComponentDrawer.h" />
     <ClInclude Include="include\hc\editor\hcMeshManagerWindow.h" />
     <ClInclude Include="include\hc\editor\hcNotImplementedComponentDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcNotImplementedMaterialDrawer.h" />
     <ClInclude Include="include\hc\editor\hcNullMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcOpenProjectMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcProjectFileSelector.h" />
@@ -226,6 +232,7 @@
     <ClInclude Include="include\hc\editor\hcSceneGraphWindow.h" />
     <ClInclude Include="include\hc\editor\hcToggleWindowMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcUnlitMaterialDescriptorEditor.h" />
+    <ClInclude Include="include\hc\editor\hcUnlitMaterialDrawer.h" />
     <ClInclude Include="include\imconfig.h" />
     <ClInclude Include="include\imgui.h" />
     <ClInclude Include="include\ImGuiFileDialog.h" />
@@ -269,12 +276,16 @@
     <ClCompile Include="src\hcMainMenuBar.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorAssetGroupDrawer.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorEditorWindow.cpp" />
+    <ClCompile Include="src\hcMaterialDrawersManagerFactory.cpp" />
+    <ClCompile Include="src\hcMaterialDrawersManager.cpp" />
+    <ClCompile Include="src\hcMaterialManagerWindow.cpp" />
     <ClCompile Include="src\hcMenu.cpp" />
     <ClCompile Include="src\hcMenuBuilder.cpp" />
     <ClCompile Include="src\hcMainMenuFactory.cpp" />
     <ClCompile Include="src\hcMeshComponentDrawer.cpp" />
     <ClCompile Include="src\hcMeshManagerWindow.cpp" />
     <ClCompile Include="src\hcNotImplementedComponentDrawer.cpp" />
+    <ClCompile Include="src\hcNotImplementedMaterialDrawer.cpp" />
     <ClCompile Include="src\hcNullMaterialDescriptorEditor.cpp" />
     <ClCompile Include="src\hcOpenProjectMenuItem.cpp" />
     <ClCompile Include="src\hcPluginManagerWindow.cpp" />
@@ -286,6 +297,7 @@
     <ClCompile Include="src\hcSceneGraphWindow.cpp" />
     <ClCompile Include="src\hcToggleWindowMenuItem.cpp" />
     <ClCompile Include="src\hcUnlitMaterialDescriptorEditor.cpp" />
+    <ClCompile Include="src\hcUnlitMaterialDrawer.cpp" />
     <ClCompile Include="src\imgui.cpp" />
     <ClCompile Include="src\ImGuiFileDialog.cpp" />
     <ClCompile Include="src\imgui_demo.cpp" />

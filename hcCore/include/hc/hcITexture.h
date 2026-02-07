@@ -13,6 +13,13 @@ namespace hc
     virtual ~ITexture() = default;
 
     /**
+     * @brief Gets the unique identifier of the texture.
+     * 
+     * @return The Id of the texture.
+     */
+    virtual const Id& getId() const = 0;
+
+    /**
      * @brief Gets the width of the texture in pixels.
      * 
      * @return Texture width as an unsigned 32-bit integer.

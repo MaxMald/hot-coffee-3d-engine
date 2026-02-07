@@ -145,6 +145,18 @@
     <Filter Include="Header Files\views\fileDialogView">
       <UniqueIdentifier>{5f8bc127-162d-43a3-888b-a6a857086b99}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\views\windows\materialManagerWindow">
+      <UniqueIdentifier>{ebd9d8ff-3d83-4d84-90a2-3e90c399fb9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\materialManagerWindow">
+      <UniqueIdentifier>{583f1497-9f2d-4c45-8183-d812ec77ceea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\views\windows\materialManagerWindow\materialDrawers">
+      <UniqueIdentifier>{c2d9791f-1f90-41b4-9769-e80f22a7a06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\views\windows\materialManagerWindow\materialDrawers">
+      <UniqueIdentifier>{9dfda0c2-b355-4548-aa85-7cc487fb5247}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -375,6 +387,27 @@
     <ClInclude Include="include\hc\editor\hcMeshManagerWindow.h">
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialManagerWindow.h">
+      <Filter>Header Files\views\windows\materialManagerWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIMaterialDrawer.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcNotImplementedMaterialDrawer.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialDrawersManager.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcUnlitMaterialDrawer.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcABaseMaterialDrawer.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcMaterialDrawersManagerFactory.h">
+      <Filter>Header Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -541,6 +574,21 @@
     </ClCompile>
     <ClCompile Include="src\hcMeshManagerWindow.cpp">
       <Filter>Source Files\views\windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialManagerWindow.cpp">
+      <Filter>Source Files\views\windows\materialManagerWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcNotImplementedMaterialDrawer.cpp">
+      <Filter>Source Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterialDrawer.cpp">
+      <Filter>Source Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDrawersManager.cpp">
+      <Filter>Source Files\views\windows\materialManagerWindow\materialDrawers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialDrawersManagerFactory.cpp">
+      <Filter>Source Files\views\windows\materialManagerWindow\materialDrawers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

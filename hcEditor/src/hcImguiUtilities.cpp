@@ -31,6 +31,22 @@ namespace hc::editor
       return changed;
     }
 
+    void DrawColor(const String& label, const Color& color)
+    {
+      ImVec4 colorVec(
+        static_cast<float>(color.r),
+        static_cast<float>(color.g),
+        static_cast<float>(color.b),
+        static_cast<float>(color.a)
+      );
+
+      ImGui::Text("%s", label.c_str());
+      ImGui::SameLine();
+      ImGui::ColorButton("##MaterialColor", colorVec, ImGuiColorEditFlags_NoTooltip | ImGuiColorEditFlags_NoPicker, ImVec2(32, 32));
+      ImGui::SameLine();
+      ImGui::Text("RGBA: %.3f, %.3f, %.3f, %.3f", colorVec.x, colorVec.y, colorVec.z, colorVec.w);
+    }
+
     void DrawMatrix(const String& label, const Matrix4& matrix)
     {
       ImGui::BeginTable(label.c_str(), 4, ImGuiTableFlags_Borders | ImGuiTableFlags_SizingFixedFit);
