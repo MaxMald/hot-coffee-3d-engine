@@ -4,7 +4,8 @@ namespace hc
 {
   OpenGlMaterialManager::OpenGlMaterialManager() :
     m_textureManager(nullptr),
-    m_assetManager(nullptr)
+    m_assetManager(nullptr),
+    m_shaderProgramManager(nullptr)
   {
   }
 
@@ -132,7 +133,7 @@ namespace hc
       mainTexture
     );
 
-    m_cachedMaterialsByDescriptorId[descriptor->getId()] = material;
+    addMaterial(material);
     return material;
   }
 
