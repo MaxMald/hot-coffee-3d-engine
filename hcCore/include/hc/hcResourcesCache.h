@@ -48,6 +48,13 @@ namespace hc
     void cacheResource(const Key& id, SharedPtr<ResourceType> resource);
 
     /**
+     * @brief Retrieves all cached resources.
+     *
+     * @return Vector of shared pointers to all cached resources.
+     */
+    Vector<SharedPtr<ResourceType>> getCachedResources() const;
+
+    /**
      * @brief Clears all cached resources from the cache.
      */
     void clearCache();
@@ -90,6 +97,15 @@ namespace hc
       return;
 
     m_cache[id] = resource;
+  }
+
+  template<typename Key, typename ResourceType>
+  inline Vector<SharedPtr<ResourceType>> ResourcesCache<Key, ResourceType>::getCachedResources() const
+  {
+    Vector<SharedPtr<ResourceType>> resources;
+    for (const auto& pair : m_cache)
+      resources.push_back(pair.second);
+    return resources;
   }
 
   template <typename Key, typename ResourceType>
