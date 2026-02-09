@@ -7,6 +7,13 @@ namespace hc
 {
   class IShader;
 
+  /**
+   * @brief Interface for shader manager classes.
+   *
+   * Provides methods for creating, retrieving, and caching shader instances.
+   * Supports creation from files and string content, access to default shaders,
+   * and management of cached shader resources.
+   */
   class IShaderManager : public NonCopyable
   {
   public:
@@ -54,6 +61,18 @@ namespace hc
     virtual SharedPtr<IShader> getShader(
       const String& shaderKey
     ) const = 0;
+
+    /**
+     * @brief Retrieves the default vertex shader. If it does not exist, creates
+     * and caches it before returning.
+     */
+    virtual SharedPtr<IShader> getDefaultVertexShader() = 0;
+    
+    /**
+     * @brief Retrieves the unlit fragment shader. If it does not exist, creates
+     * and caches it before returning.
+     */
+    virtual SharedPtr<IShader> getUnlitFragmentShader() = 0;
 
     /**
      * @brief Clears all cached shaders from the manager.
