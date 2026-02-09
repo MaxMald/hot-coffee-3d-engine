@@ -103,6 +103,7 @@ namespace hc
 
   bool OpenGlTextureManager::hasCachedTextureForImageId(const Id& imageId) const
   {
-    return false;
+    return m_cachedTexturesByImageId.find(imageId) != 
+      m_cachedTexturesByImageId.end();
   }
 }
