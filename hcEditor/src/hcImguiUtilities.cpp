@@ -5,6 +5,21 @@ namespace hc::editor
 {
   namespace imguiUtilities
   {
+    bool DrawInputText(const String& label, String& text)
+    {
+      char nameBuffer[256];
+      strncpy_s(nameBuffer, text.c_str(), sizeof(nameBuffer));
+      nameBuffer[sizeof(nameBuffer) - 1] = '\0';
+
+      if (ImGui::InputText(label.c_str(), nameBuffer, sizeof(nameBuffer)))
+      {
+        text = nameBuffer;
+        return true;
+      }
+
+      return false;
+    }
+
     bool DrawColorEdit3(const String& label, Color& color)
     {
       bool changed = false;

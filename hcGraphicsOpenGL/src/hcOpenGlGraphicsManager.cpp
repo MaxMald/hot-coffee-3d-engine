@@ -69,7 +69,7 @@ namespace hc
     }
 
     glEnable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glViewport(
       0, 0,
       static_cast<GLsizei>(window.getSize().x),

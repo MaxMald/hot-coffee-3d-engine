@@ -5,6 +5,7 @@
 #include "hc/editor/hcComponentDrawersManager.h"
 #include "hc/editor/hcComponentDrawersRegistry.h"
 #include "hc/editor/hcProjectFileSelector.h"
+#include "hc/editor/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -40,8 +41,10 @@ namespace hc::editor
     if (!gameObject)
       return;
 
-    String label = String::Format("Game Object: %s", gameObject->getName().c_str());
-    ImGui::Text(label.c_str());
+    String name = gameObject->getName();
+    if (imguiUtilities::DrawInputText("Name", name))
+      gameObject->setName(name);
+
     ImGui::Separator();
     drawTransform(gameObject);
     ImGui::Separator();
@@ -60,29 +63,25 @@ namespace hc::editor
     if (!gameObject)
       return;
 
-    Vector3f position = gameObject->getPosition();
-    Vector3f rotation = gameObject->getRotation();
-    Vector3f scale = gameObject->getScale();
-
-    if (ImGui::DragFloat3("Position", &position.x, 0.1f))
-      gameObject->setPosition(position);
-      
-    if (ImGui::DragFloat3("Rotation", &rotation.x, 0.1f))
-      gameObject->setRotation(rotation);
-
-    if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
-      gameObject->setScale(scale);
-
-    if (ImGui::CollapsingHeader("World Matrix"))
+    if (ImGui::CollapsingHeader("Transform"))
     {
-      const Matrix4 worldMatrix = gameObject->getWorldMatrix();
-      for (int row = 0; row < 4; ++row)
+      Vector3f position = gameObject->getPosition();
+      Vector3f rotation = gameObject->getRotation();
+      Vector3f scale = gameObject->getScale();
+
+      if (ImGui::DragFloat3("Position", &position.x, 0.1f))
+        gameObject->setPosition(position);
+
+      if (ImGui::DragFloat3("Rotation", &rotation.x, 0.1f))
+        gameObject->setRotation(rotation);
+
+      if (ImGui::DragFloat3("Scale", &scale.x, 0.1f))
+        gameObject->setScale(scale);
+
+      if (ImGui::TreeNode("World Matrix"))
       {
-        ImGui::Text("%.3f %.3f %.3f %.3f",
-          worldMatrix.m[row][0],
-          worldMatrix.m[row][1],
-          worldMatrix.m[row][2],
-          worldMatrix.m[row][3]);
+        imguiUtilities::DrawMatrix("World Matrix", gameObject->getWorldMatrix());
+        ImGui::TreePop();
       }
     }
   }

@@ -7,6 +7,18 @@ namespace hc::editor
   namespace imguiUtilities
   {
     /**
+     * @brief Draws an input text widget in ImGui.
+     *
+     * Allows the user to edit a string value with a label.
+     *
+     * @param label The label to display next to the input text widget.
+     * @param text Reference to the string that will be edited by the user.
+     *
+     * @return True if the text was modified by the user, false otherwise.
+     */
+    bool DrawInputText(const String& label, String& text);
+
+    /**
      * @brief Draws a 3-component color editor widget in ImGui.
      *
      * Allows the user to edit the RGB values of the provided color.
