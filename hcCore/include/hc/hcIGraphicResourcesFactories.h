@@ -16,7 +16,7 @@ namespace hc
    * programs, meshes, and textures. Implementations should supply concrete
    * factory instances for each resource type.
    */
-  class HC_CORE_EXPORT IGraphicResourcesFactories
+  class IGraphicResourcesFactories
   {
   public:
     virtual ~IGraphicResourcesFactories() = default;

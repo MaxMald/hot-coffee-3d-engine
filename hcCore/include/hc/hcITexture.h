@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcIGraphicResource.h"
 
 namespace hc
 {
@@ -9,7 +9,7 @@ namespace hc
   /**
    * @brief Interface for texture resources in the graphics module.
    */
-  class ITexture
+  class ITexture : public IGraphicResource
   {
   public:
     virtual ~ITexture() = default;

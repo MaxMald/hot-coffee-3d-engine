@@ -13,7 +13,7 @@ namespace hc
    * Provides methods for creating shader instances from string content or
    * default types. Implementations should supply concrete shader creation logic.
    */
-  class HC_CORE_EXPORT IShaderFactory
+  class IShaderFactory
   {
   public:
     virtual ~IShaderFactory() = default;

@@ -13,7 +13,7 @@ namespace hc
    * Provides an abstract interface for creating texture instances from images.
    * Implementations should provide concrete texture creation logic.
    */
-  class HC_CORE_EXPORT ITextureFactory
+  class ITextureFactory
   {
   public:
     virtual ~ITextureFactory() = default;

@@ -13,7 +13,7 @@ namespace hc
    * Provides an abstract interface for creating mesh instances from models.
    * Implementations should provide concrete mesh creation logic.
    */
-  class HC_CORE_EXPORT IMeshFactory
+  class IMeshFactory
   {
   public:
     virtual ~IMeshFactory() = default;

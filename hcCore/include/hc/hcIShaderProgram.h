@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcIGraphicResource.h"
 
 namespace hc
 {
@@ -9,7 +9,7 @@ namespace hc
   /**
    * @brief Interface for a linked shader program (multi-stage).
    */
-  class IShaderProgram : public NonCopyable
+  class IShaderProgram : public IGraphicResource
   {
   public:
     virtual ~IShaderProgram() = default;

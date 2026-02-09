@@ -15,7 +15,7 @@ namespace hc
    * collection of shaders. Implementations should provide concrete shader
    * program creation logic.
    */
-  class HC_CORE_EXPORT IShaderProgramFactory
+  class IShaderProgramFactory
   {
   public:
     virtual ~IShaderProgramFactory() = default;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcIGraphicResource.h"
 #include "hc/hcIDrawable.h"
 
 namespace hc
@@ -11,7 +11,7 @@ namespace hc
   /**
    * @brief Interface for mesh objects in the engine.
    */
-  class IMesh : public NonCopyable, public IDrawable
+  class IMesh : public IGraphicResource, public IDrawable
   {
   public:
     virtual ~IMesh() = default;
