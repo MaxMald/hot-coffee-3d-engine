@@ -127,6 +127,12 @@
     <Filter Include="Header Files\assets\materialDescriptors">
       <UniqueIdentifier>{c23f9574-f981-4a4e-b7ee-9270e2dc43ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphics\graphicResources">
+      <UniqueIdentifier>{1713017b-fe3a-4ec6-901b-29c604febd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\factories">
+      <UniqueIdentifier>{fc5bb8e6-0cf5-4bd9-8a40-1871857bda92}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -469,6 +475,21 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcRenderContext.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIMeshFactory.h">
+      <Filter>Header Files\graphics\graphicResources\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShaderProgramFactory.h">
+      <Filter>Header Files\graphics\graphicResources\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShaderFactory.h">
+      <Filter>Header Files\graphics\graphicResources\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcITextureFactory.h">
+      <Filter>Header Files\graphics\graphicResources\factories</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIGraphicResourcesFactories.h">
+      <Filter>Header Files\graphics\graphicResources\factories</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
