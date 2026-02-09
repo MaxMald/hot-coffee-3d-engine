@@ -6,6 +6,7 @@ namespace hc
 {
   class Model;
   class IMesh;
+  class IMaterial;
 
   /**
    * @brief Interface for mesh factory classes.
@@ -26,7 +27,10 @@ namespace hc
      * @return Shared pointer to the created mesh instance. nullptr if creation
      * fails.
      */
-    virtual SharedPtr<IMesh> createMesh(SharedPtr<Model> model) = 0;
+    virtual SharedPtr<IMesh> createMesh(
+      SharedPtr<Model> model,
+      Vector<SharedPtr<IMaterial>>& materials
+    ) = 0;
 
   protected:
     IMeshFactory() = default;

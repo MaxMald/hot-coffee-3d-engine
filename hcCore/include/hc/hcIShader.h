@@ -34,10 +34,5 @@ namespace hc
      * @brief Compiles the shader.
      */
     virtual void compile() = 0;
-
-    /**
-     * @brief Destroys the shader and releases associated resources.
-     */
-    virtual void destroy() = 0;
   };
 }

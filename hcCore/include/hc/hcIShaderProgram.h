@@ -63,10 +63,5 @@ namespace hc
      * @brief Sets a texture uniform variable.
      */
     virtual void setUniformTexture(const String& name, Int32 slotLocation) = 0;
-
-    /**
-     * @brief Destroys the shader program and releases resources.
-     */
-    virtual void destroy() = 0;
   };
 }

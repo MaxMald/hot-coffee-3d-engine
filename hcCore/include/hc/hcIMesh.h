@@ -17,13 +17,6 @@ namespace hc
     virtual ~IMesh() = default;
 
     /**
-     * @brief Returns the unique identifier of the mesh.
-     * 
-     * @return The unique Id of the mesh.
-     */
-    virtual const Id& getId() const = 0;
-
-    /**
      * @brief Returns the model associated with this mesh.
      *
      * @return Shared pointer to the associated Model.
@@ -34,11 +27,6 @@ namespace hc
      * @brief Updates the mesh state.
      */
     virtual void update() = 0;
-
-    /**
-     * @brief Destroys the mesh and releases its resources.
-     */
-    virtual void destroy() = 0;
 
     /**
      * @brief Returns the materials associated with this mesh.
