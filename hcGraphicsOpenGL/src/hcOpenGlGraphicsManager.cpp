@@ -100,6 +100,8 @@ namespace hc
     AssetManager& assetManager
   )
   {
+    m_assetManager = &assetManager;
+
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK)
