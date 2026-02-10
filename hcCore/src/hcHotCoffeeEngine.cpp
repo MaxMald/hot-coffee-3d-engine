@@ -130,12 +130,21 @@ namespace hc
     if (m_initialized)
     {
       m_sceneManager->destroy();
-      m_graphicsManager->destroy();
-      m_graphicsManager.reset();
-      m_windowManager->destroy();
-      m_windowManager.reset();
       m_assetManager->clear();
       m_assetManager = nullptr;
+
+      if (m_graphicsManager)
+      {
+        m_graphicsManager->destroy();
+        m_graphicsManager.reset();
+      }
+
+      if (m_windowManager)
+      {
+        m_windowManager->destroy();
+        m_windowManager.reset();
+      }
+
       m_dependencyContainer.clear();
       m_pluginManager.closeAll();
 
