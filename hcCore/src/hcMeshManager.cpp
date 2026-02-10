@@ -27,7 +27,15 @@ namespace hc
   {
     SharedPtr<Model> model = m_assetManager.load<Model>(path);
     if (!model)
-      return SharedPtr<IMesh>();
+    {
+      LogService::Error(
+        String::Format(
+          "MeshManager::createMeshFromPath: Failed to load model from path '%s'.",
+          path.string().c_str()
+        )
+      );
+      return nullptr;
+    }
 
     return createMeshFromModel(model);
   }
@@ -37,7 +45,12 @@ namespace hc
   )
   {
     if (!model)
-      return SharedPtr<IMesh>();
+    {
+      LogService::Error(
+        "MeshManager::createMeshFromModel: Invalid model provided."
+      );
+      return nullptr;
+    }
 
     if (hasCachedResource(model->getId()))
       return getCachedResource(model->getId());
@@ -47,6 +60,17 @@ namespace hc
       model,
       materials
     );
+
+    if (!mesh)
+    {
+      LogService::Error(
+        String::Format(
+          "MeshManager::createMeshFromModel: Failed to create mesh from model with Id '%s'.",
+          model->getId().toString().c_str()
+        )
+      );
+      return nullptr;
+    }
 
     m_meshes.push_back(mesh);
     cacheResource(model->getId(), mesh);
@@ -73,9 +97,22 @@ namespace hc
     const Vector<SharedPtr<MaterialDescriptor>>& materialDescs = model->getMaterials();
     for (const SharedPtr<MaterialDescriptor>& materialDesc : materialDescs)
     {
-      materials.push_back(
-        m_materialManager.createMaterialFromDescriptor(materialDesc)
-      );
+      SharedPtr<IMaterial> createdMaterial = m_materialManager
+        .createMaterialFromDescriptor(materialDesc);
+
+      if (!createdMaterial)
+      {
+        throw RuntimeErrorException(
+          String::Format(
+            "MeshManager::createMaterialsFromModel: Failed to create material from descriptor with Id '%s'.",
+            materialDesc->getId().toString().c_str()
+          )
+        );
+
+        continue;
+      }
+
+      materials.push_back(createdMaterial);
     }
 
     return materials;
