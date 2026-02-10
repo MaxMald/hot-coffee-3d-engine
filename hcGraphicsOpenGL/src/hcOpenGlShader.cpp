@@ -89,11 +89,6 @@ namespace hc
     m_compiled = true;
   }
 
-  const Id& OpenGlShader::getId() const
-  {
-      // TODO: insert return statement here
-  }
-
   GLuint OpenGlShader::getShaderId() const
   {
     return m_shaderId;
