@@ -184,6 +184,7 @@
     <ClCompile Include="src\hcMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcMaterialDescriptorJsonSerializer.cpp" />
     <ClCompile Include="src\hcMaterialFactoriesManager.cpp" />
+    <ClCompile Include="src\hcMaterialFactoriesManagerRegistry.cpp" />
     <ClCompile Include="src\hcMaterialManager.cpp" />
     <ClCompile Include="src\hcMeshComponent.cpp" />
     <ClCompile Include="src\hcMeshManager.cpp" />
@@ -260,6 +261,7 @@
     <ClInclude Include="include\hc\hcMaterialDescriptorJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterialManager.h" />
     <ClInclude Include="include\hc\hcMaterialFactoriesManager.h" />
+    <ClInclude Include="include\hc\hcMaterialFactoriesManagerRegistry.h" />
     <ClInclude Include="include\hc\hcMaterialManager.h" />
     <ClInclude Include="include\hc\hcMeshComponent.h" />
     <ClInclude Include="include\hc\hcMeshManager.h" />

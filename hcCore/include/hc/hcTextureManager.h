@@ -11,7 +11,7 @@ namespace hc
   /**
    * @brief Manages texture resources and their creation, caching, and retrieval.
    */
-  class TextureManager :
+  class HC_CORE_EXPORT TextureManager :
     public ITextureManager,
     private ResourcesCache<Id, ITexture>
   {
@@ -19,12 +19,12 @@ namespace hc
     /**
      * @brief Constructs a TextureManager with the required dependencies.
      *
-     * @param textureFactory Reference to the texture factory used for texture
+     * @param textureFactory Unique pointer to the texture factory used for texture
      * creation.
      * @param assetManager Reference to the asset manager.
      */
     TextureManager(
-      ITextureFactory& textureFactory,
+      UniquePtr<ITextureFactory> textureFactory,
       AssetManager& assetManager
     );
     ~TextureManager() override;
@@ -62,7 +62,7 @@ namespace hc
     void clear() override;
 
   private:
-    ITextureFactory& m_textureFactory;
+    UniquePtr<ITextureFactory> m_textureFactory;
     AssetManager& m_assetManager;
     Vector<SharedPtr<ITexture>> m_textures;
   };

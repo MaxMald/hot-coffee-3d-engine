@@ -7,9 +7,10 @@
 namespace hc
 {
   ShaderProgramManager::ShaderProgramManager(
-    IShaderProgramFactory& shaderProgramFactory,
+    UniquePtr<IShaderProgramFactory> shaderProgramFactory,
     IShaderManager& shaderManager
-  ) : m_shaderProgramFactory(shaderProgramFactory),
+  ) :
+    m_shaderProgramFactory(std::move(shaderProgramFactory)),
     m_shaderManager(shaderManager)
   {
   }
@@ -32,14 +33,14 @@ namespace hc
 
   void ShaderProgramManager::createUnlitShaderProgram()
   {
-    m_unlitShaderProgram = m_shaderProgramFactory.createShaderProgram();
+    m_unlitShaderProgram = m_shaderProgramFactory->createShaderProgram();
     if (!m_unlitShaderProgram)
     {
       throw RuntimeErrorException(
         "Failed to create unlit shader program."
       );
     }
-    
+
     SharedPtr<IShader> vertexShader = m_shaderManager.getDefaultVertexShader();
     SharedPtr<IShader> fragmentShader = m_shaderManager.getUnlitFragmentShader();
 

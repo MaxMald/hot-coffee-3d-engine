@@ -7,10 +7,10 @@
 namespace hc
 {
   TextureManager::TextureManager(
-    ITextureFactory& textureFactory,
+    UniquePtr<ITextureFactory> textureFactory,
     AssetManager& assetManager
   ) :
-    m_textureFactory(textureFactory),
+    m_textureFactory(std::move(textureFactory)),
     m_assetManager(assetManager)
   {
   }
@@ -32,7 +32,7 @@ namespace hc
     if (hasCachedResource(image->getId()))
       return getCachedResource(image->getId());
 
-    SharedPtr<ITexture> texture = m_textureFactory.createTexture(image);
+    SharedPtr<ITexture> texture = m_textureFactory->createTexture(image);
     if (!texture)
     {
       LogService::Error(

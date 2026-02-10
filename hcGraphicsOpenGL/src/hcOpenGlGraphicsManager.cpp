@@ -1,14 +1,24 @@
 #include "hc/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include "hc/hcOpenGlShader.h"
-#include "hc/hcOpenGlShaderProgram.h"
-#include "hc/hcBuiltInShaders.h"
-#include "hc/hcOpenGlTexture.h"
+#include <hc/hcTextureManager.h>
+#include <hc/hcShaderManager.h>
+#include <hc/hcShaderProgramManager.h>
+#include <hc/hcMaterialManager.h>
+#include <hc/hcMaterialFactoriesManagerRegistry.h>
+#include <hc/hcMaterialFactoriesManager.h>
+#include <hc/hcMeshManager.h>
+
+#include "hc/hcOpenGlTextureFactory.h"
+#include "hc/hcOpenGlShaderFactory.h"
+#include "hc/hcOpenGlShaderProgramFactory.h"
+#include "hc/hcOpenGlMeshFactory.h"
 
 namespace hc
 {
-  OpenGlGraphicsManager::OpenGlGraphicsManager()
+  OpenGlGraphicsManager::OpenGlGraphicsManager() :
+    m_assetManager(nullptr),
+    m_sceneManager(nullptr)
   {
   }
 
@@ -28,35 +38,68 @@ namespace hc
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
   {
-    return m_textureManager;
+    if (!m_textureManager)
+    {
+      throw RuntimeErrorException(
+        "Texture manager is not initialized."
+      );
+    }
+
+    return *m_textureManager;
   }
 
   IMaterialManager& OpenGlGraphicsManager::getMaterialManager()
   {
-    return m_materialManager;
+    if (!m_materialManager)
+    {
+      throw RuntimeErrorException(
+        "Material manager is not initialized."
+      );
+    }
+
+    return *m_materialManager;
   }
 
   IShaderManager& OpenGlGraphicsManager::getShaderManager()
   {
-    return m_shaderManager;
+    if (!m_shaderManager)
+    {
+      throw RuntimeErrorException(
+        "Shader manager is not initialized."
+      );
+    }
+
+    return *m_shaderManager;
   }
 
   IShaderProgramManager& OpenGlGraphicsManager::getShaderProgramManager()
   {
-    return m_shaderProgramManager;
+    if (!m_shaderProgramManager)
+    {
+      throw RuntimeErrorException(
+        "Shader program manager is not initialized."
+      );
+    }
+
+    return *m_shaderProgramManager;
   }
 
   IMeshManager& OpenGlGraphicsManager::getMeshManager()
   {
-    return m_meshManager;
+    if (!m_meshManager)
+    {
+      throw RuntimeErrorException(
+        "Mesh manager is not initialized."
+      );
+    }
+
+    return *m_meshManager;
   }
 
-  void OpenGlGraphicsManager::resolveDependencies(DependencyContainer& container)
-  {
-    m_assetManager = container.resolve<AssetManager>();
-  }
-
-  void OpenGlGraphicsManager::init(IWindow& window)
+  void OpenGlGraphicsManager::initialize(
+    IWindow& window,
+    AssetManager& assetManager
+  )
   {
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -85,20 +128,38 @@ namespace hc
 
   void OpenGlGraphicsManager::prepareManagers()
   {
-    m_textureManager.initialize(
-      m_assetManager
+    m_textureManager = MakeUnique<TextureManager>(
+      MakeUnique<OpenGlTextureFactory>(),
+      *m_assetManager
     );
-    m_shaderProgramManager.initialize(
-      &m_shaderManager
+
+    m_shaderManager = MakeUnique<ShaderManager>(
+      MakeUnique<OpenGlShaderFactory>()
     );
-    m_materialManager.initialize(
-      m_assetManager,
-      &m_textureManager,
-      &m_shaderProgramManager
+
+    m_shaderProgramManager = MakeUnique<ShaderProgramManager>(
+      MakeUnique<OpenGlShaderProgramFactory>(),
+      *m_shaderManager
     );
-    m_meshManager.initialize(
-      m_assetManager,
-      &m_materialManager
+
+    UniquePtr<MaterialFactoriesManager> materialFactoriesManager =
+      MakeUnique<MaterialFactoriesManager>();
+
+    materialFactoriesManagerRegistry::resigtryMaterialFactories(
+      *materialFactoriesManager
+    );
+
+    m_materialManager = MakeUnique<MaterialManager>(
+      *m_assetManager,
+      *m_textureManager,
+      *m_shaderProgramManager,
+      std::move(materialFactoriesManager)
+    );
+
+    m_meshManager = MakeUnique<MeshManager>(
+      *m_assetManager,
+      MakeUnique<OpenGlMeshFactory>(),
+      *m_materialManager
     );
   }
 }

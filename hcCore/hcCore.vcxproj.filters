@@ -291,6 +291,9 @@
     <ClCompile Include="src\hcUnlitMaterial.cpp">
       <Filter>Source Files\graphics\graphicResources\material</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcMaterialFactoriesManagerRegistry.cpp">
+      <Filter>Source Files\graphics\graphicResources\material\factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -561,6 +564,9 @@
       <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcUnlitMaterialFactory.h">
+      <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialFactoriesManagerRegistry.h">
       <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
     </ClInclude>
   </ItemGroup>

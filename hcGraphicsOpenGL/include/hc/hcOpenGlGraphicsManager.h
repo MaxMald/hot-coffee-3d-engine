@@ -1,17 +1,11 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include "hc/hcOpenGlTextureManager.h"
-#include "hc/hcOpenGlMaterialManager.h"
-#include "hc/hcOpenGlShaderManager.h"
-#include "hc/hcOpenGlShaderProgramManager.h"
-#include "hc/hcOpenGlMeshManager.h"
 
 namespace hc
 {
   class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsManager :
-    public IGraphicsManager,
-    public IDependencyResolvable
+    public IGraphicsManager
   {
   public:
     OpenGlGraphicsManager();
@@ -52,14 +46,8 @@ namespace hc
      */
     IMeshManager& getMeshManager() override;
 
-    /**
-     * @copydoc IDependencyResolvable::resolveDependencies
-     */
-    void resolveDependencies(DependencyContainer& container) override;
-
   private:
-    AssetManager& m_assetManager;
-    SharedPtr<SceneManager> m_sceneManager;
+    AssetManager* m_assetManager;
 
     UniquePtr<ITextureManager> m_textureManager;
     UniquePtr<IMaterialManager> m_materialManager;
@@ -70,7 +58,10 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::initialize
      */
-    void initialize(IWindow& window, AssetManager& assetManager) override;
+    void initialize(
+      IWindow& window,
+      AssetManager& assetManager
+    ) override;
 
     /**
      * @copydoc IGraphicsManager::destroy

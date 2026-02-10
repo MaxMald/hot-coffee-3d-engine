@@ -6,8 +6,8 @@ namespace hc
   static constexpr const char* DEFAULT_VERTEX_SHADER_KEY = "#_HC_DEFAULT_VERTEX_SHADER";
   static constexpr const char* UNLIT_FRAGMENT_SHADER_KEY = "#_HC_UNLIT_FRAGMENT_SHADER";
 
-  ShaderManager::ShaderManager(IShaderFactory& shaderFactory) :
-    m_shaderFactory(shaderFactory)
+  ShaderManager::ShaderManager(UniquePtr<IShaderFactory> shaderFactory) :
+    m_shaderFactory(std::move(shaderFactory))
   {
   }
 
@@ -55,7 +55,7 @@ namespace hc
     if (hasCachedResource(shaderKey))
       return getCachedResource(shaderKey);
 
-    SharedPtr<IShader> shader = m_shaderFactory.createShaderFromStringContent(
+    SharedPtr<IShader> shader = m_shaderFactory->createShaderFromStringContent(
       shaderCode,
       type
     );
@@ -103,7 +103,7 @@ namespace hc
 
   void ShaderManager::createDefaultVertexShader()
   {
-    SharedPtr<IShader> shader = m_shaderFactory.createDefaultVertexShader();
+    SharedPtr<IShader> shader = m_shaderFactory->createDefaultVertexShader();
     if (!shader)
     {
       throw RuntimeErrorException(
@@ -116,7 +116,7 @@ namespace hc
 
   void ShaderManager::createUnlitFragmentShader()
   {
-    SharedPtr<IShader> shader = m_shaderFactory.createUnlitFragmentShader();
+    SharedPtr<IShader> shader = m_shaderFactory->createUnlitFragmentShader();
     if (!shader)
     {
       throw RuntimeErrorException(

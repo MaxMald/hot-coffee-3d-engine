@@ -17,7 +17,7 @@ namespace hc
    * mesh instances, and managing associated materials. Inherits from
    * IMeshManager and uses ResourcesCache for mesh caching.
    */
-  class MeshManager :
+  class HC_CORE_EXPORT MeshManager :
     public IMeshManager,
     private ResourcesCache<Id, IMesh>
   {
@@ -26,12 +26,12 @@ namespace hc
      * @brief Constructs a MeshManager with required dependencies.
      *
      * @param assetManager Reference to the asset manager.
-     * @param meshFactory Reference to the mesh factory.
+     * @param meshFactory Unique pointer to the mesh factory.
      * @param materialManager Reference to the material manager.
      */
     MeshManager(
       AssetManager& assetManager,
-      IMeshFactory& meshFactory,
+      UniquePtr<IMeshFactory> meshFactory,
       IMaterialManager& materialManager
     );
     virtual ~MeshManager() = default;
@@ -70,7 +70,7 @@ namespace hc
 
   private:
     AssetManager& m_assetManager;
-    IMeshFactory& m_meshFactory;
+    UniquePtr<IMeshFactory> m_meshFactory;
     IMaterialManager& m_materialManager;
     Vector<SharedPtr<IMesh>> m_meshes;
 

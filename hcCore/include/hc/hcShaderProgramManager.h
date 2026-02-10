@@ -14,17 +14,17 @@ namespace hc
    * programs, including the default unlit shader program. Implements the
    * IShaderProgramManager interface.
    */
-  class ShaderProgramManager : public IShaderProgramManager
+  class HC_CORE_EXPORT ShaderProgramManager : public IShaderProgramManager
   {
   public:
     /**
      * @brief Constructs a ShaderProgramManager with required dependencies.
      * 
-     * @param shaderProgramFactory Reference to the shader program factory.
+     * @param shaderProgramFactory Unique pointer to the shader program factory.
      * @param shaderManager Reference to the shader manager.
      */
     ShaderProgramManager(
-      IShaderProgramFactory& shaderProgramFactory,
+      UniquePtr<IShaderProgramFactory> shaderProgramFactory,
       IShaderManager& shaderManager
     );
     ~ShaderProgramManager() override;
@@ -43,7 +43,7 @@ namespace hc
     void clear() override;
 
   private:
-    IShaderProgramFactory& m_shaderProgramFactory;
+    UniquePtr<IShaderProgramFactory> m_shaderProgramFactory;
     IShaderManager& m_shaderManager;
     SharedPtr<IShaderProgram> m_unlitShaderProgram;
 

@@ -10,16 +10,12 @@ namespace hc
 {
   MeshManager::MeshManager(
     AssetManager& assetManager,
-    IMeshFactory& meshFactory,
+    UniquePtr<IMeshFactory> meshFactory,
     IMaterialManager& materialManager
   ) :
     m_assetManager(assetManager),
-    m_meshFactory(meshFactory),
+    m_meshFactory(std::move(meshFactory)),
     m_materialManager(materialManager)
-  {
-  }
-
-  MeshManager::~MeshManager()
   {
   }
 
@@ -56,7 +52,7 @@ namespace hc
       return getCachedResource(model->getId());
 
     Vector<SharedPtr<IMaterial>> materials = createMaterialsFromModel(model);
-    SharedPtr<IMesh> mesh = m_meshFactory.createMesh(
+    SharedPtr<IMesh> mesh = m_meshFactory->createMesh(
       model,
       materials
     );

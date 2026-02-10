@@ -14,7 +14,7 @@ namespace hc
    * @tparam ResourceType The type of the resource to be cached.
    */
   template <typename Key, typename ResourceType>
-  class ResourcesCache
+  class HC_CORE_EXPORT ResourcesCache
   {
   public:
     ResourcesCache() = default;

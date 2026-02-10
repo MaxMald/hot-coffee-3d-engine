@@ -14,7 +14,7 @@ namespace hc
    * caching shader instances, and accessing default shaders. Implements the
    * IShaderManager interface and uses ResourcesCache for shader caching.
    */
-  class ShaderManager :
+  class HC_CORE_EXPORT ShaderManager :
     public IShaderManager,
     private ResourcesCache<String, IShader>
   {
@@ -22,10 +22,10 @@ namespace hc
     /**
      * @brief Constructs a ShaderManager with the required shader factory.
      *
-     * @param shaderFactory Reference to the shader factory used for shader
+     * @param shaderFactory Unique pointer to the shader factory used for shader
      * creation.
      */
-    ShaderManager(IShaderFactory& shaderFactory);
+    ShaderManager(UniquePtr<IShaderFactory> shaderFactory);
     ~ShaderManager() override;
 
     /**
@@ -93,7 +93,7 @@ namespace hc
     void clear() override;
 
   private:
-    IShaderFactory& m_shaderFactory;
+    UniquePtr<IShaderFactory> m_shaderFactory;
 
     void createDefaultVertexShader();
     void createUnlitFragmentShader();
