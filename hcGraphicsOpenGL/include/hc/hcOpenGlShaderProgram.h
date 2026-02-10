@@ -5,6 +5,9 @@
 
 namespace hc
 {
+  /**
+   * @brief OpenGL implementation of the IShaderProgram interface.
+   */
   class OpenGlShaderProgram : public IShaderProgram
   {
   public:
@@ -12,9 +15,19 @@ namespace hc
     ~OpenGlShaderProgram() override;
 
     /**
+     * @copydoc IGraphicResource::getId
+     */
+    const Id& getId() const override;
+
+    /**
      * @copydoc IShaderProgram::bind
      */
     void bind() override;
+
+    /**
+     * @copydoc IShaderProgram::linkShaders
+     */
+    void linkShaders() override;
 
     /**
      * @copydoc IShaderProgram::isValid
@@ -66,9 +79,8 @@ namespace hc
      */
     void destroy() override;
 
-    bool link();
-
   private:
+    Id m_id;
     GLuint m_programId;
     bool m_linked;
     UnorderedMap<String, GLint> m_uniformLocationCache;

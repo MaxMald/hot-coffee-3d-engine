@@ -3,7 +3,9 @@
 namespace hc
 {
   OpenGlShader::OpenGlShader(shaderStageType::Type stageType, const String& source)
-    : m_stageType(stageType),
+    : 
+    m_id(Id::Create()),
+    m_stageType(stageType),
     m_source(source),
     m_compiled(false),
     m_shaderId(0)
@@ -13,6 +15,22 @@ namespace hc
   OpenGlShader::~OpenGlShader()
   {
     destroy();
+  }
+  
+  const Id& OpenGlShader::getId() const
+  {
+    return m_id;
+  }
+
+  void OpenGlShader::destroy()
+  {
+    if (m_shaderId != 0)
+    {
+      glDeleteShader(m_shaderId);
+      m_shaderId = 0;
+    }
+
+    m_compiled = false;
   }
 
   shaderStageType::Type OpenGlShader::getStageType() const
@@ -69,17 +87,6 @@ namespace hc
     }
 
     m_compiled = true;
-  }
-
-  void OpenGlShader::destroy()
-  {
-    if (m_shaderId != 0)
-    {
-      glDeleteShader(m_shaderId);
-      m_shaderId = 0;
-    }
-
-    m_compiled = false;
   }
 
   GLuint OpenGlShader::getShaderId() const

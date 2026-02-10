@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcIGraphicResource.h"
 
 namespace hc
 {
@@ -9,7 +9,7 @@ namespace hc
   /**
    * @brief Interface for a linked shader program (multi-stage).
    */
-  class IShaderProgram : public NonCopyable
+  class IShaderProgram : public IGraphicResource
   {
   public:
     virtual ~IShaderProgram() = default;
@@ -18,6 +18,11 @@ namespace hc
      * @brief Binds this program for rendering.
      */
     virtual void bind() = 0;
+
+    /**
+     * @brief Links the attached shaders into a complete shader program.
+     */
+    virtual void linkShaders() = 0;
 
     /**
      * @brief Returns true if the program is successfully linked and ready.
@@ -63,10 +68,5 @@ namespace hc
      * @brief Sets a texture uniform variable.
      */
     virtual void setUniformTexture(const String& name, Int32 slotLocation) = 0;
-
-    /**
-     * @brief Destroys the shader program and releases resources.
-     */
-    virtual void destroy() = 0;
   };
 }

@@ -1,18 +1,18 @@
 #include "hc/hcOpenGlMesh.h"
 #include <GL/glew.h>
-#include "hc/hcOpenGlMaterialManager.h"
 
 namespace hc
 {
   OpenGlMesh::OpenGlMesh(
     SharedPtr<Model> model,
-    OpenGlMaterialManager* materialManager
+    Vector<SharedPtr<IMaterial>> materials
   ) :
     m_id(Id::Create()),
     m_vao(0),
     m_vbo(0),
     m_ebo(0),
-    m_model(model)
+    m_model(model),
+    m_materials(materials)
   {
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
@@ -22,7 +22,6 @@ namespace hc
       return;
 
     update();
-    createMaterials(materialManager);
   }
 
   OpenGlMesh::~OpenGlMesh()
@@ -136,24 +135,6 @@ namespace hc
   UInt32 OpenGlMesh::getVao() const
   {
     return m_vao;
-  }
-
-  void OpenGlMesh::createMaterials(
-    OpenGlMaterialManager* materialManager
-  )
-  {
-    if (!m_model)
-      return;
-
-    const Vector<SharedPtr<MaterialDescriptor>>& materials = 
-      m_model->getMaterials();
-
-    for (const SharedPtr<MaterialDescriptor>& materialDesc : materials)
-    {
-      m_materials.push_back(
-        materialManager->createMaterialFromDescriptor(materialDesc)
-      );
-    }
   }
 
   void OpenGlMesh::drawModelSubMesh(

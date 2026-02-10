@@ -79,9 +79,6 @@
     <Filter Include="Source Files\assets\loaders">
       <UniqueIdentifier>{313daf0a-b560-4433-8bb4-24edea1c5ba7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\graphics\material">
-      <UniqueIdentifier>{abd929a5-a437-4c84-b8db-ce2ed9c79135}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\jsonSerializer">
       <UniqueIdentifier>{5b99308c-9b9c-46fb-bc97-0e56052df71a}</UniqueIdentifier>
     </Filter>
@@ -91,26 +88,11 @@
     <Filter Include="Header Files\jsonSerializer\serializers">
       <UniqueIdentifier>{eb0267b1-f140-4f54-8aea-d4a2bf52f182}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\graphics\texture">
-      <UniqueIdentifier>{5f9cf296-764d-489e-962e-26a178c19a3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics\shaders">
-      <UniqueIdentifier>{d06cc074-84b6-4ffc-85af-31a263b83309}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\graphics\shaders">
-      <UniqueIdentifier>{121242e0-ce2d-4a2a-a082-6f229d97b477}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics\shaderPrograms">
-      <UniqueIdentifier>{bf1a93c1-d2e9-4b41-8d48-9387b2faad34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\assets\model">
       <UniqueIdentifier>{733da4d8-e0a5-4490-b7e0-c8d5129435d2}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\assets\model">
       <UniqueIdentifier>{76c7a109-2ca5-45bc-b387-851d3a04ce7e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\graphics\mesh">
-      <UniqueIdentifier>{593fe603-a4ea-4146-afc4-62839dd3216f}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\gameObject\components">
       <UniqueIdentifier>{2a2af49c-e55d-46e6-bf0e-2a588a47aec6}</UniqueIdentifier>
@@ -126,6 +108,54 @@
     </Filter>
     <Filter Include="Header Files\assets\materialDescriptors">
       <UniqueIdentifier>{c23f9574-f981-4a4e-b7ee-9270e2dc43ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources">
+      <UniqueIdentifier>{1713017b-fe3a-4ec6-901b-29c604febd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\mesh">
+      <UniqueIdentifier>{593fe603-a4ea-4146-afc4-62839dd3216f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\shaderPrograms">
+      <UniqueIdentifier>{bf1a93c1-d2e9-4b41-8d48-9387b2faad34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\shaders">
+      <UniqueIdentifier>{d06cc074-84b6-4ffc-85af-31a263b83309}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\texture">
+      <UniqueIdentifier>{5f9cf296-764d-489e-962e-26a178c19a3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources">
+      <UniqueIdentifier>{c44c4035-dfe5-42ef-9db9-2a1750d872a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\material">
+      <UniqueIdentifier>{abd929a5-a437-4c84-b8db-ce2ed9c79135}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\material">
+      <UniqueIdentifier>{cf390b30-a6b0-4041-8b7e-2be007d5fd22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\mesh">
+      <UniqueIdentifier>{47e70299-ff78-48f2-9a31-dbe381c69016}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\shaderProgram">
+      <UniqueIdentifier>{b5f75ecc-7152-4fa4-9813-7867fdc1f09a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\shader">
+      <UniqueIdentifier>{ad30556f-5eb6-4b59-bdf5-530dccc12c21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\texture">
+      <UniqueIdentifier>{ef221b79-ed4e-409c-a78c-faba08665968}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\scene\light">
+      <UniqueIdentifier>{7613c264-d1e0-4376-aefb-d89d9365fa3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene\light">
+      <UniqueIdentifier>{b5a0485b-f20a-4764-8147-10da851d1c46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphics\graphicResources\material\factory">
+      <UniqueIdentifier>{fd407652-6298-435f-9628-63c47581c173}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphics\graphicResources\material\factory">
+      <UniqueIdentifier>{dbfd748b-17bf-43f5-90d8-f12694f95d30}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -162,15 +192,6 @@
     <ClCompile Include="src\hcSceneManager.cpp">
       <Filter>Source Files\scene</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcLightType.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcLight.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcLightManager.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcAssetManager.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
@@ -189,9 +210,6 @@
     <ClCompile Include="src\hcShadingType.cpp">
       <Filter>Source Files\assets\materials</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcUnlitMaterial.cpp">
-      <Filter>Source Files\graphics</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcJsonSerializer.cpp">
       <Filter>Source Files\jsonSerializer</Filter>
     </ClCompile>
@@ -200,9 +218,6 @@
     </ClCompile>
     <ClCompile Include="src\hcAssetFileExtensions.cpp">
       <Filter>Source Files\assets</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcShaderStageType.cpp">
-      <Filter>Source Files\graphics\shaders</Filter>
     </ClCompile>
     <ClCompile Include="src\hcVertex.cpp">
       <Filter>Source Files\assets\model</Filter>
@@ -239,6 +254,45 @@
     </ClCompile>
     <ClCompile Include="src\hcPerspectiveCameraProjection.cpp">
       <Filter>Source Files\scene\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMeshManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTextureManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderProgramManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\shaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLight.cpp">
+      <Filter>Source Files\scene\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLightManager.cpp">
+      <Filter>Source Files\scene\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcLightType.cpp">
+      <Filter>Source Files\scene\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcShaderStageType.cpp">
+      <Filter>Source Files\graphics\graphicResources\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialFactoriesManager.cpp">
+      <Filter>Source Files\graphics\graphicResources\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterialFactory.cpp">
+      <Filter>Source Files\graphics\graphicResources\material\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcUnlitMaterial.cpp">
+      <Filter>Source Files\graphics\graphicResources\material</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcMaterialFactoriesManagerRegistry.cpp">
+      <Filter>Source Files\graphics\graphicResources\material\factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,15 +377,6 @@
     <ClInclude Include="include\hc\hcSceneManager.h">
       <Filter>Header Files\scene</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcLight.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcLightType.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcLightManager.h">
-      <Filter>Header Files\graphics</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcAsset.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
@@ -360,13 +405,13 @@
       <Filter>Header Files\assets\materialDescriptors</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMaterialManager.h">
-      <Filter>Header Files\graphics\material</Filter>
+      <Filter>Header Files\graphics\graphicResources\material</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMaterial.h">
-      <Filter>Header Files\graphics\material</Filter>
+      <Filter>Header Files\graphics\graphicResources\material</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcUnlitMaterial.h">
-      <Filter>Header Files\graphics\material</Filter>
+      <Filter>Header Files\graphics\graphicResources\material</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcJsonSerializer.h">
       <Filter>Header Files\jsonSerializer</Filter>
@@ -387,25 +432,25 @@
       <Filter>Header Files\window</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcITexture.h">
-      <Filter>Header Files\graphics\texture</Filter>
+      <Filter>Header Files\graphics\graphicResources\texture</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcITextureManager.h">
-      <Filter>Header Files\graphics\texture</Filter>
+      <Filter>Header Files\graphics\graphicResources\texture</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShader.h">
-      <Filter>Header Files\graphics\shaders</Filter>
+      <Filter>Header Files\graphics\graphicResources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShaderManager.h">
-      <Filter>Header Files\graphics\shaders</Filter>
+      <Filter>Header Files\graphics\graphicResources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShaderProgram.h">
-      <Filter>Header Files\graphics\shaderPrograms</Filter>
+      <Filter>Header Files\graphics\graphicResources\shaderPrograms</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcShaderStageType.h">
-      <Filter>Header Files\graphics\shaders</Filter>
+      <Filter>Header Files\graphics\graphicResources\shaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIShaderProgramManager.h">
-      <Filter>Header Files\graphics\shaderPrograms</Filter>
+      <Filter>Header Files\graphics\graphicResources\shaderPrograms</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcVertex.h">
       <Filter>Header Files\assets\model</Filter>
@@ -423,13 +468,13 @@
       <Filter>Header Files\assets\model</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcTextureType.h">
-      <Filter>Header Files\graphics\texture</Filter>
+      <Filter>Header Files\graphics\graphicResources\texture</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMesh.h">
-      <Filter>Header Files\graphics\mesh</Filter>
+      <Filter>Header Files\graphics\graphicResources\mesh</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIMeshManager.h">
-      <Filter>Header Files\graphics\mesh</Filter>
+      <Filter>Header Files\graphics\graphicResources\mesh</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcABaseComponent.h">
       <Filter>Header Files\gameObject\components</Filter>
@@ -469,6 +514,60 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcRenderContext.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIGraphicResource.h">
+      <Filter>Header Files\graphics\graphicResources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMeshManager.h">
+      <Filter>Header Files\graphics\graphicResources\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderProgramManager.h">
+      <Filter>Header Files\graphics\graphicResources\shaderPrograms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcShaderManager.h">
+      <Filter>Header Files\graphics\graphicResources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcTextureManager.h">
+      <Filter>Header Files\graphics\graphicResources\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcResourcesCache.h">
+      <Filter>Header Files\graphics\graphicResources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIMeshFactory.h">
+      <Filter>Header Files\graphics\graphicResources\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShaderFactory.h">
+      <Filter>Header Files\graphics\graphicResources\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIShaderProgramFactory.h">
+      <Filter>Header Files\graphics\graphicResources\shaderPrograms</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcITextureFactory.h">
+      <Filter>Header Files\graphics\graphicResources\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLight.h">
+      <Filter>Header Files\scene\light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLightManager.h">
+      <Filter>Header Files\scene\light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcLightType.h">
+      <Filter>Header Files\scene\light</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialManager.h">
+      <Filter>Header Files\graphics\graphicResources\material</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialFactoriesManager.h">
+      <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIMaterialFactory.h">
+      <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcUnlitMaterialFactory.h">
+      <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMaterialFactoriesManagerRegistry.h">
+      <Filter>Header Files\graphics\graphicResources\material\factory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcIGraphicResource.h"
 
 namespace hc
 {
@@ -9,17 +9,10 @@ namespace hc
   /**
    * @brief Interface for texture resources in the graphics module.
    */
-  class ITexture
+  class ITexture : public IGraphicResource
   {
   public:
     virtual ~ITexture() = default;
-
-    /**
-     * @brief Gets the unique identifier of the texture.
-     * 
-     * @return The Id of the texture.
-     */
-    virtual const Id& getId() const = 0;
 
     /**
      * @brief Gets the width of the texture in pixels.
@@ -55,11 +48,6 @@ namespace hc
      * @return True if the texture is valid, false otherwise.
      */
     virtual bool isValid() const = 0;
-
-    /**
-     * @brief Destroys the texture and releases resources.
-     */
-    virtual void destroy() = 0;
 
     /**
      * @brief Gets the image associated with the texture.

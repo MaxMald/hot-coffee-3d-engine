@@ -23,6 +23,11 @@ namespace hc
     const Id& getId() const override;
 
     /**
+     * @copydoc IMaterial::destroy
+     */
+    void destroy() override;
+
+    /**
      * @copydoc IMaterial::getShaderType
      */
     shadingType::Type getShaderType() const override;

@@ -171,29 +171,27 @@
     <ClInclude Include="include\hc\hcOpenGlGraphicsManager.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h" />
     <ClInclude Include="include\hc\hcOpenGlGraphicsUtilitites.h" />
-    <ClInclude Include="include\hc\hcOpenGlMaterialManager.h" />
     <ClInclude Include="include\hc\hcOpenGlMesh.h" />
-    <ClInclude Include="include\hc\hcOpenGlMeshManager.h" />
+    <ClInclude Include="include\hc\hcOpenGlMeshFactory.h" />
     <ClInclude Include="include\hc\hcOpenGlShader.h" />
-    <ClInclude Include="include\hc\hcOpenGlShaderManager.h" />
+    <ClInclude Include="include\hc\hcOpenGlShaderFactory.h" />
     <ClInclude Include="include\hc\hcOpenGlShaderProgram.h" />
-    <ClInclude Include="include\hc\hcOpenGlShaderProgramManager.h" />
     <ClInclude Include="include\hc\hcOpenGlTexture.h" />
-    <ClInclude Include="include\hc\hcOpenGlTextureManager.h" />
+    <ClInclude Include="include\hc\hcOpenGlTextureFactory.h" />
+    <ClInclude Include="include\hc\hcOpenGlShaderProgramFactory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcOpenGlGraphicsManager.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp" />
     <ClCompile Include="src\hcOpenGlGraphicsUtilities.cpp" />
-    <ClCompile Include="src\hcOpenGlMaterialManager.cpp" />
     <ClCompile Include="src\hcOpenGlMesh.cpp" />
-    <ClCompile Include="src\hcOpenGlMeshManager.cpp" />
+    <ClCompile Include="src\hcOpenGlMeshFactory.cpp" />
     <ClCompile Include="src\hcOpenGlShader.cpp" />
-    <ClCompile Include="src\hcOpenGlShaderManager.cpp" />
+    <ClCompile Include="src\hcOpenGlShaderFactory.cpp" />
     <ClCompile Include="src\hcOpenGlShaderProgram.cpp" />
-    <ClCompile Include="src\hcOpenGlShaderProgramManager.cpp" />
+    <ClCompile Include="src\hcOpenGlShaderProgramFactory.cpp" />
     <ClCompile Include="src\hcOpenGlTexture.cpp" />
-    <ClCompile Include="src\hcOpenGlTextureManager.cpp" />
+    <ClCompile Include="src\hcOpenGlTextureFactory.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

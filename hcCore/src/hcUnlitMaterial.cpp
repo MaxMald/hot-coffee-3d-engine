@@ -20,6 +20,13 @@ namespace hc
     return m_id;
   }
 
+  void UnlitMaterial::destroy()
+  {
+    m_shaderProgram.reset();
+    m_descriptor.reset();
+    m_mainTexture.reset();
+  }
+
   shadingType::Type UnlitMaterial::getShaderType() const
   {
     return shadingType::Unlit;
