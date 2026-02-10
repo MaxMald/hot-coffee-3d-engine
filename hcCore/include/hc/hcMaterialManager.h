@@ -14,7 +14,7 @@ namespace hc
    * @brief Concrete implementation of the IMaterialManager interface that
    * manages materials using a cache and a set of material factories.
    */
-  class MaterialManager :
+  class HC_CORE_EXPORT MaterialManager :
     public IMaterialManager,
     private ResourcesCache<Id, IMaterial>
   {

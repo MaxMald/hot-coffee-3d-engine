@@ -14,7 +14,7 @@ namespace hc
    * This class allows registering, querying, and accessing IMaterialFactory
    * instances associated with specific shading types.
    */
-  class MaterialFactoriesManager
+  class HC_CORE_EXPORT MaterialFactoriesManager : public NonCopyable
   {
   public:
     /**
