@@ -17,8 +17,7 @@
 namespace hc
 {
   OpenGlGraphicsManager::OpenGlGraphicsManager() :
-    m_assetManager(nullptr),
-    m_sceneManager(nullptr)
+    m_assetManager(nullptr)
   {
   }
 

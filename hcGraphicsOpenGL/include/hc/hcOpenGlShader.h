@@ -22,6 +22,18 @@ namespace hc
     ~OpenGlShader() override;
 
     /**
+     * @brief Returns the unique identifier of the shader resource.
+      *
+      * @return Reference to the shader's Id.
+     */
+    const Id& getId() const override;
+
+    /**
+     * @brief Destroys the shader and releases OpenGL resources.
+     */
+    void destroy() override;
+
+    /**
      * @brief Returns the stage type of the shader (vertex, fragment, etc.).
      */
     shaderStageType::Type getStageType() const override;
@@ -43,12 +55,13 @@ namespace hc
 
     /**
      * @brief Returns the OpenGL shader object ID.
-     * 
+     *
      * @return The OpenGL shader ID.
      */
     GLuint getShaderId() const;
 
   private:
+    Id m_id;
     shaderStageType::Type m_stageType;
     String m_source;
     bool m_compiled;
