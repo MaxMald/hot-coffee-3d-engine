@@ -21,7 +21,7 @@ namespace hc
      */
     virtual UniquePtr<IWindowManager> createWindowManager() const = 0;
 
-  private:
-    IWindowManagerPlugin();
+  protected:
+    IWindowManagerPlugin() = default;
   };
 }

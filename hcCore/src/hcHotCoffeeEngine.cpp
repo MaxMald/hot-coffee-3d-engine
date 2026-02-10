@@ -10,6 +10,7 @@
 #include "hc/hcAssetManager.h"
 
 #include "hc/hcGraphicsManagerFactory.h"
+#include "hc/hcWindowManagerFactory.h"
 
 namespace hc
 {
@@ -106,6 +107,8 @@ namespace hc
     connectToPlugins(settings.pluginManagerSettings);
     registerDependencies();
     resolveDependencies();
+
+    m_windowManager = windowManagerFactory::Create(m_pluginManager);
     m_windowManager->createWindow(settings.windowSettings);
 
     m_graphicsManager = graphicsManagerFactory::Create(
@@ -129,7 +132,8 @@ namespace hc
       m_sceneManager->destroy();
       m_graphicsManager->destroy();
       m_graphicsManager.reset();
-      m_windowManager = nullptr;
+      m_windowManager->destroy();
+      m_windowManager.reset();
       m_assetManager->clear();
       m_assetManager = nullptr;
       m_dependencyContainer.clear();
@@ -160,8 +164,6 @@ namespace hc
   void HotCoffeeEngine::resolveDependencies()
   {
     m_dependencyContainer.resolveAllDependencies();
-
-    m_windowManager = m_dependencyContainer.resolve<IWindowManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();
   }

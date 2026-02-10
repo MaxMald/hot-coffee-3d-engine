@@ -209,6 +209,7 @@
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcUnlitMaterialFactory.cpp" />
     <ClCompile Include="src\hcVertex.cpp" />
+    <ClCompile Include="src\hcWindowManagerFactory.cpp" />
     <ClCompile Include="src\hcWindowPluginSlot.cpp" />
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
   </ItemGroup>
@@ -305,6 +306,7 @@
     <ClInclude Include="include\hc\hcVertex.h" />
     <ClInclude Include="include\hc\hcWindowHandle.h" />
     <ClInclude Include="include\hc\hcIWindowManager.h" />
+    <ClInclude Include="include\hc\hcWindowManagerFactory.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />
     <ClInclude Include="include\hc\hcWindowSettings.h" />
     <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h" />
