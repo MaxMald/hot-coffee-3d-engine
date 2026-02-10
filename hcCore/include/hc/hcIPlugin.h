@@ -28,13 +28,6 @@ namespace hc
     virtual void onClose() = 0;
 
     /**
-    * Get the wrapped data of this plug-in.
-    *
-    * @return Wrapped data.
-    */
-    virtual void* getData() = 0;
-
-    /**
     * Add dependencies provided by this plug-in to the given container.
     */
     virtual void addDependencies(DependencyContainer& container) = 0;
