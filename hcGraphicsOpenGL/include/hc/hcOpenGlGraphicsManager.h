@@ -58,18 +58,19 @@ namespace hc
     void resolveDependencies(DependencyContainer& container) override;
 
   private:
-    SharedPtr<AssetManager> m_assetManager;
+    AssetManager& m_assetManager;
     SharedPtr<SceneManager> m_sceneManager;
-    OpenGlTextureManager m_textureManager;
-    OpenGlMaterialManager m_materialManager;
-    OpenGlShaderManager m_shaderManager;
-    OpenGlShaderProgramManager m_shaderProgramManager;
-    OpenGlMeshManager m_meshManager;
+
+    UniquePtr<ITextureManager> m_textureManager;
+    UniquePtr<IMaterialManager> m_materialManager;
+    UniquePtr<IShaderManager> m_shaderManager;
+    UniquePtr<IShaderProgramManager> m_shaderProgramManager;
+    UniquePtr<IMeshManager> m_meshManager;
 
     /**
-     * @copydoc IGraphicsManager::init
+     * @copydoc IGraphicsManager::initialize
      */
-    void init(IWindow& window) override;
+    void initialize(IWindow& window, AssetManager& assetManager) override;
 
     /**
      * @copydoc IGraphicsManager::destroy

@@ -36,9 +36,6 @@ namespace hc
     virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
 
   protected:
-    /**
-     * @brief Protected default constructor to prevent direct instantiation.
-     */
     IMesh() = default;
   };
 }

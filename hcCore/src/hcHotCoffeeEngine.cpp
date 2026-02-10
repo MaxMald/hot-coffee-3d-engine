@@ -109,7 +109,7 @@ namespace hc
     registerDependencies();
     resolveDependencies();
     m_windowManager->createWindow(settings.windowSettings);
-    m_graphicsManager->init(m_windowManager->getWindow());
+    m_graphicsManager->initialize(m_windowManager->getWindow(), *m_assetManager);
   }
 
   void HotCoffeeEngine::onPrepare()
