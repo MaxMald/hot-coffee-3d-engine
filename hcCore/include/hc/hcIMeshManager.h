@@ -14,7 +14,7 @@ namespace hc
    * creation, retrieval, and cleanup of mesh objects. Mesh managers are
    * non-copyable.
    */
-  class IMeshManager : public NonCopyable
+  class HC_CORE_EXPORT IMeshManager : public NonCopyable
   {
   public:
     /**

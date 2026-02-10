@@ -14,7 +14,7 @@ namespace hc
    * textures. It provides methods to create textures from images, image keys, or
    * files, and to clear all managed textures.
    */
-  class ITextureManager : public NonCopyable
+  class HC_CORE_EXPORT ITextureManager : public NonCopyable
   {
   public:
     /**

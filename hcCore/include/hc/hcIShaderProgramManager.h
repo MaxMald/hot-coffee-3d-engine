@@ -13,7 +13,7 @@ namespace hc
    * Implementations should supply logic for retrieving default programs and
    * clearing resources.
    */
-  class IShaderProgramManager : public NonCopyable
+  class HC_CORE_EXPORT IShaderProgramManager : public NonCopyable
   {
   public:
     virtual ~IShaderProgramManager() = default;

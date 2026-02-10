@@ -3,4 +3,4 @@ bin/
 intermediate/
 lib/
 
-imgui.ini
+hcEditor/imgui.ini
