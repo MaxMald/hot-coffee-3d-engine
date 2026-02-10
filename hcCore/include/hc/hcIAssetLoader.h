@@ -26,5 +26,8 @@ namespace hc
      * @return Shared pointer to the loaded asset, or nullptr on failure.
      */
     virtual SharedPtr<T> load(const Path& path) = 0;
+
+  protected:
+    IAssetLoader() = default;
   };
 }

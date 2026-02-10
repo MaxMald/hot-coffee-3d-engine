@@ -174,7 +174,6 @@
     <ClCompile Include="src\hcCameraComponent.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
-    <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcGraphicsManagerFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
@@ -230,7 +229,6 @@
     <ClInclude Include="include\hc\hcAssetManager.h" />
     <ClInclude Include="include\hc\hcCamera.h" />
     <ClInclude Include="include\hc\hcCameraManager.h" />
-    <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />
     <ClInclude Include="include\hc\hcCoreLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcCorePrerequisites.h" />
     <ClInclude Include="include\hc\hcEvent.h" />
@@ -260,7 +258,6 @@
     <ClInclude Include="include\hc\hcIPluginSlot.h" />
     <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
     <ClInclude Include="include\hc\hcIDrawable.h" />
-    <ClInclude Include="include\hc\hcIImageLoader.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />
     <ClInclude Include="include\hc\hcLight.h" />
@@ -274,7 +271,6 @@
     <ClInclude Include="include\hc\hcMeshComponent.h" />
     <ClInclude Include="include\hc\hcMeshManager.h" />
     <ClInclude Include="include\hc\hcModel.h" />
-    <ClInclude Include="include\hc\hcIModelLoader.h" />
     <ClInclude Include="include\hc\hcModelSubMesh.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcMouseWheelType.h" />

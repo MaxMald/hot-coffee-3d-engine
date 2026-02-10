@@ -1,7 +1,6 @@
 #include "hc/hcHotCoffeeEngine.h"
 
 #include "hc/hcJsonSerializer.h"
-#include "hc/hcCoreDependenciesRegister.h"
 #include "hc/hcPluginConnectionHelper.h"
 #include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"

@@ -4,11 +4,11 @@
 
 namespace hc
 {
-  class HC_ASSET_LOADERS_EXPORT ImageLoader : public IImageLoader
+  class HC_ASSET_LOADERS_EXPORT ImageLoader : public IAssetLoader<Image>
   {
   public:
-    ImageLoader();
-    virtual ~ImageLoader() override;
+    ImageLoader() = default;
+    virtual ~ImageLoader() = default;
 
     /**
      * @copydoc IAssetLoader::load

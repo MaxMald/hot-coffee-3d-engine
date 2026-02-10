@@ -8,11 +8,11 @@ struct aiMaterial;
 
 namespace hc
 {
-  class HC_ASSET_LOADERS_EXPORT ModelLoader : public IModelLoader
+  class HC_ASSET_LOADERS_EXPORT ModelLoader : public IAssetLoader<Model>
   {
   public:
-    ModelLoader();
-    virtual ~ModelLoader() override;
+    ModelLoader() = default;
+    virtual ~ModelLoader() = default;
 
     /**
      * @copydoc IAssetLoader::load
