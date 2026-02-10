@@ -13,11 +13,6 @@ namespace hc
   {
   }
 
-  AssetLoadersPlugin::AssetLoadersPlugin()
-    : IPlugin()
-  {
-  }
-
   void AssetLoadersPlugin::onConnect()
   {
   }
@@ -26,12 +21,19 @@ namespace hc
   {
   }
 
-  void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
+  void AssetLoadersPlugin::addDependencies(DependencyContainer&)
   {
-    container.registerInstanceAsInterface<IImageLoader, ImageLoader>(
+  }
+
+  void AssetLoadersPlugin::registerAssetLoaders(
+    AssetManager& assetManager
+  ) const
+  {
+    assetManager.addLoader<Image>(
       MakeShared<ImageLoader>()
     );
-    container.registerInstanceAsInterface<IModelLoader, ModelLoader>(
+
+    assetManager.addLoader<Model>(
       MakeShared<ModelLoader>()
     );
   }

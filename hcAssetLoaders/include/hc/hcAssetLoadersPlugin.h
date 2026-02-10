@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcIAssetLoaderPlugin.h>
 #include "hc/hcAssetLoadersPrerequisites.h"
 
 namespace hc
@@ -10,10 +11,10 @@ namespace hc
     HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin();
   }
 
-  class HC_ASSET_LOADERS_EXPORT AssetLoadersPlugin : public IPlugin
+  class HC_ASSET_LOADERS_EXPORT AssetLoadersPlugin : public IAssetLoaderPlugin
   {
   public:
-    AssetLoadersPlugin();
+    AssetLoadersPlugin() = default;
     virtual ~AssetLoadersPlugin() = default;
 
     /**
@@ -30,5 +31,10 @@ namespace hc
     * @copydoc IPlugin::addDependencies
     */
     void addDependencies(DependencyContainer& container) override;
+
+    /**
+     * @copydoc IAssetLoaderPlugin::registerAssetLoaders
+     */
+    void registerAssetLoaders(AssetManager& assetManager) const override;
   };
 }

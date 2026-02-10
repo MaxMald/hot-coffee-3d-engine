@@ -5,6 +5,7 @@
 #include "hc/hcPluginStandardKeys.h"
 #include "hc/hcMaterialDescriptor.h"
 #include "hc/hcJsonDeserializerAssetLoader.h"
+#include "hc/hcIAssetLoaderPlugin.h"
 
 namespace hc
 {
@@ -37,7 +38,20 @@ namespace hc
         );
       }
 
+      SharedPtr<IAssetLoaderPlugin> assetLoaderPlugin =
+        std::dynamic_pointer_cast<IAssetLoaderPlugin>(plugin);
 
+      if (!assetLoaderPlugin)
+      {
+        throw RuntimeErrorException(
+          String::Format(
+            "Failed to register asset loaders: Plugin '%s' does not implement IAssetLoaderPlugin.",
+            pluginStandardKeys::AssetLoadersPlugin
+          )
+        );
+      }
+
+      assetLoaderPlugin->registerAssetLoaders(assetManager);
     }
   }
 }

@@ -309,6 +309,9 @@
     <ClCompile Include="src\hcWindowManagerFactory.cpp">
       <Filter>Source Files\window</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -598,6 +601,12 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcWindowManagerFactory.h">
       <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

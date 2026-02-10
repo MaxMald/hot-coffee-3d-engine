@@ -169,6 +169,7 @@
     <ClCompile Include="src\hcAsset.cpp" />
     <ClCompile Include="src\hcAssetFileExtensions.cpp" />
     <ClCompile Include="src\hcAssetManager.cpp" />
+    <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraComponent.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
@@ -218,9 +219,11 @@
     <ClInclude Include="include\hc\hcAsset.h" />
     <ClInclude Include="include\hc\hcAssetFileExtensions.h" />
     <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
+    <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h" />
     <ClInclude Include="include\hc\hcIGraphicResource.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
