@@ -20,6 +20,40 @@ namespace hc
   {
     if (m_linked)
       glUseProgram(m_programId);
+    else
+    {
+      LogService::Error("Attempted to bind an invalid shader program. Make sure to link shaders successfully before binding.");
+    }
+  }
+
+  void OpenGlShaderProgram::linkShaders()
+  {
+    if (m_linked)
+      return;
+
+    glLinkProgram(m_programId);
+    GLint linkStatus = GL_FALSE;
+    glGetProgramiv(m_programId, GL_LINK_STATUS, &linkStatus);
+    if (linkStatus == GL_TRUE)
+    {
+      m_linked = true;
+    }
+    else
+    {
+      m_linked = false;
+      GLint infoLogLength = 0;
+      glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &infoLogLength);
+      if (infoLogLength > 0)
+      {
+        std::vector<char> infoLog(infoLogLength);
+        glGetProgramInfoLog(m_programId, infoLogLength, nullptr, infoLog.data());
+        LogService::Error("Shader program linking failed: %s", infoLog.data());
+      }
+      else
+      {
+        LogService::Error("Shader program linking failed with no additional info.");
+      }
+    }
   }
 
   bool OpenGlShaderProgram::isValid() const 
@@ -120,25 +154,6 @@ namespace hc
 
     m_uniformLocationCache.clear();
     m_linked = false;
-  }
-
-  bool OpenGlShaderProgram::link()
-  {
-    glLinkProgram(m_programId);
-
-    GLint linked = 0;
-    glGetProgramiv(m_programId, GL_LINK_STATUS, &linked);
-    if (!linked)
-    {
-      char log[1024];
-      glGetProgramInfoLog(m_programId, sizeof(log), nullptr, log);
-      LogService::Error(String("Program linking failed: ") + log);
-      m_linked = false;
-      return false;
-    }
-
-    m_linked = true;
-    return true;
   }
 
   GLint OpenGlShaderProgram::getUniformLocation(const String& name)

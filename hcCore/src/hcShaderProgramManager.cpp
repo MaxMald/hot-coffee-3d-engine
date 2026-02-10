@@ -1,6 +1,8 @@
 #include "hc/hcShaderProgramManager.h"
 #include "hc/hcIShaderProgramFactory.h"
 #include "hc/hcIShaderManager.h"
+#include "hc/hcIShaderProgram.h"
+#include "hc/hcIShader.h"
 
 namespace hc
 {
@@ -30,8 +32,14 @@ namespace hc
 
   void ShaderProgramManager::createUnlitShaderProgram()
   {
-    Vector<SharedPtr<IShader>> shaders;
-
+    m_unlitShaderProgram = m_shaderProgramFactory.createShaderProgram();
+    if (!m_unlitShaderProgram)
+    {
+      throw RuntimeErrorException(
+        "Failed to create unlit shader program."
+      );
+    }
+    
     SharedPtr<IShader> vertexShader = m_shaderManager.getDefaultVertexShader();
     SharedPtr<IShader> fragmentShader = m_shaderManager.getUnlitFragmentShader();
 
@@ -42,15 +50,14 @@ namespace hc
       );
     }
 
-    shaders.push_back(vertexShader);
-    shaders.push_back(fragmentShader);
-    m_unlitShaderProgram = m_shaderProgramFactory.createShaderProgram(shaders);
+    if (!vertexShader->isCompiled())
+      vertexShader->compile();
+    if (!fragmentShader->isCompiled())
+      fragmentShader->compile();
 
-    if (!m_unlitShaderProgram)
-    {
-      throw RuntimeErrorException(
-        "Failed to create unlit shader program."
-      );
-    }
+    m_unlitShaderProgram->attachShader(vertexShader);
+    m_unlitShaderProgram->attachShader(fragmentShader);
+
+    m_unlitShaderProgram->linkShaders();
   }
 }

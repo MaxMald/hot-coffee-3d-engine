@@ -20,6 +20,11 @@ namespace hc
     virtual void bind() = 0;
 
     /**
+     * @brief Links the attached shaders into a complete shader program.
+     */
+    virtual void linkShaders() = 0;
+
+    /**
      * @brief Returns true if the program is successfully linked and ready.
      */
     virtual bool isValid() const = 0;

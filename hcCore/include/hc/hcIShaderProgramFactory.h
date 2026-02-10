@@ -6,7 +6,6 @@
 namespace hc
 {
   class IShaderProgram;
-  class IShader;
 
   /**
    * @brief Interface for shader program factory classes.
@@ -23,15 +22,10 @@ namespace hc
     /**
      * @brief Creates a shader program from the given collection of shaders.
      * 
-     * @param shaders Vector of shared pointers to shader instances used in the
-     * program.
-     * 
      * @return Shared pointer to the created shader program instance. nullptr if
      * creation fails.
      */
-    virtual SharedPtr<IShaderProgram> createShaderProgram(
-      const Vector<SharedPtr<IShader>>& shaders
-    ) = 0;
+    virtual SharedPtr<IShaderProgram> createShaderProgram() = 0;
 
   protected:
     IShaderProgramFactory() = default;
