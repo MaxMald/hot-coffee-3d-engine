@@ -31,8 +31,26 @@ namespace hc
   void ShaderProgramManager::createUnlitShaderProgram()
   {
     Vector<SharedPtr<IShader>> shaders;
-    shaders.push_back(m_shaderManager.getDefaultVertexShader());
-    shaders.push_back(m_shaderManager.getUnlitFragmentShader());
+
+    SharedPtr<IShader> vertexShader = m_shaderManager.getDefaultVertexShader();
+    SharedPtr<IShader> fragmentShader = m_shaderManager.getUnlitFragmentShader();
+
+    if (!vertexShader || !fragmentShader)
+    {
+      throw RuntimeErrorException(
+        "Failed to retrieve shaders for unlit shader program."
+      );
+    }
+
+    shaders.push_back(vertexShader);
+    shaders.push_back(fragmentShader);
     m_unlitShaderProgram = m_shaderProgramFactory.createShaderProgram(shaders);
+
+    if (!m_unlitShaderProgram)
+    {
+      throw RuntimeErrorException(
+        "Failed to create unlit shader program."
+      );
+    }
   }
 }
