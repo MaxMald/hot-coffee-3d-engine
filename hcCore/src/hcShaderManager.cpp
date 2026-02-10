@@ -29,7 +29,15 @@ namespace hc
     );
 
     if (!shaderCode.has_value())
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to load shader from file: %s",
+          shaderPath.string().c_str()
+        )
+      );
       return nullptr;
+    }
 
     return createShaderFromString(
       shaderKey,
@@ -53,10 +61,17 @@ namespace hc
     );
 
     if (!shader)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to create shader from string with key: %s",
+          shaderKey.c_str()
+        )
+      );
       return nullptr;
+    }
 
     cacheResource(shaderKey, shader);
-
     return shader;
   }
 
@@ -89,12 +104,26 @@ namespace hc
   void ShaderManager::createDefaultVertexShader()
   {
     SharedPtr<IShader> shader = m_shaderFactory.createDefaultVertexShader();
+    if (!shader)
+    {
+      throw RuntimeErrorException(
+        "Failed to create default vertex shader."
+      );
+    }
+
     cacheResource(DEFAULT_VERTEX_SHADER_KEY, shader);
   }
 
   void ShaderManager::createUnlitFragmentShader()
   {
     SharedPtr<IShader> shader = m_shaderFactory.createUnlitFragmentShader();
+    if (!shader)
+    {
+      throw RuntimeErrorException(
+        "Failed to create unlit fragment shader."
+      );
+    }
+
     cacheResource(UNLIT_FRAGMENT_SHADER_KEY, shader);
   }
 }
