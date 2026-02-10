@@ -10,7 +10,7 @@ namespace hc
    * Represents a generic graphic resource with a unique identifier. Provides
    * methods for accessing the resource ID and destroying the resource.
    */
-  class IGraphicResource : public NonCopyable
+  class HC_CORE_EXPORT IGraphicResource : public NonCopyable
   {
   public:
     /**

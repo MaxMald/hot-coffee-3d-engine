@@ -8,7 +8,7 @@ namespace hc
   class MaterialDescriptor;
   class IMaterial;
 
-  class IMaterialManager : public NonCopyable
+  class HC_CORE_EXPORT IMaterialManager : public NonCopyable
   {
   public:
     virtual ~IMaterialManager() = default;

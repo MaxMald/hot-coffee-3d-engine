@@ -26,7 +26,7 @@ namespace hc
   {
   }
 
-  void OpenGlGraphicsPlugin::addDependencies(DependencyContainer& container)
+  void OpenGlGraphicsPlugin::addDependencies(DependencyContainer&)
   {
   }
 

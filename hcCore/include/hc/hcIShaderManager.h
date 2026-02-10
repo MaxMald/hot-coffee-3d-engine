@@ -14,7 +14,7 @@ namespace hc
    * Supports creation from files and string content, access to default shaders,
    * and management of cached shader resources.
    */
-  class IShaderManager : public NonCopyable
+  class HC_CORE_EXPORT IShaderManager : public NonCopyable
   {
   public:
     virtual ~IShaderManager() = default;
