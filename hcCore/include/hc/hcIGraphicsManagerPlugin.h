@@ -31,7 +31,7 @@ namespace hc
     virtual UniquePtr<IGraphicsManager> createGraphicsManager(
       IWindow& window,
       AssetManager& assetManager,
-      UniquePtr<MaterialFactoriesManager>
+      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
     ) const = 0;
   };
 }
