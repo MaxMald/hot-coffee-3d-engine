@@ -12,8 +12,8 @@ namespace hc
   class AssetManager : public NonCopyable
   {
   public:
-    AssetManager();
-    ~AssetManager();
+    AssetManager() = default;
+    ~AssetManager() = default;
 
     /**
      * @brief Registers an asset loader for a specific asset type T.

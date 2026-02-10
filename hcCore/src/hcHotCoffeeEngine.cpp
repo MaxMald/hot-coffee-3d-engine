@@ -9,6 +9,7 @@
 
 #include "hc/hcGraphicsManagerFactory.h"
 #include "hc/hcWindowManagerFactory.h"
+#include "hc/hcAssetManagerLoadersRegistry.h"
 
 namespace hc
 {
@@ -93,6 +94,11 @@ namespace hc
       return;
 
     connectToPlugins(settings.pluginManagerSettings);
+
+    assetManagerLoadersRegistry::RegisterLoaders(
+      m_assetManager,
+      m_pluginManager
+    );
 
     m_windowManager = windowManagerFactory::Create(m_pluginManager);
     m_windowManager->createWindow(settings.windowSettings);
