@@ -3,13 +3,13 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
+#include "hc/hcSceneManager.h"
+#include "hc/hcAssetManager.h"
 
 namespace hc
 {
   class IWindowManager;
   class IGraphicsManager;
-  class SceneManager;
-  class AssetManager;
 
   class HC_CORE_EXPORT HotCoffeeEngine : public AModule<HotCoffeeEngine>
   {
@@ -32,10 +32,9 @@ namespace hc
   private:
     UniquePtr<IGraphicsManager> m_graphicsManager;
     UniquePtr<IWindowManager> m_windowManager;
-    SharedPtr<SceneManager> m_sceneManager;
-    SharedPtr<AssetManager> m_assetManager;
+    SceneManager m_sceneManager;
+    AssetManager m_assetManager;
     PluginManager m_pluginManager;
-    DependencyContainer m_dependencyContainer;
     bool m_initialized;
 
     void onPrepare() override;
@@ -43,7 +42,5 @@ namespace hc
 
     void initialize(const HotCoffeeEngineSettings& settings);
     void connectToPlugins(const PluginManagerSettings& settings);
-    void registerDependencies();
-    void resolveDependencies();
   };
 }

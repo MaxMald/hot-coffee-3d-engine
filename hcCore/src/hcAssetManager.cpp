@@ -9,8 +9,9 @@ namespace hc
 {
   AssetManager::AssetManager()
   {
-    m_assetLoaders[typeid(MaterialDescriptor)] = 
-      MakeShared<JsonDeserializerAssetLoader<MaterialDescriptor>>();
+    addLoader<MaterialDescriptor>(
+      MakeShared<JsonDeserializerAssetLoader<MaterialDescriptor>>()
+    );
   }
 
   AssetManager::~AssetManager()
@@ -18,13 +19,14 @@ namespace hc
     clear();
   }
 
+  /*
   void AssetManager::resolveDependencies(DependencyContainer& container)
   {
     SharedPtr<IImageLoader> imageLoader = container.resolve<IImageLoader>();
     m_assetLoaders[typeid(Image)] = imageLoader;
     SharedPtr<IModelLoader> modelLoader = container.resolve<IModelLoader>();
     m_assetLoaders[typeid(Model)] = modelLoader;
-  }
+  }*/
 
   void AssetManager::clear()
   {

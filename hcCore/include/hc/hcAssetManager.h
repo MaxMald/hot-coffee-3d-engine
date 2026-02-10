@@ -9,18 +9,21 @@ namespace hc
   /**
    * @brief Manages all asset groups in the engine, providing type-safe access.
    */
-  class AssetManager :
-    public NonCopyable,
-    public IDependencyResolvable
+  class AssetManager : public NonCopyable
   {
   public:
     AssetManager();
     ~AssetManager();
 
     /**
-     * @brief Resolves dependencies for the asset manager.
+     * @brief Registers an asset loader for a specific asset type T.
+     * 
+     * @tparam T Asset type.
+     * 
+     * @param loader Shared pointer to the asset loader.
      */
-    void resolveDependencies(DependencyContainer& container) override;
+    template<typename T>
+    void addLoader(const SharedPtr<IAssetLoader<T>>& loader);
 
     /**
      * @brief Loads an asset of type T using the appropriate asset loader.
@@ -118,6 +121,13 @@ namespace hc
     TypeIndex typeIdx(typeid(T));
     if (m_assetGroups.find(typeIdx) == m_assetGroups.end())
       m_assetGroups[typeIdx] = MakeShared<AssetGroup<T>>();
+  }
+
+  template<typename T>
+  inline void AssetManager::addLoader(const SharedPtr<IAssetLoader<T>>& loader)
+  {
+    TypeIndex typeIdx(typeid(T));
+    m_assetLoaders[typeIdx] = loader;
   }
 
   template<typename T>

@@ -6,8 +6,6 @@
 #include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
-#include "hc/hcSceneManager.h"
-#include "hc/hcAssetManager.h"
 
 #include "hc/hcGraphicsManagerFactory.h"
 #include "hc/hcWindowManagerFactory.h"
@@ -40,7 +38,11 @@ namespace hc
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :
-    m_initialized(false)
+    m_initialized(false),
+    m_windowManager(nullptr),
+    m_graphicsManager(nullptr),
+    m_sceneManager(),
+    m_assetManager()
   {
   }
 
@@ -77,24 +79,12 @@ namespace hc
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
-    if (m_sceneManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "SceneManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
-      );
-    }
-    return *m_sceneManager;
+    return m_sceneManager;
   }
 
   AssetManager& HotCoffeeEngine::getAssetManager()
   {
-    if (m_assetManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "AssetManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
-      );
-    }
-    return *m_assetManager;
+    return m_assetManager;
   }
 
   void HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
@@ -102,11 +92,7 @@ namespace hc
     if (m_initialized)
       return;
 
-    m_initialized = true;
-
     connectToPlugins(settings.pluginManagerSettings);
-    registerDependencies();
-    resolveDependencies();
 
     m_windowManager = windowManagerFactory::Create(m_pluginManager);
     m_windowManager->createWindow(settings.windowSettings);
@@ -114,9 +100,11 @@ namespace hc
     m_graphicsManager = graphicsManagerFactory::Create(
       m_pluginManager,
       m_windowManager->getWindow(),
-      *m_assetManager
+      m_assetManager
     );
     m_graphicsManager->initialize();
+
+    m_initialized = true;
   }
 
   void HotCoffeeEngine::onPrepare()
@@ -127,29 +115,24 @@ namespace hc
 
   void HotCoffeeEngine::onShutdown()
   {
-    if (m_initialized)
+    m_sceneManager.clear();
+    m_assetManager.clear();
+
+    if (m_graphicsManager)
     {
-      m_sceneManager->destroy();
-      m_assetManager->clear();
-      m_assetManager = nullptr;
-
-      if (m_graphicsManager)
-      {
-        m_graphicsManager->destroy();
-        m_graphicsManager.reset();
-      }
-
-      if (m_windowManager)
-      {
-        m_windowManager->destroy();
-        m_windowManager.reset();
-      }
-
-      m_dependencyContainer.clear();
-      m_pluginManager.closeAll();
-
-      m_initialized = false;
+      m_graphicsManager->destroy();
+      m_graphicsManager.reset();
     }
+
+    if (m_windowManager)
+    {
+      m_windowManager->destroy();
+      m_windowManager.reset();
+    }
+
+    m_pluginManager.closeAll();
+
+    m_initialized = false;
 
     JsonSerializer::Shutdown();
     LogService::Shutdown();
@@ -162,18 +145,5 @@ namespace hc
       m_pluginManager,
       settings
     );
-  }
-
-  void HotCoffeeEngine::registerDependencies()
-  {
-    coreDependenciesRegister::registerDependencies(m_dependencyContainer);
-    m_pluginManager.addDependenciesFromPlugins(m_dependencyContainer);
-  }
-
-  void HotCoffeeEngine::resolveDependencies()
-  {
-    m_dependencyContainer.resolveAllDependencies();
-    m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
-    m_assetManager = m_dependencyContainer.resolve<AssetManager>();
   }
 }

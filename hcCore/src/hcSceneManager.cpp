@@ -83,7 +83,7 @@ namespace hc
       m_activeScene->update(deltaTime);
   }
 
-  void SceneManager::destroy()
+  void SceneManager::clear()
   {
     if (m_activeScene)
     {
