@@ -9,6 +9,8 @@
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
 
+#include "hc/hcGraphicsManagerFactory.h"
+
 namespace hc
 {
   void HotCoffeeEngine::Initialize(const HotCoffeeEngineSettings& settings)
@@ -58,7 +60,6 @@ namespace hc
         "WindowManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
       );
     }
-
     return *m_windowManager;
   }
 
@@ -70,7 +71,6 @@ namespace hc
         "IGraphicsManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
       );
     }
-
     return *m_graphicsManager;
   }
 
@@ -82,7 +82,6 @@ namespace hc
         "SceneManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
       );
     }
-
     return *m_sceneManager;
   }
 
@@ -94,7 +93,6 @@ namespace hc
         "AssetManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
       );
     }
-
     return *m_assetManager;
   }
 
@@ -109,7 +107,13 @@ namespace hc
     registerDependencies();
     resolveDependencies();
     m_windowManager->createWindow(settings.windowSettings);
-    m_graphicsManager->initialize(m_windowManager->getWindow(), *m_assetManager);
+
+    m_graphicsManager = graphicsManagerFactory::Create(
+      m_pluginManager,
+      m_windowManager->getWindow(),
+      *m_assetManager
+    );
+    m_graphicsManager->initialize();
   }
 
   void HotCoffeeEngine::onPrepare()
@@ -124,7 +128,7 @@ namespace hc
     {
       m_sceneManager->destroy();
       m_graphicsManager->destroy();
-      m_graphicsManager = nullptr;
+      m_graphicsManager.reset();
       m_windowManager = nullptr;
       m_assetManager->clear();
       m_assetManager = nullptr;
@@ -158,7 +162,6 @@ namespace hc
     m_dependencyContainer.resolveAllDependencies();
 
     m_windowManager = m_dependencyContainer.resolve<IWindowManager>();
-    m_graphicsManager = m_dependencyContainer.resolve<IGraphicsManager>();
     m_sceneManager = m_dependencyContainer.resolve<SceneManager>();
     m_assetManager = m_dependencyContainer.resolve<AssetManager>();
   }

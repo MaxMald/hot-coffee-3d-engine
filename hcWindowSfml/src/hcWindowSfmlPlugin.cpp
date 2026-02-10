@@ -30,11 +30,6 @@ namespace hc
     LogService::Message("hcWindowSfmlPlugin closed.");
   }
 
-  void* WindowSfmlPlugin::getData()
-  {
-    return nullptr;
-  }
-
   void WindowSfmlPlugin::addDependencies(DependencyContainer& container)
   {
     container.registerInstanceAsInterface<IWindowManager, SfmlWindowManager>(

@@ -26,11 +26,6 @@ namespace hc
   {
   }
 
-  void* AssetLoadersPlugin::getData()
-  {
-    return nullptr;
-  }
-
   void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
   {
     container.registerInstanceAsInterface<IImageLoader, ImageLoader>(

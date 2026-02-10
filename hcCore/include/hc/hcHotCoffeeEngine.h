@@ -30,8 +30,8 @@ namespace hc
     AssetManager& getAssetManager();
 
   private:
+    UniquePtr<IGraphicsManager> m_graphicsManager;
     SharedPtr<IWindowManager> m_windowManager;
-    SharedPtr<IGraphicsManager> m_graphicsManager;
     SharedPtr<SceneManager> m_sceneManager;
     SharedPtr<AssetManager> m_assetManager;
     PluginManager m_pluginManager;

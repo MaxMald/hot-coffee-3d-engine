@@ -175,6 +175,7 @@
     <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
+    <ClCompile Include="src\hcGraphicsManagerFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
     <ClCompile Include="src\hcIGraphicsManager.cpp" />
     <ClCompile Include="src\hcJsonSerializer.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="include\hc\hcAssetGroup.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
+    <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
     <ClInclude Include="include\hc\hcIGraphicResource.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
@@ -234,6 +236,7 @@
     <ClInclude Include="include\hc\hcICameraProjection.h" />
     <ClInclude Include="include\hc\hcIComponent.h" />
     <ClInclude Include="include\hc\hcIGraphicsManager.h" />
+    <ClInclude Include="include\hc\hcIGraphicsManagerPlugin.h" />
     <ClInclude Include="include\hc\hcIJsonSerializer.h" />
     <ClInclude Include="include\hc\hcIMaterial.h" />
     <ClInclude Include="include\hc\hcIMaterialFactory.h" />
@@ -276,6 +279,7 @@
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h" />
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
+    <ClInclude Include="include\hc\hcPluginStandardKeys.h" />
     <ClInclude Include="include\hc\hcProjectionType.h" />
     <ClInclude Include="include\hc\hcCameraMatrices.h" />
     <ClInclude Include="include\hc\hcRenderContext.h" />

@@ -2,3 +2,5 @@
 bin/
 intermediate/
 lib/
+
+imgui.ini
