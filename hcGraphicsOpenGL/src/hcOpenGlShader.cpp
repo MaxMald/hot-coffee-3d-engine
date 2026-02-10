@@ -94,17 +94,6 @@ namespace hc
       // TODO: insert return statement here
   }
 
-  void OpenGlShader::destroy()
-  {
-    if (m_shaderId != 0)
-    {
-      glDeleteShader(m_shaderId);
-      m_shaderId = 0;
-    }
-
-    m_compiled = false;
-  }
-
   GLuint OpenGlShader::getShaderId() const
   {
     return m_shaderId;

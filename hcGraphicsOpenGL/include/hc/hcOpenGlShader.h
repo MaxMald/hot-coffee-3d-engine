@@ -49,11 +49,6 @@ namespace hc
     void compile() override;
 
     /**
-     * @brief Destroys the shader and releases OpenGL resources.
-     */
-    void destroy() override;
-
-    /**
      * @brief Returns the OpenGL shader object ID.
      *
      * @return The OpenGL shader ID.

@@ -68,7 +68,7 @@ namespace hc
   };
 
   template <typename Key, typename ResourceType>
-  SharedPtr<ResourceType> ResourcesCache<Key, ResourceType>::getCachedResource(
+  inline SharedPtr<ResourceType> ResourcesCache<Key, ResourceType>::getCachedResource(
     const Key& id
   ) const
   {
@@ -80,7 +80,7 @@ namespace hc
   }
 
   template <typename Key, typename ResourceType>
-  bool ResourcesCache<Key, ResourceType>::hasCachedResource(
+  inline bool ResourcesCache<Key, ResourceType>::hasCachedResource(
     const Key& id
   ) const
   {
@@ -88,7 +88,7 @@ namespace hc
   }
 
   template <typename Key, typename ResourceType>
-  void ResourcesCache<Key, ResourceType>::cacheResource(
+  inline void ResourcesCache<Key, ResourceType>::cacheResource(
     const Key& id,
     SharedPtr<ResourceType> resource
   )
@@ -109,7 +109,7 @@ namespace hc
   }
 
   template <typename Key, typename ResourceType>
-  void ResourcesCache<Key, ResourceType>::clearCache()
+  inline void ResourcesCache<Key, ResourceType>::clearCache()
   {
     m_cache.clear();
   }
