@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcShadingType.h"
+#include "hc/hcIGraphicResource.h"
 
 namespace hc
 {
@@ -11,17 +12,10 @@ namespace hc
   /**
    * @brief Interface for material objects in the engine.
    */
-  class HC_CORE_EXPORT IMaterial
+  class HC_CORE_EXPORT IMaterial : public IGraphicResource
   {
   public:
     virtual ~IMaterial() = default;
-
-    /**
-     * @brief Gets the unique identifier of the material.
-     * 
-     * @return The unique Id of the material.
-     */
-    virtual const Id& getId() const = 0;
 
     /**
      * @brief Gets the shader type associated with this material.
