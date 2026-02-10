@@ -6,6 +6,7 @@
 namespace hc
 {
   OpenGlShaderProgram::OpenGlShaderProgram() :
+    m_id(Id::Create()),
     m_programId(glCreateProgram()),
     m_linked(false)
   {
@@ -14,6 +15,11 @@ namespace hc
   OpenGlShaderProgram::~OpenGlShaderProgram()
   {
     destroy();
+  }
+
+  const Id& OpenGlShaderProgram::getId() const
+  {
+    return m_id;
   }
 
   void OpenGlShaderProgram::bind()
