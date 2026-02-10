@@ -51,9 +51,15 @@ namespace hc
       glGetProgramiv(m_programId, GL_INFO_LOG_LENGTH, &infoLogLength);
       if (infoLogLength > 0)
       {
-        std::vector<char> infoLog(infoLogLength);
+        Vector<char> infoLog(infoLogLength);
         glGetProgramInfoLog(m_programId, infoLogLength, nullptr, infoLog.data());
-        LogService::Error("Shader program linking failed: %s", infoLog.data());
+        
+        LogService::Error(
+          String::Format(
+            "Shader program linking failed: %s",
+            infoLog.data()
+          )
+        );
       }
       else
       {
