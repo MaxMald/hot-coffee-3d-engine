@@ -60,9 +60,9 @@ namespace hc
     AssetManager& m_assetManager;
     IWindow& m_window;
     TextureManager m_textureManager;
-    MaterialManager m_materialManager;
     ShaderManager m_shaderManager;
     ShaderProgramManager m_shaderProgramManager;
+    MaterialManager m_materialManager;
     MeshManager m_meshManager;
 
     /**
