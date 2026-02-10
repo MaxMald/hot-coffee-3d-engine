@@ -248,6 +248,7 @@
     <ClInclude Include="include\hc\hcIShaderProgram.h" />
     <ClInclude Include="include\hc\hcIShaderProgramFactory.h" />
     <ClInclude Include="include\hc\hcITextureFactory.h" />
+    <ClInclude Include="include\hc\hcIWindowManagerPlugin.h" />
     <ClInclude Include="include\hc\hcJsonDeserializerAssetLoader.h" />
     <ClInclude Include="include\hc\hcJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptor.h" />

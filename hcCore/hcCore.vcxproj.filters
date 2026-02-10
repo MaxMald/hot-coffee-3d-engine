@@ -584,5 +584,8 @@
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h">
       <Filter>Header Files\graphics</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcIWindowManagerPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
