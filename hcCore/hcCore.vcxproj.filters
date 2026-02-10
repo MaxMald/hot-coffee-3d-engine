@@ -323,9 +323,6 @@
     <ClInclude Include="include\hc\hcIWindow.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcIPlugin.h">
-      <Filter>Header Files\plugin</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcPluginManager.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
@@ -588,6 +585,9 @@
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIPlugin.h">
       <Filter>Header Files\plugin\plugins</Filter>
     </ClInclude>
   </ItemGroup>

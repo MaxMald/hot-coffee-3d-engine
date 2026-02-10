@@ -21,10 +21,6 @@ namespace hc
   {
   }
 
-  void AssetLoadersPlugin::addDependencies(DependencyContainer&)
-  {
-  }
-
   void AssetLoadersPlugin::registerAssetLoaders(
     AssetManager& assetManager
   ) const

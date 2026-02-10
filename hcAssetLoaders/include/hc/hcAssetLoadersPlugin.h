@@ -28,11 +28,6 @@ namespace hc
     void onClose() override;
 
     /**
-    * @copydoc IPlugin::addDependencies
-    */
-    void addDependencies(DependencyContainer& container) override;
-
-    /**
      * @copydoc IAssetLoaderPlugin::registerAssetLoaders
      */
     void registerAssetLoaders(AssetManager& assetManager) const override;
