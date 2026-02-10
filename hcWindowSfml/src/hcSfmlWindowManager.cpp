@@ -29,4 +29,13 @@ namespace hc
 
     return *m_window;
   }
+
+  void SfmlWindowManager::destroy()
+  {
+    if (m_window)
+    {
+      m_window->destroy();
+      m_window.reset();
+    }
+  }
 }

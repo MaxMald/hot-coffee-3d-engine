@@ -160,6 +160,12 @@
     <Filter Include="Header Files\plugin\plugins">
       <UniqueIdentifier>{a3d13947-4b64-4c30-b333-fed9a68bc285}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\window\input">
+      <UniqueIdentifier>{66a27e18-e79a-43c5-9f01-ec954f4b680d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\window">
+      <UniqueIdentifier>{3804282c-e9ed-43ef-b4d9-977650dc6f73}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -300,6 +306,9 @@
     <ClCompile Include="src\hcGraphicsManagerFactory.cpp">
       <Filter>Source Files\graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcWindowManagerFactory.cpp">
+      <Filter>Source Files\window</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -345,12 +354,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcEvent.h">
-      <Filter>Header Files\window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcKeyboardKey.h">
-      <Filter>Header Files\window</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcMouseButtonKey.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcPluginManagerSettings.h">
@@ -421,9 +424,6 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcAssetFileExtensions.h">
       <Filter>Header Files\assets</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcMouseWheelType.h">
-      <Filter>Header Files\window</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcITexture.h">
       <Filter>Header Files\graphics\graphicResources\texture</Filter>
@@ -583,6 +583,21 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h">
       <Filter>Header Files\graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIWindowManagerPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcKeyboardKey.h">
+      <Filter>Header Files\window\input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMouseButtonKey.h">
+      <Filter>Header Files\window\input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcMouseWheelType.h">
+      <Filter>Header Files\window\input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcWindowManagerFactory.h">
+      <Filter>Header Files\window</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
