@@ -14,7 +14,7 @@ namespace hc
    *
    * Provides a contract for plugins that create graphics manager instances.
    */
-  class IGraphicsManagerPlugin : public IPlugin 
+  class HC_CORE_EXPORT IGraphicsManagerPlugin : public IPlugin 
   {
   public:
     /**
