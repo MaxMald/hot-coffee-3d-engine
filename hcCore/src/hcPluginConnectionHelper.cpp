@@ -1,6 +1,7 @@
 #include "hc/hcPluginConnectionHelper.h"
 #include "hc/hcPluginManager.h"
 #include "hc/hcPluginManagerSettings.h"
+#include "hc/hcPluginStandardKeys.h"
 
 namespace hc
 {
@@ -23,7 +24,7 @@ namespace hc
     void connectWindowSfmlPlugin(PluginManager& pluginManager)
     {
       pluginManager.connectPlugin(
-        "WindowPlugin",
+        pluginStandardKeys::WindowPlugin,
         "hcWindowSfml" + String(HC_DYN_LIB_SUFIX),
         "createWindowSfmlPlugin",
         "destroyWindowSfmlPlugin"
@@ -33,7 +34,7 @@ namespace hc
     void connectGraphicsOpenGLPlugin(PluginManager& pluginManager)
     {
       pluginManager.connectPlugin(
-        "GraphicsPlugin",
+        pluginStandardKeys::GraphicsPlugin,
         "hcGraphicsOpenGL" + String(HC_DYN_LIB_SUFIX),
         "createGraphicsOpenGLPlugin",
         "destroyGraphicsOpenGLPlugin"
@@ -43,7 +44,7 @@ namespace hc
     void connectAssetLoadersPlugin(PluginManager& pluginManager)
     {
       pluginManager.connectPlugin(
-        "AssetLoadersPlugin",
+        pluginStandardKeys::AssetLoadersPlugin,
         "hcAssetLoaders" + String(HC_DYN_LIB_SUFIX),
         "createAssetLoadersPlugin",
         "destroyAssetLoadersPlugin"

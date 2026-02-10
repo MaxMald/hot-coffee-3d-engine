@@ -7,6 +7,7 @@ namespace hc
   class IGraphicsManager;
   class IWindow;
   class AssetManager;
+  class MaterialFactoriesManager;
 
   /**
    * @brief Interface for graphics manager plugins.
@@ -21,13 +22,16 @@ namespace hc
      *
      * @param window Reference to the window used for graphics initialization.
      * @param assetManager Reference to the asset manager for resource handling.
+     * @param materialFactoriesManager Unique pointer to the material factories
+     * manager.
      *
      * @return Unique pointer to the created graphics manager. nullptr if
      * creation fails.
      */
     virtual UniquePtr<IGraphicsManager> createGraphicsManager(
       IWindow& window,
-      AssetManager& assetManager
+      AssetManager& assetManager,
+      UniquePtr<MaterialFactoriesManager>
     ) const = 0;
   };
 }

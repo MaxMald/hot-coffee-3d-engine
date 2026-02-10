@@ -1,6 +1,12 @@
 #pragma once
 
+#include <hc/hcTextureManager.h>
+#include <hc/hcMeshManager.h>
+#include <hc/hcMaterialManager.h>
+#include <hc/hcShaderManager.h>
+#include <hc/hcShaderProgramManager.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
+
 
 namespace hc
 {
@@ -8,7 +14,11 @@ namespace hc
     public IGraphicsManager
   {
   public:
-    OpenGlGraphicsManager();
+    OpenGlGraphicsManager(
+      IWindow& window,
+      AssetManager& assetManager,
+      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+    );
     virtual ~OpenGlGraphicsManager();
 
     /**
@@ -47,27 +57,22 @@ namespace hc
     IMeshManager& getMeshManager() override;
 
   private:
-    AssetManager* m_assetManager;
-
-    UniquePtr<ITextureManager> m_textureManager;
-    UniquePtr<IMaterialManager> m_materialManager;
-    UniquePtr<IShaderManager> m_shaderManager;
-    UniquePtr<IShaderProgramManager> m_shaderProgramManager;
-    UniquePtr<IMeshManager> m_meshManager;
+    AssetManager& m_assetManager;
+    IWindow& m_window;
+    TextureManager m_textureManager;
+    MaterialManager m_materialManager;
+    ShaderManager m_shaderManager;
+    ShaderProgramManager m_shaderProgramManager;
+    MeshManager m_meshManager;
 
     /**
      * @copydoc IGraphicsManager::initialize
      */
-    void initialize(
-      IWindow& window,
-      AssetManager& assetManager
-    ) override;
+    void initialize() override;
 
     /**
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
-
-    void prepareManagers();
   };
 }

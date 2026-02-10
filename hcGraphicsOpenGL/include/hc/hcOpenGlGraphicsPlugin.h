@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcIGraphicsManagerPlugin.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 
 namespace hc
@@ -10,7 +11,7 @@ namespace hc
     HC_GRAPHICS_OPENGL_EXPORT void destroyGraphicsOpenGLPlugin();
   }
 
-  class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsPlugin : public IPlugin
+  class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsPlugin : public IGraphicsManagerPlugin
   {
   public:
     OpenGlGraphicsPlugin();
@@ -27,13 +28,17 @@ namespace hc
     void onClose() override;
 
     /**
-    * @copydoc IPlugin::getData
-    */
-    void* getData() override;
-
-    /**
     * @copydoc IPlugin::addDependencies
     */
     void addDependencies(DependencyContainer& container) override;
+
+    /**
+     * @copydoc IGraphicsManagerPlugin::createGraphicsManager
+     */
+    UniquePtr<IGraphicsManager> createGraphicsManager(
+      IWindow& window,
+      AssetManager& assetManager,
+      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+    ) const override;
   };
 }

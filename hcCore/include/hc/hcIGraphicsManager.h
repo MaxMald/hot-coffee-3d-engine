@@ -78,16 +78,9 @@ namespace hc
     IGraphicsManager();
 
     /**
-     * @brief Initializes the graphics manager with the given window and asset
-     * manager.
-     *
-     * @param window Reference to the window for graphics initialization.
-     * @param assetManager Reference to the asset manager for resource loading.
+     * @brief Initializes the graphics manager.
      */
-    virtual void initialize(
-      IWindow&,
-      AssetManager&
-    ) = 0;
+    virtual void initialize() = 0;
 
     /**
      * @brief Destroys and cleans up the graphics manager.

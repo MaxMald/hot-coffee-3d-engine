@@ -1,5 +1,6 @@
 #include "hc/hcOpenGlGraphicsPlugin.h"
 
+#include <hc/hcMaterialFactoriesManager.h>
 #include "hc/hcOpenGlGraphicsManager.h"
 
 namespace hc
@@ -25,15 +26,20 @@ namespace hc
   {
   }
 
-  void* OpenGlGraphicsPlugin::getData()
-  {
-    return nullptr;
-  }
-
   void OpenGlGraphicsPlugin::addDependencies(DependencyContainer& container)
   {
-    container.registerInstanceAsInterface<IGraphicsManager, OpenGlGraphicsManager>(
-      MakeShared<OpenGlGraphicsManager>()
+  }
+
+  UniquePtr<IGraphicsManager> OpenGlGraphicsPlugin::createGraphicsManager(
+    IWindow& window,
+    AssetManager& assetManager,
+    UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+  ) const
+  {
+    return MakeUnique<OpenGlGraphicsManager>(
+      window,
+      assetManager,
+      std::move(materialFactoriesManager)
     );
   }
 }

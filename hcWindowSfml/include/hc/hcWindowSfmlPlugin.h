@@ -30,11 +30,6 @@ namespace hc
     void onClose() override;
 
     /**
-     * @copydoc IPlugin::getData
-     */
-    void* getData() override;
-
-    /**
      * @copydoc IPlugin::addDependencies
      */
     void addDependencies(DependencyContainer& container) override;
