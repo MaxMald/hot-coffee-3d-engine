@@ -103,7 +103,8 @@ namespace hc
     AssetGroup<T>& getGroup();
 
     /**
-     * @brief Clears all asset groups and their contents.
+     * @brief Clears all asset groups and loaders from the manager, effectively
+     * resetting the asset manager to an empty state.
      */
     void clear();
 
