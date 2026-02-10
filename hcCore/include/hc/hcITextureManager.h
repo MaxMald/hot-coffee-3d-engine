@@ -32,15 +32,6 @@ namespace hc
     virtual SharedPtr<ITexture> createTextureFromImage(SharedPtr<Image> image) = 0;
 
     /**
-     * @brief Creates a texture from an image identified by a key.
-     *
-     * @param imageKey Key identifying the image.
-     *
-     * @return Shared pointer to the created texture.
-     */
-    virtual SharedPtr<ITexture> createTextureFromImage(const String& imageKey) = 0;
-
-    /**
      * @brief Creates a texture from an image file.
      *
      * @param filePath Path to the image file.
