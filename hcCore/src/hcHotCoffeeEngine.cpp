@@ -81,11 +81,25 @@ namespace hc
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
+    if (!m_initialized)
+    {
+      throw RuntimeErrorException(
+        "SceneManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
     return m_sceneManager;
   }
 
   AssetManager& HotCoffeeEngine::getAssetManager()
   {
+    if (!m_initialized)
+    {
+      throw RuntimeErrorException(
+        "AssetManager is not initialized. Make sure HotCoffeeEngine::start() has been called."
+      );
+    }
+
     return m_assetManager;
   }
 
