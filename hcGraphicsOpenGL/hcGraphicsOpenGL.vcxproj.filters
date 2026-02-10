@@ -16,6 +16,36 @@
     <Filter Include="Header Files\configuration">
       <UniqueIdentifier>{21556124-6db5-489e-937e-65f555c8a584}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\graphicResources">
+      <UniqueIdentifier>{76c8c01e-c4d3-40a0-89f7-2af74f2b763b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphicResources\mesh">
+      <UniqueIdentifier>{55a7ee8d-21cf-4ad4-ac7e-48df01148f21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphicResources\shaderProgram">
+      <UniqueIdentifier>{a82258fa-4d71-4531-9b03-5603836f2f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphicResources\shader">
+      <UniqueIdentifier>{588db614-1b8f-4b80-84f6-a86eba6b0b03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\graphicResources\texture">
+      <UniqueIdentifier>{906533f5-799b-4307-ae4e-3c9ffcffb2fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicResources">
+      <UniqueIdentifier>{bbfd6d5f-a7d3-4c89-8484-71fb7cc69034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicResources\mesh">
+      <UniqueIdentifier>{f73ca583-c92a-465a-abf7-df6bcd4c5c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicResources\texture">
+      <UniqueIdentifier>{7ccb00a3-30f8-435a-ab26-59d9c1a5baf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicResources\shader">
+      <UniqueIdentifier>{f1af4d61-bfd7-478c-8b0f-c77320d79302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\graphicResources\shaderProgram">
+      <UniqueIdentifier>{1aae96c6-0836-4629-ae2c-338241c0a593}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcOpenGlGraphicsManager.h">
@@ -30,38 +60,35 @@
     <ClInclude Include="include\hc\hcOpenGlGraphicsPlugin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcBuiltInShaders.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlShaderProgram.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlTexture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlTextureManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlMaterialManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlShaderManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlShaderProgramManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlMeshManager.h">
+    <ClInclude Include="include\hc\hcOpenGlGraphicsUtilitites.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcOpenGlMesh.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\graphicResources\mesh</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcOpenGlGraphicsUtilitites.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="include\hc\hcOpenGlMeshFactory.h">
+      <Filter>Header Files\graphicResources\mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlShaderProgramFactory.h">
+      <Filter>Header Files\graphicResources\shaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlShaderProgram.h">
+      <Filter>Header Files\graphicResources\shaderProgram</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlShaderFactory.h">
+      <Filter>Header Files\graphicResources\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlShader.h">
+      <Filter>Header Files\graphicResources\shader</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlTextureFactory.h">
+      <Filter>Header Files\graphicResources\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcOpenGlTexture.h">
+      <Filter>Header Files\graphicResources\texture</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcBuiltInShaders.h">
+      <Filter>Header Files\graphicResources\shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,35 +98,32 @@
     <ClCompile Include="src\hcOpenGlGraphicsPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcOpenGlShaderProgram.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlTexture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlTextureManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlMaterialManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlShaderManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\hcOpenGlShaderProgramManager.cpp">
+    <ClCompile Include="src\hcOpenGlGraphicsUtilities.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\hcOpenGlMesh.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\graphicResources\mesh</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcOpenGlMeshManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\hcOpenGlShader.cpp">
+      <Filter>Source Files\graphicResources\shader</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcOpenGlGraphicsUtilities.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="src\hcOpenGlTexture.cpp">
+      <Filter>Source Files\graphicResources\texture</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlShaderProgram.cpp">
+      <Filter>Source Files\graphicResources\shaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlMeshFactory.cpp">
+      <Filter>Source Files\graphicResources\mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlShaderProgramFactory.cpp">
+      <Filter>Source Files\graphicResources\shaderProgram</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlShaderFactory.cpp">
+      <Filter>Source Files\graphicResources\shader</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcOpenGlTextureFactory.cpp">
+      <Filter>Source Files\graphicResources\texture</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
