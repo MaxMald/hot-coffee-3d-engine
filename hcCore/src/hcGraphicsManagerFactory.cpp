@@ -57,7 +57,7 @@ namespace hc
         );
       }
 
-      return std::move(graphicsManager);
+      return graphicsManager;
     }
   }
 }
