@@ -39,11 +39,12 @@ namespace hc
   }
 
   HotCoffeeEngine::HotCoffeeEngine() :
-    m_initialized(false),
-    m_windowManager(nullptr),
     m_graphicsManager(nullptr),
+    m_windowManager(nullptr),
     m_sceneManager(),
-    m_assetManager()
+    m_assetManager(),
+    m_pluginManager(),
+    m_initialized(false)
   {
   }
 
