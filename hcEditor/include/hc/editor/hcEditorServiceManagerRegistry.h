@@ -9,5 +9,5 @@ namespace hc::editor
   namespace editorServiceManagerRegistry
   {
     void registerServices(EditorServiceManager& serviceManager);
-  };
+  }
 }
