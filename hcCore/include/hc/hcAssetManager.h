@@ -1,8 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcAssetGroup.h"
-#include "hc/hcIAssetLoader.h"
+#include "hc/hcATypedAssetGroup.h"
+#include "hc/hcATypedAssetLoader.h"
 
 namespace hc
 {
@@ -20,10 +20,10 @@ namespace hc
      * 
      * @tparam T Asset type.
      * 
-     * @param loader Shared pointer to the asset loader.
+     * @param loader Unique pointer to the asset loader.
      */
     template<typename T>
-    void addLoader(const SharedPtr<IAssetLoader<T>>& loader);
+    void addLoader(UniquePtr<IAssetLoader> loader);
 
     /**
      * @brief Loads an asset of type T using the appropriate asset loader.
@@ -100,7 +100,7 @@ namespace hc
      * @return Reference to the asset group for type T.
      */
     template<typename T>
-    AssetGroup<T>& getGroup();
+    ATypedAssetGroup<T>& getGroup();
 
     /**
      * @brief Clears all asset groups from the manager.
@@ -113,8 +113,8 @@ namespace hc
     void destroy();
 
   private:
-    UnorderedMap<TypeIndex, SharedPtr<void>> m_assetGroups;
-    UnorderedMap<TypeIndex, SharedPtr<void>> m_assetLoaders;
+    UnorderedMap<TypeIndex, UniquePtr<IAssetGroup>> m_assetGroups;
+    UnorderedMap<TypeIndex, UniquePtr<IAssetLoader>> m_assetLoaders;
 
     template<typename T>
     void createGroup();
@@ -125,14 +125,14 @@ namespace hc
   {
     TypeIndex typeIdx(typeid(T));
     if (m_assetGroups.find(typeIdx) == m_assetGroups.end())
-      m_assetGroups[typeIdx] = MakeShared<AssetGroup<T>>();
+      m_assetGroups[typeIdx] = MakeUnique<ATypedAssetGroup<T>>();
   }
 
   template<typename T>
-  inline void AssetManager::addLoader(const SharedPtr<IAssetLoader<T>>& loader)
+  inline void AssetManager::addLoader(UniquePtr<IAssetLoader> loader)
   {
     TypeIndex typeIdx(typeid(T));
-    m_assetLoaders[typeIdx] = loader;
+    m_assetLoaders[typeIdx] = std::move(loader);
   }
 
   template<typename T>
@@ -146,7 +146,7 @@ namespace hc
     if (!loadedAsset)
       return nullptr;
 
-    AssetGroup<T>& assetGroup = getGroup<T>();
+    ATypedAssetGroup<T>& assetGroup = getGroup<T>();
     assetGroup.add(key, loadedAsset);
 
     LogService::Message(
@@ -177,7 +177,7 @@ namespace hc
         String::Format("No asset loader registered for type %s.", typeid(T).name())
       );
 
-    auto loader = static_cast<IAssetLoader<T>*>(m_assetLoaders[typeIdx].get());
+    auto loader = static_cast<ATypedAssetLoader<T>*>(m_assetLoaders[typeIdx].get());
     SharedPtr<T> loadedAsset = loader->load(path);
 
     if (loadedAsset)
@@ -209,24 +209,24 @@ namespace hc
   template<typename T>
   inline SharedPtr<T> AssetManager::get(const String& key)
   {
-    AssetGroup<T>& assetGroup = getGroup<T>();
+    ATypedAssetGroup<T>& assetGroup = getGroup<T>();
     return assetGroup.get(key);
   }
 
   template<typename T>
   inline bool AssetManager::contains(const String& key)
   {
-    AssetGroup<T>& assetGroup = getGroup<T>();
+    ATypedAssetGroup<T>& assetGroup = getGroup<T>();
     return assetGroup.contains(key);
   }
 
   template<typename T>
-  AssetGroup<T>& AssetManager::getGroup()
+  ATypedAssetGroup<T>& AssetManager::getGroup()
   {
     TypeIndex typeIdx(typeid(T));
     if (m_assetGroups.find(typeIdx) == m_assetGroups.end())
       createGroup<T>();
 
-    return *static_cast<AssetGroup<T>*>(m_assetGroups[typeIdx].get());
+    return *static_cast<ATypedAssetGroup<T>*>(m_assetGroups[typeIdx].get());
   }
 }

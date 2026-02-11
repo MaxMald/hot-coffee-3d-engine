@@ -19,7 +19,7 @@ namespace hc
       // Core Asset Loaders
 
       assetManager.addLoader<MaterialDescriptor>(
-        MakeShared<JsonDeserializerAssetLoader<MaterialDescriptor>>()
+        MakeUnique<JsonDeserializerAssetLoader<MaterialDescriptor>>()
       );
 
       // Plugin Asset Loaders

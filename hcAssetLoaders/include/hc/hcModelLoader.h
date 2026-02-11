@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcATypedAssetLoader.h>
 #include "hc/hcAssetLoadersPrerequisites.h"
 
 struct aiScene;
@@ -11,7 +12,7 @@ namespace hc
   /**
    * @brief Asset loader for 3D model resources.
    */
-  class HC_ASSET_LOADERS_EXPORT ModelLoader : public IAssetLoader<Model>
+  class HC_ASSET_LOADERS_EXPORT ModelLoader : public ATypedAssetLoader<Model>
   {
   public:
     ModelLoader() = default;

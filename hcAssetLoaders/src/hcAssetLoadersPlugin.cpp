@@ -26,11 +26,11 @@ namespace hc
   ) const
   {
     assetManager.addLoader<Image>(
-      MakeShared<ImageLoader>()
+      MakeUnique<ImageLoader>()
     );
 
     assetManager.addLoader<Model>(
-      MakeShared<ModelLoader>()
+      MakeUnique<ModelLoader>()
     );
   }
 }

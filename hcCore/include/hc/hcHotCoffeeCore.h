@@ -10,7 +10,7 @@
 #include "hc/hcMouseButtonKey.h"
 #include "hc/hcKeyboardKey.h"
 #include "hc/hcAssetManager.h"
-#include "hc/hcAssetGroup.h"
+#include "hc/hcATypedAssetGroup.h"
 #include "hc/hcAsset.h"
 #include "hc/hcAssetFileExtensions.h"
 #include "hc/hcImage.h"

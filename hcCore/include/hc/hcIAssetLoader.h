@@ -1,31 +1,19 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcAsset.h"
 
 namespace hc
 {
   /**
-   * @brief Base class template for asset loaders.
+   * @brief Base interface for asset loader objects.
    *
-   * @tparam T Asset type to load, must derive from Asset.
+   * Provides a contract for asset loader implementations. All asset loaders must
+   * inherit from this interface to ensure proper polymorphic destruction.
    */
-  template<typename T>
-  class IAssetLoader
+  class HC_CORE_EXPORT IAssetLoader
   {
-    static_assert(std::is_base_of_v<Asset, T>, "T must derive from Asset");
-
   public:
     virtual ~IAssetLoader() = default;
-
-    /**
-     * @brief Loads an asset from the specified path.
-     * 
-     * @param path Path to the asset resource.
-     * 
-     * @return Shared pointer to the loaded asset, or nullptr on failure.
-     */
-    virtual SharedPtr<T> load(const Path& path) = 0;
 
   protected:
     IAssetLoader() = default;

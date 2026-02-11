@@ -368,7 +368,7 @@
     <ClInclude Include="include\hc\hcAssetManager.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcAssetGroup.h">
+    <ClInclude Include="include\hc\hcATypedAssetGroup.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcImage.h">
@@ -589,6 +589,12 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcIPlugin.h">
       <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcATypedAssetLoader.h">
+      <Filter>Header Files\assets\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIAssetGroup.h">
+      <Filter>Header Files\assets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

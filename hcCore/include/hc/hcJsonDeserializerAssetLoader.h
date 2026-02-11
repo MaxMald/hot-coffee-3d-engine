@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcIAssetLoader.h"
+#include "hc/hcATypedAssetLoader.h"
 #include "hc/hcJsonSerializer.h"
 
 namespace hc
@@ -16,9 +16,12 @@ namespace hc
    */
   template <typename T>
   class JsonDeserializerAssetLoader :
-    public IAssetLoader<T>
+    public ATypedAssetLoader<T>
   {
   public:
+    JsonDeserializerAssetLoader() = default;
+    virtual ~JsonDeserializerAssetLoader() = default;
+
     /**
      * @brief Loads and deserializes an asset from a JSON file.
      * 
