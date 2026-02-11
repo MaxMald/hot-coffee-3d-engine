@@ -136,7 +136,7 @@ namespace hc
   void HotCoffeeEngine::onShutdown()
   {
     m_sceneManager.clear();
-    m_assetManager.clear();
+    m_assetManager.destroy();
 
     if (m_graphicsManager)
     {

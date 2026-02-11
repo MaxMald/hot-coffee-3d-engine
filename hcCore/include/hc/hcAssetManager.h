@@ -103,10 +103,14 @@ namespace hc
     AssetGroup<T>& getGroup();
 
     /**
-     * @brief Clears all asset groups and loaders from the manager, effectively
-     * resetting the asset manager to an empty state.
+     * @brief Clears all asset groups from the manager.
      */
     void clear();
+
+    /**
+     * @brief Destroys the asset manager, clearing all assets and loaders.
+     */
+    void destroy();
 
   private:
     UnorderedMap<TypeIndex, SharedPtr<void>> m_assetGroups;
