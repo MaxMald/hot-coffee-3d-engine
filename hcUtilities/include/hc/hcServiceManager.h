@@ -1,6 +1,8 @@
 #pragma once
 
 #include "hc/hcUtilitiesPrerequisites.h"
+#include "hc/hcString.h"
+#include "hc/hcException.h"
 
 namespace hc
 {
