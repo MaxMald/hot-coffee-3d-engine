@@ -175,12 +175,18 @@ namespace hc
   {
     TypeIndex typeIdx(typeid(T));
 
-    if(m_assetLoaders.find(typeIdx) == m_assetLoaders.end())
+    auto loaderIt = m_assetLoaders.find(typeIdx);
+    if(loaderIt == m_assetLoaders.end())
       throw RuntimeErrorException(
         String::Format("No asset loader registered for type %s.", typeid(T).name())
       );
 
-    IAssetLoader* baseLoader = m_assetLoaders[typeIdx].get();
+    if (loaderIt->second == nullptr)
+      throw RuntimeErrorException(
+        String::Format("Registered asset loader for type %s is null.", typeid(T).name())
+      );
+
+    IAssetLoader* baseLoader = loaderIt->second.get();
     auto loader = dynamic_cast<ATypedAssetLoader<T>*>(baseLoader);
 
     if (!loader)
