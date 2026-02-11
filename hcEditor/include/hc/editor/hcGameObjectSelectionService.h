@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/hcIEditorService.h"
 
 namespace hc::editor
 {
@@ -9,11 +9,16 @@ namespace hc::editor
   /**
    * @brief Manages the selection state of GameObjects in the editor.
    */
-  class GameObjectSelectionService
+  class GameObjectSelectionService : public IEditorService
   {
   public:
-    GameObjectSelectionService();
-    ~GameObjectSelectionService();
+    GameObjectSelectionService() = default;
+    virtual ~GameObjectSelectionService() = default;
+
+    /**
+     * @copydoc IEditorService::destroy
+     */
+    void destroy() override;
 
     /**
      * @brief Returns the currently selected GameObjects.

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/hcIEditorService.h"
 #include "hc/editor/hcProject.h"
 
 namespace hc::editor
@@ -10,11 +10,16 @@ namespace hc::editor
   /**
    * @brief Manages the lifecycle and state of editor projects.
    */
-  class ProjectManager
+  class ProjectManager : public IEditorService
   {
   public:
     ProjectManager();
-    ~ProjectManager() = default;
+    virtual ~ProjectManager() = default;
+
+    /**
+     * @copydoc IEditorService::destroy
+     */
+    void destroy() override;
 
     /**
      * @brief Opens a project from the specified path.
