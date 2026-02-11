@@ -27,6 +27,13 @@ namespace hc
     static T& Instance();
 
     /**
+      * @brief Check if the module singleton instance has been created.
+      *
+      * @return true if the instance exists, false otherwise.
+      */
+    static bool HasInstance();
+
+    /**
      * @brief Prepare and initialize the module singleton.
      *
      * Allocates the singleton instance and calls onPrepare().
@@ -79,6 +86,12 @@ namespace hc
       );
     }
     return *s_instance;
+  }
+
+  template<typename T>
+  bool AModule<T>::HasInstance()
+  {
+    return s_instance != nullptr;
   }
 
   template<typename T>

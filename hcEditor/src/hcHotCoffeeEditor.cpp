@@ -87,8 +87,12 @@ namespace hc::editor
   {
     m_viewsManager.clear();
     m_serviceManager.clear();
-    LogService::Instance().unsubscribe(&m_editorLogHistory);
-    HotCoffeeEngine::Shutdown();
+
+    if (LogService::HasInstance())
+      LogService::Instance().unsubscribe(&m_editorLogHistory);
+    if (HotCoffeeEngine::HasInstance())
+      HotCoffeeEngine::Shutdown();
+
     m_initialized = false;
   }
 
