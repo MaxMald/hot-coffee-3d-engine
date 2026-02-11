@@ -19,6 +19,8 @@
 #include "hc/editor/hcMaterialManagerWindow.h"
 #include "hc/editor/hcMaterialDrawersManagerFactory.h"
 #include "hc/editor/hcTextureManagerWindow.h"
+#include "hc/editor/hcEditorServiceManager.h"
+#include "hc/editor/hcProjectManager.h"
 
 namespace hc::editor
 {
@@ -27,15 +29,14 @@ namespace hc::editor
     void registerDefaultViews(
       HotCoffeeEngine& hotCoffeeEngine,
       EditorViewsManager& viewsManager,
-      GameObjectSelectionService& gameObjectSelectionService,
-      ProjectManager& projectManager,
+      EditorServiceManager& editorServiceManager,
       EditorLogHistory& editorLogHistory
     )
     {
       viewsManager.registerView(MakeUnique<FileDialogView>());
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
-      viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
+      viewsManager.registerView(MakeUnique<SceneGraphWindow>(editorServiceManager.getService<GameObjectSelectionService>()));
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
@@ -47,18 +48,18 @@ namespace hc::editor
       ));
 
       UniquePtr<ProjectFileSelector> projectFileSelector =
-        MakeUnique<ProjectFileSelector>(projectManager);
+        MakeUnique<ProjectFileSelector>(editorServiceManager.getService<ProjectManager>());
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
         MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
 
       viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
-        projectManager,
+        editorServiceManager.getService<ProjectManager>(),
         *matDescEditorWindow
       ));
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
         *projectFileSelector,
-        gameObjectSelectionService
+        editorServiceManager.getService<GameObjectSelectionService>()
       ));
       viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
@@ -69,7 +70,10 @@ namespace hc::editor
       ));
 
       viewsManager.registerView(
-        mainMenuBarFactory::create(viewsManager, projectManager)
+        mainMenuBarFactory::create(
+          viewsManager, 
+          editorServiceManager.getService<ProjectManager>()
+        )
       );
     }
   }

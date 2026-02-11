@@ -4,18 +4,16 @@
 
 namespace hc::editor
 {
+  class EditorServiceManager;
   class EditorViewsManager;
-  class GameObjectSelectionService;
-  class ProjectManager;
   class EditorLogHistory;
 
   namespace editorViewsRegistry
   {
     void registerDefaultViews(
       HotCoffeeEngine& hotCoffeeEngine,
-      EditorViewsManager& manager,
-      GameObjectSelectionService& gameObjectSelectionService,
-      ProjectManager& projectManager,
+      EditorViewsManager& viewsManager,
+      EditorServiceManager& serviceManager,
       EditorLogHistory& editorLogHistory
     );
   }
