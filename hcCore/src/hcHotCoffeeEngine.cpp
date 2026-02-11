@@ -102,27 +102,44 @@ namespace hc
     return m_assetManager;
   }
 
+  bool HotCoffeeEngine::isInitialized() const
+  {
+    return m_initialized;
+  }
+
   void HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
   {
     if (m_initialized)
       return;
 
-    connectToPlugins(settings.pluginManagerSettings);
+    try
+    {
+      connectToPlugins(settings.pluginManagerSettings);
 
-    assetManagerLoadersRegistry::RegisterLoaders(
-      m_assetManager,
-      m_pluginManager
-    );
+      assetManagerLoadersRegistry::RegisterLoaders(
+        m_assetManager,
+        m_pluginManager
+      );
 
-    m_windowManager = windowManagerFactory::Create(m_pluginManager);
-    m_windowManager->createWindow(settings.windowSettings);
+      m_windowManager = windowManagerFactory::Create(m_pluginManager);
+      m_windowManager->createWindow(settings.windowSettings);
 
-    m_graphicsManager = graphicsManagerFactory::Create(
-      m_pluginManager,
-      m_windowManager->getWindow(),
-      m_assetManager
-    );
-    m_graphicsManager->initialize();
+      m_graphicsManager = graphicsManagerFactory::Create(
+        m_pluginManager,
+        m_windowManager->getWindow(),
+        m_assetManager
+      );
+      m_graphicsManager->initialize();
+    }
+    catch (const std::exception& e)
+    {
+      LogService::Error(
+        "Failed to initialize HotCoffeeEngine: " + String(e.what())
+      );
+
+      destroy();
+      return;
+    }
 
     m_initialized = true;
   }
@@ -134,6 +151,22 @@ namespace hc
   }
 
   void HotCoffeeEngine::onShutdown()
+  {
+    destroy();
+    JsonSerializer::Shutdown();
+    LogService::Shutdown();
+  }
+
+  void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
+  {
+    m_pluginManager.init();
+    pluginConnectionHelper::connectToPluginsFromSettings(
+      m_pluginManager,
+      settings
+    );
+  }
+
+  void HotCoffeeEngine::destroy()
   {
     m_sceneManager.clear();
     m_assetManager.destroy();
@@ -151,19 +184,6 @@ namespace hc
     }
 
     m_pluginManager.closeAll();
-
     m_initialized = false;
-
-    JsonSerializer::Shutdown();
-    LogService::Shutdown();
-  }
-
-  void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
-  {
-    m_pluginManager.init();
-    pluginConnectionHelper::connectToPluginsFromSettings(
-      m_pluginManager,
-      settings
-    );
   }
 }

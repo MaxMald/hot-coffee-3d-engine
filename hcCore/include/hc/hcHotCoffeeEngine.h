@@ -28,6 +28,7 @@ namespace hc
     IGraphicsManager& getGraphicsManager();
     SceneManager& getSceneManager();
     AssetManager& getAssetManager();
+    bool isInitialized() const;
 
   private:
     UniquePtr<IGraphicsManager> m_graphicsManager;
@@ -42,5 +43,6 @@ namespace hc
 
     void initialize(const HotCoffeeEngineSettings& settings);
     void connectToPlugins(const PluginManagerSettings& settings);
+    void destroy();
   };
 }
