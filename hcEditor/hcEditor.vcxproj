@@ -172,6 +172,7 @@
     <ClInclude Include="include\hc\editor\hcComponentDrawersRegistry.h" />
     <ClInclude Include="include\hc\editor\hcCreateComponentSection.h" />
     <ClInclude Include="include\hc\editor\hcEditorServiceManager.h" />
+    <ClInclude Include="include\hc\editor\hcEditorServiceManagerRegistry.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsRegistry.h" />
     <ClInclude Include="include\hc\editor\hcFileDialogRequest.h" />
     <ClInclude Include="include\hc\editor\hcFileDialogView.h" />
@@ -263,6 +264,7 @@
     <ClCompile Include="src\hcEditorLogHistory.cpp" />
     <ClCompile Include="src\hcEditorLoggerWindow.cpp" />
     <ClCompile Include="src\hcEditorServiceManager.cpp" />
+    <ClCompile Include="src\hcEditorServiceManagerRegistry.cpp" />
     <ClCompile Include="src\hcEditorViewsRegistry.cpp" />
     <ClCompile Include="src\hcEditorViewsManager.cpp" />
     <ClCompile Include="src\hcFileDialogView.cpp" />

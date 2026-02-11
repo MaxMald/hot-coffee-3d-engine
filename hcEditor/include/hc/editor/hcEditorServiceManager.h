@@ -10,7 +10,7 @@ namespace hc::editor
    * This class provides a type-safe interface for registering, accessing, and
    * clearing editor services. Services must inherit from IEditorService.
    */
-  class EditorServiceManager
+  class EditorServiceManager : public NonCopyable
   {
   public:
     EditorServiceManager() = default;

@@ -49,9 +49,6 @@
     <Filter Include="Source Files\services">
       <UniqueIdentifier>{b12310e8-d6fa-4d00-867f-a55dad192f78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\services">
-      <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\project">
       <UniqueIdentifier>{50969101-a828-4063-9023-6e4d492a9348}</UniqueIdentifier>
     </Filter>
@@ -163,6 +160,9 @@
     <Filter Include="Source Files\views\windows\textureManagerWindow">
       <UniqueIdentifier>{5f353795-bdc6-4014-888d-68ee107814ea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\service">
+      <UniqueIdentifier>{5ff1163b-6935-42e3-ab05-68827420e404}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\editor\hcHotCoffeeEditor.h">
@@ -235,10 +235,10 @@
       <Filter>Header Files\views\windows</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcIGameObjectSelectionServiceListener.h">
-      <Filter>Header Files\services</Filter>
+      <Filter>Header Files\service</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcGameObjectSelectionService.h">
-      <Filter>Header Files\services</Filter>
+      <Filter>Header Files\service</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorViewsManager.h">
       <Filter>Header Files\views</Filter>
@@ -418,10 +418,13 @@
       <Filter>Header Files\views\windows\textureManagerWindow</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcIEditorService.h">
-      <Filter>Header Files\services</Filter>
+      <Filter>Header Files\service</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\editor\hcEditorServiceManager.h">
-      <Filter>Header Files\services</Filter>
+      <Filter>Header Files\service</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorServiceManagerRegistry.h">
+      <Filter>Header Files\service</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -609,6 +612,9 @@
       <Filter>Source Files\views\windows\textureManagerWindow</Filter>
     </ClCompile>
     <ClCompile Include="src\hcEditorServiceManager.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorServiceManagerRegistry.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
   </ItemGroup>

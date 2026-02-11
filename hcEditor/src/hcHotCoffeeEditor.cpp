@@ -4,6 +4,8 @@
 #include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcEditorViewsRegistry.h"
 #include "hc/editor/hcProjectManager.h"
+
+#include "hc/editor/hcEditorServiceManagerRegistry.h"
 #include "hc/editor/hcGameObjectSelectionService.h"
 
 namespace hc::editor
@@ -21,8 +23,9 @@ namespace hc::editor
   HotCoffeeEditor::HotCoffeeEditor() :
     m_initialized(false),
     m_viewsManager(),
-    m_gameObjectSelectionService(),
-    m_editorLogHistory()
+    m_editorLogHistory(),
+    m_serviceManager(),
+    m_projectManager()
   {
   }
 
@@ -41,12 +44,14 @@ namespace hc::editor
     SceneManager& sceneManager = HotCoffeeEngine::GetSceneManager();
     IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
     IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
+
+    editorServiceManagerRegistry::registerServices(m_serviceManager);
     
     m_viewsManager.initialize(window);
     editorViewsRegistry::registerDefaultViews(
       HotCoffeeEngine::Instance(),
       m_viewsManager,
-      m_gameObjectSelectionService,
+      m_serviceManager.getService<GameObjectSelectionService>(),
       m_projectManager,
       m_editorLogHistory
     );
@@ -73,6 +78,7 @@ namespace hc::editor
     }
 
     m_viewsManager.clear();
+    m_serviceManager.clear();
   }
 
   void HotCoffeeEditor::onPrepare()

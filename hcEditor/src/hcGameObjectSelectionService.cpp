@@ -3,12 +3,9 @@
 
 namespace hc::editor
 {
-  GameObjectSelectionService::GameObjectSelectionService()
+  void GameObjectSelectionService::destroy()
   {
-  }
-
-  GameObjectSelectionService::~GameObjectSelectionService()
-  {
+    clearSelection();
   }
 
   const Vector<GameObject*>& GameObjectSelectionService::getSelectedGameObjects() const

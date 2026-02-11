@@ -16,6 +16,7 @@ namespace hc
   class ServiceManager
   {
   public:
+    ServiceManager() = default;
     virtual ~ServiceManager() = default;
 
     /**
@@ -67,10 +68,8 @@ namespace hc
       return m_services;
     }
 
-  protected:
+  private:
     UnorderedMap<TypeIndex, UniquePtr<BaseType>> m_services;
-
-    ServiceManager() = default;
   };
 
   template<typename BaseType>
