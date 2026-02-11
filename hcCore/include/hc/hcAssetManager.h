@@ -131,6 +131,9 @@ namespace hc
   template<typename T>
   inline void AssetManager::addLoader(UniquePtr<ATypedAssetLoader<T>> loader)
   {
+    if (!loader)
+      throw RuntimeErrorException("Cannot add a null asset loader.");
+
     TypeIndex typeIdx(typeid(T));
     m_assetLoaders[typeIdx] = std::move(loader);
   }
