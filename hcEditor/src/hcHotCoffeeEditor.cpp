@@ -29,7 +29,10 @@ namespace hc::editor
       );
 
       if (!processResult.success)
+      {
+        destroy();
         return processResult;
+      }
 
       prepareEditorScene();
       prepareEditorServices();
