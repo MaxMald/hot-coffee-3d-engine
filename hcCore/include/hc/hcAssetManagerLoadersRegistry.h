@@ -16,7 +16,7 @@ namespace hc
      * @param pluginManager The plugin manager to use for resolving loader
      * dependencies.
      */
-    void RegisterLoaders(
+    void registerLoaders(
       AssetManager& assetManager,
       PluginManager& pluginManager
     );

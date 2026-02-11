@@ -23,7 +23,7 @@ namespace hc
      * @param loader Unique pointer to the asset loader.
      */
     template<typename T>
-    void addLoader(UniquePtr<IAssetLoader> loader);
+    void addLoader(UniquePtr<ATypedAssetLoader<T>> loader);
 
     /**
      * @brief Loads an asset of type T using the appropriate asset loader.
@@ -129,7 +129,7 @@ namespace hc
   }
 
   template<typename T>
-  inline void AssetManager::addLoader(UniquePtr<IAssetLoader> loader)
+  inline void AssetManager::addLoader(UniquePtr<ATypedAssetLoader<T>> loader)
   {
     TypeIndex typeIdx(typeid(T));
     m_assetLoaders[typeIdx] = std::move(loader);

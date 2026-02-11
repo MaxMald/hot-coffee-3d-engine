@@ -116,7 +116,7 @@ namespace hc
     {
       connectToPlugins(settings.pluginManagerSettings);
 
-      assetManagerLoadersRegistry::RegisterLoaders(
+      assetManagerLoadersRegistry::registerLoaders(
         m_assetManager,
         m_pluginManager
       );

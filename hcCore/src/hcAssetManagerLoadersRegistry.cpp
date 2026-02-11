@@ -11,7 +11,7 @@ namespace hc
 {
   namespace assetManagerLoadersRegistry
   {
-    void RegisterLoaders(
+    void registerLoaders(
       AssetManager& assetManager,
       PluginManager& pluginManager
     )
