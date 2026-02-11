@@ -82,6 +82,16 @@ namespace hc
   template<typename ConcreteType>
   void ServiceManager<BaseType>::registerService(UniquePtr<ConcreteType> service)
   {
+    if (!service)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Cannot register a null service of type: %s.",
+          typeid(ConcreteType).name()
+        )
+      );
+    }
+
     static_assert(
       std::is_base_of_v<BaseType, ConcreteType>,
       "ConcreteType must derive from BaseType"
