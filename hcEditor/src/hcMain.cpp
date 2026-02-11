@@ -6,14 +6,15 @@ using hc::ProcessResult;
 
 int main()
 {
+  HotCoffeeEditor editor;
+
   try
-  {
-    HotCoffeeEditor editor;
+  { 
     ProcessResult result = editor.initialize();
     if (!result.success)
-    {
-      return -1;
+    { 
       std::cerr << "Editor initialization failed: " << result.message << std::endl;
+      return -1;
     }
 
     editor.run();
@@ -21,6 +22,7 @@ int main()
   }
   catch (const std::exception& e)
   {
+    editor.destroy();
     std::cerr << "Unhandled exception: " << e.what() << std::endl;
     return -1;
   }
