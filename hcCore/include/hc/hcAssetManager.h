@@ -177,7 +177,14 @@ namespace hc
         String::Format("No asset loader registered for type %s.", typeid(T).name())
       );
 
-    auto loader = static_cast<ATypedAssetLoader<T>*>(m_assetLoaders[typeIdx].get());
+    IAssetLoader* baseLoader = m_assetLoaders[typeIdx].get();
+    auto loader = dynamic_cast<ATypedAssetLoader<T>*>(baseLoader);
+
+    if (!loader)
+      throw RuntimeErrorException(
+        String::Format("Registered asset loader for type %s is not of the correct type.", typeid(T).name())
+      );
+
     SharedPtr<T> loadedAsset = loader->load(path);
 
     if (loadedAsset)
