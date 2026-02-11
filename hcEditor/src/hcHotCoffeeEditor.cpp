@@ -7,10 +7,10 @@
 namespace hc::editor
 { 
   HotCoffeeEditor::HotCoffeeEditor() :
-    m_initialized(false),
-    m_viewsManager(),
+    m_serviceManager(),
     m_editorLogHistory(),
-    m_serviceManager()
+    m_viewsManager(),
+    m_initialized(false)
   {
   }
 
