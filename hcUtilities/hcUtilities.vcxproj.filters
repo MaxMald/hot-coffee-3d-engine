@@ -135,6 +135,9 @@
     <ClInclude Include="include\hc\hcAModule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcServiceManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">

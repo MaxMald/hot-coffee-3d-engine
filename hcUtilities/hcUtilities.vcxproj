@@ -182,6 +182,7 @@
     <ClInclude Include="include\hc\hcNonCopyable.h" />
     <ClInclude Include="include\hc\hcNonMovable.h" />
     <ClInclude Include="include\hc\hcRect.h" />
+    <ClInclude Include="include\hc\hcServiceManager.h" />
     <ClInclude Include="include\hc\hcString.h" />
     <ClInclude Include="include\hc\hcTransform.h" />
     <ClInclude Include="include\hc\hcUtilities.h" />

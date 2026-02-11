@@ -417,6 +417,12 @@
     <ClInclude Include="include\hc\editor\hcTextureManagerWindow.h">
       <Filter>Header Files\views\windows\textureManagerWindow</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIEditorService.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorServiceManager.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -601,6 +607,9 @@
     </ClCompile>
     <ClCompile Include="src\hcTextureManagerWindow.cpp">
       <Filter>Source Files\views\windows\textureManagerWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorServiceManager.cpp">
+      <Filter>Source Files\services</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
