@@ -12,9 +12,9 @@
 
 namespace hc
 {
-  void HotCoffeeEngine::Initialize(const HotCoffeeEngineSettings& settings)
+  ProcessResult HotCoffeeEngine::Initialize(const HotCoffeeEngineSettings& settings)
   {
-    HotCoffeeEngine::Instance().initialize(settings);
+    return HotCoffeeEngine::Instance().initialize(settings);
   }
 
   IGraphicsManager& HotCoffeeEngine::GetGraphicsManager()
@@ -107,10 +107,10 @@ namespace hc
     return m_initialized;
   }
 
-  void HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
+  ProcessResult HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
   {
     if (m_initialized)
-      return;
+      return ProcessResult(false, "HotCoffeeEngine is already initialized.");
 
     try
     {
@@ -138,10 +138,11 @@ namespace hc
       );
 
       destroy();
-      return;
+      return ProcessResult(false, "Failed to initialize HotCoffeeEngine.");
     }
 
     m_initialized = true;
+    return ProcessResult();
   }
 
   void HotCoffeeEngine::onPrepare()

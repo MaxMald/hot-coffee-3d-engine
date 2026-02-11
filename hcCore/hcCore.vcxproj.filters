@@ -596,5 +596,8 @@
     <ClInclude Include="include\hc\hcIAssetGroup.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcProcessResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

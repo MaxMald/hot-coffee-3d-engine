@@ -5,6 +5,7 @@
 #include "hc/hcHotCoffeeEngineSettings.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
+#include "hc/hcProcessResult.h"
 
 namespace hc
 {
@@ -14,7 +15,7 @@ namespace hc
   class HC_CORE_EXPORT HotCoffeeEngine : public AModule<HotCoffeeEngine>
   {
   public:
-    static void Initialize(const HotCoffeeEngineSettings& settings);
+    static ProcessResult Initialize(const HotCoffeeEngineSettings& settings);
     static IGraphicsManager& GetGraphicsManager();
     static SceneManager& GetSceneManager();
     static AssetManager& GetAssetManager();
@@ -41,7 +42,7 @@ namespace hc
     void onPrepare() override;
     void onShutdown() override;
 
-    void initialize(const HotCoffeeEngineSettings& settings);
+    ProcessResult initialize(const HotCoffeeEngineSettings& settings);
     void connectToPlugins(const PluginManagerSettings& settings);
     void destroy();
   };

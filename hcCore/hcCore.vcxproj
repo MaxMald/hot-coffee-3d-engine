@@ -283,6 +283,7 @@
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
     <ClInclude Include="include\hc\hcPluginStandardKeys.h" />
+    <ClInclude Include="include\hc\hcProcessResult.h" />
     <ClInclude Include="include\hc\hcProjectionType.h" />
     <ClInclude Include="include\hc\hcCameraMatrices.h" />
     <ClInclude Include="include\hc\hcRenderContext.h" />
