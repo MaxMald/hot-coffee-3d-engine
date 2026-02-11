@@ -31,11 +31,6 @@ namespace hc
     void onClose() override;
 
     /**
-     * @copydoc IPlugin::addDependencies
-     */
-    void addDependencies(DependencyContainer& container) override;
-
-    /**
      * @copydoc IWindowManagerPlugin::createWindowManager
      */
     UniquePtr<IWindowManager> createWindowManager() const override;

@@ -6,14 +6,6 @@ namespace hc
 {
   static constexpr SizeT NUM_CHANNELS = 4;
 
-  ImageLoader::ImageLoader()
-  {
-  }
-
-  ImageLoader::~ImageLoader()
-  {
-  }
-
   SharedPtr<Image> ImageLoader::load(const Path& filePath)
   {
     Int32 width = 0;

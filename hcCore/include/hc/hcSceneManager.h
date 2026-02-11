@@ -75,7 +75,7 @@ namespace hc
     /**
      * @brief Destroys all scenes and clears the scene manager.
      */
-    void destroy();
+    void clear();
 
   private:
     UnorderedMap<String, UniquePtr<Scene>> m_scenes;

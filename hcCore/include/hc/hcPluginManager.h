@@ -76,12 +76,6 @@ namespace hc
     SharedPtr<IPlugin> getPlugin(const String& _key);
 
     /**
-    * Add dependencies provided by all connected plug-ins to the given
-    * container.
-    */
-    void addDependenciesFromPlugins(DependencyContainer& container);
-
-    /**
     * @brief Gets the map of plugin slots.
     */
     const UnorderedMap<String, SharedPtr<IPluginSlot>>& getPluginSlots() const;

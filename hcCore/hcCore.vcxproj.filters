@@ -28,12 +28,6 @@
     <Filter Include="Header Files\platform">
       <UniqueIdentifier>{66bfa468-1b23-4155-8d58-8cd558be8d2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\dependencyContainer">
-      <UniqueIdentifier>{7c027793-2bf4-4259-b710-e0a1a9143faa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\dependencyContainer">
-      <UniqueIdentifier>{e19cd9ea-fcc7-42d8-9384-7c58832af58e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\plugin">
       <UniqueIdentifier>{de0925ca-42c1-42e0-b14e-cba257ada51b}</UniqueIdentifier>
     </Filter>
@@ -171,9 +165,6 @@
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp">
-      <Filter>Source Files\dependencyContainer</Filter>
-    </ClCompile>
     <ClCompile Include="src\hcPluginManager.cpp">
       <Filter>Source Files\plugin</Filter>
     </ClCompile>
@@ -309,6 +300,9 @@
     <ClCompile Include="src\hcWindowManagerFactory.cpp">
       <Filter>Source Files\window</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp">
+      <Filter>Source Files\assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -329,17 +323,11 @@
     <ClInclude Include="include\hc\hcIWindow.h">
       <Filter>Header Files\window</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcIPlugin.h">
-      <Filter>Header Files\plugin</Filter>
-    </ClInclude>
     <ClInclude Include="include\hc\hcPluginManager.h">
       <Filter>Header Files\plugin</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcPlatformType.h">
       <Filter>Header Files\platform</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcCoreDependenciesRegister.h">
-      <Filter>Header Files\dependencyContainer</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcPluginConnectionHelper.h">
       <Filter>Header Files\plugin</Filter>
@@ -380,7 +368,7 @@
     <ClInclude Include="include\hc\hcAssetManager.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcAssetGroup.h">
+    <ClInclude Include="include\hc\hcATypedAssetGroup.h">
       <Filter>Header Files\assets</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcImage.h">
@@ -388,9 +376,6 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h">
       <Filter>Header Files\assets\materialDescriptors</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcIImageLoader.h">
-      <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcIAssetLoader.h">
       <Filter>Header Files\assets\loaders</Filter>
@@ -451,9 +436,6 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcModel.h">
       <Filter>Header Files\assets\model</Filter>
-    </ClInclude>
-    <ClInclude Include="include\hc\hcIModelLoader.h">
-      <Filter>Header Files\assets\loaders</Filter>
     </ClInclude>
     <ClInclude Include="include\hc\hcHotCoffeeCore.h">
       <Filter>Header Files</Filter>
@@ -598,6 +580,24 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcWindowManagerFactory.h">
       <Filter>Header Files\window</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIPlugin.h">
+      <Filter>Header Files\plugin\plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcATypedAssetLoader.h">
+      <Filter>Header Files\assets\loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIAssetGroup.h">
+      <Filter>Header Files\assets</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcProcessResult.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

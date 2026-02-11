@@ -4,8 +4,6 @@
 
 namespace hc
 {
-  class DependencyContainer;
-
   /**
   * Provides connection from a PluginManager to a DLL services.
   *
@@ -26,10 +24,5 @@ namespace hc
     * Called when the plug-in is about to been closed.
     */
     virtual void onClose() = 0;
-
-    /**
-    * Add dependencies provided by this plug-in to the given container.
-    */
-    virtual void addDependencies(DependencyContainer& container) = 0;
   };
 }

@@ -10,7 +10,7 @@
 #include "hc/hcMouseButtonKey.h"
 #include "hc/hcKeyboardKey.h"
 #include "hc/hcAssetManager.h"
-#include "hc/hcAssetGroup.h"
+#include "hc/hcATypedAssetGroup.h"
 #include "hc/hcAsset.h"
 #include "hc/hcAssetFileExtensions.h"
 #include "hc/hcImage.h"
@@ -27,8 +27,6 @@
 #include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
-#include "hc/hcIImageLoader.h"
-#include "hc/hcIModelLoader.h"
 #include "hc/hcIShader.h"
 #include "hc/hcIShaderProgram.h"
 #include "hc/hcIShaderManager.h"
@@ -44,6 +42,9 @@
 #include "hc/hcIMesh.h"
 #include "hc/hcCameraMatrices.h"
 #include "hc/hcRenderContext.h"
+#include "hc/hcVertex.h"
+#include "hc/hcModelSubMesh.h"
+#include "hc/hcModel.h"
 
 // GameObject Components
 

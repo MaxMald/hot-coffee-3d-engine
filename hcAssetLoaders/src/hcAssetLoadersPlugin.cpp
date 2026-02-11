@@ -9,12 +9,7 @@ namespace hc
     return new AssetLoadersPlugin();
   }
 
-  HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin(IPlugin*)
-  {
-  }
-
-  AssetLoadersPlugin::AssetLoadersPlugin()
-    : IPlugin()
+  HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin()
   {
   }
 
@@ -26,13 +21,16 @@ namespace hc
   {
   }
 
-  void AssetLoadersPlugin::addDependencies(DependencyContainer& container)
+  void AssetLoadersPlugin::registerAssetLoaders(
+    AssetManager& assetManager
+  ) const
   {
-    container.registerInstanceAsInterface<IImageLoader, ImageLoader>(
-      MakeShared<ImageLoader>()
+    assetManager.addLoader<Image>(
+      MakeUnique<ImageLoader>()
     );
-    container.registerInstanceAsInterface<IModelLoader, ModelLoader>(
-      MakeShared<ModelLoader>()
+
+    assetManager.addLoader<Model>(
+      MakeUnique<ModelLoader>()
     );
   }
 }

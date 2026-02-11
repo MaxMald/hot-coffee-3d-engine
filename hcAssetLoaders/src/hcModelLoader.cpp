@@ -7,15 +7,6 @@
 
 namespace hc
 {
-  ModelLoader::ModelLoader()
-    : IModelLoader()
-  {
-  }
-
-  ModelLoader::~ModelLoader()
-  {
-  }
-
   SharedPtr<Model> ModelLoader::load(const Path& filePath)
   {
     Assimp::Importer importer;

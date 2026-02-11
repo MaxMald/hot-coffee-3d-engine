@@ -22,7 +22,7 @@ namespace hc::editor
   void ATypedAssetGroupDrawer<T>::draw()
   {
     AssetManager& assetManager = HotCoffeeEngine::Instance().getAssetManager();
-    AssetGroup<T>& assetGroup = assetManager.getGroup<T>();
+    ATypedAssetGroup<T>& assetGroup = assetManager.getGroup<T>();
 
     String headerTitle = String::Format(
       "%s Assets (%zu)",
