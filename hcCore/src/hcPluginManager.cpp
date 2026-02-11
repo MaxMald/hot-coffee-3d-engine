@@ -112,21 +112,6 @@ namespace hc
     return pPluginSlot->getPluginPtr();
   }
 
-  void PluginManager::addDependenciesFromPlugins(DependencyContainer& container)
-  {
-    for (auto& [key, pPluginSlot] : m_pluginSlots)
-    {
-      if (pPluginSlot)
-      {
-        SharedPtr<IPlugin> pPlugin = pPluginSlot->getPluginPtr();
-        if (pPlugin)
-        {
-          pPlugin->addDependencies(container);
-        }
-      }
-    }
-  }
-
   const UnorderedMap<String, SharedPtr<IPluginSlot>>& PluginManager::getPluginSlots() const
   {
     return m_pluginSlots;

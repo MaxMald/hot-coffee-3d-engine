@@ -1,17 +1,24 @@
 #pragma once
 
+#include <hc/hcATypedAssetLoader.h>
 #include "hc/hcAssetLoadersPrerequisites.h"
 
 namespace hc
 {
-  class HC_ASSET_LOADERS_EXPORT ImageLoader : public IImageLoader
+  /**
+   * @brief Asset loader for image resources.
+   */
+  class HC_ASSET_LOADERS_EXPORT ImageLoader : public ATypedAssetLoader<Image>
   {
   public:
-    ImageLoader();
-    virtual ~ImageLoader() override;
+    ImageLoader() = default;
+    virtual ~ImageLoader() = default;
 
     /**
-     * @copydoc IAssetLoader::load
+     * @brief Loads an image asset from the specified file path.
+     *
+     * @param filePath The path to the image file to load.
+     * @return Shared pointer to the loaded image asset, or nullptr on failure.
      */
     SharedPtr<Image> load(const Path& filePath) override;
   };

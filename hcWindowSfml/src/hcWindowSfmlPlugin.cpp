@@ -30,10 +30,8 @@ namespace hc
     LogService::Message("hcWindowSfmlPlugin closed.");
   }
 
-  void WindowSfmlPlugin::addDependencies(DependencyContainer& container)
+  UniquePtr<IWindowManager> WindowSfmlPlugin::createWindowManager() const
   {
-    container.registerInstanceAsInterface<IWindowManager, SfmlWindowManager>(
-      MakeShared<SfmlWindowManager>()
-    );
+    return MakeUnique<SfmlWindowManager>();
   }
 }

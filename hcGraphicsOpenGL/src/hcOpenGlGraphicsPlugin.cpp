@@ -26,10 +26,6 @@ namespace hc
   {
   }
 
-  void OpenGlGraphicsPlugin::addDependencies(DependencyContainer&)
-  {
-  }
-
   UniquePtr<IGraphicsManager> OpenGlGraphicsPlugin::createGraphicsManager(
     IWindow& window,
     AssetManager& assetManager,

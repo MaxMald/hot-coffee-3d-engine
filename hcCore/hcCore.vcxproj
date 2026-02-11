@@ -169,11 +169,11 @@
     <ClCompile Include="src\hcAsset.cpp" />
     <ClCompile Include="src\hcAssetFileExtensions.cpp" />
     <ClCompile Include="src\hcAssetManager.cpp" />
+    <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraComponent.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
-    <ClCompile Include="src\hcCoreDepenendenciesRegister.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcGraphicsManagerFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
@@ -209,24 +209,28 @@
     <ClCompile Include="src\hcUnlitMaterialDescriptor.cpp" />
     <ClCompile Include="src\hcUnlitMaterialFactory.cpp" />
     <ClCompile Include="src\hcVertex.cpp" />
+    <ClCompile Include="src\hcWindowManagerFactory.cpp" />
     <ClCompile Include="src\hcWindowPluginSlot.cpp" />
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcATypedAssetLoader.h" />
     <ClInclude Include="include\hc\hcABaseComponent.h" />
     <ClInclude Include="include\hc\hcAsset.h" />
     <ClInclude Include="include\hc\hcAssetFileExtensions.h" />
-    <ClInclude Include="include\hc\hcAssetGroup.h" />
+    <ClInclude Include="include\hc\hcATypedAssetGroup.h" />
+    <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
+    <ClInclude Include="include\hc\hcIAssetGroup.h" />
+    <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h" />
     <ClInclude Include="include\hc\hcIGraphicResource.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
     <ClInclude Include="include\hc\hcAssetManager.h" />
     <ClInclude Include="include\hc\hcCamera.h" />
     <ClInclude Include="include\hc\hcCameraManager.h" />
-    <ClInclude Include="include\hc\hcCoreDependenciesRegister.h" />
     <ClInclude Include="include\hc\hcCoreLibraryConfiguration.h" />
     <ClInclude Include="include\hc\hcCorePrerequisites.h" />
     <ClInclude Include="include\hc\hcEvent.h" />
@@ -248,6 +252,7 @@
     <ClInclude Include="include\hc\hcIShaderProgram.h" />
     <ClInclude Include="include\hc\hcIShaderProgramFactory.h" />
     <ClInclude Include="include\hc\hcITextureFactory.h" />
+    <ClInclude Include="include\hc\hcIWindowManagerPlugin.h" />
     <ClInclude Include="include\hc\hcJsonDeserializerAssetLoader.h" />
     <ClInclude Include="include\hc\hcJsonSerializer.h" />
     <ClInclude Include="include\hc\hcMaterialDescriptor.h" />
@@ -255,7 +260,6 @@
     <ClInclude Include="include\hc\hcIPluginSlot.h" />
     <ClInclude Include="include\hc\hcIPluginSlotFactory.h" />
     <ClInclude Include="include\hc\hcIDrawable.h" />
-    <ClInclude Include="include\hc\hcIImageLoader.h" />
     <ClInclude Include="include\hc\hcIWindow.h" />
     <ClInclude Include="include\hc\hcKeyboardKey.h" />
     <ClInclude Include="include\hc\hcLight.h" />
@@ -269,7 +273,6 @@
     <ClInclude Include="include\hc\hcMeshComponent.h" />
     <ClInclude Include="include\hc\hcMeshManager.h" />
     <ClInclude Include="include\hc\hcModel.h" />
-    <ClInclude Include="include\hc\hcIModelLoader.h" />
     <ClInclude Include="include\hc\hcModelSubMesh.h" />
     <ClInclude Include="include\hc\hcMouseButtonKey.h" />
     <ClInclude Include="include\hc\hcMouseWheelType.h" />
@@ -280,6 +283,7 @@
     <ClInclude Include="include\hc\hcPluginManager.h" />
     <ClInclude Include="include\hc\hcPluginManagerSettings.h" />
     <ClInclude Include="include\hc\hcPluginStandardKeys.h" />
+    <ClInclude Include="include\hc\hcProcessResult.h" />
     <ClInclude Include="include\hc\hcProjectionType.h" />
     <ClInclude Include="include\hc\hcCameraMatrices.h" />
     <ClInclude Include="include\hc\hcRenderContext.h" />
@@ -304,6 +308,7 @@
     <ClInclude Include="include\hc\hcVertex.h" />
     <ClInclude Include="include\hc\hcWindowHandle.h" />
     <ClInclude Include="include\hc\hcIWindowManager.h" />
+    <ClInclude Include="include\hc\hcWindowManagerFactory.h" />
     <ClInclude Include="include\hc\hcWindowPluginSlot.h" />
     <ClInclude Include="include\hc\hcWindowSettings.h" />
     <ClInclude Include="include\hc\hcWindowsPluginSlotFactory.h" />

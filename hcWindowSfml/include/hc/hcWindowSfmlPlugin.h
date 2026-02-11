@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/hcIWindowManagerPlugin.h>
 #include "hc/hcWindowSfmlPrerequisites.h"
 
 namespace hc
@@ -13,7 +14,7 @@ namespace hc
   /**
    * @brief Plugin class for integrating SFML window functionality.
    */
-  class HC_WINDOW_SFML_EXPORT WindowSfmlPlugin : public IPlugin
+  class HC_WINDOW_SFML_EXPORT WindowSfmlPlugin : public IWindowManagerPlugin
   {
   public:
     WindowSfmlPlugin();
@@ -30,8 +31,8 @@ namespace hc
     void onClose() override;
 
     /**
-     * @copydoc IPlugin::addDependencies
+     * @copydoc IWindowManagerPlugin::createWindowManager
      */
-    void addDependencies(DependencyContainer& container) override;
+    UniquePtr<IWindowManager> createWindowManager() const override;
   };
 }

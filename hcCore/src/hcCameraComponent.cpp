@@ -1,7 +1,7 @@
 #include "hc/hcCameraComponent.h"
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/hcSceneManager.h"
-#include "hc/hcCameraManager.h";
+#include "hc/hcCameraManager.h"
 #include "hc/hcCamera.h"
 
 namespace hc
