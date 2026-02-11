@@ -2,7 +2,6 @@
 
 #include "hc/hcUtilitiesPrerequisites.h"
 #include "hc/hcString.h"
-#include "hc/hcException.h"
 
 namespace hc
 {
@@ -18,6 +17,11 @@ namespace hc
   class ServiceManager
   {
   public:
+    static_assert(
+      std::has_virtual_destructor_v<BaseType>,
+      "BaseType must have a virtual destructor"
+    );
+
     ServiceManager() = default;
     virtual ~ServiceManager() = default;
 
