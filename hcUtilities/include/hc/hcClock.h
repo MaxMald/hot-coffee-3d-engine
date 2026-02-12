@@ -31,7 +31,7 @@ namespace hc
     bool isRunning() const;
 
     /**
-     * @brief Starts or resumes the clock.
+     * @brief Starts the clock.
      *
      * If the clock is already running, this has no effect.
      */

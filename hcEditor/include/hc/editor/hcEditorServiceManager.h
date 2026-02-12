@@ -52,14 +52,14 @@ namespace hc::editor
     bool hasService() const;
 
     /**
-    * @brief Updates all registered services that implement the
-    * IUpdatableEditorService interface.
-    *
-    * This method should be called once per frame or tick, allowing updatable
-    * services to perform time-dependent operations.
-    *
-    * @param elapsedTime The time elapsed since the last update.
-    */
+     * @brief Updates all registered services that implement the
+     * IUpdatableEditorService interface.
+     *
+     * This method should be called once per frame or tick, allowing updatable
+     * services to perform time-dependent operations.
+     *
+     * @param elapsedTime The time elapsed since the last update.
+     */
     void update(const Time& elapsedTime);
 
     /**
@@ -82,6 +82,18 @@ namespace hc::editor
   {
     if (!service)
       throw InvalidArgumentException("Service pointer cannot be null");
+
+    if (m_serviceManager.hasService<ServiceType>())
+    {
+      LogService::Error(
+        String::Format(
+          "Service of type %s is already registered. Registration skipped.",
+          typeid(ServiceType).name()
+        )
+      );
+
+      return;
+    }
 
     tryAddUpdatableService(service.get());
 
@@ -106,10 +118,10 @@ namespace hc::editor
     if (!service)
       return;
 
-    IUpdatableEditorService* updetableService =
+    IUpdatableEditorService* updatableService =
       dynamic_cast<IUpdatableEditorService*>(service);
 
-    if (updetableService)
-      m_updatableServices.push_back(updetableService);
+    if (updatableService)
+      m_updatableServices.push_back(updatableService);
   }
 }

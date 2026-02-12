@@ -9,7 +9,7 @@ namespace hc::editor
   {
   }
 
-  void EditorCameraController::update(const Time& elapsedTime)
+  void EditorCameraController::update(const Time&)
   {
     // TODO
   }

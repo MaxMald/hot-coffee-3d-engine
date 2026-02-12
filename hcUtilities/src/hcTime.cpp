@@ -2,6 +2,11 @@
 
 namespace hc
 {
+  Time::Time() :
+    m_microseconds(0)
+  {
+  }
+
   Time::Time(const std::chrono::microseconds& microseconds) :
     m_microseconds(microseconds)
   {
