@@ -21,6 +21,7 @@
 #include "hc/editor/hcTextureManagerWindow.h"
 #include "hc/editor/hcEditorServiceManager.h"
 #include "hc/editor/hcProjectManager.h"
+#include "hc/editor/hcAssetGroupDrawersRegistry.h"
 
 namespace hc::editor
 {
@@ -48,7 +49,14 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<CameraManagerWindow>(
         hotCoffeeEngine.getSceneManager()
       ));
-      viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+
+      UniquePtr<AssetManagerWindow> assetManagerWindow = MakeUnique<AssetManagerWindow>();
+      assetGroupDrawersRegistry::registerAssetGroupDrawers(
+        *assetManagerWindow,
+        hotCoffeeEngine.getAssetManager()
+      );
+
+      viewsManager.registerView(std::move(assetManagerWindow));
       viewsManager.registerView(MakeUnique<TextureManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getTextureManager()
       ));
