@@ -34,7 +34,9 @@ namespace hc::editor
     )
     {
       viewsManager.registerView(MakeUnique<FileDialogView>());
-      viewsManager.registerView(MakeUnique<PluginManagerWindow>());
+      viewsManager.registerView(MakeUnique<PluginManagerWindow>(
+        hotCoffeeEngine.getPluginManager()
+      ));
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
       viewsManager.registerView(MakeUnique<SceneGraphWindow>(
         hotCoffeeEngine.getSceneManager(),

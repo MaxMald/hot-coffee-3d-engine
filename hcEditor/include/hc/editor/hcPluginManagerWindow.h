@@ -12,10 +12,12 @@ namespace hc::editor
   class  PluginManagerWindow : public AWindowView
   {
   public:
-    PluginManagerWindow();
+    PluginManagerWindow(const PluginManager& pluginManager);
     virtual ~PluginManagerWindow();
 
   protected:
+    const PluginManager& m_pluginManager;
+
     void onDraw() override;
     void drawPluginSlotInfo(const IPluginSlot& plugin);
   };
