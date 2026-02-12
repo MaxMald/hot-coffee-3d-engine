@@ -48,6 +48,7 @@
 
 // GameObject Components
 
+#include "hc/hcComponentFactoriesManager.h"
 #include "hc/hcComponentType.h"
 #include "hc/hcIComponent.h"
 #include "hc/hcABaseComponent.h"

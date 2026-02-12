@@ -40,18 +40,17 @@ namespace hc
     /**
      * @brief Updates all root GameObjects and their children.
      *
-     * @param deltaTime Time elapsed since last frame (in seconds).
+     * @param elapsedTime Time elapsed since last frame.
      */
-    void update(float deltaTime);
+    void update(const Time& elapsedTime);
 
     /**
      * @brief Adds a root GameObject for the given key. SceneGraph takes
      * ownership of the object.
      *
-     * @param key The unique key identifying the root (e.g., layer name).
      * @param root The GameObject to add as a root.
      */
-    void setRoot(const String& key, UniquePtr<GameObject> root);
+    void addRoot(UniquePtr<GameObject> root);
 
     /**
      * @brief Removes a root GameObject by key. Returns ownership to the caller
@@ -78,12 +77,9 @@ namespace hc
      *
      * @return Const reference to the internal map of roots.
      */
-    const UnorderedMap<String, UniquePtr<GameObject>>& getRoots() const;
+    const Vector<UniquePtr<GameObject>>& getRoots() const;
 
   private :
-    /**
-     * @brief Map of root GameObjects, keyed by unique string (layer/group name).
-     */
-    UnorderedMap<String, UniquePtr<GameObject>> m_roots;
+    Vector<UniquePtr<GameObject>> m_roots;
   };
 }

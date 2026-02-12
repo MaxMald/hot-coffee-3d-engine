@@ -160,6 +160,12 @@
     <Filter Include="Source Files\window">
       <UniqueIdentifier>{3804282c-e9ed-43ef-b4d9-977650dc6f73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gameObject\components\factory">
+      <UniqueIdentifier>{17c1fb6f-d413-477a-84c5-5b52db5bdef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameObject\components\factory">
+      <UniqueIdentifier>{5056b1ce-12e4-4b5e-9cff-9e1bcba212a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -302,6 +308,18 @@
     </ClCompile>
     <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp">
       <Filter>Source Files\assets</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentFactoriesRegister.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCameraComponentFactory.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcGameObjectFactory.cpp">
+      <Filter>Source Files\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcSceneManagerFactory.cpp">
+      <Filter>Source Files\scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -598,6 +616,30 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcProcessResult.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcComponentFactoriesManager.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcATypedComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcComponentFactoriesRegister.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcGameObjectFactory.h">
+      <Filter>Header Files\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIGameObjectFactory.h">
+      <Filter>Header Files\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcSceneManagerFactory.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

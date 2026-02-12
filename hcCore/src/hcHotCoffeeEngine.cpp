@@ -5,17 +5,20 @@
 #include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
+#include "hc/hcSceneManager.h"
 
 #include "hc/hcGraphicsManagerFactory.h"
 #include "hc/hcWindowManagerFactory.h"
+#include "hc/hcSceneManagerFactory.h"
 #include "hc/hcAssetManagerLoadersRegistry.h"
+#include "hc/hcComponentFactoriesRegister.h"
 
 namespace hc
 {
   HotCoffeeEngine::HotCoffeeEngine() :
     m_graphicsManager(nullptr),
     m_windowManager(nullptr),
-    m_sceneManager(),
+    m_sceneManager(nullptr),
     m_assetManager(),
     m_pluginManager(),
     m_initialized(false)
@@ -55,14 +58,14 @@ namespace hc
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
-    if (!m_initialized)
+    if (!m_sceneManager)
     {
       throw RuntimeErrorException(
         "SceneManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
       );
     }
 
-    return m_sceneManager;
+    return *m_sceneManager;
   }
 
   AssetManager& HotCoffeeEngine::getAssetManager()
@@ -73,7 +76,6 @@ namespace hc
         "AssetManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
       );
     }
-
     return m_assetManager;
   }
 
@@ -94,6 +96,8 @@ namespace hc
 
       connectToPlugins(settings.pluginManagerSettings);
 
+      m_sceneManager = sceneManagerFactory::create();
+
       assetManagerLoadersRegistry::registerLoaders(
         m_assetManager,
         m_pluginManager
@@ -108,6 +112,8 @@ namespace hc
         m_assetManager
       );
       m_graphicsManager->initialize();
+
+
     }
     catch (const std::exception& e)
     {
@@ -124,9 +130,14 @@ namespace hc
   }
 
   void HotCoffeeEngine::destroy()
-  {
-    m_sceneManager.clear();
+  { 
     m_assetManager.destroy();
+
+    if (m_sceneManager)
+    {
+      m_sceneManager->destroy();
+      m_sceneManager.reset();
+    }
 
     if (m_graphicsManager)
     {

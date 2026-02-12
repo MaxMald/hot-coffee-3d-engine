@@ -3,7 +3,6 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
-#include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
 #include "hc/hcProcessResult.h"
 
@@ -11,6 +10,7 @@ namespace hc
 {
   class IWindowManager;
   class IGraphicsManager;
+  class SceneManager;
 
   class HC_CORE_EXPORT HotCoffeeEngine
   {
@@ -31,7 +31,7 @@ namespace hc
   private:
     UniquePtr<IGraphicsManager> m_graphicsManager;
     UniquePtr<IWindowManager> m_windowManager;
-    SceneManager m_sceneManager;
+    UniquePtr<SceneManager> m_sceneManager;
     AssetManager m_assetManager;
     PluginManager m_pluginManager;
     bool m_initialized;

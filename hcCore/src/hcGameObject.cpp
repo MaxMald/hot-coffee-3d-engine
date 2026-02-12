@@ -2,18 +2,19 @@
 #include <algorithm>
 #include "hc/hcIComponent.h"
 #include "hc/hcRenderContext.h"
+#include "hc/hcIGameObjectFactory.h"
 
 namespace hc
 {
-  GameObject::GameObject() :
+  GameObject::GameObject(
+    IGameObjectFactory& gameObjectFactory,
+    ComponentFactoriesManager& componentFactoriesManager,
+    const String& name
+  ) :
     m_parent(nullptr),
-    m_name("")
-  {
-  }
-
-  GameObject::GameObject(const String& name) :
-    m_parent(nullptr),
-    m_name(name)
+    m_name(name),
+    m_gameObjectFactory(gameObjectFactory),
+    m_componentFactoriesManager(componentFactoriesManager)
   {
   }
 
@@ -40,10 +41,10 @@ namespace hc
       child->draw(localRenderContext);
   }
 
-  void GameObject::update(float deltaTime)
+  void GameObject::update(const Time& elapsedTime)
   {
     for (auto& child : m_children)
-      child->update(deltaTime);
+      child->update(elapsedTime);
   }
 
   void GameObject::setName(const String& name)
@@ -64,13 +65,47 @@ namespace hc
   void GameObject::addChild(UniquePtr<GameObject> child)
   {
     if (!child)
-      return;
+    {
+      throw InvalidArgumentException(
+        "Child GameObject cannot be null when adding to parent."
+      );
+    }
 
     if (child->m_parent)
       child->m_parent->removeChild(child.get());
 
     child->m_parent = this;
     m_children.push_back(std::move(child));
+  }
+
+  GameObject* GameObject::createChild(const String& name)
+  {
+    UniquePtr<GameObject> child = m_gameObjectFactory.create(name);
+
+    if (!child)
+      throw RuntimeErrorException(
+        "Failed to create child GameObject with name: " + name
+      );
+
+    GameObject* childPtr = child.get();
+    addChild(std::move(child));
+    return childPtr;
+  }
+
+  GameObject* GameObject::getChild(const String& name)
+  {
+    auto it = std::find_if(
+      m_children.begin(), m_children.end(),
+      [&name](const UniquePtr<GameObject>& child)
+      {
+        return child->getName() == name;
+      }
+    );
+
+    if (it != m_children.end())
+      return it->get();
+
+    return nullptr;
   }
 
   UniquePtr<GameObject> GameObject::removeChild(GameObject* child)
@@ -110,22 +145,24 @@ namespace hc
       return getMatrix();
   }
 
-  void GameObject::addComponent(UniquePtr<IComponent> component)
+  Vector<IComponent*> GameObject::getComponents() const
+  {
+    Vector<IComponent*> components;
+    components.reserve(m_components.size());
+
+    for (const auto& pair : m_components)
+      components.push_back(pair.second.get());
+
+    return components;
+  }
+
+  void GameObject::tryRegisterIDrawableComponent(IComponent* component)
   {
     if (!component)
       return;
-    m_components.push_back(std::move(component));
 
-    IDrawable* drawableComponent = dynamic_cast<IDrawable*>(
-      m_components.back().get()
-    );
-
+    IDrawable* drawableComponent = dynamic_cast<IDrawable*>(component);
     if (drawableComponent)
       m_drawableComponents.push_back(drawableComponent);
-  }
-
-  const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
-  {
-    return m_components;
   }
 }

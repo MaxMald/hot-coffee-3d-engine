@@ -1,9 +1,11 @@
 #include "hc/hcSceneManager.h"
+#include "hc/hcIGameObjectFactory.h"
 
 namespace hc
 {
-  SceneManager::SceneManager()
-    : m_activeScene(nullptr)
+  SceneManager::SceneManager(UniquePtr<IGameObjectFactory> gameObjectFactory) :
+    m_gameObjectFactory(std::move(gameObjectFactory)),
+    m_activeScene(nullptr)
   {
   }
 
@@ -21,7 +23,14 @@ namespace hc
 
   Scene* SceneManager::createScene(const String& name)
   {
-    auto scene = MakeUnique<Scene>();
+    if (!m_gameObjectFactory)
+    {
+      throw RuntimeErrorException(
+        "Cannot create scene without a valid game object factory."
+      );
+    }
+
+    auto scene = MakeUnique<Scene>(*m_gameObjectFactory);
     Scene* scenePtr = scene.get();
     m_scenes[name] = std::move(scene);
     return scenePtr;
@@ -77,10 +86,10 @@ namespace hc
     return m_activeScene;
   }
 
-  void SceneManager::update(float deltaTime)
+  void SceneManager::update(const Time& elapsedTime)
   {
     if (m_activeScene)
-      m_activeScene->update(deltaTime);
+      m_activeScene->update(elapsedTime);
   }
 
   void SceneManager::clear()
@@ -98,5 +107,11 @@ namespace hc
     }
 
     m_scenes.clear();
+  }
+
+  void SceneManager::destroy()
+  {
+    clear();
+    m_gameObjectFactory.reset();
   }
 }

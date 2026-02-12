@@ -172,9 +172,12 @@
     <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp" />
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraComponent.cpp" />
+    <ClCompile Include="src\hcCameraComponentFactory.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
+    <ClCompile Include="src\hcComponentFactoriesRegister.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
+    <ClCompile Include="src\hcGameObjectFactory.cpp" />
     <ClCompile Include="src\hcGraphicsManagerFactory.cpp" />
     <ClCompile Include="src\hcHotCoffeeEngine.cpp" />
     <ClCompile Include="src\hcIGraphicsManager.cpp" />
@@ -200,6 +203,7 @@
     <ClCompile Include="src\hcSceneGraph.cpp" />
     <ClCompile Include="src\hcSceneManager.cpp" />
     <ClCompile Include="src\hcImage.cpp" />
+    <ClCompile Include="src\hcSceneManagerFactory.cpp" />
     <ClCompile Include="src\hcShaderManager.cpp" />
     <ClCompile Include="src\hcShaderProgramManager.cpp" />
     <ClCompile Include="src\hcShaderStageType.cpp" />
@@ -221,10 +225,16 @@
     <ClInclude Include="include\hc\hcATypedAssetGroup.h" />
     <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
+    <ClInclude Include="include\hc\hcCameraComponentFactory.h" />
+    <ClInclude Include="include\hc\hcComponentFactoriesManager.h" />
+    <ClInclude Include="include\hc\hcComponentFactoriesRegister.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
+    <ClInclude Include="include\hc\hcGameObjectFactory.h" />
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
     <ClInclude Include="include\hc\hcIAssetGroup.h" />
     <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h" />
+    <ClInclude Include="include\hc\hcIComponentFactory.h" />
+    <ClInclude Include="include\hc\hcIGameObjectFactory.h" />
     <ClInclude Include="include\hc\hcIGraphicResource.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
     <ClInclude Include="include\hc\hcIAssetLoader.h" />
@@ -294,6 +304,7 @@
     <ClInclude Include="include\hc\hcImage.h" />
     <ClInclude Include="include\hc\hcIShaderManager.h" />
     <ClInclude Include="include\hc\hcIShaderProgramManager.h" />
+    <ClInclude Include="include\hc\hcSceneManagerFactory.h" />
     <ClInclude Include="include\hc\hcShaderManager.h" />
     <ClInclude Include="include\hc\hcShaderProgramManager.h" />
     <ClInclude Include="include\hc\hcShaderStageType.h" />
@@ -302,6 +313,7 @@
     <ClInclude Include="include\hc\hcITextureManager.h" />
     <ClInclude Include="include\hc\hcTextureManager.h" />
     <ClInclude Include="include\hc\hcTextureType.h" />
+    <ClInclude Include="include\hc\hcATypedComponentFactory.h" />
     <ClInclude Include="include\hc\hcUnlitMaterial.h" />
     <ClInclude Include="include\hc\hcUnlitMaterialDescriptor.h" />
     <ClInclude Include="include\hc\hcUnlitMaterialFactory.h" />

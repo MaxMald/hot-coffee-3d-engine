@@ -8,6 +8,7 @@ namespace hc
   class Camera;
   class CameraManager;
   class ICameraProjection;
+  class SceneManager;
 
   /**
    * @brief Component that encapsulates camera functionality for entities.
@@ -15,7 +16,11 @@ namespace hc
   class HC_CORE_EXPORT CameraComponent : public ABaseComponent
   {
   public:
-    CameraComponent();
+    /**
+     * @brief Constructs a CameraComponent and creates an associated Camera in
+     * the scene's CameraManager.
+     */
+    CameraComponent(SceneManager& sceneManager);
     ~CameraComponent() override;
 
     /**
@@ -73,13 +78,9 @@ namespace hc
     void setAsActiveCamera();
 
   private:
+    SceneManager& m_sceneManager;
     Camera* m_camera;
 
-    /**
-     * @brief Gets the camera manager associated with this component.
-     *
-     * @return Reference to the camera manager.
-     */
     CameraManager& getCameraManager();
   };
 }
