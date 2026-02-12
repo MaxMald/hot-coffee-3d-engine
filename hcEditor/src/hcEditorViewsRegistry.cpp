@@ -36,7 +36,10 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<FileDialogView>());
       viewsManager.registerView(MakeUnique<PluginManagerWindow>());
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
-      viewsManager.registerView(MakeUnique<SceneGraphWindow>(editorServiceManager.getService<GameObjectSelectionService>()));
+      viewsManager.registerView(MakeUnique<SceneGraphWindow>(
+        hotCoffeeEngine.getSceneManager(),
+        editorServiceManager.getService<GameObjectSelectionService>()
+      ));
       viewsManager.registerView(MakeUnique<LightManagerWindow>());
       viewsManager.registerView(MakeUnique<CameraManagerWindow>());
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());

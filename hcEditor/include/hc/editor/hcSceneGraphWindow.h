@@ -13,10 +13,14 @@ namespace hc::editor
   class SceneGraphWindow : public AWindowView
   {
   public:
-    SceneGraphWindow(GameObjectSelectionService& gameObjectSelectionService);
+    SceneGraphWindow(
+      SceneManager& sceneManager,
+      GameObjectSelectionService& gameObjectSelectionService
+    );
     virtual ~SceneGraphWindow();
 
   protected:
+    SceneManager& m_sceneManager;
     GameObjectSelectionService& m_gameObjectSelectionService;
 
     void onDraw() override;
