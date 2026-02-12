@@ -27,3 +27,5 @@
 #include "hc/hcNonMovable.h"
 #include "hc/hcId.h"
 #include "hc/hcServiceManager.h"
+#include "hc/hcTime.h"
+#include "hc/hcClock.h"

@@ -171,6 +171,7 @@
     <ClInclude Include="include\hc\editor\hcComponentDrawersManager.h" />
     <ClInclude Include="include\hc\editor\hcComponentDrawersRegistry.h" />
     <ClInclude Include="include\hc\editor\hcCreateComponentSection.h" />
+    <ClInclude Include="include\hc\editor\hcEditorCameraController.h" />
     <ClInclude Include="include\hc\editor\hcEditorServiceManager.h" />
     <ClInclude Include="include\hc\editor\hcEditorServiceManagerRegistry.h" />
     <ClInclude Include="include\hc\editor\hcEditorViewsRegistry.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\hc\editor\hcImageAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMaterialDescriptorEditor.h" />
     <ClInclude Include="include\hc\editor\hcIMaterialDrawer.h" />
+    <ClInclude Include="include\hc\editor\hcIUpdatableEditorService.h" />
     <ClInclude Include="include\hc\editor\hcMainMenuBar.h" />
     <ClInclude Include="include\hc\editor\hcMaterialDescriptorAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcIMenuItem.h" />
@@ -267,6 +269,7 @@
     <ClCompile Include="src\hcEditorServiceManagerRegistry.cpp" />
     <ClCompile Include="src\hcEditorViewsRegistry.cpp" />
     <ClCompile Include="src\hcEditorViewsManager.cpp" />
+    <ClCompile Include="src\hcEditorCameraController.cpp" />
     <ClCompile Include="src\hcFileDialogView.cpp" />
     <ClCompile Include="src\hcFileReference.cpp" />
     <ClCompile Include="src\hcGameObjectEditorWindow.cpp" />

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcIEditorService.h"
+#include "hc/editor/hcIUpdatableEditorService.h"
 
 namespace hc::editor
 {
@@ -18,10 +19,10 @@ namespace hc::editor
 
     /**
      * @brief Registers a service of the specified type.
-     * 
+     *
      * @tparam ServiceType The concrete service type, must derive from
      * IEditorService.
-     * 
+     *
      * @param service Unique pointer to the service instance.
      */
     template<typename ServiceType>
@@ -42,13 +43,24 @@ namespace hc::editor
 
     /**
      * @brief Checks if a service of the specified type is registered.
-     * 
+     *
      * @tparam ServiceType The concrete service type.
-     * 
+     *
      * @return True if the service exists, false otherwise.
      */
     template<typename ServiceType>
     bool hasService() const;
+
+    /**
+    * @brief Updates all registered services that implement the
+    * IUpdatableEditorService interface.
+    *
+    * This method should be called once per frame or tick, allowing updatable
+    * services to perform time-dependent operations.
+    *
+    * @param elapsedTime The time elapsed since the last update.
+    */
+    void update(const Time& elapsedTime);
 
     /**
      * @brief Removes all registered services.
@@ -57,6 +69,10 @@ namespace hc::editor
 
   private:
     ServiceManager<IEditorService> m_serviceManager;
+    Vector<IUpdatableEditorService*> m_updatableServices;
+
+    template<typename ServiceType>
+    void tryAddUpdatableService(ServiceType* service);
   };
 
   template<typename ServiceType>
@@ -64,6 +80,11 @@ namespace hc::editor
     UniquePtr<ServiceType> service
   )
   {
+    if (!service)
+      throw InvalidArgumentException("Service pointer cannot be null");
+
+    tryAddUpdatableService(service.get());
+
     m_serviceManager.registerService<ServiceType>(std::move(service));
   }
 
@@ -77,5 +98,18 @@ namespace hc::editor
   bool EditorServiceManager::hasService() const
   {
     return m_serviceManager.hasService<ServiceType>();
+  }
+
+  template<typename ServiceType>
+  void EditorServiceManager::tryAddUpdatableService(ServiceType* service)
+  {
+    if (!service)
+      return;
+
+    IUpdatableEditorService* updetableService =
+      dynamic_cast<IUpdatableEditorService*>(service);
+
+    if (updetableService)
+      m_updatableServices.push_back(updetableService);
   }
 }

@@ -164,6 +164,7 @@
     <ClInclude Include="include\hc\hcAModule.h" />
     <ClInclude Include="include\hc\hcAngle.h" />
     <ClInclude Include="include\hc\hcBuffer.h" />
+    <ClInclude Include="include\hc\hcClock.h" />
     <ClInclude Include="include\hc\hcColor.h" />
     <ClInclude Include="include\hc\hcDependencyContainer.h" />
     <ClInclude Include="include\hc\hcExceptionsAliases.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="include\hc\hcRect.h" />
     <ClInclude Include="include\hc\hcServiceManager.h" />
     <ClInclude Include="include\hc\hcString.h" />
+    <ClInclude Include="include\hc\hcTime.h" />
     <ClInclude Include="include\hc\hcTransform.h" />
     <ClInclude Include="include\hc\hcUtilities.h" />
     <ClInclude Include="include\hc\hcUtilitiesPrerequisites.h" />
@@ -198,6 +200,7 @@
     <ClInclude Include="include\hc\hcJsonObjectBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\hcClock.cpp" />
     <ClCompile Include="src\hcFileUtilities.cpp" />
     <ClCompile Include="src\hcJson.cpp" />
     <ClCompile Include="src\hcJsonArrayBuilder.cpp" />
@@ -205,6 +208,7 @@
     <ClCompile Include="src\hcJsonObjectBuilder.cpp" />
     <ClCompile Include="src\hcJsonParsers.cpp" />
     <ClCompile Include="src\hcLogService.cpp" />
+    <ClCompile Include="src\hcTime.cpp" />
     <ClCompile Include="src\hcTransform.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
