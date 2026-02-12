@@ -29,27 +29,22 @@ namespace hc::editor
       return;
     }
 
-    hc::SceneGraph& sceneGraph = scene->getSceneGraph();
-    drawCreateLayerSection(sceneGraph);
-    drawSceneGraph(sceneGraph);
+    drawCreateLayerSection(*scene);
+    drawSceneGraph(scene->getSceneGraph());
   }
 
-  void SceneGraphWindow::drawCreateLayerSection(SceneGraph& sceneGraph)
+  void SceneGraphWindow::drawCreateLayerSection(Scene& scene)
   {
-    if (ImGui::CollapsingHeader("Create Layer"))
+    if (ImGui::CollapsingHeader("Create Root"))
     {
       static char layerNameBuffer[128] = "";
-      ImGui::InputText("Layer Name", layerNameBuffer, sizeof(layerNameBuffer));
+      ImGui::InputText("Root Name", layerNameBuffer, sizeof(layerNameBuffer));
 
       if (ImGui::Button("Create"))
       {
         String layerName(layerNameBuffer);
-        if (!layerName.empty() && sceneGraph.getRoot(layerName) == nullptr)
-        {
-          UniquePtr<GameObject> newLayer = MakeUnique<GameObject>(layerName);
-          sceneGraph.setRoot(layerName, std::move(newLayer));
-          layerNameBuffer[0] = '\0';
-        }
+        scene.createRootGameObject(layerName);
+        layerNameBuffer[0] = '\0';
       }
     }
   }
@@ -64,16 +59,18 @@ namespace hc::editor
       return;
     }
 
-    for (const auto& pair : roots)
+    for (const UniquePtr<GameObject>& root : roots)
     {
-      hc::GameObject* root = pair.second.get();
       if (root)
-        drawGameObjectNode(root);
+        drawGameObjectNode(root.get());
     }
   }
 
   void SceneGraphWindow::drawGameObjectNode(GameObject* gameObject)
   {
+    if (!gameObject)
+      return;
+
     String gameObjectName = gameObject->getName();
     if (gameObjectName.empty())
       gameObjectName = "<unnamed>";
