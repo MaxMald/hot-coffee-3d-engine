@@ -12,56 +12,59 @@ namespace hc
 
   void SceneGraph::draw(const RenderContext& renderContext)
   {
-    for (const auto& pair : m_roots)
+    for (const UniquePtr<GameObject>& root : m_roots)
     {
-      if (pair.second)
-        pair.second->draw(renderContext);
+      if (root)
+        root->draw(renderContext);
     }
   }
 
   void SceneGraph::update(const Time& elapsedTime)
   {
-    for (const auto& pair : m_roots)
+    for (const UniquePtr<GameObject>& root : m_roots)
     {
-      if (pair.second)
-        pair.second->update(elapsedTime);
+      if (root)
+        root->update(elapsedTime);
     }
   }
 
-  void SceneGraph::setRoot(const String& key, UniquePtr<GameObject> root)
+  void SceneGraph::addRoot(UniquePtr<GameObject> root)
   {
+    if (!root)
+    {
+      throw RuntimeErrorException(
+        "Cannot add a null root GameObject to the SceneGraph."
+      );
+    }
+
     if (root->getParent())
     {
       throw RuntimeErrorException(
         String::Format(
           "Cannot set root GameObject for key '%s' because it already has a parent.",
-          key.c_str()
+          root->getName().c_str()
         )
       );
     }
 
-    if (m_roots.find(key) != m_roots.end())
-    {
-      throw RuntimeErrorException(
-        String::Format(
-          "Root GameObject for key '%s' already exists. Remove it before setting a new one.",
-          key.c_str()
-        )
-      );
-    }
-
-    m_roots[key] = std::move(root);
+    m_roots.push_back(std::move(root));
   }
 
   UniquePtr<GameObject> SceneGraph::removeRoot(const String& key)
   {
-    auto it = m_roots.find(key);
+    auto it = std::find_if(
+      m_roots.begin(), m_roots.end(),
+      [&key](const UniquePtr<GameObject>& root) 
+      {
+        return root && root->getName() == key;
+      }
+    );
+
     if (it != m_roots.end())
     {
-      UniquePtr<GameObject> removed = std::move(it->second);
+      UniquePtr<GameObject> removedRoot = std::move(*it);
       m_roots.erase(it);
-
-      return removed;
+      return removedRoot;
     }
 
     return nullptr;
@@ -69,13 +72,21 @@ namespace hc
 
   GameObject* SceneGraph::getRoot(const String& key) const
   {
-    auto it = m_roots.find(key);
-    if (it != m_roots.end() && it->second)
-      return it->second.get();
+    auto it = std::find_if(
+      m_roots.begin(), m_roots.end(),
+      [&key](const UniquePtr<GameObject>& root) 
+      {
+        return root && root->getName() == key;
+      }
+    );
+
+    if (it != m_roots.end())
+      return it->get();
+
     return nullptr;
   }
 
-  const UnorderedMap<String, UniquePtr<GameObject>>& SceneGraph::getRoots() const
+  const Vector<UniquePtr<GameObject>>& SceneGraph::getRoots() const
   {
     return m_roots;
   }

@@ -5,13 +5,21 @@
 
 namespace hc
 {
+  class IGameObjectFactory;
+
   /**
    * @brief Manages multiple scenes and controls the active scene.
    */
   class HC_CORE_EXPORT SceneManager : public NonCopyable
   {
   public:
-    SceneManager();
+    /**
+     * @brief Constructs a SceneManager with the provided game object factory.
+      *
+      * @param gameObjectFactory Unique pointer to an IGameObjectFactory used for
+      * creating game objects in scenes.
+     */
+    SceneManager(UniquePtr<IGameObjectFactory> gameObjectFactory);
     ~SceneManager();
 
     /**
@@ -77,8 +85,14 @@ namespace hc
      */
     void clear();
 
+    /**
+     * @brief Destroys the scene manager and all managed scenes.
+     */
+    void destroy();
+
   private:
     UnorderedMap<String, UniquePtr<Scene>> m_scenes;
     Scene* m_activeScene;
+    UniquePtr<IGameObjectFactory> m_gameObjectFactory;
   };
 }

@@ -303,6 +303,12 @@
     <ClCompile Include="src\hcAssetManagerLoadersRegistry.cpp">
       <Filter>Source Files\assets</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcGameObjectFactory.cpp">
+      <Filter>Source Files\gameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcSceneManagerFactory.cpp">
+      <Filter>Source Files\scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -598,6 +604,15 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcProcessResult.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIGameObjectFactory.h">
+      <Filter>Header Files\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcGameObjectFactory.h">
+      <Filter>Header Files\gameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcSceneManagerFactory.h">
+      <Filter>Header Files\scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
