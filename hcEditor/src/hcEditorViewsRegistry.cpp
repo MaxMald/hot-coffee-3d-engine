@@ -54,7 +54,10 @@ namespace hc::editor
         MakeUnique<ProjectFileSelector>(editorServiceManager.getService<ProjectManager>());
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
-        MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
+        MakeUnique<MaterialDescriptorEditorWindow>(
+          hotCoffeeEngine.getAssetManager(),
+          *projectFileSelector
+        );
 
       viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
         editorServiceManager.getService<ProjectManager>(),
