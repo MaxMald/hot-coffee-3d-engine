@@ -36,7 +36,7 @@ namespace hc
     if (m_windowManager == nullptr)
     {
       throw RuntimeErrorException(
-        "WindowManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "WindowManager is not initialized. Make sure initialize() has been called."
       );
     }
     return *m_windowManager;
@@ -47,7 +47,7 @@ namespace hc
     if (m_graphicsManager == nullptr)
     {
       throw RuntimeErrorException(
-        "IGraphicsManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "IGraphicsManager is not initialized. Make sure initialize() has been called."
       );
     }
     return *m_graphicsManager;
@@ -58,7 +58,7 @@ namespace hc
     if (!m_initialized)
     {
       throw RuntimeErrorException(
-        "SceneManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "SceneManager is not initialized. Make sure initialize() has been called."
       );
     }
 
@@ -70,7 +70,7 @@ namespace hc
     if (!m_initialized)
     {
       throw RuntimeErrorException(
-        "AssetManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "AssetManager is not initialized. Make sure initialize() has been called."
       );
     }
 
