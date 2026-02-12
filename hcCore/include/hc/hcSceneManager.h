@@ -68,9 +68,9 @@ namespace hc
     /**
      * @brief Updates the active scene.
      * 
-     * @param deltaTime Time elapsed since last frame (in seconds).
+     * @param elapsedTime Time elapsed since last frame (in seconds).
      */
-    void update(float deltaTime);
+    void update(const Time& elapsedTime);
 
     /**
      * @brief Destroys all scenes and clears the scene manager.

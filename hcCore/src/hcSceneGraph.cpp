@@ -19,12 +19,12 @@ namespace hc
     }
   }
 
-  void SceneGraph::update(float deltaTime)
+  void SceneGraph::update(const Time& elapsedTime)
   {
     for (const auto& pair : m_roots)
     {
       if (pair.second)
-        pair.second->update(deltaTime);
+        pair.second->update(elapsedTime);
     }
   }
 

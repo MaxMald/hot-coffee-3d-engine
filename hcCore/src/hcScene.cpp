@@ -34,9 +34,9 @@ namespace hc
     m_sceneGraph.draw(renderContext);
   }
 
-  void Scene::update(float deltaTime)
+  void Scene::update(const Time& elapsedTime)
   {
-    m_sceneGraph.update(deltaTime);
+    m_sceneGraph.update(elapsedTime);
   }
 
   SceneGraph& Scene::getSceneGraph()
