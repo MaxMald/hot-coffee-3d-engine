@@ -17,7 +17,7 @@ namespace hc::editor
 
   void PluginManagerWindow::onDraw()
   {
-    UnorderedMap<String, SharedPtr<IPluginSlot>> pluginSlots =
+    const UnorderedMap<String, SharedPtr<IPluginSlot>>& pluginSlots =
       m_pluginManager.getPluginSlots();
 
     if (ImGui::TreeNode("Plugins"))
