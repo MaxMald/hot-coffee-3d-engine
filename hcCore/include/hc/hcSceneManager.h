@@ -68,7 +68,7 @@ namespace hc
     /**
      * @brief Updates the active scene.
      * 
-     * @param elapsedTime Time elapsed since last frame (in seconds).
+     * @param elapsedTime Time elapsed since last frame.
      */
     void update(const Time& elapsedTime);
 

@@ -28,7 +28,7 @@ namespace hc
     /**
      * @brief Updates the game object and its children.
      * 
-     * @param elapsedTime Time elapsed since last frame (in seconds).
+     * @param elapsedTime Time elapsed since last frame.
      */
     void update(const Time& elapsedTime);
 
