@@ -40,8 +40,12 @@ namespace hc::editor
         hotCoffeeEngine.getSceneManager(),
         editorServiceManager.getService<GameObjectSelectionService>()
       ));
-      viewsManager.registerView(MakeUnique<LightManagerWindow>());
-      viewsManager.registerView(MakeUnique<CameraManagerWindow>());
+      viewsManager.registerView(MakeUnique<LightManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
+      viewsManager.registerView(MakeUnique<CameraManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
       viewsManager.registerView(MakeUnique<AssetManagerWindow>());
       viewsManager.registerView(MakeUnique<TextureManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getTextureManager()
