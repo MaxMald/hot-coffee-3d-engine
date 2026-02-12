@@ -5,8 +5,9 @@
 #include "hc/editor/hcEditorServiceManagerRegistry.h"
 
 namespace hc::editor
-{ 
+{
   HotCoffeeEditor::HotCoffeeEditor() :
+    m_engine(),
     m_serviceManager(),
     m_editorLogHistory(),
     m_viewsManager(),
@@ -18,13 +19,13 @@ namespace hc::editor
   {
     if (m_initialized)
       return ProcessResult(false, "HotCoffeeEditor is already initialized.");
-    
+
     try
     {
-      HotCoffeeEngine::Prepare();
+      LogService::Prepare();
       LogService::Instance().subscribe(&m_editorLogHistory);
 
-      ProcessResult processResult = HotCoffeeEngine::Initialize(
+      ProcessResult processResult = m_engine.initialize(
         hotCoffeeEngineSettingsFactory::createDefault()
       );
 
@@ -38,7 +39,7 @@ namespace hc::editor
       prepareEditorServices();
       prepareEditorViews();
     }
-    catch(const std::exception& e)
+    catch (const std::exception& e)
     {
       destroy();
       return ProcessResult(false, e.what());
@@ -57,9 +58,9 @@ namespace hc::editor
       );
     }
 
-    SceneManager& sceneManager = HotCoffeeEngine::GetSceneManager();
-    IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
-    IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
+    SceneManager& sceneManager = m_engine.getSceneManager();
+    IGraphicsManager& graphicsManager = m_engine.getGraphicsManager();
+    IWindow& window = m_engine.getWindowManager().getWindow();
 
     while (window.isOpen())
     {
@@ -88,18 +89,18 @@ namespace hc::editor
     m_viewsManager.clear();
     m_serviceManager.clear();
 
+    m_engine.destroy();
+
     if (LogService::HasInstance())
       LogService::Instance().unsubscribe(&m_editorLogHistory);
-    if (HotCoffeeEngine::HasInstance())
-      HotCoffeeEngine::Shutdown();
 
     m_initialized = false;
   }
 
   void HotCoffeeEditor::prepareEditorScene()
   {
-    HotCoffeeEngine::GetSceneManager().createScene("Editor Scene");
-    HotCoffeeEngine::GetSceneManager().setActiveScene("Editor Scene");
+    m_engine.getSceneManager().createScene("Editor Scene");
+    m_engine.getSceneManager().setActiveScene("Editor Scene");
   }
 
   void HotCoffeeEditor::prepareEditorServices()
@@ -109,9 +110,9 @@ namespace hc::editor
 
   void HotCoffeeEditor::prepareEditorViews()
   {
-    m_viewsManager.initialize(HotCoffeeEngine::GetWindowManager().getWindow());
+    m_viewsManager.initialize(m_engine.getWindowManager().getWindow());
     editorViewsRegistry::registerDefaultViews(
-      HotCoffeeEngine::Instance(),
+      m_engine,
       m_viewsManager,
       m_serviceManager,
       m_editorLogHistory
