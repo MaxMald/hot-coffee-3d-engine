@@ -138,6 +138,12 @@
     <ClInclude Include="include\hc\hcServiceManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\hcTime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcClock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcLogService.cpp">
@@ -162,6 +168,12 @@
       <Filter>Source Files\jsonBuilder</Filter>
     </ClCompile>
     <ClCompile Include="src\hcFileUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcClock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

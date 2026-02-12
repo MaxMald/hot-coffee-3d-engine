@@ -46,9 +46,6 @@
     <Filter Include="Header Files\imguiFileDialog">
       <UniqueIdentifier>{2bd77174-9cfe-449f-b118-0951450a22c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\imguiFileDialog">
-      <UniqueIdentifier>{d4facd98-5b01-424d-82b3-05fabba5a4fb}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\views\windows\projectBrowser">
       <UniqueIdentifier>{f9c982e7-cd01-40e9-9f38-fbfee722c712}</UniqueIdentifier>
     </Filter>
@@ -162,6 +159,18 @@
     </Filter>
     <Filter Include="Source Files\services\projectManager\loader">
       <UniqueIdentifier>{3ee3c9d5-01f9-49e2-bb06-619f07d1a0a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\service\editorCameraController">
+      <UniqueIdentifier>{cfa277f0-2fab-4b8f-8fb3-a78d98f56e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\services\editorCameraController">
+      <UniqueIdentifier>{6eb8d6f1-21e8-40c2-891d-666bcdd75d27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\imguiFileDialog">
+      <UniqueIdentifier>{d4facd98-5b01-424d-82b3-05fabba5a4fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\service\editorServiceComponents">
+      <UniqueIdentifier>{3348ec3b-8ff3-4011-a53d-f9ee018779e4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +435,12 @@
     <ClInclude Include="include\hc\editor\hcEditorServiceManagerRegistry.h">
       <Filter>Header Files\service</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcEditorCameraController.h">
+      <Filter>Header Files\service\editorCameraController</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\editor\hcIUpdatableEditorService.h">
+      <Filter>Header Files\service\editorServiceComponents</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -616,6 +631,9 @@
     </ClCompile>
     <ClCompile Include="src\hcEditorServiceManagerRegistry.cpp">
       <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcEditorCameraController.cpp">
+      <Filter>Source Files\services\editorCameraController</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
