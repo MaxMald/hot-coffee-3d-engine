@@ -16,7 +16,7 @@ namespace hc
     /**
      * @brief Default constructor. Initializes the time duration to zero.
      */
-    Time() = default;
+    Time();
 
     /**
      * @brief Constructs a Time object from a microsecond duration.
