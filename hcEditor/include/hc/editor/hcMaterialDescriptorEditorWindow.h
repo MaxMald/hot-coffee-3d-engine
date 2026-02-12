@@ -18,7 +18,10 @@ namespace hc::editor
   class MaterialDescriptorEditorWindow : public AWindowView
   {
   public:
-    MaterialDescriptorEditorWindow(ProjectFileSelector& projectFileSelector);
+    MaterialDescriptorEditorWindow(
+      AssetManager& assetManager,
+      ProjectFileSelector& projectFileSelector
+    );
     virtual ~MaterialDescriptorEditorWindow();
 
     /**
@@ -34,6 +37,7 @@ namespace hc::editor
     void clear();
 
   private:
+    AssetManager& m_assetManager;
     UnorderedMap<shadingType::Type, UniquePtr<IMaterialDescriptorEditor>> m_editors;
     UniquePtr<IMaterialDescriptorEditor> m_nullEditor;
     shadingType::Type m_currentShaderType = shadingType::Type::Unknown;

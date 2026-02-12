@@ -1,5 +1,4 @@
 #include "hc/hcCameraComponent.h"
-#include "hc/hcHotCoffeeEngine.h"
 #include "hc/hcSceneManager.h"
 #include "hc/hcCameraManager.h"
 #include "hc/hcCamera.h"
@@ -76,6 +75,13 @@ namespace hc
 
   CameraManager& CameraComponent::getCameraManager()
   {
+    // TODO
+
+    throw RuntimeErrorException(
+      "CameraComponent::getCameraManager is not implemented yet."
+    );
+
+    /*
     SceneManager& sceneManager = HotCoffeeEngine::Instance().getSceneManager();
     Scene* activeScene = sceneManager.getActiveScene();
     if (!activeScene)
@@ -84,5 +90,6 @@ namespace hc
       );
 
     return activeScene->getCameraManager();
+    */
   }
 }

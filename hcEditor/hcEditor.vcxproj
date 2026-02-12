@@ -167,6 +167,7 @@
     <ClInclude Include="include\hc\editor\hcActionExecutionMenuItem.h" />
     <ClInclude Include="include\hc\editor\hcAssetCreator.h" />
     <ClInclude Include="include\hc\editor\hcAssetFileReference.h" />
+    <ClInclude Include="include\hc\editor\hcAssetGroupDrawersRegistry.h" />
     <ClInclude Include="include\hc\editor\hcATypedAssetGroupDrawer.h" />
     <ClInclude Include="include\hc\editor\hcComponentDrawersManager.h" />
     <ClInclude Include="include\hc\editor\hcComponentDrawersRegistry.h" />
@@ -255,6 +256,7 @@
     <ClCompile Include="src\hcABaseView.cpp" />
     <ClCompile Include="src\hcActionExecutionMenuItem.cpp" />
     <ClCompile Include="src\hcAssetCreator.cpp" />
+    <ClCompile Include="src\hcAssetGroupDrawersRegistry.cpp" />
     <ClCompile Include="src\hcAssetManagerWindow.cpp" />
     <ClCompile Include="src\hcAWindowView.cpp" />
     <ClCompile Include="src\hcCameraManagerWindow.cpp" />

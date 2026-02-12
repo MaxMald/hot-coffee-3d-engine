@@ -40,10 +40,10 @@ namespace hc
       child->draw(localRenderContext);
   }
 
-  void GameObject::update(float deltaTime)
+  void GameObject::update(const Time& elapsedTime)
   {
     for (auto& child : m_children)
-      child->update(deltaTime);
+      child->update(elapsedTime);
   }
 
   void GameObject::setName(const String& name)

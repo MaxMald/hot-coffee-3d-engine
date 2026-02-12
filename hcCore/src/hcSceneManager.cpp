@@ -77,10 +77,10 @@ namespace hc
     return m_activeScene;
   }
 
-  void SceneManager::update(float deltaTime)
+  void SceneManager::update(const Time& elapsedTime)
   {
     if (m_activeScene)
-      m_activeScene->update(deltaTime);
+      m_activeScene->update(elapsedTime);
   }
 
   void SceneManager::clear()

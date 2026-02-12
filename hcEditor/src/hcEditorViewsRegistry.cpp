@@ -21,6 +21,7 @@
 #include "hc/editor/hcTextureManagerWindow.h"
 #include "hc/editor/hcEditorServiceManager.h"
 #include "hc/editor/hcProjectManager.h"
+#include "hc/editor/hcAssetGroupDrawersRegistry.h"
 
 namespace hc::editor
 {
@@ -34,12 +35,28 @@ namespace hc::editor
     )
     {
       viewsManager.registerView(MakeUnique<FileDialogView>());
-      viewsManager.registerView(MakeUnique<PluginManagerWindow>());
+      viewsManager.registerView(MakeUnique<PluginManagerWindow>(
+        hotCoffeeEngine.getPluginManager()
+      ));
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
-      viewsManager.registerView(MakeUnique<SceneGraphWindow>(editorServiceManager.getService<GameObjectSelectionService>()));
-      viewsManager.registerView(MakeUnique<LightManagerWindow>());
-      viewsManager.registerView(MakeUnique<CameraManagerWindow>());
-      viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+      viewsManager.registerView(MakeUnique<SceneGraphWindow>(
+        hotCoffeeEngine.getSceneManager(),
+        editorServiceManager.getService<GameObjectSelectionService>()
+      ));
+      viewsManager.registerView(MakeUnique<LightManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
+      viewsManager.registerView(MakeUnique<CameraManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
+
+      UniquePtr<AssetManagerWindow> assetManagerWindow = MakeUnique<AssetManagerWindow>();
+      assetGroupDrawersRegistry::registerAssetGroupDrawers(
+        *assetManagerWindow,
+        hotCoffeeEngine.getAssetManager()
+      );
+
+      viewsManager.registerView(std::move(assetManagerWindow));
       viewsManager.registerView(MakeUnique<TextureManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getTextureManager()
       ));
@@ -51,13 +68,17 @@ namespace hc::editor
         MakeUnique<ProjectFileSelector>(editorServiceManager.getService<ProjectManager>());
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
-        MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
+        MakeUnique<MaterialDescriptorEditorWindow>(
+          hotCoffeeEngine.getAssetManager(),
+          *projectFileSelector
+        );
 
       viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
         editorServiceManager.getService<ProjectManager>(),
         *matDescEditorWindow
       ));
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
+        hotCoffeeEngine,
         *projectFileSelector,
         editorServiceManager.getService<GameObjectSelectionService>()
       ));

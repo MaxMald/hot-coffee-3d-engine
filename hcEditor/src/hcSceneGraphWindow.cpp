@@ -7,9 +7,11 @@
 namespace hc::editor
 {
   SceneGraphWindow::SceneGraphWindow(
+    SceneManager& sceneManager,
     GameObjectSelectionService& gameObjectSelectionService
   ) :
     AWindowView("Scene Graph", true),
+    m_sceneManager(sceneManager),
     m_gameObjectSelectionService(gameObjectSelectionService)
   {
   }
@@ -20,7 +22,7 @@ namespace hc::editor
 
   void SceneGraphWindow::onDraw()
   {
-    hc::Scene* scene = HotCoffeeEngine::GetSceneManager().getActiveScene();
+    hc::Scene* scene = m_sceneManager.getActiveScene();
     if (!scene)
     {
       ImGui::Text("No active scene.");

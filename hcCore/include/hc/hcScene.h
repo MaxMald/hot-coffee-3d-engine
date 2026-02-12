@@ -29,9 +29,9 @@ namespace hc
     /**
      * @brief Updates the scene and all contained game objects.
      * 
-     * @param deltaTime Time elapsed since last frame (in seconds).
+     * @param elapsedTime Time elapsed since last frame.
      */
-    void update(float deltaTime);
+    void update(const Time& elapsedTime);
 
     /**
      * @brief Gets a reference to the scene graph for modification.

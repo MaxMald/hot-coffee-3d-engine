@@ -14,6 +14,7 @@ namespace hc::editor
   {
   public:
     GameObjectEditorWindow(
+      HotCoffeeEngine& hotCoffeeEngine,
       ProjectFileSelector& projectFileSelector,
       GameObjectSelectionService& gameObjectSelectionService
     );

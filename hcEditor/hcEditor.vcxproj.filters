@@ -441,6 +441,9 @@
     <ClInclude Include="include\hc\editor\hcIUpdatableEditorService.h">
       <Filter>Header Files\service\editorServiceComponents</Filter>
     </ClInclude>
+    <ClInclude Include="include\hc\editor\hcAssetGroupDrawersRegistry.h">
+      <Filter>Header Files\views\windows\assetManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEditor.cpp">
@@ -634,6 +637,9 @@
     </ClCompile>
     <ClCompile Include="src\hcEditorCameraController.cpp">
       <Filter>Source Files\services\editorCameraController</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcAssetGroupDrawersRegistry.cpp">
+      <Filter>Source Files\views\windows\assetManager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

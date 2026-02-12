@@ -8,7 +8,7 @@ namespace hc::editor
     public ATypedAssetGroupDrawer<MaterialDescriptor>
   {
   public:
-    MaterialDescriptorAssetGroupDrawer() = default;
+    MaterialDescriptorAssetGroupDrawer(AssetManager& assetManager);
     virtual ~MaterialDescriptorAssetGroupDrawer() = default;
 
   protected:

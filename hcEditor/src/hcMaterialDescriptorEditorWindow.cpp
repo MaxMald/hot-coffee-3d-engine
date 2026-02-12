@@ -18,9 +18,11 @@ namespace
 namespace hc::editor
 {
   MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow(
+    AssetManager& assetManager,
     ProjectFileSelector& projectFileSelector
   ) :
     AWindowView("Material Descriptor Editor", false),
+    m_assetManager(assetManager),
     m_assetReference(),
     m_currentShaderType(shadingType::Type::Unknown)
   {
@@ -37,8 +39,7 @@ namespace hc::editor
 
     try
     {
-      SharedPtr<MaterialDescriptor> materialDescriptor = HotCoffeeEngine::Instance()
-        .getAssetManager()
+      SharedPtr<MaterialDescriptor> materialDescriptor = m_assetManager
         .loadDirect<MaterialDescriptor>(materialDescriptorPath);
 
       if (!materialDescriptor)

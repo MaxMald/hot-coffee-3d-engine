@@ -18,6 +18,7 @@ namespace hc::editor
     void destroy();
 
   private:
+    HotCoffeeEngine m_engine;
     EditorServiceManager m_serviceManager;
     EditorLogHistory m_editorLogHistory;
     EditorViewsManager m_viewsManager;
