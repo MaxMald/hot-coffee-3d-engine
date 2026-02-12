@@ -5,9 +5,11 @@
 namespace hc::editor
 {
   MeshComponentDrawer::MeshComponentDrawer(
+    IMeshManager& meshManager,
     ProjectFileSelector& projectFileSelector
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
+    m_meshManager(meshManager),
     m_projectFileSelector(projectFileSelector)
   {
   }
@@ -53,12 +55,7 @@ namespace hc::editor
     const Path& selectedPath
   )
   {
-    SharedPtr<IMesh> mesh = 
-      HotCoffeeEngine::Instance()
-      .getGraphicsManager()
-      .getMeshManager()
-      .createMeshFromPath(selectedPath);
-
+    SharedPtr<IMesh> mesh =  m_meshManager.createMeshFromPath(selectedPath);
     component->setMesh(mesh);
   }
 }

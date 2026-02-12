@@ -70,6 +70,7 @@ namespace hc::editor
         *matDescEditorWindow
       ));
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
+        hotCoffeeEngine,
         *projectFileSelector,
         editorServiceManager.getService<GameObjectSelectionService>()
       ));

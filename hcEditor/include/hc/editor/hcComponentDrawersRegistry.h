@@ -13,6 +13,7 @@ namespace hc::editor
      * @brief Registers the default component drawers into the provided manager.
      */
     void registryDefaultComponentDrawers(
+      HotCoffeeEngine& hotCoffeeEngine,
       ComponentDrawersManager& componentDrawersManager,
       ProjectFileSelector& projectFileSelector
     );

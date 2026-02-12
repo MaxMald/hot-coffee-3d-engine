@@ -12,10 +12,14 @@ namespace hc::editor
   class MeshComponentDrawer : public ABaseComponentDrawer<MeshComponent>
   {
   public:
-    MeshComponentDrawer(ProjectFileSelector& projectFileSelector);
+    MeshComponentDrawer(
+      IMeshManager& meshManager,
+      ProjectFileSelector& projectFileSelector
+    );
     virtual ~MeshComponentDrawer();
 
   protected:
+    IMeshManager& m_meshManager;
     ProjectFileSelector& m_projectFileSelector;
 
     void onDrawComponent(MeshComponent* component) override;
