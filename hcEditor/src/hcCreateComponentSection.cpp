@@ -55,23 +55,36 @@ namespace hc::editor
       COMPONENT_TYPES[m_selectedComponentTypeIndex]
     );
 
-    switch (selectedType)
+    try
     {
-    case componentType::Type::Mesh:
-      createComponent<MeshComponent>(gameObject);
-      break;
-    case componentType::Type::Camera:
-      createComponent<CameraComponent>(gameObject);
-      break;
-    default:
+      switch (selectedType)
+      {
+      case componentType::Type::Mesh:
+        createComponent<MeshComponent>(gameObject);
+        break;
+      case componentType::Type::Camera:
+        createComponent<CameraComponent>(gameObject);
+        break;
+      default:
+        LogService::Error(
+          String::Format(
+            "CreateComponentSection::createComponentFromSelection: "
+            "Unknown component type selected (%s).",
+            COMPONENT_TYPES[m_selectedComponentTypeIndex]
+          )
+        );
+        break;
+      }
+    }
+    catch (Exception& e)
+    {
       LogService::Error(
         String::Format(
-          "CreateComponentSection::createComponentFromSelection: "
-          "Unknown component type selected (%s).",
-          COMPONENT_TYPES[m_selectedComponentTypeIndex]
+          "Failed to create component of type %s. Error: %s",
+          COMPONENT_TYPES[m_selectedComponentTypeIndex],
+          e.what()
         )
       );
-      break;
     }
 
     m_userRequestedCreation = false;
