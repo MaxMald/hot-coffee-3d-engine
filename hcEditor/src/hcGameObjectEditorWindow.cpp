@@ -96,8 +96,20 @@ namespace hc::editor
     m_createComponentSection.draw();
     if (!m_createComponentSection.wasCreationRequested())
       return;
-
-    m_createComponentSection.createComponentFromSelection(gameObject);
+    
+    try
+    {
+      m_createComponentSection.createComponentFromSelection(gameObject);
+    }
+    catch (Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to create component. Error: %s",
+          e.what()
+        )
+      );
+    }
   }
 
   void GameObjectEditorWindow::drawComponents(GameObject* gameObject)
