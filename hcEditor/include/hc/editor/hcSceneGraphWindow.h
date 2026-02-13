@@ -24,7 +24,7 @@ namespace hc::editor
     GameObjectSelectionService& m_gameObjectSelectionService;
 
     void onDraw() override;
-    void drawCreateLayerSection(Scene& sceneGraph);
+    void drawCreateLayerSection(Scene& scene);
     void drawSceneGraph(const SceneGraph& sceneGraph);
     void drawGameObjectNode(GameObject* gameObject);
   };
