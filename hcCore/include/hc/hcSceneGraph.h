@@ -7,15 +7,17 @@
 namespace hc
 {
   /**
-   * @brief Manages a collection of root GameObjects, organized by key
-   * (layer/group).
+   * @brief Organizes and manages root-level GameObjects in the scene.
    *
-   * The SceneGraph allows for flexible scene organization by supporting multiple
-   * root objects, each identified by a unique key (such as a layer or group
-   * name). It is responsible for updating and rendering all root objects and
-   * their hierarchies.
+   * The SceneGraph is responsible for maintaining a collection of root
+   * GameObjects, each representing a separate hierarchy (such as a layer or
+   * group) in the scene. It provides methods for adding, removing, updating, and
+   * rendering these root objects and their entire subtrees. Ownership of root
+   * GameObjects is managed by the SceneGraph.
+   *
+   * @note SceneGraph is non-copyable.
    */
-  class HC_CORE_EXPORT SceneGraph : 
+  class HC_CORE_EXPORT SceneGraph :
     public NonCopyable,
     public IDrawable
   {
@@ -26,67 +28,68 @@ namespace hc
     SceneGraph();
 
     /**
-     * @brief Virtual destructor.
+     * @brief Destroys the SceneGraph and all root GameObjects it owns.
      */
     virtual ~SceneGraph() override;
 
     /**
-     * @brief Renders all root GameObjects and their children.
+     * @brief Renders all root GameObjects and their hierarchies.
      *
-     * @param graphicsManager The graphics manager used for rendering.
+     * @param renderContext The rendering context to use.
      */
     void draw(const RenderContext& renderContext);
 
     /**
-     * @brief Updates all root GameObjects and their children.
+     * @brief Updates all root GameObjects and their hierarchies.
      *
-     * @param elapsedTime Time elapsed since last frame.
+     * @param elapsedTime Time elapsed since the last update.
      */
     void update(const Time& elapsedTime);
 
     /**
-     * @brief Adds a root GameObject to the scene graph. The GameObject must not
-     * have a parent. Ownership is transferred to the SceneGraph.
-     * 
+     * @brief Adds a root GameObject to the scene graph.
+     *
+     * The GameObject must not have a parent. Ownership is transferred to the
+     * SceneGraph.
+     *
      * @param root Unique pointer to the root GameObject to add.
      */
     void addRoot(UniquePtr<GameObject> root);
 
     /**
-     * @brief Removes a root GameObject by name. Returns ownership to the caller
-     * if found, nullptr otherwise.
+     * @brief Removes the first root GameObject with the specified name from the
+     * scene graph and returns ownership to the caller.
      *
-     * @param name The name of the root to remove.
+     * @param name The name of the root GameObject to remove.
      *
-     * @return The removed GameObject, or nullptr if not found.
+     * @return Unique pointer to the removed GameObject, or nullptr if not found.
      */
     UniquePtr<GameObject> removeRoot(const String& name);
 
     /**
-     * @brief Gets a root GameObject by name.
-     * 
-     * @param name The name of the root to retrieve.
-     * 
+     * @brief Retrieves the first root GameObject with the specified name.
+     *
+     * @param name The name of the root GameObject to retrieve.
+     *
      * @return Pointer to the GameObject, or nullptr if not found.
      */
     GameObject* getRoot(const String& name) const;
+
     /**
-     * @brief Gets a const reference to all root GameObjects mapped by their
-     * keys.
-     *
-     * @return Const reference to the internal map of roots.
+     * @brief Gets a const reference to all root GameObjects.
+     * 
+     * @return Const reference to the vector of root GameObjects.
      */
     const Vector<UniquePtr<GameObject>>& getRoots() const;
 
     /**
-     * @brief Clears all root GameObjects from the scene graph, destroying them
-     * in the process.
+     * @brief Removes and destroys all root GameObjects from the scene graph.
      */
     void clear();
 
-  private :
+  private:
     /**
-     * @brief Map of root GameObjects, keyed by unique string (layer/group name).
+     * @brief Collection of root GameObjects owned by the SceneGraph.
      */
     Vector<UniquePtr<GameObject>> m_roots;
   };
