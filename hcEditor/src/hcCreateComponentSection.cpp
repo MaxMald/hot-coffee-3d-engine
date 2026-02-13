@@ -47,6 +47,7 @@ namespace hc::editor
     if (!gameObject)
     {
       LogService::Error("Game Object is null. Cannot create component.");
+      m_userRequestedCreation = false;
       return;
     }
 
