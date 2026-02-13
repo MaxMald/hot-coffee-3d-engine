@@ -231,7 +231,6 @@ namespace hc
 
     ComponentType* componentPtr = component.get();
     m_components[typeIndex] = std::move(component);
-    
     IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
     if (drawable)
       m_drawableComponents.push_back(drawable);
