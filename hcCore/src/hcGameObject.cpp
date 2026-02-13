@@ -148,28 +148,14 @@ namespace hc
       return getMatrix();
   }
 
-  void GameObject::addComponent(UniquePtr<IComponent> component)
+  Vector<IComponent*> GameObject::getComponents() const
   {
-    if (!component)
-    {
-      throw InvalidArgumentException(
-        "Cannot add a null component to GameObject: " + m_name
-      );
-    }
+    Vector<IComponent*> components;
+    components.reserve(m_components.size());
 
-    m_components.push_back(std::move(component));
-
-    IDrawable* drawableComponent = dynamic_cast<IDrawable*>(
-      m_components.back().get()
-      );
-
-    if (drawableComponent)
-      m_drawableComponents.push_back(drawableComponent);
-  }
-
-  const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
-  {
-    return m_components;
+    for (const auto& pair : m_components)
+      components.push_back(pair.second.get());
+    return components;
   }
 
   void GameObject::destroy()

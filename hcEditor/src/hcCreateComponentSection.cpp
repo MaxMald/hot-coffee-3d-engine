@@ -57,12 +57,11 @@ namespace hc::editor
     switch (selectedType)
     {
     case componentType::Type::Mesh:
-      gameObject->createComponent<MeshComponent>();
+      createComponent<MeshComponent>(gameObject);
       break;
     case componentType::Type::Camera:
-      gameObject->createComponent<CameraComponent>();
+      createComponent<CameraComponent>(gameObject);
       break;
-
     default:
       LogService::Error(
         String::Format(

@@ -105,13 +105,11 @@ namespace hc::editor
     if (!gameObject)
       return;
 
-    const Vector<UniquePtr<IComponent>>& components = 
-      gameObject->getComponents();
-
-    for (const UniquePtr<IComponent>& component : components)
+    Vector<IComponent*> components =  gameObject->getComponents();
+    for (IComponent* component : components)
     {
-      ImGui::PushID(component.get());
-      m_componentDrawersManager.drawComponent(component.get());
+      ImGui::PushID(component);
+      m_componentDrawersManager.drawComponent(component);
       ImGui::PopID();
     }
   }

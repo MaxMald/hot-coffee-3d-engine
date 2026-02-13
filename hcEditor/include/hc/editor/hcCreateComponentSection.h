@@ -38,5 +38,33 @@ namespace hc::editor
   private:
     Bool m_userRequestedCreation;
     Int32 m_selectedComponentTypeIndex;
+
+    /**
+     * @brief Creates a component of the specified type on the given GameObject.
+     * 
+     * @tparam ComponentType The type of component to create.
+     * 
+     * @param gameObject The GameObject to which the component will be added.
+     */
+    template<typename ComponentType>
+    void createComponent(GameObject* gameObject);
   };
+
+  template<typename ComponentType>
+  void CreateComponentSection::createComponent(GameObject* gameObject)
+  {
+    if (!gameObject)
+    {
+      LogService::Error("Game Object is null. Cannot create component.");
+      return;
+    }
+
+    if (gameObject->hasComponent<ComponentType>())
+    {
+      LogService::Warning("Game Object already has a component of this type.");
+      return;
+    }
+
+    gameObject->createComponent<ComponentType>();
+  }
 }

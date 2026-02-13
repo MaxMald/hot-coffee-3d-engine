@@ -165,10 +165,10 @@ namespace hc
 
     /**
      * @brief Gets all components attached to this GameObject.
-     *
-     * @return Vector of unique pointers to components.
+     * 
+     * @return Vector of pointers to all components.
      */
-    const Vector<UniquePtr<IComponent>>& getComponents() const;
+    Vector<IComponent*> getComponents() const;
 
   private:
     String m_name;
@@ -176,15 +176,11 @@ namespace hc
     IGameObjectFactory& m_gameObjectFactory;
     ComponentFactoriesManager& m_componentFactoriesManager;
     Vector<UniquePtr<GameObject>> m_children;
-    Vector<UniquePtr<IComponent>> m_components;
+    UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
 
-    /**
-     * @brief Adds a component to this GameObject and takes ownership.
-     *
-     * @param component Unique pointer to the component.
-     */
-    void addComponent(UniquePtr<IComponent> component);
+    template<typename ComponentType>
+    void addComponent(UniquePtr<ComponentType> component);
 
     /**
      * @brief Destroys this GameObject and all its children, releasing resources.
@@ -223,11 +219,20 @@ namespace hc
   template<typename ComponentType>
   bool GameObject::hasComponent() const
   {
-    for (const auto& component : m_components)
-    {
-      if (dynamic_cast<ComponentType*>(component.get()))
-        return true;
-    }
-    return false;
+    TypeIndex typeIndex(typeid(ComponentType));
+    return m_components.find(typeIndex) != m_components.end();
+  }
+
+  template<typename ComponentType>
+  void GameObject::addComponent(UniquePtr<ComponentType> component)
+  {
+    TypeIndex typeIndex(typeid(ComponentType));
+
+    ComponentType* componentPtr = component.get();
+    m_components[typeIndex] = std::move(component);
+    
+    IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
+    if (drawable)
+      m_drawableComponents.push_back(drawable);
   }
 }
