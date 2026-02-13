@@ -14,6 +14,8 @@
 #include <variant>
 #include <optional>
 #include <array>
+#include <chrono>
+#include <ratio>
 
 namespace hc
 {

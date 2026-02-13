@@ -7,7 +7,7 @@ namespace hc::editor
   class ImageAssetGroupDrawer : public ATypedAssetGroupDrawer<Image>
   {
   public:
-    ImageAssetGroupDrawer() = default;
+    ImageAssetGroupDrawer(AssetManager& assetManager);
     virtual ~ImageAssetGroupDrawer() = default;
 
   protected:

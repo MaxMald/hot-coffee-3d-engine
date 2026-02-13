@@ -7,10 +7,12 @@ namespace hc::editor
   class CameraManagerWindow : public AWindowView
   {
   public:
-    CameraManagerWindow();
+    CameraManagerWindow(SceneManager& sceneManager);
     ~CameraManagerWindow();
 
   private:
+    SceneManager& m_sceneManager;
+
     void onDraw() override;
     void drawCameraController(Camera* camera);
     void drawCameraProjectionController(ICameraProjection* projection);

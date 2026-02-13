@@ -9,20 +9,27 @@ namespace hc::editor
   class ATypedAssetGroupDrawer : public IAssetGroupDrawer
   {
   public:
-    ATypedAssetGroupDrawer() = default;
+    ATypedAssetGroupDrawer(AssetManager& assetManager);
     virtual ~ATypedAssetGroupDrawer() = default;
 
     void draw() override;
 
   protected:
+    AssetManager& m_assetManager;
+
     virtual void drawAssetDetails(const SharedPtr<T>& asset) = 0;
   };
 
   template<typename T>
+  ATypedAssetGroupDrawer<T>::ATypedAssetGroupDrawer(AssetManager& assetManager) :
+    m_assetManager(assetManager)
+  {
+  }
+
+  template<typename T>
   void ATypedAssetGroupDrawer<T>::draw()
   {
-    AssetManager& assetManager = HotCoffeeEngine::Instance().getAssetManager();
-    ATypedAssetGroup<T>& assetGroup = assetManager.getGroup<T>();
+    ATypedAssetGroup<T>& assetGroup = m_assetManager.getGroup<T>();
 
     String headerTitle = String::Format(
       "%s Assets (%zu)",

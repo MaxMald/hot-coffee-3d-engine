@@ -1,10 +1,5 @@
 #include "hc/editor/hcAssetManagerWindow.h"
-
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcProjectFileSelector.h"
 #include "hc/editor/hcIAssetGroupDrawer.h"
-#include "hc/editor/hcImageAssetGroupDrawer.h"
-#include "hc/editor/hcMaterialDescriptorAssetGroupDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -14,23 +9,39 @@ namespace hc::editor
   {
     m_allAssetExtensions.clear();
     assetFileExtensions::GetAllAssetExtensions(m_allAssetExtensions);
-
-    registerAssetGroupDrawers();
   }
 
   AssetManagerWindow::~AssetManagerWindow()
   {
   }
 
-  void AssetManagerWindow::onDraw()
+  void AssetManagerWindow::registerAssetGroupDrawer(
+    UniquePtr<IAssetGroupDrawer> drawer
+  )
   {
-    for (const SharedPtr<IAssetGroupDrawer>& drawer : m_assetGroupDrawers)
-      drawer->draw();
+    if (!drawer)
+    {
+      throw InvalidArgumentException(
+        "Cannot register a null asset group drawer."
+      );
+    }
+
+    m_assetGroupDrawers.push_back(std::move(drawer));
   }
 
-  void AssetManagerWindow::registerAssetGroupDrawers()
+  void AssetManagerWindow::clear()
   {
-    m_assetGroupDrawers.push_back(MakeShared<ImageAssetGroupDrawer>());
-    m_assetGroupDrawers.push_back(MakeShared<MaterialDescriptorAssetGroupDrawer>());
+    m_assetGroupDrawers.clear();
+  }
+
+  void AssetManagerWindow::onDestroy()
+  {
+    clear();
+  }
+
+  void AssetManagerWindow::onDraw()
+  {
+    for (const UniquePtr<IAssetGroupDrawer>& drawer : m_assetGroupDrawers)
+      drawer->draw();
   }
 }

@@ -2,6 +2,13 @@
 
 namespace hc::editor
 {
+  MaterialDescriptorAssetGroupDrawer::MaterialDescriptorAssetGroupDrawer(
+    AssetManager& assetManager
+  ) :
+    ATypedAssetGroupDrawer<MaterialDescriptor>(assetManager)
+  {
+  }
+
   void MaterialDescriptorAssetGroupDrawer::drawAssetDetails(
     const SharedPtr<MaterialDescriptor>& asset
   )

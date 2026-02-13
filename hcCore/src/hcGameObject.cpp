@@ -2,27 +2,23 @@
 #include <algorithm>
 #include "hc/hcIComponent.h"
 #include "hc/hcRenderContext.h"
+#include "hc/hcIGameObjectFactory.h"
 
 namespace hc
 {
-  GameObject::GameObject() :
+  GameObject::GameObject(
+    const String& name,
+    IGameObjectFactory& gameObjectFactory
+  ) :
     m_parent(nullptr),
-    m_name("")
-  {
-  }
-
-  GameObject::GameObject(const String& name) :
-    m_parent(nullptr),
+    m_gameObjectFactory(gameObjectFactory),
     m_name(name)
   {
   }
 
   GameObject::~GameObject()
   {
-    m_components.clear();
-
-    if (m_parent)
-      m_parent->removeChild(this);
+    destroy();
   }
 
   void GameObject::draw(const RenderContext& renderContext)
@@ -40,10 +36,10 @@ namespace hc
       child->draw(localRenderContext);
   }
 
-  void GameObject::update(float deltaTime)
+  void GameObject::update(const Time& elapsedTime)
   {
     for (auto& child : m_children)
-      child->update(deltaTime);
+      child->update(elapsedTime);
   }
 
   void GameObject::setName(const String& name)
@@ -64,13 +60,32 @@ namespace hc
   void GameObject::addChild(UniquePtr<GameObject> child)
   {
     if (!child)
-      return;
+    {
+      throw InvalidArgumentException(
+        "Cannot add a null child GameObject."
+      );
+    }
 
     if (child->m_parent)
       child->m_parent->removeChild(child.get());
 
     child->m_parent = this;
     m_children.push_back(std::move(child));
+  }
+
+  GameObject* GameObject::createChild(const String& childName)
+  {
+    UniquePtr<GameObject> newChild = m_gameObjectFactory.create(childName);
+    if (!newChild)
+    {
+      throw RuntimeErrorException(
+        "Failed to create child GameObject with name: " + childName
+      );
+    }
+
+    GameObject* newChildPtr = newChild.get();
+    addChild(std::move(newChild));
+    return newChildPtr;
   }
 
   UniquePtr<GameObject> GameObject::removeChild(GameObject* child)
@@ -97,6 +112,27 @@ namespace hc
     return nullptr;
   }
 
+  GameObject* GameObject::getChild(const String& name)
+  {
+    for (const auto& child : m_children)
+    {
+      if (child->getName() == name)
+        return child.get();
+    }
+    return nullptr;
+  }
+
+  Vector<GameObject*> GameObject::getChildrenByName(const String& name)
+  {
+    Vector<GameObject*> matchingChildren;
+    for (const auto& child : m_children)
+    {
+      if (child->getName() == name)
+        matchingChildren.push_back(child.get());
+    }
+    return matchingChildren;
+  }
+
   const Vector<UniquePtr<GameObject>>& GameObject::getChildren() const
   {
     return m_children;
@@ -118,7 +154,7 @@ namespace hc
 
     IDrawable* drawableComponent = dynamic_cast<IDrawable*>(
       m_components.back().get()
-    );
+      );
 
     if (drawableComponent)
       m_drawableComponents.push_back(drawableComponent);
@@ -127,5 +163,18 @@ namespace hc
   const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
   {
     return m_components;
+  }
+
+  void GameObject::destroy()
+  {
+    m_components.clear();
+
+    if (m_parent)
+      m_parent->removeChild(this);
+
+    for (auto& child : m_children)
+      child->m_parent = nullptr;
+
+    m_children.clear();
   }
 }

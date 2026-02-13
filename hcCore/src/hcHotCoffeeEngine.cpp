@@ -5,42 +5,19 @@
 #include "hc/hcIWindowManager.h"
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
+#include "hc/hcSceneManager.h"
 
 #include "hc/hcGraphicsManagerFactory.h"
 #include "hc/hcWindowManagerFactory.h"
 #include "hc/hcAssetManagerLoadersRegistry.h"
+#include "hc/hcSceneManagerFactory.h"
 
 namespace hc
 {
-  ProcessResult HotCoffeeEngine::Initialize(const HotCoffeeEngineSettings& settings)
-  {
-    return HotCoffeeEngine::Instance().initialize(settings);
-  }
-
-  IGraphicsManager& HotCoffeeEngine::GetGraphicsManager()
-  {
-    return HotCoffeeEngine::Instance().getGraphicsManager();
-  }
-
-  SceneManager& HotCoffeeEngine::GetSceneManager()
-  {
-    return HotCoffeeEngine::Instance().getSceneManager();
-  }
-
-  AssetManager& HotCoffeeEngine::GetAssetManager()
-  {
-    return HotCoffeeEngine::Instance().getAssetManager();
-  }
-
-  IWindowManager& HotCoffeeEngine::GetWindowManager()
-  {
-    return HotCoffeeEngine::Instance().getWindowManager();
-  }
-
   HotCoffeeEngine::HotCoffeeEngine() :
     m_graphicsManager(nullptr),
     m_windowManager(nullptr),
-    m_sceneManager(),
+    m_sceneManager(nullptr),
     m_assetManager(),
     m_pluginManager(),
     m_initialized(false)
@@ -61,7 +38,7 @@ namespace hc
     if (m_windowManager == nullptr)
     {
       throw RuntimeErrorException(
-        "WindowManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "WindowManager is not initialized. Make sure initialize() has been called."
       );
     }
     return *m_windowManager;
@@ -72,7 +49,7 @@ namespace hc
     if (m_graphicsManager == nullptr)
     {
       throw RuntimeErrorException(
-        "IGraphicsManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "IGraphicsManager is not initialized. Make sure initialize() has been called."
       );
     }
     return *m_graphicsManager;
@@ -80,14 +57,14 @@ namespace hc
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
-    if (!m_initialized)
+    if (!m_sceneManager)
     {
       throw RuntimeErrorException(
-        "SceneManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "SceneManager is not initialized. Make sure initialize() has been called."
       );
     }
 
-    return m_sceneManager;
+    return *m_sceneManager;
   }
 
   AssetManager& HotCoffeeEngine::getAssetManager()
@@ -95,7 +72,7 @@ namespace hc
     if (!m_initialized)
     {
       throw RuntimeErrorException(
-        "AssetManager is not initialized. Make sure HotCoffeeEngine::Initialize() has been called."
+        "AssetManager is not initialized. Make sure initialize() has been called."
       );
     }
 
@@ -114,7 +91,12 @@ namespace hc
 
     try
     {
+      LogService::Prepare();
+      JsonSerializer::Prepare();
+
       connectToPlugins(settings.pluginManagerSettings);
+      
+      m_sceneManager = SceneManagerFactory::create();
 
       assetManagerLoadersRegistry::registerLoaders(
         m_assetManager,
@@ -145,32 +127,15 @@ namespace hc
     return ProcessResult();
   }
 
-  void HotCoffeeEngine::onPrepare()
-  {
-    LogService::Prepare();
-    JsonSerializer::Prepare();
-  }
-
-  void HotCoffeeEngine::onShutdown()
-  {
-    destroy();
-    JsonSerializer::Shutdown();
-    LogService::Shutdown();
-  }
-
-  void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
-  {
-    m_pluginManager.init();
-    pluginConnectionHelper::connectToPluginsFromSettings(
-      m_pluginManager,
-      settings
-    );
-  }
-
   void HotCoffeeEngine::destroy()
   {
-    m_sceneManager.clear();
     m_assetManager.destroy();
+
+    if (m_sceneManager)
+    {
+      m_sceneManager->destroy();
+      m_sceneManager.reset();
+    }
 
     if (m_graphicsManager)
     {
@@ -185,6 +150,19 @@ namespace hc
     }
 
     m_pluginManager.closeAll();
+
+    JsonSerializer::Shutdown();
+    LogService::Shutdown();
+
     m_initialized = false;
+  }
+
+  void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
+  {
+    m_pluginManager.init();
+    pluginConnectionHelper::connectToPluginsFromSettings(
+      m_pluginManager,
+      settings
+    );
   }
 }

@@ -5,8 +5,9 @@
 
 namespace hc::editor
 {
-  PluginManagerWindow::PluginManagerWindow() : 
-    AWindowView("Plugin Manager")
+  PluginManagerWindow::PluginManagerWindow(const PluginManager& pluginManager) : 
+    AWindowView("Plugin Manager"),
+    m_pluginManager(pluginManager)
   {
   }
 
@@ -16,8 +17,8 @@ namespace hc::editor
 
   void PluginManagerWindow::onDraw()
   {
-    UnorderedMap<String, SharedPtr<IPluginSlot>> pluginSlots =
-      HotCoffeeEngine::Instance().getPluginManager().getPluginSlots();
+    const UnorderedMap<String, SharedPtr<IPluginSlot>>& pluginSlots =
+      m_pluginManager.getPluginSlots();
 
     if (ImGui::TreeNode("Plugins"))
     {

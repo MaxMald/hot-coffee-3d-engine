@@ -7,6 +7,7 @@
 
 namespace hc
 {
+  class IGameObjectFactory;
   class SceneManager;
 
   /**
@@ -16,7 +17,13 @@ namespace hc
   class HC_CORE_EXPORT Scene : public NonCopyable
   {
   public:
-    Scene();
+    /**
+     * @brief Constructs a Scene with the provided game object factory.
+     *
+     * @param gameObjectFactory Reference to an IGameObjectFactory used for
+     * creating game objects in the scene.
+     */
+    Scene(IGameObjectFactory& gameObjectFactory);
     virtual ~Scene();
 
     /**
@@ -28,21 +35,40 @@ namespace hc
 
     /**
      * @brief Updates the scene and all contained game objects.
-     * 
-     * @param deltaTime Time elapsed since last frame (in seconds).
+     *
+     * @param elapsedTime Time elapsed since last frame.
      */
-    void update(float deltaTime);
+    void update(const Time& elapsedTime);
+
+    /**
+     * @brief Creates a new GameObject with the specified name.
+     *
+     * @param name The name to assign to the created GameObject.
+     *
+     * @return UniquePtr<GameObject> The created GameObject.
+     */
+    UniquePtr<GameObject> createGameObject(const String& name);
+
+    /**
+     * @brief Creates and adds a new root GameObject to the scene graph with the
+     * specified name. The root is added with a key equal to the name.
+     *
+     * @param name The name to assign to the created root GameObject and its key.
+     *
+     * @return Pointer to the created root GameObject.
+     */
+    GameObject* createRootGameObject(const String& name);
 
     /**
      * @brief Gets a reference to the scene graph for modification.
-     * 
+     *
      * @return Reference to the SceneGraph.
      */
     SceneGraph& getSceneGraph();
 
     /**
      * @brief Gets a const reference to the scene graph.
-     * 
+     *
      * @return Const reference to the SceneGraph.
      */
     const SceneGraph& getSceneGraph() const;
@@ -50,14 +76,14 @@ namespace hc
     /**
      * @brief Gets a reference to the light manager for managing lights in the
      * scene.
-     * 
+     *
      * @return Reference to the LightManager.
      */
     LightManager& getLightManager();
 
     /**
      * @brief Gets a const reference to the light manager.
-     * 
+     *
      * @return Const reference to the LightManager.
      */
     const LightManager& getLightManager() const;
@@ -72,12 +98,13 @@ namespace hc
 
     /**
      * @brief Gets a const reference to the camera manager.
-     * 
+     *
      * @return Const reference to the CameraManager.
      */
     const CameraManager& getCameraManager() const;
 
   private:
+    IGameObjectFactory& m_gameObjectFactory;
     SceneGraph m_sceneGraph;
     LightManager m_lightManager;
     CameraManager m_cameraManager;

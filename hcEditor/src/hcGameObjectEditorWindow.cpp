@@ -11,6 +11,7 @@
 namespace hc::editor
 {
   GameObjectEditorWindow::GameObjectEditorWindow(
+    HotCoffeeEngine& hotCoffeeEngine,
     ProjectFileSelector& projectFileSelector,
     GameObjectSelectionService& gameObjectSelectionService
   ) :
@@ -19,6 +20,7 @@ namespace hc::editor
     m_gameObjectSelectionService(gameObjectSelectionService)
   {
     componentDrawersRegistry::registryDefaultComponentDrawers(
+      hotCoffeeEngine,
       m_componentDrawersManager,
       projectFileSelector
     );

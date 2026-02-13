@@ -1,12 +1,31 @@
+#include <iostream>
 #include "hc/editor/hcHotCoffeeEditor.h"
 
 using hc::editor::HotCoffeeEditor;
+using hc::ProcessResult;
 
 int main()
 {
-  HotCoffeeEditor::Prepare();
-  HotCoffeeEditor::Initialize();
-  HotCoffeeEditor::Run();
-  HotCoffeeEditor::Shutdown();
+  HotCoffeeEditor editor;
+
+  try
+  { 
+    ProcessResult result = editor.initialize();
+    if (!result.success)
+    { 
+      std::cerr << "Editor initialization failed: " << result.message << std::endl;
+      return -1;
+    }
+
+    editor.run();
+    editor.destroy();
+  }
+  catch (const std::exception& e)
+  {
+    editor.destroy();
+    std::cerr << "Unhandled exception: " << e.what() << std::endl;
+    return -1;
+  }
+
   return 0;
 }

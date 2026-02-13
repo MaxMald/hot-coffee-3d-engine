@@ -1,10 +1,12 @@
 #include "hc/hcScene.h"
 #include "hc/hcRenderContext.h"
 #include "hc/hcCamera.h"
+#include "hc/hcIGameObjectFactory.h"
 
 namespace hc
 {
-  Scene::Scene()
+  Scene::Scene(IGameObjectFactory& gameObjectFactory) :
+    m_gameObjectFactory(gameObjectFactory)
   {
   }
 
@@ -34,9 +36,29 @@ namespace hc
     m_sceneGraph.draw(renderContext);
   }
 
-  void Scene::update(float deltaTime)
+  void Scene::update(const Time& elapsedTime)
   {
-    m_sceneGraph.update(deltaTime);
+    m_sceneGraph.update(elapsedTime);
+  }
+
+  UniquePtr<GameObject> Scene::createGameObject(const String& name)
+  {
+    return m_gameObjectFactory.create(name);
+  }
+
+  GameObject* Scene::createRootGameObject(const String& name)
+  {
+    UniquePtr<GameObject> root = createGameObject(name);
+    if (!root)
+    {
+      throw RuntimeErrorException(
+        String::Format("Failed to create root GameObject with name '%s'", name.c_str())
+      );
+    }
+
+    GameObject* rootPtr = root.get();
+    m_sceneGraph.addRoot(std::move(root));
+    return rootPtr;
   }
 
   SceneGraph& Scene::getSceneGraph()
@@ -81,6 +103,7 @@ namespace hc
 
   void Scene::onDestroy()
   {
+    m_sceneGraph.clear();
     m_lightManager.clear();
   }
 }

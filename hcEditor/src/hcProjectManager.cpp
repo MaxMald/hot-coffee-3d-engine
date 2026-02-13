@@ -12,6 +12,12 @@ namespace hc::editor
   {
   }
 
+  void ProjectManager::destroy()
+  {
+    closeProject();
+    m_listeners.clear();
+  }
+
   bool ProjectManager::openProject(const Path& projectPath)
   {
     closeProject();

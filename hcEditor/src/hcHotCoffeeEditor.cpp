@@ -1,55 +1,66 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
-#include "hc/editor/hcEditorViewsManager.h"
 #include "hc/editor/hcEditorViewsRegistry.h"
-#include "hc/editor/hcProjectManager.h"
-#include "hc/editor/hcGameObjectSelectionService.h"
+#include "hc/editor/hcEditorServiceManagerRegistry.h"
 
 namespace hc::editor
-{ 
-  void HotCoffeeEditor::Initialize()
-  {
-    HotCoffeeEditor::Instance().initialize();
-  }
-
-  void HotCoffeeEditor::Run()
-  {
-    HotCoffeeEditor::Instance().run();
-  }
-
+{
   HotCoffeeEditor::HotCoffeeEditor() :
-    m_initialized(false),
+    m_engine(),
+    m_serviceManager(),
+    m_editorLogHistory(),
     m_viewsManager(),
-    m_gameObjectSelectionService(),
-    m_editorLogHistory()
+    m_initialized(false)
   {
   }
 
-  void HotCoffeeEditor::initialize()
+  ProcessResult HotCoffeeEditor::initialize()
   {
     if (m_initialized)
-      return;
+      return ProcessResult(false, "HotCoffeeEditor is already initialized.");
+
+    try
+    {
+      LogService::Prepare();
+      LogService::Instance().subscribe(&m_editorLogHistory);
+
+      ProcessResult processResult = m_engine.initialize(
+        hotCoffeeEngineSettingsFactory::createDefault()
+      );
+
+      if (!processResult.success)
+      {
+        destroy();
+        return processResult;
+      }
+
+      prepareEditorScene();
+      prepareEditorServices();
+      prepareEditorViews();
+    }
+    catch (const std::exception& e)
+    {
+      destroy();
+      return ProcessResult(false, e.what());
+    }
+
     m_initialized = true;
-    
-    initEngine();
-    prepareEditorScene();
+    return ProcessResult(true);
   }
 
   void HotCoffeeEditor::run()
   {
-    SceneManager& sceneManager = HotCoffeeEngine::GetSceneManager();
-    IGraphicsManager& graphicsManager = HotCoffeeEngine::GetGraphicsManager();
-    IWindow& window = HotCoffeeEngine::GetWindowManager().getWindow();
-    
-    m_viewsManager.initialize(window);
-    editorViewsRegistry::registerDefaultViews(
-      HotCoffeeEngine::Instance(),
-      m_viewsManager,
-      m_gameObjectSelectionService,
-      m_projectManager,
-      m_editorLogHistory
-    );
+    if (!m_initialized)
+    {
+      throw RuntimeErrorException(
+        "HotCoffeeEditor is not initialized. Call initialize() before run()."
+      );
+    }
+
+    SceneManager& sceneManager = m_engine.getSceneManager();
+    IGraphicsManager& graphicsManager = m_engine.getGraphicsManager();
+    IWindow& window = m_engine.getWindowManager().getWindow();
 
     while (window.isOpen())
     {
@@ -71,31 +82,40 @@ namespace hc::editor
       m_viewsManager.draw();
       graphicsManager.endFrame(window);
     }
+  }
 
+  void HotCoffeeEditor::destroy()
+  {
     m_viewsManager.clear();
-  }
+    m_serviceManager.clear();
 
-  void HotCoffeeEditor::onPrepare()
-  {
-    HotCoffeeEngine::Prepare();
-    LogService::Instance().subscribe(&m_editorLogHistory);
-  }
+    m_engine.destroy();
 
-  void HotCoffeeEditor::onShutdown()
-  {
-    LogService::Instance().unsubscribe(&m_editorLogHistory);
-    HotCoffeeEngine::Shutdown();
-  }
+    if (LogService::HasInstance())
+      LogService::Instance().unsubscribe(&m_editorLogHistory);
 
-  void HotCoffeeEditor::initEngine()
-  {
-    HotCoffeeEngineSettings settings = hotCoffeeEngineSettingsFactory::createDefault();
-    HotCoffeeEngine::Initialize(settings);
+    m_initialized = false;
   }
 
   void HotCoffeeEditor::prepareEditorScene()
   {
-    HotCoffeeEngine::GetSceneManager().createScene("Editor Scene");
-    HotCoffeeEngine::GetSceneManager().setActiveScene("Editor Scene");
+    m_engine.getSceneManager().createScene("Editor Scene");
+    m_engine.getSceneManager().setActiveScene("Editor Scene");
+  }
+
+  void HotCoffeeEditor::prepareEditorServices()
+  {
+    editorServiceManagerRegistry::registerServices(m_serviceManager);
+  }
+
+  void HotCoffeeEditor::prepareEditorViews()
+  {
+    m_viewsManager.initialize(m_engine.getWindowManager().getWindow());
+    editorViewsRegistry::registerDefaultViews(
+      m_engine,
+      m_viewsManager,
+      m_serviceManager,
+      m_editorLogHistory
+    );
   }
 }

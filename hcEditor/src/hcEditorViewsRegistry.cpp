@@ -19,6 +19,9 @@
 #include "hc/editor/hcMaterialManagerWindow.h"
 #include "hc/editor/hcMaterialDrawersManagerFactory.h"
 #include "hc/editor/hcTextureManagerWindow.h"
+#include "hc/editor/hcEditorServiceManager.h"
+#include "hc/editor/hcProjectManager.h"
+#include "hc/editor/hcAssetGroupDrawersRegistry.h"
 
 namespace hc::editor
 {
@@ -27,18 +30,33 @@ namespace hc::editor
     void registerDefaultViews(
       HotCoffeeEngine& hotCoffeeEngine,
       EditorViewsManager& viewsManager,
-      GameObjectSelectionService& gameObjectSelectionService,
-      ProjectManager& projectManager,
+      EditorServiceManager& editorServiceManager,
       EditorLogHistory& editorLogHistory
     )
     {
       viewsManager.registerView(MakeUnique<FileDialogView>());
-      viewsManager.registerView(MakeUnique<PluginManagerWindow>());
+      viewsManager.registerView(MakeUnique<PluginManagerWindow>(
+        hotCoffeeEngine.getPluginManager()
+      ));
       viewsManager.registerView(MakeUnique<EditorLoggerWindow>(editorLogHistory));
-      viewsManager.registerView(MakeUnique<SceneGraphWindow>(gameObjectSelectionService));
-      viewsManager.registerView(MakeUnique<LightManagerWindow>());
-      viewsManager.registerView(MakeUnique<CameraManagerWindow>());
-      viewsManager.registerView(MakeUnique<AssetManagerWindow>());
+      viewsManager.registerView(MakeUnique<SceneGraphWindow>(
+        hotCoffeeEngine.getSceneManager(),
+        editorServiceManager.getService<GameObjectSelectionService>()
+      ));
+      viewsManager.registerView(MakeUnique<LightManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
+      viewsManager.registerView(MakeUnique<CameraManagerWindow>(
+        hotCoffeeEngine.getSceneManager()
+      ));
+
+      UniquePtr<AssetManagerWindow> assetManagerWindow = MakeUnique<AssetManagerWindow>();
+      assetGroupDrawersRegistry::registerAssetGroupDrawers(
+        *assetManagerWindow,
+        hotCoffeeEngine.getAssetManager()
+      );
+
+      viewsManager.registerView(std::move(assetManagerWindow));
       viewsManager.registerView(MakeUnique<TextureManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getTextureManager()
       ));
@@ -47,18 +65,22 @@ namespace hc::editor
       ));
 
       UniquePtr<ProjectFileSelector> projectFileSelector =
-        MakeUnique<ProjectFileSelector>(projectManager);
+        MakeUnique<ProjectFileSelector>(editorServiceManager.getService<ProjectManager>());
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
-        MakeUnique<MaterialDescriptorEditorWindow>(*projectFileSelector);
+        MakeUnique<MaterialDescriptorEditorWindow>(
+          hotCoffeeEngine.getAssetManager(),
+          *projectFileSelector
+        );
 
       viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
-        projectManager,
+        editorServiceManager.getService<ProjectManager>(),
         *matDescEditorWindow
       ));
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
+        hotCoffeeEngine,
         *projectFileSelector,
-        gameObjectSelectionService
+        editorServiceManager.getService<GameObjectSelectionService>()
       ));
       viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
@@ -69,7 +91,10 @@ namespace hc::editor
       ));
 
       viewsManager.registerView(
-        mainMenuBarFactory::create(viewsManager, projectManager)
+        mainMenuBarFactory::create(
+          viewsManager, 
+          editorServiceManager.getService<ProjectManager>()
+        )
       );
     }
   }

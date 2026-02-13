@@ -7,9 +7,11 @@
 namespace hc::editor
 {
   SceneGraphWindow::SceneGraphWindow(
+    SceneManager& sceneManager,
     GameObjectSelectionService& gameObjectSelectionService
   ) :
     AWindowView("Scene Graph", true),
+    m_sceneManager(sceneManager),
     m_gameObjectSelectionService(gameObjectSelectionService)
   {
   }
@@ -20,34 +22,32 @@ namespace hc::editor
 
   void SceneGraphWindow::onDraw()
   {
-    hc::Scene* scene = HotCoffeeEngine::GetSceneManager().getActiveScene();
+    hc::Scene* scene = m_sceneManager.getActiveScene();
     if (!scene)
     {
       ImGui::Text("No active scene.");
       return;
     }
 
-    hc::SceneGraph& sceneGraph = scene->getSceneGraph();
-    drawCreateLayerSection(sceneGraph);
-    drawSceneGraph(sceneGraph);
+    drawCreateLayerSection(*scene);
+    drawSceneGraph(scene->getSceneGraph());
   }
 
-  void SceneGraphWindow::drawCreateLayerSection(SceneGraph& sceneGraph)
+  void SceneGraphWindow::drawCreateLayerSection(Scene& scene)
   {
-    if (ImGui::CollapsingHeader("Create Layer"))
+    if (ImGui::CollapsingHeader("Create Root"))
     {
       static char layerNameBuffer[128] = "";
-      ImGui::InputText("Layer Name", layerNameBuffer, sizeof(layerNameBuffer));
+      ImGui::InputText("Root Name", layerNameBuffer, sizeof(layerNameBuffer));
 
       if (ImGui::Button("Create"))
       {
         String layerName(layerNameBuffer);
-        if (!layerName.empty() && sceneGraph.getRoot(layerName) == nullptr)
-        {
-          UniquePtr<GameObject> newLayer = MakeUnique<GameObject>(layerName);
-          sceneGraph.setRoot(layerName, std::move(newLayer));
-          layerNameBuffer[0] = '\0';
-        }
+        if (layerName.empty())
+          layerName = "New Root";
+
+        scene.createRootGameObject(layerName);
+        layerNameBuffer[0] = '\0';
       }
     }
   }
@@ -62,16 +62,18 @@ namespace hc::editor
       return;
     }
 
-    for (const auto& pair : roots)
+    for (const UniquePtr<GameObject>& root : roots)
     {
-      hc::GameObject* root = pair.second.get();
       if (root)
-        drawGameObjectNode(root);
+        drawGameObjectNode(root.get());
     }
   }
 
   void SceneGraphWindow::drawGameObjectNode(GameObject* gameObject)
   {
+    if (!gameObject)
+      return;
+
     String gameObjectName = gameObject->getName();
     if (gameObjectName.empty())
       gameObjectName = "<unnamed>";
@@ -97,11 +99,8 @@ namespace hc::editor
     if (ImGui::BeginPopup("GameObjectMenu"))
     {
       if (ImGui::MenuItem("Create Child"))
-      {
-        // Create a new child GameObject with a default name
-        UniquePtr<GameObject> newChild = MakeUnique<GameObject>("New Child");
-        gameObject->addChild(std::move(newChild));
-      }
+        gameObject->createChild("New Child");
+
       ImGui::EndPopup();
     }
 

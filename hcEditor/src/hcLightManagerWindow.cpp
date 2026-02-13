@@ -5,8 +5,9 @@
 
 namespace hc::editor
 {
-  LightManagerWindow::LightManagerWindow() :
-    AWindowView("Light Manager", false)
+  LightManagerWindow::LightManagerWindow(SceneManager& sceneManager) :
+    AWindowView("Light Manager", false),
+    m_sceneManager(sceneManager)
   {
   }
 
@@ -15,7 +16,7 @@ namespace hc::editor
   void LightManagerWindow::onDraw()
   {
 
-    Scene* activeScene = HotCoffeeEngine::GetSceneManager().getActiveScene();
+    Scene* activeScene = m_sceneManager.getActiveScene();
     if (!activeScene)
     {
       ImGui::Text("No active scene.");
