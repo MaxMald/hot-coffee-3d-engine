@@ -16,6 +16,13 @@ namespace hc
   class GameObjectFactory : public IGameObjectFactory
   {
   public:
+    /**
+     * @brief Constructs a GameObjectFactory with the given
+     * ComponentFactoriesManager.
+     *
+     * @param componentFactoriesManager Unique pointer to the
+     * ComponentFactoriesManager to use for creating components in GameObjects.
+     */
     GameObjectFactory(
       UniquePtr<ComponentFactoriesManager> componentFactoriesManager
     );
@@ -29,14 +36,6 @@ namespace hc
      * @return UniquePtr<GameObject> The created GameObject.
      */
     UniquePtr<GameObject> create(const String& name) override;
-
-    /**
-     * @brief Gets a reference to the ComponentFactoriesManager used by this
-     * factory.
-     * 
-     * @return Reference to the ComponentFactoriesManager.
-     */
-    ComponentFactoriesManager& getComponentFactoriesManager() const;
 
   private:
     UniquePtr<ComponentFactoriesManager> m_componentFactoriesManager;

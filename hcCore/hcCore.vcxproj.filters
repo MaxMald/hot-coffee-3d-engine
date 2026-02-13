@@ -318,7 +318,7 @@
     <ClCompile Include="src\hcComponentFactoriesManager.cpp">
       <Filter>Source Files\gameObject\components\factory</Filter>
     </ClCompile>
-    <ClCompile Include="src\hcComponentFactoriesManagerFactory.cpp">
+    <ClCompile Include="src\hcComponentFactoriesManagerRegistry.cpp">
       <Filter>Source Files\gameObject\components\factory</Filter>
     </ClCompile>
     <ClCompile Include="src\hcCameraComponentFactory.cpp">

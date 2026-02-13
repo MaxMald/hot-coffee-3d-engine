@@ -175,7 +175,7 @@
     <ClCompile Include="src\hcCameraComponentFactory.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
     <ClCompile Include="src\hcComponentFactoriesManager.cpp" />
-    <ClCompile Include="src\hcComponentFactoriesManagerFactory.cpp" />
+    <ClCompile Include="src\hcComponentFactoriesManagerRegistry.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcGameObjectFactory.cpp" />
