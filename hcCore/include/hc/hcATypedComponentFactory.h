@@ -23,8 +23,7 @@ namespace hc
     virtual ~ATypedComponentFactory() = default;
 
     /**
-     * @brief Creates a new instance of the component type
-     .
+     * @brief Creates a new instance of the component type.
      * @return Unique pointer to the newly created component instance.
      */
     virtual UniquePtr<ComponentType> create() const = 0;
