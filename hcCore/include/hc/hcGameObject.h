@@ -171,6 +171,16 @@ namespace hc
      */
     Vector<IComponent*> getComponents() const;
 
+    /**
+     * @brief Gets all components attached to this GameObject and appends them to
+     * the provided vector. The vector will be cleared before adding components.
+     *
+     * @param outComponents Vector to which component pointers will be appended.
+     * The order of components in the provided vector after the call is
+     * unspecified and should not be relied upon.
+     */
+    void getComponents(Vector<IComponent*>& outComponents) const;
+
   private:
     String m_name;
     GameObject* m_parent = nullptr;

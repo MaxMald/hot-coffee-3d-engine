@@ -158,6 +158,15 @@ namespace hc
     return components;
   }
 
+  void GameObject::getComponents(Vector<IComponent*>& outComponents) const
+  {
+    outComponents.clear();
+    outComponents.reserve(m_components.size());
+
+    for (const auto& pair : m_components)
+      outComponents.push_back(pair.second.get());
+  }
+
   void GameObject::destroy()
   {
     m_components.clear();
