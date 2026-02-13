@@ -9,6 +9,12 @@ namespace hc
   ) :
     m_componentFactoriesManager(std::move(componentFactoriesManager))
   {
+    if (!m_componentFactoriesManager)
+    {
+      throw RuntimeErrorException(
+        "ComponentFactoriesManager is null."
+      );
+    }
   }
 
   GameObjectFactory::~GameObjectFactory()
