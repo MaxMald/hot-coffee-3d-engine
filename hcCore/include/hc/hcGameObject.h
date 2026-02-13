@@ -35,7 +35,7 @@ namespace hc
      * @param gameObjectFactory Reference to the factory used for creating child
      * objects.
      * @param componentFactoriesManager Reference to the manager for component
-     * factories,
+     * factories used to create components.
      */
     GameObject(
       const String& name,
