@@ -76,7 +76,7 @@ namespace hc::editor
         break;
       }
     }
-    catch (Exception& e)
+    catch (const Exception& e)
     {
       LogService::Error(
         String::Format(
