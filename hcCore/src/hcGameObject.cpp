@@ -18,10 +18,7 @@ namespace hc
 
   GameObject::~GameObject()
   {
-    m_components.clear();
-
-    if (m_parent)
-      m_parent->removeChild(this);
+    destroy();
   }
 
   void GameObject::draw(const RenderContext& renderContext)
@@ -166,5 +163,18 @@ namespace hc
   const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
   {
     return m_components;
+  }
+
+  void GameObject::destroy()
+  {
+    m_components.clear();
+
+    if (m_parent)
+      m_parent->removeChild(this);
+
+    for (auto& child : m_children)
+      child->destroy();
+
+    m_children.clear();
   }
 }

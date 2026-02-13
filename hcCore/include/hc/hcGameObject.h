@@ -154,5 +154,10 @@ namespace hc
     Vector<UniquePtr<GameObject>> m_children;
     Vector<UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
+
+    /**
+     * @brief Destroys this GameObject and all its children, releasing resources.
+     */
+    void destroy();
   };
 }
