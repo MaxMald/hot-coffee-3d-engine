@@ -19,16 +19,4 @@ namespace hc
       *m_componentFactoriesManager
     );
   }
-
-  ComponentFactoriesManager& GameObjectFactory::getComponentFactoriesManager() const
-  {
-    if (!m_componentFactoriesManager)
-    {
-      throw InvalidArgumentException(
-        "ComponentFactoriesManager pointer is null."
-      );
-    }
-
-    return *m_componentFactoriesManager;
-  }
 }
