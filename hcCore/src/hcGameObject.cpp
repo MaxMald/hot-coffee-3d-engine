@@ -11,10 +11,10 @@ namespace hc
     IGameObjectFactory& gameObjectFactory,
     ComponentFactoriesManager& componentFactoriesManager
   ) :
+    m_name(name),
     m_parent(nullptr),
     m_gameObjectFactory(gameObjectFactory),
-    m_componentFactoriesManager(componentFactoriesManager),
-    m_name(name)
+    m_componentFactoriesManager(componentFactoriesManager)
   {
   }
 
