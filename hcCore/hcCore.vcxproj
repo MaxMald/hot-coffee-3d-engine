@@ -173,6 +173,7 @@
     <ClCompile Include="src\hcCamera.cpp" />
     <ClCompile Include="src\hcCameraComponent.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
+    <ClCompile Include="src\hcComponentFactoriesManager.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcGameObjectFactory.cpp" />
@@ -216,6 +217,7 @@
     <ClCompile Include="src\hcWindowsPluginSlotFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\hc\hcATypedComponentFactory.h" />
     <ClInclude Include="include\hc\hcATypedAssetLoader.h" />
     <ClInclude Include="include\hc\hcABaseComponent.h" />
     <ClInclude Include="include\hc\hcAsset.h" />
@@ -223,11 +225,13 @@
     <ClInclude Include="include\hc\hcATypedAssetGroup.h" />
     <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
+    <ClInclude Include="include\hc\hcComponentFactoriesManager.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
     <ClInclude Include="include\hc\hcGameObjectFactory.h" />
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
     <ClInclude Include="include\hc\hcIAssetGroup.h" />
     <ClInclude Include="include\hc\hcIAssetLoaderPlugin.h" />
+    <ClInclude Include="include\hc\hcIComponentFactory.h" />
     <ClInclude Include="include\hc\hcIGameObjectFactory.h" />
     <ClInclude Include="include\hc\hcIGraphicResource.h" />
     <ClInclude Include="include\hc\hcHotCoffeeCore.h" />
