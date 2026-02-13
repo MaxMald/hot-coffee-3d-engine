@@ -166,7 +166,8 @@ namespace hc
     /**
      * @brief Gets all components attached to this GameObject.
      * 
-     * @return Vector of pointers to all components.
+     * @return Vector of pointers to all components. The order of components in
+     *         the returned vector is unspecified and should not be relied upon.
      */
     Vector<IComponent*> getComponents() const;
 
