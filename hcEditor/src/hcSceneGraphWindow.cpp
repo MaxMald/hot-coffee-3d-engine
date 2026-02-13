@@ -96,11 +96,8 @@ namespace hc::editor
     if (ImGui::BeginPopup("GameObjectMenu"))
     {
       if (ImGui::MenuItem("Create Child"))
-      {
-        // Create a new child GameObject with a default name
-        UniquePtr<GameObject> newChild = MakeUnique<GameObject>("New Child");
-        gameObject->addChild(std::move(newChild));
-      }
+        gameObject->createChild("New Child");
+
       ImGui::EndPopup();
     }
 
