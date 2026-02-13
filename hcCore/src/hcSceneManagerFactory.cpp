@@ -10,21 +10,19 @@ namespace hc
   {
     UniquePtr<SceneManager> create()
     {
-      UniquePtr<ComponentFactoriesManager> componentFactoriesManager
-        = MakeUnique<ComponentFactoriesManager>();
+      UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>();
+      UniquePtr<ComponentFactoriesManager> componentFactoriesManager =
+        MakeUnique<ComponentFactoriesManager>();
 
-      ComponentFactoriesManager* componentFactoriesManagerPtr = 
-        componentFactoriesManager.get();
+      componentFactoriesManagerRegistry::registerFactories(
+        *componentFactoriesManager,
+        *sceneManager
+      );
 
-      UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>(
+      sceneManager->initialize(
         MakeUnique<GameObjectFactory>(
           std::move(componentFactoriesManager)
         )
-      );
-
-      componentFactoriesManagerRegistry::registerFactories(
-        *componentFactoriesManagerPtr,
-        *sceneManager
       );
 
       return sceneManager;

@@ -30,6 +30,14 @@ namespace hc
      */
     UniquePtr<GameObject> create(const String& name) override;
 
+    /**
+     * @brief Gets a reference to the ComponentFactoriesManager used by this
+     * factory.
+     * 
+     * @return Reference to the ComponentFactoriesManager.
+     */
+    ComponentFactoriesManager& getComponentFactoriesManager() const;
+
   private:
     UniquePtr<ComponentFactoriesManager> m_componentFactoriesManager;
   };

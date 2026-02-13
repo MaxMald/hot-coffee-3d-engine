@@ -13,14 +13,16 @@ namespace hc
   class HC_CORE_EXPORT SceneManager : public NonCopyable
   {
   public:
-    /**
-     * @brief Constructs a SceneManager with the provided game object factory.
-     *
-     * @param gameObjectFactory Unique pointer to an IGameObjectFactory used for
-     * creating game objects in scenes.
-     */
-    SceneManager(UniquePtr<IGameObjectFactory> gameObjectFactory);
+    SceneManager();
     ~SceneManager();
+
+    /**
+     * @brief Initializes the scene manager with a game object factory.
+     *
+     * @param gameObjectFactory Unique pointer to the IGameObjectFactory to use
+     * for creating game objects in scenes.
+     */
+    void initialize(UniquePtr<IGameObjectFactory> gameObjectFactory);
 
     /**
      * @brief Draws the active scene.

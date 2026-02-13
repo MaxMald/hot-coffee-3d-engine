@@ -3,17 +3,29 @@
 
 namespace hc
 {
-  SceneManager::SceneManager(
-    UniquePtr<IGameObjectFactory> gameObjectFactory
-  ) :
+  SceneManager::SceneManager() :
     m_activeScene(nullptr),
-    m_gameObjectFactory(std::move(gameObjectFactory))
+    m_gameObjectFactory(nullptr)
   {
   }
 
   SceneManager::~SceneManager()
   {
     destroy();
+  }
+
+  void SceneManager::initialize(
+    UniquePtr<IGameObjectFactory> gameObjectFactory
+  )
+  {
+    if (!gameObjectFactory)
+    {
+      throw InvalidArgumentException(
+        "GameObjectFactory pointer is null."
+      );
+    }
+
+    m_gameObjectFactory = std::move(gameObjectFactory);
   }
 
   void SceneManager::draw()
