@@ -101,7 +101,7 @@ namespace hc::editor
     {
       m_createComponentSection.createComponentFromSelection(gameObject);
     }
-    catch (Exception& e)
+    catch (const Exception& e)
     {
       LogService::Error(
         String::Format(
