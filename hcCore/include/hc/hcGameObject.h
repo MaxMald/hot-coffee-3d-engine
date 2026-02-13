@@ -204,14 +204,6 @@ namespace hc
     UniquePtr<ComponentType> component = m_componentFactoriesManager
       .createComponent<ComponentType>();
 
-    if (!component)
-    {
-      String typeName = typeid(ComponentType).name();
-      throw RuntimeErrorException(
-        "Failed to create component of type " + typeName
-      );
-    }
-
     ComponentType* componentPtr = component.get();
     addComponent(std::move(component));
     return componentPtr;
