@@ -5,10 +5,21 @@
 
 namespace hc
 {
+  class IGameObjectFactory;
   class IComponent;
 
   /**
-   * @brief Base class for all game objects in the engine.
+   * @class GameObject
+   * @brief Represents an entity in the scene graph with transform, rendering,
+   * and component support.
+   *
+   * GameObject is the base class for all entities in the engine. It supports
+   * hierarchical relationships, transformation, rendering, and extensibility via
+   * components. Each GameObject can have a parent, multiple children, and
+   * multiple components. Ownership of children and components is managed
+   * internally.
+   *
+   * @note GameObject instances are non-copyable.
    */
   class HC_CORE_EXPORT GameObject :
     public NonCopyable,
@@ -16,76 +27,137 @@ namespace hc
     public IDrawable
   {
   public:
-    GameObject();
-    GameObject(const String& name);
+    /**
+     * @brief Constructs a GameObject with the specified name and factory.
+     * 
+     * @param name The name of the GameObject.
+     * @param gameObjectFactory Reference to the factory used for creating child
+     * objects.
+     */
+    GameObject(const String& name, IGameObjectFactory& gameObjectFactory);
+
+    /**
+     * @brief Destructor for GameObject.
+     */
     virtual ~GameObject();
 
     /**
-     * @brief Draws the game object and its children.
+     * @brief Renders the GameObject and its drawable children/components.
+     * 
+     * @param renderContext Rendering context for drawing.
      */
     virtual void draw(const RenderContext& renderContext) override;
 
     /**
-     * @brief Updates the game object and its children.
+     * @brief Updates the GameObject and its children.
      * 
-     * @param elapsedTime Time elapsed since last frame.
+     * @param elapsedTime Time elapsed since the last update.
      */
     void update(const Time& elapsedTime);
 
     /**
-     * @brief Sets the GameObject name
+     * @brief Sets the name of the GameObject.
+     * 
+     * @param name The new name.
      */
     void setName(const String& name);
 
     /**
-     * @brief Gets the GameObject name
+     * @brief Gets the name of the GameObject.
+     * 
+     * @return The name.
      */
     const String& getName() const;
 
     /**
      * @brief Gets the parent GameObject.
+     * 
+     * @return Pointer to the parent, or nullptr if root.
      */
     GameObject* getParent() const;
 
     /**
-     * @brief Adds a child GameObject. The parent will take ownership of the
-     * child.
+     * @brief Adds a child GameObject and takes ownership.
+     * 
+     * @param child Unique pointer to the child GameObject.
      */
     void addChild(UniquePtr<GameObject> child);
 
     /**
-     * @brief Removes a child GameObject. Returns ownership to the caller if
-     * found, nullptr otherwise.
+     * @brief Creates and adds a new child GameObject.
+     * 
+     * @param childName Name for the new child.
+     * 
+     * @return Pointer to the newly created child GameObject.
+     */
+    GameObject* createChild(const String& childName);
+
+    /**
+     * @brief Removes a child GameObject and returns ownership.
+     * 
+     * @param child Pointer to the child to remove.
+     * 
+     * @return Unique pointer to the removed child, or nullptr if not found.
      */
     UniquePtr<GameObject> removeChild(GameObject* child);
 
     /**
-     * @brief Gets the children of this GameObject.
+     * @brief Gets the first child GameObject with the specified name.
+     * 
+     * @param name Name to search for.
+     * 
+     * @return Pointer to the matching child, or nullptr if not found.
+     */
+    GameObject* getChild(const String& name);
+
+    /**
+     * @brief Gets all child GameObjects with the specified name.
+     * 
+     * @param name Name to search for.
+     * 
+     * @return Vector of pointers to matching children.
+     */
+    Vector<GameObject*> getChildrenByName(const String& name);
+
+    /**
+     * @brief Gets all children of this GameObject.
+     * 
+     * @return Vector of unique pointers to children.
      */
     const Vector<UniquePtr<GameObject>>& getChildren() const;
 
     /**
-     * @brief Gets the world transformation matrix. Combines this object's
-     * transform with all ancestors.
+     * @brief Computes the world transformation matrix for this GameObject.
+     * 
+     * @return The world matrix.
      */
     Matrix4 getWorldMatrix() const;
 
     /**
-     * @brief Adds a component to this GameObject. The GameObject takes
-     * ownership of the component.
+     * @brief Adds a component to this GameObject and takes ownership.
+     * 
+     * @param component Unique pointer to the component.
      */
     void addComponent(UniquePtr<IComponent> component);
 
     /**
-     * @brief Gets the components attached to this GameObject.
+     * @brief Gets all components attached to this GameObject.
+     * 
+     * @return Vector of unique pointers to components.
      */
     const Vector<UniquePtr<IComponent>>& getComponents() const;
 
   private:
     String m_name;
     GameObject* m_parent = nullptr;
+    IGameObjectFactory& m_gameObjectFactory;
     Vector<UniquePtr<GameObject>> m_children;
     Vector<UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
+
+    /**
+     * @brief Destroys this GameObject and all its children, releasing resources.
+     */
+    void destroy();
   };
 }

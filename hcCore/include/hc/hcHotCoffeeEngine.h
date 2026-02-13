@@ -3,12 +3,12 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
-#include "hc/hcSceneManager.h"
 #include "hc/hcAssetManager.h"
 #include "hc/hcProcessResult.h"
 
 namespace hc
 {
+  class SceneManager;
   class IWindowManager;
   class IGraphicsManager;
 
@@ -31,7 +31,7 @@ namespace hc
   private:
     UniquePtr<IGraphicsManager> m_graphicsManager;
     UniquePtr<IWindowManager> m_windowManager;
-    SceneManager m_sceneManager;
+    UniquePtr<SceneManager> m_sceneManager;
     AssetManager m_assetManager;
     PluginManager m_pluginManager;
     bool m_initialized;
