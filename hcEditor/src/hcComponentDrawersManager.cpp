@@ -24,7 +24,7 @@ namespace hc::editor
     }
     else
     {
-      m_notImplementedView->drawComponent(component);
+      m_notImplementedView.drawComponent(component);
     }
   }
 

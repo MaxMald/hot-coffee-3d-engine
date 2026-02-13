@@ -5,8 +5,9 @@
 
 namespace hc
 {
-  CameraComponent::CameraComponent() :
+  CameraComponent::CameraComponent(SceneManager& sceneManager) :
     ABaseComponent(componentType::Type::Camera),
+    m_sceneManager(sceneManager),
     m_camera(nullptr)
   {
     CameraManager& cameraManager = getCameraManager();
@@ -19,7 +20,7 @@ namespace hc
     cameraManager.destroyCamera(m_camera);
   }
 
-  const Vector3f& CameraComponent::getPosition() const 
+  const Vector3f& CameraComponent::getPosition() const
   {
     if (m_camera)
       return m_camera->getPosition();
@@ -75,21 +76,12 @@ namespace hc
 
   CameraManager& CameraComponent::getCameraManager()
   {
-    // TODO
-
-    throw RuntimeErrorException(
-      "CameraComponent::getCameraManager is not implemented yet."
-    );
-
-    /*
-    SceneManager& sceneManager = HotCoffeeEngine::Instance().getSceneManager();
-    Scene* activeScene = sceneManager.getActiveScene();
+    Scene* activeScene = m_sceneManager.getActiveScene();
     if (!activeScene)
       throw RuntimeErrorException(
         "Cannot get CameraManager because there is no active scene."
       );
 
     return activeScene->getCameraManager();
-    */
   }
 }

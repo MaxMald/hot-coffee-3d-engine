@@ -96,14 +96,20 @@ namespace hc::editor
     m_createComponentSection.draw();
     if (!m_createComponentSection.wasCreationRequested())
       return;
-
-    UniquePtr<IComponent> newComponent = m_createComponentSection
-      .createComponentFromSelection();
-
-    if (!newComponent)
-      return;
-
-    gameObject->addComponent(std::move(newComponent));
+    
+    try
+    {
+      m_createComponentSection.createComponentFromSelection(gameObject);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to create component. Error: %s",
+          e.what()
+        )
+      );
+    }
   }
 
   void GameObjectEditorWindow::drawComponents(GameObject* gameObject)
@@ -111,13 +117,11 @@ namespace hc::editor
     if (!gameObject)
       return;
 
-    const Vector<UniquePtr<IComponent>>& components = 
-      gameObject->getComponents();
-
-    for (const UniquePtr<IComponent>& component : components)
+    gameObject->getComponents(m_gameObjectComponents);
+    for (IComponent* component : m_gameObjectComponents)
     {
-      ImGui::PushID(component.get());
-      m_componentDrawersManager.drawComponent(component.get());
+      ImGui::PushID(component);
+      m_componentDrawersManager.drawComponent(component);
       ImGui::PopID();
     }
   }

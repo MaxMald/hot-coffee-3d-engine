@@ -24,6 +24,7 @@ namespace hc::editor
     GameObjectSelectionService& m_gameObjectSelectionService;
     CreateComponentSection m_createComponentSection;
     ComponentDrawersManager m_componentDrawersManager;
+    Vector<IComponent*> m_gameObjectComponents;
 
     void onDraw() override;
     void onDestroy() override;

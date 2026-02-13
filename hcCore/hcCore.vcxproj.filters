@@ -160,6 +160,12 @@
     <Filter Include="Source Files\window">
       <UniqueIdentifier>{3804282c-e9ed-43ef-b4d9-977650dc6f73}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gameObject\components\factory">
+      <UniqueIdentifier>{69a9356c-f664-4622-8368-6c2b8191fd17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gameObject\components\factory">
+      <UniqueIdentifier>{ab4bd03e-6e51-46e4-bd7a-0722c6fe3cfd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\hcHotCoffeeEngine.cpp">
@@ -308,6 +314,15 @@
     </ClCompile>
     <ClCompile Include="src\hcSceneManagerFactory.cpp">
       <Filter>Source Files\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentFactoriesManager.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcComponentFactoriesManagerRegistry.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
+    </ClCompile>
+    <ClCompile Include="src\hcCameraComponentFactory.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -613,6 +628,21 @@
     </ClInclude>
     <ClInclude Include="include\hc\hcSceneManagerFactory.h">
       <Filter>Header Files\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcIComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcATypedComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcComponentFactoriesManager.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcComponentFactoriesManagerRegistry.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraComponentFactory.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
