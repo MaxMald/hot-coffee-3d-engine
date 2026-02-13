@@ -53,24 +53,23 @@ namespace hc
     void addRoot(UniquePtr<GameObject> root);
 
     /**
-     * @brief Removes a root GameObject by key. Returns ownership to the caller
+     * @brief Removes a root GameObject by name. Returns ownership to the caller
      * if found, nullptr otherwise.
      *
-     * @param key The key of the root to remove.
-     * 
+     * @param name The name of the root to remove.
+     *
      * @return The removed GameObject, or nullptr if not found.
      */
-    UniquePtr<GameObject> removeRoot(const String& key);
+    UniquePtr<GameObject> removeRoot(const String& name);
 
     /**
-     * @brief Gets a root GameObject by key.
+     * @brief Gets a root GameObject by name.
      * 
-     * @param key The key of the root to retrieve.
+     * @param name The name of the root to retrieve.
      * 
      * @return Pointer to the GameObject, or nullptr if not found.
      */
-    GameObject* getRoot(const String& key) const;
-
+    GameObject* getRoot(const String& name) const;
     /**
      * @brief Gets a const reference to all root GameObjects mapped by their
      * keys.

@@ -41,7 +41,7 @@ namespace hc
     {
       throw RuntimeErrorException(
         String::Format(
-          "Cannot set root GameObject for key '%s' because it already has a parent.",
+          "Cannot set GameObject with name '%s' because it already has a parent.",
           root->getName().c_str()
         )
       );
@@ -50,13 +50,13 @@ namespace hc
     m_roots.push_back(std::move(root));
   }
 
-  UniquePtr<GameObject> SceneGraph::removeRoot(const String& key)
+  UniquePtr<GameObject> SceneGraph::removeRoot(const String& name)
   {
     auto it = std::find_if(
       m_roots.begin(), m_roots.end(),
-      [&key](const UniquePtr<GameObject>& root) 
+      [&name](const UniquePtr<GameObject>& root) 
       {
-        return root && root->getName() == key;
+        return root && root->getName() == name;
       }
     );
 
@@ -70,13 +70,13 @@ namespace hc
     return nullptr;
   }
 
-  GameObject* SceneGraph::getRoot(const String& key) const
+  GameObject* SceneGraph::getRoot(const String& name) const
   {
     auto it = std::find_if(
       m_roots.begin(), m_roots.end(),
-      [&key](const UniquePtr<GameObject>& root) 
+      [&name](const UniquePtr<GameObject>& root) 
       {
-        return root && root->getName() == key;
+        return root && root->getName() == name;
       }
     );
 
