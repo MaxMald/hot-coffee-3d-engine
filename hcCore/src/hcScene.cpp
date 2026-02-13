@@ -103,6 +103,7 @@ namespace hc
 
   void Scene::onDestroy()
   {
+    m_sceneGraph.clear();
     m_lightManager.clear();
   }
 }

@@ -44,6 +44,12 @@ namespace hc
      */
     void update(const Time& elapsedTime);
 
+    /**
+     * @brief Adds a root GameObject to the scene graph. The GameObject must not
+     * have a parent. Ownership is transferred to the SceneGraph.
+     * 
+     * @param root Unique pointer to the root GameObject to add.
+     */
     void addRoot(UniquePtr<GameObject> root);
 
     /**
@@ -72,6 +78,12 @@ namespace hc
      * @return Const reference to the internal map of roots.
      */
     const Vector<UniquePtr<GameObject>>& getRoots() const;
+
+    /**
+     * @brief Clears all root GameObjects from the scene graph, destroying them
+     * in the process.
+     */
+    void clear();
 
   private :
     /**

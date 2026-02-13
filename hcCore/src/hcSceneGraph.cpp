@@ -90,4 +90,9 @@ namespace hc
   {
     return m_roots;
   }
+
+  void SceneGraph::clear()
+  {
+    m_roots.clear();
+  }
 }
