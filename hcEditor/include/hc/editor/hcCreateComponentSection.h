@@ -53,12 +53,6 @@ namespace hc::editor
   template<typename ComponentType>
   void CreateComponentSection::createComponent(GameObject* gameObject)
   {
-    if (!gameObject)
-    {
-      LogService::Error("Game Object is null. Cannot create component.");
-      return;
-    }
-
     if (gameObject->hasComponent<ComponentType>())
     {
       LogService::Warning("Game Object already has a component of this type.");
