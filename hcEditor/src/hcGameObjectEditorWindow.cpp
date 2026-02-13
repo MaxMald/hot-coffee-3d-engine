@@ -105,7 +105,7 @@ namespace hc::editor
     if (!gameObject)
       return;
 
-    Vector<IComponent*> components =  gameObject->getComponents();
+    Vector<IComponent*> components = gameObject->getComponents();
     for (IComponent* component : components)
     {
       ImGui::PushID(component);
