@@ -4,6 +4,7 @@
 namespace hc
 {
   SceneManager::SceneManager() :
+    m_scenes(),
     m_activeScene(nullptr),
     m_gameObjectFactory(nullptr)
   {
