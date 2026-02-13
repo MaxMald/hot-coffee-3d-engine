@@ -15,9 +15,9 @@ namespace hc
   public:
     /**
      * @brief Constructs a SceneManager with the provided game object factory.
-      *
-      * @param gameObjectFactory Unique pointer to an IGameObjectFactory used for
-      * creating game objects in scenes.
+     *
+     * @param gameObjectFactory Unique pointer to an IGameObjectFactory used for
+     * creating game objects in scenes.
      */
     SceneManager(UniquePtr<IGameObjectFactory> gameObjectFactory);
     ~SceneManager();

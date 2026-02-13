@@ -43,6 +43,9 @@ namespace hc::editor
       if (ImGui::Button("Create"))
       {
         String layerName(layerNameBuffer);
+        if (layerName.empty())
+          layerName = "New Root";
+
         scene.createRootGameObject(layerName);
         layerNameBuffer[0] = '\0';
       }
