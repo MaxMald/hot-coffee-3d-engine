@@ -321,6 +321,9 @@
     <ClCompile Include="src\hcComponentFactoriesManagerFactory.cpp">
       <Filter>Source Files\gameObject\components\factory</Filter>
     </ClCompile>
+    <ClCompile Include="src\hcCameraComponentFactory.cpp">
+      <Filter>Source Files\gameObject\components\factory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\hc\hcHotCoffeeEngine.h">
@@ -635,7 +638,10 @@
     <ClInclude Include="include\hc\hcComponentFactoriesManager.h">
       <Filter>Header Files\gameObject\components\factory</Filter>
     </ClInclude>
-    <ClInclude Include="include\hc\hcComponentFactoriesManagerFactory.h">
+    <ClInclude Include="include\hc\hcComponentFactoriesManagerRegistry.h">
+      <Filter>Header Files\gameObject\components\factory</Filter>
+    </ClInclude>
+    <ClInclude Include="include\hc\hcCameraComponentFactory.h">
       <Filter>Header Files\gameObject\components\factory</Filter>
     </ClInclude>
   </ItemGroup>

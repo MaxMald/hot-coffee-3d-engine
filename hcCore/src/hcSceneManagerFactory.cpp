@@ -2,7 +2,7 @@
 #include "hc/hcSceneManager.h"
 #include "hc/hcGameObjectFactory.h"
 #include "hc/hcComponentFactoriesManager.h"
-#include "hc/hcComponentFactoriesManagerFactory.h"
+#include "hc/hcComponentFactoriesManagerRegistry.h"
 
 namespace hc
 {
@@ -10,11 +10,24 @@ namespace hc
   {
     UniquePtr<SceneManager> create()
     {
-      return MakeUnique<SceneManager>(
+      UniquePtr<ComponentFactoriesManager> componentFactoriesManager
+        = MakeUnique<ComponentFactoriesManager>();
+
+      ComponentFactoriesManager* componentFactoriesManagerPtr = 
+        componentFactoriesManager.get();
+
+      UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>(
         MakeUnique<GameObjectFactory>(
-          componentFactoriesManagerFactory::create()
+          std::move(componentFactoriesManager)
         )
       );
+
+      componentFactoriesManagerRegistry::registerFactories(
+        *componentFactoriesManagerPtr,
+        *sceneManager
+      );
+
+      return sceneManager;
     }
   }
 }

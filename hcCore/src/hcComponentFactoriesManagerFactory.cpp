@@ -1,13 +1,21 @@
-#include "hc/hcComponentFactoriesManagerFactory.h"
+#include "hc/hcComponentFactoriesManagerRegistry.h"
 #include "hc/hcComponentFactoriesManager.h"
+#include "hc/hcCameraComponentFactory.h"
+
+#include "hc/hcSceneManager.h"
 
 namespace hc
 {
-  UniquePtr<ComponentFactoriesManager> componentFactoriesManagerFactory::create()
+  namespace componentFactoriesManagerRegistry
   {
-    UniquePtr<ComponentFactoriesManager> manager
-      = MakeUnique<ComponentFactoriesManager>();
-
-    return manager;
+    void registerFactories(
+      ComponentFactoriesManager& manager,
+      SceneManager& sceneManager
+    )
+    {
+      manager.registerFactory<CameraComponent>(
+        MakeUnique<CameraComponentFactory>(sceneManager)
+      );
+    }
   }
 }
