@@ -173,7 +173,7 @@ namespace hc
       m_parent->removeChild(this);
 
     for (auto& child : m_children)
-      child->destroy();
+      child->m_parent = nullptr;
 
     m_children.clear();
   }
