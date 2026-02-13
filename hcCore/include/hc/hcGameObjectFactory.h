@@ -26,7 +26,7 @@ namespace hc
     GameObjectFactory(
       UniquePtr<ComponentFactoriesManager> componentFactoriesManager
     );
-    ~GameObjectFactory() override = default;
+    ~GameObjectFactory() override;
 
     /**
      * @brief Creates a new GameObject instance with the specified name.

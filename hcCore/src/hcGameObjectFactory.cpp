@@ -11,6 +11,9 @@ namespace hc
   {
   }
 
+  GameObjectFactory::~GameObjectFactory()
+  { }
+
   UniquePtr<GameObject> GameObjectFactory::create(const String& name)
   {
     return MakeUnique<GameObject>(
