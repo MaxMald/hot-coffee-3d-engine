@@ -4,6 +4,7 @@
 
 namespace hc
 {
+  class ComponentFactoriesManager;
   class GameObject;
 
   /**
@@ -15,7 +16,9 @@ namespace hc
   class GameObjectFactory : public IGameObjectFactory
   {
   public:
-    GameObjectFactory();
+    GameObjectFactory(
+      UniquePtr<ComponentFactoriesManager> componentFactoriesManager
+    );
     ~GameObjectFactory() override = default;
 
     /**
@@ -26,5 +29,8 @@ namespace hc
      * @return UniquePtr<GameObject> The created GameObject.
      */
     UniquePtr<GameObject> create(const String& name) override;
+
+  private:
+    UniquePtr<ComponentFactoriesManager> m_componentFactoriesManager;
   };
 }

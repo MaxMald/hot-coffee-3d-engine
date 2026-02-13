@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/hcIDrawable.h"
+#include "hc/hcComponentFactoriesManager.h"
 
 namespace hc
 {
@@ -29,12 +30,18 @@ namespace hc
   public:
     /**
      * @brief Constructs a GameObject with the specified name and factory.
-     * 
+     *
      * @param name The name of the GameObject.
      * @param gameObjectFactory Reference to the factory used for creating child
      * objects.
+     * @param componentFactoriesManager Reference to the manager for component
+     * factories,
      */
-    GameObject(const String& name, IGameObjectFactory& gameObjectFactory);
+    GameObject(
+      const String& name,
+      IGameObjectFactory& gameObjectFactory,
+      ComponentFactoriesManager& componentFactoriesManager
+    );
 
     /**
      * @brief Destructor for GameObject.
@@ -43,106 +50,122 @@ namespace hc
 
     /**
      * @brief Renders the GameObject and its drawable children/components.
-     * 
+     *
      * @param renderContext Rendering context for drawing.
      */
     virtual void draw(const RenderContext& renderContext) override;
 
     /**
      * @brief Updates the GameObject and its children.
-     * 
+     *
      * @param elapsedTime Time elapsed since the last update.
      */
     void update(const Time& elapsedTime);
 
     /**
      * @brief Sets the name of the GameObject.
-     * 
+     *
      * @param name The new name.
      */
     void setName(const String& name);
 
     /**
      * @brief Gets the name of the GameObject.
-     * 
+     *
      * @return The name.
      */
     const String& getName() const;
 
     /**
      * @brief Gets the parent GameObject.
-     * 
+     *
      * @return Pointer to the parent, or nullptr if root.
      */
     GameObject* getParent() const;
 
     /**
      * @brief Adds a child GameObject and takes ownership.
-     * 
+     *
      * @param child Unique pointer to the child GameObject.
      */
     void addChild(UniquePtr<GameObject> child);
 
     /**
      * @brief Creates and adds a new child GameObject.
-     * 
+     *
      * @param childName Name for the new child.
-     * 
+     *
      * @return Pointer to the newly created child GameObject.
      */
     GameObject* createChild(const String& childName);
 
     /**
      * @brief Removes a child GameObject and returns ownership.
-     * 
+     *
      * @param child Pointer to the child to remove.
-     * 
+     *
      * @return Unique pointer to the removed child, or nullptr if not found.
      */
     UniquePtr<GameObject> removeChild(GameObject* child);
 
     /**
      * @brief Gets the first child GameObject with the specified name.
-     * 
+     *
      * @param name Name to search for.
-     * 
+     *
      * @return Pointer to the matching child, or nullptr if not found.
      */
     GameObject* getChild(const String& name);
 
     /**
      * @brief Gets all child GameObjects with the specified name.
-     * 
+     *
      * @param name Name to search for.
-     * 
+     *
      * @return Vector of pointers to matching children.
      */
     Vector<GameObject*> getChildrenByName(const String& name);
 
     /**
      * @brief Gets all children of this GameObject.
-     * 
+     *
      * @return Vector of unique pointers to children.
      */
     const Vector<UniquePtr<GameObject>>& getChildren() const;
 
     /**
      * @brief Computes the world transformation matrix for this GameObject.
-     * 
+     *
      * @return The world matrix.
      */
     Matrix4 getWorldMatrix() const;
 
     /**
-     * @brief Adds a component to this GameObject and takes ownership.
-     * 
-     * @param component Unique pointer to the component.
+     * @brief Creates and adds a component of the specified type to this
+     * GameObject.
+     *
+     * @tparam ComponentType The type of component to create.
+     *
+     * @return Pointer to the created component.
+     *
+     * @throws RuntimeErrorException if a component of the specified type already
+     * exists or if creation fails.
      */
-    void addComponent(UniquePtr<IComponent> component);
+    template<typename ComponentType>
+    ComponentType* createComponent();
+
+    /**
+     * @brief Checks if a component of the specified type is attached to this
+     * GameObject.
+     *
+     * @return True if a component of the specified type exists, false otherwise.
+     */
+    template<typename ComponentType>
+    bool hasComponent() const;
 
     /**
      * @brief Gets all components attached to this GameObject.
-     * 
+     *
      * @return Vector of unique pointers to components.
      */
     const Vector<UniquePtr<IComponent>>& getComponents() const;
@@ -151,13 +174,60 @@ namespace hc
     String m_name;
     GameObject* m_parent = nullptr;
     IGameObjectFactory& m_gameObjectFactory;
+    ComponentFactoriesManager& m_componentFactoriesManager;
     Vector<UniquePtr<GameObject>> m_children;
     Vector<UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
+
+    /**
+     * @brief Adds a component to this GameObject and takes ownership.
+     *
+     * @param component Unique pointer to the component.
+     */
+    void addComponent(UniquePtr<IComponent> component);
 
     /**
      * @brief Destroys this GameObject and all its children, releasing resources.
      */
     void destroy();
   };
+
+  template<typename ComponentType>
+  ComponentType* GameObject::createComponent()
+  {
+    if (hasComponent<ComponentType>())
+    {
+      String typeName = typeid(ComponentType).name();
+      throw RuntimeErrorException(
+        "Component of type " + typeName +
+        " already exists on this GameObject."
+      );
+    }
+
+    UniquePtr<ComponentType> component = m_componentFactoriesManager
+      .createComponent<ComponentType>();
+
+    if (!component)
+    {
+      String typeName = typeid(ComponentType).name();
+      throw RuntimeErrorException(
+        "Failed to create component of type " + typeName
+      );
+    }
+
+    ComponentType* componentPtr = component.get();
+    addComponent(std::move(component));
+    return componentPtr;
+  }
+
+  template<typename ComponentType>
+  bool GameObject::hasComponent() const
+  {
+    for (const auto& component : m_components)
+    {
+      if (dynamic_cast<ComponentType*>(component.get()))
+        return true;
+    }
+    return false;
+  }
 }

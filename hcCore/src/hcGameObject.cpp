@@ -8,10 +8,12 @@ namespace hc
 {
   GameObject::GameObject(
     const String& name,
-    IGameObjectFactory& gameObjectFactory
+    IGameObjectFactory& gameObjectFactory,
+    ComponentFactoriesManager& componentFactoriesManager
   ) :
     m_parent(nullptr),
     m_gameObjectFactory(gameObjectFactory),
+    m_componentFactoriesManager(componentFactoriesManager),
     m_name(name)
   {
   }
@@ -149,7 +151,12 @@ namespace hc
   void GameObject::addComponent(UniquePtr<IComponent> component)
   {
     if (!component)
-      return;
+    {
+      throw InvalidArgumentException(
+        "Cannot add a null component to GameObject: " + m_name
+      );
+    }
+
     m_components.push_back(std::move(component));
 
     IDrawable* drawableComponent = dynamic_cast<IDrawable*>(

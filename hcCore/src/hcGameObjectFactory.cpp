@@ -1,9 +1,13 @@
 #include "hc/hcGameObjectFactory.h"
 #include "hc/hcGameObject.h"
+#include "hc/hcComponentFactoriesManager.h"
 
 namespace hc
 {
-  GameObjectFactory::GameObjectFactory()
+  GameObjectFactory::GameObjectFactory(
+    UniquePtr<ComponentFactoriesManager> componentFactoriesManager
+  ) :
+    m_componentFactoriesManager(std::move(componentFactoriesManager))
   {
   }
 
@@ -11,7 +15,8 @@ namespace hc
   {
     return MakeUnique<GameObject>(
       name,
-      *this
+      *this,
+      *m_componentFactoriesManager
     );
   }
 }

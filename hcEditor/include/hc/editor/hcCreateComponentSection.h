@@ -28,12 +28,12 @@ namespace hc::editor
     bool wasCreationRequested() const;
 
     /**
-     * @brief Creates a component based on the current selection.
-     * 
-     * @return Unique pointer to the newly created component. Returns nullptr
-     * if creation failed or the type is unknown.
+     * @brief Creates a component on the specified GameObject based on the user's
+     * selection.
+     *
+     * @param gameObject The GameObject to which the new component will be added.
      */
-    UniquePtr<IComponent> createComponentFromSelection();
+    void createComponentFromSelection(GameObject* gameObject);
 
   private:
     Bool m_userRequestedCreation;

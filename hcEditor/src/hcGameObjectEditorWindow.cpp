@@ -97,13 +97,7 @@ namespace hc::editor
     if (!m_createComponentSection.wasCreationRequested())
       return;
 
-    UniquePtr<IComponent> newComponent = m_createComponentSection
-      .createComponentFromSelection();
-
-    if (!newComponent)
-      return;
-
-    gameObject->addComponent(std::move(newComponent));
+    m_createComponentSection.createComponentFromSelection(gameObject);
   }
 
   void GameObjectEditorWindow::drawComponents(GameObject* gameObject)

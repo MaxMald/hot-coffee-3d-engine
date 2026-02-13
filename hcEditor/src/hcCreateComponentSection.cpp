@@ -40,8 +40,16 @@ namespace hc::editor
     return m_userRequestedCreation;
   }
 
-  UniquePtr<IComponent> CreateComponentSection::createComponentFromSelection()
+  void CreateComponentSection::createComponentFromSelection(
+    GameObject* gameObject
+  )
   {
+    if (!gameObject)
+    {
+      LogService::Error("Game Object is null. Cannot create component.");
+      return;
+    }
+
     componentType::Type selectedType = componentType::FromString(
       COMPONENT_TYPES[m_selectedComponentTypeIndex]
     );
@@ -49,12 +57,13 @@ namespace hc::editor
     switch (selectedType)
     {
     case componentType::Type::Mesh:
-      return MakeUnique<MeshComponent>();
+      gameObject->createComponent<MeshComponent>();
+      break;
     case componentType::Type::Camera:
-      return MakeUnique<CameraComponent>();
+      gameObject->createComponent<CameraComponent>();
+      break;
 
     default:
-    {
       LogService::Error(
         String::Format(
           "CreateComponentSection::createComponentFromSelection: "
@@ -63,10 +72,8 @@ namespace hc::editor
         )
       );
       break;
-    } 
     }
 
     m_userRequestedCreation = false;
-    return nullptr;
   }
 }

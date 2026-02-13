@@ -174,6 +174,7 @@
     <ClCompile Include="src\hcCameraComponent.cpp" />
     <ClCompile Include="src\hcCameraManager.cpp" />
     <ClCompile Include="src\hcComponentFactoriesManager.cpp" />
+    <ClCompile Include="src\hcComponentFactoriesManagerFactory.cpp" />
     <ClCompile Include="src\hcComponentType.cpp" />
     <ClCompile Include="src\hcGameObject.cpp" />
     <ClCompile Include="src\hcGameObjectFactory.cpp" />
@@ -226,6 +227,7 @@
     <ClInclude Include="include\hc\hcAssetManagerLoadersRegistry.h" />
     <ClInclude Include="include\hc\hcCameraComponent.h" />
     <ClInclude Include="include\hc\hcComponentFactoriesManager.h" />
+    <ClInclude Include="include\hc\hcComponentFactoriesManagerFactory.h" />
     <ClInclude Include="include\hc\hcComponentType.h" />
     <ClInclude Include="include\hc\hcGameObjectFactory.h" />
     <ClInclude Include="include\hc\hcGraphicsManagerFactory.h" />
