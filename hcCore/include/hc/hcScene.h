@@ -192,7 +192,7 @@ namespace hc
     void initialize(IGameObjectFactory* gameObjectFactory);
 
     /**
-     * @brief Activates the scene, calling activation and loading hooks.
+     * @brief Activates the scene, calling onActivate(), onLoad(), and onPrepare() hooks.
      */
     void activate();
 
