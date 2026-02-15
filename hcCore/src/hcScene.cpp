@@ -143,6 +143,10 @@ namespace hc
   void Scene::activate()
   {
     onActivate();
+
+    // Note: onLoad() is called every time the scene is activated.
+    // Since deactivate() calls clear(), scenes must (re)load or recreate
+    // their resources in onLoad() whenever they become active again.
     onLoad();
     onPrepare();
   }
