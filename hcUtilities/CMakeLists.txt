@@ -7,12 +7,10 @@ add_library(hcUtilities SHARED
   ${UTILITIES_HEADERS}
 )
 
-target_compile_definitions(hcUtilities PRIVATE HC_UTILITY_EXPORTS)
-
 # Target properties
 set_target_properties(hcUtilities PROPERTIES
   OUTPUT_NAME "hcUtilities"
-  SUFFIX $<$<CONFIG:Debug>:-d>
+  DEBUG_POSTFIX "-d"
   VS_CHARSET "" # Character set: Not set (default)
 )
 
@@ -33,7 +31,6 @@ target_compile_options(hcUtilities PRIVATE
 # Includes
 target_include_directories(hcUtilities 
   PUBLIC "include"
-  PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/NLOHMANN_JSON/include"
 )
 
 # Install the library to the 'lib' directory

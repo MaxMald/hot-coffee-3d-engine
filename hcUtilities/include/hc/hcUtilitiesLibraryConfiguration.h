@@ -6,7 +6,7 @@
 #   if defined(HC_STATIC_LIB)
 #     define HC_UTILITY_EXPORT
 #   else
-#     if defined(HC_UTILITY_EXPORTS)
+#     if defined(hcUtilities_EXPORTS)
 #       define HC_UTILITY_EXPORT __declspec(dllexport)
 #     else
 #       define HC_UTILITY_EXPORT __declspec(dllimport)
