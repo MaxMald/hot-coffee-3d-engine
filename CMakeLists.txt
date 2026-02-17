@@ -9,7 +9,14 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Subdirectories
+# Assimp
 add_subdirectory(dependencies/assimp-6.0.4)
+
+# Sfml 
+set(BUILD_SHARED_LIBS ON)
+add_subdirectory(dependencies/SFML-3.0.2)
+
+# Hot Coffee
 add_subdirectory(hcAssetLoaders)
 add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
