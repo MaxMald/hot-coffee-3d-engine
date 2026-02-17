@@ -92,7 +92,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS;hcUtilities_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)dependencies\NLOHMANN_JSON\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -111,7 +111,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS;hcUtilities_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -128,7 +128,7 @@
     <ClCompile>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS;hcUtilities_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;$(SolutionDir)dependencies\NLOHMANN_JSON\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -147,7 +147,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);HK_UTILITY_EXPORTS;HC_UTILITY_EXPORTS;hcUtilities_EXPORTS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)$(ProjectName)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>

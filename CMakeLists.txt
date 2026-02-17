@@ -25,14 +25,18 @@ set_target_properties(
   zlibstatic
   uninstall
   UpdateAssimpLibsDebugSymbolsAndDLLs
-  PROPERTIES FOLDER "Dependencies/Assimp"
+  PROPERTIES FOLDER "Assimp"
 )
 
 set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 
 # Sfml 
-#set(BUILD_SHARED_LIBS ON)
-#add_subdirectory(dependencies/SFML-3.0.2)
+set(BUILD_SHARED_LIBS ON)
+set(SFML_BUILD_NETWORK OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_AUDIO OFF CACHE BOOL "" FORCE)
+set(SFML_BUILD_GRAPHICS OFF CACHE BOOL "" FORCE)
+add_subdirectory(dependencies/SFML-3.0.2)
+set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 
 # Hot Coffee
 add_subdirectory(hcAssetLoaders)
@@ -40,7 +44,7 @@ add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
 add_subdirectory(hcGraphicsOpenGL)
 add_subdirectory(hcUtilities)
-#add_subdirectory(hcWindowSfml)
+add_subdirectory(hcWindowSfml)
 
 # Editor as startup project
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT hcEditor)

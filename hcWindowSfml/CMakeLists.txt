@@ -10,7 +10,8 @@ add_library(hcWindowSfml SHARED
 # Target properties
 set_target_properties(hcWindowSfml PROPERTIES
   OUTPUT_NAME "hcWindowSfml"
-  SUFFIX "-d"
+  DEBUG_POSTFIX "-d"
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
@@ -42,6 +43,18 @@ target_link_libraries(hcWindowSfml PUBLIC
   sfml-window
   sfml-system
 )
+
+##Post-build commands
+# copy sfml libraries to the output directory of the Hot Coffee Engine
+if(WIN32)
+  add_custom_command(TARGET hcWindowSfml POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${CMAKE_BINARY_DIR}/dependencies/SFML-3.0.2/bin/$<CONFIG>/sfml-system$<$<CONFIG:Debug>:-d>-3.dll"
+      "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/"
+      "${CMAKE_BINARY_DIR}/dependencies/SFML-3.0.2/bin/$<CONFIG>/sfml-window$<$<CONFIG:Debug>:-d>-3.dll"
+      "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/"
+  )
+endif()
 
 # Install the library to the 'lib' directory
 install(TARGETS hcWindowSfml DESTINATION lib)
