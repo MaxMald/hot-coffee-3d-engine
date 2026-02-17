@@ -48,7 +48,7 @@ namespace hc
      * @param name The unique name for the new scene.
      * @param args Arguments to forward to the scene's constructor.
      *
-     * @return Pointer to the created scene.
+     * @return Pointer to the newly created scene of the specified type.
      *
      * @throws RuntimeErrorException if a scene with the given name already
      * exists.
@@ -133,7 +133,7 @@ namespace hc
      * @param name The name of the scene.
      * @param scene The unique pointer to the scene instance.
      */
-    void addScene(String name, UniquePtr<Scene> scene);
+    void addScene(const String& name, UniquePtr<Scene> scene);
   };
 
   template<typename SceneType, typename... TArgs>
@@ -157,6 +157,4 @@ namespace hc
     addScene(name, std::move(newScene));
     return scenePtr;
   }
-
-  template Scene* SceneManager::createScene<Scene>(const String& name);
 }

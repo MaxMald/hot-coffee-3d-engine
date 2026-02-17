@@ -131,6 +131,13 @@ namespace hc
     // the scene is destroyed.
   }
 
+  void Scene::clear()
+  {
+    m_sceneGraph.clear();
+    m_lightManager.clear();
+    m_cameraManager.clear();
+  }
+
   void Scene::initialize(IGameObjectFactory* gameObjectFactory)
   {
     if (!gameObjectFactory)
@@ -143,10 +150,6 @@ namespace hc
   void Scene::activate()
   {
     onActivate();
-
-    // Note: onLoad() is called every time the scene is activated.
-    // Since deactivate() calls clear(), scenes must (re)load or recreate
-    // their resources in onLoad() whenever they become active again.
     onLoad();
     onPrepare();
   }
@@ -154,7 +157,6 @@ namespace hc
   void Scene::deactivate()
   {
     onDeactivate();
-    clear();
   }
 
   void Scene::draw()
@@ -186,13 +188,6 @@ namespace hc
     onBeforeUpdate(elapsedTime);
     m_sceneGraph.update(elapsedTime);
     onAfterUpdate(elapsedTime);
-  }
-
-  void Scene::clear()
-  {
-    m_sceneGraph.clear();
-    m_lightManager.clear();
-    m_cameraManager.clear();
   }
 
   void Scene::destroy()

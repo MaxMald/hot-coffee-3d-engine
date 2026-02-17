@@ -27,9 +27,6 @@ namespace hc
      */
     Scene();
 
-    /**
-     * @brief Virtual destructor for Scene.
-     */
     virtual ~Scene();
 
     /**
@@ -95,10 +92,6 @@ namespace hc
     const CameraManager& getCameraManager() const;
 
   protected:
-    SceneGraph m_sceneGraph;
-    LightManager m_lightManager;
-    CameraManager m_cameraManager;
-
     /**
      * @brief Called after the scene is initialized.
      *
@@ -177,10 +170,15 @@ namespace hc
      */
     virtual void onDestroy();
 
-  private:
     /**
-     * @brief Pointer to the factory used for creating game objects.
+     * @brief Clears the scene graph, lights, and cameras.
      */
+    void clear();
+
+  private:
+    SceneGraph m_sceneGraph;
+    LightManager m_lightManager;
+    CameraManager m_cameraManager;
     IGameObjectFactory* m_gameObjectFactory;
 
     /**
@@ -197,7 +195,7 @@ namespace hc
     void activate();
 
     /**
-     * @brief Deactivates the scene and clears its contents.
+     * @brief Deactivates the scene.
      */
     void deactivate();
 
@@ -212,11 +210,6 @@ namespace hc
      * @param elapsedTime The elapsed time since the last update.
      */
     void update(const Time& elapsedTime);
-
-    /**
-     * @brief Clears the scene graph, lights, and cameras.
-     */
-    void clear();
 
     /**
      * @brief Destroys the scene, performing cleanup and clearing contents.

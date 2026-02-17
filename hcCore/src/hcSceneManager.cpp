@@ -119,7 +119,7 @@ namespace hc
     m_gameObjectFactory.reset();
   }
 
-  void SceneManager::addScene(String name, UniquePtr<Scene> scene)
+  void SceneManager::addScene(const String& name, UniquePtr<Scene> scene)
   {
     if (!m_gameObjectFactory)
     {
