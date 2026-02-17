@@ -35,21 +35,6 @@ namespace hc
       m_activeScene->draw();
   }
 
-  Scene* SceneManager::createScene(const String& name)
-  {
-    if (!m_gameObjectFactory)
-    {
-      throw RuntimeErrorException(
-        "IGameObjectFactory is not initialized. Cannot create scene."
-      );
-    }
-
-    auto scene = MakeUnique<Scene>(*m_gameObjectFactory);
-    Scene* scenePtr = scene.get();
-    m_scenes[name] = std::move(scene);
-    return scenePtr;
-  }
-
   bool SceneManager::removeScene(const String& name)
   {
     auto it = m_scenes.find(name);
@@ -57,16 +42,21 @@ namespace hc
     {
       if (m_activeScene == it->second.get())
       {
-        m_activeScene->onDeactivate();
+        m_activeScene->deactivate();
         m_activeScene = nullptr;
       }
 
-      it->second->onDestroy();
+      it->second->destroy();
       m_scenes.erase(it);
       return true;
     }
 
     return false;
+  }
+
+  bool SceneManager::hasScene(const String& name) const
+  {
+    return m_scenes.find(name) != m_scenes.end();
   }
 
   Scene* SceneManager::getScene(const String& name) const
@@ -84,10 +74,10 @@ namespace hc
     if (it != m_scenes.end())
     {
       if (m_activeScene)
-        m_activeScene->onDeactivate();
+        m_activeScene->deactivate();
 
       m_activeScene = it->second.get();
-      m_activeScene->onActivate();
+      m_activeScene->activate();
 
       return true;
     }
@@ -110,14 +100,14 @@ namespace hc
   {
     if (m_activeScene)
     {
-      m_activeScene->onDeactivate();
+      m_activeScene->deactivate();
       m_activeScene = nullptr;
     }
 
     for (auto& pair : m_scenes)
     {
       if (pair.second)
-        pair.second->onDestroy();
+        pair.second->destroy();
     }
 
     m_scenes.clear();
@@ -127,5 +117,18 @@ namespace hc
   {
     clear();
     m_gameObjectFactory.reset();
+  }
+
+  void SceneManager::addScene(const String& name, UniquePtr<Scene> scene)
+  {
+    if (!m_gameObjectFactory)
+    {
+      throw RuntimeErrorException(
+        "IGameObjectFactory is not initialized. Cannot add scene."
+      );
+    }
+
+    scene->initialize(m_gameObjectFactory.get());
+    m_scenes[name] = std::move(scene);
   }
 }

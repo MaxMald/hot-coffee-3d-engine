@@ -99,7 +99,7 @@ namespace hc::editor
 
   void HotCoffeeEditor::prepareEditorScene()
   {
-    m_engine.getSceneManager().createScene("Editor Scene");
+    m_engine.getSceneManager().createScene<Scene>("Editor Scene");
     m_engine.getSceneManager().setActiveScene("Editor Scene");
   }
 
