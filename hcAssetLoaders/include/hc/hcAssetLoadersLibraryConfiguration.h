@@ -6,7 +6,7 @@
 #   if defined(HC_STATIC_LIB)
 #     define HC_ASSET_LOADERS_EXPORT
 #   else
-#     if defined(HC_ASSET_LOADERS_EXPORTS)
+#     if defined(hcAssetLoaders_EXPORTS)
 #       define HC_ASSET_LOADERS_EXPORT __declspec(dllexport)
 #     else
 #       define HC_ASSET_LOADERS_EXPORT __declspec(dllimport)

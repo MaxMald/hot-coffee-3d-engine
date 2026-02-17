@@ -8,7 +8,7 @@ add_executable(hcEditor
 )
 
 # Preprocessor definition
-target_compile_definitions(hcEditor PRIVATE USE_STD_FILESYSTEM) # Imgui required
+target_compile_definitions(hcEditor PRIVATE USE_STD_FILESYSTEM) # Required by imgui
 
 # Target properties
 set_target_properties(hcEditor PROPERTIES
@@ -29,6 +29,12 @@ target_compile_options(hcEditor PRIVATE
 
   # SDL checks
   $<$<CXX_COMPILER_ID:MSVC>:/sdl>
+)
+
+# Required dependencies (loaded at runtime)
+add_dependencies(hcEditor 
+  hcGraphicsOpenGL 
+  hcAssetLoaders
 )
 
 # Includes

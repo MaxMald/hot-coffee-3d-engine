@@ -8,16 +8,34 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
-# Subdirectories
+# Current shared libs state
+set(_OLD_BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS})
+
+## Subdirectories
 # Assimp
-#add_subdirectory(dependencies/assimp-6.0.4)
+set(BUILD_SHARED_LIBS ON)
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
+
+add_subdirectory(dependencies/assimp-6.0.4)
+
+set_target_properties(
+  assimp
+  zlibstatic
+  uninstall
+  UpdateAssimpLibsDebugSymbolsAndDLLs
+  PROPERTIES FOLDER "Dependencies/Assimp"
+)
+
+set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 
 # Sfml 
 #set(BUILD_SHARED_LIBS ON)
 #add_subdirectory(dependencies/SFML-3.0.2)
 
 # Hot Coffee
-#add_subdirectory(hcAssetLoaders)
+add_subdirectory(hcAssetLoaders)
 add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
 add_subdirectory(hcGraphicsOpenGL)

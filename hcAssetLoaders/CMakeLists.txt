@@ -10,7 +10,8 @@ add_library(hcAssetLoaders SHARED
 # Target properties
 set_target_properties(hcAssetLoaders PROPERTIES
   OUTPUT_NAME "hcAssetLoaders"
-  SUFFIX "-d"
+  DEBUG_POSTFIX "-d"
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
