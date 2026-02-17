@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "cmakeMinimumRequired": {
+    "major": 4,
+    "minor": 2
+  },
+  "configurePresets": [
+    {
+      "name": "windows-x64",
+      "hidden": false,
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "description": "Use x64 architecture on Windows"
+    }
+  ]
+}

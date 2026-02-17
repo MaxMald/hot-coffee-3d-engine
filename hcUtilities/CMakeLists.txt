@@ -7,10 +7,13 @@ add_library(hcUtilities SHARED
   ${UTILITIES_HEADERS}
 )
 
+target_compile_definitions(hcUtilities PRIVATE HC_UTILITY_EXPORTS)
+
 # Target properties
 set_target_properties(hcUtilities PROPERTIES
   OUTPUT_NAME "hcUtilities"
-  SUFFIX "-d"
+  SUFFIX $<$<CONFIG:Debug>:-d>
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
