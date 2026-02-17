@@ -7,10 +7,14 @@ add_executable(hcEditor
   ${EDITOR_HEADERS}
 )
 
+# Preprocessor definition
+target_compile_definitions(hcEditor PRIVATE USE_STD_FILESYSTEM) # Imgui required
+
 # Target properties
 set_target_properties(hcEditor PROPERTIES
   OUTPUT_NAME "hcEditor"
-  SUFFIX "-d"
+  DEBUG_POSTFIX "-d"
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
