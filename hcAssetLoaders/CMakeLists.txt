@@ -27,7 +27,7 @@ target_compile_options(hcAssetLoaders PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/sdl>
 )
 
-# Dependencies
+# Includes
 target_include_directories(hcAssetLoaders 
   PUBLIC "include"
   PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/assimp-6.0.4/include"
