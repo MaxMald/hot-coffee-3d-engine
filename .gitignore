@@ -2,5 +2,6 @@
 bin/
 intermediate/
 lib/
+build/
 
 hcEditor/imgui.ini
