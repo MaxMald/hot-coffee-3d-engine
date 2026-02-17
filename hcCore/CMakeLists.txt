@@ -10,7 +10,8 @@ add_library(hcCore SHARED
 # Target properties
 set_target_properties(hcCore PROPERTIES
   OUTPUT_NAME "hcCore"
-  SUFFIX "-d"
+  DEBUG_POSTFIX "-d"
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options

@@ -18,7 +18,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 # Hot Coffee
 #add_subdirectory(hcAssetLoaders)
-#add_subdirectory(hcCore)
+add_subdirectory(hcCore)
 #add_subdirectory(hcEditor)
 #add_subdirectory(hcGraphicsOpenGL)
 add_subdirectory(hcUtilities)
