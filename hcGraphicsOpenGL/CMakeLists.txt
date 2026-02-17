@@ -17,7 +17,8 @@ add_library(hcGraphicsOpenGL SHARED
 # Target properties
 set_target_properties(hcGraphicsOpenGL PROPERTIES
   OUTPUT_NAME "hcGraphicsOpenGL"
-  SUFFIX "-d"
+  DEBUG_POSTFIX "-d"
+  VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
@@ -43,7 +44,7 @@ target_include_directories(hcGraphicsOpenGL
 )
 
 # Linking
-target_link_libraries(hcGraphicsOpenGL PUBLIC hcCore hcUtilities assimp)
+target_link_libraries(hcGraphicsOpenGL PUBLIC hcCore hcUtilities)
 
 if(WIN32)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL)
