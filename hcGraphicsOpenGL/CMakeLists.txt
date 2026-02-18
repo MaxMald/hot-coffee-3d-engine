@@ -53,10 +53,15 @@ elseif(UNIX)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL GLEW::GLEW)
 endif()
 
+##Post-build commands
+# copy glew to the output directory of the Hot Coffee Engine
+if(WIN32)
+  add_custom_command(TARGET hcGraphicsOpenGL POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${CMAKE_SOURCE_DIR}/dependencies/GLEW_2.3.0/bin/Windows/Release/${HC_ARCH}/glew32.dll"
+      "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIG>/"
+  )
+endif()
+
 # Install
 install(TARGETS hcGraphicsOpenGL DESTINATION lib)
-
-if (WIN32)
-  install(FILES "${CMAKE_SOURCE_DIR}/dependencies/GLEW_2.3.0/bin/Windows/Release/x64/glew32.dll" 
-          DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-endif()
