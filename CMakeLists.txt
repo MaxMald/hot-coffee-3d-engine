@@ -3,6 +3,19 @@ project(HotCoffeeEngine LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
+#Shared Variables
+if(WIN32)
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(HC_ARCH "x64" CACHE STRING "HotCoffeeEngine architecture")
+  elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    set(HC_ARCH "x86" CACHE STRING "HotCoffeeEngine architecture")
+  else()
+    set(HC_ARCH "unknown" CACHE STRING "HotCoffeeEngine architecture")
+  endif()
+else()
+  set(HC_ARCH "" CACHE STRING "HotCoffeeEngine architecture")
+endif()
+
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
