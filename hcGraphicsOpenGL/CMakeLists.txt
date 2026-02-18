@@ -48,7 +48,7 @@ target_link_libraries(hcGraphicsOpenGL PUBLIC hcCore hcUtilities)
 
 if(WIN32)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL)
-  target_link_libraries(hcGraphicsOpenGL PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/GLEW_2.3.0/lib/Windows/Release/x64/glew32.lib")
+  target_link_libraries(hcGraphicsOpenGL PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/GLEW_2.3.0/lib/Windows/Release/${HC_ARCH}/glew32.lib")
 elseif(UNIX)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL GLEW::GLEW)
 endif()
