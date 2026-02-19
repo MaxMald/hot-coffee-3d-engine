@@ -18,7 +18,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/ninja-debug",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       },
       "description": "Ninja Debug build on Linux"
     },
@@ -28,7 +29,8 @@
       "generator": "Ninja",
       "binaryDir": "${sourceDir}/build/ninja-release",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
       },
       "description": "Ninja Release build on Linux"
     }

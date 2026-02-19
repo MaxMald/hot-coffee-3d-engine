@@ -59,7 +59,14 @@ namespace hc
     : r(v.x), g(v.y), b(v.z), a(v.w) {
   }
 
-  constexpr Color& Color::operator=(const Color& other) = default;
+  constexpr Color& Color::operator=(const Color& other)
+  {
+    r = other.r;
+    g = other.g;
+    b = other.b;
+    a = other.a;
+    return *this;
+  }
 
   constexpr bool Color::operator==(const Color& rhs) const
   {

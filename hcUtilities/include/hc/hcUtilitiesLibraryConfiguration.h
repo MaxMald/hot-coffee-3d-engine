@@ -15,8 +15,13 @@
 # endif
 # define HC_UTILITY_HIDDEN
 #else // Linux / Mac
-# define HC_UTILITY_EXPORT __attribute__ ((visibility("default")))
-# define HC_UTILITY_HIDDEN __attribute__ ((visibility("hidden")))
+# if defined(HC_STATIC_LIB)
+#  define HC_UTILITY_EXPORT
+#  define HC_UTILITY_HIDDEN
+# else
+#  define HC_UTILITY_EXPORT __attribute__ ((visibility("default")))
+#  define HC_UTILITY_HIDDEN __attribute__ ((visibility("hidden")))
+# endif
 #endif
 
 // DLL export for plug-ins
