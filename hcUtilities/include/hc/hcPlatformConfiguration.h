@@ -124,7 +124,7 @@
 
 #if HC_PLATFORM == HC_PLATFORM_LINUX || HC_PLATFORM == HC_PLATFORM_OSX
 # define stripcmp strcasecmp
-# if defined(_DEBUG) || defined(DEBUG)
+# if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
 #   define HC_DEBUG_MODE 1
 # else
 #   define HC_DEBUG_MODE 0
