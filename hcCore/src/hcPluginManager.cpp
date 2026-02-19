@@ -5,6 +5,8 @@
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 #include "hc/hcWindowsPluginSlotFactory.h"
+#elif HC_PLATFORM == HC_PLATFORM_LINUX
+#include "hc/hcLinuxPluginSlotFactory.h"
 #endif
 
 namespace hc
@@ -22,6 +24,8 @@ namespace hc
   {
 #if HC_PLATFORM == HC_PLATFORM_WIN32
     m_pluginSlotFactory = MakeShared<WindowsPluginSlotFactory>();
+#elif HC_PLATFORM == HC_PLATFORM_LINUX
+    m_pluginSlotFactory = MakeShared<LinuxPluginSlotFactory>();
 #endif
   }
 
