@@ -99,8 +99,8 @@ namespace hc
   WindowHandle SfmlWindow::getNativeHandle() const
   {
     if (m_sfmlWindow)
-      return reinterpret_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
-    return nullptr;
+      return static_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
+    return WindowHandle{};
   }
 
   void SfmlWindow::swapBuffers()
