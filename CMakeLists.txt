@@ -33,13 +33,19 @@ set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
 
 add_subdirectory(dependencies/assimp-6.0.4)
 
-set_target_properties(
+# Group assimp targets in a folder
+set(_assimp_targets_with_folder
   assimp
   zlibstatic
   uninstall
   UpdateAssimpLibsDebugSymbolsAndDLLs
-  PROPERTIES FOLDER "Assimp"
 )
+
+foreach(_target_name IN LISTS _assimp_targets_with_folder)
+  if(TARGET ${_target_name})
+    set_target_properties(${_target_name} PROPERTIES FOLDER "Assimp")
+  endif()
+endforeach()
 
 set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 

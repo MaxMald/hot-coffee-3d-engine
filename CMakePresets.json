@@ -11,6 +11,36 @@
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
       "description": "Use x64 architecture on Windows"
+    },
+    {
+      "name": "ninja-debug",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/ninja-debug",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug"
+      },
+      "description": "Ninja Debug build on Linux"
+    },
+    {
+      "name": "ninja-release",
+      "hidden": false,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/ninja-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release"
+      },
+      "description": "Ninja Release build on Linux"
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "ninja-debug",
+      "configurePreset": "ninja-debug"
+    },
+    {
+      "name": "ninja-release",
+      "configurePreset": "ninja-release"
     }
   ]
 }
