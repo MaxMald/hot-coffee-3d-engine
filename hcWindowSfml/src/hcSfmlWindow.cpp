@@ -100,7 +100,10 @@ namespace hc
   {
     if (m_sfmlWindow)
       return static_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
-    return WindowHandle{};
+    
+    throw RuntimeErrorException(
+      "Attempted to get native handle from SfmlWindow, but the window has not been created."
+    );
   }
 
   void SfmlWindow::swapBuffers()

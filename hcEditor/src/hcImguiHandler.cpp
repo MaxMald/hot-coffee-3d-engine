@@ -2,7 +2,11 @@
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
+
+#if HC_PLATFORM == HC_PLATFORM_WIN32
 #include "imgui_impl_win32.h"
+#endif
+
 #include "hc/editor/hcHotCoffeeToImguiMappings.h"
 
 namespace hc::editor
@@ -19,14 +23,17 @@ namespace hc::editor
 
       ImGui::StyleColorsDark();
 
+    #if HC_PLATFORM == HC_PLATFORM_WIN32
       void* hwnd = window.getNativeHandle();
       ImGui_ImplWin32_Init(hwnd);
+    #else
+      (void)window;
+    #endif
       ImGui_ImplOpenGL3_Init("#version 130");
     }
 
     bool processEvent(const Event& evt)
     {
-      ImGuiIO& io = ImGui::GetIO();
       bool handled = false;
 
       if (evt.is<Event::MouseButtonPressed>())
@@ -121,7 +128,9 @@ namespace hc::editor
     void beginFrame()
     {
       ImGui_ImplOpenGL3_NewFrame();
+#if HC_PLATFORM == HC_PLATFORM_WIN32
       ImGui_ImplWin32_NewFrame();
+#endif
       ImGui::NewFrame();
       ImGui::DockSpaceOverViewport(0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
     }
@@ -135,7 +144,9 @@ namespace hc::editor
     void destroy()
     {
       ImGui_ImplOpenGL3_Shutdown();
+#if HC_PLATFORM == HC_PLATFORM_WIN32
       ImGui_ImplWin32_Shutdown();
+#endif
       ImGui::DestroyContext();
     }
   }
