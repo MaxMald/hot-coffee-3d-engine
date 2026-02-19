@@ -6,7 +6,7 @@
 #   if defined(HC_STATIC_LIB)
 #     define HC_WINDOW_SFML_EXPORT
 #   else
-#     if defined(HC_WINDOW_SFML_EXPORTS)
+#     if defined(hcWindowSfml_EXPORTS)
 #       define HC_WINDOW_SFML_EXPORT __declspec(dllexport)
 #     else
 #       define HC_WINDOW_SFML_EXPORT __declspec(dllimport)

@@ -1,6 +1,6 @@
-.vs
-bin/
-intermediate/
-lib/
+build/
+.vs/
+.vscode/
 
-hcEditor/imgui.ini
+*.code-workspace
+
