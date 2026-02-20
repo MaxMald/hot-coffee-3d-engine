@@ -44,6 +44,7 @@ namespace hc::editor
 
   void EditorScene::onDestroy()
   {
+    m_engine.removeEventListener(&m_viewsManager);
     m_viewsManager.clear();
     m_serviceManager.clear();
   }
