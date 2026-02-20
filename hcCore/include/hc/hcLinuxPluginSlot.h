@@ -55,7 +55,7 @@ namespace hc
     void* m_pluginHandler;
 
     /**
-    * Pointer of the hakool Plug-in interface.
+    * Pointer of the Plug-in interface.
     */
     SharedPtr<IPlugin> m_pluginPtr;
 
