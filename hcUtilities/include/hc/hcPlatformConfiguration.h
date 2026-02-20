@@ -124,7 +124,7 @@
 
 #if HC_PLATFORM == HC_PLATFORM_LINUX || HC_PLATFORM == HC_PLATFORM_OSX
 # define stripcmp strcasecmp
-# if defined(_DEBUG) || defined(DEBUG)
+# if defined(_DEBUG) || defined(DEBUG) || !defined(NDEBUG)
 #   define HC_DEBUG_MODE 1
 # else
 #   define HC_DEBUG_MODE 0
@@ -149,8 +149,25 @@
 # pragma warning(disable: 4201)
 #endif
 
-#if HC_DEBUG_MODE
-#define  HC_DYN_LIB_SUFIX "-d.dll"
+#if HC_PLATFORM == HC_PLATFORM_WIN32
+# define HC_DYN_LIB_PREFIX ""
+# if HC_DEBUG_MODE
+#   define HC_DYN_LIB_SUFIX "-d.dll"
+# else
+#   define HC_DYN_LIB_SUFIX ".dll"
+# endif
+#elif HC_PLATFORM == HC_PLATFORM_OSX
+# define HC_DYN_LIB_PREFIX "lib"
+# if HC_DEBUG_MODE
+#   define HC_DYN_LIB_SUFIX "-d.dylib"
+# else
+#   define HC_DYN_LIB_SUFIX ".dylib"
+# endif
 #else
-#define  HC_DYN_LIB_SUFIX ".dll"
+# define HC_DYN_LIB_PREFIX "lib"
+# if HC_DEBUG_MODE
+#   define HC_DYN_LIB_SUFIX "-d.so"
+# else
+#   define HC_DYN_LIB_SUFIX ".so"
+# endif
 #endif

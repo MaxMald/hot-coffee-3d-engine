@@ -1,6 +1,8 @@
-#if HC_PLATFORM == HC_PLATFORM_WIN32
-
 #pragma once
+
+#include "hc/hcCorePrerequisites.h"
+
+#if HC_PLATFORM == HC_PLATFORM_WIN32
 
 #include <Windows.h>
 #include <libloaderapi.h>
@@ -56,7 +58,7 @@ namespace hc
     HINSTANCE m_pluginHandler;
 
     /**
-    * Pointer of the hakool Plug-in interface.
+    * Pointer of the Plug-in interface.
     */
     SharedPtr<IPlugin> m_pluginPtr;
 

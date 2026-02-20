@@ -8,11 +8,13 @@ namespace hc
 {
   GameObject::GameObject(
     const String& name,
-    IGameObjectFactory& gameObjectFactory
+    IGameObjectFactory& gameObjectFactory,
+    ComponentFactoriesManager& componentFactoriesManager
   ) :
+    m_name(name),
     m_parent(nullptr),
     m_gameObjectFactory(gameObjectFactory),
-    m_name(name)
+    m_componentFactoriesManager(componentFactoriesManager)
   {
   }
 
@@ -146,23 +148,23 @@ namespace hc
       return getMatrix();
   }
 
-  void GameObject::addComponent(UniquePtr<IComponent> component)
+  Vector<IComponent*> GameObject::getComponents() const
   {
-    if (!component)
-      return;
-    m_components.push_back(std::move(component));
+    Vector<IComponent*> components;
+    components.reserve(m_components.size());
 
-    IDrawable* drawableComponent = dynamic_cast<IDrawable*>(
-      m_components.back().get()
-      );
-
-    if (drawableComponent)
-      m_drawableComponents.push_back(drawableComponent);
+    for (const auto& pair : m_components)
+      components.push_back(pair.second.get());
+    return components;
   }
 
-  const Vector<UniquePtr<IComponent>>& GameObject::getComponents() const
+  void GameObject::getComponents(Vector<IComponent*>& outComponents) const
   {
-    return m_components;
+    outComponents.clear();
+    outComponents.reserve(m_components.size());
+
+    for (const auto& pair : m_components)
+      outComponents.push_back(pair.second.get());
   }
 
   void GameObject::destroy()

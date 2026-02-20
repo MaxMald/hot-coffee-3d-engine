@@ -42,41 +42,34 @@ namespace hc
     if (m_sfmlWindow)
     {
       m_sfmlWindow->close();
+      m_sfmlWindow.reset();
     }
   }
 
   Vector2u SfmlWindow::getSize() const
   {
-    if (m_sfmlWindow)
-    {
-      auto size = m_sfmlWindow->getSize();
-      return Vector2u(size.x, size.y);
-    }
-
-    return Vector2u(0, 0);
+    assertSfmlWindowExists();
+    auto size = m_sfmlWindow->getSize();
+    return Vector2u(size.x, size.y);
   }
 
   void SfmlWindow::setSize(const Vector2u& size)
   {
-    if (m_sfmlWindow)
-      m_sfmlWindow->setSize(sf::Vector2u(size.x, size.y));
+    assertSfmlWindowExists();
+    m_sfmlWindow->setSize(sf::Vector2u(size.x, size.y));
   }
 
   Vector2i SfmlWindow::getPosition() const
   {
-    if (m_sfmlWindow)
-    {
-      auto pos = m_sfmlWindow->getPosition();
-      return Vector2i(pos.x, pos.y);
-    }
-
-    return Vector2i(0, 0);
+    assertSfmlWindowExists();
+    auto pos = m_sfmlWindow->getPosition();
+    return Vector2i(pos.x, pos.y);
   }
 
   void SfmlWindow::setPosition(const Vector2i& position)
   {
-    if (m_sfmlWindow)
-      m_sfmlWindow->setPosition(sf::Vector2i(position.x, position.y));
+    assertSfmlWindowExists();
+    m_sfmlWindow->setPosition(sf::Vector2i(position.x, position.y));
   }
 
   bool SfmlWindow::isOpen() const
@@ -86,8 +79,7 @@ namespace hc
 
   Optional<Event> SfmlWindow::pollEvent()
   {
-    if (!m_sfmlWindow)
-      return Optional<Event>();
+    assertSfmlWindowExists();
 
     Optional<sf::Event> optSfmlEvent = m_sfmlWindow->pollEvent();
     if (!optSfmlEvent.has_value())
@@ -98,15 +90,14 @@ namespace hc
 
   WindowHandle SfmlWindow::getNativeHandle() const
   {
-    if (m_sfmlWindow)
-      return reinterpret_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
-    return nullptr;
+    assertSfmlWindowExists();
+    return static_cast<WindowHandle>(m_sfmlWindow->getNativeHandle());
   }
 
   void SfmlWindow::swapBuffers()
   {
-    if (m_sfmlWindow)
-      m_sfmlWindow->display();
+    assertSfmlWindowExists();
+    m_sfmlWindow->display();
   }
 
   Optional<Event> SfmlWindow::convertSfmlEvent(const sf::Event& sfmlEvent) const
@@ -181,5 +172,15 @@ namespace hc
     }
 
     return Optional<Event>();
+  }
+
+  void SfmlWindow::assertSfmlWindowExists() const
+  {
+    if (!m_sfmlWindow)
+    {
+      throw RuntimeErrorException(
+        "Attempted to perform an operation on SfmlWindow, but the window has not been created."
+      );
+    }
   }
 }

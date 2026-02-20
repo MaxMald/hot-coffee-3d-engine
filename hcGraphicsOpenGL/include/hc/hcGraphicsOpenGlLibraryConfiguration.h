@@ -6,7 +6,7 @@
 #   if defined(HC_STATIC_LIB)
 #     define HC_GRAPHICS_OPENGL_EXPORT
 #   else
-#     if defined(HC_GRAPHICS_OPENGL_EXPORTS)
+#     if defined(hcGraphicsOpenGL_EXPORTS)
 #       define HC_GRAPHICS_OPENGL_EXPORT __declspec(dllexport)
 #     else
 #       define HC_GRAPHICS_OPENGL_EXPORT __declspec(dllimport)

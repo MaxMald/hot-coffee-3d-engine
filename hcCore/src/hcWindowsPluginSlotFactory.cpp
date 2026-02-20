@@ -1,6 +1,7 @@
+#include "hc/hcWindowsPluginSlotFactory.h"
+
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 
-#include "hc/hcWindowsPluginSlotFactory.h"
 #include "hc/hcWindowPluginSlot.h"
 
 namespace hc

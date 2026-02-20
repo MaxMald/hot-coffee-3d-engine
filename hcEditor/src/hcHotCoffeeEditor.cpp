@@ -61,6 +61,8 @@ namespace hc::editor
     SceneManager& sceneManager = m_engine.getSceneManager();
     IGraphicsManager& graphicsManager = m_engine.getGraphicsManager();
     IWindow& window = m_engine.getWindowManager().getWindow();
+    Clock frameClock;
+    frameClock.start();
 
     while (window.isOpen())
     {
@@ -79,8 +81,10 @@ namespace hc::editor
 
       graphicsManager.beginFrame();
       sceneManager.draw();
-      m_viewsManager.draw();
+      m_viewsManager.draw(window, frameClock.getElapsedTime());
       graphicsManager.endFrame(window);
+
+      frameClock.restart();
     }
   }
 
@@ -99,7 +103,7 @@ namespace hc::editor
 
   void HotCoffeeEditor::prepareEditorScene()
   {
-    m_engine.getSceneManager().createScene("Editor Scene");
+    m_engine.getSceneManager().createScene<Scene>("Editor Scene");
     m_engine.getSceneManager().setActiveScene("Editor Scene");
   }
 

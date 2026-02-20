@@ -1,4 +1,7 @@
 #include "hc/hcWindowPluginSlot.h"
+
+#if HC_PLATFORM == HC_PLATFORM_WIN32
+
 #include "hc/hcIPlugin.h"
 
 namespace hc
@@ -173,3 +176,5 @@ namespace hc
     LogService::Message("WindowsPluginSlot closed for key: " + m_key);
   }
 }
+
+#endif // HC_PLATFORM == HC_PLATFORM_WIN32

@@ -40,33 +40,53 @@ namespace hc::editor
     return m_userRequestedCreation;
   }
 
-  UniquePtr<IComponent> CreateComponentSection::createComponentFromSelection()
+  void CreateComponentSection::createComponentFromSelection(
+    GameObject* gameObject
+  )
   {
+    if (!gameObject)
+    {
+      LogService::Error("Game Object is null. Cannot create component.");
+      m_userRequestedCreation = false;
+      return;
+    }
+
     componentType::Type selectedType = componentType::FromString(
       COMPONENT_TYPES[m_selectedComponentTypeIndex]
     );
 
-    switch (selectedType)
+    try
     {
-    case componentType::Type::Mesh:
-      return MakeUnique<MeshComponent>();
-    case componentType::Type::Camera:
-      return MakeUnique<CameraComponent>();
-
-    default:
+      switch (selectedType)
+      {
+      case componentType::Type::Mesh:
+        createComponent<MeshComponent>(gameObject);
+        break;
+      case componentType::Type::Camera:
+        createComponent<CameraComponent>(gameObject);
+        break;
+      default:
+        LogService::Error(
+          String::Format(
+            "CreateComponentSection::createComponentFromSelection: "
+            "Unknown component type selected (%s).",
+            COMPONENT_TYPES[m_selectedComponentTypeIndex]
+          )
+        );
+        break;
+      }
+    }
+    catch (const Exception& e)
     {
       LogService::Error(
         String::Format(
-          "CreateComponentSection::createComponentFromSelection: "
-          "Unknown component type selected (%s).",
-          COMPONENT_TYPES[m_selectedComponentTypeIndex]
+          "Failed to create component of type %s. Error: %s",
+          COMPONENT_TYPES[m_selectedComponentTypeIndex],
+          e.what()
         )
       );
-      break;
-    } 
     }
 
     m_userRequestedCreation = false;
-    return nullptr;
   }
 }

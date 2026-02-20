@@ -10,10 +10,11 @@ namespace hc::editor
 
       settings.windowSettings.width = 1920;
       settings.windowSettings.height = 1080;
-      settings.windowSettings.title = "HotCoffee Editor";
+      settings.windowSettings.title = "Hot Coffee Editor";
 
       settings.pluginManagerSettings.windowType =
         PluginManagerSettings::windowPluginType::SFML;
+
       settings.pluginManagerSettings.graphicsType =
         PluginManagerSettings::graphicsPluginType::OPENGL;
 

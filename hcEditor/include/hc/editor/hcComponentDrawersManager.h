@@ -36,7 +36,7 @@ namespace hc::editor
     void clear();
 
   private:
-    UniquePtr<NotImplementedComponentDrawer> m_notImplementedView;
+    NotImplementedComponentDrawer m_notImplementedView;
     UnorderedMap<componentType::Type, UniquePtr<IComponentDrawer>> m_componentViews;
   };
 }

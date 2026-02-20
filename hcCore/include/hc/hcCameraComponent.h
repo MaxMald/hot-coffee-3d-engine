@@ -7,6 +7,7 @@ namespace hc
 {
   class Camera;
   class CameraManager;
+  class SceneManager;
   class ICameraProjection;
 
   /**
@@ -15,7 +16,7 @@ namespace hc
   class HC_CORE_EXPORT CameraComponent : public ABaseComponent
   {
   public:
-    CameraComponent();
+    CameraComponent(SceneManager& sceneManager);
     ~CameraComponent() override;
 
     /**
@@ -73,6 +74,7 @@ namespace hc
     void setAsActiveCamera();
 
   private:
+    SceneManager& m_sceneManager;
     Camera* m_camera;
 
     /**

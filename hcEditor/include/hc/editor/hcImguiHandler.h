@@ -30,8 +30,11 @@ namespace hc::editor
 
     /**
      * @brief Begins a new ImGui frame.
+     * 
+     * @param window Reference to the window for which to begin the frame.
+     * @param elapsedTime The time elapsed since the last frame.
      */
-    void beginFrame();
+    void beginFrame(IWindow& window, const Time& elapsedTime);
 
     /**
      * @brief Ends the current ImGui frame and renders the UI.
