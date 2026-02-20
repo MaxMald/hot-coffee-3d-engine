@@ -4,6 +4,8 @@
 
 namespace hc::editor
 {
+  constexpr const char* DEFAULT_EDITOR_SCENE_NAME = "Editor Scene";
+
   HotCoffeeEditor::HotCoffeeEditor() :
     m_engine(),
     m_serviceManager(),
@@ -52,7 +54,7 @@ namespace hc::editor
         "HotCoffeeEditor is not initialized. Call initialize() before running the editor."
       );
 
-    m_engine.run();
+    m_engine.run(DEFAULT_EDITOR_SCENE_NAME);
   }
 
   void HotCoffeeEditor::destroy()
@@ -71,10 +73,9 @@ namespace hc::editor
   void HotCoffeeEditor::prepareEditorScene()
   {
     m_engine.getSceneManager().createScene<EditorScene>(
-      "Editor Scene",
+      DEFAULT_EDITOR_SCENE_NAME,
       m_engine,
       m_editorLogHistory
     );
-    m_engine.getSceneManager().setActiveScene("Editor Scene");
   }
 }

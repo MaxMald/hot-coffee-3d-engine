@@ -31,7 +31,7 @@ namespace hc
     void removeEventListener(IEventListener* listener);
 
     ProcessResult initialize(const HotCoffeeEngineSettings& settings);
-    void run();
+    void run(const String& sceneName);
     void destroy();
 
   private:

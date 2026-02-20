@@ -136,9 +136,16 @@ namespace hc
     return ProcessResult();
   }
 
-  void HotCoffeeEngine::run()
+  void HotCoffeeEngine::run(const String& sceneName)
   {
     assertEngineIsInitialized();
+
+    if (!m_sceneManager->setActiveScene(sceneName))
+    {
+      throw RuntimeErrorException(
+        "Failed to set active scene. Scene with name '" + sceneName + "' not found."
+      );
+    }
 
     IWindow& window = m_windowManager->getWindow();
     m_frameClock.start();
