@@ -8,11 +8,11 @@ namespace hc::editor
   /**
    * @brief Manages editor views and their lifecycle in the editor.
    */
-  class EditorViewsManager
+  class EditorViewsManager : public IEventListener
   {
   public:
     EditorViewsManager();
-    ~EditorViewsManager() = default;
+    virtual ~EditorViewsManager() = default;
 
     /**
      * @brief Initialize the manager and register default views.
@@ -63,6 +63,11 @@ namespace hc::editor
   private:
     bool m_initialized;
     Vector<UniquePtr<IView>> m_views;
+
+    /**
+     * @copydoc IEventListener::onEvent
+     */
+    bool onEvent(const Event& event) override;
   };
 
   template<typename T>

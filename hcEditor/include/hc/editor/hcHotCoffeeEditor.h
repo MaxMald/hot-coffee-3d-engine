@@ -25,7 +25,5 @@ namespace hc::editor
     bool m_initialized;
 
     void prepareEditorScene();
-    void prepareEditorServices();
-    void prepareEditorViews();
   };
 }

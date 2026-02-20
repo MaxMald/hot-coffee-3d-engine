@@ -44,4 +44,9 @@ namespace hc::editor
       view->destroy();
     m_views.clear();
   }
+
+  bool EditorViewsManager::onEvent(const Event& event)
+  {
+    return hcImguiHandler::processEvent(event);
+  }
 }

@@ -6,6 +6,7 @@
 #include "hc/hcIWindow.h"
 #include "hc/hcIGraphicsManager.h"
 #include "hc/hcSceneManager.h"
+#include "hc/hcIEventListener.h"
 
 #include "hc/hcGraphicsManagerFactory.h"
 #include "hc/hcWindowManagerFactory.h"
@@ -20,6 +21,8 @@ namespace hc
     m_sceneManager(nullptr),
     m_assetManager(),
     m_pluginManager(),
+    m_frameClock(),
+    m_eventListeners(),
     m_initialized(false)
   {
   }
@@ -35,53 +38,59 @@ namespace hc
 
   IWindowManager& HotCoffeeEngine::getWindowManager()
   {
-    if (m_windowManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "WindowManager is not initialized. Make sure initialize() has been called."
-      );
-    }
+    assertEngineIsInitialized();
     return *m_windowManager;
   }
 
   IGraphicsManager& HotCoffeeEngine::getGraphicsManager()
   {
-    if (m_graphicsManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "IGraphicsManager is not initialized. Make sure initialize() has been called."
-      );
-    }
+    assertEngineIsInitialized();
     return *m_graphicsManager;
   }
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
-    if (!m_sceneManager)
-    {
-      throw RuntimeErrorException(
-        "SceneManager is not initialized. Make sure initialize() has been called."
-      );
-    }
-
+    assertEngineIsInitialized();
     return *m_sceneManager;
   }
 
   AssetManager& HotCoffeeEngine::getAssetManager()
   {
-    if (!m_initialized)
-    {
-      throw RuntimeErrorException(
-        "AssetManager is not initialized. Make sure initialize() has been called."
-      );
-    }
-
+    assertEngineIsInitialized();
     return m_assetManager;
+  }
+
+  Time HotCoffeeEngine::getElapsedTime() const
+  {
+    assertEngineIsInitialized();
+    return m_frameClock.getElapsedTime();
   }
 
   bool HotCoffeeEngine::isInitialized() const
   {
     return m_initialized;
+  }
+
+  void HotCoffeeEngine::addEventListener(IEventListener* listener)
+  {
+    if (!listener)
+      throw InvalidArgumentException("Event listener pointer cannot be null.");
+    m_eventListeners.push_back(listener);
+  }
+
+  void HotCoffeeEngine::removeEventListener(IEventListener* listener)
+  {
+    if (!listener)
+      return;
+
+    auto it = std::find(
+      m_eventListeners.begin(),
+      m_eventListeners.end(),
+      listener
+    );
+
+    if (it != m_eventListeners.end())
+      m_eventListeners.erase(it);
   }
 
   ProcessResult HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
@@ -95,7 +104,7 @@ namespace hc
       JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
-      
+
       m_sceneManager = SceneManagerFactory::create();
 
       assetManagerLoadersRegistry::registerLoaders(
@@ -127,8 +136,43 @@ namespace hc
     return ProcessResult();
   }
 
+  void HotCoffeeEngine::run()
+  {
+    assertEngineIsInitialized();
+
+    IWindow& window = m_windowManager->getWindow();
+    m_frameClock.start();
+
+    while (window.isOpen())
+    {
+      Optional<Event> eventOpt;
+      while ((eventOpt = window.pollEvent()))
+      {
+        if (eventOpt->is<Event::Closed>())
+        {
+          m_frameClock.stop();
+          window.destroy();
+          return;
+        }
+
+        for (IEventListener* listener : m_eventListeners)
+        {
+          if (listener->onEvent(*eventOpt))
+            break;
+        }
+      }
+
+      m_sceneManager->update(m_frameClock.getElapsedTime());
+      m_graphicsManager->beginFrame();
+      m_sceneManager->draw();
+      m_graphicsManager->endFrame(window);
+      m_frameClock.restart();
+    }
+  }
+
   void HotCoffeeEngine::destroy()
   {
+    m_frameClock.stop();
     m_assetManager.destroy();
 
     if (m_sceneManager)
@@ -164,5 +208,15 @@ namespace hc
       m_pluginManager,
       settings
     );
+  }
+
+  void HotCoffeeEngine::assertEngineIsInitialized() const
+  {
+    if (!m_initialized)
+    {
+      throw RuntimeErrorException(
+        "HotCoffeeEngine is not initialized. Call initialize() before using engine features."
+      );
+    }
   }
 }

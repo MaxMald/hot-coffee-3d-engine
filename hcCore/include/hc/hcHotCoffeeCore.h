@@ -45,6 +45,7 @@
 #include "hc/hcVertex.h"
 #include "hc/hcModelSubMesh.h"
 #include "hc/hcModel.h"
+#include "hc/hcIEventListener.h"
 
 // GameObject Components
 
