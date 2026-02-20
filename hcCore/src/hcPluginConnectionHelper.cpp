@@ -25,7 +25,7 @@ namespace hc
     {
       pluginManager.connectPlugin(
         pluginStandardKeys::WindowPlugin,
-        "hcWindowSfml" + String(HC_DYN_LIB_SUFIX),
+        String(HC_DYN_LIB_PREFIX) + "hcWindowSfml" + String(HC_DYN_LIB_SUFIX),
         "createWindowSfmlPlugin",
         "destroyWindowSfmlPlugin"
       );
@@ -35,7 +35,7 @@ namespace hc
     {
       pluginManager.connectPlugin(
         pluginStandardKeys::GraphicsPlugin,
-        "hcGraphicsOpenGL" + String(HC_DYN_LIB_SUFIX),
+        String(HC_DYN_LIB_PREFIX) + "hcGraphicsOpenGL" + String(HC_DYN_LIB_SUFIX),
         "createGraphicsOpenGLPlugin",
         "destroyGraphicsOpenGLPlugin"
       );
@@ -45,7 +45,7 @@ namespace hc
     {
       pluginManager.connectPlugin(
         pluginStandardKeys::AssetLoadersPlugin,
-        "hcAssetLoaders" + String(HC_DYN_LIB_SUFIX),
+        String(HC_DYN_LIB_PREFIX) + "hcAssetLoaders" + String(HC_DYN_LIB_SUFIX),
         "createAssetLoadersPlugin",
         "destroyAssetLoadersPlugin"
       );

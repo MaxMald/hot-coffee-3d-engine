@@ -2,20 +2,17 @@
 
 #include "hc/hcCorePrerequisites.h"
 
-#if HC_PLATFORM == HC_PLATFORM_WIN32
-
-#include <Windows.h>
-#include <libloaderapi.h>
+#if HC_PLATFORM == HC_PLATFORM_LINUX
 
 #include "hc/hcIPluginSlot.h"
 
 namespace hc
 {
-  class WindowsPluginSlot : public IPluginSlot
+  class LinuxPluginSlot : public IPluginSlot
   {
   public:
-    WindowsPluginSlot();
-    ~WindowsPluginSlot() override;
+    LinuxPluginSlot();
+    ~LinuxPluginSlot() override;
 
     virtual bool connect(
         const String& key,
@@ -55,7 +52,7 @@ namespace hc
     /**
     * The instance of the plug-in.
     */
-    HINSTANCE m_pluginHandler;
+    void* m_pluginHandler;
 
     /**
     * Pointer of the Plug-in interface.
@@ -69,4 +66,4 @@ namespace hc
   };
 }
 
-#endif // HC_PLATFORM == HC_PLATFORM_WIN32
+#endif // HC_PLATFORM == HC_PLATFORM_LINUX

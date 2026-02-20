@@ -1,6 +1,8 @@
 #include "hc/editor/hcImguiUtilities.h"
 #include "imgui.h"
 
+#include <cstdio>
+
 namespace hc::editor
 {
   namespace imguiUtilities
@@ -8,8 +10,7 @@ namespace hc::editor
     bool DrawInputText(const String& label, String& text)
     {
       char nameBuffer[256];
-      strncpy_s(nameBuffer, text.c_str(), sizeof(nameBuffer));
-      nameBuffer[sizeof(nameBuffer) - 1] = '\0';
+      std::snprintf(nameBuffer, sizeof(nameBuffer), "%s", text.c_str());
 
       if (ImGui::InputText(label.c_str(), nameBuffer, sizeof(nameBuffer)))
       {
@@ -29,7 +30,7 @@ namespace hc::editor
       ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch, 200.0f);
       ImGui::TableNextRow();
       ImGui::TableSetColumnIndex(0);
-      ImGui::Text(label.c_str());
+      ImGui::Text("%s", label.c_str());
       ImGui::TableSetColumnIndex(1);
 
       ImGui::SetNextItemWidth(200.0f);

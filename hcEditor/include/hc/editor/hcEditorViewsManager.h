@@ -42,8 +42,11 @@ namespace hc::editor
 
     /**
      * @brief Draw all registered views.
+     * 
+     * @param window Reference to the main application window.
+     * @param elapsedTime Time elapsed since the last frame, used for animations and updates.
      */
-    void draw();
+    void draw(IWindow& window, const Time& elapsedTime);
 
     /**
      * @brief Register a new view with the manager.

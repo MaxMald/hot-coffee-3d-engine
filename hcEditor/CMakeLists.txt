@@ -2,6 +2,10 @@
 file(GLOB_RECURSE EDITOR_HEADERS "include/*.h")
 file(GLOB_RECURSE EDITOR_SOURCES "src/*.cpp")
 
+if(NOT WIN32)
+  list(FILTER EDITOR_SOURCES EXCLUDE REGEX ".*/imgui_impl_win32\\.cpp$")
+endif()
+
 add_executable(hcEditor 
   ${EDITOR_SOURCES} 
   ${EDITOR_HEADERS}
