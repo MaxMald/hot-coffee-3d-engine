@@ -125,8 +125,19 @@ namespace hc::editor
       return handled;
     }
 
-    void beginFrame()
+    void beginFrame(IWindow& window, const Time& elapsedTime)
     {
+      ImGuiIO& io = ImGui::GetIO();
+
+      const Vector2u windowSize = window.getSize();
+      io.DisplaySize = ImVec2(
+        static_cast<float>(windowSize.x), 
+        static_cast<float>(windowSize.y)
+      );
+
+      const float deltaTime = elapsedTime.toSeconds();
+      io.DeltaTime = (deltaTime > 0.0f) ? deltaTime : (1.0f / 60.0f);
+
       ImGui_ImplOpenGL3_NewFrame();
 #if HC_PLATFORM == HC_PLATFORM_WIN32
       ImGui_ImplWin32_NewFrame();

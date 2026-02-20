@@ -25,9 +25,9 @@ namespace hc::editor
     return hcImguiHandler::processEvent(event);
   }
 
-  void EditorViewsManager::draw()
+  void EditorViewsManager::draw(IWindow& window, const Time& elapsedTime)
   {
-    hcImguiHandler::beginFrame();
+    hcImguiHandler::beginFrame(window, elapsedTime);
     for (const UniquePtr<IView>& view : m_views)
       view->draw();
     hcImguiHandler::endFrame();
