@@ -72,9 +72,7 @@ namespace hc
   private:
     SharedPtr<sf::Window> m_sfmlWindow;
 
-    /**
-     * @brief Converts an sf::Event to a hc::Event.
-     */
     Optional<Event> convertSfmlEvent(const sf::Event& sfmlEvent) const;
+    void assertSfmlWindowExists() const;
   };
 }
