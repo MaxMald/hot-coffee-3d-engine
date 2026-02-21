@@ -128,10 +128,9 @@ namespace hc::editor
     void beginFrame(IWindow& window, const Time& elapsedTime)
     {
       ImGuiIO& io = ImGui::GetIO();
-
       const Vector2u windowSize = window.getSize();
       io.DisplaySize = ImVec2(
-        static_cast<float>(windowSize.x), 
+        static_cast<float>(windowSize.x),
         static_cast<float>(windowSize.y)
       );
 
