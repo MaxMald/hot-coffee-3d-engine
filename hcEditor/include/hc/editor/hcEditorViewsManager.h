@@ -16,16 +16,16 @@ namespace hc::editor
 
     /**
      * @brief Initialize the manager and register default views.
-     * 
+     *
      * @param window Reference to the main application window.
      */
     void initialize(IWindow& window);
 
     /**
      * @brief Retrieve a view of the specified type.
-     * 
+     *
      * @tparam T The view type to retrieve. Must derive from IView.
-     * 
+     *
      * @return Pointer to the view if found, nullptr otherwise.
      */
     template<typename T>
@@ -33,16 +33,16 @@ namespace hc::editor
 
     /**
      * @brief Process an event for all registered views.
-     * 
+     *
      * @param event The event to process.
-     * 
+     *
      * @return True if the event was handled by any view, false otherwise.
      */
     bool processEvent(const Event& event);
 
     /**
      * @brief Draw all registered views.
-     * 
+     *
      * @param window Reference to the main application window.
      * @param elapsedTime Time elapsed since the last frame, used for animations and updates.
      */
@@ -50,7 +50,7 @@ namespace hc::editor
 
     /**
      * @brief Register a new view with the manager.
-     * 
+     *
      * @param view Unique pointer to the view to register.
      */
     void registerView(UniquePtr<IView> view);
@@ -59,6 +59,11 @@ namespace hc::editor
      * @brief Clear all registered views.
      */
     void clear();
+
+    /**
+     * @brief Destroy the manager and release resources.
+     */
+    void destroy();
 
   private:
     bool m_initialized;

@@ -45,6 +45,16 @@ namespace hc::editor
     m_views.clear();
   }
 
+  void EditorViewsManager::destroy()
+  {
+    if (!m_initialized)
+      return;
+
+    clear();
+    hcImguiHandler::destroy();
+    m_initialized = false;
+  }
+
   bool EditorViewsManager::onEvent(const Event& event)
   {
     return hcImguiHandler::processEvent(event);
