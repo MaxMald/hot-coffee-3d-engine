@@ -8,9 +8,7 @@ namespace hc::editor
 
   HotCoffeeEditor::HotCoffeeEditor() :
     m_engine(),
-    m_serviceManager(),
     m_editorLogHistory(),
-    m_viewsManager(),
     m_initialized(false)
   {
   }
@@ -59,9 +57,6 @@ namespace hc::editor
 
   void HotCoffeeEditor::destroy()
   {
-    m_viewsManager.clear();
-    m_serviceManager.clear();
-
     m_engine.destroy();
 
     if (LogService::HasInstance())
