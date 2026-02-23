@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hc/hcIGraphicsManagerPlugin.h>
+#include <hc/plugins/hcIGraphicsManagerPlugin.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 
 namespace hc

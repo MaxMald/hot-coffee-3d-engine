@@ -1,4 +1,4 @@
-#include "hc/hcOpenGlMesh.h"
+#include "hc/graphics/resource/mesh/hcOpenGlMesh.h"
 #include <GL/glew.h>
 
 namespace hc

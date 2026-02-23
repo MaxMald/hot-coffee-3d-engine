@@ -1,12 +1,11 @@
 #pragma once
 
-#include <hc/hcTextureManager.h>
-#include <hc/hcMeshManager.h>
-#include <hc/hcMaterialManager.h>
-#include <hc/hcShaderManager.h>
-#include <hc/hcShaderProgramManager.h>
+#include <hc/graphics/resource/texture/hcTextureManager.h>
+#include <hc/graphics/resource/mesh/hcMeshManager.h>
+#include <hc/graphics/resource/material/hcMaterialManager.h>
+#include <hc/graphics/resource/shader/hcShaderManager.h>
+#include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-
 
 namespace hc
 {

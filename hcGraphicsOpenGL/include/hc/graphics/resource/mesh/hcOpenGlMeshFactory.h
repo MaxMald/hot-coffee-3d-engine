@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hc/hcIMeshFactory.h>
+#include <hc/graphics/resource/mesh/hcIMeshFactory.h>
 
 namespace hc
 {

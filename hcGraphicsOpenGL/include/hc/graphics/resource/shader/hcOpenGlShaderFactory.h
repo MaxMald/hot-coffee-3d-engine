@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hc/hcIShaderFactory.h>
+#include <hc/graphics/resource/shader/hcIShaderFactory.h>
 
 namespace hc
 {

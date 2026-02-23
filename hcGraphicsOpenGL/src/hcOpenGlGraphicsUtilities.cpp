@@ -1,4 +1,4 @@
-#include "hc/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
 #include <GL/glew.h>
 
 namespace hc

@@ -1,5 +1,5 @@
-#include "hc/hcOpenGlMeshFactory.h"
-#include "hc/hcOpenGlMesh.h"
+#include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
+#include "hc/graphics/resource/mesh/hcOpenGlMesh.h"
 
 namespace hc
 {

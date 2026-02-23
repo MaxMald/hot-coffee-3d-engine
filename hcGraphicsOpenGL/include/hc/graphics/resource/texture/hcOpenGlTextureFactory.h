@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hc/hcITextureFactory.h>
+#include <hc/graphics/resource/texture/hcITextureFactory.h>
 
 namespace hc
 {

@@ -1,13 +1,13 @@
-#include "hc/hcOpenGlGraphicsManager.h"
+#include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include <hc/hcMaterialFactoriesManagerRegistry.h>
-#include <hc/hcMaterialFactoriesManager.h>
+#include <hc/graphics/resource/material/hcMaterialFactoriesManagerRegistry.h>
+#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
 
-#include "hc/hcOpenGlTextureFactory.h"
-#include "hc/hcOpenGlShaderFactory.h"
-#include "hc/hcOpenGlShaderProgramFactory.h"
-#include "hc/hcOpenGlMeshFactory.h"
+#include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
+#include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
+#include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
+#include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 
 namespace hc
 {

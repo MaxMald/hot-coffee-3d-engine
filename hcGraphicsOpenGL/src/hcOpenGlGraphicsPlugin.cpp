@@ -1,7 +1,7 @@
-#include "hc/hcOpenGlGraphicsPlugin.h"
+#include "hc/plugins/hcOpenGlGraphicsPlugin.h"
 
-#include <hc/hcMaterialFactoriesManager.h>
-#include "hc/hcOpenGlGraphicsManager.h"
+#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
+#include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 namespace hc
 {
