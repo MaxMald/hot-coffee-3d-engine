@@ -1,4 +1,4 @@
-#include "hc/hcIGraphicsManager.h"
+#include "hc/graphics/hcIGraphicsManager.h"
 
 namespace hc
 {

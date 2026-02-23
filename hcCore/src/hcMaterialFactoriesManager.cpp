@@ -1,5 +1,5 @@
-#include "hc/hcMaterialFactoriesManager.h"
-#include "hc/hcIMaterialFactory.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
+#include "hc/graphics/resource/material/hcIMaterialFactory.h"
 
 namespace hc
 {

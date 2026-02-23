@@ -1,8 +1,8 @@
-#include "hc/hcShaderProgramManager.h"
-#include "hc/hcIShaderProgramFactory.h"
-#include "hc/hcIShaderManager.h"
-#include "hc/hcIShaderProgram.h"
-#include "hc/hcIShader.h"
+#include "hc/graphics/resource/shaderProgram/hcShaderProgramManager.h"
+#include "hc/graphics/resource/shaderProgram/hcIShaderProgramFactory.h"
+#include "hc/graphics/resource/shader/hcIShaderManager.h"
+#include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
+#include "hc/graphics/resource/shader/hcIShader.h"
 
 namespace hc
 {

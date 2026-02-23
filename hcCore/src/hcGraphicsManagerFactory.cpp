@@ -1,10 +1,10 @@
-#include "hc/hcGraphicsManagerFactory.h"
-#include "hc/hcPluginManager.h"
-#include "hc/hcPluginStandardKeys.h"
-#include "hc/hcIGraphicsManagerPlugin.h"
-#include "hc/hcIGraphicsManager.h"
-#include "hc/hcMaterialFactoriesManager.h"
-#include "hc/hcMaterialFactoriesManagerRegistry.h"
+#include "hc/graphics/hcGraphicsManagerFactory.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/plugins/hcPluginStandardKeys.h"
+#include "hc/plugins/hcIGraphicsManagerPlugin.h"
+#include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManagerRegistry.h"
 
 namespace hc
 {

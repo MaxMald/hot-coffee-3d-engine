@@ -1,4 +1,4 @@
-#include "hc/hcCamera.h"
+#include "hc/scene/camera/hcCamera.h"
 
 namespace hc
 {

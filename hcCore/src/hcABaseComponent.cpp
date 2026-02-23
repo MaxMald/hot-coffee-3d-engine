@@ -1,4 +1,4 @@
-#include "hc/hcABaseComponent.h"
+#include "hc/scene/gameObject/components/hcABaseComponent.h"
 
 namespace hc
 {

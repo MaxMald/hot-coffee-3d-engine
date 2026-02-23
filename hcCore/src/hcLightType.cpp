@@ -1,4 +1,4 @@
-#include "hc/hcLightType.h"
+#include "hc/scene/light/hcLightType.h"
 
 namespace hc
 {

@@ -1,4 +1,4 @@
-#include "hc/hcModel.h"
+#include "hc/assets/hcModel.h"
 
 namespace hc
 {

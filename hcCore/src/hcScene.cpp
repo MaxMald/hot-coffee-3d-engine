@@ -1,7 +1,7 @@
-#include "hc/hcScene.h"
-#include "hc/hcRenderContext.h"
-#include "hc/hcCamera.h"
-#include "hc/hcIGameObjectFactory.h"
+#include "hc/scene/hcScene.h"
+#include "hc/graphics/hcRenderContext.h"
+#include "hc/scene/camera/hcCamera.h"
+#include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc
 {

@@ -1,4 +1,4 @@
-#include "hc/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
 
 namespace hc
 {

@@ -1,12 +1,12 @@
-#include "hc/hcPluginManager.h"
-#include "hc/hcIPluginSlotFactory.h"
-#include "hc/hcIPluginSlot.h"
-#include "hc/hcIPlugin.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/plugins/pluginSlot/hcIPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcIPluginSlot.h"
+#include "hc/plugins/hcIPlugin.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
-#include "hc/hcWindowsPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcWindowsPluginSlotFactory.h"
 #elif HC_PLATFORM == HC_PLATFORM_LINUX
-#include "hc/hcLinuxPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcLinuxPluginSlotFactory.h"
 #endif
 
 namespace hc

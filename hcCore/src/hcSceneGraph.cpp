@@ -1,4 +1,4 @@
-#include "hc/hcSceneGraph.h"
+#include "hc/scene/hcSceneGraph.h"
 
 namespace hc
 {

@@ -1,4 +1,4 @@
-#include "hc/hcShadingType.h"
+#include "hc/graphics/resource/material/hcShadingType.h"
 
 namespace hc
 {

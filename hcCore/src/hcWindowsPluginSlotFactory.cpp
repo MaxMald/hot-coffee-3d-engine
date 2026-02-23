@@ -1,8 +1,8 @@
-#include "hc/hcWindowsPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcWindowsPluginSlotFactory.h"
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 
-#include "hc/hcWindowPluginSlot.h"
+#include "hc/plugins/pluginSlot/hcWindowPluginSlot.h"
 
 namespace hc
 {

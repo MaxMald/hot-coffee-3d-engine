@@ -1,6 +1,6 @@
-#include "hc/hcMaterialDescriptorJsonSerializer.h"
-#include "hc/hcMaterialDescriptor.h"
-#include "hc/hcUnlitMaterialDescriptor.h"
+#include "hc/serialization/hcMaterialDescriptorJsonSerializer.h"
+#include "hc/assets/hcMaterialDescriptor.h"
+#include "hc/assets/hcUnlitMaterialDescriptor.h"
 
 namespace hc
 {

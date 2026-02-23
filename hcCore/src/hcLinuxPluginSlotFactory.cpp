@@ -1,8 +1,8 @@
-#include "hc/hcLinuxPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcLinuxPluginSlotFactory.h"
 
 #if HC_PLATFORM == HC_PLATFORM_LINUX
 
-#include "hc/hcLinuxPluginSlot.h"
+#include "hc/plugins/pluginSlot/hcLinuxPluginSlot.h"
 
 namespace hc
 {

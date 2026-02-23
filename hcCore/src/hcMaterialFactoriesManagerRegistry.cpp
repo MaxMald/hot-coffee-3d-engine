@@ -1,6 +1,6 @@
-#include "hc/hcMaterialFactoriesManagerRegistry.h"
-#include "hc/hcUnlitMaterialFactory.h"
-#include "hc/hcMaterialFactoriesManager.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManagerRegistry.h"
+#include "hc/graphics/resource/material/hcUnlitMaterialFactory.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
 
 namespace hc
 {
