@@ -1,6 +1,6 @@
 #pragma once
 
-#include <hc/hcIWindowManagerPlugin.h>
+#include <hc/plugins/hcIWindowManagerPlugin.h>
 #include "hc/hcWindowSfmlPrerequisites.h"
 
 namespace hc

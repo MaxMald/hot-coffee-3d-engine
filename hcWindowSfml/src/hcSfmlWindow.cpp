@@ -1,4 +1,4 @@
-#include "hc/hcSfmlWindow.h"
+#include "hc/window/hcSfmlWindow.h"
 
 #include <SFML/Window.hpp>
 

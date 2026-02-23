@@ -1,5 +1,5 @@
-#include "hc/hcSfmlWindowManager.h"
-#include "hc/hcSfmlWindow.h"
+#include "hc/window/hcSfmlWindowManager.h"
+#include "hc/window/hcSfmlWindow.h"
 
 namespace hc
 {
