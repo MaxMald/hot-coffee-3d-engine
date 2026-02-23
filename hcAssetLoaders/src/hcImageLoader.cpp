@@ -1,4 +1,4 @@
-#include "hc/hcImageLoader.h"
+#include "hc/assets/hcImageLoader.h"
 
 #include "stb_image.h"
 

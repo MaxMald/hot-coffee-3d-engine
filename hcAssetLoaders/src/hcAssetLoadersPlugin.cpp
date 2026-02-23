@@ -1,6 +1,6 @@
-#include "hc/hcAssetLoadersPlugin.h"
-#include "hc/hcImageLoader.h"
-#include "hc/hcModelLoader.h"
+#include "hc/plugins/hcAssetLoadersPlugin.h"
+#include "hc/assets/hcImageLoader.h"
+#include "hc/assets/hcModelLoader.h"
 
 namespace hc
 {
