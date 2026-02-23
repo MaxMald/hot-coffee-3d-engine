@@ -1,4 +1,4 @@
-#include "hc/hcTime.h"
+#include "hc/utilities/hcTime.h"
 
 namespace hc
 {

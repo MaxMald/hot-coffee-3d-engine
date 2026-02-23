@@ -1,4 +1,4 @@
-#include "hc/hcJsonFromattedValue.h"
+#include "hc/utilities/hcJsonFromattedValue.h"
 
 namespace hc
 {

@@ -1,4 +1,4 @@
-#include "hc/hcFileUtilities.h"
+#include "hc/utilities/hcFileUtilities.h"
 #include <fstream>
 
 namespace hc

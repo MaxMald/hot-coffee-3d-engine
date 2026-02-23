@@ -1,5 +1,5 @@
-#include "hc/hcLogService.h"
-#include "hc/hcILogServiceListener.h"
+#include "hc/utilities/hcLogService.h"
+#include "hc/utilities/hcILogServiceListener.h"
 
 namespace hc
 {

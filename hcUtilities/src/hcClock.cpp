@@ -1,4 +1,4 @@
-#include "hc/hcClock.h"
+#include "hc/utilities/hcClock.h"
 
 namespace hc
 {
