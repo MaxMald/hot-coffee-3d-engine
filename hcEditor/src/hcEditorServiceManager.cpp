@@ -1,4 +1,4 @@
-#include "hc/editor/hcEditorServiceManager.h"
+#include "hc/editor/services/hcEditorServiceManager.h"
 
 namespace hc::editor
 {

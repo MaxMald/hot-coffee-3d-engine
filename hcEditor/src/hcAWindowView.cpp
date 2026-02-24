@@ -1,4 +1,4 @@
-#include "hc/editor/hcAWindowView.h"
+#include "hc/editor/views/windows/hcAWindowView.h"
 #include "imgui.h"
 
 namespace hc::editor

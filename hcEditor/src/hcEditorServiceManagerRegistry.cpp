@@ -1,7 +1,7 @@
-#include "hc/editor/hcEditorServiceManagerRegistry.h"
-#include "hc/editor/hcEditorServiceManager.h"
-#include "hc/editor/hcGameObjectSelectionService.h"
-#include "hc/editor/hcProjectManager.h"
+#include "hc/editor/services/hcEditorServiceManagerRegistry.h"
+#include "hc/editor/services/hcEditorServiceManager.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
 
 namespace hc::editor
 {

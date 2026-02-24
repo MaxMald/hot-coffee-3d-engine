@@ -1,4 +1,4 @@
-#include "hc/editor/hcCreateComponentSection.h"
+#include "hc/editor/views/windows/gameObjectEditor/hcCreateComponentSection.h"
 #include "imgui.h"
 
 namespace

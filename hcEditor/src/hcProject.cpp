@@ -1,6 +1,6 @@
-#include "hc/editor/hcProject.h"
+#include "hc/editor/services/projectManager/hcProject.h"
 
-#include "hc/editor/hcProjectFileContentLoader.h"
+#include "hc/editor/services/projectManager/hcProjectFileContentLoader.h"
 
 namespace hc::editor
 {

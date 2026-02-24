@@ -1,4 +1,4 @@
-#include "hc/editor/hcEditorCameraController.h"
+#include "hc/editor/services/hcEditorCameraController.h"
 
 namespace hc::editor
 {

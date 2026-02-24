@@ -1,6 +1,6 @@
-#include "hc/editor/hcLightManagerWindow.h"
+#include "hc/editor/views/windows/hcLightManagerWindow.h"
 
-#include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
 #include "imgui.h"
 
 namespace hc::editor

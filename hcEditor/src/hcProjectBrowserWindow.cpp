@@ -1,12 +1,12 @@
-#include "hc/editor/hcProjectBrowserWindow.h"
+#include "hc/editor/views/windows/hcProjectBrowserWindow.h"
 
 #include <filesystem>
-#include "hc/editor/hcProjectManager.h"
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcDirectoryReference.h"
-#include "hc/editor/hcFileReference.h"
-#include "hc/editor/hcAssetCreator.h"
-#include "hc/editor/hcMaterialDescriptorEditorWindow.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
+#include "hc/editor/views/directoryNavigator/hcFileReference.h"
+#include "hc/editor/utilities/hcAssetCreator.h"
+#include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "imgui.h"
 
 namespace 

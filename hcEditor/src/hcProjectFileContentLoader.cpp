@@ -1,4 +1,4 @@
-#include "hc/editor/hcProjectFileContentLoader.h"
+#include "hc/editor/services/projectManager/hcProjectFileContentLoader.h"
 
 namespace hc::editor
 {

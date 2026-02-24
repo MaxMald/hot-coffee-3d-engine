@@ -1,7 +1,7 @@
-#include "hc/editor/hcOpenProjectMenuItem.h"
-#include "hc/editor/hcProjectManager.h"
-#include "hc/editor/hcFileDialogView.h"
-#include "hc/editor/hcFileDialogRequest.h"
+#include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/views/fileDialog/hcFileDialogView.h"
+#include "hc/editor/views/fileDialog/hcFileDialogRequest.h"
 #include "imgui.h"
 
 namespace hc::editor

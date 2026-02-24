@@ -1,11 +1,11 @@
-#include "hc/editor/hcGameObjectEditorWindow.h"
+#include "hc/editor/views/windows/gameObjectEditor/hcGameObjectEditorWindow.h"
 
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcGameObjectSelectionService.h"
-#include "hc/editor/hcComponentDrawersManager.h"
-#include "hc/editor/hcComponentDrawersRegistry.h"
-#include "hc/editor/hcProjectFileSelector.h"
-#include "hc/editor/hcImguiUtilities.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor

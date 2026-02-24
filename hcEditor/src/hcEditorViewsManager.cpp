@@ -1,8 +1,8 @@
-#include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
 
-#include "hc/editor/hcIView.h"
-#include "hc/editor/hcImguiHandler.h"
-#include "hc/editor/hcProjectFileSelector.h"
+#include "hc/editor/views/hcIView.h"
+#include "hc/editor/imgui/hcImguiHandler.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
 
 namespace hc::editor
 {

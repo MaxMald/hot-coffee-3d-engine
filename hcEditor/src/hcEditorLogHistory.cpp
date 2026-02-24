@@ -1,4 +1,4 @@
-#include "hc/editor/hcEditorLogHistory.h"
+#include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
 
 namespace hc::editor
 {

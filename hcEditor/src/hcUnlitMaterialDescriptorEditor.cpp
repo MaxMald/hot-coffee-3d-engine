@@ -1,6 +1,6 @@
-#include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
-#include "hc/editor/hcProjectFileSelector.h"
-#include "hc/editor/hcImguiUtilities.h"
+#include "hc/editor/materialDrawer/hcUnlitMaterialDescriptorEditor.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor
