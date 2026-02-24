@@ -1,8 +1,8 @@
-#include "hc/hcTextureManager.h"
-#include "hc/hcITextureFactory.h"
-#include "hc/hcImage.h"
-#include "hc/hcAssetManager.h"
-#include "hc/hcITexture.h"
+#include "hc/graphics/resource/texture/hcTextureManager.h"
+#include "hc/graphics/resource/texture/hcITextureFactory.h"
+#include "hc/assets/hcImage.h"
+#include "hc/assets/hcAssetManager.h"
+#include "hc/graphics/resource/texture/hcITexture.h"
 
 namespace hc
 {

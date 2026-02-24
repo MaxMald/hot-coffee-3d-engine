@@ -1,5 +1,5 @@
-#include "hc/editor/hcMeshComponentDrawer.h"
-#include "hc/editor/hcProjectFileSelector.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
 #include "imgui.h"
 
 namespace hc::editor

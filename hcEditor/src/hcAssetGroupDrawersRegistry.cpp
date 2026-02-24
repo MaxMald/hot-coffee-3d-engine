@@ -1,7 +1,7 @@
-#include "hc/editor/hcAssetGroupDrawersRegistry.h"
-#include "hc/editor/hcAssetManagerWindow.h"
-#include "hc/editor/hcImageAssetGroupDrawer.h"
-#include "hc/editor/hcMaterialDescriptorAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetGroupDrawersRegistry.h"
+#include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcImageAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetGroupDrawer.h"
 
 namespace hc::editor
 {

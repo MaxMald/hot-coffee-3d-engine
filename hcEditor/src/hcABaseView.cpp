@@ -1,5 +1,5 @@
-#include "hc/editor/hcABaseView.h"
-#include "hc/editor/hcEditorViewsManager.h"
+#include "hc/editor/views/hcABaseView.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
 
 namespace hc::editor
 {

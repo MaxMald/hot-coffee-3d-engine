@@ -1,5 +1,5 @@
-#include "hc/hcCameraManager.h"
-#include "hc/hcCamera.h"
+#include "hc/scene/camera/hcCameraManager.h"
+#include "hc/scene/camera/hcCamera.h"
 
 namespace hc
 {

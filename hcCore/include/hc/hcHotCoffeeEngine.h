@@ -1,9 +1,9 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcPluginManager.h"
+#include "hc/plugins/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
-#include "hc/hcAssetManager.h"
+#include "hc/assets/hcAssetManager.h"
 #include "hc/hcProcessResult.h"
 
 namespace hc

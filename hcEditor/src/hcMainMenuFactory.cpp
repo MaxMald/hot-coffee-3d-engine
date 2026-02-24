@@ -1,25 +1,25 @@
-#include "hc/editor/hcMainMenuBarFactory.h"
-#include "hc/editor/hcMenuBuilder.h"
-#include "hc/editor/hcMenu.h"
-#include "hc/editor/hcMainMenuBar.h"
-#include "hc/editor/hcProjectManager.h"
+#include "hc/editor/views/mainMenuBar/hcMainMenuBarFactory.h"
+#include "hc/editor/views/mainMenuBar/hcMenuBuilder.h"
+#include "hc/editor/views/mainMenuBar/hcMenu.h"
+#include "hc/editor/views/mainMenuBar/hcMainMenuBar.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
 
 // Windows
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcPluginManagerWindow.h"
-#include "hc/editor/hcEditorLoggerWindow.h"
-#include "hc/editor/hcSceneGraphWindow.h"
-#include "hc/editor/hcLightManagerWindow.h"
-#include "hc/editor/hcCameraManagerWindow.h"
-#include "hc/editor/hcAssetManagerWindow.h"
-#include "hc/editor/hcFileDialogView.h"
-#include "hc/editor/hcMeshManagerWindow.h"
-#include "hc/editor/hcMaterialManagerWindow.h"
-#include "hc/editor/hcTextureManagerWindow.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/views/windows/hcPluginManagerWindow.h"
+#include "hc/editor/views/windows/hcEditorLoggerWindow.h"
+#include "hc/editor/views/windows/hcSceneGraphWindow.h"
+#include "hc/editor/views/windows/hcLightManagerWindow.h"
+#include "hc/editor/views/windows/hcCameraManagerWindow.h"
+#include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
+#include "hc/editor/views/fileDialog/hcFileDialogView.h"
+#include "hc/editor/views/windows/hcMeshManagerWindow.h"
+#include "hc/editor/views/windows/hcMaterialManagerWindow.h"
+#include "hc/editor/views/windows/hcTextureManagerWindow.h"
 
 // Menu Items
-#include "hc/editor/hcOpenProjectMenuItem.h"
-#include "hc/editor/hcToggleWindowMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
 
 namespace hc::editor
 {

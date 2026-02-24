@@ -1,4 +1,4 @@
-#include "hc/hcShaderStageType.h"
+#include "hc/graphics/resource/shader/hcShaderStageType.h"
 
 namespace hc
 {

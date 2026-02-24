@@ -1,5 +1,5 @@
-#include "hc/editor/hcActionExecutionMenuItem.h"
-#include "hc/editor/hcIMenuItemAction.h"
+#include "hc/editor/views/mainMenuBar/hcActionExecutionMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcIMenuItemAction.h"
 #include "imgui.h"
 
 namespace hc::editor

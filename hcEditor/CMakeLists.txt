@@ -2,17 +2,20 @@
 file(GLOB_RECURSE EDITOR_HEADERS "include/*.h")
 file(GLOB_RECURSE EDITOR_SOURCES "src/*.cpp")
 
-if(NOT WIN32)
-  list(FILTER EDITOR_SOURCES EXCLUDE REGEX ".*/imgui_impl_win32\\.cpp$")
-endif()
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${EDITOR_HEADERS})
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" 
+             PREFIX "Source Files" 
+             FILES ${EDITOR_SOURCES})
+
+# Create the executable target
 add_executable(hcEditor 
   ${EDITOR_SOURCES} 
   ${EDITOR_HEADERS}
 )
-
-# Preprocessor definition
-target_compile_definitions(hcEditor PRIVATE USE_STD_FILESYSTEM) # Required by imgui
 
 # Target properties
 set_target_properties(hcEditor PROPERTIES
@@ -50,4 +53,4 @@ target_include_directories(hcEditor
 )
 
 # Linking
-target_link_libraries(hcEditor PUBLIC hcCore hcUtilities)
+target_link_libraries(hcEditor PUBLIC hcCore hcUtilities imgui)

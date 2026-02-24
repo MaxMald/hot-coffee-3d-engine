@@ -1,5 +1,5 @@
-#include "hc/hcMeshComponent.h"
-#include "hc/hcIMesh.h"
+#include "hc/scene/gameObject/components/hcMeshComponent.h"
+#include "hc/graphics/resource/mesh/hcIMesh.h"
 
 namespace hc
 {

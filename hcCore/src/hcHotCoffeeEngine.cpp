@@ -2,18 +2,18 @@
 
 #include <algorithm>
 
-#include "hc/hcJsonSerializer.h"
-#include "hc/hcPluginConnectionHelper.h"
-#include "hc/hcIWindowManager.h"
-#include "hc/hcIWindow.h"
-#include "hc/hcIGraphicsManager.h"
-#include "hc/hcSceneManager.h"
+#include "hc/serialization/hcJsonSerializer.h"
+#include "hc/plugins/hcPluginConnectionHelper.h"
+#include "hc/window/hcIWindowManager.h"
+#include "hc/window/hcIWindow.h"
+#include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/scene/hcSceneManager.h"
 #include "hc/hcIEventListener.h"
 
-#include "hc/hcGraphicsManagerFactory.h"
-#include "hc/hcWindowManagerFactory.h"
-#include "hc/hcAssetManagerLoadersRegistry.h"
-#include "hc/hcSceneManagerFactory.h"
+#include "hc/graphics/hcGraphicsManagerFactory.h"
+#include "hc/window/hcWindowManagerFactory.h"
+#include "hc/assets/hcAssetManagerLoadersRegistry.h"
+#include "hc/scene/hcSceneManagerFactory.h"
 
 namespace hc
 {

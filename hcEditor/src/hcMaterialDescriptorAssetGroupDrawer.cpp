@@ -1,4 +1,4 @@
-#include "hc/editor/hcMaterialDescriptorAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetGroupDrawer.h"
 
 namespace hc::editor
 {

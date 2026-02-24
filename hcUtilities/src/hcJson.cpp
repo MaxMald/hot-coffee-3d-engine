@@ -1,4 +1,4 @@
-#include "hc/hcJson.h"
+#include "hc/utilities/hcJson.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
 #include <stdexcept>

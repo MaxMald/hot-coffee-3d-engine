@@ -1,4 +1,4 @@
-#include "hc/editor/hcFileDialogView.h"
+#include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "ImGuiFileDialog.h"
 
 namespace hc::editor

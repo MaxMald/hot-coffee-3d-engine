@@ -1,4 +1,4 @@
-#include "hc/hcOpenGlShader.h"
+#include "hc/graphics/resource/shader/hcOpenGlShader.h"
 
 namespace hc
 {

@@ -1,4 +1,4 @@
-#include "hc/editor/hcMaterialManagerWindow.h"
+#include "hc/editor/views/windows/hcMaterialManagerWindow.h"
 #include "imgui.h"
 
 namespace hc::editor

@@ -1,7 +1,7 @@
-#include "hc/editor/hcSceneGraphWindow.h"
+#include "hc/editor/views/windows/hcSceneGraphWindow.h"
 
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcGameObjectSelectionService.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "imgui.h"
 
 namespace hc::editor

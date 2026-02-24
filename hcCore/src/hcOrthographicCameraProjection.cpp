@@ -1,4 +1,4 @@
-#include "hc/hcOrthographicCameraProjection.h"
+#include "hc/scene/camera/hcOrthographicCameraProjection.h"
 
 namespace hc
 {

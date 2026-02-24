@@ -1,5 +1,5 @@
-#include "hc/editor/hcGameObjectSelectionService.h"
-#include "hc/editor/hcIGameObjectSelectionServiceListener.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
 
 namespace hc::editor
 {

@@ -1,6 +1,6 @@
-#include "hc/editor/hcComponentDrawersRegistry.h"
-#include "hc/editor/hcComponentDrawersManager.h"
-#include "hc/editor/hcMeshComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
 
 namespace hc::editor
 {

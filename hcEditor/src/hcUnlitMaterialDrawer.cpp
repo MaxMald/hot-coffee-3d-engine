@@ -1,5 +1,5 @@
-#include "hc/editor/hcUnlitMaterialDrawer.h"
-#include "hc/editor/hcImguiUtilities.h"
+#include "hc/editor/materialDrawer/hcUnlitMaterialDrawer.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor

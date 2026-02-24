@@ -1,4 +1,4 @@
-#include "hc/hcOpenGlTexture.h"
+#include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 
 namespace hc
 {

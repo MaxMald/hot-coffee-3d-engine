@@ -1,7 +1,7 @@
-#include "hc/editor/hcDirectoryReference.h"
+#include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
 
 #include <filesystem>
-#include "hc/editor/hcFileReference.h"
+#include "hc/editor/views/directoryNavigator/hcFileReference.h"
 
 namespace hc::editor
 {

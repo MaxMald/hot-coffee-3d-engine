@@ -1,4 +1,4 @@
-#include "hc/editor/hcHotCoffeeToImguiMappings.h"
+#include "hc/editor/imgui/hcHotCoffeeToImguiMappings.h"
 
 namespace hc::editor
 {

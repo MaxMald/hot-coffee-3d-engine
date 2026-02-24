@@ -1,4 +1,4 @@
-#include "hc/editor/hcNullMaterialDescriptorEditor.h"
+#include "hc/editor/materialDescriptorEditor/hcNullMaterialDescriptorEditor.h"
 #include "imgui.h"
 
 namespace hc::editor

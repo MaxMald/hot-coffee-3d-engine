@@ -1,10 +1,10 @@
-#include "hc/editor/hcMaterialDescriptorEditorWindow.h"
+#include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 
-#include "hc/editor/hcImguiUtilities.h"
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcProjectFileSelector.h"
-#include "hc/editor/hcUnlitMaterialDescriptorEditor.h"
-#include "hc/editor/hcNullMaterialDescriptorEditor.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/materialDrawer/hcUnlitMaterialDescriptorEditor.h"
+#include "hc/editor/materialDescriptorEditor/hcNullMaterialDescriptorEditor.h"
 #include "imgui.h"
 
 namespace

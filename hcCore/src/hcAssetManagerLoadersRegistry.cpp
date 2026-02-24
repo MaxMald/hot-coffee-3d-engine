@@ -1,11 +1,11 @@
-#include "hc/hcAssetManagerLoadersRegistry.h"
-#include "hc/hcAssetManager.h"
-#include "hc/hcPluginManager.h"
-#include "hc/hcIPlugin.h"
-#include "hc/hcPluginStandardKeys.h"
-#include "hc/hcMaterialDescriptor.h"
-#include "hc/hcJsonDeserializerAssetLoader.h"
-#include "hc/hcIAssetLoaderPlugin.h"
+#include "hc/assets/hcAssetManagerLoadersRegistry.h"
+#include "hc/assets/hcAssetManager.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/plugins/hcIPlugin.h"
+#include "hc/plugins/hcPluginStandardKeys.h"
+#include "hc/assets/hcMaterialDescriptor.h"
+#include "hc/assets/hcJsonDeserializerAssetLoader.h"
+#include "hc/plugins/hcIAssetLoaderPlugin.h"
 
 namespace hc
 {

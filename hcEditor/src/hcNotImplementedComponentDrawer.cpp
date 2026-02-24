@@ -1,4 +1,4 @@
-#include "hc/editor/hcNotImplementedComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcNotImplementedComponentDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor

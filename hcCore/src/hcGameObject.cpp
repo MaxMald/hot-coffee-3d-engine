@@ -1,8 +1,8 @@
-#include "hc/hcGameObject.h"
+#include "hc/scene/gameObject/hcGameObject.h"
 #include <algorithm>
-#include "hc/hcIComponent.h"
-#include "hc/hcRenderContext.h"
-#include "hc/hcIGameObjectFactory.h"
+#include "hc/scene/gameObject/components/hcIComponent.h"
+#include "hc/graphics/hcRenderContext.h"
+#include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc
 {

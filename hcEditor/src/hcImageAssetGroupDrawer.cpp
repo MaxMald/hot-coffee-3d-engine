@@ -1,4 +1,4 @@
-#include "hc/editor/hcImageAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcImageAssetGroupDrawer.h"
 
 namespace hc::editor
 {

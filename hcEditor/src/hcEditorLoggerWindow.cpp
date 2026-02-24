@@ -1,7 +1,7 @@
-#include "hc/editor/hcEditorLoggerWindow.h"
+#include "hc/editor/views/windows/hcEditorLoggerWindow.h"
 
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcEditorLogHistory.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
 #include "imgui.h"
 
 namespace hc::editor

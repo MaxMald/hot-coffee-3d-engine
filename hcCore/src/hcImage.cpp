@@ -1,4 +1,4 @@
-#include "hc/hcImage.h"
+#include "hc/assets/hcImage.h"
 
 namespace hc
 {

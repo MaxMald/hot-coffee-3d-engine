@@ -1,7 +1,7 @@
-#include "hc/editor/hcCameraManagerWindow.h"
+#include "hc/editor/views/windows/hcCameraManagerWindow.h"
 
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcImguiUtilities.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor

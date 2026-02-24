@@ -1,8 +1,8 @@
-#include "hc/hcUnlitMaterial.h"
-#include "hc/hcUnlitMaterialDescriptor.h"
-#include "hc/hcIShaderProgram.h"
-#include "hc/hcCameraMatrices.h"
-#include "hc/hcITexture.h"
+#include "hc/graphics/resource/material/hcUnlitMaterial.h"
+#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
+#include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/resource/texture/hcITexture.h"
 
 namespace hc
 {

@@ -1,5 +1,5 @@
-#include "hc/hcOpenGlTextureFactory.h"
-#include "hc/hcOpenGlTexture.h"
+#include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
+#include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 
 namespace hc
 {

@@ -1,5 +1,5 @@
-#include "hc/hcSceneManager.h"
-#include "hc/hcIGameObjectFactory.h"
+#include "hc/scene/hcSceneManager.h"
+#include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc
 {

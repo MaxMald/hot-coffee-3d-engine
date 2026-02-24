@@ -1,6 +1,6 @@
-#include "hc/editor/hcMaterialDrawersManagerFactory.h"
-#include "hc/editor/hcMaterialDrawersManager.h"
-#include "hc/editor/hcUnlitMaterialDrawer.h"
+#include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
+#include "hc/editor/materialDrawer/hcMaterialDrawersManager.h"
+#include "hc/editor/materialDrawer/hcUnlitMaterialDrawer.h"
 
 namespace hc::editor
 {

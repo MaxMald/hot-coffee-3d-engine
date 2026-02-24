@@ -1,6 +1,6 @@
 #include "hc/editor/hcHotCoffeeEditor.h"
 #include "hc/editor/hcHotCoffeeEngineSettingsFactory.h"
-#include "hc/editor/hcEditorScene.h"
+#include "hc/editor/scenes/hcEditorScene.h"
 
 namespace hc::editor
 {

@@ -1,5 +1,5 @@
-#include "hc/editor/hcToggleWindowMenuItem.h"
-#include "hc/editor/hcAWindowView.h"
+#include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
+#include "hc/editor/views/windows/hcAWindowView.h"
 #include "imgui.h"
 
 namespace hc::editor

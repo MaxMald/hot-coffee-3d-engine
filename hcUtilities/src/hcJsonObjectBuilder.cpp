@@ -1,7 +1,7 @@
-#include "hc/hcJsonObjectBuilder.h"
-#include "hc/hcJsonArrayBuilder.h"
-#include "hc/hcJsonFromattedValue.h"
-#include "hc/hcColor.h"
+#include "hc/utilities/hcJsonObjectBuilder.h"
+#include "hc/utilities/hcJsonArrayBuilder.h"
+#include "hc/utilities/hcJsonFromattedValue.h"
+#include "hc/utilities/hcColor.h"
 
 namespace hc
 {

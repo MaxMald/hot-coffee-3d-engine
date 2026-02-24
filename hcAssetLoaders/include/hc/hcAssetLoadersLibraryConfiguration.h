@@ -1,6 +1,6 @@
 #pragma once
 
-// Core export macros
+// Asset Loaders export macros
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 # if HC_COMPILER == HC_COMPILER_MSVC || HC_COMPILER == HC_COMPILER_GNUC || HC_COMPILER == HC_COMPILER_INTEL
 #   if defined(HC_STATIC_LIB)

@@ -1,4 +1,4 @@
-#include "hc/editor/hcMeshManagerWindow.h"
+#include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "imgui.h"
 
 namespace hc::editor

@@ -1,9 +1,9 @@
-#include "hc/hcModelLoader.h"
+#include "hc/assets/hcModelLoader.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include "hc/hcMaterialParser.h"
+#include "hc/assets/hcMaterialParser.h"
 
 namespace hc
 {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcWindowSettings.h"
-#include "hc/hcPluginManagerSettings.h"
+#include "hc/window/hcWindowSettings.h"
+#include "hc/plugins/hcPluginManagerSettings.h"
 
 namespace hc
 {

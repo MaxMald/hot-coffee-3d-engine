@@ -1,7 +1,7 @@
-#include "hc/editor/hcEditorScene.h"
-#include "hc/editor/hcEditorLogHistory.h"
-#include "hc/editor/hcEditorServiceManagerRegistry.h"
-#include "hc/editor/hcEditorViewsRegistry.h"
+#include "hc/editor/scenes/hcEditorScene.h"
+#include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
+#include "hc/editor/services/hcEditorServiceManagerRegistry.h"
+#include "hc/editor/views/hcEditorViewsRegistry.h"
 
 namespace hc::editor
 {

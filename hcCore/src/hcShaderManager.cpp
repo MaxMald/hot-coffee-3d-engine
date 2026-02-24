@@ -1,5 +1,5 @@
-#include "hc/hcShaderManager.h"
-#include "hc/hcIShaderFactory.h"
+#include "hc/graphics/resource/shader/hcShaderManager.h"
+#include "hc/graphics/resource/shader/hcIShaderFactory.h"
 
 namespace hc
 {

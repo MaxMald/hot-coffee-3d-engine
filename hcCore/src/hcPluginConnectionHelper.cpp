@@ -1,7 +1,7 @@
-#include "hc/hcPluginConnectionHelper.h"
-#include "hc/hcPluginManager.h"
-#include "hc/hcPluginManagerSettings.h"
-#include "hc/hcPluginStandardKeys.h"
+#include "hc/plugins/hcPluginConnectionHelper.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/plugins/hcPluginManagerSettings.h"
+#include "hc/plugins/hcPluginStandardKeys.h"
 
 namespace hc
 {

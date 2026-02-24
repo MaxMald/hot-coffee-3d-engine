@@ -1,6 +1,6 @@
-#include "hc/hcOpenGlShaderFactory.h"
-#include "hc/hcBuiltInShaders.h"
-#include "hc/hcOpenGlShader.h"
+#include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
+#include "hc/graphics/resource/shader/hcBuiltInShaders.h"
+#include "hc/graphics/resource/shader/hcOpenGlShader.h"
 
 namespace hc
 {

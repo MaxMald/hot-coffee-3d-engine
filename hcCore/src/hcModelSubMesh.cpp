@@ -1,4 +1,4 @@
-#include "hc/hcModelSubMesh.h"
+#include "hc/assets/hcModelSubMesh.h"
 
 namespace hc
 {

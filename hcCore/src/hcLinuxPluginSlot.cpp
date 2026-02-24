@@ -1,10 +1,10 @@
-#include "hc/hcLinuxPluginSlot.h"
+#include "hc/plugins/pluginSlot/hcLinuxPluginSlot.h"
 
 #if HC_PLATFORM == HC_PLATFORM_LINUX
 
 #include <dlfcn.h>
 
-#include "hc/hcIPlugin.h"
+#include "hc/plugins/hcIPlugin.h"
 
 namespace hc
 {

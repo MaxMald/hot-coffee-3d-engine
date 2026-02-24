@@ -1,5 +1,5 @@
-#include "hc/editor/hcMaterialDrawersManager.h"
-#include "hc/editor/hcIMaterialDrawer.h"
+#include "hc/editor/materialDrawer/hcMaterialDrawersManager.h"
+#include "hc/editor/materialDrawer/hcIMaterialDrawer.h"
 
 namespace hc::editor
 {

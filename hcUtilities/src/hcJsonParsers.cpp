@@ -1,5 +1,5 @@
-#include "hc/hcJsonParsers.h"
-#include "hc/hcColor.h"
+#include "hc/utilities/hcJsonParsers.h"
+#include "hc/utilities/hcColor.h"
 
 namespace hc
 {

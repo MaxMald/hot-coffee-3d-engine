@@ -1,9 +1,9 @@
-#include "hc/hcUnlitMaterialFactory.h"
-#include "hc/hcUnlitMaterialDescriptor.h"
-#include "hc/hcUnlitMaterial.h"
-#include "hc/hcITextureManager.h"
-#include "hc/hcIShaderProgramManager.h"
-#include "hc/hcIShaderProgram.h"
+#include "hc/graphics/resource/material/hcUnlitMaterialFactory.h"
+#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/graphics/resource/material/hcUnlitMaterial.h"
+#include "hc/graphics/resource/texture/hcITextureManager.h"
+#include "hc/graphics/resource/shaderProgram/hcIShaderProgramManager.h"
+#include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 
 namespace hc
 {

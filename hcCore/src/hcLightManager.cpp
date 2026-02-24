@@ -1,5 +1,5 @@
-#include "hc/hcLightManager.h"
-#include "hc/hcLight.h"
+#include "hc/scene/light/hcLightManager.h"
+#include "hc/scene/light/hcLight.h"
 
 namespace hc
 {

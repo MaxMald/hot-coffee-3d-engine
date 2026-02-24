@@ -1,7 +1,7 @@
-#include "hc/hcOpenGlShaderProgram.h"
-#include "hc/hcOpenGlShader.h"
-#include "hc/hcOpenGlTexture.h"
-#include "hc/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgram.h"
+#include "hc/graphics/resource/shader/hcOpenGlShader.h"
+#include "hc/graphics/resource/texture/hcOpenGlTexture.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
 
 namespace hc
 {

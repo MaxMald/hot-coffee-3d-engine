@@ -1,5 +1,5 @@
-#include "hc/editor/hcTextureManagerWindow.h"
-#include "hc/editor/hcImguiUtilities.h"
+#include "hc/editor/views/windows/hcTextureManagerWindow.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor

@@ -1,10 +1,10 @@
-#include "hc/hcMeshManager.h"
-#include "hc/hcModel.h"
-#include "hc/hcAssetManager.h"
-#include "hc/hcIMeshFactory.h"
-#include "hc/hcIMaterialManager.h"
-#include "hc/hcMaterialDescriptor.h"
-#include "hc/hcIMaterial.h"
+#include "hc/graphics/resource/mesh/hcMeshManager.h"
+#include "hc/assets/hcModel.h"
+#include "hc/assets/hcAssetManager.h"
+#include "hc/graphics/resource/mesh/hcIMeshFactory.h"
+#include "hc/graphics/resource/material/hcIMaterialManager.h"
+#include "hc/assets/hcMaterialDescriptor.h"
+#include "hc/graphics/resource/material/hcIMaterial.h"
 
 namespace hc
 {

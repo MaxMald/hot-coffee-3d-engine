@@ -1,4 +1,4 @@
-#include "hc/editor/hcComponentDrawersManager.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 
 namespace hc::editor
 {

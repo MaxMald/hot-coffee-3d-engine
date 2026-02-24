@@ -1,9 +1,9 @@
-#include "hc/editor/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelector.h"
 
-#include "hc/editor/hcProjectManager.h"
-#include "hc/editor/hcEditorViewsManager.h"
-#include "hc/editor/hcFileReference.h"
-#include "hc/editor/hcDirectoryReference.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/views/directoryNavigator/hcFileReference.h"
+#include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
 #include "imgui.h"
 
 namespace hc::editor

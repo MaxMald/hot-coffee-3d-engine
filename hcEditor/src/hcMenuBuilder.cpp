@@ -1,6 +1,6 @@
-#include "hc/editor/hcMenuBuilder.h"
-#include "hc/editor/hcMenu.h"
-#include "hc/editor/hcIMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcMenuBuilder.h"
+#include "hc/editor/views/mainMenuBar/hcMenu.h"
+#include "hc/editor/views/mainMenuBar/hcIMenuItem.h"
 
 namespace hc::editor
 {

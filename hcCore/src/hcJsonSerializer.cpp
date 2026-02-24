@@ -1,7 +1,7 @@
-#include "hc/hcJsonSerializer.h"
+#include "hc/serialization/hcJsonSerializer.h"
 
-#include "hc/hcMaterialDescriptorJsonSerializer.h"
-#include "hc/hcMaterialDescriptor.h"
+#include "hc/serialization/hcMaterialDescriptorJsonSerializer.h"
+#include "hc/assets/hcMaterialDescriptor.h"
 
 namespace hc
 {

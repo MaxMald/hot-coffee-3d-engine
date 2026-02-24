@@ -1,8 +1,8 @@
-#include "hc/hcWindowManagerFactory.h"
-#include "hc/hcPluginManager.h"
-#include "hc/hcPluginStandardKeys.h"
-#include "hc/hcIWindowManagerPlugin.h"
-#include "hc/hcIWindowManager.h"
+#include "hc/window/hcWindowManagerFactory.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/plugins/hcPluginStandardKeys.h"
+#include "hc/plugins/hcIWindowManagerPlugin.h"
+#include "hc/window/hcIWindowManager.h"
 
 namespace hc
 {

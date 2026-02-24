@@ -1,10 +1,10 @@
-#include "hc/hcMaterialManager.h"
-#include "hc/hcShaderProgramManager.h"
-#include "hc/hcAssetManager.h"
-#include "hc/hcMaterialFactoriesManager.h"
-#include "hc/hcMaterialDescriptor.h"
-#include "hc/hcITextureManager.h"
-#include "hc/hcIMaterialFactory.h"
+#include "hc/graphics/resource/material/hcMaterialManager.h"
+#include "hc/graphics/resource/shaderProgram/hcShaderProgramManager.h"
+#include "hc/assets/hcAssetManager.h"
+#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
+#include "hc/assets/hcMaterialDescriptor.h"
+#include "hc/graphics/resource/texture/hcITextureManager.h"
+#include "hc/graphics/resource/material/hcIMaterialFactory.h"
 
 namespace hc
 {

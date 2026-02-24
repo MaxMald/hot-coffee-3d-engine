@@ -1,6 +1,5 @@
-#include "hc/hcPerspectiveCameraProjection.h"
-#include "hc/hcProjectionType.h"
-#include "hc/hcMatrix4.h"
+#include "hc/scene/camera/hcPerspectiveCameraProjection.h"
+#include "hc/scene/camera/hcProjectionType.h"
 
 namespace hc
 {

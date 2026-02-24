@@ -1,8 +1,8 @@
-#include "hc/hcSceneManagerFactory.h"
-#include "hc/hcSceneManager.h"
-#include "hc/hcGameObjectFactory.h"
-#include "hc/hcComponentFactoriesManager.h"
-#include "hc/hcComponentFactoriesManagerRegistry.h"
+#include "hc/scene/hcSceneManagerFactory.h"
+#include "hc/scene/hcSceneManager.h"
+#include "hc/scene/gameObject/hcGameObjectFactory.h"
+#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/hcComponentFactoriesManagerRegistry.h"
 
 namespace hc
 {
