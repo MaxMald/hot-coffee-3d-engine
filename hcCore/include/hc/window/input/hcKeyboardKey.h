@@ -6,9 +6,9 @@ namespace hc
 {
   namespace keyboardKey
   {
-    enum Type : UInt8
+    enum Type : Int8
     {
-      Unknown = -1,
+      Undefined = -1,
       A = 0,
       B,
       C,
@@ -109,7 +109,8 @@ namespace hc
       F13,
       F14,
       F15,
-      Pause
+      Pause,
+      Count
     };
   }
 }

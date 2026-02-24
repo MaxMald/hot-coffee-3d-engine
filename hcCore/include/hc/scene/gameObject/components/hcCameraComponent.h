@@ -21,21 +21,21 @@ namespace hc
 
     /**
      * @brief Gets the camera's position in world space.
-     * 
+     *
      * @return Reference to the position vector.
      */
     const Vector3f& getPosition() const;
 
     /**
      * @brief Gets the camera's direction vector.
-     * 
+     *
      * @return Reference to the direction vector.
      */
     const Vector3f& getDirection() const;
 
     /**
      * @brief Gets the camera's up vector.
-     * 
+     *
      * @return Reference to the up vector.
      */
     const Vector3f& getUp() const;
@@ -49,21 +49,21 @@ namespace hc
 
     /**
      * @brief Gets the camera's projection matrix.
-     * 
+     *
      * @return The projection matrix.
      */
     Matrix4 getProjectionMatrix();
 
     /**
      * @brief Gets the camera's view matrix.
-     * 
+     *
      * @return The view matrix.
      */
     Matrix4 getViewMatrix();
 
     /**
      * @brief Gets the active camera projection object.
-     * 
+     *
      * @return Pointer to the camera projection.
      */
     ICameraProjection* getCameraProjection();
@@ -83,5 +83,12 @@ namespace hc
      * @return Reference to the camera manager.
      */
     CameraManager& getCameraManager();
+
+    /**
+     * @brief Asserts that the camera exists and is valid.
+     *
+     * @throws RuntimeErrorException if the camera does not exist.
+     */
+    void assertCameraExists() const;
   };
 }

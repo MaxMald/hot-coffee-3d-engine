@@ -86,7 +86,11 @@ namespace hc
     if (m_descriptor)
       return m_descriptor->getColor();
     else
-      return Color::White();
+    {
+      throw RuntimeErrorException(
+        "UnlitMaterial::getColor - Material descriptor is not set."
+      );
+    } 
   }
 
   const SharedPtr<ITexture>& UnlitMaterial::getMainTexture() const
