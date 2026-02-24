@@ -6,7 +6,7 @@ namespace hc
 {
   namespace keyboardKey
   {
-    enum Type
+    enum Type : UInt8
     {
       Unknown = -1,
       A = 0,
