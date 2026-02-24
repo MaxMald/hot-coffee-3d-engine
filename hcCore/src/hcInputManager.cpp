@@ -112,11 +112,16 @@ namespace hc
   {
     engine.addEventListener(this);
 
-    for (Int8 keyCode = 0; keyCode < keyboardKey::Type::Count; ++keyCode)
+    Int8 keyboardKeyCount = static_cast<Int8>(keyboardKey::Type::Count);
+    for (Int8 keyCode = 0; keyCode < keyboardKeyCount; ++keyCode)
       m_keyboardKeyStates[keyCode] = MakeUnique<KeyState>(keyCode);
 
-    for (UInt8 mouseButtonCode = 0; mouseButtonCode < mouseButtonKey::Type::Count; ++mouseButtonCode)
-      m_mouseButtonKeyStates[mouseButtonCode] = MakeUnique<KeyState>(mouseButtonCode);
+    UInt8 mouseButtonCount = static_cast<UInt8>(mouseButtonKey::Type::Count);
+    for (UInt8 mouseButtonCode = 0; mouseButtonCode < mouseButtonCount; ++mouseButtonCode)
+    {
+      m_mouseButtonKeyStates[mouseButtonCode] =
+        MakeUnique<KeyState>(mouseButtonCode);
+    }
   }
 
   void InputManager::destroy(HotCoffeeEngine& engine)
