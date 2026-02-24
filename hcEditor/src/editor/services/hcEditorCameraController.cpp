@@ -14,8 +14,8 @@ namespace hc::editor
 
   void EditorCameraController::update(const Time&)
   {
-    if (receivedPanCommand())
-      pan();
+    if (receivedMoveCommand())
+      move();
   }
 
   void EditorCameraController::destroy()
@@ -23,27 +23,30 @@ namespace hc::editor
     // TODO
   }
 
-  bool EditorCameraController::receivedPanCommand()
+  bool EditorCameraController::receivedMoveCommand()
   {
     return ((m_inputManager.isKeyboardKeyPressed(keyboardKey::LShift) ||
       m_inputManager.isKeyboardKeyPressed(keyboardKey::RShift)) &&
       m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle));
   }
 
-  void EditorCameraController::pan()
+  void EditorCameraController::move()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
       return;
 
     Camera& activeCamera = getActiveCamera();
-    activeCamera.move(
-      Vector3f(
-        static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
-        static_cast<float>(mouseDelta.y * m_cameraMoveScale),
-        0.0f
-      )
+
+    Vector4f movementDelta(
+      static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
+      static_cast<float>(mouseDelta.y * m_cameraMoveScale),
+      0.0f,
+      0.0f
     );
+
+    movementDelta = activeCamera.getViewMatrix() * movementDelta;
+    activeCamera.move(movementDelta.xyz());
   }
 
   Camera& EditorCameraController::getActiveCamera()

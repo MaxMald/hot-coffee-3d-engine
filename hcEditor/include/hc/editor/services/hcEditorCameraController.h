@@ -25,8 +25,8 @@ namespace hc::editor
     float m_cameraMoveScale;
     float m_cameraRotationSpeed;
 
-    bool receivedPanCommand();
-    void pan();
+    bool receivedMoveCommand();
+    void move();
     Camera& getActiveCamera();
   };;
 }
