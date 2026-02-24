@@ -1,12 +1,12 @@
 #include "hc/editor/materialDrawer/hcUnlitMaterialDescriptorEditor.h"
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
   UnlitMaterialDescriptorEditor::UnlitMaterialDescriptorEditor(
-    ProjectFileSelector& projectFileSelector
+    ProjectFileSelectorView& projectFileSelector
   ) : 
     m_color(0.0f, 0.0f, 0.0f, 1.0f),
     m_mainImagePath(),

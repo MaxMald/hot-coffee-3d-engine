@@ -1,6 +1,6 @@
 #include "hc/editor/views/hcEditorViewsRegistry.h"
 #include "hc/editor/views/hcEditorViewsManager.h"
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 #include "hc/editor/views/windows/hcPluginManagerWindow.h"
 #include "hc/editor/views/windows/hcEditorLoggerWindow.h"
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
@@ -64,8 +64,8 @@ namespace hc::editor
         hotCoffeeEngine.getGraphicsManager().getMeshManager()
       ));
 
-      UniquePtr<ProjectFileSelector> projectFileSelector =
-        MakeUnique<ProjectFileSelector>(editorServiceManager.getService<ProjectManager>());
+      UniquePtr<ProjectFileSelectorView> projectFileSelector =
+        MakeUnique<ProjectFileSelectorView>(editorServiceManager.getService<ProjectManager>());
 
       UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
         MakeUnique<MaterialDescriptorEditorWindow>(

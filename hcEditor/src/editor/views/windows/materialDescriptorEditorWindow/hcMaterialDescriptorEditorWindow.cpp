@@ -2,7 +2,7 @@
 
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "hc/editor/views/hcEditorViewsManager.h"
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 #include "hc/editor/materialDrawer/hcUnlitMaterialDescriptorEditor.h"
 #include "hc/editor/materialDescriptorEditor/hcNullMaterialDescriptorEditor.h"
 #include "imgui.h"
@@ -19,7 +19,7 @@ namespace hc::editor
 {
   MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow(
     AssetManager& assetManager,
-    ProjectFileSelector& projectFileSelector
+    ProjectFileSelectorView& projectFileSelector
   ) :
     AWindowView("Material Descriptor Editor", false),
     m_assetManager(assetManager),
@@ -78,7 +78,7 @@ namespace hc::editor
       editor->clear();
   }
 
-  void MaterialDescriptorEditorWindow::registerEditors(ProjectFileSelector& projectFileSelector)
+  void MaterialDescriptorEditorWindow::registerEditors(ProjectFileSelectorView& projectFileSelector)
   {
     m_editors[shadingType::Type::Unlit] = MakeUnique<UnlitMaterialDescriptorEditor>(
       projectFileSelector
