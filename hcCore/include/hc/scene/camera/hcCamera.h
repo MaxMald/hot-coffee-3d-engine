@@ -60,6 +60,27 @@ namespace hc
     const Vector3f& getUp() const;
 
     /**
+     * @brief Moves the camera by a specified delta vector.
+     *
+     * @param delta The vector by which to move the camera.
+     */
+    void move(const Vector3f& delta);
+
+    /**
+     * @brief Orients the camera to look at a specific target point in world space.
+     *
+     * @param target The point in world space to look at.
+     */
+    void lookAt(const Vector3f& target);
+
+    /**
+     * @brief Rotates the camera by specified Euler angles (in radians).
+     *
+     * @param eulerAngles The rotation angles around the X, Y, and Z axes.
+     */
+    void rotate(const Vector3f& eulerAngles);
+
+    /**
      * @brief Sets the projection type of the camera.
      * 
      * @param type The new projection type.

@@ -44,6 +44,22 @@ namespace hc
     return m_up;
   }
 
+  void Camera::move(const Vector3f& delta)
+  {
+    m_position += delta;
+  }
+
+  void Camera::lookAt(const Vector3f& target)
+  {
+    m_direction = (target - m_position).normalized();
+  }
+
+  void Camera::rotate(const Vector3f& eulerAngles)
+  {
+    Matrix4 rotationMatrix = Matrix4::Rotation(eulerAngles);
+    m_direction = (rotationMatrix * Vector4f(m_direction, 0.0f)).xyz().normalized();
+  }
+
   void Camera::setProjectionType(projectionType::Type type)
   {
     m_projectionType = type;
