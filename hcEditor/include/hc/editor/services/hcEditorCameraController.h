@@ -23,10 +23,13 @@ namespace hc::editor
     SceneManager& m_sceneManager;
     InputManager& m_inputManager;
     float m_cameraMoveScale;
+    float m_cameraDollyScale;
     float m_cameraRotationSpeed;
 
     bool receivedMoveCommand();
     void move();
+    bool receivedDollyCommand();
+    void dolly();
     Camera& getActiveCamera();
   };;
 }

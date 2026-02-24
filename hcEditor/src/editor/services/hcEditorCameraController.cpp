@@ -8,6 +8,7 @@ namespace hc::editor
     m_sceneManager(sceneManager),
     m_inputManager(inputManager),
     m_cameraMoveScale(0.005f),
+    m_cameraDollyScale(0.1f),
     m_cameraRotationSpeed(90.0f)
   {
   }
@@ -16,6 +17,8 @@ namespace hc::editor
   {
     if (receivedMoveCommand())
       move();
+    if (receivedDollyCommand())
+      dolly();
   }
 
   void EditorCameraController::destroy()
@@ -36,8 +39,6 @@ namespace hc::editor
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
       return;
 
-    Camera& activeCamera = getActiveCamera();
-
     Vector4f movementDelta(
       static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
       static_cast<float>(mouseDelta.y * m_cameraMoveScale),
@@ -45,6 +46,36 @@ namespace hc::editor
       0.0f
     );
 
+    Camera& activeCamera = getActiveCamera();
+    movementDelta = activeCamera.getViewMatrix() * movementDelta;
+    activeCamera.move(movementDelta.xyz());
+  }
+
+  bool EditorCameraController::receivedDollyCommand()
+  {
+    float scrollDelta = m_inputManager
+      .getMouseState()
+      .getScrollState()
+      .getVerticalScrollDelta();
+
+    return scrollDelta != 0.0f;
+  }
+
+  void EditorCameraController::dolly()
+  {
+    float scrollDelta = m_inputManager
+      .getMouseState()
+      .getScrollState()
+      .getVerticalScrollDelta();
+
+    Vector4f movementDelta(
+      0.0f,
+      0.0f,
+      static_cast<float>(-scrollDelta * m_cameraDollyScale),
+      0.0f
+    );
+
+    Camera& activeCamera = getActiveCamera();
     movementDelta = activeCamera.getViewMatrix() * movementDelta;
     activeCamera.move(movementDelta.xyz());
   }
