@@ -23,6 +23,7 @@ namespace hc
     m_sceneManager(nullptr),
     m_assetManager(),
     m_pluginManager(),
+    m_inputManager(),
     m_frameClock(),
     m_eventListeners(),
     m_initialized(false)
@@ -60,6 +61,12 @@ namespace hc
   {
     assertEngineIsInitialized();
     return m_assetManager;
+  }
+
+  InputManager& HotCoffeeEngine::getInputManager()
+  {
+    assertEngineIsInitialized();
+    return m_inputManager;
   }
 
   Time HotCoffeeEngine::getElapsedTime() const
@@ -123,6 +130,8 @@ namespace hc
         m_assetManager
       );
       m_graphicsManager->initialize();
+
+      m_inputManager.initialize(*this);
     }
     catch (const std::exception& e)
     {
@@ -154,6 +163,8 @@ namespace hc
 
     while (window.isOpen())
     {
+      m_inputManager.prepareForEventPolling();
+
       Optional<Event> eventOpt;
       while ((eventOpt = window.pollEvent()))
       {
@@ -182,6 +193,7 @@ namespace hc
   void HotCoffeeEngine::destroy()
   {
     m_frameClock.stop();
+    m_inputManager.destroy(*this);
     m_assetManager.destroy();
 
     if (m_sceneManager)

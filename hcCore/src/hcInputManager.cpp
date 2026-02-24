@@ -4,21 +4,22 @@
 
 namespace hc
 {
-  InputManager::InputManager(HotCoffeeEngine& engine) :
+  InputManager::InputManager() :
     m_keyboardKeyStates(),
     m_mouseButtonKeyStates(),
     m_mouseState()
   {
-    engine.addEventListener(this);
   }
 
-  bool InputManager::isKeyboardKeyPressed(keyboardKey::Type keyboardKey)
+  bool InputManager::isKeyboardKeyPressed(
+    keyboardKey::Type keyboardKey
+  ) const
   {
     KeyState& keyState = getKeyboardKeyState(keyboardKey);
     return keyState.isPressed();
   }
 
-  bool InputManager::isMouseButtonPressed(mouseButtonKey::Type mouseButtonKey)
+  bool InputManager::isMouseButtonPressed(mouseButtonKey::Type mouseButtonKey) const     
   {
     KeyState& keyState = getMouseButtonKeyState(mouseButtonKey);
     return keyState.isPressed();
@@ -50,9 +51,14 @@ namespace hc
     );
   }
 
-  MouseState& InputManager::getMouseState() const
+  MouseState& InputManager::getMouseState()
   {
     return m_mouseState;
+  }
+
+  void InputManager::prepareForEventPolling()
+  {
+    m_mouseState.resetScrollState();
   }
 
   bool InputManager::onEvent(const Event& event)
@@ -81,11 +87,37 @@ namespace hc
         event.getIf<Event::MouseButtonReleased>();
       getMouseButtonKeyState(mouseButtonReleasedEvent->button).release();
     }
+    else if (event.is<Event::MouseMoved>())
+    {
+      const auto& mouseMovedEvent =
+        event.getIf<Event::MouseMoved>();
+      m_mouseState.setPosition(mouseMovedEvent->position);
+    }
+    else if (event.is<Event::MouseWheelScrolled>())
+    {
+      const auto& mouseWheelScrolledEvent =
+        event.getIf<Event::MouseWheelScrolled>();
+      m_mouseState.getScrollState().updateScrollDelta(
+        mouseWheelScrolledEvent->wheel,
+        mouseWheelScrolledEvent->delta
+      );
+    }
 
     return false;
   }
 
-  void InputManager::destroy()
+  void InputManager::initialize(HotCoffeeEngine& engine)
+  {
+    engine.addEventListener(this);
+
+    for (Int8 keyCode = 0; keyCode < keyboardKey::Type::Count; ++keyCode)
+      m_keyboardKeyStates[keyCode] = MakeUnique<KeyState>(keyCode);
+
+    for (UInt8 mouseButtonCode = 0; mouseButtonCode < mouseButtonKey::Type::Count; ++mouseButtonCode)
+      m_mouseButtonKeyStates[mouseButtonCode] = MakeUnique<KeyState>(mouseButtonCode);
+  }
+
+  void InputManager::destroy(HotCoffeeEngine& engine)
   {
     m_keyboardKeyStates.clear();
     m_mouseButtonKeyStates.clear();

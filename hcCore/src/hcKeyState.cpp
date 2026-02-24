@@ -1,5 +1,3 @@
-#include "hcKeyState.h"
-#include "hcKeyState.h"
 #include "hc/inputManager/hcKeyState.h"
 
 namespace hc

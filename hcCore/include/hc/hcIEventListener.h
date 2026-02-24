@@ -12,7 +12,7 @@ namespace hc
    *
    * Implement this interface to receive event notifications from the engine.
    */
-  class IEventListener
+  class HC_CORE_EXPORT IEventListener
   {
   public:
     virtual ~IEventListener() = default;

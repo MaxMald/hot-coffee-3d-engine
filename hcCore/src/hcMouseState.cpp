@@ -4,14 +4,9 @@ namespace hc
 {
   MouseState::MouseState() :
     m_scrollState(),
-    m_position(0.0f, 0.0f)
+    m_position(0, 0)
   {
-  }
-
-  void MouseState::reset()
-  {
-    m_scrollState.reset();
-  }
+  }  
 
   Vector2i MouseState::getPosition() const
   {
@@ -26,5 +21,10 @@ namespace hc
   void MouseState::setPosition(const Vector2i& position)
   {
     m_position = position;
+  }
+
+  void MouseState::resetScrollState()
+  {
+    m_scrollState.reset();
   }
 }

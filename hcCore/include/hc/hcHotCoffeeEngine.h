@@ -1,9 +1,10 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/plugins/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
+#include "hc/plugins/hcPluginManager.h"
 #include "hc/assets/hcAssetManager.h"
+#include "hc/inputManager/hcInputManager.h"
 #include "hc/hcProcessResult.h"
 
 namespace hc
@@ -24,6 +25,7 @@ namespace hc
     IGraphicsManager& getGraphicsManager();
     SceneManager& getSceneManager();
     AssetManager& getAssetManager();
+    InputManager& getInputManager();
     Time getElapsedTime() const;
     bool isInitialized() const;
     
@@ -40,6 +42,7 @@ namespace hc
     UniquePtr<SceneManager> m_sceneManager;
     AssetManager m_assetManager;
     PluginManager m_pluginManager;
+    InputManager m_inputManager;
     Clock m_frameClock;
     Vector<IEventListener*> m_eventListeners;
     bool m_initialized;

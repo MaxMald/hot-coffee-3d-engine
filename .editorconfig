@@ -15,6 +15,7 @@ insert_final_newline = true
 [*.{cpp,h,hpp,c,cc,cxx}]
 indent_style = space
 indent_size = 2
+max_line_length = 90
 
 # CMake files
 [CMakeLists.txt,*.cmake]

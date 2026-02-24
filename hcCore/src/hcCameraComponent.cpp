@@ -22,56 +22,50 @@ namespace hc
 
   const Vector3f& CameraComponent::getPosition() const
   {
-    if (m_camera)
-      return m_camera->getPosition();
-    return Vector3f(0.0f, 0.0f, 0.0f);
+    assertCameraExists();
+    return m_camera->getPosition();
   }
 
   const Vector3f& CameraComponent::getDirection() const
   {
-    if (m_camera)
-      return m_camera->getDirection();
-    return Vector3f(0.0f, 0.0f, 0.0f);
+    assertCameraExists();
+    return m_camera->getDirection();
   }
 
   const Vector3f& CameraComponent::getUp() const
   {
-    if (m_camera)
-      return m_camera->getUp();
-    return Vector3f(0.0f, 0.0f, 0.0f);
+    assertCameraExists();
+    return m_camera->getUp();
   }
 
   void CameraComponent::setAsActiveCamera()
   {
-    if (m_camera)
-      getCameraManager().setActiveCamera(m_camera);
+    assertCameraExists();
+    getCameraManager().setActiveCamera(m_camera);
   }
 
   void CameraComponent::setProjectionType(projectionType::Type type)
   {
-    if (m_camera)
-      m_camera->setProjectionType(type);
+    assertCameraExists();
+    m_camera->setProjectionType(type);
   }
 
   Matrix4 CameraComponent::getProjectionMatrix()
   {
-    if (m_camera)
-      return m_camera->getProjectionMatrix();
-    return Matrix4::Identity();
+    assertCameraExists();
+    return m_camera->getProjectionMatrix();
   }
 
   Matrix4 CameraComponent::getViewMatrix()
   {
-    if (m_camera)
-      return m_camera->getViewMatrix();
-    return Matrix4::Identity();
+    assertCameraExists();
+    return m_camera->getViewMatrix();
   }
 
   ICameraProjection* CameraComponent::getCameraProjection()
   {
-    if (m_camera)
-      return m_camera->getCameraProjection();
-    return nullptr;
+    assertCameraExists();
+    return m_camera->getCameraProjection();
   }
 
   CameraManager& CameraComponent::getCameraManager()
@@ -83,5 +77,13 @@ namespace hc
       );
 
     return activeScene->getCameraManager();
+  }
+
+  void CameraComponent::assertCameraExists() const
+  {
+    if (!m_camera)
+      throw RuntimeErrorException(
+        "CameraComponent does not have a valid Camera instance."
+      );
   }
 }
