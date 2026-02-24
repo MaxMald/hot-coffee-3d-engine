@@ -6,6 +6,16 @@ if(NOT WIN32)
   list(FILTER EDITOR_SOURCES EXCLUDE REGEX ".*/imgui_impl_win32\\.cpp$")
 endif()
 
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${EDITOR_HEADERS})
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" 
+             PREFIX "Source Files" 
+             FILES ${EDITOR_SOURCES})
+
+# Create the executable target
 add_executable(hcEditor 
   ${EDITOR_SOURCES} 
   ${EDITOR_HEADERS}

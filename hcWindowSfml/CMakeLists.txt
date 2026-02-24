@@ -2,6 +2,15 @@
 file(GLOB_RECURSE WINDOW_SFML_HEADERS "include/*.h")
 file(GLOB_RECURSE WINDOW_SFML_SOURCES "src/*.cpp")
 
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${WINDOW_SFML_HEADERS})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+             PREFIX "Source Files"
+             FILES ${WINDOW_SFML_SOURCES})
+
+# Create the shared library target
 add_library(hcWindowSfml SHARED 
   ${WINDOW_SFML_SOURCES} 
   ${WINDOW_SFML_HEADERS}

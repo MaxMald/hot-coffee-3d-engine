@@ -1,7 +1,17 @@
 # Asset Loaders library
 file(GLOB_RECURSE ASSET_LOADERS_HEADERS "include/*.h")
 file(GLOB_RECURSE ASSET_LOADERS_SOURCES "src/*.cpp")
+             
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${ASSET_LOADERS_HEADERS})
 
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" 
+             PREFIX "Source Files" 
+             FILES ${ASSET_LOADERS_SOURCES})
+
+# Create the shared library target
 add_library(hcAssetLoaders SHARED 
   ${ASSET_LOADERS_SOURCES} 
   ${ASSET_LOADERS_HEADERS}
