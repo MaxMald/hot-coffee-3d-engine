@@ -6,11 +6,18 @@
   },
   "configurePresets": [
     {
-      "name": "windows-x64",
+      "name": "vs-2022-x64",
       "hidden": false,
       "generator": "Visual Studio 17 2022",
       "architecture": "x64",
-      "description": "Use x64 architecture on Windows"
+      "description": "Visual Studio 2022 for Windows x64"
+    },
+    {
+      "name": "vs-2026-x64",
+      "hidden": false,
+      "generator": "Visual Studio 18 2026",
+      "architecture": "x64",
+      "description": "Visual Studio 2026 for Windows x64"
     },
     {
       "name": "ninja-debug",
