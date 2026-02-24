@@ -4,7 +4,7 @@
 
 #if HC_PLATFORM == HC_PLATFORM_LINUX
 
-#include "hc/hcIPluginSlotFactory.h"
+#include "hc/plugins/pluginSlot/hcIPluginSlotFactory.h"
 
 namespace hc
 {
