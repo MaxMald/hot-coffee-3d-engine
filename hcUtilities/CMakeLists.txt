@@ -40,6 +40,7 @@ target_compile_options(hcUtilities PRIVATE
 # Includes
 target_include_directories(hcUtilities 
   PUBLIC "include"
+  PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/NLOHMANN_JSON/include"
 )
 
 # Install the library to the 'lib' directory
