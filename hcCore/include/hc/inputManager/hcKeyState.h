@@ -8,18 +8,18 @@ namespace hc
   class InputManager;
 
   /**
-   * @brief Represents the state of a keyboard key.
+   * @brief Represents the state of an input key/button.
    * 
-   * This class tracks whether a specific keyboard key is currently pressed or released.
+   * This class tracks whether a specific input key/button is currently pressed or released.
    * The state is managed internally by the InputManager class.
    */
   class HC_CORE_EXPORT KeyState
   {
   public:
     /**
-     * @brief Constructs a KeyState object for the specified key.
+     * @brief Constructs a KeyState object for the specified input key/button.
      * 
-     * @param keyCode The code of the keyboard key to track.
+     * @param keyCode The code of the input key/button to track.
      */
     KeyState(UInt8 keyCode);
     ~KeyState() = default;
@@ -32,9 +32,9 @@ namespace hc
     UInt8 getKeyCode() const;
 
     /**
-     * @brief Checks if the key is currently pressed.
+     * @brief Checks if the input key/button is currently pressed.
      * 
-     * @return true if the key is pressed, false otherwise.
+     * @return true if the input key/button is pressed, false otherwise.
      */
     bool isPressed() const;
 
