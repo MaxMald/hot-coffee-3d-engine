@@ -1,4 +1,4 @@
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/hcEditorViewsManager.h"
@@ -8,7 +8,7 @@
 
 namespace hc::editor
 {
-  ProjectFileSelector::ProjectFileSelector(
+  ProjectFileSelectorView::ProjectFileSelectorView(
     ProjectManager& projectManager
   ) :
     ABaseView(),
@@ -29,12 +29,12 @@ namespace hc::editor
     m_projectManager.subscribeListener(this);
   }
 
-  ProjectFileSelector::~ProjectFileSelector()
+  ProjectFileSelectorView::~ProjectFileSelectorView()
   {
     m_projectManager.unsubscribeListener(this);
   }
 
-  void ProjectFileSelector::draw()
+  void ProjectFileSelectorView::draw()
   {
     if (!m_isDirectorySelectorOpen && !m_isFileSelectorOpen)
       return;
@@ -60,7 +60,7 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelector::openImageFile(
+  void ProjectFileSelectorView::openImageFile(
     const std::function<void(const Path&)>& onFileSelected
   )
   {
@@ -71,7 +71,7 @@ namespace hc::editor
     );
   }
 
-  void ProjectFileSelector::openModelFile(
+  void ProjectFileSelectorView::openModelFile(
     const std::function<void(const Path&)>& onFileSelected
   )
   {
@@ -82,12 +82,12 @@ namespace hc::editor
     );
   }
 
-  void ProjectFileSelector::onDestroy()
+  void ProjectFileSelectorView::onDestroy()
   {
     clear();
   }
 
-  void ProjectFileSelector::onProjectOpened()
+  void ProjectFileSelectorView::onProjectOpened()
   {
     clear();
     m_directoryNavigator.clear();
@@ -102,13 +102,13 @@ namespace hc::editor
     m_directoryNavigator.initialize(currentProjectDirectory);
   }
 
-  void ProjectFileSelector::onProjectClosed()
+  void ProjectFileSelectorView::onProjectClosed()
   {
     clear();
     m_directoryNavigator.clear();
   }
 
-  void ProjectFileSelector::openFileSelector(
+  void ProjectFileSelectorView::openFileSelector(
     const String& title,
     const Vector<String>& filters,
     const std::function<void(const Path&)>& onFileSelected
@@ -122,7 +122,7 @@ namespace hc::editor
     m_selectionCallback = onFileSelected;
   }
 
-  void ProjectFileSelector::openDirectorySelector(
+  void ProjectFileSelectorView::openDirectorySelector(
     const String& title,
     const std::function<void(const Path&)>& onDirectorySelected
   )
@@ -134,7 +134,7 @@ namespace hc::editor
     m_selectionCallback = onDirectorySelected;
   }
 
-  void ProjectFileSelector::drawDirectorySelectionInterface()
+  void ProjectFileSelectorView::drawDirectorySelectionInterface()
   {
     if (drawBackAndRefreshButtons())
       return;
@@ -165,7 +165,7 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelector::drawFileSelectionInterface()
+  void ProjectFileSelectorView::drawFileSelectionInterface()
   {
     if (drawBackAndRefreshButtons())
       return;
@@ -202,7 +202,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelector::drawBackAndRefreshButtons()
+  bool ProjectFileSelectorView::drawBackAndRefreshButtons()
   {
     DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
     if (!currentDir)
@@ -223,7 +223,7 @@ namespace hc::editor
     return false;
   }
 
-  void ProjectFileSelector::clear()
+  void ProjectFileSelectorView::clear()
   {
     m_isFileSelectorOpen = false;
     m_isDirectorySelectorOpen = false;
@@ -232,7 +232,7 @@ namespace hc::editor
     m_fileFilters.clear();
   }
 
-  void ProjectFileSelector::logWarningIfAlreadyOpen()
+  void ProjectFileSelectorView::logWarningIfAlreadyOpen()
   {
     if (m_isFileSelectorOpen)
     {
@@ -255,7 +255,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelector::isValidFile(const FileReference& file) const
+  bool ProjectFileSelectorView::isValidFile(const FileReference& file) const
   {
     if (m_fileFilters.empty())
       return true;
@@ -270,7 +270,7 @@ namespace hc::editor
     return false;
   }
 
-  bool ProjectFileSelector::onDirectorySelected(
+  bool ProjectFileSelectorView::onDirectorySelected(
     const DirectoryReference& directory
   )
   {
@@ -284,7 +284,7 @@ namespace hc::editor
     return true;
   }
 
-  bool ProjectFileSelector::onFileSelected(
+  bool ProjectFileSelectorView::onFileSelected(
     const FileReference& file
   )
   {

@@ -4,7 +4,7 @@
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "imgui.h"
 
@@ -12,7 +12,7 @@ namespace hc::editor
 {
   GameObjectEditorWindow::GameObjectEditorWindow(
     HotCoffeeEngine& hotCoffeeEngine,
-    ProjectFileSelector& projectFileSelector,
+    ProjectFileSelectorView& projectFileSelector,
     GameObjectSelectionService& gameObjectSelectionService
   ) :
     AWindowView("Game Object Editor", true),

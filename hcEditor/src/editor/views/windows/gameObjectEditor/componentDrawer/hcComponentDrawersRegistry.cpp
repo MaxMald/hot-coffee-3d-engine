@@ -9,7 +9,7 @@ namespace hc::editor
     void registryDefaultComponentDrawers(
       HotCoffeeEngine& hotCoffeeEngine,
       ComponentDrawersManager& componentDrawersManager,
-      ProjectFileSelector& projectFileSelector
+      ProjectFileSelectorView& projectFileSelector
     )
     {
       componentDrawersManager.registerComponentView(

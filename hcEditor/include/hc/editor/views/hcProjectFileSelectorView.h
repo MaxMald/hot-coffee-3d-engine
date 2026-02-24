@@ -13,13 +13,13 @@ namespace hc::editor
   /**
    * @brief View for selecting files or directories within a project.
    */
-  class ProjectFileSelector :
+  class ProjectFileSelectorView :
     public ABaseView,
     public IProjectManagerListener
   {
   public:
-    ProjectFileSelector(ProjectManager& projectManager);
-    virtual ~ProjectFileSelector();
+    ProjectFileSelectorView(ProjectManager& projectManager);
+    virtual ~ProjectFileSelectorView();
 
     /**
      * @copydoc ABaseView::draw

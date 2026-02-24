@@ -1,12 +1,12 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
-#include "hc/editor/views/hcProjectFileSelector.h"
+#include "hc/editor/views/hcProjectFileSelectorView.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
   MeshComponentDrawer::MeshComponentDrawer(
     IMeshManager& meshManager,
-    ProjectFileSelector& projectFileSelector
+    ProjectFileSelectorView& projectFileSelector
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
     m_meshManager(meshManager),
