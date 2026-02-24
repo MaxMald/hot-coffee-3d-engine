@@ -19,7 +19,9 @@ namespace hc
     return keyState.isPressed();
   }
 
-  bool InputManager::isMouseButtonPressed(mouseButtonKey::Type mouseButtonKey) const     
+  bool InputManager::isMouseButtonPressed(
+    mouseButtonKey::Type mouseButtonKey
+  ) const
   {
     KeyState& keyState = getMouseButtonKeyState(mouseButtonKey);
     return keyState.isPressed();
