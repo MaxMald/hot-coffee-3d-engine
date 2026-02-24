@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
+#include "hc/utilities/hcVector3.h"
 
 namespace hc
 {
@@ -24,6 +25,7 @@ namespace hc
     constexpr Vector4();
     constexpr Vector4(T xVal, T yVal, T zVal, T wVal);
     constexpr Vector4(const Vector4& other);
+    constexpr Vector4(const Vector3<T>& vector3, T wVal);
 
     constexpr Vector4& operator=(const Vector4& other);
 
@@ -47,6 +49,7 @@ namespace hc
     T length() const;
     Vector4 normalized() const;
     T dot(const Vector4& rhs) const;
+    Vector3<T> xyz() const;
   };
 
   // Definitions (must remain in header for templates)
@@ -59,6 +62,10 @@ namespace hc
 
   template <typename T>
   constexpr Vector4<T>::Vector4(const Vector4& other) = default;
+
+  template <typename T>
+  constexpr Vector4<T>::Vector4(const Vector3<T>& vector3, T wVal)
+    : x(vector3.x), y(vector3.y), z(vector3.z), w(wVal) {}
 
   template <typename T>
   constexpr Vector4<T>& Vector4<T>::operator=(const Vector4& other) = default;
@@ -153,6 +160,12 @@ namespace hc
   T Vector4<T>::dot(const Vector4& rhs) const
   {
     return x * rhs.x + y * rhs.y + z * rhs.z + w * rhs.w;
+  }
+
+  template <typename T>
+  Vector3<T> Vector4<T>::xyz() const
+  {
+    return { x, y, z };
   }
 
   // Scalar multiplication from left
