@@ -8,6 +8,9 @@ namespace hc::editor
 
   namespace editorServiceManagerRegistry
   {
-    void registerServices(EditorServiceManager& serviceManager);
+    void registerServices(
+      HotCoffeeEngine& engine,
+      EditorServiceManager& serviceManager
+    );
   }
 }
