@@ -10,7 +10,10 @@ namespace hc::editor
     public IUpdatableEditorService
   {
   public:
-    EditorCameraController(SceneManager& sceneManager);
+    EditorCameraController(
+      SceneManager& sceneManager,
+      InputManager& inputManager
+    );
     virtual ~EditorCameraController() = default;
 
     void update(const Time& elapsedTime) override;
@@ -18,8 +21,12 @@ namespace hc::editor
 
   private:
     SceneManager& m_sceneManager;
-
-    float m_cameraMoveSpeed;
+    InputManager& m_inputManager;
+    float m_cameraMoveScale;
     float m_cameraRotationSpeed;
+
+    bool receivedPanCommand();
+    void pan();
+    Camera& getActiveCamera();
   };;
 }
