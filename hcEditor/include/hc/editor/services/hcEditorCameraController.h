@@ -23,15 +23,22 @@ namespace hc::editor
     SceneManager& m_sceneManager;
     InputManager& m_inputManager;
     float m_cameraMoveScale;
-    float m_cameraDollyScale;
-    float m_cameraRotationSpeed;
+    float m_cameraZoomScale;
+    float m_cameraRollScale;
+    float m_minDistanceToTarget;
+    Vector3f m_target;
 
-    bool receivedLocalMoveCommand();
+    bool isMouseMiddleButtonPressed() const;
+    bool isShiftKeyPressed() const;
+    bool isAltKeyPressed() const;
+    bool isScrollingVertically() const;
+
     void localMove();
-    bool receivedDollyCommand();
-    void dolly();
-    bool receivedOrbitCommand();
+    void zoom();
     void orbit();
+    void roll();
+
     Camera& getActiveCamera();
+    float getCameraDistanceToTarget(const Camera& camera) const;
   };;
 }

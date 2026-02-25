@@ -8,19 +8,28 @@ namespace hc::editor
     m_sceneManager(sceneManager),
     m_inputManager(inputManager),
     m_cameraMoveScale(0.005f),
-    m_cameraDollyScale(0.1f),
-    m_cameraRotationSpeed(90.0f)
+    m_cameraZoomScale(0.1f),
+    m_cameraRollScale(0.01f),
+    m_minDistanceToTarget(0.01f),
+    m_target(0.0f, 0.0f, 0.0f)
   {
   }
 
   void EditorCameraController::update(const Time&)
   {
-    if (receivedLocalMoveCommand())
-      localMove();
-    else if (receivedOrbitCommand())
-      orbit();
-    else if (receivedDollyCommand())
-      dolly();
+    if (isMouseMiddleButtonPressed())
+    {
+      if (isShiftKeyPressed())
+        localMove();
+      else if (isAltKeyPressed())
+        roll();
+      else
+        orbit();
+    }
+    else if (isScrollingVertically())
+    {
+      zoom();
+    } 
   }
 
   void EditorCameraController::destroy()
@@ -28,31 +37,24 @@ namespace hc::editor
     // TODO
   }
 
-  bool EditorCameraController::receivedLocalMoveCommand()
+  bool EditorCameraController::isMouseMiddleButtonPressed() const
   {
-    return ((m_inputManager.isKeyboardKeyPressed(keyboardKey::LShift) ||
-      m_inputManager.isKeyboardKeyPressed(keyboardKey::RShift)) &&
-      m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle));
+    return m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle);
   }
 
-  void EditorCameraController::localMove()
+  bool EditorCameraController::isShiftKeyPressed() const
   {
-    Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
-    if (mouseDelta.x == 0 && mouseDelta.y == 0)
-      return;
-
-    Camera& activeCamera = getActiveCamera();
-    
-    float deltaX = -mouseDelta.x * m_cameraMoveScale;
-    float deltaY = mouseDelta.y * m_cameraMoveScale;
-
-    Vector3f worldMovement = 
-      activeCamera.getRight() * deltaX + 
-      activeCamera.getUp() * deltaY;    
-    activeCamera.move(worldMovement);
+    return m_inputManager.isKeyboardKeyPressed(keyboardKey::LShift) ||
+      m_inputManager.isKeyboardKeyPressed(keyboardKey::RShift);
   }
 
-  bool EditorCameraController::receivedDollyCommand()
+  bool EditorCameraController::isAltKeyPressed() const
+  {
+    return m_inputManager.isKeyboardKeyPressed(keyboardKey::LAlt) ||
+      m_inputManager.isKeyboardKeyPressed(keyboardKey::RAlt);
+  }
+
+  bool EditorCameraController::isScrollingVertically() const
   {
     float scrollDelta = m_inputManager
       .getMouseState()
@@ -62,7 +64,29 @@ namespace hc::editor
     return scrollDelta != 0.0f;
   }
 
-  void EditorCameraController::dolly()
+  void EditorCameraController::localMove()
+  {
+    Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
+    if (mouseDelta.x == 0 && mouseDelta.y == 0)
+      return;       
+
+    Camera& activeCamera = getActiveCamera();
+
+    float distanceToTarget = getCameraDistanceToTarget(activeCamera);
+    float distanceModifier = Math::clamp(distanceToTarget, 0.01f, 1.0f);
+
+    float deltaX = -mouseDelta.x * m_cameraMoveScale *  distanceModifier;
+    float deltaY = mouseDelta.y * m_cameraMoveScale * distanceModifier;
+
+    Vector3f worldMovement = 
+      activeCamera.getRight() * deltaX + 
+      activeCamera.getUp() * deltaY;
+
+    m_target += worldMovement;
+    activeCamera.move(worldMovement);
+  }
+
+  void EditorCameraController::zoom()
   {
     float scrollDelta = m_inputManager
       .getMouseState()
@@ -71,15 +95,17 @@ namespace hc::editor
 
     Camera& activeCamera = getActiveCamera();
 
-    float deltaZ = scrollDelta * m_cameraDollyScale;
+    float currentDistance = getCameraDistanceToTarget(activeCamera);
+    float deltaZ = scrollDelta * m_cameraZoomScale;
+    float maxAllowedDelta = currentDistance - m_minDistanceToTarget;
 
-    Vector3f worldMovement = activeCamera.getDirection() * deltaZ;
-    activeCamera.move(worldMovement);
-  }
+    if (deltaZ > maxAllowedDelta)
+      deltaZ = maxAllowedDelta;
 
-  bool EditorCameraController::receivedOrbitCommand()
-  {
-    return m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle);
+    Vector3f desiredPosition = activeCamera.getPosition() +
+      activeCamera.getDirection() * deltaZ;
+
+    activeCamera.setPosition(desiredPosition);
   }
 
   void EditorCameraController::orbit()
@@ -88,20 +114,30 @@ namespace hc::editor
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
       return;
 
-    Vector3f rotation(
-      static_cast<float>(-mouseDelta.y * m_cameraMoveScale),
-      static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
-      0.0f
-    );
-
     Camera& activeCamera = getActiveCamera();
-    Vector3f target = activeCamera.getPosition() + activeCamera.getDirection() * 5.0f;
-    Vector3f toCamera = activeCamera.getPosition() - target;
+        
+    float yaw = -mouseDelta.x * m_cameraMoveScale;
+    float pitch = -mouseDelta.y * m_cameraMoveScale;
 
-    Matrix4 rotationMatrix = Matrix4::Rotation(rotation);
-    Vector3f rotatedToCamera = (rotationMatrix * Vector4f(toCamera, 1.0f)).xyz();
-    activeCamera.setPosition(target + rotatedToCamera);
-    activeCamera.lookAt(target);
+    Matrix4 yawRotation = Matrix4::RotationAxis(activeCamera.getUp(), yaw);
+    Matrix4 pitchRotation = Matrix4::RotationAxis(activeCamera.getRight(), pitch);
+    Matrix4 combinedRotation = yawRotation * pitchRotation;
+
+    Vector3f targetToCamera = activeCamera.getPosition() - m_target;
+    Vector4f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 1.0f));
+
+    activeCamera.setPosition(m_target + rotatedVector.xyz());
+    activeCamera.lookAt(m_target);
+  }
+
+  void EditorCameraController::roll()
+  {
+    Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
+    if (mouseDelta.x == 0 && mouseDelta.y == 0)
+      return;
+
+    Angle rollAmount = Angle::FromRadians(-mouseDelta.x * m_cameraRollScale);
+    getActiveCamera().roll(rollAmount);
   }
 
   Camera& EditorCameraController::getActiveCamera()
@@ -115,5 +151,10 @@ namespace hc::editor
       throw RuntimeErrorException("Active scene has no active camera to control.");
 
     return *activeCamera;
+  }
+
+  float EditorCameraController::getCameraDistanceToTarget(const Camera& camera) const
+  {
+    return (camera.getPosition() - m_target).length();
   }
 }

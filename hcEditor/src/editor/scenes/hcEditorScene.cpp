@@ -32,6 +32,15 @@ namespace hc::editor
       m_serviceManager,
       m_editorLogHistory
     );
+
+    // TODO initialization of the camera should be set by the EditorCameraController
+    // through an "onInitialization" callback.
+    Camera* camera = getCameraManager().getActiveCamera();
+    if (camera)
+    {
+      camera->setPosition(Vector3f(0.0f, 0.0f, 5.0f));
+      camera->lookAt(Vector3f(0.0f, 0.0f, 0.0f));
+    }
   }
 
   void EditorScene::onAfterDraw(const RenderContext&)
