@@ -27,6 +27,8 @@ namespace hc
   void Camera::setDirection(const Vector3f& direction)
   {
     m_direction = direction;
+    Vector3f right = getRight();
+    m_up = right.cross(m_direction).normalized();
   }
 
   const Vector3f& Camera::getDirection() const
@@ -44,6 +46,11 @@ namespace hc
     return m_up;
   }
 
+  Vector3f Camera::getRight() const
+  {
+    return m_direction.cross(m_up).normalized();
+  }
+
   void Camera::move(const Vector3f& delta)
   {
     m_position += delta;
@@ -52,12 +59,16 @@ namespace hc
   void Camera::lookAt(const Vector3f& target)
   {
     m_direction = (target - m_position).normalized();
+    Vector3f right = getRight();
+    m_up = right.cross(m_direction).normalized();
   }
 
   void Camera::rotate(const Vector3f& eulerAngles)
   {
     Matrix4 rotationMatrix = Matrix4::Rotation(eulerAngles);
     m_direction = (rotationMatrix * Vector4f(m_direction, 0.0f)).xyz().normalized();
+    Vector3f right = getRight();
+    m_up = right.cross(m_direction).normalized();
   }
 
   void Camera::setProjectionType(projectionType::Type type)

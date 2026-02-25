@@ -60,6 +60,14 @@ namespace hc
     const Vector3f& getUp() const;
 
     /**
+     * @brief Gets the right vector of the camera, computed as the cross product
+     * of the direction and up vectors.
+     *
+     * @return The right vector.
+     */
+    Vector3f getRight() const;
+
+    /**
      * @brief Moves the camera by a specified delta vector.
      *
      * @param delta The vector by which to move the camera.

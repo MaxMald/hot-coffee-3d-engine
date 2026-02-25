@@ -26,10 +26,12 @@ namespace hc::editor
     float m_cameraDollyScale;
     float m_cameraRotationSpeed;
 
-    bool receivedMoveCommand();
-    void move();
+    bool receivedLocalMoveCommand();
+    void localMove();
     bool receivedDollyCommand();
     void dolly();
+    bool receivedOrbitCommand();
+    void orbit();
     Camera& getActiveCamera();
   };;
 }

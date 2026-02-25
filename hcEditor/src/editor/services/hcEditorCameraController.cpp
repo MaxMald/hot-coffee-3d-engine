@@ -15,9 +15,11 @@ namespace hc::editor
 
   void EditorCameraController::update(const Time&)
   {
-    if (receivedMoveCommand())
-      move();
-    if (receivedDollyCommand())
+    if (receivedLocalMoveCommand())
+      localMove();
+    else if (receivedOrbitCommand())
+      orbit();
+    else if (receivedDollyCommand())
       dolly();
   }
 
@@ -26,29 +28,28 @@ namespace hc::editor
     // TODO
   }
 
-  bool EditorCameraController::receivedMoveCommand()
+  bool EditorCameraController::receivedLocalMoveCommand()
   {
     return ((m_inputManager.isKeyboardKeyPressed(keyboardKey::LShift) ||
       m_inputManager.isKeyboardKeyPressed(keyboardKey::RShift)) &&
       m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle));
   }
 
-  void EditorCameraController::move()
+  void EditorCameraController::localMove()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
       return;
 
-    Vector4f movementDelta(
-      static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
-      static_cast<float>(mouseDelta.y * m_cameraMoveScale),
-      0.0f,
-      0.0f
-    );
-
     Camera& activeCamera = getActiveCamera();
-    movementDelta = activeCamera.getViewMatrix() * movementDelta;
-    activeCamera.move(movementDelta.xyz());
+    
+    float deltaX = -mouseDelta.x * m_cameraMoveScale;
+    float deltaY = mouseDelta.y * m_cameraMoveScale;
+
+    Vector3f worldMovement = 
+      activeCamera.getRight() * deltaX + 
+      activeCamera.getUp() * deltaY;    
+    activeCamera.move(worldMovement);
   }
 
   bool EditorCameraController::receivedDollyCommand()
@@ -68,16 +69,39 @@ namespace hc::editor
       .getScrollState()
       .getVerticalScrollDelta();
 
-    Vector4f movementDelta(
-      0.0f,
-      0.0f,
-      static_cast<float>(-scrollDelta * m_cameraDollyScale),
+    Camera& activeCamera = getActiveCamera();
+
+    float deltaZ = scrollDelta * m_cameraDollyScale;
+
+    Vector3f worldMovement = activeCamera.getDirection() * deltaZ;
+    activeCamera.move(worldMovement);
+  }
+
+  bool EditorCameraController::receivedOrbitCommand()
+  {
+    return m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle);
+  }
+
+  void EditorCameraController::orbit()
+  {
+    Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
+    if (mouseDelta.x == 0 && mouseDelta.y == 0)
+      return;
+
+    Vector3f rotation(
+      static_cast<float>(-mouseDelta.y * m_cameraMoveScale),
+      static_cast<float>(-mouseDelta.x * m_cameraMoveScale),
       0.0f
     );
 
     Camera& activeCamera = getActiveCamera();
-    movementDelta = activeCamera.getViewMatrix() * movementDelta;
-    activeCamera.move(movementDelta.xyz());
+    Vector3f target = activeCamera.getPosition() + activeCamera.getDirection() * 5.0f;
+    Vector3f toCamera = activeCamera.getPosition() - target;
+
+    Matrix4 rotationMatrix = Matrix4::Rotation(rotation);
+    Vector3f rotatedToCamera = (rotationMatrix * Vector4f(toCamera, 1.0f)).xyz();
+    activeCamera.setPosition(target + rotatedToCamera);
+    activeCamera.lookAt(target);
   }
 
   Camera& EditorCameraController::getActiveCamera()
