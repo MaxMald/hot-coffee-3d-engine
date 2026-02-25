@@ -27,6 +27,7 @@ namespace hc
     static Matrix4 RotationX(float angleRadians);
     static Matrix4 RotationY(float angleRadians);
     static Matrix4 RotationZ(float angleRadians);
+    static Matrix4 RotationAxis(const Vector3f& axis, float angleRadians);
     static Matrix4 LookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up);
     static Matrix4 Orthographic(
       float left, float right,
@@ -185,6 +186,20 @@ namespace hc
       c, -s, 0.0f, 0.0f,
       s, c, 0.0f, 0.0f,
       0.0f, 0.0f, 1.0f, 0.0f,
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
+  inline Matrix4 Matrix4::RotationAxis(const Vector3f& axis, float angleRadians)
+  {
+    Vector3f n = axis.normalized();
+    float c = cos(angleRadians);
+    float s = sin(angleRadians);
+    float t = 1.0f - c;
+    return Matrix4(
+      t * n.x * n.x + c, t * n.x * n.y - s * n.z, t * n.x * n.z + s * n.y, 0.0f,
+      t * n.y * n.x + s * n.z, t * n.y * n.y + c, t * n.y * n.z - s * n.x, 0.0f,
+      t * n.z * n.x - s * n.y, t * n.z * n.y + s * n.x, t * n.z * n.z + c, 0.0f,
       0.0f, 0.0f, 0.0f, 1.0f
     );
   }
