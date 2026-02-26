@@ -19,6 +19,11 @@ namespace hc::editor
     virtual ~IEditorService() = default;
 
     /**
+     * @brief Prepares the editor service for use.
+     */
+    virtual void prepare() = 0;
+
+    /**
      * @brief Destroys the editor service and releases its resources.
      */
     virtual void destroy() = 0;

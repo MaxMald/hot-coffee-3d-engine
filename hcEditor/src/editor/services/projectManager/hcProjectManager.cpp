@@ -12,6 +12,11 @@ namespace hc::editor
   {
   }
 
+  void ProjectManager::prepare()
+  {
+    // No initialization logic needed for the ProjectManager at this time.
+  }
+
   void ProjectManager::destroy()
   {
     closeProject();

@@ -15,6 +15,13 @@ namespace hc::editor
   {
   }
 
+  void EditorCameraController::prepare()
+  {
+    Camera& camera = getActiveCamera();
+    camera.setPosition(Vector3f(0.0f, 0.0f, 5.0f));
+    camera.lookAt(Vector3f(0.0f, 0.0f, 0.0f));
+  }
+
   void EditorCameraController::update(const Time&)
   {
     if (isMouseMiddleButtonPressed())
