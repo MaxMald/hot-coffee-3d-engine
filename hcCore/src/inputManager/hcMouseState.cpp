@@ -34,7 +34,6 @@ namespace hc
 
   void MouseState::setPosition(const Vector2i& position)
   {
-    m_previousPosition = m_position;
     m_position = position;
   }
 

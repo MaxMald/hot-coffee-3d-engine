@@ -36,7 +36,7 @@ namespace hc::editor
     else if (isScrollingVertically())
     {
       zoom();
-    } 
+    }
   }
 
   void EditorCameraController::destroy()
@@ -75,18 +75,18 @@ namespace hc::editor
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
-      return;       
+      return;
 
     Camera& activeCamera = getActiveCamera();
 
     float distanceToTarget = getCameraDistanceToTarget(activeCamera);
     float distanceModifier = Math::clamp(distanceToTarget, 0.01f, 1.0f);
 
-    float deltaX = -mouseDelta.x * m_cameraMoveScale *  distanceModifier;
+    float deltaX = -mouseDelta.x * m_cameraMoveScale * distanceModifier;
     float deltaY = mouseDelta.y * m_cameraMoveScale * distanceModifier;
 
-    Vector3f worldMovement = 
-      activeCamera.getRight() * deltaX + 
+    Vector3f worldMovement =
+      activeCamera.getRight() * deltaX +
       activeCamera.getUp() * deltaY;
 
     m_target += worldMovement;
@@ -122,7 +122,7 @@ namespace hc::editor
       return;
 
     Camera& activeCamera = getActiveCamera();
-        
+
     float yaw = -mouseDelta.x * m_cameraMoveScale;
     float pitch = -mouseDelta.y * m_cameraMoveScale;
 
@@ -131,7 +131,7 @@ namespace hc::editor
     Matrix4 combinedRotation = yawRotation * pitchRotation;
 
     Vector3f targetToCamera = activeCamera.getPosition() - m_target;
-    Vector4f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 1.0f));
+    Vector4f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 0.0f));
 
     activeCamera.setPosition(m_target + rotatedVector.xyz());
     activeCamera.lookAt(m_target);

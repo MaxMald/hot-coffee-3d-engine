@@ -63,5 +63,5 @@ namespace hc::editor
 
     Camera& getActiveCamera();
     float getCameraDistanceToTarget(const Camera& camera) const;
-  };;
+  };
 }
