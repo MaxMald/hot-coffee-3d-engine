@@ -52,6 +52,14 @@ namespace hc::editor
     bool hasService() const;
 
     /**
+    * @brief Prepare all registered services by calling their prepare() method.
+    *
+    * This method should be called after all services have been registered to
+    * perform any necessary setup or initialization logic for the services.
+    */
+    void prepareServices();
+
+    /**
      * @brief Updates all registered services that implement the
      * IUpdatableEditorService interface.
      *

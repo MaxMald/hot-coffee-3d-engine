@@ -16,6 +16,11 @@ namespace hc::editor
     virtual ~GameObjectSelectionService() = default;
 
     /**
+     * @copydoc IEditorService::prepare
+     */
+    void prepare() override;
+
+    /**
      * @copydoc IEditorService::destroy
      */
     void destroy() override;

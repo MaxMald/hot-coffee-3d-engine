@@ -61,6 +61,7 @@ namespace hc
   void InputManager::prepareForEventPolling()
   {
     m_mouseState.resetScrollState();
+    m_mouseState.resetPreviousPosition();
   }
 
   bool InputManager::onEvent(const Event& event)

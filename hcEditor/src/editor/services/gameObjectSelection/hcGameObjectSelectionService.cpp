@@ -3,6 +3,11 @@
 
 namespace hc::editor
 {
+  void GameObjectSelectionService::prepare()
+  {
+    // No initialization logic needed for the GameObjectSelectionService at this time.
+  }
+
   void GameObjectSelectionService::destroy()
   {
     clearSelection();

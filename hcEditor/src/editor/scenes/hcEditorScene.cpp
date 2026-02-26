@@ -23,7 +23,7 @@ namespace hc::editor
 
   void EditorScene::onInitialized()
   {
-    editorServiceManagerRegistry::registerServices(m_serviceManager);
+    editorServiceManagerRegistry::registerServices(m_engine, m_serviceManager);
     m_viewsManager.initialize(m_engine.getWindowManager().getWindow());
     m_engine.addEventListener(&m_viewsManager);
     editorViewsRegistry::registerDefaultViews(
@@ -34,12 +34,22 @@ namespace hc::editor
     );
   }
 
+  void EditorScene::onActivate()
+  {
+    m_serviceManager.prepareServices();
+  }
+
   void EditorScene::onAfterDraw(const RenderContext&)
   {
     m_viewsManager.draw(
       m_engine.getWindowManager().getWindow(),
       m_engine.getElapsedTime()
     );
+  }
+
+  void EditorScene::onBeforeUpdate(const Time& elapsedTime)
+  {
+    m_serviceManager.update(elapsedTime);
   }
 
   void EditorScene::onDestroy()
