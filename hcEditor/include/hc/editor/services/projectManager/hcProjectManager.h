@@ -17,7 +17,7 @@ namespace hc::editor
     virtual ~ProjectManager() = default;
 
     /**
-    * @copydoc IEditorService::onInitialization
+    * @copydoc IEditorService::prepare
     */
     void prepare() override;
 
