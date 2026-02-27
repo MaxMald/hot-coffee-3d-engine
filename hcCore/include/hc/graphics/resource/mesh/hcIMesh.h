@@ -37,8 +37,8 @@ namespace hc
     virtual void setMaterial(UInt32 index, SharedPtr<IMaterial> material) = 0;
 
     /**
-    * @brief Returns the number of materials associated with this mesh.
-    */
+     * @brief Returns the number of materials associated with this mesh.
+     */
     virtual SizeT getMaterialsSize() const = 0;
 
     /**
