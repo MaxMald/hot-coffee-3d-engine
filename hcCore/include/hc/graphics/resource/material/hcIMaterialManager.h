@@ -25,17 +25,6 @@ namespace hc
     ) = 0;
 
     /**
-     * @brief Creates a material from a material descriptor key.
-     *
-     * @param materialDescriptorKey Key identifying the material descriptor.
-     *
-     * @return Shared pointer to the created material.
-     */
-    virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      const String& materialDescriptorKey
-    ) = 0;
-
-    /**
      * @brief Creates a material from a material descriptor object.
      *
      * @param descriptor Shared pointer to the material descriptor.
