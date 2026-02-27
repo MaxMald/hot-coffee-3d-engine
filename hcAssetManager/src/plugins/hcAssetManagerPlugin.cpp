@@ -1,6 +1,5 @@
 #include "hc/plugins/hcAssetManagerPlugin.h"
-#include "hc/assets/hcImageLoader.h"
-#include "hc/assets/hcModelLoader.h"
+#include "hc/assets/hcAssetManager.h"
 
 namespace hc
 {
@@ -21,16 +20,8 @@ namespace hc
   {
   }
 
-  void AssetManagerPlugin::registerAssetLoaders(
-    AssetManager& assetManager
-  ) const
+  UniquePtr<IAssetManager> AssetManagerPlugin::createAssetManager() const
   {
-    assetManager.addLoader<Image>(
-      MakeUnique<ImageLoader>()
-    );
-
-    assetManager.addLoader<Model>(
-      MakeUnique<ModelLoader>()
-    );
+    return MakeUnique<AssetManager>();
   }
 }

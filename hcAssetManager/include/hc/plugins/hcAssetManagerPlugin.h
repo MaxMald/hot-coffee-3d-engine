@@ -16,6 +16,7 @@ namespace hc
   public:
     AssetManagerPlugin() = default;
     virtual ~AssetManagerPlugin() = default;
+
     /**
      * @copydoc IPlugin::onConnect
      */
@@ -27,8 +28,8 @@ namespace hc
     void onClose() override;
 
     /**
-     * @copydoc IAssetLoaderPlugin::registerAssetLoaders
+     * @copydoc IAssetManagerPlugin::createAssetManager
      */
-    void registerAssetLoaders(AssetManager& assetManager) const override;
+    UniquePtr<IAssetManager> createAssetManager() const;
   };
 }
