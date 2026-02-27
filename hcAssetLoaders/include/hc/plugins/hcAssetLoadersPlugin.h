@@ -11,7 +11,7 @@ namespace hc
     HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin();
   }
 
-  class HC_ASSET_LOADERS_EXPORT AssetLoadersPlugin : public IAssetLoaderPlugin
+  class HC_ASSET_LOADERS_EXPORT AssetLoadersPlugin : public IAssetManagerPlugin
   {
   public:
     AssetLoadersPlugin() = default;

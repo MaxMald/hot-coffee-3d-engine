@@ -7,16 +7,12 @@ namespace hc
   class AssetManager;
 
   /**
-   * @brief Interface for asset loader plugins.
-   *
-   * Provides a contract for plugins that register asset loaders with the asset
-   * manager. Implementations must provide a method to register their asset
-   * loaders.
+   * @brief Interface for asset manager plugins.
    */
-  class HC_CORE_EXPORT IAssetLoaderPlugin : public IPlugin
+  class HC_CORE_EXPORT IAssetManagerPlugin : public IPlugin
   {
   public:
-    virtual ~IAssetLoaderPlugin() = default;
+    virtual ~IAssetManagerPlugin() = default;
 
     /**
      * @brief Registers asset loaders with the provided asset manager.
@@ -27,6 +23,6 @@ namespace hc
     virtual void registerAssetLoaders(AssetManager& assetManager) const = 0;
 
   protected:
-    IAssetLoaderPlugin() = default;
+    IAssetManagerPlugin() = default;
   };
 }

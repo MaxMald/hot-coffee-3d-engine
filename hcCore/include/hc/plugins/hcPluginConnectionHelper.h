@@ -43,11 +43,11 @@ namespace hc
     void connectGraphicsOpenGLPlugin(PluginManager& pluginManager);
 
     /**
-     * @brief Connects the asset loaders plugin to the given PluginManager.
+     * @brief Connects the asset manager plugin to the given PluginManager.
      * 
      * @param pluginManager Reference to the PluginManager to which the plugin
      * will be connected.
      */
-    void connectAssetLoadersPlugin(PluginManager& pluginManager);
+    void connectAssetManagerPlugin(PluginManager& pluginManager);
   }
 }

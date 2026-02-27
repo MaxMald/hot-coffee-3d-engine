@@ -18,7 +18,7 @@ namespace hc
       if (settings.graphicsType == PluginManagerSettings::graphicsPluginType::OPENGL)
         connectGraphicsOpenGLPlugin(pluginManager);
 
-      connectAssetLoadersPlugin(pluginManager);
+      connectAssetManagerPlugin(pluginManager);
     }
 
     void connectWindowSfmlPlugin(PluginManager& pluginManager)
@@ -41,13 +41,13 @@ namespace hc
       );
     }
 
-    void connectAssetLoadersPlugin(PluginManager& pluginManager)
+    void connectAssetManagerPlugin(PluginManager& pluginManager)
     {
       pluginManager.connectPlugin(
-        pluginStandardKeys::AssetLoadersPlugin,
-        String(HC_DYN_LIB_PREFIX) + "hcAssetLoaders" + String(HC_DYN_LIB_SUFIX),
-        "createAssetLoadersPlugin",
-        "destroyAssetLoadersPlugin"
+        pluginStandardKeys::AssetManagerPlugin,
+        String(HC_DYN_LIB_PREFIX) + "hcAssetManager" + String(HC_DYN_LIB_SUFIX),
+        "createAssetManagerPlugin",
+        "destroyAssetManagerPlugin"
       );
     }
   }
