@@ -41,7 +41,7 @@ target_compile_options(hcEditor PRIVATE
 # Required dependencies (loaded at runtime)
 add_dependencies(hcEditor 
   hcGraphicsOpenGL 
-  hcAssetLoaders
+  hcAssetManager
   hcWindowSfml
 )
 
