@@ -24,7 +24,7 @@ namespace hc
         return "Pyramid";
       default:
         throw RuntimeErrorException(
-          String::Format("Not implemented primitive shape type:  %d", static_cast<Int32>(type))
+          String::Format("Not implemented primitive shape type: %d", static_cast<Int32>(type))
         );
       }
     }
