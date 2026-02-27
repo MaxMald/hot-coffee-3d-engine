@@ -52,6 +52,21 @@ namespace hc
     void update() override;
 
     /**
+     * @brief Sets the material at the specified index for this mesh.
+     * 
+     * @param index The index of the material to set.
+     * @param material Shared pointer to the material to associate with this mesh.
+     */
+    void setMaterial(UInt32 index, SharedPtr<IMaterial> material) override;
+
+    /**
+     * @brief Returns the number of materials associated with this mesh.
+     * 
+     * @return The number of materials.
+     */
+    SizeT getMaterialsSize() const override;
+
+    /**
      * @brief Destroys the mesh and releases OpenGL resources.
      */
     void destroy() override;
