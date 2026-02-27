@@ -18,6 +18,13 @@ namespace hc
   public:
     virtual ~IMaterialDescriptorAssetManager() = default;
 
+    /**
+     * Retrieves the default material descriptor.
+     *
+     * @return A shared pointer to the default material descriptor asset
+     */
+    virtual SharedPtr<AMaterialDescriptor> getDefault() const = 0;
+
   protected:
     IMaterialDescriptorAssetManager() = default;
   };

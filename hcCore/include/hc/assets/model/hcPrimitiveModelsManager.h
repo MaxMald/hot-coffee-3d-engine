@@ -2,10 +2,12 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/assets/model/hcPrimitiveModelType.h"
+#include "hc/assets/model/hcPrimitiveModelsFactory.h"
 
 namespace hc
 {
   class Model;
+  class IMaterialDescriptorAssetManager;
 
   /**
    * Manages and caches primitive 3D model assets for efficient reuse.
@@ -18,7 +20,9 @@ namespace hc
   class PrimitiveModelsManager : public NonCopyable
   {
   public:
-    PrimitiveModelsManager() = default;
+    PrimitiveModelsManager(
+      IMaterialDescriptorAssetManager& materialDescriptorAssetManager
+    );
     ~PrimitiveModelsManager() = default;
 
     /**
@@ -43,6 +47,7 @@ namespace hc
 
   private:
     UnorderedMap<primitiveModelType::Type, SharedPtr<Model>> m_primitiveModels;
+    PrimitiveModelsFactory m_primitiveModelsFactory;
 
     bool hasPrimitive(primitiveModelType::Type primitiveType) const;
   };

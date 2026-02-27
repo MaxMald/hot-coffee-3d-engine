@@ -1,10 +1,17 @@
 #include "hc/assets/model/hcPrimitiveModelsFactory.h"
 #include "hc/assets/model/hcModel.h"
 #include "hc/assets/model/hcPrimitiveModelPathUtilities.h"
-#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcIMaterialDescriptorAssetManager.h"
 
 namespace hc
 {
+  PrimitiveModelsFactory::PrimitiveModelsFactory(
+    IMaterialDescriptorAssetManager& materialDescriptorAssetManager
+  ) :
+    m_materialDescriptorAssetManager(materialDescriptorAssetManager)
+  {
+  }
+
   SharedPtr<Model> PrimitiveModelsFactory::createCube()
   {
     Buffer<Vertex> vertices(24);
@@ -177,8 +184,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cube),
@@ -284,8 +290,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cone),
@@ -372,8 +377,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Sphere),
@@ -524,8 +528,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cylinder),
@@ -578,8 +581,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Plane),
@@ -711,8 +713,7 @@ namespace hc
     subMeshes.push_back(subMesh);
 
     Vector<SharedPtr<AMaterialDescriptor>> materials;
-    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
-    // TODO Get default materials from material asset manager.
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Pyramid),

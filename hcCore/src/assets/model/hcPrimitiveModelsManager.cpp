@@ -5,6 +5,12 @@
 
 namespace hc
 {
+  PrimitiveModelsManager::PrimitiveModelsManager(
+    IMaterialDescriptorAssetManager& materialDescriptorAssetManager
+  ) : m_primitiveModelsFactory(materialDescriptorAssetManager)
+  {
+  }
+
   SharedPtr<Model> PrimitiveModelsManager::getPrimitive(
     primitiveModelType::Type primitiveType
   )
@@ -15,34 +21,34 @@ namespace hc
     SharedPtr<Model> model;
     switch (primitiveType)
     {
-      case primitiveModelType::Undefined:
-        throw RuntimeErrorException(
-          "Cannot create model for Undefined primitive model type."
-        );
-      case primitiveModelType::Cube:
-        model = PrimitiveModelsFactory::createCube();
-        break;
-      case primitiveModelType::Cone:
-        model = PrimitiveModelsFactory::createCone();
-        break;
-      case primitiveModelType::Sphere:
-        model = PrimitiveModelsFactory::createSphere();
-        break;
-      case primitiveModelType::Cylinder:
-        model = PrimitiveModelsFactory::createCylinder();
-        break;
-      case primitiveModelType::Plane:
-        model = PrimitiveModelsFactory::createPlane();
-        break;
-      case primitiveModelType::Pyramid:
-        model = PrimitiveModelsFactory::createPyramid();
-        break;
-      default:
-        throw RuntimeErrorException(
-          String::Format("Not implemented primitive model type: %s",
-            primitiveModelType::toString(primitiveType).c_str()
-          )
-        );
+    case primitiveModelType::Undefined:
+      throw RuntimeErrorException(
+        "Cannot create model for Undefined primitive model type."
+      );
+    case primitiveModelType::Cube:
+      model = m_primitiveModelsFactory.createCube();
+      break;
+    case primitiveModelType::Cone:
+      model = m_primitiveModelsFactory.createCone();
+      break;
+    case primitiveModelType::Sphere:
+      model = m_primitiveModelsFactory.createSphere();
+      break;
+    case primitiveModelType::Cylinder:
+      model = m_primitiveModelsFactory.createCylinder();
+      break;
+    case primitiveModelType::Plane:
+      model = m_primitiveModelsFactory.createPlane();
+      break;
+    case primitiveModelType::Pyramid:
+      model = m_primitiveModelsFactory.createPyramid();
+      break;
+    default:
+      throw RuntimeErrorException(
+        String::Format("Not implemented primitive model type: %s",
+          primitiveModelType::toString(primitiveType).c_str()
+        )
+      );
     }
 
     m_primitiveModels[primitiveType] = model;

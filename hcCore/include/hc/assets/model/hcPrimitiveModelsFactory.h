@@ -5,53 +5,63 @@
 namespace hc
 {
   class Model;
+  class IMaterialDescriptorAssetManager;
 
   /**
    * Factory for creating primitive 3D model shapes.
    * Provides static methods to generate common geometric primitives.
    */
-  struct PrimitiveModelsFactory
+  class PrimitiveModelsFactory
   {
+  public:
+    PrimitiveModelsFactory(
+      IMaterialDescriptorAssetManager& materialDescriptorAssetManager
+    );
+    ~PrimitiveModelsFactory() = default;
+
     /**
      * Creates a cube model with unit dimensions.
      *
      * @return A shared pointer to the created cube model.
      */
-    static SharedPtr<Model> createCube();
+    SharedPtr<Model> createCube();
 
     /**
      * Creates a cone model with default dimensions.
      *
      * @return A shared pointer to the created cone model.
      */
-    static SharedPtr<Model> createCone();
+    SharedPtr<Model> createCone();
 
     /**
      * Creates a sphere model with default dimensions.
      *
      * @return A shared pointer to the created sphere model.
      */
-    static SharedPtr<Model> createSphere();
+    SharedPtr<Model> createSphere();
 
     /**
      * Creates a cylinder model with default dimensions.
      *
      * @return A shared pointer to the created cylinder model.
      */
-    static SharedPtr<Model> createCylinder();
+    SharedPtr<Model> createCylinder();
 
     /**
      * Creates a plane model with default dimensions.
      *
      * @return A shared pointer to the created plane model.
      */
-    static SharedPtr<Model> createPlane();
+    SharedPtr<Model> createPlane();
 
     /**
      * Creates a pyramid model with default dimensions.
      *
      * @return A shared pointer to the created pyramid model.
      */
-    static SharedPtr<Model> createPyramid();
+    SharedPtr<Model> createPyramid();
+
+  private:
+    IMaterialDescriptorAssetManager& m_materialDescriptorAssetManager;
   };
 }
