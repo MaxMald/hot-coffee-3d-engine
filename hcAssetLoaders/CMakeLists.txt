@@ -1,31 +1,31 @@
-# Asset Loaders library
-file(GLOB_RECURSE ASSET_LOADERS_HEADERS "include/*.h")
-file(GLOB_RECURSE ASSET_LOADERS_SOURCES "src/*.cpp")
+# Asset Manager library
+file(GLOB_RECURSE ASSET_MANAGER_HEADERS "include/*.h")
+file(GLOB_RECURSE ASSET_MANAGER_SOURCES "src/*.cpp")
              
 # Grouping source files in IDEs
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
              PREFIX "Header Files" 
-             FILES ${ASSET_LOADERS_HEADERS})
+             FILES ${ASSET_MANAGER_HEADERS})
 
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" 
              PREFIX "Source Files" 
-             FILES ${ASSET_LOADERS_SOURCES})
+             FILES ${ASSET_MANAGER_SOURCES})
 
 # Create the shared library target
-add_library(hcAssetLoaders SHARED 
-  ${ASSET_LOADERS_SOURCES} 
-  ${ASSET_LOADERS_HEADERS}
+add_library(hcAssetManager SHARED 
+  ${ASSET_MANAGER_SOURCES} 
+  ${ASSET_MANAGER_HEADERS}
 )
 
 # Target properties
-set_target_properties(hcAssetLoaders PROPERTIES
-  OUTPUT_NAME "hcAssetLoaders"
+set_target_properties(hcAssetManager PROPERTIES
+  OUTPUT_NAME "hcAssetManager"
   DEBUG_POSTFIX "-d"
   VS_CHARSET "" # Character set: Not set (default)
 )
 
 # Compiler options
-target_compile_options(hcAssetLoaders PRIVATE
+target_compile_options(hcAssetManager PRIVATE
   # C++ Warning level
   $<$<CXX_COMPILER_ID:MSVC>:/W4>
   $<$<CXX_COMPILER_ID:GNU>:-Wall -Wextra>
@@ -39,14 +39,14 @@ target_compile_options(hcAssetLoaders PRIVATE
 )
 
 # Includes
-target_include_directories(hcAssetLoaders 
+target_include_directories(hcAssetManager 
   PUBLIC "include"
   PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/assimp-6.0.4/include"
   PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/NOTHINGS_STB/include"
 )
 
 # Linking
-target_link_libraries(hcAssetLoaders PUBLIC hcCore hcUtilities assimp)
+target_link_libraries(hcAssetManager PUBLIC hcCore hcUtilities assimp)
 
 # Install the library to the 'lib' directory
-install(TARGETS hcAssetLoaders DESTINATION lib)
+install(TARGETS hcAssetManager DESTINATION lib)
