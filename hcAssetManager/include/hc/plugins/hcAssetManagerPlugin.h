@@ -1,22 +1,21 @@
 #pragma once
 
-#include <hc/plugins/hcIAssetLoaderPlugin.h>
-#include "hc/hcAssetLoadersPrerequisites.h"
+#include <hc/plugins/hcIAssetManagerPlugin.h>
+#include "hc/hcAssetManagerPrerequisites.h"
 
 namespace hc
 {
   extern "C"
   {
-    HC_ASSET_LOADERS_EXPORT IPlugin* createAssetLoadersPlugin();
-    HC_ASSET_LOADERS_EXPORT void destroyAssetLoadersPlugin();
+    HC_ASSET_MANAGER_EXPORT IPlugin* createAssetManagerPlugin();
+    HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin();
   }
 
-  class HC_ASSET_LOADERS_EXPORT AssetLoadersPlugin : public IAssetManagerPlugin
+  class HC_ASSET_MANAGER_EXPORT AssetManagerPlugin : public IAssetManagerPlugin
   {
   public:
-    AssetLoadersPlugin() = default;
-    virtual ~AssetLoadersPlugin() = default;
-
+    AssetManagerPlugin() = default;
+    virtual ~AssetManagerPlugin() = default;
     /**
      * @copydoc IPlugin::onConnect
      */

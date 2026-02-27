@@ -1,7 +1,7 @@
 #pragma once
 
 #include <hc/assets/hcATypedAssetLoader.h>
-#include "hc/hcAssetLoadersPrerequisites.h"
+#include "hc/hcAssetManagerPrerequisites.h"
 
 struct aiScene;
 struct aiMesh;
@@ -12,7 +12,7 @@ namespace hc
   /**
    * @brief Asset loader for 3D model resources.
    */
-  class HC_ASSET_LOADERS_EXPORT ModelLoader : public ATypedAssetLoader<Model>
+  class HC_ASSET_MANAGER_EXPORT ModelLoader : public ATypedAssetLoader<Model>
   {
   public:
     ModelLoader() = default;

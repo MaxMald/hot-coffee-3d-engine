@@ -1,14 +1,14 @@
 #pragma once
 
 #include <hc/assets/hcATypedAssetLoader.h>
-#include "hc/hcAssetLoadersPrerequisites.h"
+#include "hc/hcAssetManagerPrerequisites.h"
 
 namespace hc
 {
   /**
    * @brief Asset loader for image resources.
    */
-  class HC_ASSET_LOADERS_EXPORT ImageLoader : public ATypedAssetLoader<Image>
+  class HC_ASSET_MANAGER_EXPORT ImageLoader : public ATypedAssetLoader<Image>
   {
   public:
     ImageLoader() = default;

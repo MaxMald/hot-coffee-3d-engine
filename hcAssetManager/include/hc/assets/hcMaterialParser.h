@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcAssetLoadersPrerequisites.h"
+#include "hc/hcAssetManagerPrerequisites.h"
 
 struct aiMaterial;
 

@@ -1,22 +1,22 @@
 #pragma once
 
-// Asset Loaders export macros
+// Asset Manager export macros
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 # if HC_COMPILER == HC_COMPILER_MSVC || HC_COMPILER == HC_COMPILER_GNUC || HC_COMPILER == HC_COMPILER_INTEL
 #   if defined(HC_STATIC_LIB)
-#     define HC_ASSET_LOADERS_EXPORT
+#     define HC_ASSET_MANAGER_EXPORT
 #   else
-#     if defined(hcAssetLoaders_EXPORTS)
-#       define HC_ASSET_LOADERS_EXPORT __declspec(dllexport)
+#     if defined(hcAssetManager_EXPORTS)
+#       define HC_ASSET_MANAGER_EXPORT __declspec(dllexport)
 #     else
-#       define HC_ASSET_LOADERS_EXPORT __declspec(dllimport)
+#       define HC_ASSET_MANAGER_EXPORT __declspec(dllimport)
 #     endif
 #   endif
 # endif
-# define HC_ASSET_LOADERS_HIDDEN
+# define HC_ASSET_MANAGER_HIDDEN
 #else // Linux / Mac
-# define HC_ASSET_LOADERS_EXPORT __attribute__ ((visibility("default")))
-# define HC_ASSET_LOADERS_HIDDEN __attribute__ ((visibility("hidden")))
+# define HC_ASSET_MANAGER_EXPORT __attribute__ ((visibility("default")))
+# define HC_ASSET_MANAGER_HIDDEN __attribute__ ((visibility("hidden")))
 #endif
 
 // DLL export for plug-ins
