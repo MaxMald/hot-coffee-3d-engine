@@ -612,17 +612,17 @@ namespace hc
     vertices[8].texCoord = Vector2f(0.5f, 0.0f);
 
     vertices[9].position = Vector3f(-halfSize, -halfHeight, halfSize);
-    vertices[9].normal = Vector3f(-sideNormalXZ, 0.0f, 0.0f);
+    vertices[9].normal = Vector3f(-sideNormalXZ, sideNormalY, 0.0f);
     vertices[9].tangent = Vector3f(0.0f, 0.0f, -1.0f);
     vertices[9].texCoord = Vector2f(0.0f, 1.0f);
 
     vertices[10].position = Vector3f(-halfSize, -halfHeight, -halfSize);
-    vertices[10].normal = Vector3f(-sideNormalXZ, 0.0f, 0.0f);
+    vertices[10].normal = Vector3f(-sideNormalXZ, sideNormalY, 0.0f);
     vertices[10].tangent = Vector3f(0.0f, 0.0f, -1.0f);
     vertices[10].texCoord = Vector2f(1.0f, 1.0f);
 
     vertices[11].position = Vector3f(0.0f, halfHeight, 0.0f);
-    vertices[11].normal = Vector3f(-sideNormalXZ, 0.0f, 0.0f);
+    vertices[11].normal = Vector3f(-sideNormalXZ, sideNormalY, 0.0f);
     vertices[11].tangent = Vector3f(0.0f, 0.0f, -1.0f);
     vertices[11].texCoord = Vector2f(0.5f, 0.0f);
 
