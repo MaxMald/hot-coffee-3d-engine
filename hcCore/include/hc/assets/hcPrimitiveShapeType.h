@@ -6,8 +6,9 @@ namespace hc
 {
   namespace primitiveShapeType
   {
-    enum Type : UInt8
+    enum Type : Int8
     {
+      Undefined = -1,
       Cube = 0,
       Cone,
       Sphere,

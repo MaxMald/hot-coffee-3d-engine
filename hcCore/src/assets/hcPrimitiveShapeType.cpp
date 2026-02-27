@@ -8,6 +8,8 @@ namespace hc
     {
       switch (type)
       {
+      case Undefined:
+        return "Undefined";
       case Cube:
         return "Cube";
       case Cone:
@@ -29,7 +31,9 @@ namespace hc
 
     Type fromString(const String& str)
     {
-      if (str == "Cube")
+      if (str == "Undefined")
+        return Undefined;
+      else if (str == "Cube")
         return Cube;
       else if (str == "Cone")
         return Cone;
