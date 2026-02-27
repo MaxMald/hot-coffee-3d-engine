@@ -15,6 +15,10 @@ namespace hc
     SharedPtr<Model> model;
     switch (primitiveType)
     {
+      case primitiveShapeType::Undefined:
+        throw RuntimeErrorException(
+          "Cannot create model for Undefined primitive shape type."
+        );
       case primitiveShapeType::Cube:
         model = PrimitiveModelsFactory::createCube();
         break;

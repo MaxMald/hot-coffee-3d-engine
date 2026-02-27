@@ -22,6 +22,8 @@ namespace hc
         return "Plane";
       case Pyramid:
         return "Pyramid";
+      case Count:
+        return "Count";
       default:
         throw RuntimeErrorException(
           String::Format("Not implemented primitive shape type: %d", static_cast<Int32>(type))
@@ -45,6 +47,8 @@ namespace hc
         return Plane;
       else if (str == "Pyramid")
         return Pyramid;
+      else if (str == "Count")
+        return Count;
       else
         throw RuntimeErrorException("Cannot find primitive shape type for: " + str);
     }
