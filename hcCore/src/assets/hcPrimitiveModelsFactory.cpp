@@ -554,7 +554,7 @@ namespace hc
     return MakeShared<Model>(vertices, indices, subMeshes, materials);
   }
 
-  SharedPtr<Model> PrimitiveModelsFactory::createPiramid()
+  SharedPtr<Model> PrimitiveModelsFactory::createPyramid()
   {
     Buffer<Vertex> vertices(16);
     BufferUInt32 indices(18);

@@ -10,6 +10,10 @@ namespace hc
     {
       Cube = 0,
       Cone,
+      Sphere,
+      Cylinder,
+      Plane,
+      Pyramid,
       Count
     };
 
