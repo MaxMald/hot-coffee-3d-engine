@@ -7,7 +7,7 @@ namespace hc
 {
   class ITextureManager;
   class IShaderProgramManager;
-  class AssetManager;
+  class IAssetManager;
   class MaterialFactoriesManager;
 
   /**
@@ -20,7 +20,7 @@ namespace hc
   {
   public:
     MaterialManager(
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       ITextureManager& textureManager,
       IShaderProgramManager& shaderProgramManager,
       UniquePtr<MaterialFactoriesManager> materialFactoriesManager
@@ -39,17 +39,6 @@ namespace hc
     ) override;
 
     /**
-     * @brief Creates a material from a material descriptor key.
-     *
-     * @param materialDescriptorKey Key identifying the material descriptor.
-     *
-     * @return Shared pointer to the created material.
-     */
-    SharedPtr<IMaterial> createMaterialFromDescriptor(
-      const String& materialDescriptorKey
-    ) override;
-
-    /**
      * @brief Creates a material from a material descriptor object.
      *
      * @param descriptor Shared pointer to the material descriptor.
@@ -57,7 +46,7 @@ namespace hc
      * @return Shared pointer to the created material.
      */
     SharedPtr<IMaterial> createMaterialFromDescriptor(
-      SharedPtr<MaterialDescriptor> descriptor
+      SharedPtr<AMaterialDescriptor> descriptor
     ) override;
 
     /**
@@ -74,7 +63,7 @@ namespace hc
 
   private:
     UniquePtr<MaterialFactoriesManager> m_materialFactoriesManager;
-    AssetManager& m_assetManager;
+    IAssetManager& m_assetManager;
     IShaderProgramManager& m_shaderProgramManager;
     ITextureManager& m_textureManager;
     Vector<SharedPtr<IMaterial>> m_materials;

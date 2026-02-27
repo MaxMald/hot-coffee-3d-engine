@@ -1,29 +1,19 @@
-#include "hc/assets/hcModel.h"
+#include "hc/assets/model/hcModel.h"
 
 namespace hc
 {
-  Model::Model() :
-    Asset(),
-    m_vertices(0),
-    m_indices(0)
-  {
-  }
-
   Model::Model(
+    const Path& path,
     const Buffer<Vertex>& vertices,
     const BufferUInt32& indices,
     const Vector<ModelSubMesh>& subMeshes,
-    const Vector<SharedPtr<MaterialDescriptor>>& materials
+    const Vector<SharedPtr<AMaterialDescriptor>>& materials
   ) :
-    Asset(),
+    Asset(path),
     m_vertices(vertices),
     m_indices(indices),
     m_subMeshes(subMeshes),
     m_materials(materials)
-  {
-  }
-
-  Model::~Model()
   {
   }
 
@@ -42,7 +32,7 @@ namespace hc
     return m_subMeshes;
   }
 
-  const Vector<SharedPtr<MaterialDescriptor>>& Model::getMaterials() const
+  const Vector<SharedPtr<AMaterialDescriptor>>& Model::getMaterials() const
   {
     return m_materials;
   }

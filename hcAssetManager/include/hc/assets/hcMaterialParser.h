@@ -8,16 +8,16 @@ namespace hc
 {
   namespace materialParser
   {
-    SharedPtr<MaterialDescriptor> ParseMaterialDescriptorFromAssimpMaterial(
+    SharedPtr<AMaterialDescriptor> ParseMaterialDescriptorFromAssimpMaterial(
       const Path& fileDirectory,
       const aiMaterial* material
     );
 
     shadingType::Type DetermineShadingType(const aiMaterial* material);
 
-    SharedPtr<MaterialDescriptor> CreateDefaultMaterial();
+    SharedPtr<AMaterialDescriptor> CreateDefaultMaterial();
 
-    SharedPtr<MaterialDescriptor> ParseUnlitMaterialDescriptor(
+    SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
       const aiMaterial* material
     );

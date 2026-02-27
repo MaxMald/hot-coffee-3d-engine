@@ -24,7 +24,7 @@ namespace hc::editor
      * 
      * @param asset Shared pointer to the material descriptor asset.
      */
-    virtual void copyValuesFrom(SharedPtr<MaterialDescriptor> asset) = 0;
+    virtual void copyValuesFrom(SharedPtr<AMaterialDescriptor> asset) = 0;
 
     /**
      * @brief Draws the editor UI for the material descriptor.

@@ -6,7 +6,7 @@
 namespace hc
 {
   class ITextureFactory;
-  class AssetManager;
+  class IAssetManager;
 
   /**
    * @brief Manages texture resources and their creation, caching, and retrieval.
@@ -25,7 +25,7 @@ namespace hc
      */
     TextureManager(
       UniquePtr<ITextureFactory> textureFactory,
-      AssetManager& assetManager
+      IAssetManager& assetManager
     );
     ~TextureManager() override;
 
@@ -63,7 +63,7 @@ namespace hc
 
   private:
     UniquePtr<ITextureFactory> m_textureFactory;
-    AssetManager& m_assetManager;
+    IAssetManager& m_assetManager;
     Vector<SharedPtr<ITexture>> m_textures;
   };
 }

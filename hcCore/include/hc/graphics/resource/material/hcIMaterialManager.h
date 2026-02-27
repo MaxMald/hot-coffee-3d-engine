@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  class MaterialDescriptor;
+  class AMaterialDescriptor;
   class IMaterial;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
@@ -43,7 +43,7 @@ namespace hc
      * @return Shared pointer to the created material.
      */
     virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      SharedPtr<MaterialDescriptor> descriptor
+      SharedPtr<AMaterialDescriptor> descriptor
     ) = 0;
 
     /**

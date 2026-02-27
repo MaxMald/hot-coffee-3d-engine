@@ -1,15 +1,15 @@
 #include "hc/graphics/resource/material/hcMaterialManager.h"
 #include "hc/graphics/resource/shaderProgram/hcShaderProgramManager.h"
-#include "hc/assets/hcAssetManager.h"
 #include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
-#include "hc/assets/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/material/hcIMaterialFactory.h"
+#include "hc/assets/hcIAssetManager.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
   MaterialManager::MaterialManager(
-    AssetManager& assetManager,
+    IAssetManager& assetManager,
     ITextureManager& textureManager,
     IShaderProgramManager& shaderProgramManager,
     UniquePtr<MaterialFactoriesManager> materialFactoriesManager
@@ -25,9 +25,9 @@ namespace hc
     const Path& materialDescriptorPath
   )
   {
-    SharedPtr<MaterialDescriptor> mat = m_assetManager.load<MaterialDescriptor>(
-      materialDescriptorPath
-    );
+    SharedPtr<AMaterialDescriptor> mat = m_assetManager
+      .getMaterialDescriptorAssetManager()
+      .load(materialDescriptorPath);
 
     if (!mat)
     {
@@ -44,29 +44,7 @@ namespace hc
   }
 
   SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
-    const String& materialDescriptorKey
-  )
-  {
-    SharedPtr<MaterialDescriptor> mat = m_assetManager.get<MaterialDescriptor>(
-      materialDescriptorKey
-    );
-
-    if (!mat)
-    {
-      LogService::Error(
-        String::Format(
-          "MaterialDescriptor with key '%s' not found.",
-          materialDescriptorKey.c_str()
-        )
-      );
-      return nullptr;
-    }
-
-    return createMaterialFromDescriptor(mat);
-  }
-
-  SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
-    SharedPtr<MaterialDescriptor> descriptor
+    SharedPtr<AMaterialDescriptor> descriptor
   )
   {
     if (!descriptor)

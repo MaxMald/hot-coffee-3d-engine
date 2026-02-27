@@ -1,4 +1,4 @@
-#include "hc/assets/hcVertex.h"
+#include "hc/assets/model/hcVertex.h"
 
 namespace hc
 {

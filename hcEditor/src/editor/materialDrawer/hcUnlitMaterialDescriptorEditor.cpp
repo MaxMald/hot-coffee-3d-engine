@@ -23,7 +23,7 @@ namespace hc::editor
   }
 
   void UnlitMaterialDescriptorEditor::copyValuesFrom(
-    SharedPtr<MaterialDescriptor> asset
+    SharedPtr<AMaterialDescriptor> asset
   )
   {
     auto unlitDesc = std::dynamic_pointer_cast<UnlitMaterialDescriptor>(asset);
@@ -58,7 +58,7 @@ namespace hc::editor
     unlitDesc->setColor(m_color);
     unlitDesc->setMainImagePath(m_mainImagePath);
 
-    auto serialized = JsonSerializer::Serialize<MaterialDescriptor>(unlitDesc.get());
+    auto serialized = JsonSerializer::Serialize<AMaterialDescriptor>(unlitDesc.get());
     if (!serialized.has_value())
     {
       LogService::Error("Failed to serialize UnlitMaterialDescriptor.");

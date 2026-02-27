@@ -1,14 +1,14 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/assets/hcPrimitiveShapeType.h"
+#include "hc/assets/model/hcPrimitiveModelType.h"
 
 namespace hc
 {
   class Model;
 
   /**
-   * Manages and caches primitive 3D shape models for efficient reuse.
+   * Manages and caches primitive 3D model assets for efficient reuse.
    * 
    * This manager provides lazy loading and caching of basic geometric
    * primitives such as cubes, spheres, cylinders, cones, planes, and
@@ -22,16 +22,16 @@ namespace hc
     ~PrimitiveModelsManager() = default;
 
     /**
-     * Retrieves a primitive shape model, creating it if necessary.
+     * Retrieves a primitive model, creating it if necessary.
      * 
      * If the requested primitive has not been created yet, it will be
      * generated and cached for future use.
      * 
-     * @param primitiveType The type of primitive shape to retrieve.
+     * @param primitiveType The type of primitive model to retrieve.
      * 
      * @return A shared pointer to the requested primitive model.
      */
-    SharedPtr<Model> getPrimitive(primitiveShapeType::Type primitiveType);
+    SharedPtr<Model> getPrimitive(primitiveModelType::Type primitiveType);
 
     /**
      * Destroys all cached primitive models and releases their resources.
@@ -42,8 +42,8 @@ namespace hc
     void destroy();
 
   private:
-    UnorderedMap<primitiveShapeType::Type, SharedPtr<Model>> m_primitiveModels;
+    UnorderedMap<primitiveModelType::Type, SharedPtr<Model>> m_primitiveModels;
 
-    bool hasPrimitive(primitiveShapeType::Type primitiveType) const;
+    bool hasPrimitive(primitiveModelType::Type primitiveType) const;
   };
 }

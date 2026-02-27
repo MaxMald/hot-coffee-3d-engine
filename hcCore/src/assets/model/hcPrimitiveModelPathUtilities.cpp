@@ -1,4 +1,4 @@
-#include "hc/assets/hcPrimitiveModelPathUtilities.h"
+#include "hc/assets/model/hcPrimitiveModelPathUtilities.h"
 
 namespace hc
 {
@@ -8,7 +8,7 @@ namespace hc
     return pathStr.find(PrimitivesBasePath) == 0;
   }
 
-  primitiveShapeType::Type PrimitiveModelPathUtilities::GetPrimitiveShapeTypeFromPath(
+  primitiveModelType::Type PrimitiveModelPathUtilities::GetPrimitiveModelTypeFromPath(
     const Path& path
   )
   {
@@ -20,14 +20,14 @@ namespace hc
     }
 
     String fileName = path.stem().string();
-    return primitiveShapeType::fromString(fileName);
+    return primitiveModelType::fromString(fileName);
   }
 
   Path PrimitiveModelPathUtilities::GetPrimitiveModelPath(
-    primitiveShapeType::Type primitiveType
+    primitiveModelType::Type primitiveType
   )
   {
-    String fileName = primitiveShapeType::toString(primitiveType);
+    String fileName = primitiveModelType::toString(primitiveType);
     return Path(PrimitivesBasePath) / (fileName + ".hcmodel");
   }
 }

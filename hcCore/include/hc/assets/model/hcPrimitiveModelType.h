@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  namespace primitiveShapeType
+  namespace primitiveModelType
   {
     enum Type : Int8
     {

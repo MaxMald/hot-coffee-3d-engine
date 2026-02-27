@@ -1,8 +1,8 @@
-#include "hc/assets/hcPrimitiveShapeType.h"
+#include "hc/assets/model/hcPrimitiveModelType.h"
 
 namespace hc
 {
-  namespace primitiveShapeType
+  namespace primitiveModelType
   {
     String toString(Type type)
     {
@@ -26,7 +26,7 @@ namespace hc
         return "Count";
       default:
         throw RuntimeErrorException(
-          String::Format("Not implemented primitive shape type: %d", static_cast<Int32>(type))
+          String::Format("Not implemented primitive model type: %d", static_cast<Int32>(type))
         );
       }
     }
@@ -50,7 +50,7 @@ namespace hc
       else if (str == "Count")
         return Count;
       else
-        throw RuntimeErrorException("Cannot find primitive shape type for: " + str);
+        throw RuntimeErrorException("Cannot find primitive model type for: " + str);
     }
   }
 }

@@ -5,13 +5,13 @@
 namespace hc::editor
 {
   class MaterialDescriptorAssetGroupDrawer :
-    public ATypedAssetGroupDrawer<MaterialDescriptor>
+    public ATypedAssetGroupDrawer<AMaterialDescriptor>
   {
   public:
     MaterialDescriptorAssetGroupDrawer(AssetManager& assetManager);
     virtual ~MaterialDescriptorAssetGroupDrawer() = default;
 
   protected:
-    void drawAssetDetails(const SharedPtr<MaterialDescriptor>& asset) override;
+    void drawAssetDetails(const SharedPtr<AMaterialDescriptor>& asset) override;
   };
 }

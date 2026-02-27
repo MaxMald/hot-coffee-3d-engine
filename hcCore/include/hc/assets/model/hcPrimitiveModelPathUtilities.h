@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/assets/hcPrimitiveShapeType.h"
+#include "hc/assets/model/hcPrimitiveModelType.h"
 
 namespace hc
 {
@@ -22,7 +22,7 @@ namespace hc
      * Checks if a given path corresponds to a primitive model.
      * 
      * Determines whether the provided path points to a built-in
-     * primitive shape asset based on the path structure.
+     * primitive model asset based on the path structure.
      * 
      * @param path The file path to check.
      * 
@@ -32,27 +32,27 @@ namespace hc
     static bool IsPrimitiveModelPath(const Path& path);
 
     /**
-     * Extracts the primitive shape type from a primitive model path.
+     * Extracts the primitive model type from a primitive model path.
      * 
      * Parses the provided path and returns the corresponding primitive
-     * shape type. The path must be a valid primitive model path.
+     * model type. The path must be a valid primitive model path.
      * 
      * @param path The primitive model path to parse.
      * 
-     * @return The primitive shape type identified from the path.
+     * @return The primitive model type identified from the path.
      */
-    static primitiveShapeType::Type GetPrimitiveShapeTypeFromPath(const Path& path);
+    static primitiveModelType::Type GetPrimitiveModelTypeFromPath(const Path& path);
 
     /**
-     * Constructs the file path for a given primitive shape type.
+     * Constructs the file path for a given primitive model type.
      * 
-     * Generates the full asset path for the specified primitive shape
+     * Generates the full asset path for the specified primitive model
      * type using the base primitives directory.
      * 
-     * @param primitiveType The type of primitive shape.
+     * @param primitiveType The type of primitive model.
      * 
      * @return The constructed file path for the primitive model.
      */
-    static Path GetPrimitiveModelPath(primitiveShapeType::Type primitiveType);
+    static Path GetPrimitiveModelPath(primitiveModelType::Type primitiveType);
   };
 }

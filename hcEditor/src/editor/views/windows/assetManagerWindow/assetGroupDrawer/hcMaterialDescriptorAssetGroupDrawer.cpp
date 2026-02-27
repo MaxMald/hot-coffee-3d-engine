@@ -5,12 +5,12 @@ namespace hc::editor
   MaterialDescriptorAssetGroupDrawer::MaterialDescriptorAssetGroupDrawer(
     AssetManager& assetManager
   ) :
-    ATypedAssetGroupDrawer<MaterialDescriptor>(assetManager)
+    ATypedAssetGroupDrawer<AMaterialDescriptor>(assetManager)
   {
   }
 
   void MaterialDescriptorAssetGroupDrawer::drawAssetDetails(
-    const SharedPtr<MaterialDescriptor>& asset
+    const SharedPtr<AMaterialDescriptor>& asset
   )
   {
     String shaderTypeStr = shadingType::toString(asset->getShaderType());

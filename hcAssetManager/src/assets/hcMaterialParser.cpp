@@ -7,7 +7,7 @@ namespace hc
 {
   namespace materialParser
   {
-    SharedPtr<MaterialDescriptor> ParseMaterialDescriptorFromAssimpMaterial(
+    SharedPtr<AMaterialDescriptor> ParseMaterialDescriptorFromAssimpMaterial(
       const Path& fileDirectory,
       const aiMaterial* material
     )
@@ -41,12 +41,12 @@ namespace hc
       }
     }
 
-    SharedPtr<MaterialDescriptor> CreateDefaultMaterial()
+    SharedPtr<AMaterialDescriptor> CreateDefaultMaterial()
     {
       return MakeShared<UnlitMaterialDescriptor>();
     }
 
-    SharedPtr<MaterialDescriptor> ParseUnlitMaterialDescriptor(
+    SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
       const aiMaterial* material
     )

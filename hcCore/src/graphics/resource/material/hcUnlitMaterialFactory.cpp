@@ -1,5 +1,5 @@
 #include "hc/graphics/resource/material/hcUnlitMaterialFactory.h"
-#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgramManager.h"
@@ -12,7 +12,7 @@ namespace hc
   }
 
   SharedPtr<IMaterial> UnlitMaterialFactory::create(
-    SharedPtr<MaterialDescriptor> descriptor,
+    SharedPtr<AMaterialDescriptor> descriptor,
     ITextureManager& textureManager,
     IShaderProgramManager& shaderProgramManager
   )

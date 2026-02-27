@@ -39,14 +39,14 @@ namespace hc::editor
 
     try
     {
-      SharedPtr<MaterialDescriptor> materialDescriptor = m_assetManager
-        .loadDirect<MaterialDescriptor>(materialDescriptorPath);
+      SharedPtr<AMaterialDescriptor> materialDescriptor = m_assetManager
+        .loadDirect<AMaterialDescriptor>(materialDescriptorPath);
 
       if (!materialDescriptor)
         return;
 
       m_assetReference.setFilePath(materialDescriptorPath);
-      m_assetReference.setAsset(SharedPtr<MaterialDescriptor>(materialDescriptor));
+      m_assetReference.setAsset(SharedPtr<AMaterialDescriptor>(materialDescriptor));
       m_currentShaderType = materialDescriptor->getShaderType();
 
       updateShaderTypeCombo();
@@ -70,7 +70,7 @@ namespace hc::editor
 
   void MaterialDescriptorEditorWindow::clear()
   {
-    m_assetReference = AssetFileReference<MaterialDescriptor>();
+    m_assetReference = AssetFileReference<AMaterialDescriptor>();
     m_currentShaderType = shadingType::Type::Unknown;
     m_activeEditor = nullptr;
 

@@ -2,13 +2,9 @@
 
 namespace hc
 {
-  Asset::Asset() :
-    m_path(),
+  Asset::Asset(const Path& path) :
+    m_path(path),
     m_id(Id::Create())
-  {
-  }
-
-  Asset::~Asset()
   {
   }
 

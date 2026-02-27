@@ -4,32 +4,21 @@
 
 namespace hc
 {
-  class IImageLoader;
-
   /**
    * @brief Represents a image asset in the engine.
    */
-  class HC_CORE_EXPORT Image :
-    public Asset
+  class HC_CORE_EXPORT Image : public Asset
   {
   public:
-    Image();
-    virtual ~Image();
-
-    /**
-     * @brief Initializes the image with dimensions and image data.
-     *
-     * @param width Image width.
-     * @param height Image height.
-     * @param channels Number of color channels in the image.
-     * @param buffer Buffer containing image data. Ownership is transferred.
-     */
-    void initialize(
+    Image(
+      const Path& path,
       UInt32 width,
       UInt32 height,
       UInt32 channels,
       BufferByte&& buffer
     );
+
+    virtual ~Image();
 
     /**
      * @brief Gets the width of the image in pixels.
@@ -67,8 +56,6 @@ namespace hc
     const BufferByte& getBuffer() const;
 
   private:
-    static UInt64 s_nextId;
-
     UInt32 m_width;
     UInt32 m_height;
     UInt32 m_channels;

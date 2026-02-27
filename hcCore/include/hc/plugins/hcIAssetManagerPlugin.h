@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class AssetManager;
+  class IAssetManager;
 
   /**
    * @brief Interface for asset manager plugins.
@@ -15,12 +15,11 @@ namespace hc
     virtual ~IAssetManagerPlugin() = default;
 
     /**
-     * @brief Registers asset loaders with the provided asset manager.
+     * Creates an instance of the asset manager provided by this plugin.
      *
-     * @param assetManager Reference to the asset manager where loaders will be
-     * registered.
+     * @return A unique pointer to the created asset manager instance.
      */
-    virtual void registerAssetLoaders(AssetManager& assetManager) const = 0;
+    virtual UniquePtr<IAssetManager> createAssetManager() const = 0;
 
   protected:
     IAssetManagerPlugin() = default;

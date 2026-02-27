@@ -1,32 +1,24 @@
-#include "hc/assets/hcImage.h"
+#include "hc/assets/image/hcImage.h"
 
 namespace hc
 {
-  UInt64 Image::s_nextId = 1;
-
-  Image::Image() :
-    m_width(0),
-    m_height(0),
-    m_channels(0),
-    m_data(0)
+  Image::Image(
+    const Path& path,
+    UInt32 width,
+    UInt32 height,
+    UInt32 channels,
+    BufferByte&& buffer
+  ) :
+    Asset(path),
+    m_width(width),
+    m_height(height),
+    m_channels(channels),
+    m_data(std::move(buffer))
   {
   }
 
   Image::~Image()
   {
-  }
-
-  void Image::initialize(
-    UInt32 width,
-    UInt32 height,
-    UInt32 channels,
-    BufferByte&& buffer
-  )
-  {
-    m_width = width;
-    m_height = height;
-    m_channels = channels;
-    m_data = std::move(buffer);
   }
 
   UInt32 Image::getWidth() const

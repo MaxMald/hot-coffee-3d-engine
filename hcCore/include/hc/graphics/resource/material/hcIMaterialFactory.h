@@ -7,7 +7,7 @@ namespace hc
   class IMaterial;
   class ITextureManager;
   class IShaderProgramManager;
-  class MaterialDescriptor;
+  class AMaterialDescriptor;
 
   /**
    * @brief Interface for material factory classes.
@@ -34,7 +34,7 @@ namespace hc
      * @return Shared pointer to the created IMaterial instance.
      */
     virtual SharedPtr<IMaterial> create(
-      SharedPtr<MaterialDescriptor> descriptor,
+      SharedPtr<AMaterialDescriptor> descriptor,
       ITextureManager& textureManager,
       IShaderProgramManager& shaderProgramManager
     ) = 0;

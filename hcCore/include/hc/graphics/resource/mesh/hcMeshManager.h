@@ -8,7 +8,7 @@ namespace hc
   class IMaterial;
   class IMaterialManager;
   class IMeshFactory;
-  class AssetManager;
+  class IAssetManager;
 
   /**
    * @brief Manages mesh resources and their creation.
@@ -30,7 +30,7 @@ namespace hc
      * @param materialManager Reference to the material manager.
      */
     MeshManager(
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       UniquePtr<IMeshFactory> meshFactory,
       IMaterialManager& materialManager
     );
@@ -69,7 +69,7 @@ namespace hc
     void clear() override;
 
   private:
-    AssetManager& m_assetManager;
+    IAssetManager& m_assetManager;
     UniquePtr<IMeshFactory> m_meshFactory;
     IMaterialManager& m_materialManager;
     Vector<SharedPtr<IMesh>> m_meshes;

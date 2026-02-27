@@ -1,12 +1,12 @@
-#include "hc/assets/hcPrimitiveModelsManager.h"
-#include "hc/assets/hcVertex.h"
-#include "hc/assets/hcModelSubMesh.h"
-#include "hc/assets/hcPrimitiveModelsFactory.h"
+#include "hc/assets/model/hcPrimitiveModelsManager.h"
+#include "hc/assets/model/hcVertex.h"
+#include "hc/assets/model/hcModelSubMesh.h"
+#include "hc/assets/model/hcPrimitiveModelsFactory.h"
 
 namespace hc
 {
   SharedPtr<Model> PrimitiveModelsManager::getPrimitive(
-    primitiveShapeType::Type primitiveType
+    primitiveModelType::Type primitiveType
   )
   {
     if (hasPrimitive(primitiveType))
@@ -15,32 +15,32 @@ namespace hc
     SharedPtr<Model> model;
     switch (primitiveType)
     {
-      case primitiveShapeType::Undefined:
+      case primitiveModelType::Undefined:
         throw RuntimeErrorException(
-          "Cannot create model for Undefined primitive shape type."
+          "Cannot create model for Undefined primitive model type."
         );
-      case primitiveShapeType::Cube:
+      case primitiveModelType::Cube:
         model = PrimitiveModelsFactory::createCube();
         break;
-      case primitiveShapeType::Cone:
+      case primitiveModelType::Cone:
         model = PrimitiveModelsFactory::createCone();
         break;
-      case primitiveShapeType::Sphere:
+      case primitiveModelType::Sphere:
         model = PrimitiveModelsFactory::createSphere();
         break;
-      case primitiveShapeType::Cylinder:
+      case primitiveModelType::Cylinder:
         model = PrimitiveModelsFactory::createCylinder();
         break;
-      case primitiveShapeType::Plane:
+      case primitiveModelType::Plane:
         model = PrimitiveModelsFactory::createPlane();
         break;
-      case primitiveShapeType::Pyramid:
+      case primitiveModelType::Pyramid:
         model = PrimitiveModelsFactory::createPyramid();
         break;
       default:
         throw RuntimeErrorException(
-          String::Format("Not implemented primitive shape type: %s",
-            primitiveShapeType::toString(primitiveType).c_str()
+          String::Format("Not implemented primitive model type: %s",
+            primitiveModelType::toString(primitiveType).c_str()
           )
         );
     }
@@ -55,7 +55,7 @@ namespace hc
   }
 
   bool PrimitiveModelsManager::hasPrimitive(
-    primitiveShapeType::Type primitiveType
+    primitiveModelType::Type primitiveType
   ) const
   {
     return m_primitiveModels.find(primitiveType) != m_primitiveModels.end();

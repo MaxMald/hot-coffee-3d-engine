@@ -1,6 +1,7 @@
-#include "hc/assets/hcPrimitiveModelsFactory.h"
-#include "hc/assets/hcModel.h"
-#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/model/hcPrimitiveModelsFactory.h"
+#include "hc/assets/model/hcModel.h"
+#include "hc/assets/model/hcPrimitiveModelPathUtilities.h"
+#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 
 namespace hc
 {
@@ -175,10 +176,17 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cube),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 
   SharedPtr<Model> PrimitiveModelsFactory::createCone()
@@ -275,10 +283,17 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cone),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 
   SharedPtr<Model> PrimitiveModelsFactory::createSphere()
@@ -356,10 +371,17 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Sphere),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 
   SharedPtr<Model> PrimitiveModelsFactory::createCylinder()
@@ -501,10 +523,17 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Cylinder),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 
   SharedPtr<Model> PrimitiveModelsFactory::createPlane()
@@ -548,10 +577,17 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Plane),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 
   SharedPtr<Model> PrimitiveModelsFactory::createPyramid()
@@ -674,9 +710,16 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<MaterialDescriptor>> materials;
-    materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    //materials.push_back(MakeShared<UnlitMaterialDescriptor>());
+    // TODO Get default materials from material asset manager.
 
-    return MakeShared<Model>(vertices, indices, subMeshes, materials);
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Pyramid),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
   }
 }

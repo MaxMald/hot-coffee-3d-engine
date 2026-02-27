@@ -9,10 +9,11 @@
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/scene/hcSceneManager.h"
 #include "hc/hcIEventListener.h"
+#include "hc/assets/hcAssetManagerFactory.h"
+#include "hc/assets/hcIAssetManager.h"
 
 #include "hc/graphics/hcGraphicsManagerFactory.h"
 #include "hc/window/hcWindowManagerFactory.h"
-#include "hc/assets/hcAssetManagerLoadersRegistry.h"
 #include "hc/scene/hcSceneManagerFactory.h"
 
 namespace hc
@@ -21,7 +22,7 @@ namespace hc
     m_graphicsManager(nullptr),
     m_windowManager(nullptr),
     m_sceneManager(nullptr),
-    m_assetManager(),
+    m_assetManager(nullptr),
     m_pluginManager(),
     m_inputManager(),
     m_frameClock(),
@@ -57,10 +58,10 @@ namespace hc
     return *m_sceneManager;
   }
 
-  AssetManager& HotCoffeeEngine::getAssetManager()
+  IAssetManager& HotCoffeeEngine::getAssetManager()
   {
     assertEngineIsInitialized();
-    return m_assetManager;
+    return *m_assetManager;
   }
 
   InputManager& HotCoffeeEngine::getInputManager()
@@ -114,12 +115,8 @@ namespace hc
 
       connectToPlugins(settings.pluginManagerSettings);
 
-      m_sceneManager = SceneManagerFactory::create();
-
-      assetManagerLoadersRegistry::registerLoaders(
-        m_assetManager,
-        m_pluginManager
-      );
+      m_sceneManager = SceneManagerFactory::create();      
+      m_assetManager = AssetManagerFactory::Create(m_pluginManager);
 
       m_windowManager = windowManagerFactory::Create(m_pluginManager);
       m_windowManager->createWindow(settings.windowSettings);
@@ -127,7 +124,7 @@ namespace hc
       m_graphicsManager = graphicsManagerFactory::Create(
         m_pluginManager,
         m_windowManager->getWindow(),
-        m_assetManager
+        *m_assetManager
       );
       m_graphicsManager->initialize();
 
@@ -194,7 +191,6 @@ namespace hc
   {
     m_frameClock.stop();
     m_inputManager.destroy(*this);
-    m_assetManager.destroy();
 
     if (m_sceneManager)
     {
@@ -212,6 +208,12 @@ namespace hc
     {
       m_windowManager->destroy();
       m_windowManager.reset();
+    }
+
+    if (m_assetManager)
+    {
+      m_assetManager->destroy();
+      m_assetManager.reset();
     }
 
     m_pluginManager.closeAll();

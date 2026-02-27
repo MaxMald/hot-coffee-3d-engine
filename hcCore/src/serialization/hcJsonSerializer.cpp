@@ -1,13 +1,12 @@
 #include "hc/serialization/hcJsonSerializer.h"
-
 #include "hc/serialization/hcMaterialDescriptorJsonSerializer.h"
-#include "hc/assets/hcMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
   void JsonSerializer::onPrepare()
   {
-    registerSerializer<MaterialDescriptor>(
+    registerSerializer<AMaterialDescriptor>(
       MakeUnique<MaterialDescriptorJsonSerializer>()
     );
   }
