@@ -95,6 +95,23 @@ namespace hc
 
   }
 
+  SizeT OpenGlMesh::getMaterialsSize() const
+  {
+    return m_materials.size();
+  }
+
+  void OpenGlMesh::setMaterial(UInt32 index, SharedPtr<IMaterial> material)
+  {
+    if (static_cast<SizeT>(index) >= m_materials.size())
+      throw RuntimeErrorException(
+        String::Format("Material index %d is out of bounds for materials size %zu",
+          index, m_materials.size()
+        )
+      );
+
+    m_materials[index] = material;
+  }
+
   void OpenGlMesh::destroy()
   {
     if (m_ebo != 0)

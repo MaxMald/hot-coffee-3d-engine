@@ -29,6 +29,19 @@ namespace hc
     virtual void update() = 0;
 
     /**
+     * @brief Sets the material at the specified index for this mesh.
+     *
+     * @param index The index of the material to set.
+     * @param material Shared pointer to the material to associate with this mesh.
+     */
+    virtual void setMaterial(UInt32 index, SharedPtr<IMaterial> material) = 0;
+
+    /**
+    * @brief Returns the number of materials associated with this mesh.
+    */
+    virtual SizeT getMaterialsSize() const = 0;
+
+    /**
      * @brief Returns the materials associated with this mesh.
      * 
      * @return A vector of shared pointers to the materials.
