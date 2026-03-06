@@ -1,6 +1,66 @@
 #include "hc/assets/image/hcImageAssetManager.h"
+#include "stb_image.h"
 
 namespace hc
 {
-  // TODO
+  static constexpr SizeT NUM_CHANNELS = 4;
+
+  SharedPtr<Image> ImageAssetManager::load(const Path& path)
+  {
+    if (isLoaded(path))
+      return m_loadedImages.at(path);
+
+    Int32 width = 0;
+    Int32 height = 0;
+    Int32 channels = 0;
+
+    Byte* data = stbi_load(
+      path.string().c_str(),
+      reinterpret_cast<int*>(&width),
+      reinterpret_cast<int*>(&height),
+      reinterpret_cast<int*>(&channels),
+      STBI_rgb_alpha
+    );
+
+    if (!data)
+      return nullptr;
+
+    SizeT bufferSize = static_cast<SizeT>(width)
+      * static_cast<SizeT>(height)
+      * NUM_CHANNELS;
+
+    BufferByte buffer(bufferSize);
+    buffer.initialize(data, bufferSize);
+
+    SharedPtr<Image> image = MakeShared<Image>(
+      path,
+      static_cast<UInt32>(width),
+      static_cast<UInt32>(height),
+      NUM_CHANNELS,
+      std::move(buffer)
+    );
+
+    stbi_image_free(data);
+
+    m_loadedImages[path] = image;
+    return image;
+  }
+
+  SharedPtr<Image> ImageAssetManager::get(const Path& path) const
+  {
+    if (isLoaded(path))
+      return m_loadedImages.at(path);
+
+    throw RuntimeErrorException("Image asset not loaded: " + path.string());
+  }
+
+  bool ImageAssetManager::isLoaded(const Path& path) const
+  {
+    return m_loadedImages.find(path) != m_loadedImages.end();
+  }
+
+  void ImageAssetManager::clear()
+  {
+    m_loadedImages.clear();
+  }
 }
