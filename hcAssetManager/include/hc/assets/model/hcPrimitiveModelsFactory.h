@@ -20,6 +20,17 @@ namespace hc
     ~PrimitiveModelsFactory() = default;
 
     /**
+    * Creates a model based on the specified primitive type.
+    *
+    * @param primitiveType The type of primitive model to create.
+    * 
+    * @return A shared pointer to the created model.
+    */
+    SharedPtr<Model> createFromPrimitiveType(
+      primitiveModelType::Type primitiveType
+    );
+
+    /**
      * Creates a cube model with unit dimensions.
      *
      * @return A shared pointer to the created cube model.

@@ -12,6 +12,32 @@ namespace hc
   {
   }
 
+  SharedPtr<Model> PrimitiveModelsFactory::createFromPrimitiveType(
+    primitiveModelType::Type primitiveType
+  )
+  {
+    switch (primitiveType)
+    {
+    case primitiveModelType::Cube:
+      return createCube();
+    case primitiveModelType::Cone:
+      return createCone();
+    case primitiveModelType::Sphere:
+      return createSphere();
+    case primitiveModelType::Cylinder:
+      return createCylinder();
+    case primitiveModelType::Plane:
+      return createPlane();
+    case primitiveModelType::Pyramid:
+      return createPyramid();
+    default:
+      throw InvalidArgumentException(
+        "Unsupported primitive model type: " +
+        primitiveModelType::toString(primitiveType)
+      );
+    }
+  }
+
   SharedPtr<Model> PrimitiveModelsFactory::createCube()
   {
     Buffer<Vertex> vertices(24);
