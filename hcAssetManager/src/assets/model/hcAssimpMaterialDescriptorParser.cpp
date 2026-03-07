@@ -1,4 +1,4 @@
-#include "hc/assets/hcAssimpMaterialDescriptorParser.h"
+#include "hc/assets/model/hcAssimpMaterialDescriptorParser.h"
 #include <assimp/scene.h>
 #include <assimp/mesh.h>
 #include <assimp/material.h>

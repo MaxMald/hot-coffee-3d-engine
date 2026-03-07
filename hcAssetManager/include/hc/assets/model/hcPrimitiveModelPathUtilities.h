@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcAssetManagerPrerequisites.h"
 #include "hc/assets/model/hcPrimitiveModelType.h"
 
 namespace hc

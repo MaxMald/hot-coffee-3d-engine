@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
+#include "hc/hcAssetManagerPrerequisites.h"
 
 namespace hc
 {

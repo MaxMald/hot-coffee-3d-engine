@@ -17,6 +17,8 @@
 #include "hc/assets/model/hcVertex.h"
 #include "hc/assets/model/hcModelSubMesh.h"
 #include "hc/assets/model/hcModel.h"
+#include "hc/assets/model/hcIModelAssetManager.h"
+#include "hc/assets/model/hcPrimitiveModelType.h"
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
