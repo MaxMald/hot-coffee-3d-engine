@@ -8,11 +8,13 @@ namespace hc
     return new WindowSfmlPlugin();
   }
 
-  HC_WINDOW_SFML_EXPORT void destroyWindowSfmlPlugin()
+  HC_WINDOW_SFML_EXPORT void destroyWindowSfmlPlugin(IPlugin* plugin)
   {
+    delete plugin;
   }
 
-  WindowSfmlPlugin::WindowSfmlPlugin()
+  WindowSfmlPlugin::WindowSfmlPlugin() :
+    m_windowManager()
   {
   }
 
@@ -22,16 +24,15 @@ namespace hc
 
   void WindowSfmlPlugin::onConnect()
   {
-    LogService::Message("hcWindowSfmlPlugin connected.");
   }
 
   void WindowSfmlPlugin::onClose()
   {
-    LogService::Message("hcWindowSfmlPlugin closed.");
+    m_windowManager.destroy();
   }
 
-  UniquePtr<IWindowManager> WindowSfmlPlugin::createWindowManager() const
+  IWindowManager& WindowSfmlPlugin::getWindowManager()
   {
-    return MakeUnique<SfmlWindowManager>();
+    return m_windowManager;
   }
 }

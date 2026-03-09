@@ -38,7 +38,7 @@ namespace hc
 
   private:
     UniquePtr<IGraphicsManager> m_graphicsManager;
-    UniquePtr<IWindowManager> m_windowManager;
+    IWindowManager* m_windowManager;
     UniquePtr<SceneManager> m_sceneManager;
     IAssetManager* m_assetManager;
     PluginManager m_pluginManager;

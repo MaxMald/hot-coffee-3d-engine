@@ -10,8 +10,7 @@ namespace hc
 
   HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin(IPlugin* plugin)
   {
-    if (plugin)
-      delete plugin;
+    delete plugin;
   }
 
   void AssetManagerPlugin::onConnect()

@@ -2,13 +2,14 @@
 
 #include <hc/plugins/hcIWindowManagerPlugin.h>
 #include "hc/hcWindowSfmlPrerequisites.h"
+#include "hc/window/hcSfmlWindowManager.h"
 
 namespace hc
 {
   extern "C"
   {
     HC_WINDOW_SFML_EXPORT IPlugin* createWindowSfmlPlugin();
-    HC_WINDOW_SFML_EXPORT void destroyWindowSfmlPlugin();
+    HC_WINDOW_SFML_EXPORT void destroyWindowSfmlPlugin(IPlugin* plugin);
   }
 
   /**
@@ -33,6 +34,9 @@ namespace hc
     /**
      * @copydoc IWindowManagerPlugin::createWindowManager
      */
-    UniquePtr<IWindowManager> createWindowManager() const override;
+    IWindowManager& getWindowManager() override;
+
+  private:
+    SfmlWindowManager m_windowManager;
   };
 }

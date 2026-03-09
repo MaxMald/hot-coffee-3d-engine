@@ -6,7 +6,7 @@
 
 namespace hc
 {
-  IAssetManager* AssetManagerPluginAccessor::GetAssetManager(
+  IAssetManager& AssetManagerPluginAccessor::GetAssetManager(
     PluginManager& pluginManager
   )
   {
@@ -31,6 +31,6 @@ namespace hc
       );
     }
 
-    return &(assetManagerPlugin->getAssetManager());
+    return assetManagerPlugin->getAssetManager();
   }
 }

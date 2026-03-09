@@ -13,7 +13,7 @@
 #include "hc/assets/hcIAssetManager.h"
 
 #include "hc/graphics/hcGraphicsManagerFactory.h"
-#include "hc/window/hcWindowManagerFactory.h"
+#include "hc/window/hcWindowManagerPluginAccessor.h"
 #include "hc/scene/hcSceneManagerFactory.h"
 
 namespace hc
@@ -116,9 +116,8 @@ namespace hc
       connectToPlugins(settings.pluginManagerSettings);
 
       m_sceneManager = SceneManagerFactory::create();      
-      m_assetManager = AssetManagerPluginAccessor::GetAssetManager(m_pluginManager);
-
-      m_windowManager = windowManagerFactory::Create(m_pluginManager);
+      m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
+      m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
 
       m_graphicsManager = graphicsManagerFactory::Create(
@@ -204,14 +203,9 @@ namespace hc
       m_graphicsManager.reset();
     }
 
-    if (m_windowManager)
-    {
-      m_windowManager->destroy();
-      m_windowManager.reset();
-    }
-
     m_pluginManager.closeAll();
     m_assetManager = nullptr;
+    m_windowManager = nullptr;
 
     JsonSerializer::Shutdown();
     LogService::Shutdown();

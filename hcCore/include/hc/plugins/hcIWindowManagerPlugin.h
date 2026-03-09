@@ -15,11 +15,11 @@ namespace hc
     virtual ~IWindowManagerPlugin() = default;
 
     /**
-     * @brief Creates an instance of the window manager provided by this plugin.
+     * @brief Gets the window manager instance provided by this plugin.
      *
-     * @return Unique pointer to the window manager instance.
+     * @return The reference to the window manager instance.
      */
-    virtual UniquePtr<IWindowManager> createWindowManager() const = 0;
+    virtual IWindowManager& getWindowManager() = 0;
 
   protected:
     IWindowManagerPlugin() = default;
