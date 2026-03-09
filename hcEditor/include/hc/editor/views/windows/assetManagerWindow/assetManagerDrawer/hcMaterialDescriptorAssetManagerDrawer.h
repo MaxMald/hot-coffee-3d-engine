@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAAssetManagerDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAAssetManagerDrawer.h"
 
 namespace hc::editor
 {

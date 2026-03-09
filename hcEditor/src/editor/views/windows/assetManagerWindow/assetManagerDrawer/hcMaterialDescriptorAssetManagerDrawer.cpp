@@ -1,4 +1,4 @@
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetManagerDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcMaterialDescriptorAssetManagerDrawer.h"
 #include <imgui.h>
 
 namespace hc::editor

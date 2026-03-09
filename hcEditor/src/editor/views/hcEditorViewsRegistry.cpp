@@ -21,7 +21,7 @@
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/services/hcEditorServiceManager.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetManagerDrawersRegistry.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAssetManagerDrawersRegistry.h"
 
 namespace hc::editor
 {

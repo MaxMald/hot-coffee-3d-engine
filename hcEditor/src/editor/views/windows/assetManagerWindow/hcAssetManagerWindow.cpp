@@ -1,5 +1,5 @@
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcIAssetManagerDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcIAssetManagerDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
