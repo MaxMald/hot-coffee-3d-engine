@@ -1,4 +1,4 @@
-#include "hc/assets/hcAssetManagerFactory.h"
+#include "hc/assets/hcAssetManagerPluginAccessor.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/plugins/hcPluginManager.h"
 #include "hc/plugins/hcPluginStandardKeys.h"
@@ -6,7 +6,7 @@
 
 namespace hc
 {
-  UniquePtr<IAssetManager> AssetManagerFactory::Create(
+  IAssetManager* AssetManagerPluginAccessor::GetAssetManager(
     PluginManager& pluginManager
   )
   {
@@ -22,7 +22,7 @@ namespace hc
     }
 
     SharedPtr<IAssetManagerPlugin> assetManagerPlugin =
-      std::dynamic_pointer_cast<IAssetManagerPlugin>(plugin);
+      std::reinterpret_pointer_cast<IAssetManagerPlugin>(plugin);
 
     if (!assetManagerPlugin)
     {
@@ -31,16 +31,6 @@ namespace hc
       );
     }
 
-    UniquePtr<IAssetManager> assetManager =
-      assetManagerPlugin->createAssetManager();
-
-    if (!assetManager)
-    {
-      throw RuntimeErrorException(
-        "Failed to create asset manager from plugin. Make sure the asset manager plugin's createAssetManager function is correctly implemented and returns a valid IAssetManager instance."
-      );
-    }
-
-    return assetManager;
+    return &(assetManagerPlugin->getAssetManager());
   }
 }

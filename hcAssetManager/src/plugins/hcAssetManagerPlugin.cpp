@@ -8,8 +8,10 @@ namespace hc
     return new AssetManagerPlugin();
   }
 
-  HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin()
+  HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin(IPlugin* plugin)
   {
+    if (plugin)
+      delete plugin;
   }
 
   void AssetManagerPlugin::onConnect()
@@ -18,10 +20,11 @@ namespace hc
 
   void AssetManagerPlugin::onClose()
   {
+    m_assetManager.destroy();
   }
 
-  UniquePtr<IAssetManager> AssetManagerPlugin::createAssetManager() const
+  IAssetManager& AssetManagerPlugin::getAssetManager()
   {
-    return MakeUnique<AssetManager>();
+    return m_assetManager;
   }
 }

@@ -24,5 +24,8 @@ namespace hc
     * Called when the plug-in is about to been closed.
     */
     virtual void onClose() = 0;
+
+  protected:
+    IPlugin() = default;
   };
 }

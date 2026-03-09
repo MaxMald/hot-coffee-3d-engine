@@ -2,13 +2,14 @@
 
 #include <hc/plugins/hcIAssetManagerPlugin.h>
 #include "hc/hcAssetManagerPrerequisites.h"
+#include "hc/assets/hcAssetManager.h"
 
 namespace hc
 {
   extern "C"
   {
     HC_ASSET_MANAGER_EXPORT IPlugin* createAssetManagerPlugin();
-    HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin();
+    HC_ASSET_MANAGER_EXPORT void destroyAssetManagerPlugin(IPlugin* plugin);
   }
 
   class HC_ASSET_MANAGER_EXPORT AssetManagerPlugin : public IAssetManagerPlugin
@@ -30,6 +31,9 @@ namespace hc
     /**
      * @copydoc IAssetManagerPlugin::createAssetManager
      */
-    UniquePtr<IAssetManager> createAssetManager() const override;
+    IAssetManager& getAssetManager() override;
+
+  private:
+    AssetManager m_assetManager;
   };
 }

@@ -40,7 +40,7 @@ namespace hc
     UniquePtr<IGraphicsManager> m_graphicsManager;
     UniquePtr<IWindowManager> m_windowManager;
     UniquePtr<SceneManager> m_sceneManager;
-    UniquePtr<IAssetManager> m_assetManager;
+    IAssetManager* m_assetManager;
     PluginManager m_pluginManager;
     InputManager m_inputManager;
     Clock m_frameClock;

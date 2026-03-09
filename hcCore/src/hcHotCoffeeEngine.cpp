@@ -9,7 +9,7 @@
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/scene/hcSceneManager.h"
 #include "hc/hcIEventListener.h"
-#include "hc/assets/hcAssetManagerFactory.h"
+#include "hc/assets/hcAssetManagerPluginAccessor.h"
 #include "hc/assets/hcIAssetManager.h"
 
 #include "hc/graphics/hcGraphicsManagerFactory.h"
@@ -116,7 +116,7 @@ namespace hc
       connectToPlugins(settings.pluginManagerSettings);
 
       m_sceneManager = SceneManagerFactory::create();      
-      m_assetManager = AssetManagerFactory::Create(m_pluginManager);
+      m_assetManager = AssetManagerPluginAccessor::GetAssetManager(m_pluginManager);
 
       m_windowManager = windowManagerFactory::Create(m_pluginManager);
       m_windowManager->createWindow(settings.windowSettings);
@@ -210,13 +210,8 @@ namespace hc
       m_windowManager.reset();
     }
 
-    if (m_assetManager)
-    {
-      m_assetManager->destroy();
-      m_assetManager.reset();
-    }
-
     m_pluginManager.closeAll();
+    m_assetManager = nullptr;
 
     JsonSerializer::Shutdown();
     LogService::Shutdown();

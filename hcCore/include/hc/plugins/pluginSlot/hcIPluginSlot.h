@@ -67,11 +67,11 @@ namespace hc
     virtual const String& getDestructorFunctionName() const = 0;
 
     /**
-    * Get the pointer of the wrapped plug-in.
+    * Get the wrapped plug-in.
     *
-    * @return The pointer of the wrapped plug-in.
+    * @return The the wrapped plug-in.
     */
-    virtual SharedPtr<IPlugin> getPluginPtr() = 0;
+    virtual IPlugin& getPlugin() = 0;
 
     /**
     * Safely disconnect this plug-in.

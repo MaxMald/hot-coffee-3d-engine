@@ -15,11 +15,11 @@ namespace hc
     virtual ~IAssetManagerPlugin() = default;
 
     /**
-     * Creates an instance of the asset manager provided by this plugin.
+     * Gets the instance of the asset manager provided by this plugin.
      *
-     * @return A unique pointer to the created asset manager instance.
+     * @return A reference to the asset manager instance.
      */
-    virtual UniquePtr<IAssetManager> createAssetManager() const = 0;
+    virtual IAssetManager& getAssetManager() = 0;
 
   protected:
     IAssetManagerPlugin() = default;
