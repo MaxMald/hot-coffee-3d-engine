@@ -1,5 +1,5 @@
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcIAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcIAssetManagerDrawer.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -16,7 +16,7 @@ namespace hc::editor
   }
 
   void AssetManagerWindow::registerAssetGroupDrawer(
-    UniquePtr<IAssetGroupDrawer> drawer
+    UniquePtr<IAssetManagerDrawer> drawer
   )
   {
     if (!drawer)
@@ -41,7 +41,7 @@ namespace hc::editor
 
   void AssetManagerWindow::onDraw()
   {
-    for (const UniquePtr<IAssetGroupDrawer>& drawer : m_assetGroupDrawers)
+    for (const UniquePtr<IAssetManagerDrawer>& drawer : m_assetGroupDrawers)
       drawer->draw();
   }
 }

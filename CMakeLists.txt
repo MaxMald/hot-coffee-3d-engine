@@ -61,7 +61,7 @@ set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 add_subdirectory(dependencies/IMGUI)
 
 # Hot Coffee
-add_subdirectory(hcAssetLoaders)
+add_subdirectory(hcAssetManager)
 add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
 add_subdirectory(hcGraphicsOpenGL)

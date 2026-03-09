@@ -1,15 +1,15 @@
 #include "hc/graphics/resource/mesh/hcMeshManager.h"
-#include "hc/assets/hcModel.h"
-#include "hc/assets/hcAssetManager.h"
+#include "hc/assets/model/hcModel.h"
+#include "hc/assets/hcIAssetManager.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 #include "hc/graphics/resource/mesh/hcIMeshFactory.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
-#include "hc/assets/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
 
 namespace hc
 {
   MeshManager::MeshManager(
-    AssetManager& assetManager,
+    IAssetManager& assetManager,
     UniquePtr<IMeshFactory> meshFactory,
     IMaterialManager& materialManager
   ) :
@@ -21,7 +21,10 @@ namespace hc
 
   SharedPtr<IMesh> MeshManager::createMeshFromPath(const Path& path)
   {
-    SharedPtr<Model> model = m_assetManager.load<Model>(path);
+    SharedPtr<Model> model = m_assetManager
+      .getModelAssetManager()
+      .load(path);
+
     if (!model)
     {
       LogService::Error(
@@ -90,8 +93,8 @@ namespace hc
   )
   {
     Vector<SharedPtr<IMaterial>> materials;
-    const Vector<SharedPtr<MaterialDescriptor>>& materialDescs = model->getMaterials();
-    for (const SharedPtr<MaterialDescriptor>& materialDesc : materialDescs)
+    const Vector<SharedPtr<AMaterialDescriptor>>& materialDescs = model->getMaterials();
+    for (const SharedPtr<AMaterialDescriptor>& materialDesc : materialDescs)
     {
       SharedPtr<IMaterial> createdMaterial = m_materialManager
         .createMaterialFromDescriptor(materialDesc);

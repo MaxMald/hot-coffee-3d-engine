@@ -1,5 +1,5 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
-#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
@@ -65,7 +65,7 @@ namespace hc
   {
   }
 
-  SharedPtr<MaterialDescriptor> UnlitMaterial::getDescriptor() const
+  SharedPtr<AMaterialDescriptor> UnlitMaterial::getDescriptor() const
   {
     return m_descriptor;
   }

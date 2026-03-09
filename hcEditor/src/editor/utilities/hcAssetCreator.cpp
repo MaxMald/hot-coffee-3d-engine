@@ -6,10 +6,15 @@ namespace hc::editor
   {
     bool createMaterialDescriptor(const Path& assetPath)
     {
-      UnlitMaterialDescriptor materialDesc;
-      MaterialDescriptor* materialDescPtr = &materialDesc;
+      UnlitMaterialDescriptor materialDesc(
+        assetPath,
+        Color(1.0f, 1.0f, 1.0f, 1.0f),
+        ""
+      );
+
+      AMaterialDescriptor* materialDescPtr = &materialDesc;
       Optional<String> jsonStr = 
-        JsonSerializer::Serialize<MaterialDescriptor>(materialDescPtr);
+        JsonSerializer::Serialize<AMaterialDescriptor>(materialDescPtr);
 
       if (!jsonStr.has_value())
         return false;

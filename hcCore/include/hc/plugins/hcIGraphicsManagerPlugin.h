@@ -6,7 +6,7 @@ namespace hc
 {
   class IGraphicsManager;
   class IWindow;
-  class AssetManager;
+  class IAssetManager;
   class MaterialFactoriesManager;
 
   /**
@@ -30,7 +30,7 @@ namespace hc
      */
     virtual UniquePtr<IGraphicsManager> createGraphicsManager(
       IWindow& window,
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       UniquePtr<MaterialFactoriesManager> materialFactoriesManager
     ) const = 0;
   };

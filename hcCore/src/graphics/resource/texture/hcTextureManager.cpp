@@ -1,14 +1,14 @@
 #include "hc/graphics/resource/texture/hcTextureManager.h"
 #include "hc/graphics/resource/texture/hcITextureFactory.h"
-#include "hc/assets/hcImage.h"
-#include "hc/assets/hcAssetManager.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
+#include "hc/assets/image/hcImage.h"
+#include "hc/assets/hcIAssetManager.h"
 
 namespace hc
 {
   TextureManager::TextureManager(
     UniquePtr<ITextureFactory> textureFactory,
-    AssetManager& assetManager
+    IAssetManager& assetManager
   ) :
     m_textureFactory(std::move(textureFactory)),
     m_assetManager(assetManager)
@@ -53,7 +53,7 @@ namespace hc
 
   SharedPtr<ITexture> TextureManager::createTextureFromFile(const Path& filePath)
   {
-    SharedPtr<Image> image = m_assetManager.load<Image>(filePath);
+    SharedPtr<Image> image = m_assetManager.getImageAssetManager().load(filePath);
     if (!image)
     {
       LogService::Error(

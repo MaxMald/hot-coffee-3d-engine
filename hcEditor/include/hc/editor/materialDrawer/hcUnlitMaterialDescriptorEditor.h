@@ -24,7 +24,7 @@ namespace hc::editor
     /**
      * @copydoc IMaterialDescriptorEditor::copyValuesFrom
      */
-    void copyValuesFrom(SharedPtr<MaterialDescriptor> asset) override;
+    void copyValuesFrom(SharedPtr<AMaterialDescriptor> asset) override;
 
     /**
      * @copydoc IMaterialDescriptorEditor::draw

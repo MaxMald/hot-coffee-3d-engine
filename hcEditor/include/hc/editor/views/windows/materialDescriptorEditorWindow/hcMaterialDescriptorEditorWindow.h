@@ -19,7 +19,7 @@ namespace hc::editor
   {
   public:
     MaterialDescriptorEditorWindow(
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       ProjectFileSelectorView& projectFileSelector
     );
     virtual ~MaterialDescriptorEditorWindow();
@@ -37,12 +37,12 @@ namespace hc::editor
     void clear();
 
   private:
-    AssetManager& m_assetManager;
+    IAssetManager& m_assetManager;
     UnorderedMap<shadingType::Type, UniquePtr<IMaterialDescriptorEditor>> m_editors;
     UniquePtr<IMaterialDescriptorEditor> m_nullEditor;
     shadingType::Type m_currentShaderType = shadingType::Type::Unknown;
     IMaterialDescriptorEditor* m_activeEditor = nullptr;
-    AssetFileReference<MaterialDescriptor> m_assetReference;
+    AssetFileReference<AMaterialDescriptor> m_assetReference;
     Int32 m_selectedShaderTypeIndex = 0;
 
     void onDraw() override;

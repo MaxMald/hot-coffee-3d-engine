@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  class MaterialDescriptor;
+  class AMaterialDescriptor;
   class IMaterial;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
@@ -25,17 +25,6 @@ namespace hc
     ) = 0;
 
     /**
-     * @brief Creates a material from a material descriptor key.
-     *
-     * @param materialDescriptorKey Key identifying the material descriptor.
-     *
-     * @return Shared pointer to the created material.
-     */
-    virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      const String& materialDescriptorKey
-    ) = 0;
-
-    /**
      * @brief Creates a material from a material descriptor object.
      *
      * @param descriptor Shared pointer to the material descriptor.
@@ -43,7 +32,7 @@ namespace hc
      * @return Shared pointer to the created material.
      */
     virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      SharedPtr<MaterialDescriptor> descriptor
+      SharedPtr<AMaterialDescriptor> descriptor
     ) = 0;
 
     /**

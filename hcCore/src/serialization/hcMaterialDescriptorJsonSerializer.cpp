@@ -1,11 +1,11 @@
 #include "hc/serialization/hcMaterialDescriptorJsonSerializer.h"
-#include "hc/assets/hcMaterialDescriptor.h"
-#include "hc/assets/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 
 namespace hc
 {
   Optional<String> MaterialDescriptorJsonSerializer::serialize(
-    const MaterialDescriptor* data
+    const AMaterialDescriptor* data
   ) const
   {
     if (data == nullptr)
@@ -35,7 +35,7 @@ namespace hc
     return builder.toString();
   }
 
-  MaterialDescriptor* MaterialDescriptorJsonSerializer::deserialize(
+  AMaterialDescriptor* MaterialDescriptorJsonSerializer::deserialize(
     const String& jsonString
   ) const
   {
@@ -73,21 +73,28 @@ namespace hc
     const Json& json
   ) const
   {
-    UnlitMaterialDescriptor* descriptor = new UnlitMaterialDescriptor();
-
     try
     {
       Color color = jsonParsers::parseColor(json["color"]);
-      descriptor->setColor(color);
-      String mainImagePath = json["mainImagePath"].getString();
-      descriptor->setMainImagePath(Path(mainImagePath.c_str()));
+      String mainImagePathStr = json["mainImagePath"].getString();
+      Path mainImagePath(mainImagePathStr.c_str());
+      Path path = "";
+
+      return new UnlitMaterialDescriptor(
+        path,
+        color,
+        mainImagePath
+      );
     }
-    catch (...)
+    catch (const Exception& e)
     {
-      delete descriptor;
+      LogService::Error(
+        String::Format(
+          "Failed to deserialize UnlitMaterialDescriptor: %s",
+          e.what()
+        )
+      );
       return nullptr;
     }
-
-    return descriptor;
   }
 }

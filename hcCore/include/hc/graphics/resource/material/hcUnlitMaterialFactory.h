@@ -26,7 +26,7 @@ namespace hc
      * creation failed.
      */
     SharedPtr<IMaterial> create(
-      SharedPtr<MaterialDescriptor> descriptor,
+      SharedPtr<AMaterialDescriptor> descriptor,
       ITextureManager& textureManager,
       IShaderProgramManager& shaderProgramManager
     ) override;

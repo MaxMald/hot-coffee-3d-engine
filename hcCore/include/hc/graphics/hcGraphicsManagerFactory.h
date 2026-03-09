@@ -6,7 +6,7 @@ namespace hc
 {
   class IGraphicsManager;
   class IWindow;
-  class AssetManager;
+  class IAssetManager;
   class PluginManager;
 
   namespace graphicsManagerFactory
@@ -14,7 +14,7 @@ namespace hc
     UniquePtr<IGraphicsManager> Create(
       PluginManager& pluginManager,
       IWindow& window,
-      AssetManager& assetManager
+      IAssetManager& assetManager
     );
   }
 }

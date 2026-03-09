@@ -28,7 +28,7 @@ namespace hc
 
   UniquePtr<IGraphicsManager> OpenGlGraphicsPlugin::createGraphicsManager(
     IWindow& window,
-    AssetManager& assetManager,
+    IAssetManager& assetManager,
     UniquePtr<MaterialFactoriesManager> materialFactoriesManager
   ) const
   {

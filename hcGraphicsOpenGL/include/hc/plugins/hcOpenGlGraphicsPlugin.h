@@ -32,7 +32,7 @@ namespace hc
      */
     UniquePtr<IGraphicsManager> createGraphicsManager(
       IWindow& window,
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       UniquePtr<MaterialFactoriesManager> materialFactoriesManager
     ) const override;
   };

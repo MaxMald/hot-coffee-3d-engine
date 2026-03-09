@@ -4,23 +4,23 @@
 
 namespace hc
 {
-  class MaterialDescriptor;
+  class AMaterialDescriptor;
   class UnlitMaterialDescriptor;
   class JsonObjectBuilder;
   class Json;
 
   class MaterialDescriptorJsonSerializer :
-    public IJsonSerializer<MaterialDescriptor>
+    public IJsonSerializer<AMaterialDescriptor>
   {
   public:
     MaterialDescriptorJsonSerializer() = default;
     virtual ~MaterialDescriptorJsonSerializer() = default;
 
     Optional<String> serialize(
-      const MaterialDescriptor* data
+      const AMaterialDescriptor* data
     ) const override;
 
-    MaterialDescriptor* deserialize(
+    AMaterialDescriptor* deserialize(
       const String& jsonString
     ) const override;
 

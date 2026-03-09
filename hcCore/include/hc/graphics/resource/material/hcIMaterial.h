@@ -7,7 +7,7 @@
 namespace hc
 {
   struct CameraMatrices;
-  class MaterialDescriptor;
+  class AMaterialDescriptor;
 
   /**
    * @brief Interface for material objects in the engine.
@@ -46,7 +46,7 @@ namespace hc
       * 
       * @return Shared pointer to the material descriptor.
      */
-    virtual SharedPtr<MaterialDescriptor> getDescriptor() const = 0;
+    virtual SharedPtr<AMaterialDescriptor> getDescriptor() const = 0;
 
   protected:
     IMaterial() = default;

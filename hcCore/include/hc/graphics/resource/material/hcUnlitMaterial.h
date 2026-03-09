@@ -50,7 +50,7 @@ namespace hc
     /**
      * @copydoc IMaterial::getDescriptor
      */
-    SharedPtr<MaterialDescriptor> getDescriptor() const override;
+    SharedPtr<AMaterialDescriptor> getDescriptor() const override;
 
     /**
      * @brief Initializes the unlit material with a descriptor and main texture.

@@ -13,7 +13,7 @@ namespace hc
     UniquePtr<IGraphicsManager> Create(
       PluginManager& pluginManager,
       IWindow& window,
-      AssetManager& assetManager
+      IAssetManager& assetManager
     )
     {
       SharedPtr<IPlugin> plugin = pluginManager.getPlugin(

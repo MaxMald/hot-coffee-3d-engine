@@ -15,7 +15,7 @@ namespace hc
   public:
     OpenGlGraphicsManager(
       IWindow& window,
-      AssetManager& assetManager,
+      IAssetManager& assetManager,
       UniquePtr<MaterialFactoriesManager> materialFactoriesManager
     );
     virtual ~OpenGlGraphicsManager();
@@ -56,7 +56,7 @@ namespace hc
     IMeshManager& getMeshManager() override;
 
   private:
-    AssetManager& m_assetManager;
+    IAssetManager& m_assetManager;
     IWindow& m_window;
     TextureManager m_textureManager;
     ShaderManager m_shaderManager;

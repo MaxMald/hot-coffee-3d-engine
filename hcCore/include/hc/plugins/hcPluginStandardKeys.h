@@ -8,6 +8,6 @@ namespace hc
   {
     constexpr const char* WindowPlugin = "WindowPlugin";
     constexpr const char* GraphicsPlugin = "GraphicsPlugin";
-    constexpr const char* AssetLoadersPlugin = "AssetLoadersPlugin";
+    constexpr const char* AssetManagerPlugin = "AssetManagerPlugin";
   }
 }

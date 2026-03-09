@@ -13,7 +13,7 @@ namespace hc
 {
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
-    AssetManager& assetManager,
+    IAssetManager& assetManager,
     UniquePtr<MaterialFactoriesManager> materialFactoriesManager
   ) :
     m_window(window),
