@@ -3,7 +3,7 @@
 
 namespace hc::editor
 {
-  MaterialDescriptorAssetManagerDrawer::MaterialDescriptorAssetManagerDrawer  (
+  MaterialDescriptorAssetManagerDrawer::MaterialDescriptorAssetManagerDrawer(
     IMaterialDescriptorAssetManager& assetManager
   ) :
     AAssetManagerDrawer<AMaterialDescriptor>(assetManager)

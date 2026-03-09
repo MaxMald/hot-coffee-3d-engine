@@ -17,42 +17,62 @@ namespace hc
     const Path& path
   )
   {
-    if (isLoaded(path))
-      return get(path);
-
-    Json json = Json::loadFromFile(path);
-    if (json.isNull())
+    try
     {
-      throw RuntimeErrorException(
+      if (isLoaded(path))
+        return get(path);
+
+      Json json = Json::loadFromFile(path);
+      if (json.isNull())
+        return nullptr;
+
+      String shaderTypeStr = json["shaderType"].getString();
+      shadingType::Type shaderType = shadingType::fromString(shaderTypeStr);
+
+      SharedPtr<AMaterialDescriptor> loadedMaterialDescriptor;
+      switch (shaderType)
+      {
+      case shadingType::Unlit:
+        loadedMaterialDescriptor = deserializeUnlitMaterialDescriptor(path, json);
+        break;
+
+      default:
+        throw InvalidArgumentException(
+          String::Format(
+            "Unsupported shader type '%s' in material descriptor at path: %s",
+            shaderTypeStr.c_str(),
+            path.string().c_str()
+          )
+        );
+      }
+
+      if (!loadedMaterialDescriptor)
+      {
+        LogService::Error(
+          String::Format(
+            "Failed to load material descriptor at path: %s",
+            path.string().c_str()
+          )
+        );
+
+        return nullptr;
+      }
+
+      m_loadedMaterialDescriptors[path] = loadedMaterialDescriptor;
+      return loadedMaterialDescriptor;
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
         String::Format(
-          "Failed to parse JSON for material descriptor at path: %s",
-          path.string().c_str()
+          "Exception occurred while loading material descriptor at path '%s': %s",
+          path.string().c_str(),
+          e.what()
         )
       );
+
+      return nullptr;
     }
-
-    String shaderTypeStr = json["shaderType"].getString();
-    shadingType::Type shaderType = shadingType::fromString(shaderTypeStr);
-
-    SharedPtr<AMaterialDescriptor> loadedMaterialDescriptor;
-    switch (shaderType)
-    {
-    case shadingType::Unlit:
-      loadedMaterialDescriptor = deserializeUnlitMaterialDescriptor(path, json);
-      break;
-
-    default:
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported shader type '%s' in material descriptor at path: %s",
-          shaderTypeStr.c_str(),
-          path.string().c_str()
-        )
-      );
-    }
-
-    m_loadedMaterialDescriptors[path] = loadedMaterialDescriptor;
-    return loadedMaterialDescriptor;
   }
 
   SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::get(
