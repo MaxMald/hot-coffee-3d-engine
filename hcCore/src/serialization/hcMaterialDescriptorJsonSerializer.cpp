@@ -78,7 +78,7 @@ namespace hc
       Color color = jsonParsers::parseColor(json["color"]);
       String mainImagePathStr = json["mainImagePath"].getString();
       Path mainImagePath(mainImagePathStr.c_str());
-      Path path = ""; // TODO should the path be included in the JSON? Or should it be set separately after deserialization?";
+      Path path = "";
 
       return new UnlitMaterialDescriptor(
         path,

@@ -30,6 +30,6 @@ namespace hc
     /**
      * @copydoc IAssetManagerPlugin::createAssetManager
      */
-    UniquePtr<IAssetManager> createAssetManager() const;
+    UniquePtr<IAssetManager> createAssetManager() const override;
   };
 }
