@@ -21,7 +21,7 @@
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/services/hcEditorServiceManager.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetGroupDrawersRegistry.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetManagerDrawersRegistry.h"
 
 namespace hc::editor
 {
@@ -51,7 +51,7 @@ namespace hc::editor
       ));
 
       UniquePtr<AssetManagerWindow> assetManagerWindow = MakeUnique<AssetManagerWindow>();
-      assetGroupDrawersRegistry::registerAssetGroupDrawers(
+      assetManagerDrawersRegistry::registerAssetGroupDrawers(
         *assetManagerWindow,
         hotCoffeeEngine.getAssetManager()
       );

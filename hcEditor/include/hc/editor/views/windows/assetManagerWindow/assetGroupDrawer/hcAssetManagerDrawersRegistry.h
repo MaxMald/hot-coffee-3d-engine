@@ -6,7 +6,7 @@ namespace hc::editor
 {
   class AssetManagerWindow;
 
-  namespace assetGroupDrawersRegistry
+  namespace assetManagerDrawersRegistry
   {
     void registerAssetGroupDrawers(
       AssetManagerWindow& assetManagerWindow,

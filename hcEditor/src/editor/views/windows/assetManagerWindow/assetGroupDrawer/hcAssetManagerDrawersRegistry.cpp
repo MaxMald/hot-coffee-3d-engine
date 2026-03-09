@@ -1,11 +1,11 @@
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetGroupDrawersRegistry.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetManagerDrawersRegistry.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcImageAssetManagerDrawer.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetManagerDrawer.h"
 
 namespace hc::editor
 {
-  namespace assetGroupDrawersRegistry
+  namespace assetManagerDrawersRegistry
   {
     void registerAssetGroupDrawers(
       AssetManagerWindow& assetManagerWindow,
