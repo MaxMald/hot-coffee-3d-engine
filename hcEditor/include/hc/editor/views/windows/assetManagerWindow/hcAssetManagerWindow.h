@@ -4,7 +4,7 @@
 
 namespace hc::editor
 {
-  class IAssetGroupDrawer;
+  class IAssetManagerDrawer;
 
   class AssetManagerWindow : public AWindowView
   {
@@ -12,11 +12,11 @@ namespace hc::editor
     AssetManagerWindow();
     virtual ~AssetManagerWindow();
 
-    void registerAssetGroupDrawer(UniquePtr<IAssetGroupDrawer> drawer);
+    void registerAssetGroupDrawer(UniquePtr<IAssetManagerDrawer> drawer);
     void clear();
 
   private:
-    Vector<UniquePtr<IAssetGroupDrawer>> m_assetGroupDrawers;
+    Vector<UniquePtr<IAssetManagerDrawer>> m_assetGroupDrawers;
     Vector<String> m_allAssetExtensions;
 
     void onDestroy() override;

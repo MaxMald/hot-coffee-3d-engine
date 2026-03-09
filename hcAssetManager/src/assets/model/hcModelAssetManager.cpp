@@ -116,6 +116,20 @@ namespace hc
     m_primitiveModels.clear();
   }
 
+  void ModelAssetManager::getAllLoadedAssets(
+    Vector<SharedPtr<Model>>& outAssets
+  ) const
+  {
+    outAssets.clear();
+    for (const auto& pair : m_loadedModels)
+      outAssets.push_back(pair.second);
+  }
+
+  SizeT ModelAssetManager::size() const
+  {
+    return m_loadedModels.size();
+  }
+
   SharedPtr<Model> ModelAssetManager::getPrimitive(
     primitiveModelType::Type primitiveType
   )

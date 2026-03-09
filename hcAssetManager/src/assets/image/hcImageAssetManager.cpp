@@ -59,6 +59,20 @@ namespace hc
     return m_loadedImages.find(path) != m_loadedImages.end();
   }
 
+  SizeT ImageAssetManager::size() const
+  {
+    return m_loadedImages.size();
+  }
+
+  void ImageAssetManager::getAllLoadedAssets(
+    Vector<SharedPtr<Image>>& outAssets
+  ) const
+  {
+    outAssets.clear();
+    for (const auto& pair : m_loadedImages)
+      outAssets.push_back(pair.second);
+  }
+
   void ImageAssetManager::clear()
   {
     m_loadedImages.clear();

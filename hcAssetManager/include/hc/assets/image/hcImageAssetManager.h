@@ -49,6 +49,21 @@ namespace hc
     bool isLoaded(const Path& path) const override;
 
     /**
+     * Gets the number of images currently loaded in the manager.
+     *
+     * @return The number of loaded images
+     */
+    SizeT size() const override;
+
+    /**
+     * Retrieves all loaded images managed by this asset manager.
+     *
+     * @param outAssets A vector to be populated with shared pointers to all
+     * loaded images. Vector will be cleared before being populated.
+     */
+    void getAllLoadedAssets(Vector<SharedPtr<Image>>& outAssets) const override;
+
+    /**
      * Clears all loaded images from the cache.
      */
     void clear() override;

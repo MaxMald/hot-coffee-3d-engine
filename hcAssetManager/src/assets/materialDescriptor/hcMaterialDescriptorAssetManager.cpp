@@ -81,6 +81,20 @@ namespace hc
     m_loadedMaterialDescriptors.clear();
   }
 
+  void MaterialDescriptorAssetManager::getAllLoadedAssets(
+    Vector<SharedPtr<AMaterialDescriptor>>& outAssets
+  ) const
+  {
+    outAssets.clear();
+    for (const auto& pair : m_loadedMaterialDescriptors)
+      outAssets.push_back(pair.second);
+  }
+
+  SizeT MaterialDescriptorAssetManager::size() const
+  {
+    return m_loadedMaterialDescriptors.size();
+  }
+
   SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::getDefault() const
   {
     return m_defaultMaterialDescriptor;

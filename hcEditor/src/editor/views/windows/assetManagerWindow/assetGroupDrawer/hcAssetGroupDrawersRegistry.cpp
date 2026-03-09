@@ -1,7 +1,7 @@
 #include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcAssetGroupDrawersRegistry.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcImageAssetGroupDrawer.h"
-#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetGroupDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcImageAssetManagerDrawer.h"
+#include "hc/editor/views/windows/assetManagerWindow/assetGroupDrawer/hcMaterialDescriptorAssetManagerDrawer.h"
 
 namespace hc::editor
 {
@@ -9,14 +9,14 @@ namespace hc::editor
   {
     void registerAssetGroupDrawers(
       AssetManagerWindow& assetManagerWindow,
-      AssetManager& assetManager
+      IAssetManager& assetManager
     )
     {
       assetManagerWindow.registerAssetGroupDrawer(
-        MakeUnique<ImageAssetGroupDrawer>(assetManager)
+        MakeUnique<ImageAssetManagerDrawer>(assetManager.getImageAssetManager())
       );
       assetManagerWindow.registerAssetGroupDrawer(
-        MakeUnique<MaterialDescriptorAssetGroupDrawer>(assetManager)
+        MakeUnique<MaterialDescriptorAssetManagerDrawer>(assetManager.getMaterialDescriptorAssetManager())
       );
     }
   }

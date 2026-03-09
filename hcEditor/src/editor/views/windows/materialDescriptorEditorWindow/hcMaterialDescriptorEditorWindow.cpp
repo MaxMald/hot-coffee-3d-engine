@@ -18,7 +18,7 @@ namespace
 namespace hc::editor
 {
   MaterialDescriptorEditorWindow::MaterialDescriptorEditorWindow(
-    AssetManager& assetManager,
+    IAssetManager& assetManager,
     ProjectFileSelectorView& projectFileSelector
   ) :
     AWindowView("Material Descriptor Editor", false),
@@ -40,7 +40,8 @@ namespace hc::editor
     try
     {
       SharedPtr<AMaterialDescriptor> materialDescriptor = m_assetManager
-        .loadDirect<AMaterialDescriptor>(materialDescriptorPath);
+        .getMaterialDescriptorAssetManager()
+        .load(materialDescriptorPath);
 
       if (!materialDescriptor)
         return;

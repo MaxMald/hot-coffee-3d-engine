@@ -54,9 +54,11 @@ namespace hc::editor
 
   void UnlitMaterialDescriptorEditor::save(const Path& path)
   {
-    auto unlitDesc = MakeUnique<UnlitMaterialDescriptor>();
-    unlitDesc->setColor(m_color);
-    unlitDesc->setMainImagePath(m_mainImagePath);
+    auto unlitDesc = MakeUnique<UnlitMaterialDescriptor>(
+      path,
+      m_color,
+      m_mainImagePath
+    );
 
     auto serialized = JsonSerializer::Serialize<AMaterialDescriptor>(unlitDesc.get());
     if (!serialized.has_value())

@@ -49,6 +49,21 @@ namespace hc
     virtual bool isLoaded(const Path& path) const = 0;
 
     /**
+     * Gets the number of assets currently loaded in the manager.
+     *
+     * @return The number of loaded assets
+     */
+    virtual SizeT size() const = 0;
+
+    /**
+     * Retrieves all loaded assets managed by this asset manager.
+     *
+     * @param outAssets A vector to be populated with shared pointers to all
+     * loaded assets. Vector will be cleared before being populated.
+     */
+    virtual void getAllLoadedAssets(Vector<SharedPtr<AssetType>>& outAssets) const = 0;
+
+    /**
      * Clears all loaded assets from the manager.
      */
     virtual void clear() = 0;

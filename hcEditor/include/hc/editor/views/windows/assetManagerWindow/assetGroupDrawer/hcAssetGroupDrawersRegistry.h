@@ -10,7 +10,7 @@ namespace hc::editor
   {
     void registerAssetGroupDrawers(
       AssetManagerWindow& assetManagerWindow,
-      AssetManager& assetManager
+      IAssetManager& assetManager
     );
   }
 }

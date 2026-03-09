@@ -67,6 +67,21 @@ namespace hc
     void clear() override;
 
     /**
+     * Retrieves all loaded models managed by this asset manager.
+     *
+     * @param outAssets A vector to be populated with shared pointers to all
+     * loaded models. Vector will be cleared before being populated.
+     */
+    void getAllLoadedAssets(Vector<SharedPtr<Model>>& outAssets) const override;
+
+    /**
+     * Gets the number of models currently loaded in the manager.
+     *
+     * @return The number of loaded models
+     */
+    SizeT size() const override;
+
+    /**
      * Retrieves a primitive shape model.
      *
      * Generates the primitive on first access and caches it for reuse.

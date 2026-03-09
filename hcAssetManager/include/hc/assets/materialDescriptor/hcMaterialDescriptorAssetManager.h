@@ -56,6 +56,22 @@ namespace hc
     void clear() override;
 
     /**
+     * Retrieves all loaded material descriptors.
+     *
+     * @param outAssets A vector to be populated with shared pointers to all
+     * loaded material descriptors. The vector will be cleared before being
+     * populated.
+     */
+    void getAllLoadedAssets(Vector<SharedPtr<AMaterialDescriptor>>& outAssets) const override;
+
+    /**
+     * Gets the number of material descriptors currently loaded in the manager.
+     *
+     * @return The number of loaded material descriptors
+     */
+    SizeT size() const override;
+
+    /**
      * Retrieves the default material descriptor.
      *
      * @return A shared pointer to the default material descriptor
