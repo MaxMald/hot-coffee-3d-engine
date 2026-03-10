@@ -197,9 +197,14 @@ namespace hc
       m_sceneManager.reset();
     }
 
-    m_graphicsManager->destroy();
-    m_windowManager->destroy();
-    m_assetManager->destroy();
+    if (m_graphicsManager)
+      m_graphicsManager->destroy();
+
+    if (m_windowManager)
+      m_windowManager->destroy();
+
+    if (m_assetManager)
+      m_assetManager->destroy();
 
     m_pluginManager.closeAll();
 

@@ -66,7 +66,5 @@ namespace hc
     {
       return false;
     }
-
-    return false;
   }
 }
