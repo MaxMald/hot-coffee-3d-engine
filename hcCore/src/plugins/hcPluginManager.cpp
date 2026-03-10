@@ -103,17 +103,17 @@ namespace hc
     return m_pluginSlots.find(_key) != m_pluginSlots.end();
   }
 
-  SharedPtr<IPlugin> PluginManager::getPlugin(const String& _key)
+  IPlugin& PluginManager::getPlugin(const String& _key)
   {
     auto it = m_pluginSlots.find(_key);
     if (it == m_pluginSlots.end())
-      return nullptr;
+      throw RuntimeErrorException("Plugin with key '" + _key + "' not found.");
 
     SharedPtr<IPluginSlot> pPluginSlot = it->second;
     if (!pPluginSlot)
-      return nullptr;
+      throw RuntimeErrorException("Plugin slot for key '" + _key + "' is null.");
 
-    return pPluginSlot->getPluginPtr();
+    return pPluginSlot->getPlugin();
   }
 
   const UnorderedMap<String, SharedPtr<IPluginSlot>>& PluginManager::getPluginSlots() const

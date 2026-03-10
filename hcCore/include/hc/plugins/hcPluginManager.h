@@ -70,10 +70,10 @@ namespace hc
      *
      * @param _key Plug-in key.
      *
-     * @return The pointer of the plug-in. This could return a null pointer if
+     * @return The reference of the plug-in. This could throw an exception if
      * the plug-in doesn't exists.
      */
-    SharedPtr<IPlugin> getPlugin(const String& _key);
+    IPlugin& getPlugin(const String& _key);
 
     /**
      * @brief Gets the map of plugin slots.

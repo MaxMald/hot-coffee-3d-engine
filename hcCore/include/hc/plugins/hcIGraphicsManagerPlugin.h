@@ -25,13 +25,19 @@ namespace hc
      * @param materialFactoriesManager Unique pointer to the material factories
      * manager.
      *
-     * @return Unique pointer to the created graphics manager. nullptr if
-     * creation fails.
+     * @return true if the graphics manager was successfully created, false otherwise.
      */
-    virtual UniquePtr<IGraphicsManager> createGraphicsManager(
+    virtual bool createGraphicsManager(
       IWindow& window,
       IAssetManager& assetManager,
       UniquePtr<MaterialFactoriesManager> materialFactoriesManager
-    ) const = 0;
+    ) = 0;
+
+    /**
+     * @brief Retrieves the graphics manager instance created by this plugin.
+     *
+     * @return Reference to the graphics manager instance.
+     */
+    virtual IGraphicsManager& getGraphicsManager() = 0;
   };
 }

@@ -12,7 +12,7 @@
 #include "hc/assets/hcAssetManagerPluginAccessor.h"
 #include "hc/assets/hcIAssetManager.h"
 
-#include "hc/graphics/hcGraphicsManagerFactory.h"
+#include "hc/graphics/hcGraphicsManagerPluginAccessor.h"
 #include "hc/window/hcWindowManagerPluginAccessor.h"
 #include "hc/scene/hcSceneManagerFactory.h"
 
@@ -120,11 +120,11 @@ namespace hc
       m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
 
-      m_graphicsManager = graphicsManagerFactory::Create(
+      m_graphicsManager = &(GraphicsManagerPluginAccessor::CreateAndGet(
         m_pluginManager,
         m_windowManager->getWindow(),
         *m_assetManager
-      );
+      ));
       m_graphicsManager->initialize();
 
       m_inputManager.initialize(*this);
@@ -197,13 +197,13 @@ namespace hc
       m_sceneManager.reset();
     }
 
-    if (m_graphicsManager)
-    {
-      m_graphicsManager->destroy();
-      m_graphicsManager.reset();
-    }
+    m_graphicsManager->destroy();
+    m_windowManager->destroy();
+    m_assetManager->destroy();
 
     m_pluginManager.closeAll();
+
+    m_graphicsManager = nullptr;
     m_assetManager = nullptr;
     m_windowManager = nullptr;
 

@@ -10,19 +10,12 @@ namespace hc
     PluginManager& pluginManager
   )
   {
-    SharedPtr<IPlugin> plugin = pluginManager.getPlugin(
+    IPlugin& plugin = pluginManager.getPlugin(
       pluginStandardKeys::AssetManagerPlugin
     );
 
-    if (!plugin)
-    {
-      throw RuntimeErrorException(
-        "Asset manager plugin not found. Make sure the asset manager plugin is correctly connected."
-      );
-    }
-
-    SharedPtr<IAssetManagerPlugin> assetManagerPlugin =
-      std::reinterpret_pointer_cast<IAssetManagerPlugin>(plugin);
+    IAssetManagerPlugin* assetManagerPlugin =
+      reinterpret_cast<IAssetManagerPlugin*>(&plugin);
 
     if (!assetManagerPlugin)
     {

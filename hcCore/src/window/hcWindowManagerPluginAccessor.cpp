@@ -6,23 +6,16 @@
 
 namespace hc
 {
-  IWindowManager* WindowManagerPluginAccessor::GetWindowManager(
+  IWindowManager& WindowManagerPluginAccessor::GetWindowManager(
     PluginManager& pluginManager
   )
   {
-    SharedPtr<IPlugin> plugin = pluginManager.getPlugin(
+    IPlugin& plugin = pluginManager.getPlugin(
       pluginStandardKeys::WindowPlugin
     );
 
-    if (!plugin)
-    {
-      throw RuntimeErrorException(
-        "Window plugin not found. Make sure the window plugin is correctly connected."
-      );
-    }
-
-    SharedPtr<IWindowManagerPlugin> windowManagerPlugin =
-      std::reinterpret_pointer_cast<IWindowManagerPlugin>(plugin);
+    IWindowManagerPlugin* windowManagerPlugin =
+      reinterpret_cast<IWindowManagerPlugin*>(&plugin);
 
     if (!windowManagerPlugin)
     {
