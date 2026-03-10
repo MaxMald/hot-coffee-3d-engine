@@ -1,9 +1,8 @@
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManagerRegistry.h>
 #include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
-
+#include <hc/graphics/resource/material/hcMaterialFactoriesManagerFactory.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
@@ -13,8 +12,7 @@ namespace hc
 {
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
-    IAssetManager& assetManager,
-    UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+    IAssetManager& assetManager
   ) :
     m_window(window),
     m_assetManager(assetManager),
@@ -33,7 +31,7 @@ namespace hc
       m_assetManager,
       m_textureManager,
       m_shaderProgramManager,
-      std::move(materialFactoriesManager)
+      MaterialFactoriesManagerFactory::Create()
     ),
     m_meshManager(
       m_assetManager,

@@ -1,5 +1,4 @@
 #include "hc/plugins/hcOpenGlGraphicsPlugin.h"
-#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 namespace hc
@@ -45,8 +44,7 @@ namespace hc
 
   bool OpenGlGraphicsPlugin::createGraphicsManager(
     IWindow& window,
-    IAssetManager& assetManager,
-    UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+    IAssetManager& assetManager
   )
   {
     try
@@ -54,12 +52,7 @@ namespace hc
       if (m_graphicsManager)
         return false;
 
-      m_graphicsManager = new OpenGlGraphicsManager(
-        window,
-        assetManager,
-        std::move(materialFactoriesManager)
-      );
-
+      m_graphicsManager = new OpenGlGraphicsManager(window, assetManager);
       return true;
     }
     catch (const Exception&)

@@ -13,7 +13,8 @@ namespace hc
 
   class OpenGlGraphicsManager;
 
-  class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsPlugin : public IGraphicsManagerPlugin
+  class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsPlugin :
+    public IGraphicsManagerPlugin
   {
   public:
     OpenGlGraphicsPlugin();
@@ -23,7 +24,7 @@ namespace hc
      * @copydoc IPlugin::onConnect
      */
     void onConnect() override;
-    
+
     /**
      * @copydoc IPlugin::onClose
      */
@@ -34,8 +35,7 @@ namespace hc
      */
     bool createGraphicsManager(
       IWindow& window,
-      IAssetManager& assetManager,
-      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+      IAssetManager& assetManager
     ) override;
 
     /**
