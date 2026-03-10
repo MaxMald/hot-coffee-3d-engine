@@ -23,9 +23,9 @@ namespace hc
   void PluginManager::initialize()
   {
 #if HC_PLATFORM == HC_PLATFORM_WIN32
-    m_pluginSlotFactory = MakeShared<WindowsPluginSlotFactory>();
+    m_pluginSlotFactory = MakeUnique<WindowsPluginSlotFactory>();
 #elif HC_PLATFORM == HC_PLATFORM_LINUX
-    m_pluginSlotFactory = MakeShared<LinuxPluginSlotFactory>();
+    m_pluginSlotFactory = MakeUnique<LinuxPluginSlotFactory>();
 #endif
   }
 

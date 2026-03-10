@@ -88,7 +88,7 @@ namespace hc
     const UnorderedMap<String, SharedPtr<IPluginSlot>>& getPluginSlots() const;
 
   private:
-    SharedPtr<IPluginSlotFactory> m_pluginSlotFactory;
+    UniquePtr<IPluginSlotFactory> m_pluginSlotFactory;
     UnorderedMap<String, SharedPtr<IPluginSlot>> m_pluginSlots;
   };
 }
