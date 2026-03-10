@@ -63,7 +63,11 @@ namespace hc
     }
 
     dlerror();
-    void* constructorSymbol = dlsym(pluginHandle, constructorFunctionName.c_str());
+    void* constructorSymbol = dlsym(
+      pluginHandle, 
+      constructorFunctionName.c_str()
+    );
+
     const char* constructorError = dlerror();
     if (constructorError != nullptr)
     {
@@ -146,7 +150,6 @@ namespace hc
     LogService::Message("Closing LinuxPluginSlot for key: " + m_key);
 
     m_pluginPtr->onClose();
-    m_pluginPtr = nullptr;
 
     dlerror();
     void* destructorSymbol = dlsym(m_pluginHandler, m_destructorFunctionName.c_str());
@@ -154,7 +157,7 @@ namespace hc
     if (destructorError == nullptr)
     {
       fnDestroyPlugin destructionFunction = reinterpret_cast<fnDestroyPlugin>(destructorSymbol);
-      destructionFunction();
+      destructionFunction(m_pluginPtr);
 
       LogService::Message("Plugin destruction function called for key: " + m_key);
     }
@@ -166,6 +169,7 @@ namespace hc
       );
     }
 
+    m_pluginPtr = nullptr;
     dlclose(m_pluginHandler);
     m_pluginHandler = nullptr;
     m_isConnected = false;
