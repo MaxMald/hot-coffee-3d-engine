@@ -25,7 +25,7 @@ namespace hc
     virtual const String& getLibraryName() const override;
     virtual const String& getConstructorFunctionName() const override;
     virtual const String& getDestructorFunctionName() const override;
-    virtual SharedPtr<IPlugin> getPluginPtr() override;
+    virtual IPlugin& getPlugin() override;
     virtual void close() override;
 
   private:
