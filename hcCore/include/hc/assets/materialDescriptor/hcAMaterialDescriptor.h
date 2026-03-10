@@ -2,6 +2,7 @@
 
 #include "hc/assets/hcAsset.h"
 #include "hc/graphics/resource/material/hcShadingType.h"
+#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
 
 namespace hc
 {
@@ -37,12 +38,34 @@ namespace hc
      */
     virtual void getImagesPaths(Vector<Path>& paths) const = 0;
 
+    /**
+     * Gets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     *
+     * @return The material render mode.
+     */
+    materialRenderMode::Type getRenderMode() const;
+    
+    /**
+     * Sets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     *
+     * @param renderMode The material render mode to set.
+     */
+    void setRenderMode(materialRenderMode::Type renderMode);
+
   protected:
+    materialRenderMode::Type m_renderMode;
+
     /**
      * Constructs a material descriptor with the given asset path.
      *
      * @param path The file path to the material descriptor asset
+     * @param renderMode The material render mode (default is Opaque)
      */
-    AMaterialDescriptor(const Path& path);
+    AMaterialDescriptor(
+      const Path& path,
+      materialRenderMode::Type renderMode = materialRenderMode::Type::Opaque
+    );
   };
 }
