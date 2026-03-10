@@ -3,8 +3,6 @@
 #include "hc/plugins/hcPluginStandardKeys.h"
 #include "hc/plugins/hcIGraphicsManagerPlugin.h"
 #include "hc/graphics/hcIGraphicsManager.h"
-#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
-#include "hc/graphics/resource/material/hcMaterialFactoriesManagerRegistry.h"
 
 namespace hc
 {
@@ -21,17 +19,9 @@ namespace hc
     IGraphicsManagerPlugin* graphicsPlugin =
       static_cast<IGraphicsManagerPlugin*>(&plugin);
 
-    UniquePtr<MaterialFactoriesManager> materialFactoriesManager =
-      MakeUnique<MaterialFactoriesManager>();
-
-    materialFactoriesManagerRegistry::resigtryMaterialFactories(
-      *materialFactoriesManager
-    );
-
     bool result = graphicsPlugin->createGraphicsManager(
       window,
-      assetManager,
-      std::move(materialFactoriesManager)
+      assetManager
     );
 
     if (!result)

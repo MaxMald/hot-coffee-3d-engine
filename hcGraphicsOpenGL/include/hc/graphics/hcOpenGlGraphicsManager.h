@@ -15,8 +15,7 @@ namespace hc
   public:
     OpenGlGraphicsManager(
       IWindow& window,
-      IAssetManager& assetManager,
-      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+      IAssetManager& assetManager
     );
     virtual ~OpenGlGraphicsManager();
 

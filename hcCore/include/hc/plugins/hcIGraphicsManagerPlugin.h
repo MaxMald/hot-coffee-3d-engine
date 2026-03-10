@@ -22,15 +22,12 @@ namespace hc
      *
      * @param window Reference to the window used for graphics initialization.
      * @param assetManager Reference to the asset manager for resource handling.
-     * @param materialFactoriesManager Unique pointer to the material factories
-     * manager.
      *
      * @return true if the graphics manager was successfully created, false otherwise.
      */
     virtual bool createGraphicsManager(
       IWindow& window,
-      IAssetManager& assetManager,
-      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+      IAssetManager& assetManager
     ) = 0;
 
     /**
