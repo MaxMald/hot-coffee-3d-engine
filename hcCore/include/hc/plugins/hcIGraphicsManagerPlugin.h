@@ -7,7 +7,6 @@ namespace hc
   class IGraphicsManager;
   class IWindow;
   class IAssetManager;
-  class MaterialFactoriesManager;
 
   /**
    * @brief Interface for graphics manager plugins.
