@@ -90,6 +90,16 @@ namespace hc
       return false;
     }
 
+    if (!checkLibraryHasDestructorFunction(destructorFunctionName, pluginHandle))
+    {
+      LogService::Error(
+        "Destructor function '" + destructorFunctionName + "' not found in library: " + libraryName
+      );
+
+      FreeLibrary(pluginHandle);
+      return false;
+    }
+
     IPlugin* pluginPtr = constructorFunction();      
     if (pluginPtr == nullptr)
     {
@@ -182,6 +192,18 @@ namespace hc
     m_isConnected = false;
 
     LogService::Message("WindowsPluginSlot closed for key: " + m_key);
+  }
+
+  bool WindowsPluginSlot::checkLibraryHasDestructorFunction(
+    const String& destructorFunctionName,
+    HINSTANCE pluginHandle
+  ) const
+  {
+    FARPROC proc = GetProcAddress(
+      pluginHandle,
+      destructorFunctionName.c_str()
+    );
+    return proc != NULL;
   }
 }
 

@@ -80,6 +80,17 @@ namespace hc
       return false;
     }
 
+    if (!checkLibraryHasDestructorFunction(destructorFunctionName, pluginHandle))
+    {
+      LogService::Error(
+        "Destructor function '" + destructorFunctionName + "' not found in library: " + libraryName +
+        ". The plugin will be loaded, but may not be properly cleaned up when closed."
+      );
+
+      dlclose(pluginHandle);
+      return false;
+    }
+
     fnCreatePlugin constructorFunction = reinterpret_cast<fnCreatePlugin>(constructorSymbol);
     IPlugin* pluginPtr = constructorFunction();
 
@@ -175,6 +186,17 @@ namespace hc
     m_isConnected = false;
 
     LogService::Message("LinuxPluginSlot closed for key: " + m_key);
+  }
+
+  bool LinuxPluginSlot::checkLibraryHasDestructorFunction(
+    const String& destructorFunctionName,
+    void* pluginHandle
+  ) const
+  {
+    dlerror();
+    void* destructorSymbol = dlsym(pluginHandle, destructorFunctionName.c_str());
+    const char* error = dlerror();
+    return (error == nullptr);
   }
 }
 
