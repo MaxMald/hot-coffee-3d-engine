@@ -9,7 +9,13 @@ namespace hc
   class IPluginSlotFactory;
 
   /**
-   * Manages the lifecycle and dependencies of plugins within the system.
+   * Central manager for dynamically loading, connecting, and unloading
+   * plugin modules.
+   *
+   * This class provides platform-independent plugin management by using
+   * plugin slots to handle the platform-specific details of dynamic library
+   * loading. Each plugin is identified by a unique key and must provide
+   * factory functions for instantiation and destruction.
    */
   class HC_CORE_EXPORT PluginManager : public NonCopyable
   {
@@ -20,7 +26,7 @@ namespace hc
     /**
      * Initializes the PluginManager.
      */
-    void init();
+    void initialize();
 
     /**
      * Attempts to connect to the specified plug-in.
@@ -65,13 +71,14 @@ namespace hc
     bool hasPlugin(const String& _key);
 
     /**
-     * Get the plug-in with the given key. A null pointer will be returned if
-     * the plug-in doesn't exists.
+     * Retrieves a reference to the plugin with the specified key.
      *
-     * @param _key Plug-in key.
+     * @param _key The unique identifier of the plugin to retrieve.
      *
-     * @return The reference of the plug-in. This could throw an exception if
-     * the plug-in doesn't exists.
+     * @return A reference to the IPlugin instance.
+     *
+     * @throws RuntimeErrorException if no plugin with the given key exists or
+     * if the plugin slot is null.
      */
     IPlugin& getPlugin(const String& _key);
 

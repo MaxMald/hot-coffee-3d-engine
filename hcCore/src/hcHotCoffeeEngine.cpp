@@ -215,7 +215,7 @@ namespace hc
 
   void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
   {
-    m_pluginManager.init();
+    m_pluginManager.initialize();
     pluginConnectionHelper::connectToPluginsFromSettings(
       m_pluginManager,
       settings
