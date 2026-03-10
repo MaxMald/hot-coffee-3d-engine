@@ -19,14 +19,7 @@ namespace hc
     );
 
     IGraphicsManagerPlugin* graphicsPlugin =
-      reinterpret_cast<IGraphicsManagerPlugin*>(&plugin);
-
-    if (!graphicsPlugin)
-    {
-      throw RuntimeErrorException(
-        "Failed to cast plugin to IGraphicsManagerPlugin. Make sure the graphics plugin implements IGraphicsManagerPlugin."
-      );
-    }
+      static_cast<IGraphicsManagerPlugin*>(&plugin);
 
     UniquePtr<MaterialFactoriesManager> materialFactoriesManager =
       MakeUnique<MaterialFactoriesManager>();

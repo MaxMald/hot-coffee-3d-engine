@@ -15,14 +15,7 @@ namespace hc
     );
 
     IAssetManagerPlugin* assetManagerPlugin =
-      reinterpret_cast<IAssetManagerPlugin*>(&plugin);
-
-    if (!assetManagerPlugin)
-    {
-      throw RuntimeErrorException(
-        "The connected asset manager plugin does not implement the IAssetManagerPlugin interface."
-      );
-    }
+      static_cast<IAssetManagerPlugin*>(&plugin);
 
     return assetManagerPlugin->getAssetManager();
   }

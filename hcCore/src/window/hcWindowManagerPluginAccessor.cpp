@@ -15,14 +15,7 @@ namespace hc
     );
 
     IWindowManagerPlugin* windowManagerPlugin =
-      reinterpret_cast<IWindowManagerPlugin*>(&plugin);
-
-    if (!windowManagerPlugin)
-    {
-      throw RuntimeErrorException(
-        "The connected window manager plugin does not implement the IWindowManagerPlugin interface."
-      );
-    }
+      static_cast<IWindowManagerPlugin*>(&plugin);
 
     return windowManagerPlugin->getWindowManager();
   }
