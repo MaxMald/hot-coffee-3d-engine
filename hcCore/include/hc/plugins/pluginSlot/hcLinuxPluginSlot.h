@@ -57,7 +57,7 @@ namespace hc
     /**
     * Pointer of the Plug-in interface.
     */
-    SharedPtr<IPlugin> m_pluginPtr;
+    IPlugin* m_pluginPtr;
 
     /**
     * Indicates if the plug-in slot is connected.

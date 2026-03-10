@@ -9,7 +9,7 @@
 namespace hc
 {
   typedef IPlugin* (*fnCreatePlugin)(void);
-  typedef void (*fnDestroyPlugin)(void);
+  typedef void (*fnDestroyPlugin)(IPlugin*);
 
   LinuxPluginSlot::LinuxPluginSlot()
     : m_pluginHandler(nullptr),
@@ -77,7 +77,7 @@ namespace hc
     }
 
     fnCreatePlugin constructorFunction = reinterpret_cast<fnCreatePlugin>(constructorSymbol);
-    SharedPtr<IPlugin> pluginPtr = SharedPtr<IPlugin>(constructorFunction());
+    IPlugin* pluginPtr = constructorFunction();
 
     if (pluginPtr == nullptr)
     {
@@ -124,9 +124,12 @@ namespace hc
     return m_destructorFunctionName;
   }
 
-  SharedPtr<IPlugin> LinuxPluginSlot::getPluginPtr()
+  IPlugin& LinuxPluginSlot::getPlugin()
   {
-    return m_pluginPtr;
+    if (m_pluginPtr == nullptr)
+      throw RuntimeErrorException("Plugin slot is not connected.");
+
+    return *m_pluginPtr;
   }
 
   void LinuxPluginSlot::close()
