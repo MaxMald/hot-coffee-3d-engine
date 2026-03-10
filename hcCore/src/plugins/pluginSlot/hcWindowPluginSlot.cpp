@@ -7,7 +7,7 @@
 namespace hc
 {
   typedef IPlugin* (*fnCreatePlugin)(void);
-  typedef void (*fnDestroyPlugin)(void);
+  typedef void (*fnDestroyPlugin)(IPlugin*);
 
   WindowsPluginSlot::WindowsPluginSlot() :
     m_pluginHandler(nullptr),
@@ -80,10 +80,27 @@ namespace hc
     }
 
     fnCreatePlugin constructorFunction = reinterpret_cast<fnCreatePlugin>(proc);
-    SharedPtr<IPlugin> pluginPtr = SharedPtr<IPlugin>(
-      constructorFunction()
-    );
-      
+    if (constructorFunction == nullptr)
+    {
+      LogService::Error(
+        "Failed to cast constructor function '" + constructorFunctionName + "' in library: " + libraryName
+      );
+
+      FreeLibrary(pluginHandle);
+      return false;
+    }
+
+    if (!checkLibraryHasDestructorFunction(destructorFunctionName, pluginHandle))
+    {
+      LogService::Error(
+        "Destructor function '" + destructorFunctionName + "' not found in library: " + libraryName
+      );
+
+      FreeLibrary(pluginHandle);
+      return false;
+    }
+
+    IPlugin* pluginPtr = constructorFunction();      
     if (pluginPtr == nullptr)
     {
       LogService::Error(
@@ -129,9 +146,12 @@ namespace hc
     return m_destructorFunctionName;
   }
 
-  SharedPtr<IPlugin> WindowsPluginSlot::getPluginPtr()
+  IPlugin& WindowsPluginSlot::getPlugin()
   {
-    return m_pluginPtr;
+    if (m_pluginPtr == nullptr)
+      throw RuntimeErrorException("Plugin slot is not connected.");
+
+    return *m_pluginPtr;
   }
 
   void WindowsPluginSlot::close()
@@ -147,33 +167,43 @@ namespace hc
 
     LogService::Message("Closing WindowsPluginSlot for key: " + m_key);
 
-    m_pluginPtr->onClose();
-    m_pluginPtr = nullptr;
-
-    FARPROC proc = GetProcAddress
-    (
+    FARPROC proc = GetProcAddress(
       m_pluginHandler,
       m_destructorFunctionName.c_str()
     );
 
-    if (proc != NULL)
+    if (proc == NULL)
     {
-      fnDestroyPlugin destructionFunction = reinterpret_cast<fnDestroyPlugin>(proc);
-      destructionFunction();
-
-      LogService::Message("Plugin destruction function called for key: " + m_key);
-    }
-    else
-    {
-      LogService::Warning(
+      LogService::Error(
         "Destructor function '" + m_destructorFunctionName + "' not found in library: " + m_libraryName
       );
     }
+    else
+    {
+      fnDestroyPlugin destructionFunction = reinterpret_cast<fnDestroyPlugin>(proc);
+      m_pluginPtr->onClose();
+      destructionFunction(m_pluginPtr);
+      LogService::Message("Plugin destruction function called for key: " + m_key);
+    }
+    
+    m_pluginPtr = nullptr;
 
     FreeLibrary(m_pluginHandler);
     m_isConnected = false;
 
     LogService::Message("WindowsPluginSlot closed for key: " + m_key);
+  }
+
+  bool WindowsPluginSlot::checkLibraryHasDestructorFunction(
+    const String& destructorFunctionName,
+    HINSTANCE pluginHandle
+  ) const
+  {
+    FARPROC proc = GetProcAddress(
+      pluginHandle,
+      destructorFunctionName.c_str()
+    );
+    return proc != NULL;
   }
 }
 

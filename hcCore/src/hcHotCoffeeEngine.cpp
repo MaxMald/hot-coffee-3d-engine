@@ -9,11 +9,11 @@
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/scene/hcSceneManager.h"
 #include "hc/hcIEventListener.h"
-#include "hc/assets/hcAssetManagerFactory.h"
+#include "hc/assets/hcAssetManagerPluginAccessor.h"
 #include "hc/assets/hcIAssetManager.h"
 
-#include "hc/graphics/hcGraphicsManagerFactory.h"
-#include "hc/window/hcWindowManagerFactory.h"
+#include "hc/graphics/hcGraphicsManagerPluginAccessor.h"
+#include "hc/window/hcWindowManagerPluginAccessor.h"
 #include "hc/scene/hcSceneManagerFactory.h"
 
 namespace hc
@@ -116,16 +116,15 @@ namespace hc
       connectToPlugins(settings.pluginManagerSettings);
 
       m_sceneManager = SceneManagerFactory::create();      
-      m_assetManager = AssetManagerFactory::Create(m_pluginManager);
-
-      m_windowManager = windowManagerFactory::Create(m_pluginManager);
+      m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
+      m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
 
-      m_graphicsManager = graphicsManagerFactory::Create(
+      m_graphicsManager = &(GraphicsManagerPluginAccessor::CreateAndGet(
         m_pluginManager,
         m_windowManager->getWindow(),
         *m_assetManager
-      );
+      ));
       m_graphicsManager->initialize();
 
       m_inputManager.initialize(*this);
@@ -199,24 +198,19 @@ namespace hc
     }
 
     if (m_graphicsManager)
-    {
       m_graphicsManager->destroy();
-      m_graphicsManager.reset();
-    }
 
     if (m_windowManager)
-    {
       m_windowManager->destroy();
-      m_windowManager.reset();
-    }
 
     if (m_assetManager)
-    {
       m_assetManager->destroy();
-      m_assetManager.reset();
-    }
 
     m_pluginManager.closeAll();
+
+    m_graphicsManager = nullptr;
+    m_assetManager = nullptr;
+    m_windowManager = nullptr;
 
     JsonSerializer::Shutdown();
     LogService::Shutdown();
@@ -226,7 +220,7 @@ namespace hc
 
   void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
   {
-    m_pluginManager.init();
+    m_pluginManager.initialize();
     pluginConnectionHelper::connectToPluginsFromSettings(
       m_pluginManager,
       settings

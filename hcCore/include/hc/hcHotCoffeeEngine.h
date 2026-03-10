@@ -37,10 +37,10 @@ namespace hc
     void destroy();
 
   private:
-    UniquePtr<IGraphicsManager> m_graphicsManager;
-    UniquePtr<IWindowManager> m_windowManager;
+    IGraphicsManager* m_graphicsManager;
+    IWindowManager* m_windowManager;
+    IAssetManager* m_assetManager;
     UniquePtr<SceneManager> m_sceneManager;
-    UniquePtr<IAssetManager> m_assetManager;
     PluginManager m_pluginManager;
     InputManager m_inputManager;
     Clock m_frameClock;
