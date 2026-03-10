@@ -1,5 +1,4 @@
 #include "hc/plugins/hcOpenGlGraphicsPlugin.h"
-
 #include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
@@ -28,6 +27,7 @@ namespace hc
   {
     if (m_graphicsManager)
     {
+      m_graphicsManager->destroy();
       delete m_graphicsManager;
       m_graphicsManager = nullptr;
     }

@@ -73,5 +73,7 @@ namespace hc
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
+
+    friend class OpenGlGraphicsPlugin;
   };
 }

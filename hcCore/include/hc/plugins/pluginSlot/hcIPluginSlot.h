@@ -69,7 +69,7 @@ namespace hc
     /**
     * Get the wrapped plug-in.
     *
-    * @return The the wrapped plug-in.
+    * @return The wrapped plug-in.
     */
     virtual IPlugin& getPlugin() = 0;
 

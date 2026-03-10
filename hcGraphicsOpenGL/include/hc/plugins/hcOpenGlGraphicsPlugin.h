@@ -11,6 +11,8 @@ namespace hc
     HC_GRAPHICS_OPENGL_EXPORT void destroyGraphicsOpenGLPlugin(IPlugin* plugin);
   }
 
+  class OpenGlGraphicsManager;
+
   class HC_GRAPHICS_OPENGL_EXPORT OpenGlGraphicsPlugin : public IGraphicsManagerPlugin
   {
   public:
@@ -42,6 +44,6 @@ namespace hc
     IGraphicsManager& getGraphicsManager() override;
 
   private:
-    IGraphicsManager* m_graphicsManager;
+    OpenGlGraphicsManager* m_graphicsManager;
   };
 }
