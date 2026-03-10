@@ -1,6 +1,7 @@
 #include "hc/window/hcSfmlWindow.h"
 
 #include <SFML/Window.hpp>
+#include <SFML/Window/ContextSettings.hpp>
 
 namespace hc
 {
@@ -26,10 +27,17 @@ namespace hc
       }
     );
 
+    const sf::ContextSettings contextSettings{
+      .depthBits = 24,
+      .stencilBits = 8
+    };
+
     m_sfmlWindow = MakeShared<sf::Window>(
       videoMode,
       settings.title.c_str(),
-      sf::Style::Default
+      sf::Style::Default,
+      sf::State::Windowed,
+      contextSettings
     );
 
     m_sfmlWindow->setPosition(
