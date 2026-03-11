@@ -14,7 +14,8 @@ namespace hc
      */
     enum class Type : UInt8
     {
-      Opaque = 0,
+      Background = 0,
+      Opaque,
       Transparent
     };
 
