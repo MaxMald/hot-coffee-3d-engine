@@ -8,6 +8,8 @@ namespace hc
     {
       switch (renderMode)
       {
+        case Type::Background:
+          return "Background";
         case Type::Opaque:
           return "Opaque";
         case Type::Transparent:
@@ -19,7 +21,9 @@ namespace hc
 
     Type fromString(const String& str)
     {
-      if (str == "Opaque")
+      if (str == "Background")
+        return Type::Background;
+      else if (str == "Opaque")
         return Type::Opaque;
       else if (str == "Transparent")
         return Type::Transparent;
