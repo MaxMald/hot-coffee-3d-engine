@@ -38,6 +38,23 @@ namespace hc
     return shadingType::Unlit;
   }
 
+  materialRenderMode::Type UnlitMaterial::getRenderMode() const
+  {
+    if (m_descriptor)
+      return m_descriptor->getRenderMode();
+    else
+    {
+      throw RuntimeErrorException(
+        "UnlitMaterial::getRenderMode - Material descriptor is not set."
+      );
+    }
+  }
+
+  bool UnlitMaterial::isTransparent() const
+  {
+    return getRenderMode() == materialRenderMode::Type::Transparent;
+  }
+
   void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
   {
     if (!m_shaderProgram)

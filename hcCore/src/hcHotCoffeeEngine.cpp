@@ -8,7 +8,7 @@
 #include "hc/window/hcIWindow.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/scene/hcSceneManager.h"
-#include "hc/hcIEventListener.h"
+#include "hc/hcIGameLoopListener.h"
 #include "hc/assets/hcAssetManagerPluginAccessor.h"
 #include "hc/assets/hcIAssetManager.h"
 
@@ -81,14 +81,14 @@ namespace hc
     return m_initialized;
   }
 
-  void HotCoffeeEngine::addEventListener(IEventListener* listener)
+  void HotCoffeeEngine::addGameLoopListener(IGameLoopListener* listener)
   {
     if (!listener)
       throw InvalidArgumentException("Event listener pointer cannot be null.");
     m_eventListeners.push_back(listener);
   }
 
-  void HotCoffeeEngine::removeEventListener(IEventListener* listener)
+  void HotCoffeeEngine::removeGameLoopListener(IGameLoopListener* listener)
   {
     if (!listener)
       return;
@@ -127,7 +127,7 @@ namespace hc
       ));
       m_graphicsManager->initialize();
 
-      m_inputManager.initialize(*this);
+      m_inputManager.initialize();
     }
     catch (const std::exception& e)
     {
@@ -171,17 +171,22 @@ namespace hc
           return;
         }
 
-        for (IEventListener* listener : m_eventListeners)
-        {
+        if (m_inputManager.onEvent(*eventOpt))
+          break;
+
+        for (IGameLoopListener* listener : m_eventListeners)
           if (listener->onEvent(*eventOpt))
             break;
-        }
       }
 
       m_sceneManager->update(m_frameClock.getElapsedTime());
       m_graphicsManager->beginFrame();
       m_sceneManager->draw();
       m_graphicsManager->executeDrawCommands();
+
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onAfterSceneRender();
+
       m_graphicsManager->endFrame(window);
       m_frameClock.restart();
     }
@@ -190,7 +195,7 @@ namespace hc
   void HotCoffeeEngine::destroy()
   {
     m_frameClock.stop();
-    m_inputManager.destroy(*this);
+    m_inputManager.destroy();
 
     if (m_sceneManager)
     {

@@ -7,18 +7,13 @@ namespace hc
   class HotCoffeeEngine;
   class Event;
 
-  /**
-   * @brief Interface for objects that want to receive and handle events.
-   *
-   * Implement this interface to receive event notifications from the engine.
-   */
-  class HC_CORE_EXPORT IEventListener
+  class HC_CORE_EXPORT IGameLoopListener
   {
   public:
-    virtual ~IEventListener() = default;
+    virtual ~IGameLoopListener() = default;
 
   protected:
-    IEventListener() = default;
+    IGameLoopListener() = default;
 
     /**
      * @brief Called when an event is dispatched to this listener.
@@ -29,6 +24,13 @@ namespace hc
      * further, false to allow other listeners to process it.
      */
     virtual bool onEvent(const Event& event) = 0;
+
+    /**
+     * @brief Called after the scene is rendered in each frame.
+      *
+      * Override this method to perform custom logic after the scene has been rendered.
+     */
+    virtual void onAfterSceneRender() = 0;
 
     friend class HotCoffeeEngine;
   };

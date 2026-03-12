@@ -44,6 +44,16 @@ namespace hc
     shadingType::Type getShaderType() const override;
 
     /**
+     * @copydoc IMaterial::getRenderMode
+     */
+    materialRenderMode::Type getRenderMode() const override;
+
+    /**
+     * @copydoc IMaterial::isTransparent
+     */
+    bool isTransparent() const override;
+
+    /**
      * @copydoc IMaterial::bind
      */
     void bind(const CameraMatrices& cameraMatrices) override;

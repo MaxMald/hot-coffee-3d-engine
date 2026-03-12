@@ -48,7 +48,7 @@
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 #include "hc/inputManager/hcInputManager.h"
-#include "hc/hcIEventListener.h"
+#include "hc/hcIGameLoopListener.h"
 
 // GameObject Components
 

@@ -110,6 +110,8 @@ namespace hc
     }
 
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -163,6 +165,10 @@ namespace hc
     command.material->bind(command.cameraMatrices);
     command.material->updateModelMatrix(command.modelMatrix);
 
+    bool isTransparent = command.material->isTransparent();
+    if (isTransparent)
+      glDepthMask(GL_FALSE);
+
     glDrawElements(
       GL_TRIANGLES,
       static_cast<GLsizei>(command.indexCount),
@@ -170,6 +176,10 @@ namespace hc
       reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
     );
 
+    if (isTransparent)
+      glDepthMask(GL_TRUE);
+
+    command.material->unbind();
     glBindVertexArray(0);
   }
 }

@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/material/hcShadingType.h"
+#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
@@ -30,6 +31,21 @@ namespace hc
      * @return The shader type.
      */
     virtual shadingType::Type getShaderType() const = 0;
+
+    /**
+     * @brief Gets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     * 
+     * @return The material render mode.
+     */
+    virtual materialRenderMode::Type getRenderMode() const = 0;
+
+    /**
+     * @brief Determines if the material is transparent based on its render mode.
+     * 
+     * @return True if the material is transparent, false otherwise.
+     */
+    virtual bool isTransparent() const = 0;
 
     /**
      * @brief Binds the material for rendering.

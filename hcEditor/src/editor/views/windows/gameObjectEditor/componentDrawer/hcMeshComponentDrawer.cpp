@@ -24,6 +24,20 @@ namespace hc::editor
       return;
 
     drawLoadMeshButton(component);
+
+    ImGui::SameLine();
+    SharedPtr<IMesh> mesh = component->getMesh();
+    if (!mesh)
+    {
+      ImGui::Text("No mesh loaded");
+      return;
+    }
+    else
+    {
+      ImGui::Text("Mesh ID: %s", mesh->getId().toString().c_str());
+    }
+
+    drawMaterialsInformation(mesh->getMaterials());
   }
 
   void MeshComponentDrawer::drawLoadMeshButton(MeshComponent* component)
@@ -37,17 +51,48 @@ namespace hc::editor
         }
       );
     }
-    ImGui::SameLine();
-    SharedPtr<IMesh> mesh = component->getMesh();
-    if (!mesh)
+  }
+
+  void MeshComponentDrawer::drawMaterialsInformation(const Vector<SharedPtr<IMaterial>>& materials)
+  {
+    if (ImGui::TreeNode("Materials Information"))
     {
-      ImGui::Text("No mesh loaded");
+      for (Int32 i = 0; i < materials.size(); ++i)
+      {
+        SharedPtr<IMaterial> material = materials[i];
+        if (!material)
+          continue;
+
+        String label = String::Format("Material Slot %u", i);
+        if (ImGui::TreeNode(label.c_str()))
+        {
+          drawMaterialInformation(material);
+          ImGui::TreePop();
+        }
+      }
+      ImGui::TreePop();
+    }
+  }
+
+  void MeshComponentDrawer::drawMaterialInformation(const SharedPtr<IMaterial>& material)
+  {
+    if (!material)
       return;
-    }
-    else
-    {
-      ImGui::Text("Mesh ID: %s", mesh->getId().toString().c_str());
-    }
+
+    ImGui::Text("Asset Id: %u", material->getId().value());
+    ImGui::Text("Material ID: %d", material->getMaterialId());
+    ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
+
+    SharedPtr<AMaterialDescriptor> descriptor = material->getDescriptor();
+    if (!descriptor)
+      return;
+
+    materialRenderMode::Type currentRenderMode = descriptor->getRenderMode();
+    const char* renderModeOptions[] = { "Background", "Opaque", "Transparent" };
+    int currentItem = static_cast<int>(currentRenderMode);
+
+    if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 3))
+      descriptor->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
   }
 
   void MeshComponentDrawer::onMeshFileSelected(
