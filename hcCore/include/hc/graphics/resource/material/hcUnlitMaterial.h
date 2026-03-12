@@ -14,13 +14,24 @@ namespace hc
   class HC_CORE_EXPORT UnlitMaterial : public IMaterial
   {
   public:
-    UnlitMaterial();
+    /**
+     * @brief Constructs an unlit material with the specified material ID.
+     *
+     * @param materialId The unique identifier for this material, used for sorting and
+     * batching.
+     */
+    UnlitMaterial(UInt16 materialId);
     ~UnlitMaterial() override;
 
     /**
      * @copydoc IMaterial::getId
      */
     const Id& getId() const override;
+
+    /**
+     * @copydoc IMaterial::getMaterialId
+     */
+    UInt16 getMaterialId() const override;
 
     /**
      * @copydoc IMaterial::destroy
@@ -80,6 +91,7 @@ namespace hc
 
   private:
     Id m_id;
+    UInt16 m_materialId;
     SharedPtr<UnlitMaterialDescriptor> m_descriptor;
     SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;

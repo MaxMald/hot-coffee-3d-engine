@@ -1,4 +1,5 @@
 #include "hc/scene/gameObject/components/hcMeshComponent.h"
+#include "hc/scene/gameObject/hcGameObject.h"
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 
 namespace hc
@@ -14,8 +15,10 @@ namespace hc
 
   void MeshComponent::draw(const RenderContext& renderContext)
   {
-    if (m_mesh)
-      m_mesh->draw(renderContext);
+    if (!m_mesh)
+      return;
+
+    m_mesh->draw(renderContext);
   }
 
   void MeshComponent::setMesh(SharedPtr<IMesh> mesh)

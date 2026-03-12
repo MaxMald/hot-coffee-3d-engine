@@ -168,15 +168,18 @@ namespace hc
     {
       renderContext.cameraMatrices.viewMatrix = activeCamera->getViewMatrix();
       renderContext.cameraMatrices.projectionMatrix = activeCamera->getProjectionMatrix();
+      renderContext.cameraPosition = activeCamera->getPosition();
     }
     else
     {
       Camera& defaultCamera = m_cameraManager.getDefaultCamera();
       renderContext.cameraMatrices.viewMatrix = defaultCamera.getViewMatrix();
       renderContext.cameraMatrices.projectionMatrix = defaultCamera.getProjectionMatrix();
+      renderContext.cameraPosition = defaultCamera.getPosition();
     }
 
     renderContext.transform = Matrix4::Identity();
+    renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
 
     onBeforeDraw(renderContext);
     m_sceneGraph.draw(renderContext);

@@ -18,6 +18,13 @@ namespace hc
     virtual ~IMaterial() = default;
 
     /**
+     * @brief Gets the unique identifier of the material.
+     * 
+     * @return Reference to the material's Id.
+     */
+    virtual UInt16 getMaterialId() const = 0;
+
+    /**
      * @brief Gets the shader type associated with this material.
      * 
      * @return The shader type.

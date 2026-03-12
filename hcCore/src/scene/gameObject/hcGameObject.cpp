@@ -27,6 +27,11 @@ namespace hc
   {
     RenderContext localRenderContext = renderContext;
     localRenderContext.transform *= getMatrix();
+    localRenderContext.modelPosition = Vector3f(
+      localRenderContext.transform.m03,
+      localRenderContext.transform.m13,
+      localRenderContext.transform.m23
+    );
 
     for (IDrawable* drawableComponent : m_drawableComponents)
     {

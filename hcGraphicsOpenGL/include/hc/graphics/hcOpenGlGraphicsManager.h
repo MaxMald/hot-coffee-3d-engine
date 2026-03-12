@@ -25,9 +25,19 @@ namespace hc
     void beginFrame() override;
 
     /**
+     * @copydoc IGraphicsManager::draw
+     */
+    void draw(const DrawCommand& command) override;
+
+    /**
+     * @copydoc IGraphicsManager::executeDrawCommands
+     */
+    void executeDrawCommands() override;
+
+    /**
      * @copydoc IGraphicsManager::endFrame
      */
-    void endFrame(IWindow&) override; 
+    void endFrame(IWindow&) override;
 
     /**
      * @copydoc IGraphicsManager::getTextureManager
@@ -62,6 +72,7 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
+    Vector<DrawCommand> m_drawCommands;
 
     /**
      * @copydoc IGraphicsManager::initialize
@@ -72,6 +83,8 @@ namespace hc
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
+
+    void executeDrawCommand(const DrawCommand& command);
 
     friend class OpenGlGraphicsPlugin;
   };

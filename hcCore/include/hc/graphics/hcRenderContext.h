@@ -15,8 +15,18 @@ namespace hc
     CameraMatrices cameraMatrices;
 
     /**
+     * @brief The position of the camera in world space.
+     */
+    Vector3f cameraPosition;
+
+    /**
      * @brief The transform matrix for the rendered object.
      */
-    Matrix4 transform;
+    Matrix4 transform = Matrix4::Identity();
+
+    /**
+     * @brief The position of the model in world space, extracted from the transform.
+     */
+    Vector3f modelPosition;
   };
 }

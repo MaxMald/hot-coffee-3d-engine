@@ -8,6 +8,8 @@
 
 namespace hc
 {
+  UInt16 MaterialManager::s_nextMaterialId = 0;
+
   MaterialManager::MaterialManager(
     IAssetManager& assetManager,
     ITextureManager& textureManager,
@@ -78,8 +80,12 @@ namespace hc
       return nullptr;
     }
 
-    IMaterialFactory& materialFactor = m_materialFactoriesManager->getFactory(descriptor->getShaderType());
+    IMaterialFactory& materialFactor = m_materialFactoriesManager->getFactory(
+      descriptor->getShaderType()
+    );
+
     SharedPtr<IMaterial> material = materialFactor.create(
+      s_nextMaterialId++,
       descriptor,
       m_textureManager,
       m_shaderProgramManager

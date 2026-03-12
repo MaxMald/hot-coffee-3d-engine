@@ -62,6 +62,11 @@ namespace hc
     void clear();
 
   private:
+    /**
+     * @brief Static counter for generating unique material IDs.
+     */
+    static UInt16 s_nextMaterialId;
+
     UniquePtr<MaterialFactoriesManager> m_materialFactoriesManager;
     IAssetManager& m_assetManager;
     IShaderProgramManager& m_shaderProgramManager;

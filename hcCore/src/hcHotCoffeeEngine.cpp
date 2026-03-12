@@ -181,6 +181,7 @@ namespace hc
       m_sceneManager->update(m_frameClock.getElapsedTime());
       m_graphicsManager->beginFrame();
       m_sceneManager->draw();
+      m_graphicsManager->executeDrawCommands();
       m_graphicsManager->endFrame(window);
       m_frameClock.restart();
     }

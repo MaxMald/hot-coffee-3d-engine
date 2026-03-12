@@ -46,6 +46,7 @@
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/hcRenderContext.h"
+#include "hc/graphics/hcDrawCommand.h"
 #include "hc/inputManager/hcInputManager.h"
 #include "hc/hcIEventListener.h"
 

@@ -6,8 +6,9 @@
 
 namespace hc
 {
-  UnlitMaterial::UnlitMaterial() :
-    m_id(Id::Create())
+  UnlitMaterial::UnlitMaterial(UInt16 materialId) :
+    m_id(Id::Create()),
+    m_materialId(materialId)
   {
   }
 
@@ -18,6 +19,11 @@ namespace hc
   const Id& UnlitMaterial::getId() const
   {
     return m_id;
+  }
+
+  UInt16 UnlitMaterial::getMaterialId() const
+  {
+    return m_materialId;
   }
 
   void UnlitMaterial::destroy()
