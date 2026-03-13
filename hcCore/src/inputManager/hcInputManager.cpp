@@ -109,10 +109,8 @@ namespace hc
     return false;
   }
 
-  void InputManager::initialize(HotCoffeeEngine& engine)
+  void InputManager::initialize()
   {
-    engine.addEventListener(this);
-
     Int8 keyboardKeyCount = static_cast<Int8>(keyboardKey::Type::Count);
     for (Int8 keyCode = 0; keyCode < keyboardKeyCount; ++keyCode)
       m_keyboardKeyStates[keyCode] = MakeUnique<KeyState>(keyCode);
@@ -125,10 +123,9 @@ namespace hc
     }
   }
 
-  void InputManager::destroy(HotCoffeeEngine& engine)
+  void InputManager::destroy()
   {
     m_keyboardKeyStates.clear();
     m_mouseButtonKeyStates.clear();
-    engine.removeEventListener(this);
   }
 }

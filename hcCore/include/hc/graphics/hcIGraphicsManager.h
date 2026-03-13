@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/window/hcIWindow.h"
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/hcDrawCommand.h"
 
 namespace hc
 {
@@ -30,6 +31,18 @@ namespace hc
      * @brief Begins a new rendering frame.
      */
     virtual void beginFrame() = 0;
+
+    /**
+     * @brief Issues a draw command to render graphics for the current frame.
+     *
+     * @param command The draw command containing rendering instructions.
+     */
+    virtual void draw(const DrawCommand& command) = 0;
+
+    /**
+     * @brief Executes all issued draw commands for the current frame.
+     */
+    virtual void executeDrawCommands() = 0;
 
     /**
      * @brief Ends the current rendering frame and presents it to the given

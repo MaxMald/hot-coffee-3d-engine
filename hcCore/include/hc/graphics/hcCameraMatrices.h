@@ -12,11 +12,11 @@ namespace hc
     /**
      * @brief The projection matrix.
      */
-    Matrix4 projectionMatrix;
+    Matrix4 projectionMatrix = Matrix4::Identity();
 
     /**
      * @brief The view matrix.
      */
-    Matrix4 viewMatrix;
+    Matrix4 viewMatrix = Matrix4::Identity();
   };
 }

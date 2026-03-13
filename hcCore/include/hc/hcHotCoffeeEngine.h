@@ -8,7 +8,7 @@
 
 namespace hc
 {
-  class IEventListener;
+  class IGameLoopListener;
   class SceneManager;
   class IWindowManager;
   class IGraphicsManager;
@@ -29,8 +29,8 @@ namespace hc
     Time getElapsedTime() const;
     bool isInitialized() const;
     
-    void addEventListener(IEventListener* listener);
-    void removeEventListener(IEventListener* listener);
+    void addGameLoopListener(IGameLoopListener* listener);
+    void removeGameLoopListener(IGameLoopListener* listener);
 
     ProcessResult initialize(const HotCoffeeEngineSettings& settings);
     void run(const String& sceneName);
@@ -44,7 +44,7 @@ namespace hc
     PluginManager m_pluginManager;
     InputManager m_inputManager;
     Clock m_frameClock;
-    Vector<IEventListener*> m_eventListeners;
+    Vector<IGameLoopListener*> m_eventListeners;
     bool m_initialized;
 
     void connectToPlugins(const PluginManagerSettings& settings);

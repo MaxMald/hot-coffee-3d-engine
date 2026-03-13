@@ -6,31 +6,25 @@
 
 namespace hc::editor
 {
-  EditorViewsManager::EditorViewsManager() :
-    m_initialized(false)
-  {
+  EditorViewsManager::EditorViewsManager(HotCoffeeEngine& engine) :
+    m_initialized(false),
+    m_engine(engine)
+  { 
   }
 
-  void EditorViewsManager::initialize(IWindow& window)
+  void EditorViewsManager::initialize()
   {
     if (m_initialized)
       return;
 
-    hcImguiHandler::init(window);
+    m_engine.addGameLoopListener(this);
+    hcImguiHandler::init(m_engine.getWindowManager().getWindow());
     m_initialized = true;
   }
 
   bool EditorViewsManager::processEvent(const Event& event)
   {
     return hcImguiHandler::processEvent(event);
-  }
-
-  void EditorViewsManager::draw(IWindow& window, const Time& elapsedTime)
-  {
-    hcImguiHandler::beginFrame(window, elapsedTime);
-    for (const UniquePtr<IView>& view : m_views)
-      view->draw();
-    hcImguiHandler::endFrame();
   }
 
   void EditorViewsManager::registerView(UniquePtr<IView> view)
@@ -52,11 +46,25 @@ namespace hc::editor
 
     clear();
     hcImguiHandler::destroy();
+    m_engine.removeGameLoopListener(this);
     m_initialized = false;
   }
 
   bool EditorViewsManager::onEvent(const Event& event)
   {
     return hcImguiHandler::processEvent(event);
+  }
+
+  void EditorViewsManager::onAfterSceneRender()
+  {
+    hcImguiHandler::beginFrame(
+      m_engine.getWindowManager().getWindow(),
+      m_engine.getElapsedTime()
+    );
+
+    for (const UniquePtr<IView>& view : m_views)
+      view->draw();
+
+    hcImguiHandler::endFrame();
   }
 }

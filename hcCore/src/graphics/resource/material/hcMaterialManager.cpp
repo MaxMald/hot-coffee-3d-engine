@@ -5,9 +5,12 @@
 #include "hc/graphics/resource/material/hcIMaterialFactory.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include <limits>
 
 namespace hc
 {
+  UInt16 MaterialManager::s_nextMaterialId = 0;
+
   MaterialManager::MaterialManager(
     IAssetManager& assetManager,
     ITextureManager& textureManager,
@@ -78,8 +81,24 @@ namespace hc
       return nullptr;
     }
 
-    IMaterialFactory& materialFactor = m_materialFactoriesManager->getFactory(descriptor->getShaderType());
+    if (s_nextMaterialId == std::numeric_limits<UInt16>::max())
+    {
+      LogService::Error(
+        String::Format(
+          "Maximum number of materials (%u) exceeded; cannot allocate new material IDs.",
+          static_cast<UInt32>(std::numeric_limits<UInt16>::max())
+        )
+      );
+
+      return nullptr;
+    }
+
+    IMaterialFactory& materialFactor = m_materialFactoriesManager->getFactory(
+      descriptor->getShaderType()
+    );
+
     SharedPtr<IMaterial> material = materialFactor.create(
+      s_nextMaterialId++,
       descriptor,
       m_textureManager,
       m_shaderProgramManager

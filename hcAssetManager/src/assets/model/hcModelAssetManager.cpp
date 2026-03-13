@@ -6,16 +6,16 @@
 
 namespace hc
 {
-    ModelAssetManager::ModelAssetManager(
-      IMaterialDescriptorAssetManager& materialDescriptorAssetManager
-    ) :
-      m_loadedModels(),
-      m_primitiveModels(),
-      m_primitiveModelsFactory(materialDescriptorAssetManager)
-    {
-    }
+  ModelAssetManager::ModelAssetManager(
+    IMaterialDescriptorAssetManager& materialDescriptorAssetManager
+  ) :
+    m_loadedModels(),
+    m_primitiveModels(),
+    m_primitiveModelsFactory(materialDescriptorAssetManager)
+  {
+  }
 
-    SharedPtr<Model> ModelAssetManager::load(const Path& path)
+  SharedPtr<Model> ModelAssetManager::load(const Path& path)
   {
     if (isLoaded(path))
       return get(path);

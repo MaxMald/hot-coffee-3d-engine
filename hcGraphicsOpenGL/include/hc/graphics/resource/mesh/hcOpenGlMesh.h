@@ -18,10 +18,12 @@ namespace hc
      * 
      * @param model Shared pointer to the model data.
      * @param materials Vector of shared pointers to materials used by the mesh.
+     * @param graphicsManager Reference to the graphics manager for resource management.
      */
     OpenGlMesh(
       SharedPtr<Model> model,
-      Vector<SharedPtr<IMaterial>> materials
+      Vector<SharedPtr<IMaterial>> materials,
+      IGraphicsManager& graphicsManager
     );
     ~OpenGlMesh() override;
 
@@ -101,9 +103,11 @@ namespace hc
     UInt32 m_vao;
     UInt32 m_vbo;
     UInt32 m_ebo;
+    IGraphicsManager& m_graphicsManager;
 
     void drawModelSubMesh(
       const RenderContext& renderContext,
+      float distanceToCamera,
       const ModelSubMesh& submesh
     );
   };

@@ -29,3 +29,4 @@
 #include "hc/utilities/hcServiceManager.h"
 #include "hc/utilities/hcTime.h"
 #include "hc/utilities/hcClock.h"
+#include "hc/utilities/hcBitUtilities.h"

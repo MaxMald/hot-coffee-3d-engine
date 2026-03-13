@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/hcIEventListener.h"
+#include "hc/window/input/hcEvent.h"
 #include "hc/window/input/hcKeyboardKey.h"
 #include "hc/window/input/hcMouseButtonKey.h"
 #include "hc/inputManager/hcKeyState.h"
@@ -17,11 +17,11 @@ namespace hc
    * providing an interface to query their current pressed/released status.
    * It listens to input events from the engine and updates the internal state accordingly.
    */
-  class HC_CORE_EXPORT InputManager : public IEventListener
+  class HC_CORE_EXPORT InputManager
   {
   public:
     InputManager();
-    ~InputManager() override = default;
+    ~InputManager() = default;
 
     /**
      * @brief Check if a keyboard key is currently pressed.
@@ -83,21 +83,17 @@ namespace hc
      *
      * @return True if the event was handled, false otherwise.
      */
-    bool onEvent(const Event& event) override;
+    bool onEvent(const Event& event);
 
     /**
-     * @brief Initialize the InputManager with the engine.
-     *
-     * @param engine Reference to the HotCoffeeEngine instance.
+     * @brief Initialize the InputManager.
      */
-    void initialize(HotCoffeeEngine& engine);
+    void initialize();
 
     /**
      * @brief Clean up and destroy the InputManager.
-     *
-     * @param engine Reference to the HotCoffeeEngine instance.
      */
-    void destroy(HotCoffeeEngine& engine);
+    void destroy();
 
     friend class HotCoffeeEngine;
   };

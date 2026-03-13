@@ -5,14 +5,16 @@ namespace hc
 {
   OpenGlMesh::OpenGlMesh(
     SharedPtr<Model> model,
-    Vector<SharedPtr<IMaterial>> materials
+    Vector<SharedPtr<IMaterial>> materials,
+    IGraphicsManager& graphicsManager
   ) :
     m_id(Id::Create()),
     m_vao(0),
     m_vbo(0),
     m_ebo(0),
     m_model(model),
-    m_materials(materials)
+    m_materials(materials),
+    m_graphicsManager(graphicsManager)
   {
     glGenVertexArrays(1, &m_vao);
     glGenBuffers(1, &m_vbo);
@@ -39,13 +41,11 @@ namespace hc
     if (!m_model)
       return;
 
-    glBindVertexArray(m_vao);
+    float distanceToCamera = (renderContext.cameraPosition - renderContext.modelPosition).length();
 
     const Vector<ModelSubMesh>& subMeshes = m_model->getSubMeshes();
     for (const ModelSubMesh& submesh : subMeshes)
-      drawModelSubMesh(renderContext, submesh);
-
-    glBindVertexArray(0);
+      drawModelSubMesh(renderContext, distanceToCamera, submesh);
   }
 
   SharedPtr<Model> OpenGlMesh::getModel() const
@@ -156,6 +156,7 @@ namespace hc
 
   void OpenGlMesh::drawModelSubMesh(
     const RenderContext& renderContext,
+    float distanceToCamera,
     const ModelSubMesh& submesh
   )
   {
@@ -164,20 +165,29 @@ namespace hc
     if (submesh.materialIndex < m_materials.size())
       material = m_materials[submesh.materialIndex];
 
-    if (material)
+    if (!material)
     {
-      material->bind(renderContext.cameraMatrices);
-      material->updateModelMatrix(renderContext.transform);
+      LogService::Error(
+        String::Format(
+          "OpenGlMesh::drawModelSubMesh: Submesh with material index %d has no material assigned, skipping draw call.",
+          submesh.materialIndex
+        )
+      );
+
+      return;
     }
 
-    glDrawElements(
-      GL_TRIANGLES,
-      static_cast<GLsizei>(submesh.indexCount),
-      GL_UNSIGNED_INT,
-      reinterpret_cast<void*>(submesh.firstIndexIndex * sizeof(UInt32))
+    DrawCommand command;
+    command.initialize(
+      renderContext.cameraMatrices,
+      renderContext.transform,
+      material,
+      distanceToCamera,
+      submesh.firstIndexIndex,
+      submesh.indexCount,
+      OpenGlDrawData{ m_vao }
     );
 
-    if (material)
-      material->unbind();
+    m_graphicsManager.draw(command);
   }
 }

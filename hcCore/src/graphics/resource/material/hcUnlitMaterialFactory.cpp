@@ -12,6 +12,7 @@ namespace hc
   }
 
   SharedPtr<IMaterial> UnlitMaterialFactory::create(
+    UInt16 materialId,
     SharedPtr<AMaterialDescriptor> descriptor,
     ITextureManager& textureManager,
     IShaderProgramManager& shaderProgramManager
@@ -34,7 +35,7 @@ namespace hc
       );
     }
 
-    SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>();
+    SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>(materialId);
     material->initialize(
       shaderProgramManager.getUnlitShaderProgram(),
       unlitDescriptor,

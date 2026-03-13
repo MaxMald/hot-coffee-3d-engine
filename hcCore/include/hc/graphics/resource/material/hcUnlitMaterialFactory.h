@@ -16,6 +16,8 @@ namespace hc
     /**
      * @brief Creates an unlit material instance.
      *
+     * @param materialId The unique identifier for the material, used for sorting and
+     * batching.
      * @param descriptor Shared pointer to the material descriptor.
      * @param textureManager Reference to the texture manager used for material
      * creation.
@@ -26,6 +28,7 @@ namespace hc
      * creation failed.
      */
     SharedPtr<IMaterial> create(
+      UInt16 materialId,
       SharedPtr<AMaterialDescriptor> descriptor,
       ITextureManager& textureManager,
       IShaderProgramManager& shaderProgramManager

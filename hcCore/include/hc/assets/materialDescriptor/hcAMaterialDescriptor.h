@@ -2,6 +2,7 @@
 
 #include "hc/assets/hcAsset.h"
 #include "hc/graphics/resource/material/hcShadingType.h"
+#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
 
 namespace hc
 {
@@ -37,12 +38,70 @@ namespace hc
      */
     virtual void getImagesPaths(Vector<Path>& paths) const = 0;
 
+    /**
+     * Gets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     *
+     * @return The material render mode.
+     */
+    materialRenderMode::Type getRenderMode() const;
+    
+    /**
+     * Sets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     *
+     * @param renderMode The material render mode to set.
+     */
+    void setRenderMode(materialRenderMode::Type renderMode);
+
+    /**
+     * Sets the alpha cutout threshold for the material. This value determines
+     * the cutoff point for alpha testing when the material is rendered in alpha cutout
+     * mode.
+     * 
+     * @param threshold The alpha cutout threshold value, typically between 0.0 and 1.0.
+     */
+    void setAlphaCutoutThreshold(float threshold);
+
+    /**
+     * Gets the alpha cutout threshold for the material. This value determines
+     * the cutoff point for alpha testing when the material is rendered in alpha cutout
+     * mode.
+     *
+     * @return The alpha cutout threshold value, typically between 0.0 and 1.0.
+     */
+    float getAlphaCutoutThreshold() const;
+
+    /**
+     * Determines if the material is double-sided, meaning it should be rendered
+     * with back-face culling disabled so that both sides of the geometry are visible.
+     *
+     * @return True if the material is double-sided, false otherwise.
+     */
+    bool isDoubleSided() const;
+
+    /**
+     * Sets whether the material is double-sided, meaning it should be rendered
+     * with back-face culling disabled so that both sides of the geometry are visible.
+     *
+     * @param doubleSided True to make the material double-sided, false for single-sided.
+     */
+    void setDoubleSided(bool doubleSided);
+
   protected:
+    materialRenderMode::Type m_renderMode;
+    float m_alphaCutoutThreshold;
+    bool m_doubleSided;
+
     /**
      * Constructs a material descriptor with the given asset path.
      *
      * @param path The file path to the material descriptor asset
+     * @param renderMode The material render mode (default is Opaque)
      */
-    AMaterialDescriptor(const Path& path);
+    AMaterialDescriptor(
+      const Path& path,
+      materialRenderMode::Type renderMode = materialRenderMode::Type::Opaque
+    );
   };
 }

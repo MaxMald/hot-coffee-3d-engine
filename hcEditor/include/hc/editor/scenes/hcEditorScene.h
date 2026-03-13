@@ -22,7 +22,6 @@ namespace hc::editor
 
     void onInitialized() override;
     void onActivate() override;
-    void onAfterDraw(const RenderContext& renderContext) override;
     void onBeforeUpdate(const Time& elapsedTime) override;
     void onDestroy() override;
   };
