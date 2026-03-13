@@ -5,6 +5,7 @@
 #include "hc/graphics/resource/material/hcIMaterialFactory.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include <limits>
 
 namespace hc
 {
@@ -77,6 +78,18 @@ namespace hc
           shaderTypeStr.c_str()
         )
       );
+      return nullptr;
+    }
+
+    if (s_nextMaterialId == std::numeric_limits<UInt16>::max())
+    {
+      LogService::Error(
+        String::Format(
+          "Maximum number of materials (%u) exceeded; cannot allocate new material IDs.",
+          static_cast<UInt32>(std::numeric_limits<UInt16>::max())
+        )
+      );
+
       return nullptr;
     }
 
