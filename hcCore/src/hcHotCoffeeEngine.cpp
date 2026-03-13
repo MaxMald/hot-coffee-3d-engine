@@ -172,7 +172,7 @@ namespace hc
         }
 
         if (m_inputManager.onEvent(*eventOpt))
-          break;
+          continue;
 
         for (IGameLoopListener* listener : m_eventListeners)
           if (listener->onEvent(*eventOpt))
