@@ -79,8 +79,8 @@ namespace hc::editor
     if (!material)
       return;
 
-    ImGui::Text("Asset Id: %u", material->getId().value());
-    ImGui::Text("Material ID: %d", material->getMaterialId());
+    ImGui::Text("Asset Id: %llu", material->getId().value());
+    ImGui::Text("Material ID: %u", material->getMaterialId());
     ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
 
     SharedPtr<AMaterialDescriptor> descriptor = material->getDescriptor();
