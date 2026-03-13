@@ -42,12 +42,7 @@ namespace hc
   {
     if (m_descriptor)
       return m_descriptor->getRenderMode();
-    else
-    {
-      throw RuntimeErrorException(
-        "UnlitMaterial::getRenderMode - Material descriptor is not set."
-      );
-    }
+    return materialRenderMode::Type::Opaque;
   }
 
   bool UnlitMaterial::isTransparent() const
