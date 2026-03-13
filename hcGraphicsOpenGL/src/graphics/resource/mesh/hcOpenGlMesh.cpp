@@ -68,7 +68,7 @@ namespace hc
     {
       LogService::Error(
         String::Format(
-          "OpenGlMesh::draw: Mesh with Id '%s' has no model assigned, skipping update.",
+          "OpenGlMesh::update: Mesh with Id '%s' has no model assigned, skipping update.",
           m_id.toString().c_str()
         )
       );
