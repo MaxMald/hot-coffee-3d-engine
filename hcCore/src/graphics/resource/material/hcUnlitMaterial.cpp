@@ -55,9 +55,14 @@ namespace hc
     return getRenderMode() == materialRenderMode::Type::Transparent;
   }
 
+  bool UnlitMaterial::isAlphaCutout() const
+  {
+    return getRenderMode() == materialRenderMode::Type::AlphaCutout;
+  }
+
   void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
   {
-    if (!m_shaderProgram)
+    if (!m_shaderProgram || !m_descriptor)
       return;
 
     m_shaderProgram->bind();
@@ -65,6 +70,11 @@ namespace hc
     m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
     m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
+
+    if (isAlphaCutout())
+      m_shaderProgram->setUniform("uAlphaCutoff", m_descriptor->getAlphaCutoutThreshold());
+    else
+      m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
     if (m_mainTexture)
     {

@@ -16,6 +16,7 @@ namespace hc
     {
       Background = 0,
       Opaque,
+      AlphaCutout,
       Transparent
     };
 

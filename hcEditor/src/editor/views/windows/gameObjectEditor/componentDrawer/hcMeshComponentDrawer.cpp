@@ -88,11 +88,22 @@ namespace hc::editor
       return;
 
     materialRenderMode::Type currentRenderMode = descriptor->getRenderMode();
-    const char* renderModeOptions[] = { "Background", "Opaque", "Transparent" };
+    const char* renderModeOptions[] = { "Background", "Opaque", "AlphaCutout", "Transparent" };
     int currentItem = static_cast<int>(currentRenderMode);
 
-    if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 3))
+    if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 4))
       descriptor->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
+
+    bool isTwoSided = descriptor->isDoubleSided();
+    if (ImGui::Checkbox("Two-Sided", &isTwoSided))
+      descriptor->setDoubleSided(isTwoSided);
+
+    if (descriptor->getRenderMode() == materialRenderMode::Type::AlphaCutout)
+    {
+      float alphaCutoff = descriptor->getAlphaCutoutThreshold();
+      if (ImGui::SliderFloat("Alpha Cutoff", &alphaCutoff, 0.0f, 1.0f))
+        descriptor->setAlphaCutoutThreshold(alphaCutoff);
+    }
   }
 
   void MeshComponentDrawer::onMeshFileSelected(

@@ -48,6 +48,14 @@ namespace hc
     virtual bool isTransparent() const = 0;
 
     /**
+     * @brief Determines if the material uses alpha cutout rendering based on
+     * its render mode.
+     * 
+     * @return True if the material is an alpha cutout, false otherwise.
+     */
+    virtual bool isAlphaCutout() const = 0;
+
+    /**
      * @brief Binds the material for rendering.
      */
     virtual void bind(const CameraMatrices& cameraMatrices) = 0;

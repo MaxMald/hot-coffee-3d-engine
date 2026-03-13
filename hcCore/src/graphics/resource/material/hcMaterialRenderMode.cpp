@@ -12,6 +12,8 @@ namespace hc
           return "Background";
         case Type::Opaque:
           return "Opaque";
+        case Type::AlphaCutout:
+          return "AlphaCutout";
         case Type::Transparent:
           return "Transparent";
         default:
@@ -25,6 +27,8 @@ namespace hc
         return Type::Background;
       else if (str == "Opaque")
         return Type::Opaque;
+      else if (str == "AlphaCutout")
+        return Type::AlphaCutout;
       else if (str == "Transparent")
         return Type::Transparent;
       else

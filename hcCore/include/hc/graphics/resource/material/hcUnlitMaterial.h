@@ -54,6 +54,11 @@ namespace hc
     bool isTransparent() const override;
 
     /**
+     * @copydoc IMaterial::isAlphaCutout
+     */
+    bool isAlphaCutout() const;
+
+    /**
      * @copydoc IMaterial::bind
      */
     void bind(const CameraMatrices& cameraMatrices) override;

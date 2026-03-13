@@ -143,6 +143,15 @@ namespace hc
       return;
     }
 
+    SharedPtr<AMaterialDescriptor> descriptor = command.material->getDescriptor();
+    if (!descriptor)
+    {
+      LogService::Error(
+        "Draw command's material has no descriptor, skipping draw call."
+      );
+      return;
+    }
+
     if (!std::holds_alternative<OpenGlDrawData>(command.apiDrawData))
     {
       LogService::Error(
@@ -160,26 +169,66 @@ namespace hc
       return;
     }
 
-    glBindVertexArray(drawData.vao);
-
-    command.material->bind(command.cameraMatrices);
-    command.material->updateModelMatrix(command.modelMatrix);
-
+    bool isTwoSided = descriptor->isDoubleSided();
     bool isTransparent = command.material->isTransparent();
-    if (isTransparent)
+
+    if (isTwoSided && isTransparent)
+    {
       glDepthMask(GL_FALSE);
+      glBindVertexArray(drawData.vao);
 
-    glDrawElements(
-      GL_TRIANGLES,
-      static_cast<GLsizei>(command.indexCount),
-      GL_UNSIGNED_INT,
-      reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-    );
+      command.material->bind(command.cameraMatrices);
+      command.material->updateModelMatrix(command.modelMatrix);
 
-    if (isTransparent)
+      // Pass 1: Render back faces first
+      glCullFace(GL_FRONT);
+      glDrawElements(
+        GL_TRIANGLES,
+        static_cast<GLsizei>(command.indexCount),
+        GL_UNSIGNED_INT,
+        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
+      );
+
+      // Pass 2: Render front faces
+      glCullFace(GL_BACK);
+      glDrawElements(
+        GL_TRIANGLES,
+        static_cast<GLsizei>(command.indexCount),
+        GL_UNSIGNED_INT,
+        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
+      );
+
+      command.material->unbind();
+      glBindVertexArray(0);
       glDepthMask(GL_TRUE);
+    }
+    else
+    {
+      if (isTwoSided)
+        glDisable(GL_CULL_FACE);
 
-    command.material->unbind();
-    glBindVertexArray(0);
+      if (isTransparent)
+        glDepthMask(GL_FALSE);
+
+      glBindVertexArray(drawData.vao);
+      command.material->bind(command.cameraMatrices);
+      command.material->updateModelMatrix(command.modelMatrix);
+
+      glDrawElements(
+        GL_TRIANGLES,
+        static_cast<GLsizei>(command.indexCount),
+        GL_UNSIGNED_INT,
+        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
+      );
+
+      command.material->unbind();
+      glBindVertexArray(0);
+
+      if (isTransparent)
+        glDepthMask(GL_TRUE);
+
+      if (isTwoSided)
+        glEnable(GL_CULL_FACE);
+    }   
   }
 }
