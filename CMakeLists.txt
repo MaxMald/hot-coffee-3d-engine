@@ -57,8 +57,11 @@ set(SFML_BUILD_GRAPHICS OFF CACHE BOOL "" FORCE)
 add_subdirectory(dependencies/SFML-3.0.2)
 set(BUILD_SHARED_LIBS ${_OLD_BUILD_SHARED_LIBS})
 
+# ImGui
+add_subdirectory(dependencies/IMGUI)
+
 # Hot Coffee
-add_subdirectory(hcAssetLoaders)
+add_subdirectory(hcAssetManager)
 add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
 add_subdirectory(hcGraphicsOpenGL)

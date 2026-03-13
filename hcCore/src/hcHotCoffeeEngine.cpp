@@ -1,16 +1,20 @@
 #include "hc/hcHotCoffeeEngine.h"
 
-#include "hc/hcJsonSerializer.h"
-#include "hc/hcPluginConnectionHelper.h"
-#include "hc/hcIWindowManager.h"
-#include "hc/hcIWindow.h"
-#include "hc/hcIGraphicsManager.h"
-#include "hc/hcSceneManager.h"
+#include <algorithm>
 
-#include "hc/hcGraphicsManagerFactory.h"
-#include "hc/hcWindowManagerFactory.h"
-#include "hc/hcAssetManagerLoadersRegistry.h"
-#include "hc/hcSceneManagerFactory.h"
+#include "hc/serialization/hcJsonSerializer.h"
+#include "hc/plugins/hcPluginConnectionHelper.h"
+#include "hc/window/hcIWindowManager.h"
+#include "hc/window/hcIWindow.h"
+#include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/scene/hcSceneManager.h"
+#include "hc/hcIGameLoopListener.h"
+#include "hc/assets/hcAssetManagerPluginAccessor.h"
+#include "hc/assets/hcIAssetManager.h"
+
+#include "hc/graphics/hcGraphicsManagerPluginAccessor.h"
+#include "hc/window/hcWindowManagerPluginAccessor.h"
+#include "hc/scene/hcSceneManagerFactory.h"
 
 namespace hc
 {
@@ -18,8 +22,11 @@ namespace hc
     m_graphicsManager(nullptr),
     m_windowManager(nullptr),
     m_sceneManager(nullptr),
-    m_assetManager(),
+    m_assetManager(nullptr),
     m_pluginManager(),
+    m_inputManager(),
+    m_frameClock(),
+    m_eventListeners(),
     m_initialized(false)
   {
   }
@@ -35,53 +42,65 @@ namespace hc
 
   IWindowManager& HotCoffeeEngine::getWindowManager()
   {
-    if (m_windowManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "WindowManager is not initialized. Make sure initialize() has been called."
-      );
-    }
+    assertEngineIsInitialized();
     return *m_windowManager;
   }
 
   IGraphicsManager& HotCoffeeEngine::getGraphicsManager()
   {
-    if (m_graphicsManager == nullptr)
-    {
-      throw RuntimeErrorException(
-        "IGraphicsManager is not initialized. Make sure initialize() has been called."
-      );
-    }
+    assertEngineIsInitialized();
     return *m_graphicsManager;
   }
 
   SceneManager& HotCoffeeEngine::getSceneManager()
   {
-    if (!m_sceneManager)
-    {
-      throw RuntimeErrorException(
-        "SceneManager is not initialized. Make sure initialize() has been called."
-      );
-    }
-
+    assertEngineIsInitialized();
     return *m_sceneManager;
   }
 
-  AssetManager& HotCoffeeEngine::getAssetManager()
+  IAssetManager& HotCoffeeEngine::getAssetManager()
   {
-    if (!m_initialized)
-    {
-      throw RuntimeErrorException(
-        "AssetManager is not initialized. Make sure initialize() has been called."
-      );
-    }
+    assertEngineIsInitialized();
+    return *m_assetManager;
+  }
 
-    return m_assetManager;
+  InputManager& HotCoffeeEngine::getInputManager()
+  {
+    assertEngineIsInitialized();
+    return m_inputManager;
+  }
+
+  Time HotCoffeeEngine::getElapsedTime() const
+  {
+    assertEngineIsInitialized();
+    return m_frameClock.getElapsedTime();
   }
 
   bool HotCoffeeEngine::isInitialized() const
   {
     return m_initialized;
+  }
+
+  void HotCoffeeEngine::addGameLoopListener(IGameLoopListener* listener)
+  {
+    if (!listener)
+      throw InvalidArgumentException("Event listener pointer cannot be null.");
+    m_eventListeners.push_back(listener);
+  }
+
+  void HotCoffeeEngine::removeGameLoopListener(IGameLoopListener* listener)
+  {
+    if (!listener)
+      return;
+
+    auto it = std::find(
+      m_eventListeners.begin(),
+      m_eventListeners.end(),
+      listener
+    );
+
+    if (it != m_eventListeners.end())
+      m_eventListeners.erase(it);
   }
 
   ProcessResult HotCoffeeEngine::initialize(const HotCoffeeEngineSettings& settings)
@@ -95,23 +114,20 @@ namespace hc
       JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
-      
-      m_sceneManager = SceneManagerFactory::create();
 
-      assetManagerLoadersRegistry::registerLoaders(
-        m_assetManager,
-        m_pluginManager
-      );
-
-      m_windowManager = windowManagerFactory::Create(m_pluginManager);
+      m_sceneManager = SceneManagerFactory::create();      
+      m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
+      m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
 
-      m_graphicsManager = graphicsManagerFactory::Create(
+      m_graphicsManager = &(GraphicsManagerPluginAccessor::CreateAndGet(
         m_pluginManager,
         m_windowManager->getWindow(),
-        m_assetManager
-      );
+        *m_assetManager
+      ));
       m_graphicsManager->initialize();
+
+      m_inputManager.initialize();
     }
     catch (const std::exception& e)
     {
@@ -127,9 +143,59 @@ namespace hc
     return ProcessResult();
   }
 
+  void HotCoffeeEngine::run(const String& sceneName)
+  {
+    assertEngineIsInitialized();
+
+    if (!m_sceneManager->setActiveScene(sceneName))
+    {
+      throw RuntimeErrorException(
+        "Failed to set active scene. Scene with name '" + sceneName + "' not found."
+      );
+    }
+
+    IWindow& window = m_windowManager->getWindow();
+    m_frameClock.start();
+
+    while (window.isOpen())
+    {
+      m_inputManager.prepareForEventPolling();
+
+      Optional<Event> eventOpt;
+      while ((eventOpt = window.pollEvent()))
+      {
+        if (eventOpt->is<Event::Closed>())
+        {
+          m_frameClock.stop();
+          window.destroy();
+          return;
+        }
+
+        if (m_inputManager.onEvent(*eventOpt))
+          continue;
+
+        for (IGameLoopListener* listener : m_eventListeners)
+          if (listener->onEvent(*eventOpt))
+            break;
+      }
+
+      m_sceneManager->update(m_frameClock.getElapsedTime());
+      m_graphicsManager->beginFrame();
+      m_sceneManager->draw();
+      m_graphicsManager->executeDrawCommands();
+
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onAfterSceneRender();
+
+      m_graphicsManager->endFrame(window);
+      m_frameClock.restart();
+    }
+  }
+
   void HotCoffeeEngine::destroy()
   {
-    m_assetManager.destroy();
+    m_frameClock.stop();
+    m_inputManager.destroy();
 
     if (m_sceneManager)
     {
@@ -138,18 +204,19 @@ namespace hc
     }
 
     if (m_graphicsManager)
-    {
       m_graphicsManager->destroy();
-      m_graphicsManager.reset();
-    }
 
     if (m_windowManager)
-    {
       m_windowManager->destroy();
-      m_windowManager.reset();
-    }
+
+    if (m_assetManager)
+      m_assetManager->destroy();
 
     m_pluginManager.closeAll();
+
+    m_graphicsManager = nullptr;
+    m_assetManager = nullptr;
+    m_windowManager = nullptr;
 
     JsonSerializer::Shutdown();
     LogService::Shutdown();
@@ -159,10 +226,20 @@ namespace hc
 
   void HotCoffeeEngine::connectToPlugins(const PluginManagerSettings& settings)
   {
-    m_pluginManager.init();
+    m_pluginManager.initialize();
     pluginConnectionHelper::connectToPluginsFromSettings(
       m_pluginManager,
       settings
     );
+  }
+
+  void HotCoffeeEngine::assertEngineIsInitialized() const
+  {
+    if (!m_initialized)
+    {
+      throw RuntimeErrorException(
+        "HotCoffeeEngine is not initialized. Call initialize() before using engine features."
+      );
+    }
   }
 }

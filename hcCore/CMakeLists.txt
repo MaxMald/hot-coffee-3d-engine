@@ -2,6 +2,16 @@
 file(GLOB_RECURSE CORE_HEADERS "include/*.h")
 file(GLOB_RECURSE CORE_SOURCES "src/*.cpp")
 
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${CORE_HEADERS})
+
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src" 
+             PREFIX "Source Files" 
+             FILES ${CORE_SOURCES})
+
+# Create the shared library target
 add_library(hcCore SHARED 
   ${CORE_SOURCES} 
   ${CORE_HEADERS}

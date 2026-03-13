@@ -2,6 +2,15 @@
 file(GLOB_RECURSE UTILITIES_HEADERS "include/*.h")
 file(GLOB_RECURSE UTILITIES_SOURCES "src/*.cpp")
 
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${UTILITIES_HEADERS})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+             PREFIX "Source Files"
+             FILES ${UTILITIES_SOURCES})
+
+# Create the shared library target
 add_library(hcUtilities SHARED 
   ${UTILITIES_SOURCES} 
   ${UTILITIES_HEADERS}
@@ -31,6 +40,7 @@ target_compile_options(hcUtilities PRIVATE
 # Includes
 target_include_directories(hcUtilities 
   PUBLIC "include"
+  PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/NLOHMANN_JSON/include"
 )
 
 # Install the library to the 'lib' directory

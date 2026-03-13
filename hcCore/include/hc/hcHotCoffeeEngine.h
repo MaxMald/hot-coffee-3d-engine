@@ -1,16 +1,18 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/hcPluginManager.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
-#include "hc/hcAssetManager.h"
+#include "hc/plugins/hcPluginManager.h"
+#include "hc/inputManager/hcInputManager.h"
 #include "hc/hcProcessResult.h"
 
 namespace hc
 {
+  class IGameLoopListener;
   class SceneManager;
   class IWindowManager;
   class IGraphicsManager;
+  class IAssetManager;
 
   class HC_CORE_EXPORT HotCoffeeEngine
   {
@@ -22,20 +24,30 @@ namespace hc
     IWindowManager& getWindowManager();
     IGraphicsManager& getGraphicsManager();
     SceneManager& getSceneManager();
-    AssetManager& getAssetManager();
+    IAssetManager& getAssetManager();
+    InputManager& getInputManager();
+    Time getElapsedTime() const;
     bool isInitialized() const;
+    
+    void addGameLoopListener(IGameLoopListener* listener);
+    void removeGameLoopListener(IGameLoopListener* listener);
 
     ProcessResult initialize(const HotCoffeeEngineSettings& settings);
+    void run(const String& sceneName);
     void destroy();
 
   private:
-    UniquePtr<IGraphicsManager> m_graphicsManager;
-    UniquePtr<IWindowManager> m_windowManager;
+    IGraphicsManager* m_graphicsManager;
+    IWindowManager* m_windowManager;
+    IAssetManager* m_assetManager;
     UniquePtr<SceneManager> m_sceneManager;
-    AssetManager m_assetManager;
     PluginManager m_pluginManager;
+    InputManager m_inputManager;
+    Clock m_frameClock;
+    Vector<IGameLoopListener*> m_eventListeners;
     bool m_initialized;
 
     void connectToPlugins(const PluginManagerSettings& settings);
+    void assertEngineIsInitialized() const;
   };
 }

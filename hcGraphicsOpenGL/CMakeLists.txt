@@ -9,6 +9,15 @@ endif()
 file(GLOB_RECURSE GRAPHICS_OPENGL_HEADERS "include/*.h")
 file(GLOB_RECURSE GRAPHICS_OPENGL_SOURCES "src/*.cpp")
 
+# Grouping source files in IDEs
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/include" 
+             PREFIX "Header Files" 
+             FILES ${GRAPHICS_OPENGL_HEADERS})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/src"
+             PREFIX "Source Files" 
+             FILES ${GRAPHICS_OPENGL_SOURCES})
+
+# Create the shared library target
 add_library(hcGraphicsOpenGL SHARED 
   ${GRAPHICS_OPENGL_SOURCES} 
   ${GRAPHICS_OPENGL_HEADERS}
