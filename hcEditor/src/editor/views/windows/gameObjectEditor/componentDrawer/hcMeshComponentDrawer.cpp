@@ -63,7 +63,7 @@ namespace hc::editor
         if (!material)
           continue;
 
-        String label = String::Format("Material Slot %u", i);
+        String label = String::Format("Material Slot %d", i);
         if (ImGui::TreeNode(label.c_str()))
         {
           drawMaterialInformation(material);

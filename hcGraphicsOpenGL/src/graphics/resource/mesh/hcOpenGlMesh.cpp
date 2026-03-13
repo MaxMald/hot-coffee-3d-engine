@@ -39,16 +39,7 @@ namespace hc
   void OpenGlMesh::draw(const RenderContext& renderContext)
   {
     if (!m_model)
-    {
-      LogService::Error(
-        String::Format(
-          "OpenGlMesh::draw: Mesh with Id '%s' has no model assigned, skipping draw call.",
-          m_id.toString().c_str()
-        )
-      );
-
       return;
-    }
 
     float distanceToCamera = (renderContext.cameraPosition - renderContext.modelPosition).length();
 
@@ -65,16 +56,7 @@ namespace hc
   void OpenGlMesh::update()
   {
     if (!m_model)
-    {
-      LogService::Error(
-        String::Format(
-          "OpenGlMesh::update: Mesh with Id '%s' has no model assigned, skipping update.",
-          m_id.toString().c_str()
-        )
-      );
-
       return;
-    }
 
     const Buffer<Vertex>& vertices = m_model->getVertices();
     const BufferUInt32& indices = m_model->getIndices();
