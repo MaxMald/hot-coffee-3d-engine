@@ -112,8 +112,6 @@ namespace hc
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glViewport(
       0, 0,
@@ -172,6 +170,12 @@ namespace hc
     bool isTwoSided = descriptor->isDoubleSided();
     bool isTransparent = command.material->isTransparent();
 
+    if (isTransparent)
+    {
+      glEnable(GL_BLEND);
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
     if (isTwoSided && isTransparent)
     {
       glDepthMask(GL_FALSE);
@@ -225,7 +229,10 @@ namespace hc
       glBindVertexArray(0);
 
       if (isTransparent)
+      {
         glDepthMask(GL_TRUE);
+        glDisable(GL_BLEND);
+      } 
 
       if (isTwoSided)
         glEnable(GL_CULL_FACE);

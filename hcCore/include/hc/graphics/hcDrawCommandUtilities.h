@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/hcDrawCommand.h"
+
 
 namespace hc
 {
