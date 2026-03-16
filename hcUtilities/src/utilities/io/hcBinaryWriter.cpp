@@ -1,9 +1,4 @@
 #include "hc/utilities/io/hcBinaryWriter.h"
-#include "hc/utilities/hcVector3.h"
-#include "hc/utilities/hcVector4.h"
-#include "hc/utilities/hcMatrix4.h"
-#include "hc/utilities/hcAngle.h"
-#include "hc/utilities/hcColor.h"
 
 namespace hc
 {
