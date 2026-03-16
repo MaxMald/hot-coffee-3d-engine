@@ -3,15 +3,14 @@
 #include <istream>
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcVector3.h"
+#include "hc/utilities/hcVector4.h"
+#include "hc/utilities/hcMatrix4.h"
+#include "hc/utilities/hcColor.h"
+#include "hc/utilities/hcAngle.h"
 
 namespace hc
 {
-  struct Matrix4;
-  struct Vector3f;
-  struct Vector4f;
-  struct Color;
-  class Angle;
-
   /**
    * @brief Reads primitive types and engine data structures from a binary
    * stream.
