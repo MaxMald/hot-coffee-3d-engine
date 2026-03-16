@@ -16,6 +16,11 @@ else()
   set(HC_ARCH "" CACHE STRING "HotCoffeeEngine architecture")
 endif()
 
+# Define version
+set(HC_VERSION_MAJOR 0)
+set(HC_VERSION_MINOR 1)
+set(HC_VERSION_PATCH 0)
+
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
