@@ -6,12 +6,12 @@ namespace hc
 {
   namespace componentType
   {
-    enum Type : UInt8
+    enum Type : UInt16
     {
       Mesh = 0,
       Light,
       Camera,
-      Unknown = 255
+      Unknown = 65535
     };
 
     Type HC_CORE_EXPORT FromString(const String& str);
