@@ -14,6 +14,22 @@ namespace hc
   {
   }
 
+  void Camera::serialize(BinaryWriter& writer) const
+  {
+    writer.writeVector3f(m_position);
+    writer.writeVector3f(m_direction);
+    writer.writeVector3f(m_up);
+    writer.writeUInt8(m_projectionType);
+  }
+
+  void Camera::deserialize(BinaryReader& reader)
+  {
+    m_position = reader.readVector3f();
+    m_direction = reader.readVector3f();
+    m_up = reader.readVector3f();
+    m_projectionType = static_cast<projectionType::Type>(reader.readUInt8());
+  }
+
   void Camera::setPosition(const Vector3f& position)
   {
     m_position = position;
