@@ -20,6 +20,16 @@ namespace hc
     ~CameraComponent() override;
 
     /**
+     * @copydoc ISerializable::serialize
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ISerializable::deserialize
+     */
+    void deserialize(BinaryReader& reader) override;
+
+    /**
      * @brief Gets the camera's position in world space.
      *
      * @return Reference to the position vector.
