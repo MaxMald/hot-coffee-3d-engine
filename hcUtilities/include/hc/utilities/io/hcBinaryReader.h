@@ -19,7 +19,7 @@ namespace hc
    * a binary input stream. It handles platform-independent binary reading
    * for primitives, strings, math types, and engine structures.
    */
-  class BinaryReader
+  class HC_UTILITY_EXPORT BinaryReader
   {
   public:
     /**

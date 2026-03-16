@@ -19,7 +19,7 @@ namespace hc
    * representation for primitives, strings, math types, and engine
    * structures.
    */
-  class BinaryWriter
+  class HC_UTILITY_EXPORT BinaryWriter
   {
   public:
     /**

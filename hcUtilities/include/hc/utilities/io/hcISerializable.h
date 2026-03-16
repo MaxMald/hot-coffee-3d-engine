@@ -15,7 +15,7 @@ namespace hc
    * can save their state to a binary stream and restore it from a binary
    * stream using BinaryWriter and BinaryReader.
    */
-  class ISerializable
+  class HC_UTILITY_EXPORT ISerializable
   {
   public:
     virtual ~ISerializable() = default;
