@@ -28,6 +28,13 @@ namespace hc
     void deserialize(BinaryReader& reader) override;
 
     /**
+     * @brief Gets the unique identifier of the camera.
+     *
+     * @return The camera's UUID.
+     */
+    const UUID& getUUID() const;
+
+    /**
      * @brief Sets the position of the camera.
      *
      * @param position The new position.
@@ -177,6 +184,7 @@ namespace hc
     ICameraProjection* getCameraProjection();
 
   private:
+    UUID m_id;
     Vector3f m_position;
     Vector3f m_direction;
     Vector3f m_up;
