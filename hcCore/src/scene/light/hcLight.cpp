@@ -3,6 +3,7 @@
 namespace hc
 {
   Light::Light(lightType::Type type) :
+    m_id(UUID::Generate()),
     enabled(true),
     m_type(type),
     m_color{ 1.0f, 1.0f, 1.0f },
@@ -14,6 +15,7 @@ namespace hc
 
   void Light::serialize(BinaryWriter& writer) const
   {
+    m_id.serialize(writer);
     writer.writeBool(enabled);
     writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
@@ -24,12 +26,18 @@ namespace hc
 
   void Light::deserialize(BinaryReader& reader)
   {
+    m_id.deserialize(reader);
     enabled = reader.readBool();
     m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_position = reader.readVector3f();
     m_direction = reader.readVector3f();
+  }
+
+  const UUID& Light::getUUID() const
+  {
+    return m_id;
   }
 
   void Light::setType(lightType::Type type)

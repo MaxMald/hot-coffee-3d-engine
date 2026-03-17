@@ -29,6 +29,13 @@ namespace hc
     void deserialize(BinaryReader& reader) override;
 
     /**
+     * @brief Gets the unique identifier of the light.
+     * 
+     * @return The UUID of the light.
+     */
+    const UUID& getUUID() const;
+
+    /**
      * @brief Sets the type of the light.
      * 
      * @param type The new light type.
@@ -120,6 +127,7 @@ namespace hc
     bool isEnabled() const;
 
   private:
+    UUID m_id;
     bool enabled;
     lightType::Type m_type;
     Color m_color;

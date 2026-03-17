@@ -3,7 +3,8 @@
 
 namespace hc
 {
-  LightManager::LightManager()
+  LightManager::LightManager() :
+    m_lights()
   {
   }
 
@@ -11,30 +12,47 @@ namespace hc
   {
   }
 
+  void LightManager::serialize(BinaryWriter& writer) const
+  {
+    writer.writeSizeT(m_lights.size());
+    for (const auto& pair : m_lights)
+      pair.second->serialize(writer);
+  }
+
+  void LightManager::deserialize(BinaryReader& reader)
+  {
+    clear();
+
+    SizeT lightCount = reader.readSizeT();
+    for (SizeT i = 0; i < lightCount; ++i)
+    {
+      UniquePtr<Light> light = MakeUnique<Light>();
+      light->deserialize(reader);
+      UUID lightId = light->getUUID();
+      m_lights.emplace(lightId, std::move(light));
+    }
+  }
+
   Light* LightManager::createLight(lightType::Type type)
   {
     UniquePtr<Light> light = MakeUnique<Light>(type);
     Light* lightPtr = light.get();
-    m_lights.push_back(std::move(light));
-
+    m_lights.emplace(lightPtr->getUUID(), std::move(light));
     return lightPtr;
   }
 
-  void LightManager::destroyLight(Light* light)
+  void LightManager::destroyLight(const UUID& lightId)
   {
-    if (!light)
-      return;
-
-    auto it = std::find_if(
-      m_lights.begin(),
-      m_lights.end(),
-      [light](const UniquePtr<Light>& ptr) { return ptr.get() == light; }
-    );
-
+    auto it = m_lights.find(lightId);
     if (it != m_lights.end())
     {
       m_lights.erase(it);
+      return;
     }
+
+    LogService::Error(
+      "Attempted to destroy light with UUID " + lightId.toString() + ", but it does not exist."
+    );
   }
 
   void LightManager::clear()
@@ -42,8 +60,10 @@ namespace hc
     m_lights.clear();
   }
 
-  const Vector<UniquePtr<Light>>& LightManager::getLights() const
+  void LightManager::getLights(Vector<Light*>& outLights) const
   {
-    return m_lights;
+    outLights.clear();
+    for (const auto& pair : m_lights)
+      outLights.push_back(pair.second.get());
   }
 }

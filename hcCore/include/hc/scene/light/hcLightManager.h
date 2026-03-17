@@ -8,10 +8,11 @@ namespace hc
   class Light;
 
   /**
-   * @brief Manages the lifecycle and storage of Light objects in the engine.
+   * @brief Manages the lifecycle and storage of Light objects in the scene.
    */
   class HC_CORE_EXPORT LightManager :
-    private NonCopyable
+    public NonCopyable,
+    public ISerializable
   {
   public:
     /**
@@ -25,6 +26,28 @@ namespace hc
     ~LightManager();
 
     /**
+     * @brief Serializes the LightManager and all managed lights to binary
+     * format.
+     *
+     * Writes the number of lights, followed by the serialized data of each
+     * light.
+     * 
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @brief Deserializes the LightManager and all managed lights from
+     * binary format.
+     *
+     * Clears all existing lights and reads the number of lights, followed
+     * by the serialized data of each light.
+     * 
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    void deserialize(BinaryReader& reader) override;
+
+    /**
      * @brief Creates a new Light of the specified type.
      * 
      * @param type The type of light to create (default is Point).
@@ -34,11 +57,22 @@ namespace hc
     Light* createLight(lightType::Type type = lightType::Type::Point);
 
     /**
-     * @brief Destroys a managed Light.
+     * @brief Destroys a light with the specified ID.
+     *
+     * Removes and destroys the light from the managed lights. Logs an
+     * error if the light is not found.
      * 
-     * @param light Pointer to the Light to destroy.
+     * @param lightId The UUID of the light to destroy.
      */
-    void destroyLight(Light* light);
+    void destroyLight(const UUID& lightId);
+
+    /**
+     * @brief Gets a light by its ID.
+     * 
+     * @param lightId The UUID of the light to retrieve.
+     * @return Pointer to the light, or nullptr if not found.
+     */
+    Light* getLight(const UUID& lightId) const;
 
     /**
      * @brief Removes and destroys all managed lights.
@@ -46,14 +80,18 @@ namespace hc
     void clear();
 
     /**
-     * @brief Gets the list of all managed lights.
+     * @brief Gets a list of all managed lights.
+     *
+     * The list will be filled with pointers to the lights, but the caller
+     * @b does @b not take ownership of the lights. The list will be cleared
+     * before filling.
      * 
-     * @return A const reference to the vector of unique pointers to Light
-     * objects.
+     * @param outLights Vector to be filled with pointers to all managed
+     * lights.
      */
-    const Vector<UniquePtr<Light>>& getLights() const;
+    void getLights(Vector<Light*>& outLights) const;
 
   private:
-    Vector<UniquePtr<Light>> m_lights;
+    UnorderedMap<UUID, UniquePtr<Light>> m_lights;
   };
 }
