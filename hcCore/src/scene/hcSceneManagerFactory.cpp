@@ -8,7 +8,7 @@ namespace hc
 {
   namespace SceneManagerFactory
   {
-    UniquePtr<SceneManager> create()
+    UniquePtr<SceneManager> create(IGraphicsManager& graphicsManager)
     {
       UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>();
       UniquePtr<ComponentFactoriesManager> componentFactoriesManager =
@@ -16,7 +16,8 @@ namespace hc
 
       componentFactoriesManagerRegistry::registerFactories(
         *componentFactoriesManager,
-        *sceneManager
+        *sceneManager,
+        graphicsManager
       );
 
       sceneManager->initialize(

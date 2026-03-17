@@ -18,7 +18,7 @@ namespace hc
   class HC_UTILITY_EXPORT ISerializable
   {
   public:
-    virtual ~ISerializable() = default;
+    virtual ~ISerializable();
 
     /**
      * @brief Serializes the object to binary format.
@@ -43,6 +43,6 @@ namespace hc
     virtual void deserialize(BinaryReader& reader) = 0;
 
   protected:
-    ISerializable() = default;
+    ISerializable();
   };
 }

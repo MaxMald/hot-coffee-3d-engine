@@ -1,8 +1,9 @@
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManagerRegistry.h"
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 #include "hc/scene/gameObject/components/factories/hcCameraComponentFactory.h"
-
+#include "hc/scene/gameObject/components/factories/hcMeshComponentFactory.h"
 #include "hc/scene/hcSceneManager.h"
+#include "hc/graphics/hcIGraphicsManager.h"
 
 namespace hc
 {
@@ -10,11 +11,15 @@ namespace hc
   {
     void registerFactories(
       ComponentFactoriesManager& manager,
-      SceneManager& sceneManager
+      SceneManager& sceneManager,
+      IGraphicsManager& graphicsManager
     )
     {
       manager.registerFactory<CameraComponent>(
         MakeUnique<CameraComponentFactory>(sceneManager)
+      );
+      manager.registerFactory<MeshComponent>(
+        MakeUnique<MeshComponentFactory>(graphicsManager.getMeshManager())
       );
     }
   }

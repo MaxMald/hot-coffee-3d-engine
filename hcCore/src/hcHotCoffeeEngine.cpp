@@ -114,8 +114,7 @@ namespace hc
       JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
-
-      m_sceneManager = SceneManagerFactory::create();      
+                 
       m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
       m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
@@ -126,6 +125,8 @@ namespace hc
         *m_assetManager
       ));
       m_graphicsManager->initialize();
+
+      m_sceneManager = SceneManagerFactory::create(*m_graphicsManager);
 
       m_inputManager.initialize();
     }

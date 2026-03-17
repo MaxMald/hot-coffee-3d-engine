@@ -24,21 +24,7 @@ namespace hc
      * Constructs a mesh component with no mesh attached.
      */
     MeshComponent(IMeshManager& meshManager);
-
-    /**
-     * Destructor.
-     */
     ~MeshComponent() override;
-
-    /**
-     * @copydoc ISerializable::serialize
-     */
-    void serialize(BinaryWriter& writer) const override;
-
-    /**
-     * @copydoc ISerializable::deserialize
-     */
-    void deserialize(BinaryReader& reader) override;
 
     /**
      * Draws the mesh using the provided render context.
@@ -66,5 +52,15 @@ namespace hc
   private:
     SharedPtr<IMesh> m_mesh;
     IMeshManager& m_meshManager;
+
+    /**
+     * @copydoc ABaseComponent::onSerialize
+     */
+    void onSerialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ABaseComponent::onDeserialize
+     */
+    void onDeserialize(BinaryReader& reader) override;
   };
 }

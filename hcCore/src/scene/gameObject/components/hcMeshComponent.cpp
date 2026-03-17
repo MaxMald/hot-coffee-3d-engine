@@ -16,28 +16,6 @@ namespace hc
   {
   }
 
-  void MeshComponent::serialize(BinaryWriter& writer) const
-  {
-    bool hasMesh = (m_mesh != nullptr && m_mesh->getModel() != nullptr);
-    writer.writeBool(hasMesh);
-
-    if (hasMesh)
-      writer.writePath(m_mesh->getModel()->getPath());
-  }
-
-  void MeshComponent::deserialize(BinaryReader& reader)
-  {
-    bool hasMesh = reader.readBool();
-    if (!hasMesh)
-    {
-      m_mesh = nullptr;
-      return;
-    }
-
-    Path modelPath = reader.readPath();
-    m_mesh = m_meshManager.createMeshFromPath(modelPath);
-  }
-
   void MeshComponent::draw(const RenderContext& renderContext)
   {
     if (!m_mesh)
@@ -54,5 +32,27 @@ namespace hc
   SharedPtr<IMesh> MeshComponent::getMesh() const
   {
     return m_mesh;
+  }
+
+  void MeshComponent::onSerialize(BinaryWriter& writer) const
+  {
+    bool hasMesh = (m_mesh != nullptr && m_mesh->getModel() != nullptr);
+    writer.writeBool(hasMesh);
+
+    if (hasMesh)
+      writer.writePath(m_mesh->getModel()->getPath());
+  }
+
+  void MeshComponent::onDeserialize(BinaryReader& reader)
+  {
+    bool hasMesh = reader.readBool();
+    if (!hasMesh)
+    {
+      m_mesh = nullptr;
+      return;
+    }
+
+    Path modelPath = reader.readPath();
+    m_mesh = m_meshManager.createMeshFromPath(modelPath);
   }
 }

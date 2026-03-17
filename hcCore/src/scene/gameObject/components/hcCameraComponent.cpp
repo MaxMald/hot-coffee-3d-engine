@@ -20,18 +20,6 @@ namespace hc
     cameraManager.destroyCamera(m_camera);
   }
 
-  void CameraComponent::serialize(BinaryWriter& writer) const
-  {
-    assertCameraExists();
-    m_camera->serialize(writer);
-  }
-
-  void CameraComponent::deserialize(BinaryReader& reader)
-  {
-    assertCameraExists();
-    m_camera->deserialize(reader);
-  }
-
   const Vector3f& CameraComponent::getPosition() const
   {
     assertCameraExists();
@@ -78,6 +66,18 @@ namespace hc
   {
     assertCameraExists();
     return m_camera->getCameraProjection();
+  }
+
+  void CameraComponent::onSerialize(BinaryWriter& writer) const
+  {
+    assertCameraExists();
+    m_camera->serialize(writer);
+  }
+
+  void CameraComponent::onDeserialize(BinaryReader& reader)
+  {
+    assertCameraExists();
+    m_camera->deserialize(reader);
   }
 
   CameraManager& CameraComponent::getCameraManager()

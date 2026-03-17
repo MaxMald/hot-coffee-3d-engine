@@ -24,6 +24,7 @@ namespace hc
 
     /**
      * @brief Creates a new instance of the component type.
+     * 
      * @return Unique pointer to the newly created component instance.
      */
     virtual UniquePtr<ComponentType> create() const = 0;

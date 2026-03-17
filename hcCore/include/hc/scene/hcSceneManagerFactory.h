@@ -5,9 +5,10 @@
 namespace hc
 {
   class SceneManager;
+  class IGraphicsManager;
 
   namespace SceneManagerFactory
   {
-    UniquePtr<SceneManager> create();
+    UniquePtr<SceneManager> create(IGraphicsManager& graphicsManager);
   }
 }
