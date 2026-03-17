@@ -148,4 +148,9 @@ namespace hc
   {
     return String(uuids::to_string(m_impl->uuid));
   }
+
+  SizeT UUID::hash() const
+  {
+    return std::hash<uuids::uuid>{}(m_impl->uuid);
+  }
 }

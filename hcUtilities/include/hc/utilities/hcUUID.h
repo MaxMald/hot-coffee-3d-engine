@@ -154,6 +154,13 @@ namespace hc
      */
     String toString() const;
 
+    /**
+     * @brief Computes a hash value for the UUID.
+     *
+     * @return A hash value suitable for use in hash-based containers.
+     */
+    SizeT hash() const;
+
   private:
     struct Impl;
     Impl* m_impl;
@@ -164,5 +171,30 @@ namespace hc
      * @param impl Pointer to the implementation.
      */
     explicit UUID(Impl* impl);
+  };
+}
+
+namespace std
+{
+  /**
+   * @brief Hash specialization for hc::UUID.
+   *
+   * Allows UUID to be used as a key in unordered containers such as
+   * std::unordered_map and std::unordered_set.
+   */
+  template<>
+  struct hash<hc::UUID>
+  {
+    /**
+     * @brief Computes the hash value for a UUID.
+     *
+     * @param uuid The UUID to hash.
+     *
+     * @return The hash value.
+     */
+    std::size_t operator()(const hc::UUID& uuid) const noexcept
+    {
+      return uuid.hash();
+    }
   };
 }
