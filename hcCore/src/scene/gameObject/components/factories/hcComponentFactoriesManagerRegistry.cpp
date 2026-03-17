@@ -1,6 +1,6 @@
-#include "hc/scene/gameObject/components/hcComponentFactoriesManagerRegistry.h"
-#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
-#include "hc/scene/gameObject/components/hcCameraComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcComponentFactoriesManagerRegistry.h"
+#include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/factories/hcCameraComponentFactory.h"
 
 #include "hc/scene/hcSceneManager.h"
 

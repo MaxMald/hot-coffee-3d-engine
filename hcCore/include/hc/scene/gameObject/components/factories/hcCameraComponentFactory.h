@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/scene/gameObject/components/hcCameraComponent.h"
-#include "hc/scene/gameObject/components/hcATypedComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcATypedComponentFactory.h"
 
 namespace hc
 {

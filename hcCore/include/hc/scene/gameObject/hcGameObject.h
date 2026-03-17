@@ -2,7 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 
 namespace hc
 {
