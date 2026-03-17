@@ -136,7 +136,7 @@ namespace hc
 
   void UUID::deserialize(BinaryReader& reader)
   {
-    std::array<uuids::uuid::value_type, UUID_BYTE_SIZE> bytes;
+    std::array<uuids::uuid::value_type, UUID_BYTE_SIZE> bytes{};
     for (size_t i = 0; i < UUID_BYTE_SIZE; ++i)
       bytes[i] = reader.readUInt8();
 
