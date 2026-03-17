@@ -17,7 +17,7 @@ namespace hc
   CameraComponent::~CameraComponent()
   {
     CameraManager& cameraManager = getCameraManager();
-    cameraManager.destroyCamera(m_camera);
+    cameraManager.destroyCamera(m_camera->getUUID());
   }
 
   const Vector3f& CameraComponent::getPosition() const
@@ -41,7 +41,7 @@ namespace hc
   void CameraComponent::setAsActiveCamera()
   {
     assertCameraExists();
-    getCameraManager().setActiveCamera(m_camera);
+    getCameraManager().setActiveCamera(m_camera->getUUID());
   }
 
   void CameraComponent::setProjectionType(projectionType::Type type)
@@ -70,14 +70,33 @@ namespace hc
 
   void CameraComponent::onSerialize(BinaryWriter& writer) const
   {
-    assertCameraExists();
-    m_camera->serialize(writer);
+    bool hasCamera = (m_camera != nullptr);
+    writer.writeBool(hasCamera);
+
+    if (hasCamera)
+      m_camera->getUUID().serialize(writer);
   }
 
   void CameraComponent::onDeserialize(BinaryReader& reader)
   {
-    assertCameraExists();
-    m_camera->deserialize(reader);
+    bool hasCamera = reader.readBool();
+    if (hasCamera)
+    {
+      UUID cameraId;
+      cameraId.deserialize(reader);
+      CameraManager& cameraManager = getCameraManager();
+      m_camera = cameraManager.getCamera(cameraId);
+
+      if (!m_camera)
+        throw RuntimeErrorException(
+          "Failed to deserialize CameraComponent: Camera with ID " +
+          cameraId.toString() + " not found."
+        );
+    }
+    else
+    {
+      m_camera = nullptr;
+    }
   }
 
   CameraManager& CameraComponent::getCameraManager()
