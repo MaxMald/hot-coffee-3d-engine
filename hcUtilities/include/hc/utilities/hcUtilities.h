@@ -33,3 +33,4 @@
 #include "hc/utilities/io/hcBinaryReader.h"
 #include "hc/utilities/io/hcBinaryWriter.h"
 #include "hc/utilities/io/hcISerializable.h"
+#include "hc/utilities/hcUUID.h"
