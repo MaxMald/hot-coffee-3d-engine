@@ -24,7 +24,6 @@ namespace hc
    */
   class HC_CORE_EXPORT GameObject :
     public NonCopyable,
-    public ISerializable,
     public Transform,
     public IDrawable
   {
@@ -50,12 +49,21 @@ namespace hc
     virtual ~GameObject();
 
     /**
-     * @copydoc ISerializable::serialize
+     * @brief Serializes the GameObject and all its children and components to
+     * a binary writer.
+     *
+     * @param writer The BinaryWriter to serialize to.
      */
     void serialize(BinaryWriter& writer) const override;
 
     /**
-     * @copydoc ISerializable::deserialize
+     * @brief Deserializes the GameObject and all its children and components
+     * from a binary reader.
+     *
+     * @param reader The BinaryReader to deserialize from.
+     *
+     * @throws RuntimeErrorException if a component type is not registered or
+     * deserialization is not implemented for a component type.
      */
     void deserialize(BinaryReader& reader) override;
 

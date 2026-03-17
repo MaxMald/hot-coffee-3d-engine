@@ -28,6 +28,7 @@ namespace hc
 
   void GameObject::serialize(BinaryWriter& writer) const
   {
+    Transform::serialize(writer);
     writer.writeString(m_name);
 
     writer.writeSizeT(m_children.size());
@@ -44,7 +45,8 @@ namespace hc
 
   void GameObject::deserialize(BinaryReader& reader)
   {
-    m_name = reader.readString();
+    Transform::deserialize(reader);
+    m_name = reader.readString();   
 
     SizeT childCount = reader.readSizeT();
     for (SizeT i = 0; i < childCount; ++i)
