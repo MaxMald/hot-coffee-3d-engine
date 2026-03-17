@@ -13,11 +13,14 @@ namespace hc
 {
   /**
    * @brief Reads primitive types and engine data structures from a binary
-   * stream.
+   *        stream.
    *
    * BinaryReader provides methods for deserializing various data types from
    * a binary input stream. It handles platform-independent binary reading
    * for primitives, strings, math types, and engine structures.
+   *
+   * @note Peek methods require the underlying stream to be seekable. They
+   *       will fail with non-seekable streams (e.g., network streams, pipes).
    */
   class HC_UTILITY_EXPORT BinaryReader
   {
@@ -45,11 +48,27 @@ namespace hc
     Int8 readInt8();
 
     /**
+     * @brief Peeks at the next 8-bit signed integer without advancing the
+     * stream position.
+     *
+     * @return The integer value peeked from the stream.
+     */
+    Int8 peekInt8();
+
+    /**
      * @brief Reads a 16-bit signed integer.
      *
      * @return The integer value read from the stream.
      */
     Int16 readInt16();
+
+    /**
+     * @brief Peeks at the next 16-bit signed integer without advancing the
+     * stream position.
+     *
+     * @return The integer value peeked from the stream.
+     */
+    Int16 peekInt16();
 
     /**
      * @brief Reads a 32-bit signed integer.
@@ -73,11 +92,27 @@ namespace hc
     UInt8 readUInt8();
 
     /**
+     * @brief Peeks at the next 8-bit unsigned integer without advancing the
+     * stream position.
+     *
+     * @return The integer value peeked from the stream.
+     */
+    UInt8 peekUInt8();
+
+    /**
      * @brief Reads a 16-bit unsigned integer.
      *
      * @return The integer value read from the stream.
      */
     UInt16 readUInt16();
+
+    /**
+     * @brief Peeks at the next 16-bit unsigned integer without advancing the
+     * stream position.
+     *
+     * @return The integer value peeked from the stream.
+     */
+    UInt16 peekUInt16();
 
     /**
      * @brief Reads a 32-bit unsigned integer.

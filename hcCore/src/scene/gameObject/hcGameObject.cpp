@@ -14,13 +14,67 @@ namespace hc
     m_name(name),
     m_parent(nullptr),
     m_gameObjectFactory(gameObjectFactory),
-    m_componentFactoriesManager(componentFactoriesManager)
+    m_componentFactoriesManager(componentFactoriesManager),
+    m_children(),
+    m_components(),
+    m_drawableComponents()
   {
   }
 
   GameObject::~GameObject()
   {
     destroy();
+  }
+
+  void GameObject::serialize(BinaryWriter& writer) const
+  {
+    writer.writeString(m_name);
+
+    writer.writeSizeT(m_children.size());
+    for (const auto& child : m_children)
+      child->serialize(writer);
+
+    writer.writeSizeT(m_components.size());
+    for (const auto& pair : m_components)
+    {
+      const IComponent* component = pair.second.get();
+      component->serialize(writer);
+    }
+  }
+
+  void GameObject::deserialize(BinaryReader& reader)
+  {
+    m_name = reader.readString();
+
+    SizeT childCount = reader.readSizeT();
+    for (SizeT i = 0; i < childCount; ++i)
+    {
+      UniquePtr<GameObject> child = m_gameObjectFactory.create("_toDeserialize");
+      child->deserialize(reader);
+      addChild(std::move(child));
+    }
+
+    SizeT componentCount = reader.readSizeT();
+    for (SizeT i = 0; i < componentCount; ++i)
+    {
+      componentType::Type componentType = static_cast<componentType::Type>(
+        reader.peekUInt16()
+      );
+
+      UniquePtr<IComponent> component = m_componentFactoriesManager
+        .createComponent(componentType);
+
+      if (!component)
+      {
+        throw RuntimeErrorException(
+          "Component deserialization is not implemented. Component type: " +
+          componentType::ToString(componentType)
+        );
+      }
+
+      component->deserialize(reader);
+      addComponent(std::move(component));
+    }
   }
 
   void GameObject::draw(const RenderContext& renderContext)

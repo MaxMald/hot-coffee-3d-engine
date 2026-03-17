@@ -24,6 +24,7 @@ namespace hc
    */
   class HC_CORE_EXPORT GameObject :
     public NonCopyable,
+    public ISerializable,
     public Transform,
     public IDrawable
   {
@@ -47,6 +48,16 @@ namespace hc
      * @brief Destructor for GameObject.
      */
     virtual ~GameObject();
+
+    /**
+     * @copydoc ISerializable::serialize
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ISerializable::deserialize
+     */
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Renders the GameObject and its drawable children/components.

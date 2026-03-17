@@ -21,10 +21,26 @@ namespace hc
     return value;
   }
 
+  Int8 BinaryReader::peekInt8()
+  {
+    std::streampos originalPos = m_stream.tellg();
+    Int8 value = readInt8();
+    m_stream.seekg(originalPos);
+    return value;
+  }
+
   Int16 BinaryReader::readInt16()
   {
     Int16 value = 0;
     m_stream.read(reinterpret_cast<char*>(&value), sizeof(Int16));
+    return value;
+  }
+
+  Int16 BinaryReader::peekInt16()
+  {
+    std::streampos originalPos = m_stream.tellg();
+    Int16 value = readInt16();
+    m_stream.seekg(originalPos);
     return value;
   }
 
@@ -49,10 +65,26 @@ namespace hc
     return value;
   }
 
+  UInt8 BinaryReader::peekUInt8()
+  {
+    std::streampos originalPos = m_stream.tellg();
+    UInt8 value = readUInt8();
+    m_stream.seekg(originalPos);
+    return value;
+  }
+
   UInt16 BinaryReader::readUInt16()
   {
     UInt16 value = 0;
     m_stream.read(reinterpret_cast<char*>(&value), sizeof(UInt16));
+    return value;
+  }
+
+  UInt16 BinaryReader::peekUInt16()
+  {
+    std::streampos originalPos = m_stream.tellg();
+    UInt16 value = readUInt16();
+    m_stream.seekg(originalPos);
     return value;
   }
 
