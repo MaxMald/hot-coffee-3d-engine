@@ -42,13 +42,13 @@ namespace hc
        * is cleared before deserialization. Returns false if the file cannot
        * be opened, has an invalid format, or if an exception occurs.
        *
-       * @param filePath The path to the input .hcscene file.
        * @param scene Reference to the Scene object to populate with
        * deserialized data.
+       * @param filePath The path to the input .hcscene file.
        *
        * @return True if deserialization was successful, false otherwise.
        */
-      static bool Deserialize(const Path& filePath, Scene& scene);
+      static bool Deserialize(Scene& scene, const Path& filePath);
 
       /**
        * @brief Deserializes a scene from a .hcscene file and returns a new

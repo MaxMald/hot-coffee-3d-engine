@@ -41,7 +41,7 @@ namespace hc
       }
     }
 
-    bool SceneSerializer::Deserialize(const Path& filePath, Scene& scene)
+    bool SceneSerializer::Deserialize(Scene& scene, const Path& filePath)
     {
       try
       {
@@ -76,7 +76,7 @@ namespace hc
       try
       {
         UniquePtr<Scene> scene = MakeUnique<Scene>();
-        if (Deserialize(filePath, *scene))
+        if (Deserialize(*scene, filePath))
           return scene;
         else
           return nullptr;
