@@ -6,6 +6,9 @@
 
 namespace hc
 {
+  class IGameObjectFactory;
+  class Scene;
+
   /**
    * @brief Organizes and manages root-level GameObjects in the scene.
    *
@@ -19,6 +22,7 @@ namespace hc
    */
   class HC_CORE_EXPORT SceneGraph :
     public NonCopyable,
+    public ISerializable,
     public IDrawable
   {
   public:
@@ -31,6 +35,20 @@ namespace hc
      * @brief Destroys the SceneGraph and all root GameObjects it owns.
      */
     virtual ~SceneGraph() override;
+
+    /**
+     * @brief Serializes the SceneGraph and all root GameObjects to binary format.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @brief Deserializes the SceneGraph and all root GameObjects from binary format.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Renders all root GameObjects and their hierarchies.
@@ -92,5 +110,20 @@ namespace hc
      * @brief Collection of root GameObjects owned by the SceneGraph.
      */
     Vector<UniquePtr<GameObject>> m_roots;
+
+    /**
+     * @brief Pointer to the GameObjectFactory used for creating GameObjects during
+     * deserialization.
+     */
+    IGameObjectFactory* m_gameObjectFactory;
+
+    /**
+     * @brief Initializes the SceneGraph with a GameObjectFactory for deserialization.
+     *
+     * @param gameObjectFactory Pointer to the factory to use for creating GameObjects.
+     */
+    void initialize(IGameObjectFactory* gameObjectFactory);
+
+    friend class Scene;
   };
 }

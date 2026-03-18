@@ -6,12 +6,32 @@
 namespace hc
 {
   Scene::Scene() :
+    m_sceneGraph(),
+    m_cameraManager(),
+    m_lightManager(),
     m_gameObjectFactory(nullptr)
   {
   }
 
   Scene::~Scene()
   {
+  }
+
+  void Scene::serialize(BinaryWriter& writer) const
+  {
+    m_lightManager.serialize(writer);
+    m_cameraManager.serialize(writer);
+    m_sceneGraph.serialize(writer);
+    onSerialize(writer);
+  }
+
+  void Scene::deserialize(BinaryReader& reader)
+  {
+    clear();
+    m_lightManager.deserialize(reader);
+    m_cameraManager.deserialize(reader);
+    m_sceneGraph.deserialize(reader);
+    onDeserialize(reader);
   }
 
   UniquePtr<GameObject> Scene::createGameObject(const String& name)
@@ -131,6 +151,20 @@ namespace hc
     // the scene is destroyed.
   }
 
+  void Scene::onSerialize(BinaryWriter&) const
+  {
+    // This method can be overridden by derived classes to write custom data during
+    // serialization. The base implementation serializes the scene graph and
+    // default camera.
+  }
+
+  void Scene::onDeserialize(BinaryReader&)
+  {
+    // This method can be overridden by derived classes to read custom data during
+    // deserialization. The base implementation deserializes the scene graph and
+    // default camera.
+  }
+
   void Scene::clear()
   {
     m_sceneGraph.clear();
@@ -144,6 +178,7 @@ namespace hc
       throw InvalidArgumentException("GameObjectFactory pointer cannot be null");
 
     m_gameObjectFactory = gameObjectFactory;
+    m_sceneGraph.initialize(gameObjectFactory);
     onInitialized();
   }
 
