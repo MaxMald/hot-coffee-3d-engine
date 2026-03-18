@@ -9,7 +9,7 @@ namespace hc
   namespace serialization
   {
     /**
-     * @brief Serializer for .hcscene files.
+     * @brief High level methods to serialize and deserialize .hcscene files.
      *
      * This class handles the serialization and deserialization of scene data
      * to and from the .hcscene file format. It ensures that the file format
