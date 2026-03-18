@@ -112,6 +112,11 @@ namespace hc
      */
     const CameraManager& getCameraManager() const;
 
+    /**
+     * @brief Clears the scene graph, lights, and cameras.
+     */
+    void clear();
+
   protected:
     /**
      * @brief Called after the scene is initialized.
@@ -212,11 +217,6 @@ namespace hc
      * @param reader The BinaryReader to deserialize custom data from.
      */
     virtual void onDeserialize(BinaryReader& reader);
-
-    /**
-     * @brief Clears the scene graph, lights, and cameras.
-     */
-    void clear();
 
   private:
     SceneGraph m_sceneGraph;

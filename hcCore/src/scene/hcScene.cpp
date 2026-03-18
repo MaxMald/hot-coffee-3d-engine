@@ -91,6 +91,13 @@ namespace hc
     return m_cameraManager;
   }
 
+  void Scene::clear()
+  {
+    m_sceneGraph.clear();
+    m_lightManager.clear();
+    m_cameraManager.clear();
+  }
+
   void Scene::onInitialized()
   {
     // This method can be overridden by derived classes to perform actions after
@@ -163,13 +170,6 @@ namespace hc
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and
     // default camera.
-  }
-
-  void Scene::clear()
-  {
-    m_sceneGraph.clear();
-    m_lightManager.clear();
-    m_cameraManager.clear();
   }
 
   void Scene::initialize(IGameObjectFactory* gameObjectFactory)
