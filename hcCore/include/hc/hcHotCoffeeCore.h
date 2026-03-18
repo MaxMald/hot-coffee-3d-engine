@@ -31,6 +31,8 @@
 #include "hc/scene/light/hcLight.h"
 #include "hc/scene/light/hcLightManager.h"
 #include "hc/serialization/hcJsonSerializer.h"
+#include "hc/serialization/hcFileFormats.h"
+#include "hc/serialization/hcSceneSerializer.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
 #include "hc/graphics/resource/shader/hcIShader.h"
