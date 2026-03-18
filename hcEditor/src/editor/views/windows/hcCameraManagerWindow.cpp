@@ -8,7 +8,8 @@ namespace hc::editor
 {
   CameraManagerWindow::CameraManagerWindow(SceneManager& sceneManager) :
     AWindowView("Camera Manager", false),
-    m_sceneManager(sceneManager)
+    m_sceneManager(sceneManager),
+    m_cameras()
   {
   }
 
@@ -33,11 +34,11 @@ namespace hc::editor
     ImGui::Separator();
     ImGui::PopID();
 
-    
-    const Vector<UniquePtr<Camera>>& cameras = cameraManager.getCameras();
-    for (size_t i = 0; i < cameras.size(); ++i)
+    m_cameras.clear();
+    cameraManager.getCameras(m_cameras);
+    for (size_t i = 0; i < m_cameras.size(); ++i)
     {
-      Camera* camera = cameras[i].get();
+      Camera* camera = m_cameras[i];
 
       ImGui::PushID(static_cast<Int32>(i));
       drawCameraController(camera);

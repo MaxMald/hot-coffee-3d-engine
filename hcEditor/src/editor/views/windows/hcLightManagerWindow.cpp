@@ -7,7 +7,8 @@ namespace hc::editor
 {
   LightManagerWindow::LightManagerWindow(SceneManager& sceneManager) :
     AWindowView("Light Manager", false),
-    m_sceneManager(sceneManager)
+    m_sceneManager(sceneManager),
+    m_lights()
   {
   }
 
@@ -24,12 +25,12 @@ namespace hc::editor
     }
 
     LightManager& lightManager = activeScene->getLightManager();
-    const Vector<UniquePtr<Light>>& lights = lightManager.getLights();
+    m_lights.clear();
+    lightManager.getLights(m_lights);
 
-    for (size_t i = 0; i < lights.size(); ++i)
+    for (size_t i = 0; i < m_lights.size(); ++i)
     {
-      Light* light = lights[i].get();
-
+      Light* light = m_lights[i];
       ImGui::PushID(static_cast<Int32>(i));
       drawLightController(light);
       ImGui::Separator();
