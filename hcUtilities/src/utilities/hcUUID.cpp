@@ -14,7 +14,7 @@ namespace hc
   {
     uuids::uuid uuid;
 
-    Impl() = default;
+    Impl() : uuid() {}
 
     Impl(const String& uuidString) : uuid()
     {
@@ -152,5 +152,10 @@ namespace hc
   SizeT UUID::hash() const
   {
     return std::hash<uuids::uuid>{}(m_impl->uuid);
+  }
+
+  UUID::UUID(Impl* impl) :
+    m_impl(impl)
+  {
   }
 }
