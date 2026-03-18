@@ -21,7 +21,7 @@ namespace hc
      *
      * @return The version string.
      */
-    static constexpr const char* toString()
+    static constexpr const char* ToString()
     {
       return "@HC_VERSION_MAJOR@.@HC_VERSION_MINOR@.@HC_VERSION_PATCH@";
     }
@@ -33,7 +33,7 @@ namespace hc
      *
      * @return The version as a 32-bit unsigned integer.
      */
-    static constexpr UInt32 toInt()
+    static constexpr UInt32 ToInt()
     {
       return (MAJOR << 16) | (MINOR << 8) | PATCH;
     }
