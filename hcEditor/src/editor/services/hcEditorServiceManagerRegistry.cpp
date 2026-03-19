@@ -11,7 +11,8 @@ namespace hc::editor
   {
     void registerServices(
       HotCoffeeEngine& engine,
-      EditorServiceManager& serviceManager
+      EditorServiceManager& serviceManager,
+      Scene* editorScene
     )
     {
       serviceManager.registerService<ProjectManager>(
@@ -28,7 +29,7 @@ namespace hc::editor
       );
       serviceManager.registerService<EditorSceneManager>(
         MakeUnique<EditorSceneManager>(
-          engine.getSceneManager().getActiveScene(),
+          editorScene,
           serviceManager.getService<ProjectManager>()
         )
       );

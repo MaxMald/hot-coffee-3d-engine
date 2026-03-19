@@ -15,6 +15,8 @@ namespace hc::editor
   {
   }
 
+  // Set editor scene instead
+
   void EditorSceneManager::prepare()
   {
     m_projectManager.subscribeListener(this);
@@ -41,16 +43,13 @@ namespace hc::editor
 
   bool EditorSceneManager::saveScene(const Path& scenePath)
   {
-    if (!isSceneOpen())
-      return false;
-
     assertSceneIsValid();
-
     if (SceneSerializer::Serialize(*m_editorScene, scenePath))
     {
       m_currentScenePath = scenePath;
       return true;
     }
+    return false;
   }
 
   void EditorSceneManager::closeScene()

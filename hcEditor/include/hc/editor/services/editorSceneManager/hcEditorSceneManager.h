@@ -22,11 +22,15 @@ namespace hc::editor
      * @brief Constructs an EditorSceneManager with the given editor scene and project
      * manager.
      *
-     * @param editorScene Pointer to the Scene instance used for editing.
+     * @param editorScene Pointer to the Scene instance that represents the editor's
+     * scene.
      * @param projectManager Reference to the ProjectManager for subscribing to project
      * events.
      */
-    EditorSceneManager(Scene* editorScene, ProjectManager& projectManager);
+    EditorSceneManager(
+      Scene* editorScene,
+      ProjectManager& projectManager
+    );
     virtual ~EditorSceneManager() = default;
 
     /**

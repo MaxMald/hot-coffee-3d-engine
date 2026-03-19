@@ -3,6 +3,8 @@
 #include "hc/editor/views/mainMenuBar/hcMenu.h"
 #include "hc/editor/views/mainMenuBar/hcMainMenuBar.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/services/hcEditorServiceManager.h"
+#include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
 
 // Windows
 #include "hc/editor/views/hcEditorViewsManager.h"
@@ -16,10 +18,12 @@
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 // Menu Items
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcSaveSceneMenuItem.h"
 
 namespace hc::editor
 {
@@ -27,7 +31,7 @@ namespace hc::editor
   {
     UniquePtr<MainMenuBar> create(
       EditorViewsManager& editorViewsManager,
-      ProjectManager& projectManager
+      EditorServiceManager& editorServiceManager
     )
     {
       UniquePtr<MainMenuBar> mainMenuBar = MakeUnique<MainMenuBar>();
@@ -37,8 +41,20 @@ namespace hc::editor
         menuBuilder
           .beginMenu("File")
             .addMenuItem(MakeUnique<OpenProjectMenuItem>(
-              projectManager,
+              editorServiceManager.getService<ProjectManager>(),
               *editorViewsManager.getView<FileDialogView>()
+            ))
+          .endMenu()
+          .build()
+      );
+
+      mainMenuBar->addMenu(
+        menuBuilder
+          .beginMenu("Scene")
+            .addMenuItem(MakeUnique<SaveSceneMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              editorServiceManager.getService<EditorSceneManager>(),
+              *editorViewsManager.getView<ProjectFileDialogView>()
             ))
           .endMenu()
           .build()
