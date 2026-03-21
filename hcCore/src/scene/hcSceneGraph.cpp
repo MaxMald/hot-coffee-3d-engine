@@ -17,10 +17,7 @@ namespace hc
   {
     writer.writeSizeT(m_roots.size());
     for (const UniquePtr<GameObject>& root : m_roots)
-    {
-      writer.writeBool(true);
       root->serialize(writer);
-    }
   }
 
   void SceneGraph::deserialize(BinaryReader& reader)

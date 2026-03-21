@@ -105,4 +105,25 @@ namespace hc
 
     m_isDirty = false;
   }
+
+  void OrthographicCameraProjection::serialize(BinaryWriter& writer) const
+  {
+    writer.writeFloat(m_left);
+    writer.writeFloat(m_right);
+    writer.writeFloat(m_top);
+    writer.writeFloat(m_bottom);
+    writer.writeFloat(m_near);
+    writer.writeFloat(m_far);
+  }
+
+  void OrthographicCameraProjection::deserialize(BinaryReader& reader)
+  {
+    m_left = reader.readFloat();
+    m_right = reader.readFloat();
+    m_top = reader.readFloat();
+    m_bottom = reader.readFloat();
+    m_near = reader.readFloat();
+    m_far = reader.readFloat();
+    m_isDirty = true;
+  }
 }

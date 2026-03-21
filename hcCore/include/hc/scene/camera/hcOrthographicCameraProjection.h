@@ -8,7 +8,8 @@ namespace hc
    * @brief Implements an orthographic projection for a camera.
    */
   class HC_CORE_EXPORT OrthographicCameraProjection : 
-    public ICameraProjection
+    public ICameraProjection,
+    public ISerializable
   {
   public:
     OrthographicCameraProjection();
@@ -35,6 +36,10 @@ namespace hc
      * Updates the cached projection matrix if any parameters have changed.
      */
     void update() override;
+
+    void serialize(BinaryWriter& writer) const override;
+
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Gets the left boundary of the view volume.

@@ -74,6 +74,9 @@ namespace hc
 
   Camera* CameraManager::getCamera(const UUID& cameraId) const
   {
+    if (cameraId == m_default->getUUID())
+      return m_default.get();
+
     auto it = m_cameras.find(cameraId);
     if (it != m_cameras.end())
       return it->second.get();

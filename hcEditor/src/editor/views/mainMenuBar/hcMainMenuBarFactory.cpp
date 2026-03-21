@@ -24,6 +24,7 @@
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcSaveSceneMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcOpenSceneMenuItem.h"
 
 namespace hc::editor
 {
@@ -52,6 +53,11 @@ namespace hc::editor
         menuBuilder
           .beginMenu("Scene")
             .addMenuItem(MakeUnique<SaveSceneMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              editorServiceManager.getService<EditorSceneManager>(),
+              *editorViewsManager.getView<ProjectFileDialogView>()
+            ))
+            .addMenuItem(MakeUnique<OpenSceneMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               editorServiceManager.getService<EditorSceneManager>(),
               *editorViewsManager.getView<ProjectFileDialogView>()

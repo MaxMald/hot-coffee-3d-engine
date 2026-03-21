@@ -22,6 +22,8 @@ namespace hc
     writer.writeVector3f(m_direction);
     writer.writeVector3f(m_up);
     writer.writeUInt8(m_projectionType);
+    m_orthographicProjection.serialize(writer);
+    m_perspectiveProjection.serialize(writer);
   }
 
   void Camera::deserialize(BinaryReader& reader)
@@ -31,6 +33,8 @@ namespace hc
     m_direction = reader.readVector3f();
     m_up = reader.readVector3f();
     m_projectionType = static_cast<projectionType::Type>(reader.readUInt8());
+    m_orthographicProjection.deserialize(reader);
+    m_perspectiveProjection.deserialize(reader);
   }
 
   const UUID& Camera::getUUID() const
