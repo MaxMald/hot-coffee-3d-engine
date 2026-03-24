@@ -53,7 +53,7 @@ namespace hc
      *
      * Removes and destroys the camera from the managed cameras. Logs an
      * error if the camera is not found. If the active camera is destroyed,
-     * behavior is undefined.
+     * the active camera is reset to the default camera.
      * 
      * @param cameraId The UUID of the camera to destroy.
      */
