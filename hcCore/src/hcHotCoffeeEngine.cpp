@@ -126,7 +126,10 @@ namespace hc
       ));
       m_graphicsManager->initialize();
 
-      m_sceneManager = SceneManagerFactory::create(*m_graphicsManager);
+      m_sceneManager = SceneManagerFactory::create(
+        *m_graphicsManager,
+        *m_assetManager
+      );
 
       m_inputManager.initialize();
     }

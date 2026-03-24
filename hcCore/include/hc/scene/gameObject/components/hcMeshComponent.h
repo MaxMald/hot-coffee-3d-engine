@@ -7,6 +7,7 @@ namespace hc
 {
   class IMesh;
   class IMeshManager;
+  class IAssetManager;
 
   /**
    * Component that holds and manages a mesh for rendering.
@@ -23,7 +24,7 @@ namespace hc
     /**
      * Constructs a mesh component with no mesh attached.
      */
-    MeshComponent(IMeshManager& meshManager);
+    MeshComponent(IMeshManager& meshManager, IAssetManager& assetManager);
     ~MeshComponent() override;
 
     /**
@@ -52,6 +53,7 @@ namespace hc
   private:
     SharedPtr<IMesh> m_mesh;
     IMeshManager& m_meshManager;
+    IAssetManager& m_assetManager;
 
     /**
      * @copydoc ABaseComponent::onSerialize

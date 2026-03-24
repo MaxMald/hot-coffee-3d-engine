@@ -13,7 +13,13 @@ namespace hc::editor
   class ProjectManager : public IEditorService
   {
   public:
-    ProjectManager();
+    /**
+     * @brief Constructs a ProjectManager with the given AssetManager reference.
+     *
+     * @param assetManager Reference to the AssetManager for loading and saving project
+     * assets.
+     */
+    ProjectManager(IAssetManager& assetManager);
     virtual ~ProjectManager() = default;
 
     /**
@@ -84,6 +90,7 @@ namespace hc::editor
     void unsubscribeListener(IProjectManagerListener* listener);
 
   private:
+    IAssetManager& m_assetManager;
     Path m_currentProjectPath;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;

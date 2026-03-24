@@ -49,6 +49,27 @@ namespace hc
      */
     virtual void destroy() = 0;
 
+    /**
+     * Sets the root path for asset loading.
+     *
+     * @param rootPath The root directory path where assets are located
+     */
+    virtual void setRootPath(const Path& rootPath) = 0;
+
+    /**
+     * Gets the root path for asset loading.
+     *
+     * @returns The root directory path where assets are located
+     */
+    virtual const Path& getRootPath() const = 0;
+
+    /**
+     * Checks if a root path has been set for asset loading.
+     *
+     * @return true if a root path is set, false otherwise
+     */
+    virtual bool hasRootPath() const = 0;
+
   protected:
     IAssetManager() = default;
   };

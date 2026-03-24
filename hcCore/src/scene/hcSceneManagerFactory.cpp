@@ -1,5 +1,6 @@
 #include "hc/scene/hcSceneManagerFactory.h"
 #include "hc/scene/hcSceneManager.h"
+#include "hc/assets/hcIAssetManager.h"
 #include "hc/scene/gameObject/hcGameObjectFactory.h"
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManagerRegistry.h"
@@ -8,7 +9,10 @@ namespace hc
 {
   namespace SceneManagerFactory
   {
-    UniquePtr<SceneManager> create(IGraphicsManager& graphicsManager)
+    UniquePtr<SceneManager> create(
+      IGraphicsManager& graphicsManager,
+      IAssetManager& assetManager
+    )
     {
       UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>();
       UniquePtr<ComponentFactoriesManager> componentFactoriesManager =
@@ -17,7 +21,8 @@ namespace hc
       componentFactoriesManagerRegistry::registerFactories(
         *componentFactoriesManager,
         *sceneManager,
-        graphicsManager
+        graphicsManager,
+        assetManager
       );
 
       sceneManager->initialize(

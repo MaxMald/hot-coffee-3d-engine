@@ -23,6 +23,7 @@
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/assets/hcIAssetManager.h"
+#include "hc/assets/hcAssetPath.h"
 #include "hc/scene/hcScene.h"
 #include "hc/scene/hcSceneManager.h"
 #include "hc/scene/gameObject/hcGameObject.h"

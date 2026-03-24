@@ -5,7 +5,8 @@ namespace hc
   AssetManager::AssetManager() :
     m_materialDescriptorAssetManager(),
     m_modelAssetManager(m_materialDescriptorAssetManager),
-    m_imageAssetManager()
+    m_imageAssetManager(),
+    m_rootPath()
   {
   }
 
@@ -34,5 +35,20 @@ namespace hc
   void AssetManager::destroy()
   {
     clear();
+  }
+
+  void AssetManager::setRootPath(const Path& rootPath)
+  {
+    m_rootPath = rootPath;
+  }
+
+  const Path& AssetManager::getRootPath() const
+  {
+    return m_rootPath;
+  }
+
+  bool AssetManager::hasRootPath() const
+  {
+    return !m_rootPath.empty();
   }
 }

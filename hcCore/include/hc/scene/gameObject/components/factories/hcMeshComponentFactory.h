@@ -6,6 +6,7 @@
 namespace hc
 {
   class IMeshManager;
+  class IAssetManager;
 
   /**
    * Factory for creating mesh component instances.
@@ -21,8 +22,9 @@ namespace hc
      *
      * @param meshManager Reference to the mesh manager for loading and
      *                    managing mesh resources.
+     * @param assetManager Reference to the asset manager.
      */
-    MeshComponentFactory(IMeshManager& meshManager);
+    MeshComponentFactory(IMeshManager& meshManager, IAssetManager& assetManager);
     ~MeshComponentFactory() override = default;
 
     /**
@@ -34,5 +36,6 @@ namespace hc
 
   private:
     IMeshManager& m_meshManager;
+    IAssetManager& m_assetManager;
   };
 }

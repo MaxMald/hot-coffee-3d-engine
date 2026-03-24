@@ -16,7 +16,7 @@ namespace hc::editor
     )
     {
       serviceManager.registerService<ProjectManager>(
-        MakeUnique<ProjectManager>()
+        MakeUnique<ProjectManager>(engine.getAssetManager())
       );
       serviceManager.registerService<GameObjectSelectionService>(
         MakeUnique<GameObjectSelectionService>()
