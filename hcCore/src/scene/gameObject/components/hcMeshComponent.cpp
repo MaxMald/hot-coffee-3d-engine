@@ -73,7 +73,7 @@ namespace hc
       if (!m_assetManager.hasRootPath())
       {
         throw RuntimeErrorException(
-          "Cannot load mesh during deseralization: asset manager does not have a root path set for relative paths"
+          "Cannot load mesh during deserialization: asset manager does not have a root path set for relative paths"
         );
       }
 
