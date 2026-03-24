@@ -44,5 +44,9 @@ target_include_directories(hcUtilities
   PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/STDUUID/include"
 )
 
+target_link_libraries(hcUtilities PRIVATE
+  $<$<PLATFORM_ID:Linux>:uuid>
+)
+
 # Install the library to the 'lib' directory
 install(TARGETS hcUtilities DESTINATION lib)
