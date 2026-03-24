@@ -1,6 +1,7 @@
 #include "hc/editor/views/projectFileDialog/hcCreateNewFileUI.h"
 #include <imgui.h>
 #include <fstream>
+#include <filesystem>
 
 namespace hc::editor
 {
@@ -135,8 +136,15 @@ namespace hc::editor
       if (!finalFileName.ends_with(selectedExtension))
         finalFileName += selectedExtension;
 
-      // Create the new file
+      // Generate new file path
       Path newFilePath = m_targetDirectory / finalFileName.c_str();
+
+      if (std::filesystem::exists(newFilePath))
+      {
+        m_popupErrorMessage = "A file with the name '" + finalFileName + "' already exists in the target directory.";
+        ImGui::OpenPopup(CREATE_FILE_ERROR_POPUP_KEY);
+        return;
+      }
 
       std::ofstream fileStream(newFilePath);
       if (!fileStream.is_open())
