@@ -70,6 +70,7 @@ namespace hc
      * @brief Gets a light by its ID.
      * 
      * @param lightId The UUID of the light to retrieve.
+     * 
      * @return Pointer to the light, or nullptr if not found.
      */
     Light* getLight(const UUID& lightId) const;

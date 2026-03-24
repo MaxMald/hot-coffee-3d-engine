@@ -55,6 +55,15 @@ namespace hc
     );
   }
 
+  Light* LightManager::getLight(const UUID& lightId) const
+  {
+    auto it = m_lights.find(lightId);
+    if (it != m_lights.end())
+      return it->second.get();
+
+    return nullptr;
+  }
+
   void LightManager::clear()
   {
     m_lights.clear();
