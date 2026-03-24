@@ -97,8 +97,7 @@ namespace hc
      * @brief Gets a list of all managed cameras.
 
      * The list will be filled with pointers to the cameras, but the caller @b does
-     * @b not take ownership of the cameras. The list won't be cleared before filling.
-     * The default camera is not included in the list.
+     * @b not take ownership of the cameras.
      * 
      * @param outCameras Vector to be filled with pointers to all managed cameras.
      */

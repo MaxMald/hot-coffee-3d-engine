@@ -114,6 +114,7 @@ namespace hc
 
   void CameraManager::getCameras(Vector<Camera*>& outCameras) const
   {
+    outCameras.clear();
     for (const auto& pair : m_cameras)
       outCameras.push_back(pair.second.get());
   }
