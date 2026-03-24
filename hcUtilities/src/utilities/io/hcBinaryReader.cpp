@@ -158,7 +158,7 @@ namespace hc
 
   String BinaryReader::readString()
   {
-    UInt32 length = readUInt32();
+    SizeT length = readSizeT();
     if (length == 0)
       return String();
 

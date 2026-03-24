@@ -97,8 +97,8 @@ namespace hc
 
   void BinaryWriter::writeString(const String& value)
   {
-    UInt32 length = static_cast<UInt32>(value.length());
-    writeUInt32(length);
+    SizeT length = static_cast<SizeT>(value.length());
+    writeSizeT(length);
 
     if (length == 0)
       return;
