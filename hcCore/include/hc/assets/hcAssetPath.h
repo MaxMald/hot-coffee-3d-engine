@@ -18,7 +18,7 @@ namespace hc
      *
      * @param absolutePath Absolute filesystem path.
      * @param projectRoot Root directory of the project.
-     * 
+     *
      * @return Relative path from project root.
      */
     static String ToRelative(const Path& absolutePath, const Path& rootPath);
@@ -33,7 +33,7 @@ namespace hc
      *
      * @param relativePath Path relative to project root.
      * @param projectRoot Root directory of the project.
-     * 
+     *
      * @return Absolute filesystem path.
      *
      * @throws InvalidArgumentException if the resolved path escapes the
@@ -45,7 +45,7 @@ namespace hc
      * @brief Checks if a path is relative.
      *
      * @param path The path to check.
-     * 
+     *
      * @return True if the path is relative, false if it's absolute.
      */
     static bool IsRelative(const Path& path);
