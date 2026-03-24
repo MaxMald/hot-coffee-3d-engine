@@ -1,5 +1,6 @@
 #include "hc/editor/views/projectFileDialog/hcCreateNewFileUI.h"
 #include <imgui.h>
+#include <fstream>
 
 namespace hc::editor
 {
