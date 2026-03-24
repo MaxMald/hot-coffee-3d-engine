@@ -16,8 +16,7 @@ namespace hc
    *        stream.
    *
    * BinaryReader provides methods for deserializing various data types from
-   * a binary input stream. It handles platform-independent binary reading
-   * for primitives, strings, math types, and engine structures.
+   * a binary input stream.
    *
    * @note Peek methods require the underlying stream to be seekable. They
    *       will fail with non-seekable streams (e.g., network streams, pipes).

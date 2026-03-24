@@ -15,9 +15,7 @@ namespace hc
    * stream.
    *
    * BinaryWriter provides methods for serializing various data types to a
-   * binary output stream. It handles platform-independent binary
-   * representation for primitives, strings, math types, and engine
-   * structures.
+   * binary output stream.
    */
   class HC_UTILITY_EXPORT BinaryWriter
   {
