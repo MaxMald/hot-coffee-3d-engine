@@ -50,5 +50,15 @@ namespace hc
      * @return True if the string path is relative, false if it's absolute.
      */
     static bool IsRelative(const String& path);
+
+    /**
+     * @brief Checks if an absolute path is under the specified root path.
+     *
+     * @param absolutePath The absolute path to check.
+     * @param rootPath The root path to check against.
+     *
+     * @return True if the absolute path is under the root path, false otherwise.
+     */
+    static bool IsUnderRoot(const Path& absolutePath, const Path& rootPath);
   };
 }

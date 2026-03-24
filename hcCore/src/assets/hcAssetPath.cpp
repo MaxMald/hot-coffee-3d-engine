@@ -8,6 +8,12 @@ namespace hc
   String AssetPath::ToRelative(const Path& absolutePath, const Path& rootPath)
   {
     Path relative = std::filesystem::relative(absolutePath, rootPath);
+
+    if (!IsUnderRoot(absolutePath, rootPath))
+      throw InvalidArgumentException(
+        "Absolute path is not under the specified root path."
+      );
+
     return ASSET_PATH_PREFIX + relative.generic_string();
   }
 
@@ -29,5 +35,18 @@ namespace hc
   bool AssetPath::IsRelative(const String& path)
   {
     return !path.empty() && path[0] == ASSET_PATH_PREFIX;
+  }
+
+  bool AssetPath::IsUnderRoot(const Path& absolutePath, const Path& rootPath)
+  {
+    Path canonicalAbsolute = std::filesystem::weakly_canonical(absolutePath);
+    Path canonicalRoot = std::filesystem::weakly_canonical(rootPath);
+
+    auto [rootEnd, absEnd] = std::mismatch(
+      canonicalRoot.begin(), canonicalRoot.end(),
+      canonicalAbsolute.begin(), canonicalAbsolute.end()
+    );
+
+    return rootEnd == canonicalRoot.end();
   }
 }
