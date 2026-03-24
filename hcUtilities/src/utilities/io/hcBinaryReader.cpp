@@ -160,6 +160,9 @@ namespace hc
   String BinaryReader::readString()
   {
     UInt32 length = readUInt32();
+    if (length == 0)
+      return String();
+
     String value;
     value.resize(length);
     m_stream.read(&value[0], length);

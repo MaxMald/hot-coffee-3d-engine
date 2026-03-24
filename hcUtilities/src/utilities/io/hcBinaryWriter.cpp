@@ -98,6 +98,10 @@ namespace hc
   {
     UInt32 length = static_cast<UInt32>(value.length());
     writeUInt32(length);
+
+    if (length == 0)
+      return;
+
     m_stream.write(value.c_str(), length);
   }
 
