@@ -146,9 +146,8 @@ namespace hc
 
   SizeT BinaryReader::readSizeT()
   {
-    SizeT value = 0;
-    m_stream.read(reinterpret_cast<char*>(&value), sizeof(SizeT));
-    return value;
+    UInt64 fixedValue = readUInt64();
+    return static_cast<SizeT>(fixedValue);
   }
 
   Path BinaryReader::readPath()

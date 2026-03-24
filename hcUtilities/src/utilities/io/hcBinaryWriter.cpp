@@ -85,7 +85,8 @@ namespace hc
 
   void BinaryWriter::writeSizeT(SizeT value)
   {
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(SizeT));
+    UInt64 fixedValue = static_cast<UInt64>(value);
+    writeUInt64(fixedValue);
   }
 
   void BinaryWriter::writePath(const Path& value)
