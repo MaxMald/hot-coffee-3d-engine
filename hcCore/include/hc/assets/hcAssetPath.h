@@ -26,10 +26,18 @@ namespace hc
     /**
      * @brief Converts project-relative path to absolute path.
      *
+     * Resolves a relative path (prefixed with @) to an absolute path by
+     * combining it with the project root. Validates that the resulting
+     * path remains within the project root to prevent path traversal
+     * attacks.
+     *
      * @param relativePath Path relative to project root.
      * @param projectRoot Root directory of the project.
      * 
      * @return Absolute filesystem path.
+     *
+     * @throws InvalidArgumentException if the resolved path escapes the
+     *         project root directory.
      */
     static Path ToAbsolute(const String& relativePath, const Path& rootPath);
 

@@ -19,12 +19,20 @@ namespace hc
 
   Path AssetPath::ToAbsolute(const String& relativePath, const Path& rootPath)
   {
-    if (!IsRelative(relativePath)) {
+    if (!IsRelative(relativePath))
       return Path(relativePath.c_str());
-    }
 
     String relativePart = relativePath.substr(1);
-    return rootPath / Path(relativePart.c_str());
+    Path resultPath = rootPath / Path(relativePart.c_str());
+
+    if (!IsUnderRoot(resultPath, rootPath))
+    {
+      throw InvalidArgumentException(
+        "Relative path escapes root directory: " + relativePath
+      );
+    }
+
+    return resultPath;
   }
 
   bool AssetPath::IsRelative(const Path& path)
