@@ -6,13 +6,13 @@ namespace hc::editor
 {
   class MainMenuBar;
   class EditorViewsManager;
-  class ProjectManager;
+  class EditorServiceManager;
 
   namespace mainMenuBarFactory
   {
     UniquePtr<MainMenuBar> create(
       EditorViewsManager& editorViewsManager,
-      ProjectManager& projectManager
+      EditorServiceManager& editorServiceManager
     );
   }
 }

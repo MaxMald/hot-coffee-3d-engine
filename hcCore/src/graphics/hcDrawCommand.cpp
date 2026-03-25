@@ -4,26 +4,26 @@
 namespace hc
 {
   void DrawCommand::initialize(
-    const CameraMatrices& cameraMatrices,
-    const Matrix4& modelMatrix,
-    SharedPtr<IMaterial> material,
+    const CameraMatrices& _cameraMatrices,
+    const Matrix4& _modelMatrix,
+    SharedPtr<IMaterial> _material,
     float distanceToCamera,
-    UInt32 firstIndex,
-    UInt32 indexCount,
-    const Variant<OpenGlDrawData>& apiDrawData
+    UInt32 _firstIndex,
+    UInt32 _indexCount,
+    const Variant<OpenGlDrawData>& _apiDrawData
   )
   {
-    this->cameraMatrices = cameraMatrices;
-    this->modelMatrix = modelMatrix;
-    this->material = material;
-    this->firstIndex = firstIndex;
-    this->indexCount = indexCount;
-    this->apiDrawData = apiDrawData;
+    this->cameraMatrices = _cameraMatrices;
+    this->modelMatrix = _modelMatrix;
+    this->material = _material;
+    this->firstIndex = _firstIndex;
+    this->indexCount = _indexCount;
+    this->apiDrawData = _apiDrawData;
 
-    if (!material)
+    if (!_material)
       return;
 
-    SharedPtr<AMaterialDescriptor> descriptor = material->getDescriptor();
+    SharedPtr<AMaterialDescriptor> descriptor = _material->getDescriptor();
     if (!descriptor)
       return;
 

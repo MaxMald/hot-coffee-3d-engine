@@ -1,6 +1,6 @@
 #include "hc/scene/gameObject/hcGameObjectFactory.h"
 #include "hc/scene/gameObject/hcGameObject.h"
-#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 
 namespace hc
 {

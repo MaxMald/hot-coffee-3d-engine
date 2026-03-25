@@ -1,6 +1,7 @@
 #pragma once
 
-#include "hc/scene/gameObject/components/hcATypedComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcATypedComponentFactory.h"
+#include "hc/scene/gameObject/components/hcComponentType.h"
 
 namespace hc
 {
@@ -69,6 +70,21 @@ namespace hc
      */
     template <typename ComponentType>
     UniquePtr<ComponentType> createComponent() const;
+
+    /**
+     * @brief Creates a new component instance of the specified type. Returns nullptr if
+     * the component type is unknown, is not implemented or if creation fails.
+     *
+     * This overload allows creating a component based on the component type enum.
+     *
+     * @param componentType The enum value representing the component type.
+     *
+     * @returns Unique pointer to the created component instance,
+     * or nullptr if the type is unknown, is not implemented or creation fails.
+     */
+    UniquePtr<IComponent> createComponent(
+      const componentType::Type& componentType
+    ) const;
 
     /**
      * @brief Removes all registered factories and clears the manager.

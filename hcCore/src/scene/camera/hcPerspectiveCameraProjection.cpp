@@ -40,6 +40,23 @@ namespace hc
     m_isDirty = false;
   }
 
+  void PerspectiveCameraProjection::serialize(BinaryWriter& writer) const
+  {
+    writer.writeAngle(m_fovY);
+    writer.writeFloat(m_aspectRatio);
+    writer.writeFloat(m_near);
+    writer.writeFloat(m_far);
+  }
+
+  void PerspectiveCameraProjection::deserialize(BinaryReader& reader)
+  {
+    m_fovY = reader.readAngle();
+    m_aspectRatio = reader.readFloat();
+    m_near = reader.readFloat();
+    m_far = reader.readFloat();
+    m_isDirty = true;
+  }
+
   void PerspectiveCameraProjection::setFovY(Angle fovY)
   {
     if (m_fovY != fovY)

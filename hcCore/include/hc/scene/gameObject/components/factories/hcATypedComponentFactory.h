@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/scene/gameObject/components/hcIComponent.h"
-#include "hc/scene/gameObject/components/hcIComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcIComponentFactory.h"
 
 namespace hc
 {
@@ -24,6 +24,7 @@ namespace hc
 
     /**
      * @brief Creates a new instance of the component type.
+     * 
      * @return Unique pointer to the newly created component instance.
      */
     virtual UniquePtr<ComponentType> create() const = 0;

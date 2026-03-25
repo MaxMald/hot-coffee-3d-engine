@@ -3,6 +3,7 @@
 namespace hc
 {
   Camera::Camera() :
+    m_id(UUID::Generate()),
     m_position(0.0f, 0.0f, 0.0f),
     m_direction(0.0f, 0.0f, -1.0f),
     m_up(0.0f, 1.0f, 0.0f),
@@ -12,6 +13,33 @@ namespace hc
 
   Camera::~Camera()
   {
+  }
+
+  void Camera::serialize(BinaryWriter& writer) const
+  {
+    m_id.serialize(writer);
+    writer.writeVector3f(m_position);
+    writer.writeVector3f(m_direction);
+    writer.writeVector3f(m_up);
+    writer.writeUInt8(m_projectionType);
+    m_orthographicProjection.serialize(writer);
+    m_perspectiveProjection.serialize(writer);
+  }
+
+  void Camera::deserialize(BinaryReader& reader)
+  {
+    m_id.deserialize(reader);
+    m_position = reader.readVector3f();
+    m_direction = reader.readVector3f();
+    m_up = reader.readVector3f();
+    m_projectionType = static_cast<projectionType::Type>(reader.readUInt8());
+    m_orthographicProjection.deserialize(reader);
+    m_perspectiveProjection.deserialize(reader);
+  }
+
+  const UUID& Camera::getUUID() const
+  {
+    return m_id;
   }
 
   void Camera::setPosition(const Vector3f& position)

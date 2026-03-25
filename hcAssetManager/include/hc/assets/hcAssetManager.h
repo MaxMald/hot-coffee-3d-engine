@@ -52,9 +52,31 @@ namespace hc
      */
     void destroy() override;
 
+    /**
+     * Sets the root path for asset loading.
+     *
+     * @param rootPath The root directory path where assets are located
+     */
+    void setRootPath(const Path& rootPath);
+
+    /**
+     * Gets the root path for asset loading.
+     *
+     * @returns The root directory path where assets are located
+     */
+    const Path& getRootPath() const;
+
+    /**
+     * Checks if a root path has been set for asset loading.
+     *
+     * @return true if a root path is set, false otherwise
+     */
+    bool hasRootPath() const;
+
   private:
     MaterialDescriptorAssetManager m_materialDescriptorAssetManager;
     ModelAssetManager m_modelAssetManager;
     ImageAssetManager m_imageAssetManager;
+    Path m_rootPath;
   };
 }

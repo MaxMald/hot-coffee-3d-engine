@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Represents a light source in the engine.
    */
-  class HC_CORE_EXPORT Light
+  class HC_CORE_EXPORT Light : public ISerializable
   {
   public:
     /**
@@ -17,6 +17,23 @@ namespace hc
      * @param type The type of the light (default is Point).
      */
     Light(lightType::Type type = lightType::Type::Point);
+
+    /**
+     * @copydoc ISerializable::serialize
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ISerializable::deserialize
+     */
+    void deserialize(BinaryReader& reader) override;
+
+    /**
+     * @brief Gets the unique identifier of the light.
+     * 
+     * @return The UUID of the light.
+     */
+    const UUID& getUUID() const;
 
     /**
      * @brief Sets the type of the light.
@@ -110,6 +127,7 @@ namespace hc
     bool isEnabled() const;
 
   private:
+    UUID m_id;
     bool enabled;
     lightType::Type m_type;
     Color m_color;

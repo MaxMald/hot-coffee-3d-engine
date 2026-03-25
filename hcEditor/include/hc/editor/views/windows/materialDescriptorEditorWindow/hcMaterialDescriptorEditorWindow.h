@@ -6,7 +6,7 @@
 
 namespace hc::editor
 {
-  class ProjectFileSelectorView;
+  class ProjectFileDialogView;
 
   /**
    * @brief Window for editing material descriptors.
@@ -20,7 +20,7 @@ namespace hc::editor
   public:
     MaterialDescriptorEditorWindow(
       IAssetManager& assetManager,
-      ProjectFileSelectorView& projectFileSelector
+      ProjectFileDialogView& projectFileSelector
     );
     virtual ~MaterialDescriptorEditorWindow();
 
@@ -46,7 +46,7 @@ namespace hc::editor
     Int32 m_selectedShaderTypeIndex = 0;
 
     void onDraw() override;
-    void registerEditors(ProjectFileSelectorView& projectFileSelector);
+    void registerEditors(ProjectFileDialogView& projectFileSelector);
     void initializeEditors();
     IMaterialDescriptorEditor* getEditor(shadingType::Type type);
     void drawShaderTypeSelector();

@@ -5,7 +5,8 @@
 
 namespace hc::editor
 {
-  ProjectManager::ProjectManager() :
+  ProjectManager::ProjectManager(IAssetManager& assetManager) :
+    m_assetManager(assetManager),
     m_currentProjectPath(),
     m_isProjectOpen(false),
     m_currentProject(nullptr)
@@ -31,6 +32,7 @@ namespace hc::editor
     if (m_currentProject->loadFromFile(projectPath))
     {
       m_currentProjectPath = projectPath;
+      m_assetManager.setRootPath(projectPath.parent_path());
       m_isProjectOpen = true;
 
       for (auto* listener : m_listeners)
@@ -50,6 +52,7 @@ namespace hc::editor
       m_currentProject = nullptr;
       m_isProjectOpen = false;
       m_currentProjectPath.clear();
+      m_assetManager.setRootPath(Path());
 
       for (auto* listener : m_listeners)
         listener->onProjectClosed();

@@ -10,6 +10,7 @@ Install required build tools and development libraries:
 ```bash
 sudo apt update && sudo apt install -y \
 	cmake ninja-build build-essential pkg-config \
+	uuid-dev \
 	libx11-dev libxrandr-dev libxcursor-dev libxi-dev \
 	libgl1-mesa-dev libopengl-dev libudev-dev libglew-dev
 ```

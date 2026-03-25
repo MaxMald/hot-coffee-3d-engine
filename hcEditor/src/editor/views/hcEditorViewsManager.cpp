@@ -2,7 +2,7 @@
 
 #include "hc/editor/views/hcIView.h"
 #include "hc/editor/imgui/hcImguiHandler.h"
-#include "hc/editor/views/hcProjectFileSelectorView.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {

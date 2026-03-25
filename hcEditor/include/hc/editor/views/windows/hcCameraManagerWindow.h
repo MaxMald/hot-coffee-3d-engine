@@ -12,6 +12,7 @@ namespace hc::editor
 
   private:
     SceneManager& m_sceneManager;
+    Vector<Camera*> m_cameras;
 
     void onDraw() override;
     void drawCameraController(Camera* camera);

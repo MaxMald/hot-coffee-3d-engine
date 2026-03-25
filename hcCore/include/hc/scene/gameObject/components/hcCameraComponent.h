@@ -78,6 +78,16 @@ namespace hc
     Camera* m_camera;
 
     /**
+     * @copydoc ABaseComponent::onSerialize
+     */
+    void onSerialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ABaseComponent::onDeserialize
+     */
+    void onDeserialize(BinaryReader& reader) override;
+
+    /**
      * @brief Gets the camera manager associated with this component.
      *
      * @return Reference to the camera manager.

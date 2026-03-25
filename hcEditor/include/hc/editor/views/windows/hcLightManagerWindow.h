@@ -12,6 +12,7 @@ namespace hc::editor
 
   protected:
     SceneManager& m_sceneManager;
+    Vector<Light*> m_lights;
 
     void onDraw() override;
     void drawLightController(Light* light);

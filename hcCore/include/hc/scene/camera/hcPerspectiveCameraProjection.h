@@ -7,7 +7,9 @@ namespace hc
   /**
    * @brief Implements a perspective projection for a camera.
    */
-  class HC_CORE_EXPORT PerspectiveCameraProjection : public ICameraProjection
+  class HC_CORE_EXPORT PerspectiveCameraProjection :
+    public ICameraProjection,
+    public ISerializable
   {
   public:
     PerspectiveCameraProjection();
@@ -33,6 +35,10 @@ namespace hc
      * Updates the cached projection matrix if any parameters have changed.
      */
     void update() override;
+
+    void serialize(BinaryWriter& writer) const override;
+
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Sets the vertical field of view angle (in radians or degrees,
