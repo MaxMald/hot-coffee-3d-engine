@@ -41,6 +41,11 @@ target_compile_options(hcUtilities PRIVATE
 target_include_directories(hcUtilities 
   PUBLIC "include"
   PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/NLOHMANN_JSON/include"
+  PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/STDUUID/include"
+)
+
+target_link_libraries(hcUtilities PRIVATE
+  $<$<PLATFORM_ID:Linux>:uuid>
 )
 
 # Install the library to the 'lib' directory

@@ -4,7 +4,7 @@
 
 namespace hc::editor
 {
-  class ProjectFileSelectorView;
+  class ProjectFileDialogView;
 
   /**
    * @brief Drawer for MeshComponent in the editor.
@@ -14,13 +14,13 @@ namespace hc::editor
   public:
     MeshComponentDrawer(
       IMeshManager& meshManager,
-      ProjectFileSelectorView& projectFileSelector
+      ProjectFileDialogView& projectFileSelector
     );
     virtual ~MeshComponentDrawer();
 
   protected:
     IMeshManager& m_meshManager;
-    ProjectFileSelectorView& m_projectFileSelector;
+    ProjectFileDialogView& m_projectFileSelector;
 
     void onDrawComponent(MeshComponent* component) override;
     void drawLoadMeshButton(MeshComponent* component);

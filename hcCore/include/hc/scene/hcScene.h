@@ -19,15 +19,36 @@ namespace hc
    * updating. The class is intended to be subclassed for custom scene logic by
    * overriding the protected virtual hooks.
    */
-  class HC_CORE_EXPORT Scene : public NonCopyable
+  class HC_CORE_EXPORT Scene : public NonCopyable, public ISerializable
   {
   public:
     /**
      * @brief Constructs a Scene instance.
      */
     Scene();
-
     virtual ~Scene();
+
+    /**
+     * @brief Serializes the scene's light manager, camera manager, and scene
+     * graph to a binary writer.
+     *
+     * Writes all scene data including lights, cameras, and the entire scene
+     * graph hierarchy to the binary stream.
+     *
+     * @param writer The BinaryWriter to serialize to.
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @brief Deserializes the scene's light manager, camera manager, and scene
+     * graph from a binary reader.
+     *
+     * Clears existing scene data and reads all scene data including lights,
+     * cameras, and the entire scene graph hierarchy from the binary stream.
+     *
+     * @param reader The BinaryReader to deserialize from.
+     */
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -90,6 +111,11 @@ namespace hc
      * @return Const reference to the CameraManager.
      */
     const CameraManager& getCameraManager() const;
+
+    /**
+     * @brief Clears the scene graph, lights, and cameras.
+     */
+    void clear();
 
   protected:
     /**
@@ -171,9 +197,26 @@ namespace hc
     virtual void onDestroy();
 
     /**
-     * @brief Clears the scene graph, lights, and cameras.
+     * @brief Called during serialization to write custom scene data.
+     *
+     * Override to serialize additional custom data for derived scene classes.
+     * Called after the base scene data (lights, cameras, scene graph) is
+     * serialized.
+     *
+     * @param writer The BinaryWriter to serialize custom data to.
      */
-    void clear();
+    virtual void onSerialize(BinaryWriter& writer) const;
+
+    /**
+     * @brief Called during deserialization to read custom scene data.
+     *
+     * Override to deserialize additional custom data for derived scene
+     * classes. Called after the base scene data (lights, cameras, scene
+     * graph) is deserialized.
+     *
+     * @param reader The BinaryReader to deserialize custom data from.
+     */
+    virtual void onDeserialize(BinaryReader& reader);
 
   private:
     SceneGraph m_sceneGraph;

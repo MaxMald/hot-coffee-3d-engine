@@ -2,7 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/scene/gameObject/components/hcComponentFactoriesManager.h"
+#include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 
 namespace hc
 {
@@ -47,6 +47,25 @@ namespace hc
      * @brief Destructor for GameObject.
      */
     virtual ~GameObject();
+
+    /**
+     * @brief Serializes the GameObject and all its children and components to
+     * a binary writer.
+     *
+     * @param writer The BinaryWriter to serialize to.
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @brief Deserializes the GameObject and all its children and components
+     * from a binary reader.
+     *
+     * @param reader The BinaryReader to deserialize from.
+     *
+     * @throws RuntimeErrorException if a component type is not registered or
+     * deserialization is not implemented for a component type.
+     */
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Renders the GameObject and its drawable children/components.

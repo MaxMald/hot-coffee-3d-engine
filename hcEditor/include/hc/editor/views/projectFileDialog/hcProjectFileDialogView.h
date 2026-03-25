@@ -2,6 +2,7 @@
 
 #include "hc/editor/views/hcABaseView.h"
 #include "hc/editor/views/directoryNavigator/hcDirectoryNavigator.h"
+#include "hc/editor/views/projectFileDialog/hcCreateNewFileUI.h"
 #include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
 
 namespace hc::editor
@@ -13,13 +14,13 @@ namespace hc::editor
   /**
    * @brief View for selecting files or directories within a project.
    */
-  class ProjectFileSelectorView :
+  class ProjectFileDialogView :
     public ABaseView,
     public IProjectManagerListener
   {
   public:
-    ProjectFileSelectorView(ProjectManager& projectManager);
-    virtual ~ProjectFileSelectorView();
+    ProjectFileDialogView(ProjectManager& projectManager);
+    virtual ~ProjectFileDialogView();
 
     /**
      * @copydoc ABaseView::draw
@@ -50,11 +51,16 @@ namespace hc::editor
      * @param title Dialog title.
      * @param filters List of file extension filters.
      * @param onFileSelected Callback invoked when a file is selected.
+     * @param allowCreateNewFile If true, allows the user to create a new file in the
+     * dialog. The first filter in the filters list will be used as the default extension
+     * for the new file. If filter list is empty, this feature will be disabled regardless
+     * of the value of this parameter.
      */
     void openFileSelector(
       const String& title,
       const Vector<String>& filters,
-      const std::function<void(const Path&)>& onFileSelected
+      const std::function<void(const Path&)>& onFileSelected,
+      bool allowCreateNewFile = false
     );
 
     /**
@@ -78,6 +84,7 @@ namespace hc::editor
     Vector<String> m_modelFileExtensions;
     bool m_isFileSelectorOpen;
     bool m_isDirectorySelectorOpen;
+    CreateNewFileUI m_createNewFileUI;
 
     void onDestroy() override;
     void onProjectOpened() override;

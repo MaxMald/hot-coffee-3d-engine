@@ -1,4 +1,6 @@
 #include "hc/utilities/hcTransform.h"
+#include "hc/utilities/io/hcBinaryWriter.h"
+#include "hc/utilities/io/hcBinaryReader.h"
 
 namespace hc
 {
@@ -10,6 +12,20 @@ namespace hc
   }
 
   Transform::~Transform() = default;
+
+  void Transform::serialize(BinaryWriter& writer) const
+  {
+    writer.writeVector3f(m_position);
+    writer.writeVector3f(m_rotation);
+    writer.writeVector3f(m_scale);
+  }
+
+  void Transform::deserialize(BinaryReader& reader)
+  {
+    m_position = reader.readVector3f();
+    m_rotation = reader.readVector3f();
+    m_scale = reader.readVector3f();
+  }
 
   void Transform::setScale(const Vector3f& scaleFactors)
   {

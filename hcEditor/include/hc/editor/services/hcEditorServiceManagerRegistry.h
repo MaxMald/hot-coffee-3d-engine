@@ -10,7 +10,8 @@ namespace hc::editor
   {
     void registerServices(
       HotCoffeeEngine& engine,
-      EditorServiceManager& serviceManager
+      EditorServiceManager& serviceManager,
+      Scene* editorScene
     );
   }
 }

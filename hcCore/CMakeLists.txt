@@ -38,9 +38,17 @@ target_compile_options(hcCore PRIVATE
   $<$<CXX_COMPILER_ID:MSVC>:/sdl>
 )
 
+# Generate the version header
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/hc/hcVersion.h.in"
+  "${CMAKE_BINARY_DIR}/include/hc/hcVersion.h"
+  @ONLY
+)
+
 # Includes
 target_include_directories(hcCore 
   PUBLIC "include"
+  PUBLIC "${CMAKE_BINARY_DIR}/include"
   PUBLIC "${CMAKE_SOURCE_DIR}/hcUtilities/include"
 )
 

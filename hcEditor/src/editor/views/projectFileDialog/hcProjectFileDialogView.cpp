@@ -1,20 +1,23 @@
-#include "hc/editor/views/hcProjectFileSelectorView.h"
-
-#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 #include "hc/editor/views/hcEditorViewsManager.h"
 #include "hc/editor/views/directoryNavigator/hcFileReference.h"
 #include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
-#include "imgui.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include <imgui.h>
 
 namespace hc::editor
 {
-  ProjectFileSelectorView::ProjectFileSelectorView(
+  static constexpr const char* DIRECTORY_PREFIX = "[Dir] ";
+  static constexpr const char* FILE_PREFIX = "[File] ";
+
+  ProjectFileDialogView::ProjectFileDialogView(
     ProjectManager& projectManager
   ) :
     ABaseView(),
     m_isFileSelectorOpen(false),
     m_isDirectorySelectorOpen(false),
-    m_projectManager(projectManager)
+    m_projectManager(projectManager),
+    m_createNewFileUI()
   {
     m_imageFileExtensions = Vector<String>(
       assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS.begin(),
@@ -29,12 +32,12 @@ namespace hc::editor
     m_projectManager.subscribeListener(this);
   }
 
-  ProjectFileSelectorView::~ProjectFileSelectorView()
+  ProjectFileDialogView::~ProjectFileDialogView()
   {
     m_projectManager.unsubscribeListener(this);
   }
 
-  void ProjectFileSelectorView::draw()
+  void ProjectFileDialogView::draw()
   {
     if (!m_isDirectorySelectorOpen && !m_isFileSelectorOpen)
       return;
@@ -60,7 +63,7 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelectorView::openImageFile(
+  void ProjectFileDialogView::openImageFile(
     const std::function<void(const Path&)>& onFileSelected
   )
   {
@@ -71,7 +74,7 @@ namespace hc::editor
     );
   }
 
-  void ProjectFileSelectorView::openModelFile(
+  void ProjectFileDialogView::openModelFile(
     const std::function<void(const Path&)>& onFileSelected
   )
   {
@@ -82,12 +85,12 @@ namespace hc::editor
     );
   }
 
-  void ProjectFileSelectorView::onDestroy()
+  void ProjectFileDialogView::onDestroy()
   {
     clear();
   }
 
-  void ProjectFileSelectorView::onProjectOpened()
+  void ProjectFileDialogView::onProjectOpened()
   {
     clear();
     m_directoryNavigator.clear();
@@ -102,27 +105,43 @@ namespace hc::editor
     m_directoryNavigator.initialize(currentProjectDirectory);
   }
 
-  void ProjectFileSelectorView::onProjectClosed()
+  void ProjectFileDialogView::onProjectClosed()
   {
     clear();
     m_directoryNavigator.clear();
   }
 
-  void ProjectFileSelectorView::openFileSelector(
+  void ProjectFileDialogView::openFileSelector(
     const String& title,
     const Vector<String>& filters,
-    const std::function<void(const Path&)>& onFileSelected
+    const std::function<void(const Path&)>& onFileSelected,
+    bool allowCreateNewFile
   )
   {
     logWarningIfAlreadyOpen();
     clear();
+
     m_isFileSelectorOpen = true;
     m_currentTitle = (title.empty() ? "Select File" : title);
     m_fileFilters = filters;
     m_selectionCallback = onFileSelected;
+
+    if (allowCreateNewFile && !filters.empty())
+    {
+      m_createNewFileUI.initialize(
+        m_directoryNavigator.getCurrentDirectory()->getFullPath(),
+        filters,
+        [this](const Path& newFilePath)
+        {
+          if (m_selectionCallback)
+            m_selectionCallback(newFilePath);
+          clear();
+        }
+      );
+    }
   }
 
-  void ProjectFileSelectorView::openDirectorySelector(
+  void ProjectFileDialogView::openDirectorySelector(
     const String& title,
     const std::function<void(const Path&)>& onDirectorySelected
   )
@@ -134,7 +153,7 @@ namespace hc::editor
     m_selectionCallback = onDirectorySelected;
   }
 
-  void ProjectFileSelectorView::drawDirectorySelectionInterface()
+  void ProjectFileDialogView::drawDirectorySelectionInterface()
   {
     if (drawBackAndRefreshButtons())
       return;
@@ -156,8 +175,8 @@ namespace hc::editor
 
     for (const auto& subDir : currentDir->getSubDirectories())
     {
-      String displayName = "<folder> " + subDir->getName();
-      if (ImGui::Selectable(displayName.c_str()))
+      String displayDirectory = DIRECTORY_PREFIX + subDir->getName();
+      if (ImGui::Selectable(displayDirectory.c_str()))
       {
         m_directoryNavigator.navigateToSubDirectory(subDir->getName());
         return;
@@ -165,8 +184,17 @@ namespace hc::editor
     }
   }
 
-  void ProjectFileSelectorView::drawFileSelectionInterface()
+  void ProjectFileDialogView::drawFileSelectionInterface()
   {
+    if (m_createNewFileUI.isInitialized())
+    {
+      m_createNewFileUI.draw();
+      if (m_createNewFileUI.wasFileCreated())
+        return;
+
+      ImGui::Separator();
+    }
+
     if (drawBackAndRefreshButtons())
       return;
 
@@ -181,10 +209,13 @@ namespace hc::editor
 
     for (const auto& subDir : currentDir->getSubDirectories())
     {
-      String displayName = "<folder> " + subDir->getName();
-      if (ImGui::Selectable(displayName.c_str()))
+      String displayDirectoryName = DIRECTORY_PREFIX + subDir->getName();
+      if (ImGui::Selectable(displayDirectoryName.c_str()))
       {
         m_directoryNavigator.navigateToSubDirectory(subDir->getName());
+
+        if (m_createNewFileUI.isInitialized())
+          m_createNewFileUI.setTargetDirectory(subDir->getFullPath());
         return;
       }
     }
@@ -194,7 +225,8 @@ namespace hc::editor
       if (!isValidFile(*file))
         continue;
 
-      if (ImGui::Selectable(file->getNameWithExtension().c_str()))
+      String displayFileName = FILE_PREFIX + file->getNameWithExtension();
+      if (ImGui::Selectable(displayFileName.c_str()))
       {
         if (onFileSelected(*file))
           return;
@@ -202,7 +234,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelectorView::drawBackAndRefreshButtons()
+  bool ProjectFileDialogView::drawBackAndRefreshButtons()
   {
     DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
     if (!currentDir)
@@ -223,16 +255,17 @@ namespace hc::editor
     return false;
   }
 
-  void ProjectFileSelectorView::clear()
+  void ProjectFileDialogView::clear()
   {
     m_isFileSelectorOpen = false;
     m_isDirectorySelectorOpen = false;
     m_selectionCallback = nullptr;
     m_currentTitle.clear();
     m_fileFilters.clear();
+    m_createNewFileUI.reset();
   }
 
-  void ProjectFileSelectorView::logWarningIfAlreadyOpen()
+  void ProjectFileDialogView::logWarningIfAlreadyOpen()
   {
     if (m_isFileSelectorOpen)
     {
@@ -255,7 +288,7 @@ namespace hc::editor
     }
   }
 
-  bool ProjectFileSelectorView::isValidFile(const FileReference& file) const
+  bool ProjectFileDialogView::isValidFile(const FileReference& file) const
   {
     if (m_fileFilters.empty())
       return true;
@@ -270,7 +303,7 @@ namespace hc::editor
     return false;
   }
 
-  bool ProjectFileSelectorView::onDirectorySelected(
+  bool ProjectFileDialogView::onDirectorySelected(
     const DirectoryReference& directory
   )
   {
@@ -284,7 +317,7 @@ namespace hc::editor
     return true;
   }
 
-  bool ProjectFileSelectorView::onFileSelected(
+  bool ProjectFileDialogView::onFileSelected(
     const FileReference& file
   )
   {

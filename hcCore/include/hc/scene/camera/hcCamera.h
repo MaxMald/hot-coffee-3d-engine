@@ -12,10 +12,27 @@ namespace hc
   /**
    * @brief Represents a camera in the engine.
    */
-  class HC_CORE_EXPORT Camera
+  class HC_CORE_EXPORT Camera : public ISerializable
   {
   public:
     ~Camera();
+
+    /**
+     * @copydoc ISerializable::serialize
+     */
+    void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ISerializable::deserialize
+     */
+    void deserialize(BinaryReader& reader) override;
+
+    /**
+     * @brief Gets the unique identifier of the camera.
+     *
+     * @return The camera's UUID.
+     */
+    const UUID& getUUID() const;
 
     /**
      * @brief Sets the position of the camera.
@@ -167,6 +184,7 @@ namespace hc
     ICameraProjection* getCameraProjection();
 
   private:
+    UUID m_id;
     Vector3f m_position;
     Vector3f m_direction;
     Vector3f m_up;

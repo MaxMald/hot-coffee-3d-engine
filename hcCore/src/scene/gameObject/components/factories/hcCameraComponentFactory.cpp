@@ -1,4 +1,4 @@
-#include "hc/scene/gameObject/components/hcCameraComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcCameraComponentFactory.h"
 #include "hc/scene/hcSceneManager.h"
 
 namespace hc

@@ -24,6 +24,24 @@ namespace hc
     return m_type;
   }
 
+  void ABaseComponent::serialize(BinaryWriter& writer) const
+  {
+    writer.writeUInt16(getType());
+    onSerialize(writer);
+  }
+
+  void ABaseComponent::deserialize(BinaryReader& reader)
+  {
+    componentType::Type type = static_cast<componentType::Type>(reader.readUInt16());
+    if (type != getType())
+    {
+      throw RuntimeErrorException(
+        "Component type mismatch during deserialization."
+      );
+    }
+    onDeserialize(reader);
+  }
+
   void ABaseComponent::onGameObjectSet()
   {
     // Default implementation does nothing.

@@ -2,17 +2,32 @@
 
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcVector3.h"
+#include "hc/utilities/io/hcISerializable.h"
 
 namespace hc
 {
   /**
    * @brief Represents a 3D transformation (position, rotation, scale).
    */
-  class HC_UTILITY_EXPORT Transform
+  class HC_UTILITY_EXPORT Transform : public ISerializable
   {
   public:
     Transform();
     virtual ~Transform();
+
+    /**
+     * @brief Serializes the transform's position, rotation, and scale.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    virtual void serialize(BinaryWriter& writer) const override;
+
+    /**
+     * @brief Deserializes the transform's position, rotation, and scale.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    virtual void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Sets the scale factors.

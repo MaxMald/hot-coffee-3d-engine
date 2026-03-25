@@ -1,6 +1,7 @@
 #include "hc/editor/scenes/hcEditorScene.h"
 #include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
 #include "hc/editor/services/hcEditorServiceManagerRegistry.h"
+#include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
 #include "hc/editor/views/hcEditorViewsRegistry.h"
 
 namespace hc::editor
@@ -23,7 +24,11 @@ namespace hc::editor
 
   void EditorScene::onInitialized()
   {
-    editorServiceManagerRegistry::registerServices(m_engine, m_serviceManager);
+    editorServiceManagerRegistry::registerServices(
+      m_engine,
+      m_serviceManager,
+      this
+    );
     m_viewsManager.initialize();
     editorViewsRegistry::registerDefaultViews(
       m_engine,
