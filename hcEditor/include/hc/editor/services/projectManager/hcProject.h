@@ -1,52 +1,69 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
-#include "hc/editor/services/projectManager/hcProjectFileContent.h"
 
 namespace hc::editor
 {
+  class ProjectManager;
+
   /**
    * @brief Represents an editor project, providing load and save functionality.
    */
-  class Project
+  class Project : public ISerializable
   {
   public:
+    /**
+     * @brief Constructs a new Project instance.
+     */
     Project();
+
+    /**
+     * @brief Destroys the Project instance.
+     */
     ~Project();
 
     /**
-     * @brief Loads the project data from a file.
-     * 
-     * @param filePath The path to the project file to load.
-     * 
-     * @return True if the project was loaded successfully, false otherwise.
+     * @brief Serializes the project data to a binary writer.
+     *
+     * @param writer The binary writer to serialize to.
      */
-    bool loadFromFile(const Path& filePath);
+    void serialize(BinaryWriter& writer) const override;
 
     /**
-     * @brief Saves the project data to a file.
-     * 
-     * @param filePath The path to the file where the project will be saved.
-     * 
-     * @return True if the project was saved successfully, false otherwise.
+     * @brief Deserializes the project data from a binary reader.
+     *
+     * @param reader The binary reader to deserialize from.
      */
-    bool saveToFile(const Path& filePath) const;
+    void deserialize(BinaryReader& reader) override;
 
     /**
-     * @brief Gets a reference to the project file content.
+     * @brief Gets the absolute path to the project file.
      * 
-     * @return Reference to the ProjectFileContent instance.
+     * @return The path to the project file.
      */
-    ProjectFileContent& getProjectFileContent();
+    const Path getProjectFilePath() const;
 
     /**
-     * @brief Gets a const reference to the project file content.
+     * @brief Sets the path to the last opened scene in the project.
      * 
-     * @return Const reference to the ProjectFileContent instance.
+     * @param absolutePath The absolute path to the scene file.
      */
-    const ProjectFileContent& getProjectFileContent() const;
+    void setPathToLastOpenedScene(const Path& absolutePath);
 
   private:
-    ProjectFileContent m_projectFileContent;
+    UInt16 m_majorVersion;
+    UInt16 m_minorVersion;
+    UInt16 m_patchVersion;
+    Path m_projectFilePath;
+    String m_relativePathToLastOpenedScene;
+
+    /**
+     * @brief Sets the absolute path to the project file.
+     * 
+     * @param path The absolute path to the project file.
+     */
+    void setProjectFilePath(const Path& path);
+
+    friend class ProjectManager;
   };
 }
