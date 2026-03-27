@@ -1,15 +1,16 @@
 #include "hc/editor/services/projectManager/hcProjectManager.h"
-
+#include <fstream>
 #include "hc/editor/services/projectManager/hcProject.h"
 #include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
+#include "hc/editor/serialization/hcProjectSerializer.h"
 
 namespace hc::editor
 {
   ProjectManager::ProjectManager(IAssetManager& assetManager) :
     m_assetManager(assetManager),
-    m_currentProjectPath(),
     m_isProjectOpen(false),
-    m_currentProject(nullptr)
+    m_currentProject(nullptr),
+    m_listeners()
   {
   }
 
@@ -26,13 +27,15 @@ namespace hc::editor
 
   bool ProjectManager::openProject(const Path& projectPath)
   {
-    closeProject();
-
-    m_currentProject = MakeUnique<Project>();
-    if (m_currentProject->loadFromFile(projectPath))
+    try
     {
-      m_currentProjectPath = projectPath;
-      m_assetManager.setRootPath(projectPath.parent_path());
+      closeProject();
+
+      m_currentProject = serialization::ProjectSerializer().Deserialize(projectPath);
+      if (!m_currentProject)
+        return false;
+
+      m_currentProject->setProjectFilePath(projectPath);
       m_isProjectOpen = true;
 
       for (auto* listener : m_listeners)
@@ -40,9 +43,51 @@ namespace hc::editor
 
       return true;
     }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        "Failed to open project file: " + projectPath.string() + " Error: " + e.what()
+      );
+      return false;
+    }
+  }
 
-    m_currentProject = nullptr;
-    return false;
+  bool ProjectManager::saveProject(const Path& savePath)
+  {
+    if (!m_isProjectOpen)
+    {
+      LogService::Error("No project is currently open to save.");
+      return false;
+    }
+
+    if (!m_currentProject)
+    {
+      LogService::Error("Current project data is invalid. Cannot save.");
+      return false;
+    }
+
+    try
+    {
+      if (serialization::ProjectSerializer().Serialize(*m_currentProject, savePath))
+      {
+        m_currentProject->setProjectFilePath(savePath);
+        return true;
+      }
+      else
+      {
+        LogService::Error(
+          "Failed to save project file: " + savePath.string()
+        );
+        return false;
+      }
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        "Failed to save project file: " + savePath.string() + " Error: " + e.what()
+      );
+      return false;
+    }
   }
 
   bool ProjectManager::closeProject()
@@ -51,7 +96,6 @@ namespace hc::editor
     {
       m_currentProject = nullptr;
       m_isProjectOpen = false;
-      m_currentProjectPath.clear();
       m_assetManager.setRootPath(Path());
 
       for (auto* listener : m_listeners)
@@ -65,13 +109,15 @@ namespace hc::editor
 
   Path ProjectManager::getCurrentProjectPath() const
   {
-    return m_currentProjectPath;
+    if (m_currentProject)
+      return m_currentProject->getProjectFilePath();
+    return Path();
   }
 
   Path ProjectManager::getCurrentProjectDirectory() const
   {
-    if (m_isProjectOpen)
-      return m_currentProjectPath.parent_path();
+    if (m_currentProject)
+      return m_currentProject->getProjectFilePath().parent_path();
     return Path();
   }
 
