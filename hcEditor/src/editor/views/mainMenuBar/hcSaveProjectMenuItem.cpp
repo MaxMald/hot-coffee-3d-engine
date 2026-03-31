@@ -30,11 +30,14 @@ namespace hc::editor
           LogService::Error(
             "Current project does not have a file path. Please use 'Save Project As' to specify a save location."
           );
+          
         }
-
-        m_projectManager.saveProject(
-          m_projectManager.getCurrentProjectPath()
-        );
+        else
+        {
+          m_projectManager.saveProject(
+            m_projectManager.getCurrentProjectPath()
+          );
+        }
       }
       else
       {
