@@ -28,9 +28,9 @@ namespace hc::editor
   void Project::serialize(BinaryWriter& writer) const
   {
     writer.writeUInt32(hc::editor::serialization::fileFormats::Project::MAGIC);
-    writer.writeUInt16(hc::editor::serialization::fileFormats::Project::MAJOR_VERSION);
-    writer.writeUInt16(hc::editor::serialization::fileFormats::Project::MINOR_VERSION);
-    writer.writeUInt16(hc::editor::serialization::fileFormats::Project::PATCH_VERSION);
+    writer.writeUInt16(m_majorVersion);
+    writer.writeUInt16(m_minorVersion);
+    writer.writeUInt16(m_patchVersion);
     writer.writeString(m_relativePathToLastOpenedScene);
   }
 
