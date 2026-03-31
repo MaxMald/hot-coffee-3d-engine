@@ -23,8 +23,8 @@ namespace hc::editor
     virtual ~ProjectManager() = default;
 
     /**
-    * @copydoc IEditorService::prepare
-    */
+     * @copydoc IEditorService::prepare
+     */
     void prepare() override;
 
     /**
@@ -40,6 +40,15 @@ namespace hc::editor
      * @return True if the project was successfully opened, false otherwise.
      */
     bool openProject(const Path& projectPath);
+
+    /**
+     * @brief Saves the currently open project to the specified path.
+     * 
+     * @param savePath The file system path to save the project to.
+     * 
+     * @return True if the project was successfully saved, false otherwise.
+     */
+    bool saveProject(const Path& savePath);
 
     /**
      * @brief Closes the currently open project, if any.
@@ -80,18 +89,17 @@ namespace hc::editor
     Project* getCurrentProject();
 
     /**
-    * @brief Subscribes a listener to project manager events.
-    */
+     * @brief Subscribes a listener to project manager events.
+     */
     void subscribeListener(IProjectManagerListener* listener);
 
     /**
-    * @brief Unsubscribes a listener from project manager events.
-    */
+     * @brief Unsubscribes a listener from project manager events.
+     */
     void unsubscribeListener(IProjectManagerListener* listener);
 
   private:
     IAssetManager& m_assetManager;
-    Path m_currentProjectPath;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
     Vector<IProjectManagerListener*> m_listeners;
