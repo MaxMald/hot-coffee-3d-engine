@@ -8,7 +8,7 @@ namespace hc::editor
     Project* newProject = new Project();
     newProject->m_majorVersion = hc::editor::serialization::fileFormats::Project::MAJOR_VERSION;
     newProject->m_minorVersion = hc::editor::serialization::fileFormats::Project::MINOR_VERSION;
-    newProject->m_majorVersion = hc::editor::serialization::fileFormats::Project::PATCH_VERSION;
+    newProject->m_patchVersion = hc::editor::serialization::fileFormats::Project::PATCH_VERSION;
     return newProject;
   }
 
