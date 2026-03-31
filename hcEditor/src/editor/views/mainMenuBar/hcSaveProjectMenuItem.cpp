@@ -4,7 +4,6 @@
 #include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/fileDialog/hcFileDialogRequest.h"
 #include "hc/editor/serialization/hcFileFormats.h"
-#include "hc/editor/serialization/hcProjectSerializer.h"
 
 namespace hc::editor
 {
