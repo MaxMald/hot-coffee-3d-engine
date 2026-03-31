@@ -10,7 +10,7 @@ namespace hc::editor::serialization
     {
       UniquePtr<Project> project = MakeUnique<Project>();
 
-      std::fstream fileStream(filePath, std::ios::binary | std::ios::in);
+      std::ifstream fileStream(filePath, std::ios::binary);
       if (!fileStream.is_open())
       {
         LogService::Error(
@@ -35,9 +35,14 @@ namespace hc::editor::serialization
   {
     try
     {
-      std::fstream fileStream(filePath, std::ios::binary | std::ios::out);
+      std::ofstream fileStream(filePath, std::ios::binary);
       if (!fileStream.is_open())
-        throw RuntimeErrorException("Failed to open project file for writing.");
+      {
+        LogService::Error(
+          "Failed to open project file for writing: " + filePath.string()
+        );
+        return false;
+      }        
 
       BinaryWriter writer(fileStream);
       project.serialize(writer);
