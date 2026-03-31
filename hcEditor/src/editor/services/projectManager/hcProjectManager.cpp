@@ -1,5 +1,4 @@
 #include "hc/editor/services/projectManager/hcProjectManager.h"
-#include <fstream>
 #include "hc/editor/services/projectManager/hcProject.h"
 #include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
 #include "hc/editor/serialization/hcProjectSerializer.h"
