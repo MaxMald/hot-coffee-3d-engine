@@ -8,6 +8,7 @@
 namespace hc::editor
 {
   static constexpr const char* SAVE_PROJECT_DIALOG_KEY = "SaveProject";
+  static constexpr const char* SAVE_PROJECT_AS_DIALOG_KEY = "SaveProjectAs";
 
   SaveProjectMenuItem::SaveProjectMenuItem(
     ProjectManager& projectManager,
@@ -61,7 +62,7 @@ namespace hc::editor
       config.path = ".";
 
       FileDialogRequest request(
-        SAVE_PROJECT_DIALOG_KEY,
+        SAVE_PROJECT_AS_DIALOG_KEY,
         "Save Project As",
         serialization::fileFormats::Project::FILE_EXTENSION,
         this,
@@ -79,5 +80,10 @@ namespace hc::editor
   {
     if (dialogKey == SAVE_PROJECT_DIALOG_KEY)
       m_projectManager.saveProject(filePathName);
+    else if (dialogKey == SAVE_PROJECT_AS_DIALOG_KEY)
+    {
+      if (m_projectManager.saveProject(filePathName))
+        m_projectManager.openProject(filePathName);
+    }
   }
 }
