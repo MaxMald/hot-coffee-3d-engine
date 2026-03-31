@@ -22,6 +22,7 @@
 
 // Menu Items
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcSaveProjectMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcSaveSceneMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcOpenSceneMenuItem.h"
@@ -41,6 +42,10 @@ namespace hc::editor
       mainMenuBar->addMenu(
         menuBuilder
           .beginMenu("File")
+            .addMenuItem(MakeUnique<SaveProjectMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              *editorViewsManager.getView<FileDialogView>()
+            ))
             .addMenuItem(MakeUnique<OpenProjectMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               *editorViewsManager.getView<FileDialogView>()
@@ -52,12 +57,12 @@ namespace hc::editor
       mainMenuBar->addMenu(
         menuBuilder
           .beginMenu("Scene")
-            .addMenuItem(MakeUnique<SaveSceneMenuItem>(
+            .addMenuItem(MakeUnique<OpenSceneMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               editorServiceManager.getService<EditorSceneManager>(),
               *editorViewsManager.getView<ProjectFileDialogView>()
             ))
-            .addMenuItem(MakeUnique<OpenSceneMenuItem>(
+            .addMenuItem(MakeUnique<SaveSceneMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               editorServiceManager.getService<EditorSceneManager>(),
               *editorViewsManager.getView<ProjectFileDialogView>()

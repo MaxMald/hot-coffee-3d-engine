@@ -12,6 +12,15 @@ namespace hc::editor
   class Project : public ISerializable
   {
   public:
+
+    /**
+     * @brief Creates a new empty Project instance with default version information.
+     *
+     * @return A pointer to the newly created Project instance. The caller is responsible
+     * for managing the memory of the returned Project object.
+     */
+    static Project* CreateEmpty();
+    
     /**
      * @brief Constructs a new Project instance.
      */
@@ -41,7 +50,7 @@ namespace hc::editor
      * 
      * @return The path to the project file.
      */
-    const Path getProjectFilePath() const;
+    const Path& getProjectFilePath() const;
 
     /**
      * @brief Sets the path to the last opened scene in the project.
@@ -49,6 +58,14 @@ namespace hc::editor
      * @param absolutePath The absolute path to the scene file.
      */
     void setPathToLastOpenedScene(const Path& absolutePath);
+
+    /**
+     * @brief Gets the relative path to the last opened scene in the project.
+     *
+     * @return The relative path to the last opened scene, or an empty string if no
+     * scene has been opened.
+     */
+    const String& getPathToLastOpenedScene() const;
 
   private:
     UInt16 m_majorVersion;

@@ -16,7 +16,7 @@ namespace hc::editor
 
   void ProjectManager::prepare()
   {
-    // No initialization logic needed for the ProjectManager at this time.
+    m_currentProject = UniquePtr<Project>(Project::CreateEmpty());
   }
 
   void ProjectManager::destroy()
@@ -31,12 +31,17 @@ namespace hc::editor
     {
       closeProject();
 
-      m_currentProject = serialization::ProjectSerializer().Deserialize(projectPath);
+      m_currentProject = serialization::ProjectSerializer::Deserialize(projectPath);
       if (!m_currentProject)
         return false;
 
       m_currentProject->setProjectFilePath(projectPath);
+      m_assetManager.setRootPath(projectPath.parent_path());
       m_isProjectOpen = true;
+
+      LogService::Message(
+        "Project opened successfully: " + projectPath.string()
+      );
 
       for (auto* listener : m_listeners)
         listener->onProjectOpened();
@@ -54,12 +59,6 @@ namespace hc::editor
 
   bool ProjectManager::saveProject(const Path& savePath)
   {
-    if (!m_isProjectOpen)
-    {
-      LogService::Error("No project is currently open to save.");
-      return false;
-    }
-
     if (!m_currentProject)
     {
       LogService::Error("Current project data is invalid. Cannot save.");
@@ -68,9 +67,15 @@ namespace hc::editor
 
     try
     {
-      if (serialization::ProjectSerializer().Serialize(*m_currentProject, savePath))
+      if (serialization::ProjectSerializer::Serialize(*m_currentProject, savePath))
       {
         m_currentProject->setProjectFilePath(savePath);
+        m_assetManager.setRootPath(savePath.parent_path());
+
+        LogService::Message(
+          "Project saved successfully: " + savePath.string()
+        );
+
         return true;
       }
       else

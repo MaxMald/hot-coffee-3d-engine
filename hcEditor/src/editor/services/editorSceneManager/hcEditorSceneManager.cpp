@@ -35,6 +35,12 @@ namespace hc::editor
     if (SceneSerializer::Deserialize(*m_editorScene, scenePath))
     {
       m_currentScenePath = scenePath;
+      updateLastOpenedSceneInProject();
+
+      LogService::Message(
+        "Scene opened successfully: " + scenePath.string()
+      );
+
       return true;
     }
 
@@ -47,6 +53,12 @@ namespace hc::editor
     if (SceneSerializer::Serialize(*m_editorScene, scenePath))
     {
       m_currentScenePath = scenePath;
+      updateLastOpenedSceneInProject();
+
+      LogService::Message(
+        "Scene saved successfully: " + scenePath.string()
+      );
+
       return true;
     }
     return false;
@@ -77,12 +89,34 @@ namespace hc::editor
   {
     if (isSceneOpen())
       closeScene();
+
+    Project* currentProject = m_projectManager.getCurrentProject();
+    if (!currentProject)
+      return;
+
+    String relativeScenePath = currentProject->getPathToLastOpenedScene();
+    if (relativeScenePath.empty())
+      return;
+
+    const Path lastOpenedScenePath = AssetPath::ToAbsolute(
+      relativeScenePath,
+      m_projectManager.getCurrentProjectDirectory()
+    );
+
+    openScene(lastOpenedScenePath);
   }
 
   void EditorSceneManager::onProjectClosed()
   {
     if (isSceneOpen())
       closeScene();
+  }
+
+  void EditorSceneManager::updateLastOpenedSceneInProject()
+  {
+    Project* currentProject = m_projectManager.getCurrentProject();
+    if (currentProject)
+      currentProject->setPathToLastOpenedScene(m_currentScenePath);
   }
 
   void EditorSceneManager::assertSceneIsValid() const

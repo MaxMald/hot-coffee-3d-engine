@@ -96,6 +96,7 @@ namespace hc::editor
     Scene* m_editorScene;
     Path m_currentScenePath;
 
+    void updateLastOpenedSceneInProject();
     void assertSceneIsValid() const;
   };
 }

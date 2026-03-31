@@ -3,6 +3,15 @@
 
 namespace hc::editor
 {
+  Project* Project::CreateEmpty()
+  {
+    Project* newProject = new Project();
+    newProject->m_majorVersion = hc::editor::serialization::fileFormats::Project::MAJOR_VERSION;
+    newProject->m_minorVersion = hc::editor::serialization::fileFormats::Project::MINOR_VERSION;
+    newProject->m_majorVersion = hc::editor::serialization::fileFormats::Project::PATCH_VERSION;
+    return newProject;
+  }
+
   Project::Project() :
     m_majorVersion(0),
     m_minorVersion(0),
@@ -44,7 +53,7 @@ namespace hc::editor
     m_projectFilePath = path;
   }
 
-  const Path Project::getProjectFilePath() const
+  const Path& Project::getProjectFilePath() const
   {
     return m_projectFilePath;
   }
@@ -60,5 +69,10 @@ namespace hc::editor
       absolutePath,
       m_projectFilePath.parent_path()
     );
+  }
+
+  const String& Project::getPathToLastOpenedScene() const
+  {
+    return m_relativePathToLastOpenedScene;
   }
 }

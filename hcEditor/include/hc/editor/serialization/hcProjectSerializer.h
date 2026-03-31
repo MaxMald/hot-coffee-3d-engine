@@ -23,7 +23,7 @@ namespace hc::editor::serialization
      * @return A unique pointer to the deserialized Project instance,
      *         or nullptr if deserialization fails.
      */
-    UniquePtr<Project> Deserialize(const Path& filePath);
+    static UniquePtr<Project> Deserialize(const Path& filePath);
 
     /**
      * @brief Serializes a project to a file.
@@ -33,6 +33,6 @@ namespace hc::editor::serialization
      * 
      * @return True if serialization was successful, false otherwise.
      */
-    bool Serialize(const Project& project, const Path& filePath);
+    static bool Serialize(const Project& project, const Path& filePath);
   };
 }
