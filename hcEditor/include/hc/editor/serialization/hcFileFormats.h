@@ -8,7 +8,7 @@ namespace hc::editor::serialization
   {
     struct Project
     {
-      static constexpr UInt32 MAGIC = 0x48435052;  // "HCPR" in hex
+      static constexpr UInt32 MAGIC = 0x4843504A;  // "HCPJ" in hex
       static constexpr UInt16 MAJOR_VERSION = 1;
       static constexpr UInt16 MINOR_VERSION = 0;
       static constexpr UInt16 PATCH_VERSION = 0;
