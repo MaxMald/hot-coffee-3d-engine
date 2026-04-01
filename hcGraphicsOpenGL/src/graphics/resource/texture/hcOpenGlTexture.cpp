@@ -9,6 +9,9 @@ namespace hc
     m_width(0),
     m_height(0),
     m_channels(0),
+    m_internalFormat(GL_RGBA8),
+    m_format(GL_RGBA),
+    m_type(GL_UNSIGNED_BYTE),
     m_created(false)
   {
     if (!image)
@@ -25,14 +28,62 @@ namespace hc
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    GLenum format = (m_channels == 4) ? GL_RGBA : GL_RGB;
+    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
+    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
 
     glTexImage2D(
-      GL_TEXTURE_2D, 0, format,
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
       static_cast<Int32>(m_width),
       static_cast<Int32>(m_height),
-      0, format,
-      GL_UNSIGNED_BYTE, image->getBuffer().data()
+      0,
+      m_format,
+      m_type,
+      image->getBuffer().data()
+    );
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    m_created = true;
+  }
+
+  OpenGlTexture::OpenGlTexture(
+    UInt32 width,
+    UInt32 height,
+    GLenum internalFormat,
+    GLenum format,
+    GLenum type
+  ) :
+    m_id(Id::Create()),
+    m_image(nullptr),
+    m_textureId(0),
+    m_width(width),
+    m_height(height),
+    m_channels(0),
+    m_internalFormat(internalFormat),
+    m_format(format),
+    m_type(type),
+    m_created(false)
+  {
+    glGenTextures(1, &m_textureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
+      static_cast<Int32>(m_width),
+      static_cast<Int32>(m_height),
+      0,
+      m_format,
+      m_type,
+      nullptr
     );
 
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -58,6 +109,37 @@ namespace hc
   UInt32 OpenGlTexture::getHeight() const
   {
     return m_height;
+  }
+
+  void OpenGlTexture::resize(UInt32 width, UInt32 height)
+  {
+    if (width == m_width && height == m_height)
+      return;
+
+    if (width == 0 || height == 0)
+      throw InvalidArgumentException("Texture dimensions must be greater than zero");
+
+    if (m_image != nullptr)
+      throw RuntimeErrorException(
+        "Cannot resize a texture created from an image. Create a new texture instead."
+      );
+
+    m_width = width;
+    m_height = height;
+
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+    glTexImage2D(
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
+      static_cast<Int32>(m_width),
+      static_cast<Int32>(m_height),
+      0,
+      m_format,
+      m_type,
+      nullptr
+    );
+    glBindTexture(GL_TEXTURE_2D, 0);
   }
 
   void OpenGlTexture::bind(UInt32 slot) const
@@ -91,6 +173,11 @@ namespace hc
       m_textureId = 0;
       m_created = false;
     }
+  }
+
+  bool OpenGlTexture::isImageBased() const
+  {
+    return m_image != nullptr;
   }
 
   SharedPtr<Image> OpenGlTexture::getImage()
