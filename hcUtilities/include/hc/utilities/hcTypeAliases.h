@@ -45,6 +45,9 @@ namespace hc
   template<typename T>
   using UniquePtr = std::unique_ptr<T>;
 
+  template<typename T, typename Deleter>
+  using UniquePtrWithDeleter = std::unique_ptr<T, Deleter>;
+
   template<typename T>
   using Vector = std::vector<T>;
 
