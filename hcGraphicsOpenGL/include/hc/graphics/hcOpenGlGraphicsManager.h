@@ -64,6 +64,24 @@ namespace hc
      */
     IMeshManager& getMeshManager() override;
 
+    /**
+     * @copydoc IGraphicsManager::createFrameBuffer
+     */
+    FrameBufferPtr createFrameBuffer(
+      UInt32 width,
+      UInt32 height
+    ) override;
+
+    /**
+     * @copydoc IGraphicsManager::setViewport
+     */
+    void setViewport(
+      UInt32 x,
+      UInt32 y,
+      UInt32 width,
+      UInt32 height
+    ) override;
+
   private:
     IAssetManager& m_assetManager;
     IWindow& m_window;
