@@ -49,8 +49,34 @@ namespace hc::editor
      */
     bool& getOpenFlagReference();
 
+    /**
+     * @brief Returns the current total size of the window, including title bar and
+     * borders.
+     *
+     * @return The total window size as a Vector2f (width, height).
+     */
+    const Vector2f& getWindowSize() const;
+
+    /**
+     * @brief Returns the available content area size of the window, excluding title bar,
+     * borders and scrollbars.
+     *
+     * @return The content area size as a Vector2f (width, height).
+     */
+    const Vector2f& getContentSize() const;
+    
+    /**
+     * @brief Returns the current position of the window.
+     *
+     * @return The window position as a Vector2f (x, y).
+     */
+    const Vector2f& getWindowPosition() const;
+
   protected:
     String m_windowName;
+    Vector2f m_windowSize;
+    Vector2f m_contentSize;
+    Vector2f m_windowPosition;
     bool m_isOpen = true;
 
     /**
@@ -67,5 +93,13 @@ namespace hc::editor
      * Derived classes must implement this to define their UI.
      */
     virtual void onDraw() = 0;
+
+  private:
+
+    /**
+     * @brief Updates the window's state (size, position, content size) based on ImGui's
+     * current state.
+     */
+    void updateWindowState();
   };
 }
