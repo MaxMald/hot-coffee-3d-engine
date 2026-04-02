@@ -34,6 +34,7 @@ namespace hc
 
     ProcessResult initialize(const HotCoffeeEngineSettings& settings);
     void run(const String& sceneName);
+    void run();
     void destroy();
 
   private:

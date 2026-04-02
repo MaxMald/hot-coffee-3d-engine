@@ -1,4 +1,5 @@
 #include "hc/editor/services/hcEditorCameraController.h"
+#include "hc/editor/scenes/hcEditorSceneNames.h"
 
 namespace hc::editor
 {
@@ -149,7 +150,7 @@ namespace hc::editor
 
   Camera& EditorCameraController::getActiveCamera()
   {
-    Scene* activeScene = m_sceneManager.getActiveScene();
+    Scene* activeScene = m_sceneManager.getScene(EditorSceneNames::CONTENT_SCENE);
     if (!activeScene)
       throw RuntimeErrorException("No active scene to control camera in.");
 

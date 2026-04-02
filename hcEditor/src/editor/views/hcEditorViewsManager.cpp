@@ -6,25 +6,43 @@
 
 namespace hc::editor
 {
-  EditorViewsManager::EditorViewsManager(HotCoffeeEngine& engine) :
+  EditorViewsManager::EditorViewsManager() :
     m_initialized(false),
-    m_engine(engine)
+    m_window(nullptr),
+    m_views()
   { 
   }
 
-  void EditorViewsManager::initialize()
+  void EditorViewsManager::initialize(IWindow* window)
   {
     if (m_initialized)
       return;
 
-    m_engine.addGameLoopListener(this);
-    hcImguiHandler::init(m_engine.getWindowManager().getWindow());
+    if (!window)
+      throw InvalidArgumentException("Window pointer cannot be null.");
+
+    hcImguiHandler::init(*window);
+    m_window = window;
     m_initialized = true;
   }
 
   bool EditorViewsManager::processEvent(const Event& event)
   {
     return hcImguiHandler::processEvent(event);
+  }
+
+  void EditorViewsManager::draw(const Time& elapsedTime)
+  {
+    if (!m_initialized)
+      throw RuntimeErrorException("Cannot draw views: EditorViewsManager is not initialized.");
+
+    if (!m_window)
+      throw RuntimeErrorException("Cannot draw views: Window is not initialized.");
+
+    hcImguiHandler::beginFrame(*m_window, elapsedTime);
+    for (const UniquePtr<IView>& view : m_views)
+      view->draw();
+    hcImguiHandler::endFrame();
   }
 
   void EditorViewsManager::registerView(UniquePtr<IView> view)
@@ -46,25 +64,7 @@ namespace hc::editor
 
     clear();
     hcImguiHandler::destroy();
-    m_engine.removeGameLoopListener(this);
+    m_window = nullptr;
     m_initialized = false;
-  }
-
-  bool EditorViewsManager::onEvent(const Event& event)
-  {
-    return hcImguiHandler::processEvent(event);
-  }
-
-  void EditorViewsManager::onAfterSceneRender()
-  {
-    hcImguiHandler::beginFrame(
-      m_engine.getWindowManager().getWindow(),
-      m_engine.getElapsedTime()
-    );
-
-    for (const UniquePtr<IView>& view : m_views)
-      view->draw();
-
-    hcImguiHandler::endFrame();
   }
 }

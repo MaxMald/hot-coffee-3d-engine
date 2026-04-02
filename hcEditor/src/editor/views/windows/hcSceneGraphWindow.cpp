@@ -1,7 +1,7 @@
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
-
 #include "hc/editor/views/hcEditorViewsManager.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/scenes/hcEditorSceneNames.h"
 #include "imgui.h"
 
 namespace hc::editor
@@ -22,10 +22,10 @@ namespace hc::editor
 
   void SceneGraphWindow::onDraw()
   {
-    hc::Scene* scene = m_sceneManager.getActiveScene();
+    hc::Scene* scene = m_sceneManager.getScene(EditorSceneNames::CONTENT_SCENE);
     if (!scene)
     {
-      ImGui::Text("No active scene.");
+      ImGui::Text("No content scene.");
       return;
     }
 

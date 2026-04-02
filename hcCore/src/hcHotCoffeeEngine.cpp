@@ -158,6 +158,13 @@ namespace hc
       );
     }
 
+    run();
+  }
+
+  void HotCoffeeEngine::run()
+  {
+    assertEngineIsInitialized();
+
     IWindow& window = m_windowManager->getWindow();
     m_frameClock.start();
 
@@ -183,8 +190,14 @@ namespace hc
             break;
       }
 
-      m_sceneManager->update(m_frameClock.getElapsedTime());
+      Time elapsedTime = m_frameClock.getElapsedTime();
+
+      m_sceneManager->update(elapsedTime);
       m_graphicsManager->beginFrame();
+
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onBeforeSceneRender();
+
       m_sceneManager->draw();
       m_graphicsManager->executeDrawCommands();
 
