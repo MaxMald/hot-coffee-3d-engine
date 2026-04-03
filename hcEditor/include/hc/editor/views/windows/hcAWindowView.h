@@ -1,5 +1,5 @@
 #pragma once
-
+#include <imgui.h>
 #include "hc/editor/views/hcABaseView.h"
 
 namespace hc::editor
@@ -77,6 +77,7 @@ namespace hc::editor
     Vector2f m_windowSize;
     Vector2f m_contentSize;
     Vector2f m_windowPosition;
+    ImVec2 m_defaultWindowSize;
     bool m_isOpen = true;
 
     /**
@@ -84,8 +85,13 @@ namespace hc::editor
      *
      * @param name The window's display name.
      * @param isOpen Initial open state of the window.
+     * @param defaultWindowSize The default size of the window when first opened.
      */
-    AWindowView(const String& name, bool isOpen = false);
+    AWindowView(
+      const String& name,
+      bool isOpen = false,
+      const Vector2f& defaultWindowSize = Vector2f(400.0f, 300.0f)
+    );
 
     /**
      * @brief Pure virtual method for drawing the window's specific contents.
@@ -93,6 +99,15 @@ namespace hc::editor
      * Derived classes must implement this to define their UI.
      */
     virtual void onDraw() = 0;
+
+    /**
+     * @brief Virtual method called when the window size changes.
+     *
+     * Derived classes can override this to respond to size changes.
+     *
+     * @param newSize The new size of the window (width, height).
+     */
+    virtual void onWindowSizeChanged(const Vector2f& newSize);
 
   private:
 

@@ -17,6 +17,7 @@
 #include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/services/hcEditorServiceManager.h"
@@ -43,6 +44,7 @@ namespace hc::editor
         hotCoffeeEngine.getSceneManager(),
         editorServiceManager.getService<GameObjectSelectionService>()
       ));
+      viewsManager.registerView(MakeUnique<SceneViewportWindow>(hotCoffeeEngine));
       viewsManager.registerView(MakeUnique<LightManagerWindow>(
         hotCoffeeEngine.getSceneManager()
       ));

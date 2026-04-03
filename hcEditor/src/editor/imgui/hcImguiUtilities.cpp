@@ -97,5 +97,27 @@ namespace hc::editor
         ImGui::TextDisabled("[No Texture]");
       }
     }
+    void DrawTexture(
+      ITexture* texture,
+      float width,
+      float height,
+      const Vector2f& uvTopLeft,
+      const Vector2f& uvBottomRight
+    )
+    {
+      if (texture)
+      {
+        ImGui::Image(
+          texture->getNativeHandle(),
+          ImVec2(width, height),
+          ImVec2(uvTopLeft.x, uvTopLeft.y),
+          ImVec2(uvBottomRight.x, uvBottomRight.y)
+        );
+      }
+      else
+      {
+        ImGui::TextDisabled("[No Texture]");
+      }
+    }
   }
 }

@@ -64,6 +64,28 @@ namespace hc::editor
       float width,
       float height
     );
+
+    /**
+     * @brief Draws a texture in ImGui with specified UV coordinates.
+     *
+     * Displays the given texture at the specified dimensions, using the provided UV
+     * coordinates to determine which part of the texture to display.
+     *
+     * @param texture Pointer to the texture to be drawn.
+     * @param width The width to display the texture.
+     * @param height The height to display the texture.
+     * @param uvTopLeft The UV coordinates of the top-left corner of the texture region
+     * to display.
+     * @param uvBottomRight The UV coordinates of the bottom-right corner of the texture
+     * region to display.
+     */
+    void DrawTexture(
+      ITexture* texture,
+      float width,
+      float height,
+      const Vector2f& uvTopLeft,
+      const Vector2f& uvBottomRight
+    );
   }
 }
 

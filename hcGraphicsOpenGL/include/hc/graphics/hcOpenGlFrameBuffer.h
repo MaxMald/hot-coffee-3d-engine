@@ -70,6 +70,11 @@ namespace hc
     UInt32 getHeight() const override;
 
     /**
+     * @copydoc IFrameBuffer::clear
+     */
+    void clear(const Color& clearColor) override;
+
+    /**
      * @brief Checks if the framebuffer is valid and ready for use.
      *
      * @return True if the framebuffer is valid, false otherwise.

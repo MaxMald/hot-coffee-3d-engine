@@ -91,6 +91,36 @@ namespace hc
     return m_cameraManager;
   }
 
+  void Scene::draw()
+  {
+    Camera* activeCamera = m_cameraManager.getActiveCamera();
+    if (activeCamera)
+      draw(activeCamera);
+    else
+      draw(&(m_cameraManager.getDefaultCamera()));
+  }
+
+  void Scene::draw(Camera* camera)
+  {
+    if (!camera)
+    {
+      throw RuntimeErrorException(
+        "Scene::draw: Null camera provided. Falling back to default camera."
+      );
+    }
+
+    RenderContext renderContext;
+    renderContext.cameraMatrices.viewMatrix = camera->getViewMatrix();
+    renderContext.cameraMatrices.projectionMatrix = camera->getProjectionMatrix();
+    renderContext.cameraPosition = camera->getPosition();
+    renderContext.transform = Matrix4::Identity();
+    renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
+
+    onBeforeDraw(renderContext);
+    m_sceneGraph.draw(renderContext);
+    onAfterDraw(renderContext);
+  }
+
   void Scene::clear()
   {
     m_sceneGraph.clear();
@@ -192,33 +222,6 @@ namespace hc
   void Scene::deactivate()
   {
     onDeactivate();
-  }
-
-  void Scene::draw()
-  {
-    RenderContext renderContext;
-
-    Camera* activeCamera = m_cameraManager.getActiveCamera();
-    if (activeCamera)
-    {
-      renderContext.cameraMatrices.viewMatrix = activeCamera->getViewMatrix();
-      renderContext.cameraMatrices.projectionMatrix = activeCamera->getProjectionMatrix();
-      renderContext.cameraPosition = activeCamera->getPosition();
-    }
-    else
-    {
-      Camera& defaultCamera = m_cameraManager.getDefaultCamera();
-      renderContext.cameraMatrices.viewMatrix = defaultCamera.getViewMatrix();
-      renderContext.cameraMatrices.projectionMatrix = defaultCamera.getProjectionMatrix();
-      renderContext.cameraPosition = defaultCamera.getPosition();
-    }
-
-    renderContext.transform = Matrix4::Identity();
-    renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
-
-    onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext);
-    onAfterDraw(renderContext);
   }
 
   void Scene::update(const Time& elapsedTime)

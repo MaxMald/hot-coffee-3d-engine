@@ -57,7 +57,7 @@ namespace hc::editor
         "HotCoffeeEditor is not initialized. Call initialize() before running the editor."
       );
 
-    m_engine.run(EditorSceneNames::CONTENT_SCENE); // should be run()
+    m_engine.run();
   }
 
   void HotCoffeeEditor::destroy()

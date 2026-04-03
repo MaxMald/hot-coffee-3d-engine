@@ -74,6 +74,15 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
+     * @brief Clears the framebuffer's color buffer with the specified clear color. Should
+     * bind the framebuffer before calling this method to ensure the correct target is
+     * cleared.
+     *
+     * @param clearColor The color to clear the framebuffer with.
+     */
+    virtual void clear(const Color& clearColor) = 0;
+
+    /**
      * @brief Checks if the framebuffer is valid and ready for use.
      * 
      * @return True if the framebuffer is valid, false otherwise.
