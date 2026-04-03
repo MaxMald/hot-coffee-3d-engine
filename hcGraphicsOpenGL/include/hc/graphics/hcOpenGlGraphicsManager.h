@@ -20,6 +20,11 @@ namespace hc
     virtual ~OpenGlGraphicsManager();
 
     /**
+     * @copydoc IGraphicsManager::getGraphicsBackendType
+     */
+    graphicsBackendType::Type getGraphicsBackendType() const override;
+
+    /**
      * @copydoc IGraphicsManager::beginFrame
      */
     void beginFrame() override;

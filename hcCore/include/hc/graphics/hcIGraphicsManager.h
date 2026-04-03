@@ -5,6 +5,7 @@
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
 #include "hc/graphics/hcDrawCommand.h"
 #include "hc/graphics/hcIFrameBuffer.h"
+#include "hc/graphics/hcGraphicsBackendType.h"
 
 namespace hc
 {
@@ -27,6 +28,13 @@ namespace hc
   {
   public:
     virtual ~IGraphicsManager();
+
+    /**
+     * @brief Gets the type of graphics backend used by this graphics manager.
+     *
+     * @return The graphics backend type.
+     */
+    virtual graphicsBackendType::Type getGraphicsBackendType() const = 0;
 
     /**
      * @brief Begins a new rendering frame.

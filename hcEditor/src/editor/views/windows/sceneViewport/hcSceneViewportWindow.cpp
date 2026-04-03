@@ -82,13 +82,28 @@ namespace hc::editor
     }
 
     Vector2f contentSize = getContentSize();
+    Vector2f uvTopLeft(1, 0);
+    Vector2f uvBottomRight(0, 1);
+
+    graphicsBackendType::Type backendType = m_engine
+      .getGraphicsManager()
+      .getGraphicsBackendType();
+
+    if (graphicsBackendType::OPENGL)
+    {
+      // OpenGL's texture coordinate system is flipped vertically compared to ImGui's,
+      // so we need to flip the UVs when using OpenGL.
+
+      uvTopLeft = Vector2f(0, 1);
+      uvBottomRight = Vector2f(1, 0);
+    }
 
     imguiUtilities::DrawTexture(
       &(m_frameBuffer->getColorTexture()),
       contentSize.x,
       contentSize.y,
-      Vector2f(0, 1),
-      Vector2f(1, 0)
+      uvTopLeft,
+      uvBottomRight
     );
   }
 }
