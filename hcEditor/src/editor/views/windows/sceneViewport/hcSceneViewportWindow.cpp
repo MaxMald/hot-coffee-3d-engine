@@ -7,7 +7,9 @@ namespace hc::editor
   SceneViewportWindow::SceneViewportWindow(HotCoffeeEngine& engine) :
     AWindowView("Scene Viewport"),
     m_engine(engine),
-    m_frameBuffer(nullptr)
+    m_frameBuffer(nullptr),
+    m_uvTopLeft(0, 1),
+    m_uvBottomRight(1, 0)
   {
     m_frameBuffer = m_engine
       .getGraphicsManager()
@@ -17,18 +19,33 @@ namespace hc::editor
       throw RuntimeErrorException(
         "SceneViewportWindow: Failed to create framebuffer for scene viewport."
       );
+
+    graphicsBackendType::Type backendType = m_engine
+      .getGraphicsManager()
+      .getGraphicsBackendType();
+
+    if (backendType == graphicsBackendType::OPENGL)
+    {
+      // OpenGL's texture coordinate system is flipped vertically compared to ImGui's,
+      // so we need to flip the UVs when using OpenGL.
+
+      m_uvTopLeft = Vector2f(0, 1);
+      m_uvBottomRight = Vector2f(1, 0);
+    }
   }
 
   void SceneViewportWindow::onDraw()
   {
+    updateFramebufferSize();
     renderSceneToTexture();
     drawViewport();
   }
 
-  void SceneViewportWindow::onWindowSizeChanged(const Vector2f& newSize)
+  void SceneViewportWindow::updateFramebufferSize()
   {
-    UInt32 width = static_cast<UInt32>(newSize.x);
-    UInt32 height = static_cast<UInt32>(newSize.y);
+    Vector2f contentSize = getContentSize();
+    UInt32 width = static_cast<UInt32>(contentSize.x);
+    UInt32 height = static_cast<UInt32>(contentSize.y);
 
     if (width == 0 || height == 0)
     {
@@ -82,28 +99,12 @@ namespace hc::editor
     }
 
     Vector2f contentSize = getContentSize();
-    Vector2f uvTopLeft(1, 0);
-    Vector2f uvBottomRight(0, 1);
-
-    graphicsBackendType::Type backendType = m_engine
-      .getGraphicsManager()
-      .getGraphicsBackendType();
-
-    if (graphicsBackendType::OPENGL)
-    {
-      // OpenGL's texture coordinate system is flipped vertically compared to ImGui's,
-      // so we need to flip the UVs when using OpenGL.
-
-      uvTopLeft = Vector2f(0, 1);
-      uvBottomRight = Vector2f(1, 0);
-    }
-
     imguiUtilities::DrawTexture(
       &(m_frameBuffer->getColorTexture()),
       contentSize.x,
       contentSize.y,
-      uvTopLeft,
-      uvBottomRight
+      m_uvTopLeft,
+      m_uvBottomRight
     );
   }
 }

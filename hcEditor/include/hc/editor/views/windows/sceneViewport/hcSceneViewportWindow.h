@@ -12,9 +12,15 @@ namespace hc::editor
   protected:
     HotCoffeeEngine& m_engine;
     FrameBufferPtr m_frameBuffer;
+    Vector2f m_uvTopLeft;
+    Vector2f m_uvBottomRight;
 
     void onDraw() override;
-    void onWindowSizeChanged(const Vector2f& newSize) override;
+
+    /**
+     * @brief Updates framebuffer size to match content region.
+     */
+    void updateFramebufferSize();
 
     /**
      * @brief Renders the content scene to the render texture.
