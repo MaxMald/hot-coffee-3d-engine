@@ -7,14 +7,13 @@
 
 namespace hc
 {
-  class CameraManager;
-
   /**
    * @brief Represents a camera in the engine.
    */
   class HC_CORE_EXPORT Camera : public ISerializable
   {
   public:
+    Camera();
     ~Camera();
 
     /**
@@ -192,10 +191,6 @@ namespace hc
     PerspectiveCameraProjection m_perspectiveProjection;
     OrthographicCameraProjection m_orthographicProjection;
 
-    Camera();
-
     void recalculateUp();
-
-    friend class CameraManager;
   };
 }

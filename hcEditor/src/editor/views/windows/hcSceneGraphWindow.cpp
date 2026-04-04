@@ -20,6 +20,11 @@ namespace hc::editor
   {
   }
 
+  void SceneGraphWindow::destroy()
+  {
+    m_gameObjectSelectionService.clearSelection();
+  }
+
   void SceneGraphWindow::onDraw()
   {
     hc::Scene* scene = m_sceneManager.getScene(EditorSceneNames::CONTENT_SCENE);

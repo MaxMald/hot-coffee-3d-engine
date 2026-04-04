@@ -24,6 +24,8 @@ namespace hc::editor
     );
     virtual ~MaterialDescriptorEditorWindow();
 
+    void destroy() override;
+
     /**
      * @brief Opens a material descriptor for editing.
      * 

@@ -41,6 +41,13 @@ namespace hc::editor
     bool processEvent(const Event& event);
 
     /**
+     * @brief Update all registered views.
+     *
+     * @param elapsedTime The time elapsed since the last update.
+     */
+    void update(const Time& elapsedTime);
+
+    /**
      * @brief Draw all registered views.
      *
      * @param elapsedTime The time elapsed since the last frame.

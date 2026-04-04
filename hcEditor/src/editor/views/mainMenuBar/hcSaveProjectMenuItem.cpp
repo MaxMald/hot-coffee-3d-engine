@@ -75,7 +75,7 @@ namespace hc::editor
   void SaveProjectMenuItem::onFileSelected(
     const String& dialogKey,
     const Path& filePathName,
-    const Path& currentPath
+    const Path&
   )
   {
     if (dialogKey == SAVE_PROJECT_DIALOG_KEY)

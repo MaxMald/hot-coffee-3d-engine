@@ -20,6 +20,8 @@ namespace hc::editor
     );
     virtual ~GameObjectEditorWindow();
 
+    void destroy() override;
+
   protected:
     GameObjectSelectionService& m_gameObjectSelectionService;
     CreateComponentSection m_createComponentSection;
@@ -27,7 +29,6 @@ namespace hc::editor
     Vector<IComponent*> m_gameObjectComponents;
 
     void onDraw() override;
-    void onDestroy() override;
     void drawTransform(GameObject* gameObject);
     void drawCreateComponentSection(GameObject* gameObject);
     void drawComponents(GameObject* gameObject);

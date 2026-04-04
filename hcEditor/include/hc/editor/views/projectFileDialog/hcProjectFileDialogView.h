@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/views/hcABaseView.h"
+#include "hc/editor/views/hcIView.h"
 #include "hc/editor/views/directoryNavigator/hcDirectoryNavigator.h"
 #include "hc/editor/views/projectFileDialog/hcCreateNewFileUI.h"
 #include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
@@ -15,7 +15,7 @@ namespace hc::editor
    * @brief View for selecting files or directories within a project.
    */
   class ProjectFileDialogView :
-    public ABaseView,
+    public IView,
     public IProjectManagerListener
   {
   public:
@@ -23,9 +23,19 @@ namespace hc::editor
     virtual ~ProjectFileDialogView();
 
     /**
+     * @copydoc IView::update
+     */
+    void update(const Time& elapsedTime) override;
+
+    /**
      * @copydoc ABaseView::draw
      */
     void draw() override;
+
+    /**
+     * @copydoc IView::destroy
+     */
+    void destroy() override;
 
     /**
      * @brief Opens the image file selector dialog.
@@ -86,7 +96,6 @@ namespace hc::editor
     bool m_isDirectorySelectorOpen;
     CreateNewFileUI m_createNewFileUI;
 
-    void onDestroy() override;
     void onProjectOpened() override;
     void onProjectClosed() override;
 

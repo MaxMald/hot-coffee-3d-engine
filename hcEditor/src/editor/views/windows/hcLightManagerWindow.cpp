@@ -14,6 +14,10 @@ namespace hc::editor
 
   LightManagerWindow::~LightManagerWindow() = default;
 
+  void LightManagerWindow::destroy()
+  {
+  }
+
   void LightManagerWindow::onDraw()
   {
 

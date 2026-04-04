@@ -21,6 +21,7 @@ namespace hc::editor
     );
     virtual ~ProjectBrowserWindow();
 
+    void destroy() override;
     void onProjectOpened() override;
     void onProjectClosed() override;
     void refresh();

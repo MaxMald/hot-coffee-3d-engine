@@ -19,6 +19,8 @@ namespace hc::editor
     TextureManagerWindow(ITextureManager& textureManager);
     virtual ~TextureManagerWindow();
 
+    void destroy() override;
+
   private:
     ITextureManager& m_textureManager;
 

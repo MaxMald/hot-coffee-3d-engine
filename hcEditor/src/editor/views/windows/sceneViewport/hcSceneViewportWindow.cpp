@@ -5,37 +5,48 @@
 namespace hc::editor
 {
   SceneViewportWindow::SceneViewportWindow(HotCoffeeEngine& engine) :
-    AWindowView("Scene Viewport"),
+    AWindowView("Scene Viewport", true),
     m_engine(engine),
-    m_frameBuffer(nullptr),
+    m_renderer(m_engine.getGraphicsManager()),
+    m_cameraController(m_engine.getInputManager()),
     m_uvTopLeft(0, 1),
     m_uvBottomRight(1, 0)
   {
-    m_frameBuffer = m_engine
-      .getGraphicsManager()
-      .createFrameBuffer(10, 10);
-
-    if (!m_frameBuffer)
-      throw RuntimeErrorException(
-        "SceneViewportWindow: Failed to create framebuffer for scene viewport."
-      );
-
     graphicsBackendType::Type backendType = m_engine
       .getGraphicsManager()
       .getGraphicsBackendType();
 
     if (backendType == graphicsBackendType::OPENGL)
     {
-      // OpenGL's texture coordinate system is flipped vertically compared to ImGui's,
-      // so we need to flip the UVs when using OpenGL.
-
-      m_uvTopLeft = Vector2f(0, 1);
+      m_uvTopLeft = Vector2f(0, 1); // flipped vertically 
       m_uvBottomRight = Vector2f(1, 0);
     }
+
+    m_cameraController.prepare();
+
+    if (!m_renderer.isValid())
+    {
+      LogService::Error(
+        "SceneViewportWindow: Failed to initialize renderer. Framebuffer is invalid."
+      );
+    }
+  }
+
+  void SceneViewportWindow::destroy()
+  {
+  }
+
+  void SceneViewportWindow::onUpdate(const Time& elapsedTime)
+  {
+    if (isFocused())
+      m_cameraController.update(elapsedTime);
   }
 
   void SceneViewportWindow::onDraw()
   {
+    if (!m_renderer.isValid())
+      return;
+
     updateFramebufferSize();
     renderSceneToTexture();
     drawViewport();
@@ -53,14 +64,7 @@ namespace hc::editor
       return;
     }
 
-    if (!m_frameBuffer)
-    {
-      throw RuntimeErrorException(
-        "SceneViewportWindow: Framebuffer is not initialized. Cannot resize."
-      );
-    }
-
-    m_frameBuffer->resize(width, height);
+    m_renderer.resize(width, height);
   }
 
   void SceneViewportWindow::renderSceneToTexture()
@@ -75,34 +79,18 @@ namespace hc::editor
       return;
     }
 
-    if (!m_frameBuffer || !m_frameBuffer->isValid())
-    {
-      throw RuntimeErrorException(
-        "SceneViewportWindow: Invalid frame buffer."
-      );
-    }
-
-    m_frameBuffer->bind();
-    m_frameBuffer->clear(Color(0.1f, 0.1f, 0.1f, 1.0f));
-    contentScene->draw();
-    m_engine.getGraphicsManager().executeDrawCommands();
-    m_frameBuffer->unbind();
+    m_renderer.renderScene(
+      *contentScene,
+      m_cameraController.getCamera()
+    );
   }
 
   void SceneViewportWindow::drawViewport()
   {
-    if (!m_frameBuffer || !m_frameBuffer->isValid())
-    {
-      throw RuntimeErrorException(
-        "SceneViewportWindow: Invalid frame buffer."
-      );
-    }
-
-    Vector2f contentSize = getContentSize();
     imguiUtilities::DrawTexture(
-      &(m_frameBuffer->getColorTexture()),
-      contentSize.x,
-      contentSize.y,
+      &(m_renderer.getRenderedTexture()),
+      static_cast<float>(m_renderer.getWidth()),
+      static_cast<float>(m_renderer.getHeight()),
       m_uvTopLeft,
       m_uvBottomRight
     );

@@ -31,6 +31,15 @@ namespace hc::editor
     return hcImguiHandler::processEvent(event);
   }
 
+  void EditorViewsManager::update(const Time& elapsedTime)
+  {
+    if (!m_initialized)
+      throw RuntimeErrorException("Cannot update views: EditorViewsManager is not initialized.");
+
+    for (const UniquePtr<IView>& view : m_views)
+      view->update(elapsedTime);
+  }
+
   void EditorViewsManager::draw(const Time& elapsedTime)
   {
     if (!m_initialized)

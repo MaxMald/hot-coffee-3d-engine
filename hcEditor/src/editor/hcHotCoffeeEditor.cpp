@@ -84,6 +84,7 @@ namespace hc::editor
   void HotCoffeeEditor::onBeforeSceneUpdate(const Time& elapsedTime)
   {
     m_serviceManager.update(elapsedTime);
+    m_viewsManager.update(elapsedTime);
   }
 
   void HotCoffeeEditor::onBeforeSceneRender()

@@ -192,6 +192,9 @@ namespace hc
 
       Time elapsedTime = m_frameClock.getElapsedTime();
 
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onBeforeSceneUpdate(elapsedTime);
+
       m_sceneManager->update(elapsedTime);
       m_graphicsManager->beginFrame();
 

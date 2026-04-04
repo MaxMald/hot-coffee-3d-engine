@@ -7,18 +7,27 @@ namespace hc::editor
     bool isOpen,
     const Vector2f& defaultWindowSize
   ) :
-    ABaseView(),
     m_windowName(name),
     m_windowSize(0.0f, 0.0f),
     m_contentSize(0.0f, 0.0f),
     m_windowPosition(0.0f, 0.0f),
     m_defaultWindowSize(defaultWindowSize.x, defaultWindowSize.y),
+    m_isFocused(false),
+    m_isHovered(false),
     m_isOpen(isOpen)
   {
   }
 
   AWindowView::~AWindowView()
   {
+  }
+
+  void AWindowView::update(const Time& elapsedTime)
+  {
+    if (!m_isOpen)
+      return;
+
+    onUpdate(elapsedTime);
   }
 
   void AWindowView::draw()
@@ -72,7 +81,22 @@ namespace hc::editor
     return m_windowPosition;
   }
 
-  void AWindowView::onWindowSizeChanged(const Vector2f& newSize)
+  bool AWindowView::isFocused() const
+  {
+    return m_isFocused;
+  }
+
+  bool AWindowView::isHovered() const
+  {
+    return m_isHovered;
+  }
+
+  void AWindowView::onUpdate(const Time&)
+  {
+    // Derived classes can override this to implement custom update logic.
+  }
+
+  void AWindowView::onWindowSizeChanged(const Vector2f&)
   {
     // Derived classes can override this to respond to size changes.
   }
@@ -91,5 +115,8 @@ namespace hc::editor
     m_contentSize.y = ImGui::GetContentRegionAvail().y;
     m_windowPosition.x = ImGui::GetWindowPos().x;
     m_windowPosition.y = ImGui::GetWindowPos().y;
+
+    m_isFocused = ImGui::IsWindowFocused();
+    m_isHovered = ImGui::IsWindowHovered();
   }
 }
