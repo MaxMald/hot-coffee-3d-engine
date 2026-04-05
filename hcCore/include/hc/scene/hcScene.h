@@ -121,9 +121,9 @@ namespace hc
     /**
      * @brief Draws the scene using the specified camera.
       *
-      * @param campera The camera to use for drawing the scene.
+      * @param camera The camera to use for drawing the scene.
      */
-    void draw(Camera* campera);
+    void draw(Camera* camera);
 
     /**
      * @brief Clears the scene graph, lights, and cameras.
