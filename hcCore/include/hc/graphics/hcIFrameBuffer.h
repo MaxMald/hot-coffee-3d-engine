@@ -11,8 +11,8 @@ namespace hc
    * @brief Custom deleter for IFrameBuffer that ensures proper cleanup across
    * DLL boundaries.
    *
-   * Calls the virtual destroy() method to delete the object in the same heap
-   * where it was allocated.
+   * Calls the virtual destroy() method which handles both resource cleanup
+   * and self-deletion in the same module where the object was allocated.
    */
   struct HC_CORE_EXPORT FrameBufferDeleter
   {
@@ -37,7 +37,7 @@ namespace hc
      * @brief Initializes the framebuffer with the specified dimensions. This method
      * must be called before using the framebuffer.
      *
-     * You cannot initialize a framebuffer more than once without destroying it first.
+     * You cannot initialize a framebuffer more than once without cleaning it up first.
      * If you need to change the size of an existing framebuffer, use the resize() method
      * instead.
      *
@@ -103,7 +103,17 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
+     * @brief Performs cleanup of framebuffer resources without destroying the object
+     * itself.
+     */
+    virtual void cleanup() = 0;
+
+    /**
      * @brief Destroys the framebuffer and releases all associated resources.
+     *
+     * This method performs cleanup and self-deletion to ensure the object
+     * is destroyed in the same module where it was allocated, maintaining
+     * heap consistency across DLL boundaries.
      */
     virtual void destroy() = 0;
 

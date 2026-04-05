@@ -7,7 +7,6 @@ namespace hc
     if (frameBuffer)
     {
       frameBuffer->destroy();
-      delete frameBuffer;
     }
   }
 }

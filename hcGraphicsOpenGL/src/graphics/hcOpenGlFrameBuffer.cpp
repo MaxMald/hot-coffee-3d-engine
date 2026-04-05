@@ -17,7 +17,7 @@ namespace hc
 
   OpenGlFrameBuffer::~OpenGlFrameBuffer()
   {
-    destroy();
+    cleanup();
   }
 
   void OpenGlFrameBuffer::initialize(UInt32 width, UInt32 height)
@@ -75,7 +75,7 @@ namespace hc
     }
     catch (const Exception&)
     {
-      destroy();
+      cleanup();
       throw;
     }
   }
@@ -164,7 +164,7 @@ namespace hc
     return m_isValid;
   }
 
-  void OpenGlFrameBuffer::destroy()
+  void OpenGlFrameBuffer::cleanup()
   {
     if (m_depthStencilBufferId != 0)
     {
@@ -180,6 +180,12 @@ namespace hc
 
     m_colorTexture.reset();
     m_isValid = false;
+  }
+
+  void OpenGlFrameBuffer::destroy()
+  {
+    cleanup();
+    delete this;
   }
 
   void OpenGlFrameBuffer::savePreviousViewport()
