@@ -108,7 +108,9 @@ namespace hc
     UInt32 height
   )
   {
-    return FrameBufferPtr(new OpenGlFrameBuffer(width, height));
+    FrameBufferPtr frameBufferPtr = FrameBufferPtr(new OpenGlFrameBuffer());
+    frameBufferPtr->initialize(width, height);
+    return frameBufferPtr;
   }
 
   void OpenGlGraphicsManager::setViewport(

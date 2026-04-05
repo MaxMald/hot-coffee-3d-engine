@@ -17,55 +17,43 @@ namespace hc
   {
   public:
     /**
-     * @brief Constructs an OpenGL framebuffer with the specified
-     * dimensions.
-     *
-     * @param width The width in pixels.
-     * @param height The height in pixels.
+     * @brief Constructs an OpenGL framebuffer.
      */
-    OpenGlFrameBuffer(
-      UInt32 width,
-      UInt32 height
-    );
+    OpenGlFrameBuffer();
     ~OpenGlFrameBuffer() override;
 
     /**
-     * @brief Binds this framebuffer as the current render target.
+     * @copydoc IFrameBuffer::initialize
+     */
+    void initialize(UInt32 width, UInt32 height) override;
+
+    /**
+     * @copydoc IFrameBuffer::bind
      */
     void bind() override;
 
     /**
-     * @brief Unbinds this framebuffer, restoring the default render
-     * target.
+     * @copydoc IFrameBuffer::unbind
      */
     void unbind() override;
 
     /**
-     * @brief Resizes the framebuffer to the specified dimensions.
-     *
-     * @param width The new width in pixels.
-     * @param height The new height in pixels.
+     * @copydoc IFrameBuffer::resize
      */
     void resize(UInt32 width, UInt32 height) override;
 
     /**
-     * @brief Gets the color texture attached to this framebuffer.
-     *
-     * @return Reference to the color texture.
+     * @copydoc IFrameBuffer::getColorTexture
      */
     ITexture& getColorTexture() override;
 
     /**
-     * @brief Gets the width of the framebuffer.
-     *
-     * @return The width in pixels.
+     * @copydoc IFrameBuffer::getWidth
      */
     UInt32 getWidth() const override;
 
     /**
-     * @brief Gets the height of the framebuffer.
-     *
-     * @return The height in pixels.
+     * @copydoc IFrameBuffer::getHeight
      */
     UInt32 getHeight() const override;
 
@@ -75,14 +63,12 @@ namespace hc
     void clear(const Color& clearColor) override;
 
     /**
-     * @brief Checks if the framebuffer is valid and ready for use.
-     *
-     * @return True if the framebuffer is valid, false otherwise.
+     * @copydoc IFrameBuffer::isValid
      */
     bool isValid() const override;
 
     /**
-     * @brief Destroys the framebuffer and releases all OpenGL resources.
+     * @copydoc IFrameBuffer::destroy
      */
     void destroy() override;
 

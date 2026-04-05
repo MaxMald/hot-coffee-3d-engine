@@ -3,12 +3,9 @@
 
 namespace hc
 {
-  OpenGlFrameBuffer::OpenGlFrameBuffer(
-    UInt32 width,
-    UInt32 height
-  ) :
-    m_width(width),
-    m_height(height),
+  OpenGlFrameBuffer::OpenGlFrameBuffer() :
+    m_width(0),
+    m_height(0),
     m_frameBufferId(0),
     m_depthStencilBufferId(0),
     m_colorTexture(nullptr),
@@ -16,56 +13,71 @@ namespace hc
     m_isBound(false),
     m_previousViewport{ 0, 0, 0, 0 }
   {
-    if (m_width == 0 || m_height == 0)
-      throw InvalidArgumentException(
-        "Framebuffer dimensions must be greater than zero"
-      );
-    
-    m_colorTexture = MakeUnique<OpenGlTexture>(m_width, m_height);
-    if (!m_colorTexture->isValid())
-      throw RuntimeErrorException("Failed to create color texture for framebuffer");
-
-    glGenFramebuffers(1, &m_frameBufferId);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
-
-    glFramebufferTexture2D(
-      GL_FRAMEBUFFER,
-      GL_COLOR_ATTACHMENT0,
-      GL_TEXTURE_2D,
-      m_colorTexture->getTextureId(),
-      0
-    );
-        
-    glGenRenderbuffers(1, &m_depthStencilBufferId);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
-    glRenderbufferStorage(
-      GL_RENDERBUFFER,
-      GL_DEPTH24_STENCIL8,
-      m_width,
-      m_height
-    );
-
-    glFramebufferRenderbuffer(
-      GL_FRAMEBUFFER,
-      GL_DEPTH_STENCIL_ATTACHMENT,
-      GL_RENDERBUFFER,
-      m_depthStencilBufferId
-    );
-
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    {
-      throw RuntimeErrorException("Failed to create framebuffer");
-    }
-
-    m_isValid = true;
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
   OpenGlFrameBuffer::~OpenGlFrameBuffer()
   {
     destroy();
+  }
+
+  void OpenGlFrameBuffer::initialize(UInt32 width, UInt32 height)
+  {
+    try
+    {
+      if (m_isValid)
+        throw RuntimeErrorException("Framebuffer is already initialized");
+
+      if (width == 0 || height == 0)
+        throw InvalidArgumentException(
+          "Framebuffer dimensions must be greater than zero"
+        );
+
+      m_colorTexture = MakeUnique<OpenGlTexture>(width, height);
+      if (!m_colorTexture->isValid())
+        throw RuntimeErrorException("Failed to create color texture for framebuffer");
+
+      glGenFramebuffers(1, &m_frameBufferId);
+      glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
+
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER,
+        GL_COLOR_ATTACHMENT0,
+        GL_TEXTURE_2D,
+        m_colorTexture->getTextureId(),
+        0
+      );
+
+      glGenRenderbuffers(1, &m_depthStencilBufferId);
+      glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
+      glRenderbufferStorage(
+        GL_RENDERBUFFER,
+        GL_DEPTH24_STENCIL8,
+        width,
+        height
+      );
+
+      glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER,
+        GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_RENDERBUFFER,
+        m_depthStencilBufferId
+      );
+
+      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+      {
+        throw RuntimeErrorException("Failed to create framebuffer");
+      }
+
+      m_width = width;
+      m_height = height;
+      m_isValid = true;
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    catch (const Exception&)
+    {
+      destroy();
+      throw;
+    }
   }
 
   void OpenGlFrameBuffer::bind()
@@ -85,6 +97,9 @@ namespace hc
 
   void OpenGlFrameBuffer::resize(UInt32 width, UInt32 height)
   {
+    if (!m_isValid)
+      throw RuntimeErrorException("Cannot resize an uninitialized framebuffer");
+
     if (width == m_width && height == m_height)
       return;
 
@@ -134,6 +149,12 @@ namespace hc
 
   void OpenGlFrameBuffer::clear(const Color& clearColor)
   {
+    if (!m_isValid)
+      throw RuntimeErrorException("Cannot clear an uninitialized framebuffer");
+
+    if (!m_isBound)
+      throw RuntimeErrorException("Framebuffer must be bound before clearing");
+
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }

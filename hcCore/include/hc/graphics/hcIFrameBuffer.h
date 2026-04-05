@@ -34,6 +34,19 @@ namespace hc
     virtual ~IFrameBuffer() = default;
 
     /**
+     * @brief Initializes the framebuffer with the specified dimensions. This method
+     * must be called before using the framebuffer.
+     *
+     * You cannot initialize a framebuffer more than once without destroying it first.
+     * If you need to change the size of an existing framebuffer, use the resize() method
+     * instead.
+     *
+     * @param width The width in pixels.
+     * @param height The height in pixels.
+     */
+    virtual void initialize(UInt32 width, UInt32 height) = 0;
+
+    /**
      * @brief Binds this framebuffer as the current render target.
      */
     virtual void bind() = 0;
@@ -74,18 +87,18 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
-     * @brief Clears the framebuffer's color buffer with the specified clear color. Should
-     * bind the framebuffer before calling this method to ensure the correct target is
-     * cleared.
+     * @brief Clears the framebuffer's color buffer with the specified clear color. Must
+     * bind the framebuffer before calling this method, otherwise an exception will be
+     * thrown.
      *
      * @param clearColor The color to clear the framebuffer with.
      */
     virtual void clear(const Color& clearColor) = 0;
 
     /**
-     * @brief Checks if the framebuffer is valid and ready for use.
+     * @brief Checks if the framebuffer is initialized, valid and ready for use.
      * 
-     * @return True if the framebuffer is valid, false otherwise.
+     * @return True if the framebuffer is initialize and valid, false otherwise.
      */
     virtual bool isValid() const = 0;
 
