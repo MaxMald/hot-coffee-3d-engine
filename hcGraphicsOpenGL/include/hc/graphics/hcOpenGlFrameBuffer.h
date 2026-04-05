@@ -93,5 +93,10 @@ namespace hc
     GLuint m_depthStencilBufferId;
     UniquePtr<OpenGlTexture> m_colorTexture;
     bool m_isValid;
+    bool m_isBound;
+    GLint m_previousViewport[4];
+
+    void savePreviousViewport();
+    void restorePreviousViewport();
   };
 }

@@ -12,7 +12,9 @@ namespace hc
     m_frameBufferId(0),
     m_depthStencilBufferId(0),
     m_colorTexture(nullptr),
-    m_isValid(false)
+    m_isValid(false),
+    m_isBound(false),
+    m_previousViewport{ 0, 0, 0, 0 }
   {
     if (m_width == 0 || m_height == 0)
       throw InvalidArgumentException(
@@ -68,13 +70,17 @@ namespace hc
 
   void OpenGlFrameBuffer::bind()
   {
+    savePreviousViewport();
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
     glViewport(0, 0, m_width, m_height);
+    m_isBound = true;
   }
 
   void OpenGlFrameBuffer::unbind()
   {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    restorePreviousViewport();
+    m_isBound = false;
   }
 
   void OpenGlFrameBuffer::resize(UInt32 width, UInt32 height)
@@ -153,5 +159,19 @@ namespace hc
 
     m_colorTexture.reset();
     m_isValid = false;
+  }
+
+  void OpenGlFrameBuffer::savePreviousViewport()
+  {
+    glGetIntegerv(GL_VIEWPORT, m_previousViewport);
+  }
+
+  void OpenGlFrameBuffer::restorePreviousViewport()
+  {
+    if (m_isBound)
+    {
+      glViewport(m_previousViewport[0], m_previousViewport[1],
+        m_previousViewport[2], m_previousViewport[3]);
+    }
   }
 }
