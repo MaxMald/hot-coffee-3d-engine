@@ -11,7 +11,7 @@ namespace hc
       OPENGL = 0
     };
 
-    static String ToString(Type type);
-    static Type FromString(const String& str);
+    HC_CORE_EXPORT String ToString(Type type);
+    HC_CORE_EXPORT Type FromString(const String& str);
   }
 }
