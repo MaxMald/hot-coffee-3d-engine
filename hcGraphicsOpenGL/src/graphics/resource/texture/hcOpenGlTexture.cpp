@@ -113,6 +113,9 @@ namespace hc
 
   void OpenGlTexture::resize(UInt32 width, UInt32 height)
   {
+    if (!m_created)
+      return;
+
     if (width == m_width && height == m_height)
       return;
 
