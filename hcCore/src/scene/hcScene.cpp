@@ -105,7 +105,7 @@ namespace hc
     if (!camera)
     {
       throw RuntimeErrorException(
-        "Scene::draw: Null camera provided. Falling back to default camera."
+        "Scene::draw: Null camera provided. Drawing cannot proceed."
       );
     }
 

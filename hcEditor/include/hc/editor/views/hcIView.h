@@ -15,7 +15,7 @@ namespace hc::editor
     /**
      * @brief Updates the view based on elapsed time.
      *
-     * param elapsedTime The time elapsed since the last update.
+     * @param elapsedTime The time elapsed since the last update.
      */
     virtual void update(const Time& elapsedTime) = 0;
 
