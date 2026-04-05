@@ -59,10 +59,7 @@ namespace hc::editor
     UInt32 height = static_cast<UInt32>(contentSize.y);
 
     if (width == 0 || height == 0)
-    {
-      LogService::Error("SceneViewportWindow: Cannot resize framebuffer to zero dimensions.");
       return;
-    }
 
     m_renderer.resize(width, height);
   }
