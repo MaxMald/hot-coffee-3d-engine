@@ -1,7 +1,6 @@
 #pragma once
 
-#include "hc/editor/services/hcIEditorService.h"
-#include "hc/editor/services/hcIUpdatableEditorService.h"
+#include "hc/editor/hcEditorPrerequisites.h"
 
 namespace hc::editor
 {

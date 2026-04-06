@@ -84,5 +84,7 @@ namespace hc::editor
     IGraphicsManager& m_graphicsManager;
     FrameBufferPtr m_frameBuffer;
     Color m_clearColor;
+
+    void assertFrameBufferValid() const;
   };
 }
