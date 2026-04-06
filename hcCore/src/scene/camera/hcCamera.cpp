@@ -9,6 +9,7 @@ namespace hc
     m_up(0.0f, 1.0f, 0.0f),
     m_projectionType(projectionType::Perspective)
   {
+    setAspectRatio(1.77778f); // Default to 16:9 aspect ratio
   }
 
   Camera::~Camera()
@@ -40,6 +41,33 @@ namespace hc
   const UUID& Camera::getUUID() const
   {
     return m_id;
+  }
+
+  void Camera::setAspectRatio(float aspectRatio)
+  {
+    if (aspectRatio <= 0.0f)
+    {
+      LogService::Error(
+        "Camera: Aspect ratio must be greater than zero. Ignoring setAspectRatio call."
+      );
+      return;
+    }
+
+    m_perspectiveProjection.setAspectRatio(aspectRatio);
+    m_orthographicProjection.setAspectRatio(aspectRatio);
+  }
+
+  void Camera::setAspectRatio(UInt32 width, UInt32 height)
+  {
+    if (width == 0 || height == 0)
+    {
+      LogService::Error(
+        "Camera: Viewport size cannot be zero. Ignoring setAspectRatioFromViewport call."
+      );
+      return;
+    }
+
+    setAspectRatio(static_cast<float>(width) / static_cast<float>(height));
   }
 
   void Camera::setPosition(const Vector3f& position)

@@ -36,8 +36,14 @@ namespace hc
      */
     void update() override;
 
+    /**
+     * @copydoc ISerializable::serialize
+     */
     void serialize(BinaryWriter& writer) const override;
 
+    /**
+     * @copydoc ISerializable::deserialize
+     */
     void deserialize(BinaryReader& reader) override;
 
     /**

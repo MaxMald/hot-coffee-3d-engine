@@ -34,6 +34,21 @@ namespace hc
     const UUID& getUUID() const;
 
     /**
+     * @brief Sets the aspect ratio of the camera.
+     * 
+     * @param aspectRatio The new aspect ratio (width/height).
+     */
+    void setAspectRatio(float aspectRatio);
+
+    /**
+     * @brief Sets the aspect ratio of the camera based on the given viewport dimensions.
+     * 
+     * @param width The width of the viewport.
+     * @param height The height of the viewport.
+     */
+    void setAspectRatio(UInt32 width, UInt32 height);
+
+    /**
      * @brief Sets the position of the camera.
      *
      * @param position The new position.
