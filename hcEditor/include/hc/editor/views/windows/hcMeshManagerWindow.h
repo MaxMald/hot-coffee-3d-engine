@@ -19,6 +19,8 @@ namespace hc::editor
     MeshManagerWindow(IMeshManager& meshManager);
     virtual ~MeshManagerWindow() = default;
 
+    void destroy() override;
+
   private:
     IMeshManager& m_meshManager;
 

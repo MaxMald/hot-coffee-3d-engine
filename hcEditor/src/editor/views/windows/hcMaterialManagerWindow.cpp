@@ -16,6 +16,11 @@ namespace hc::editor
   {
   }
 
+  void MaterialManagerWindow::destroy()
+  {
+    m_materialDrawersManager->clear();
+  }
+
   void MaterialManagerWindow::onDraw()
   {
     const Vector<SharedPtr<IMaterial>>& materials = m_materialManager.getMaterials();
@@ -41,10 +46,5 @@ namespace hc::editor
       }
       ImGui::Separator();
     }
-  }
-
-  void MaterialManagerWindow::onDestroy()
-  {
-    m_materialDrawersManager->clear();
   }
 }

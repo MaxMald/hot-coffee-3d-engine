@@ -88,6 +88,20 @@ namespace hc
     return m_far;
   }
 
+  void OrthographicCameraProjection::setAspectRatio(float aspectRatio)
+  {
+    float currentHeight = m_top - m_bottom;
+    float halfHeight = currentHeight * 0.5f;
+    float halfWidth = halfHeight * aspectRatio;
+
+    m_left = -halfWidth;
+    m_right = halfWidth;
+    m_top = halfHeight;
+    m_bottom = -halfHeight;
+
+    m_isDirty = true;
+  }
+
   Matrix4 OrthographicCameraProjection::getProjectionMatrix()
   {
     if (m_isDirty)

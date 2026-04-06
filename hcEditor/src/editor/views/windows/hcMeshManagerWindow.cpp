@@ -9,6 +9,10 @@ namespace hc::editor
   {
   }
 
+  void MeshManagerWindow::destroy()
+  {
+  }
+
   void MeshManagerWindow::onDraw()
   {
     const Vector<SharedPtr<IMesh>>& meshes = m_meshManager.getMeshes();

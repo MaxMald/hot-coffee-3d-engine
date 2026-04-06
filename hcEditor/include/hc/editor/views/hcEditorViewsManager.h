@@ -8,16 +8,18 @@ namespace hc::editor
   /**
    * @brief Manages editor views and their lifecycle in the editor.
    */
-  class EditorViewsManager : public IGameLoopListener
+  class EditorViewsManager
   {
   public:
-    EditorViewsManager(HotCoffeeEngine& engine);
+    EditorViewsManager();
     virtual ~EditorViewsManager() = default;
 
     /**
      * @brief Initialize the editor views manager.
+     *
+     * @param window The window to use for initializing the views manager.
      */
-    void initialize();
+    void initialize(IWindow* window);
 
     /**
      * @brief Retrieve a view of the specified type.
@@ -39,6 +41,20 @@ namespace hc::editor
     bool processEvent(const Event& event);
 
     /**
+     * @brief Update all registered views.
+     *
+     * @param elapsedTime The time elapsed since the last update.
+     */
+    void update(const Time& elapsedTime);
+
+    /**
+     * @brief Draw all registered views.
+     *
+     * @param elapsedTime The time elapsed since the last frame.
+     */
+    void draw(const Time& elapsedTime);
+
+    /**
      * @brief Register a new view with the manager.
      *
      * @param view Unique pointer to the view to register.
@@ -57,18 +73,8 @@ namespace hc::editor
 
   private:
     bool m_initialized;
-    HotCoffeeEngine& m_engine;
+    IWindow* m_window;
     Vector<UniquePtr<IView>> m_views;
-
-    /**
-     * @copydoc IGameLoopListener::onEvent
-     */
-    bool onEvent(const Event& event) override;
-
-    /**
-     * @copydoc IGameLoopListener::onAfterSceneRender
-     */
-    void onAfterSceneRender() override;
   };
 
   template<typename T>

@@ -10,6 +10,8 @@ namespace hc::editor
     LightManagerWindow(SceneManager& sceneManager);
     ~LightManagerWindow();
 
+    void destroy() override;
+
   protected:
     SceneManager& m_sceneManager;
     Vector<Light*> m_lights;

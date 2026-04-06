@@ -15,6 +15,11 @@ namespace hc::editor
   {
   }
 
+  void AssetManagerWindow::destroy()
+  {
+    clear();
+  }
+
   void AssetManagerWindow::registerAssetGroupDrawer(
     UniquePtr<IAssetManagerDrawer> drawer
   )
@@ -32,11 +37,6 @@ namespace hc::editor
   void AssetManagerWindow::clear()
   {
     m_assetGroupDrawers.clear();
-  }
-
-  void AssetManagerWindow::onDestroy()
-  {
-    clear();
   }
 
   void AssetManagerWindow::onDraw()

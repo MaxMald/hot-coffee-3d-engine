@@ -13,6 +13,13 @@ namespace hc::editor
     virtual ~IView() = default;
 
     /**
+     * @brief Updates the view based on elapsed time.
+     *
+     * @param elapsedTime The time elapsed since the last update.
+     */
+    virtual void update(const Time& elapsedTime) = 0;
+
+    /**
      * @brief Draws the view.
      */
     virtual void draw() = 0;

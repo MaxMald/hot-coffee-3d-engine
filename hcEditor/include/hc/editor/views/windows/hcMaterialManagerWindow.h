@@ -26,6 +26,8 @@ namespace hc::editor
 
     virtual ~MaterialManagerWindow();
 
+    void destroy() override;
+
   private:
     IMaterialManager& m_materialManager;
     UniquePtr<MaterialDrawersManager> m_materialDrawersManager;
@@ -34,10 +36,5 @@ namespace hc::editor
      * @brief Draws the material manager window contents.
      */
     void onDraw() override;
-
-    /**
-     * @brief Performs cleanup when the window is destroyed.
-     */
-    void onDestroy() override;
   };
 }

@@ -14,6 +14,7 @@
 #include "hc/editor/views/windows/hcLightManagerWindow.h"
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
@@ -100,6 +101,9 @@ namespace hc::editor
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<MeshManagerWindow>()
+            ))
+            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+              *editorViewsManager.getView<SceneViewportWindow>()
             ))
           .endMenu()
           .build()

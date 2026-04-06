@@ -13,7 +13,6 @@ namespace hc::editor
   ProjectFileDialogView::ProjectFileDialogView(
     ProjectManager& projectManager
   ) :
-    ABaseView(),
     m_isFileSelectorOpen(false),
     m_isDirectorySelectorOpen(false),
     m_projectManager(projectManager),
@@ -35,6 +34,10 @@ namespace hc::editor
   ProjectFileDialogView::~ProjectFileDialogView()
   {
     m_projectManager.unsubscribeListener(this);
+  }
+
+  void ProjectFileDialogView::update(const Time&)
+  {
   }
 
   void ProjectFileDialogView::draw()
@@ -63,6 +66,11 @@ namespace hc::editor
     }
   }
 
+  void ProjectFileDialogView::destroy()
+  {
+    clear();
+  }
+
   void ProjectFileDialogView::openImageFile(
     const std::function<void(const Path&)>& onFileSelected
   )
@@ -83,11 +91,6 @@ namespace hc::editor
       m_modelFileExtensions,
       onFileSelected
     );
-  }
-
-  void ProjectFileDialogView::onDestroy()
-  {
-    clear();
   }
 
   void ProjectFileDialogView::onProjectOpened()

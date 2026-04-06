@@ -29,6 +29,15 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
+     * @brief Resizes the texture to the specified dimensions. Resizing a texture created
+     * from an image is not allowed, create a new texture instead.
+     * 
+     * @param width The new width of the texture in pixels.
+     * @param height The new height of the texture in pixels.
+     */
+    virtual void resize(UInt32 width, UInt32 height) = 0;
+
+    /**
      * @brief Binds the texture to the specified slot for rendering.
      * 
      * @param slot The texture slot to bind to (default is 0).
@@ -48,6 +57,13 @@ namespace hc
      * @return True if the texture is valid, false otherwise.
      */
     virtual bool isValid() const = 0;
+
+    /**
+     * @brief Checks if the texture was created from an image.
+     * 
+     * @return True if the texture is image-based, false otherwise.
+     */
+    virtual bool isImageBased() const = 0;
 
     /**
      * @brief Gets the image associated with the texture.

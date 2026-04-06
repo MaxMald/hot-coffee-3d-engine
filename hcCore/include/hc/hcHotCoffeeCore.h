@@ -50,6 +50,7 @@
 #include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
+#include "hc/graphics/hcIFrameBuffer.h"
 #include "hc/inputManager/hcInputManager.h"
 #include "hc/hcIGameLoopListener.h"
 

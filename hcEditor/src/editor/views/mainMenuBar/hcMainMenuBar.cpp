@@ -12,6 +12,10 @@ namespace hc::editor
   {
   }
 
+  void MainMenuBar::update(const Time&)
+  {
+  }
+
   void MainMenuBar::addMenu(UniquePtr<Menu> menu)
   {
     m_menus.push_back(std::move(menu));
@@ -25,5 +29,10 @@ namespace hc::editor
         menu->draw();
       ImGui::EndMainMenuBar();
     }
+  }
+
+  void MainMenuBar::destroy()
+  {
+    m_menus.clear();
   }
 }
