@@ -63,6 +63,7 @@ namespace hc::editor
       return;
 
     m_renderer.resize(width, height);
+    m_cameraController.getCamera().setAspectRatio(width, height);
   }
 
   void SceneViewportWindow::renderSceneToTexture()
