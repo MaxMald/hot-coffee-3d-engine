@@ -1,6 +1,6 @@
 #pragma once
-
-#include "hc/editor/views/hcABaseView.h"
+#include <imgui.h>
+#include "hc/editor/views/hcIView.h"
 
 namespace hc::editor
 {
@@ -10,13 +10,18 @@ namespace hc::editor
    * Provides a common interface and state for ImGui windows, including
    * open/close management.
    */
-  class AWindowView : public ABaseView
+  class AWindowView : public IView
   {
   public:
     virtual ~AWindowView();
 
     /**
-     * @brief Draws the window contents.
+     * @copydoc IView::update
+     */
+    void update(const Time& elapsedTime) override;
+
+    /**
+     * @copydoc IView::draw
      */
     void draw() override;
 
@@ -49,17 +54,78 @@ namespace hc::editor
      */
     bool& getOpenFlagReference();
 
+    /**
+     * @brief Returns the current total size of the window, including title bar and
+     * borders.
+     *
+     * @return The total window size as a Vector2f (width, height).
+     */
+    const Vector2f& getWindowSize() const;
+
+    /**
+     * @brief Returns the available content area size of the window, excluding title bar,
+     * borders and scrollbars.
+     *
+     * @return The content area size as a Vector2f (width, height).
+     */
+    const Vector2f& getContentSize() const;
+    
+    /**
+     * @brief Returns the current position of the window.
+     *
+     * @return The window position as a Vector2f (x, y).
+     */
+    const Vector2f& getWindowPosition() const;
+
+    /**
+     * @brief Returns whether the window is currently focused (active).
+     *
+     * A focused window is the one that is currently active and receiving input.
+     *
+     * @return True if the window is focused, false otherwise.
+     */
+    bool isFocused() const;
+    
+    /**
+     * @brief Returns whether the window is currently hovered by the mouse.
+     *
+     * A hovered window is the one that the mouse cursor is currently over.
+     *
+     * @return True if the window is hovered, false otherwise.
+     */
+    bool isHovered() const;
+
   protected:
     String m_windowName;
-    bool m_isOpen = true;
+    Vector2f m_windowSize;
+    Vector2f m_contentSize;
+    Vector2f m_windowPosition;
+    ImVec2 m_defaultWindowSize;
+    bool m_isFocused;
+    bool m_isHovered;
+    bool m_isOpen;
 
     /**
      * @brief Constructs a WindowView with the given name.
      *
      * @param name The window's display name.
      * @param isOpen Initial open state of the window.
+     * @param defaultWindowSize The default size of the window when first opened.
      */
-    AWindowView(const String& name, bool isOpen = false);
+    AWindowView(
+      const String& name,
+      bool isOpen = false,
+      const Vector2f& defaultWindowSize = Vector2f(400.0f, 300.0f)
+    );
+
+    /**
+     * @brief Virtual method for updating the window's state.
+     *
+     * Derived classes can override this to implement custom update logic.
+     *
+     * @param elapsedTime The time elapsed since the last update.
+     */
+    virtual void onUpdate(const Time& elapsedTime);
 
     /**
      * @brief Pure virtual method for drawing the window's specific contents.
@@ -67,5 +133,22 @@ namespace hc::editor
      * Derived classes must implement this to define their UI.
      */
     virtual void onDraw() = 0;
+
+    /**
+     * @brief Virtual method called when the window size changes.
+     *
+     * Derived classes can override this to respond to size changes.
+     *
+     * @param newSize The new size of the window (width, height).
+     */
+    virtual void onWindowSizeChanged(const Vector2f& newSize);
+
+  private:
+
+    /**
+     * @brief Updates the window's state (size, position, content size) based on ImGui's
+     * current state.
+     */
+    void updateWindowState();
   };
 }

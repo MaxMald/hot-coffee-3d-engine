@@ -17,6 +17,11 @@ namespace hc::editor
   {
   }
 
+  void EditorLoggerWindow::destroy()
+  {
+    m_logHistory.clear();
+  }
+
   void EditorLoggerWindow::onDraw()
   {
     ImGui::Begin("Logger", &m_isOpen);

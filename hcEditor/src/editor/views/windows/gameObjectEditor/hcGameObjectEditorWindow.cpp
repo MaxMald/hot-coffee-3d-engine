@@ -28,6 +28,11 @@ namespace hc::editor
 
   GameObjectEditorWindow::~GameObjectEditorWindow() = default;
 
+  void GameObjectEditorWindow::destroy()
+  {
+    m_componentDrawersManager.clear();
+  }
+
   void GameObjectEditorWindow::onDraw()
   {
     const Vector<GameObject*> selectedGameObjects =
@@ -53,11 +58,6 @@ namespace hc::editor
     drawCreateComponentSection(gameObject);
     ImGui::Separator();
     drawComponents(gameObject);
-  }
-
-  void GameObjectEditorWindow::onDestroy()
-  {
-    m_componentDrawersManager.clear();
   }
 
   void GameObjectEditorWindow::drawTransform(GameObject* gameObject)

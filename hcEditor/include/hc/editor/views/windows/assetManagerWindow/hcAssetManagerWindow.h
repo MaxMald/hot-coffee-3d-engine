@@ -12,6 +12,7 @@ namespace hc::editor
     AssetManagerWindow();
     virtual ~AssetManagerWindow();
 
+    void destroy() override;
     void registerAssetGroupDrawer(UniquePtr<IAssetManagerDrawer> drawer);
     void clear();
 
@@ -19,7 +20,6 @@ namespace hc::editor
     Vector<UniquePtr<IAssetManagerDrawer>> m_assetGroupDrawers;
     Vector<String> m_allAssetExtensions;
 
-    void onDestroy() override;
     void onDraw() override;
   };
 }

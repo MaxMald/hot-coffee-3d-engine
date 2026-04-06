@@ -7,14 +7,13 @@
 
 namespace hc
 {
-  class CameraManager;
-
   /**
    * @brief Represents a camera in the engine.
    */
   class HC_CORE_EXPORT Camera : public ISerializable
   {
   public:
+    Camera();
     ~Camera();
 
     /**
@@ -33,6 +32,21 @@ namespace hc
      * @return The camera's UUID.
      */
     const UUID& getUUID() const;
+
+    /**
+     * @brief Sets the aspect ratio of the camera.
+     * 
+     * @param aspectRatio The new aspect ratio (width/height).
+     */
+    void setAspectRatio(float aspectRatio);
+
+    /**
+     * @brief Sets the aspect ratio of the camera based on the given viewport dimensions.
+     * 
+     * @param width The width of the viewport.
+     * @param height The height of the viewport.
+     */
+    void setAspectRatio(UInt32 width, UInt32 height);
 
     /**
      * @brief Sets the position of the camera.
@@ -192,10 +206,6 @@ namespace hc
     PerspectiveCameraProjection m_perspectiveProjection;
     OrthographicCameraProjection m_orthographicProjection;
 
-    Camera();
-
     void recalculateUp();
-
-    friend class CameraManager;
   };
 }

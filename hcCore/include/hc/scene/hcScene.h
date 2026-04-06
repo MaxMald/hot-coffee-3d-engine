@@ -113,6 +113,19 @@ namespace hc
     const CameraManager& getCameraManager() const;
 
     /**
+     * @brief Draws the scene using the active camera. If no active camera is set,
+     * the default camera will be used.
+     */
+    void draw();
+
+    /**
+     * @brief Draws the scene using the specified camera.
+      *
+      * @param camera The camera to use for drawing the scene.
+     */
+    void draw(Camera* camera);
+
+    /**
      * @brief Clears the scene graph, lights, and cameras.
      */
     void clear();
@@ -241,11 +254,6 @@ namespace hc
      * @brief Deactivates the scene.
      */
     void deactivate();
-
-    /**
-     * @brief Draws the scene using the active or default camera.
-     */
-    void draw();
 
     /**
      * @brief Updates the scene and its game objects.

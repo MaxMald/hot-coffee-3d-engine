@@ -4,6 +4,8 @@
 #include "hc/window/hcIWindow.h"
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
 #include "hc/graphics/hcDrawCommand.h"
+#include "hc/graphics/hcIFrameBuffer.h"
+#include "hc/graphics/hcGraphicsBackendType.h"
 
 namespace hc
 {
@@ -26,6 +28,13 @@ namespace hc
   {
   public:
     virtual ~IGraphicsManager();
+
+    /**
+     * @brief Gets the type of graphics backend used by this graphics manager.
+     *
+     * @return The graphics backend type.
+     */
+    virtual graphicsBackendType::Type getGraphicsBackendType() const = 0;
 
     /**
      * @brief Begins a new rendering frame.
@@ -86,6 +95,37 @@ namespace hc
      * @return Reference to the IMeshManager instance.
      */
     virtual IMeshManager& getMeshManager() = 0;
+
+    /**
+     * @brief Creates a framebuffer with the specified dimensions.
+     *
+     * The returned smart pointer will automatically handle cleanup across DLL
+     * boundaries.
+     *
+     * @param width The width in pixels.
+     * @param height The height in pixels.
+     * 
+     * @return Smart pointer to the created framebuffer.
+     */
+    virtual FrameBufferPtr createFrameBuffer(
+      UInt32 width,
+      UInt32 height
+    ) = 0;
+
+    /**
+     * @brief Sets the rendering viewport dimensions.
+     *
+     * @param x The x-coordinate of the viewport's lower-left corner.
+     * @param y The y-coordinate of the viewport's lower-left corner.
+     * @param width The width of the viewport.
+     * @param height The height of the viewport.
+     */
+    virtual void setViewport(
+      UInt32 x,
+      UInt32 y,
+      UInt32 width,
+      UInt32 height
+    ) = 0;
 
   protected:
     IGraphicsManager();

@@ -33,6 +33,11 @@ namespace hc::editor
   {
   }
 
+  void MaterialDescriptorEditorWindow::destroy()
+  {
+    clear();
+  }
+
   void MaterialDescriptorEditorWindow::open(const Path& materialDescriptorPath)
   {
     clear();

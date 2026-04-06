@@ -43,7 +43,7 @@ namespace hc::editor
   void OpenProjectMenuItem::onFileSelected(
     const String& dialogKey,
     const Path& filePathName,
-    const Path& currentPath
+    const Path&
   )
   {
     if (dialogKey == OPEN_PROJECT_DIALOG_KEY)

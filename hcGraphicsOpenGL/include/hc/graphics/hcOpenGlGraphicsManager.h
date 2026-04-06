@@ -20,6 +20,11 @@ namespace hc
     virtual ~OpenGlGraphicsManager();
 
     /**
+     * @copydoc IGraphicsManager::getGraphicsBackendType
+     */
+    graphicsBackendType::Type getGraphicsBackendType() const override;
+
+    /**
      * @copydoc IGraphicsManager::beginFrame
      */
     void beginFrame() override;
@@ -63,6 +68,24 @@ namespace hc
      * @copydoc IGraphicsManager::getMeshManager
      */
     IMeshManager& getMeshManager() override;
+
+    /**
+     * @copydoc IGraphicsManager::createFrameBuffer
+     */
+    FrameBufferPtr createFrameBuffer(
+      UInt32 width,
+      UInt32 height
+    ) override;
+
+    /**
+     * @copydoc IGraphicsManager::setViewport
+     */
+    void setViewport(
+      UInt32 x,
+      UInt32 y,
+      UInt32 width,
+      UInt32 height
+    ) override;
 
   private:
     IAssetManager& m_assetManager;

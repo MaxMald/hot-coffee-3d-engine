@@ -19,6 +19,8 @@ namespace hc::editor
     );
     virtual ~SceneGraphWindow();
 
+    void destroy() override;
+
   protected:
     SceneManager& m_sceneManager;
     GameObjectSelectionService& m_gameObjectSelectionService;

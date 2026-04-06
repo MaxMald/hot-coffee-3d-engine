@@ -17,7 +17,7 @@ namespace hc::editor
       service->update(elapsedTime);
   }
 
-  void EditorServiceManager::clear()
+  void EditorServiceManager::destroy()
   {
     m_updatableServices.clear();
 

@@ -8,6 +8,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/hcOpenGlFrameBuffer.h"
 
 namespace hc
 {
@@ -45,6 +46,11 @@ namespace hc
 
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
   {
+  }
+
+  graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
+  {
+    return graphicsBackendType::OPENGL;
   }
 
   void OpenGlGraphicsManager::beginFrame()
@@ -95,6 +101,26 @@ namespace hc
   IMeshManager& OpenGlGraphicsManager::getMeshManager()
   {
     return m_meshManager;
+  }
+
+  FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(
+    UInt32 width,
+    UInt32 height
+  )
+  {
+    FrameBufferPtr frameBufferPtr = FrameBufferPtr(new OpenGlFrameBuffer());
+    frameBufferPtr->initialize(width, height);
+    return frameBufferPtr;
+  }
+
+  void OpenGlGraphicsManager::setViewport(
+    UInt32 x,
+    UInt32 y,
+    UInt32 width,
+    UInt32 height
+  )
+  {
+    glViewport(x, y, width, height);
   }
 
   void OpenGlGraphicsManager::initialize()

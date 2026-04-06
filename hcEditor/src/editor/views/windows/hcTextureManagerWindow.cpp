@@ -14,6 +14,10 @@ namespace hc::editor
   {
   }
 
+  void TextureManagerWindow::destroy()
+  {
+  }
+
   void TextureManagerWindow::onDraw()
   {
     const auto& textures = m_textureManager.getTextures();

@@ -37,8 +37,14 @@ namespace hc
      */
     void update() override;
 
+    /**
+     * @copydoc ISerializable::serialize
+     */
     void serialize(BinaryWriter& writer) const override;
 
+    /**
+     * @copydoc ISerializable::deserialize
+     */
     void deserialize(BinaryReader& reader) override;
 
     /**
@@ -124,6 +130,15 @@ namespace hc
      * @return The current far plane value.
      */
     float getFar() const;
+
+    /**
+     * @brief Sets the aspect ratio (width / height) of the view volume. This is used to
+     * automatically adjust the left, right, top, and bottom boundaries based on the
+     * current aspect ratio and a fixed vertical size.
+     *
+     * @param aspectRatio The new aspect ratio.
+     */
+    void setAspectRatio(float aspectRatio);
 
   private:
     float m_left;
