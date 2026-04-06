@@ -9,8 +9,8 @@ namespace hc::editor
     m_engine(engine),
     m_renderer(m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
-    m_uvTopLeft(0, 1),
-    m_uvBottomRight(1, 0)
+    m_uvTopLeft(0, 0),
+    m_uvBottomRight(1, 1)
   {
     graphicsBackendType::Type backendType = m_engine
       .getGraphicsManager()
@@ -18,7 +18,8 @@ namespace hc::editor
 
     if (backendType == graphicsBackendType::OPENGL)
     {
-      m_uvTopLeft = Vector2f(0, 1); // flipped vertically 
+      // flipped vertically 
+      m_uvTopLeft = Vector2f(0, 1);
       m_uvBottomRight = Vector2f(1, 0);
     }
 
