@@ -62,7 +62,7 @@ namespace hc
     if (width == 0 || height == 0)
     {
       LogService::Error(
-        "Camera: Viewport size cannot be zero. Ignoring setAspectRatioFromViewport call."
+        "Camera: Viewport size cannot be zero. Ignoring setAspectRatio call."
       );
       return;
     }
