@@ -4,9 +4,13 @@
 
 namespace hc::editor
 {
-  SceneViewportWindow::SceneViewportWindow(HotCoffeeEngine& engine) :
+  SceneViewportWindow::SceneViewportWindow(
+    HotCoffeeEngine& engine,
+    GameObjectSelectionService& selectionService
+  ) :
     AWindowView("Scene Viewport", true),
     m_engine(engine),
+    m_selectionService(selectionService),
     m_renderer(m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
     m_uvTopLeft(0, 0),
@@ -24,17 +28,20 @@ namespace hc::editor
     }
 
     m_cameraController.prepare();
-
     if (!m_renderer.isValid())
     {
       LogService::Error(
         "SceneViewportWindow: Failed to initialize renderer. Framebuffer is invalid."
       );
+      return;
     }
+
+    m_selectionService.subscribe(this);
   }
 
   void SceneViewportWindow::destroy()
   {
+    m_selectionService.unsubscribe(this);
   }
 
   void SceneViewportWindow::onUpdate(const Time& elapsedTime)
@@ -51,6 +58,16 @@ namespace hc::editor
     updateFramebufferSize();
     renderSceneToTexture();
     drawViewport();
+  }
+
+  void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)
+  {
+    // TODO
+  }
+
+  void SceneViewportWindow::onGameObjectDeselected(GameObject* gameObject)
+  {
+    // TODO
   }
 
   void SceneViewportWindow::updateFramebufferSize()
