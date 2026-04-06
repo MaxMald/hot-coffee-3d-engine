@@ -13,6 +13,13 @@ namespace hc::editor
     clearSelection();
   }
 
+  GameObject* GameObjectSelectionService::getFirstSelectedGameObject() const
+  {
+    if (m_selectedGameObjects.empty())
+      return nullptr;
+    return m_selectedGameObjects.front();
+  }
+
   const Vector<GameObject*>& GameObjectSelectionService::getSelectedGameObjects() const
   {
     return m_selectedGameObjects;
@@ -71,6 +78,11 @@ namespace hc::editor
     );
 
     return item != m_selectedGameObjects.end();
+  }
+
+  bool GameObjectSelectionService::hasSelectedGameObjects() const
+  {
+    return !m_selectedGameObjects.empty();
   }
 
   void GameObjectSelectionService::subscribe(

@@ -3,6 +3,7 @@
 #include "hc/editor/views/windows/hcAWindowView.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderer.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportGizmoController.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
 
@@ -41,6 +42,7 @@ namespace hc::editor
     GameObjectSelectionService& m_selectionService;
     SceneViewportRenderer m_renderer;
     SceneViewportCameraController m_cameraController;
+    SceneViewportGizmoController m_gizmoController;
     Vector2f m_uvTopLeft;
     Vector2f m_uvBottomRight;
 

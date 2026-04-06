@@ -13,6 +13,7 @@ namespace hc::editor
     m_selectionService(selectionService),
     m_renderer(m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
+    m_gizmoController(),
     m_uvTopLeft(0, 0),
     m_uvBottomRight(1, 1)
   {
@@ -37,6 +38,12 @@ namespace hc::editor
     }
 
     m_selectionService.subscribe(this);
+    if (m_selectionService.hasSelectedGameObjects())
+    {
+      m_gizmoController.setActiveGameObject(
+        m_selectionService.getFirstSelectedGameObject()
+      );
+    }
   }
 
   void SceneViewportWindow::destroy()
@@ -47,7 +54,10 @@ namespace hc::editor
   void SceneViewportWindow::onUpdate(const Time& elapsedTime)
   {
     if (isFocused())
+    {
       m_cameraController.update(elapsedTime);
+      m_gizmoController.update(elapsedTime);
+    }
   }
 
   void SceneViewportWindow::onDraw()
@@ -58,16 +68,21 @@ namespace hc::editor
     updateFramebufferSize();
     renderSceneToTexture();
     drawViewport();
+    m_gizmoController.draw();
   }
 
   void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)
   {
-    // TODO
+    m_gizmoController.setActiveGameObject(gameObject);
   }
 
   void SceneViewportWindow::onGameObjectDeselected(GameObject* gameObject)
   {
-    // TODO
+    if (!m_gizmoController.hasActiveGameObject())
+      return;
+
+    if (m_gizmoController.getActiveGameObject() == gameObject)
+      m_gizmoController.clearActiveGameObject();
   }
 
   void SceneViewportWindow::updateFramebufferSize()
