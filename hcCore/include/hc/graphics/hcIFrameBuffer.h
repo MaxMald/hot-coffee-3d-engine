@@ -58,7 +58,7 @@ namespace hc
     virtual void unbind() = 0;
 
     /**
-     * @brief Resizes the framebuffer to the specified dimensions.
+     * @brief Resizes the framebuffer to the specified dimensions. 
      * 
      * @param width The new width in pixels.
      * @param height The new height in pixels.
@@ -105,6 +105,9 @@ namespace hc
     /**
      * @brief Performs cleanup of framebuffer resources without destroying the object
      * itself.
+     *
+     * You should unbind the framebuffer before calling this method to avoid issues with
+     * dangling references.
      */
     virtual void cleanup() = 0;
 
@@ -114,6 +117,9 @@ namespace hc
      * This method performs cleanup and self-deletion to ensure the object
      * is destroyed in the same module where it was allocated, maintaining
      * heap consistency across DLL boundaries.
+     *
+     * You should unbind the framebuffer before calling this method to avoid issues
+     * with dangling references.
      */
     virtual void destroy() = 0;
 

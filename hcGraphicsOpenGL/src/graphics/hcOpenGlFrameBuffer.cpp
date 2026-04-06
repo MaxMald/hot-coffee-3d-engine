@@ -82,6 +82,11 @@ namespace hc
 
   void OpenGlFrameBuffer::bind()
   {
+    assertValid();
+
+    if (m_isBound)
+      return;
+
     savePreviousViewport();
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
     glViewport(0, 0, m_width, m_height);
@@ -90,6 +95,11 @@ namespace hc
 
   void OpenGlFrameBuffer::unbind()
   {
+    assertValid();
+
+    if (!m_isBound)
+      return;
+
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     restorePreviousViewport();
     m_isBound = false;
@@ -97,8 +107,7 @@ namespace hc
 
   void OpenGlFrameBuffer::resize(UInt32 width, UInt32 height)
   {
-    if (!m_isValid)
-      throw RuntimeErrorException("Cannot resize an uninitialized framebuffer");
+    assertValid();
 
     if (width == m_width && height == m_height)
       return;
@@ -149,8 +158,7 @@ namespace hc
 
   void OpenGlFrameBuffer::clear(const Color& clearColor)
   {
-    if (!m_isValid)
-      throw RuntimeErrorException("Cannot clear an uninitialized framebuffer");
+    assertValid();
 
     if (!m_isBound)
       throw RuntimeErrorException("Framebuffer must be bound before clearing");
@@ -166,6 +174,9 @@ namespace hc
 
   void OpenGlFrameBuffer::cleanup()
   {
+    if (m_isBound)
+      unbind();
+
     if (m_depthStencilBufferId != 0)
     {
       glDeleteRenderbuffers(1, &m_depthStencilBufferId);
@@ -200,5 +211,11 @@ namespace hc
       glViewport(m_previousViewport[0], m_previousViewport[1],
         m_previousViewport[2], m_previousViewport[3]);
     }
+  }
+
+  void OpenGlFrameBuffer::assertValid() const
+  {
+    if (!m_isValid)
+      throw RuntimeErrorException("Framebuffer is not initialized or is invalid");
   }
 }

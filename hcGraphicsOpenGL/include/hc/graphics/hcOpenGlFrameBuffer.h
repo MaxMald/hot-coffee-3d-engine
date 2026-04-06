@@ -89,5 +89,6 @@ namespace hc
 
     void savePreviousViewport();
     void restorePreviousViewport();
+    void assertValid() const;
   };
 }
