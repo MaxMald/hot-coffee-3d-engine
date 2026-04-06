@@ -25,7 +25,7 @@ namespace hc
     *
     * @param width The width of the texture in pixels.
     * @param height The height of the texture in pixels.
-    * @param internalFormat The internal format of the texture (default is GL_RGBA).
+    * @param internalFormat The internal format of the texture (default is GL_RGBA8).
     * @param format The format of the pixel data (default is GL_RGBA).
     * @param type The data type of the pixel data (default is GL_UNSIGNED_BYTE).
     */

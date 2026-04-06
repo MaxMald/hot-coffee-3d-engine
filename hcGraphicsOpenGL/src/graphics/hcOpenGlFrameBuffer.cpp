@@ -174,6 +174,13 @@ namespace hc
 
   void OpenGlFrameBuffer::cleanup()
   {
+    if (m_isBound)
+    {
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+      restorePreviousViewport();
+      m_isBound = false;
+    }
+
     if (m_depthStencilBufferId != 0)
     {
       glDeleteRenderbuffers(1, &m_depthStencilBufferId);
