@@ -1,6 +1,7 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/scenes/hcEditorSceneNames.h"
 #include "hc/editor/imgui/hcImguiUtilities.h"
+#include <imgui.h>
 
 namespace hc::editor
 {
@@ -13,7 +14,7 @@ namespace hc::editor
     m_selectionService(selectionService),
     m_renderer(m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
-    m_gizmoController(),
+    m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
     m_uvTopLeft(0, 0),
     m_uvBottomRight(1, 1)
   {
@@ -67,8 +68,14 @@ namespace hc::editor
 
     updateFramebufferSize();
     renderSceneToTexture();
+
+    ImVec2 viewportPos = ImGui::GetCursorScreenPos();
     drawViewport();
-    m_gizmoController.draw();
+
+    m_gizmoController.draw(
+      Vector2f(viewportPos.x, viewportPos.y),
+      getContentSize()
+    );
   }
 
   void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)

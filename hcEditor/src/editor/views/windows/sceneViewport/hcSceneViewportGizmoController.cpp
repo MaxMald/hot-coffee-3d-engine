@@ -2,8 +2,17 @@
 
 namespace hc::editor
 {
-  SceneViewportGizmoController::SceneViewportGizmoController() :
-    m_activeGameObject(nullptr)
+  static constexpr float CUBE_VIEW_SIZE = 128.0f;
+
+  SceneViewportGizmoController::SceneViewportGizmoController(
+    InputManager& inputManager,
+    Camera& camera
+  ) :
+    m_inputManager(inputManager),
+    m_activeGameObject(nullptr),
+    m_camera(camera),
+    m_currentOperation(ImGuizmo::OPERATION::TRANSLATE),
+    m_currentMode(ImGuizmo::MODE::LOCAL)
   {
   }
 
@@ -13,12 +22,36 @@ namespace hc::editor
 
   void SceneViewportGizmoController::update(const Time& elapsedTime)
   {
-    // TODO
+    if (m_inputManager.getKeyboardKeyState(keyboardKey::T).isPressed())
+      m_currentOperation = ImGuizmo::OPERATION::TRANSLATE;
+    else if (m_inputManager.getKeyboardKeyState(keyboardKey::R).isPressed())
+      m_currentOperation = ImGuizmo::OPERATION::ROTATE;
+    else if (m_inputManager.getKeyboardKeyState(keyboardKey::S).isPressed())
+      m_currentOperation = ImGuizmo::OPERATION::SCALE;
+    else if (m_inputManager.getKeyboardKeyState(keyboardKey::Q).isPressed())
+      m_currentMode = (m_currentMode == ImGuizmo::MODE::LOCAL) ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
   }
 
-  void SceneViewportGizmoController::draw()
+  void SceneViewportGizmoController::draw(
+    const Vector2f& windowPosition,
+    const Vector2f& windowSize
+  )
   {
-    // TODO
+    if (windowSize.x <= 0 || windowSize.y <= 0)
+      return;
+
+    ImGuizmo::SetDrawlist();
+    ImGuizmo::SetRect(
+      windowPosition.x,
+      windowPosition.y,
+      windowSize.x,
+      windowSize.y
+    );
+
+    drawCubeView(windowPosition, windowSize);
+
+    if (m_activeGameObject)
+      drawGizmo(windowPosition, windowSize);
   }
 
   void SceneViewportGizmoController::setActiveGameObject(GameObject* gameObject)
@@ -39,5 +72,77 @@ namespace hc::editor
   void SceneViewportGizmoController::clearActiveGameObject()
   {
     m_activeGameObject = nullptr;
+  }
+
+  void SceneViewportGizmoController::drawGizmo(
+    const Vector2f& windowPosition,
+    const Vector2f& windowSize
+  )
+  {
+    Matrix4 view = m_camera.getViewMatrix();
+    Matrix4 projection = m_camera.getProjectionMatrix();
+    Matrix4 model = m_activeGameObject->getMatrix();
+
+    // ImGuizmo expects column-major matrices, so we need to transpose them
+    view.transpose();
+    projection.transpose();
+
+    Matrix4 imGuizmoModel;
+    Vector3f translation = m_activeGameObject->getPosition();
+    Vector3f rotation = m_activeGameObject->getRotation() * Math::RadToDeg;
+    Vector3f scale = m_activeGameObject->getScale();
+
+    ImGuizmo::RecomposeMatrixFromComponents(
+      &(translation.x),
+      &(rotation.x),
+      &(scale.x),
+      imGuizmoModel.m[0]
+    );
+
+    bool changed = ImGuizmo::Manipulate(
+      view.m[0],
+      projection.m[0],
+      m_currentOperation,
+      m_currentMode,
+      imGuizmoModel.m[0]
+    );
+
+    if (!changed)
+      return;
+
+    ImGuizmo::DecomposeMatrixToComponents(
+      imGuizmoModel.m[0],
+      &(translation.x),
+      &(rotation.x),
+      &(scale.x)
+    );
+
+    m_activeGameObject->setPosition(translation);
+    m_activeGameObject->setRotation(rotation * Math::DegToRad);
+    m_activeGameObject->setScale(scale);
+  }
+
+  void SceneViewportGizmoController::drawCubeView(
+    const Vector2f& windowPosition,
+    const Vector2f& windowSize
+  )
+  {
+    Matrix4 view = m_camera.getViewMatrix();
+    view.transpose();
+
+    ImGuizmo::ViewManipulate(
+      view.m[0],
+      8.0f,
+      ImVec2(windowPosition.x + windowSize.x - CUBE_VIEW_SIZE, windowPosition.y),
+      ImVec2(CUBE_VIEW_SIZE, CUBE_VIEW_SIZE),
+      0x10101000
+    );
+    
+    Vector3f direction;
+    direction.x = -view.m02;
+    direction.y = -view.m12;
+    direction.z = -view.m22;
+
+    m_camera.setDirection(direction);
   }
 }
