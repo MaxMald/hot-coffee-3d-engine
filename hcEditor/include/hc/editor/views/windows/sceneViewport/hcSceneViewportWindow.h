@@ -3,6 +3,9 @@
 #include "hc/editor/views/windows/hcAWindowView.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderer.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportGizmoController.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
 
 namespace hc::editor
 {
@@ -12,15 +15,22 @@ namespace hc::editor
    * Provides an interactive viewport for viewing and navigating the
    * scene using camera controls.
    */
-  class SceneViewportWindow : public AWindowView
+  class SceneViewportWindow :
+    public AWindowView,
+    public IGameObjectSelectionServiceListener
   {
   public:
     /**
      * @brief Constructs a scene viewport window.
      * 
      * @param engine The engine instance for accessing scene and graphics.
+     * @param selectionService The game object selection service to listen for selection
+     * changes.
      */
-    SceneViewportWindow(HotCoffeeEngine& engine);
+    SceneViewportWindow(
+      HotCoffeeEngine& engine,
+      GameObjectSelectionService& selectionService
+    );
 
     /**
      * @brief Destroys the viewport window and releases resources.
@@ -29,8 +39,10 @@ namespace hc::editor
 
   protected:
     HotCoffeeEngine& m_engine;
+    GameObjectSelectionService& m_selectionService;
     SceneViewportRenderer m_renderer;
     SceneViewportCameraController m_cameraController;
+    SceneViewportGizmoController m_gizmoController;
     Vector2f m_uvTopLeft;
     Vector2f m_uvBottomRight;
 
@@ -45,6 +57,16 @@ namespace hc::editor
      * @brief Draws the viewport window with the rendered scene.
      */
     void onDraw() override;
+
+    /**
+     * @copydoc IGameObjectSelectionServiceListener::onGameObjectSelected
+     */
+    void onGameObjectSelected(GameObject* gameObject) override;
+
+    /**
+     * @copydoc IGameObjectSelectionServiceListener::onGameObjectDeselected
+     */
+    void onGameObjectDeselected(GameObject* gameObject) override;
 
     /**
      * @brief Updates framebuffer size to match content region.

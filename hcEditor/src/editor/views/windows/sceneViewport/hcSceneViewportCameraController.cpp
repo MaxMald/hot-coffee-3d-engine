@@ -29,6 +29,10 @@ namespace hc::editor
 
   void SceneViewportCameraController::update(const Time&)
   {
+    // Update target
+    m_target = m_camera.getPosition() + m_camera.getDirection()
+      * getCameraDistanceToTarget(m_camera);
+
     if (isMouseMiddleButtonPressed())
     {
       if (isShiftKeyPressed())

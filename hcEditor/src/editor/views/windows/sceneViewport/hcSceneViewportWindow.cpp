@@ -1,14 +1,20 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/scenes/hcEditorSceneNames.h"
 #include "hc/editor/imgui/hcImguiUtilities.h"
+#include <imgui.h>
 
 namespace hc::editor
 {
-  SceneViewportWindow::SceneViewportWindow(HotCoffeeEngine& engine) :
+  SceneViewportWindow::SceneViewportWindow(
+    HotCoffeeEngine& engine,
+    GameObjectSelectionService& selectionService
+  ) :
     AWindowView("Scene Viewport", true),
     m_engine(engine),
+    m_selectionService(selectionService),
     m_renderer(m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
+    m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
     m_uvTopLeft(0, 0),
     m_uvBottomRight(1, 1)
   {
@@ -24,23 +30,35 @@ namespace hc::editor
     }
 
     m_cameraController.prepare();
-
     if (!m_renderer.isValid())
     {
       LogService::Error(
         "SceneViewportWindow: Failed to initialize renderer. Framebuffer is invalid."
+      );
+      return;
+    }
+
+    m_selectionService.subscribe(this);
+    if (m_selectionService.hasSelectedGameObjects())
+    {
+      m_gizmoController.setActiveGameObject(
+        m_selectionService.getFirstSelectedGameObject()
       );
     }
   }
 
   void SceneViewportWindow::destroy()
   {
+    m_selectionService.unsubscribe(this);
   }
 
   void SceneViewportWindow::onUpdate(const Time& elapsedTime)
   {
     if (isFocused())
+    {
       m_cameraController.update(elapsedTime);
+      m_gizmoController.update(elapsedTime);
+    }
   }
 
   void SceneViewportWindow::onDraw()
@@ -50,7 +68,28 @@ namespace hc::editor
 
     updateFramebufferSize();
     renderSceneToTexture();
+
+    ImVec2 viewportPos = ImGui::GetCursorScreenPos();
     drawViewport();
+
+    m_gizmoController.draw(
+      Vector2f(viewportPos.x, viewportPos.y),
+      getContentSize()
+    );
+  }
+
+  void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)
+  {
+    m_gizmoController.setActiveGameObject(gameObject);
+  }
+
+  void SceneViewportWindow::onGameObjectDeselected(GameObject* gameObject)
+  {
+    if (!m_gizmoController.hasActiveGameObject())
+      return;
+
+    if (m_gizmoController.getActiveGameObject() == gameObject)
+      m_gizmoController.clearActiveGameObject();
   }
 
   void SceneViewportWindow::updateFramebufferSize()

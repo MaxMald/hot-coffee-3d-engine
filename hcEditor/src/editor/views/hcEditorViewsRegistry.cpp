@@ -44,7 +44,10 @@ namespace hc::editor
         hotCoffeeEngine.getSceneManager(),
         editorServiceManager.getService<GameObjectSelectionService>()
       ));
-      viewsManager.registerView(MakeUnique<SceneViewportWindow>(hotCoffeeEngine));
+      viewsManager.registerView(MakeUnique<SceneViewportWindow>(
+        hotCoffeeEngine,
+        editorServiceManager.getService<GameObjectSelectionService>()
+      ));
       viewsManager.registerView(MakeUnique<LightManagerWindow>(
         hotCoffeeEngine.getSceneManager()
       ));
