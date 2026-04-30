@@ -81,7 +81,6 @@ namespace hc::editor
   {
     Matrix4 view = m_camera.getViewMatrix();
     Matrix4 projection = m_camera.getProjectionMatrix();
-    Matrix4 model = m_activeGameObject->getMatrix();
 
     // ImGuizmo expects column-major matrices, so we need to transpose them
     view.transpose();
