@@ -2,6 +2,7 @@
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 #include "hc/scene/gameObject/components/factories/hcCameraComponentFactory.h"
 #include "hc/scene/gameObject/components/factories/hcMeshComponentFactory.h"
+#include "hc/scene/gameObject/components/factories/hcLightComponentFactory.h"
 #include "hc/scene/hcSceneManager.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/graphics/hcIGraphicsManager.h"
@@ -22,6 +23,9 @@ namespace hc
       );
       manager.registerFactory<MeshComponent>(
         MakeUnique<MeshComponentFactory>(graphicsManager.getMeshManager(), assetManager)
+      );
+      manager.registerFactory<LightComponent>(
+        MakeUnique<LightComponentFactory>(sceneManager)
       );
     }
   }

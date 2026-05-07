@@ -61,3 +61,4 @@
 #include "hc/scene/gameObject/components/hcABaseComponent.h"
 #include "hc/scene/gameObject/components/hcMeshComponent.h"
 #include "hc/scene/gameObject/components/hcCameraComponent.h"
+#include "hc/scene/gameObject/components/hcLightComponent.h"

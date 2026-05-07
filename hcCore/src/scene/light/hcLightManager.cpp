@@ -37,8 +37,30 @@ namespace hc
   {
     UniquePtr<Light> light = MakeUnique<Light>(type);
     Light* lightPtr = light.get();
-    m_lights.emplace(lightPtr->getUUID(), std::move(light));
+    UUID lightId = light->getUUID();
+    m_lights.emplace(lightId, std::move(light));
     return lightPtr;
+  }
+
+  Light* LightManager::deserializeLight(BinaryReader& reader)
+  {
+    UniquePtr<Light> light = MakeUnique<Light>();
+    Light* lightPtr = light.get();
+    light->deserialize(reader);
+    m_lights.emplace(light->getUUID(), std::move(light));
+    return lightPtr;
+  }
+
+  void LightManager::addLight(UniquePtr<Light> light)
+  {
+    if(!light)
+    {
+      LogService::Error("Attempted to add a null light to the LightManager.");
+      return;
+    }
+
+    UUID lightId = light->getUUID();
+    m_lights.emplace(lightId, std::move(light));
   }
 
   void LightManager::destroyLight(const UUID& lightId)

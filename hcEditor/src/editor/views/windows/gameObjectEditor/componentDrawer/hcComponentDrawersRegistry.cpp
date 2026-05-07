@@ -1,6 +1,7 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcLightComponentDrawer.h"
 
 namespace hc::editor
 {
@@ -17,6 +18,9 @@ namespace hc::editor
           hotCoffeeEngine.getGraphicsManager().getMeshManager(),
           projectFileSelector
         )
+      );
+      componentDrawersManager.registerComponentView(
+        MakeUnique<LightComponentDrawer>()
       );
     }
   }

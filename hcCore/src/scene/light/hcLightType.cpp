@@ -18,5 +18,17 @@ namespace hc
         return "Unknown";
       }
     }
+
+    Type fromString(const String& str)
+    {
+      if (str == "Directional")
+        return Type::Directional;
+      else if (str == "Point")
+        return Type::Point;
+      else if (str == "Spot")
+        return Type::Spot;
+      else
+        throw std::invalid_argument("Invalid LightType string: " + str);
+    }
   }
 }

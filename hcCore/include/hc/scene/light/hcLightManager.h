@@ -57,6 +57,27 @@ namespace hc
     Light* createLight(lightType::Type type = lightType::Type::Point);
 
     /**
+     * @brief Deserializes a Light from binary format.
+     *
+     * Reads the light data from the provided BinaryReader and creates a new
+     * Light object with the deserialized state. The caller takes ownership of
+     * the returned Light pointer and is responsible for its destruction.
+     * 
+     * @param reader The BinaryReader to use for deserialization.
+     * 
+     * @return Pointer to the deserialized Light, or nullptr if deserialization
+     * fails.
+     */
+    Light* deserializeLight(BinaryReader& reader);
+
+    /**
+     * @brief Adds an existing Light to the manager.
+     * 
+     * @param light The UniquePtr to the Light to add.
+     */
+    void addLight(UniquePtr<Light> light);
+
+    /**
      * @brief Destroys a light with the specified ID.
      *
      * Removes and destroys the light from the managed lights. Logs an

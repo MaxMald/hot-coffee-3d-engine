@@ -1,6 +1,7 @@
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 #include "hc/scene/gameObject/components/hcMeshComponent.h"
 #include "hc/scene/gameObject/components/hcCameraComponent.h"
+#include "hc/scene/gameObject/components/hcLightComponent.h"
 
 namespace hc
 {
@@ -14,6 +15,8 @@ namespace hc
         return createComponent<MeshComponent>();
       case componentType::Type::Camera:
         return createComponent<CameraComponent>();
+      case componentType::Type::Light:
+        return createComponent<LightComponent>();
       default:
         return nullptr;
     }

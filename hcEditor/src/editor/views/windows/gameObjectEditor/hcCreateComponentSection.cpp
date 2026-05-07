@@ -6,7 +6,8 @@ namespace
   constexpr const hc::Char* COMPONENT_TYPES[] =
   {
     "Mesh",
-    "Camera"
+    "Camera",
+    "Light"
   };
 }
 
@@ -64,6 +65,9 @@ namespace hc::editor
         break;
       case componentType::Type::Camera:
         createComponent<CameraComponent>(gameObject);
+        break;
+      case componentType::Type::Light:
+        createComponent<LightComponent>(gameObject);
         break;
       default:
         LogService::Error(
