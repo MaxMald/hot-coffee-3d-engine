@@ -8,25 +8,20 @@ namespace hc
   /**
    * @brief Represents a light source in the engine.
    */
-  class HC_CORE_EXPORT Light : public ISerializable
+  class HC_CORE_EXPORT ALight : public ISerializable
   {
   public:
-    /**
-     * @brief Constructs a Light with the specified type.
-     * 
-     * @param type The type of the light (default is Point).
-     */
-    Light(lightType::Type type = lightType::Type::Point);
+    virtual ~ALight() = default;
 
     /**
      * @copydoc ISerializable::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
-
+    virtual void serialize(BinaryWriter& writer) const override;
+    
     /**
      * @copydoc ISerializable::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    virtual void deserialize(BinaryReader& reader) override;
 
     /**
      * @brief Gets the unique identifier of the light.
@@ -34,13 +29,6 @@ namespace hc
      * @return The UUID of the light.
      */
     const UUID& getUUID() const;
-
-    /**
-     * @brief Sets the type of the light.
-     * 
-     * @param type The new light type.
-     */
-    void setType(lightType::Type type);
 
     /**
      * @brief Gets the type of the light.
@@ -101,20 +89,6 @@ namespace hc
     const Vector3f& getPosition() const;
 
     /**
-     * @brief Sets the direction of the light.
-     * 
-     * @param direction The new direction vector.
-     */
-    void setDirection(const Vector3f& direction);
-
-    /**
-     * @brief Gets the direction of the light.
-     * 
-     * @return The current direction vector.
-     */
-    const Vector3f& getDirection() const;
-
-    /**
      * @brief Enables or disables the light.
      */
     void setEnabled(bool isEnabled);
@@ -126,6 +100,9 @@ namespace hc
      */
     bool isEnabled() const;
 
+  protected:
+    ALight(lightType::Type type);
+
   private:
     UUID m_id;
     bool enabled;
@@ -133,6 +110,5 @@ namespace hc
     Color m_color;
     float m_intensity;
     Vector3f m_position;
-    Vector3f m_direction;
   };
 }

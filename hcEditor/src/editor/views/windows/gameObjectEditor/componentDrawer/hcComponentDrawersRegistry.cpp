@@ -1,7 +1,9 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
-#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcLightComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcOmniLightComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcDirectionalLightComponentDrawer.h"
+#include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcSpotLightComponentDrawer.h"
 
 namespace hc::editor
 {
@@ -20,7 +22,13 @@ namespace hc::editor
         )
       );
       componentDrawersManager.registerComponentView(
-        MakeUnique<LightComponentDrawer>()
+        MakeUnique<OmniLightComponentDrawer>()
+      );
+      componentDrawersManager.registerComponentView(
+        MakeUnique<DirectionalLightComponentDrawer>()
+      );
+      componentDrawersManager.registerComponentView(
+        MakeUnique<SpotLightComponentDrawer>()
       );
     }
   }

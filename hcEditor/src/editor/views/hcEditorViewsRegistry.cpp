@@ -6,7 +6,6 @@
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
 #include "hc/editor/views/windows/hcProjectBrowserWindow.h"
 #include "hc/editor/views/windows/gameObjectEditor/hcGameObjectEditorWindow.h"
-#include "hc/editor/views/windows/hcLightManagerWindow.h"
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 #include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
@@ -47,9 +46,6 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<SceneViewportWindow>(
         hotCoffeeEngine,
         editorServiceManager.getService<GameObjectSelectionService>()
-      ));
-      viewsManager.registerView(MakeUnique<LightManagerWindow>(
-        hotCoffeeEngine.getSceneManager()
       ));
       viewsManager.registerView(MakeUnique<CameraManagerWindow>(
         hotCoffeeEngine.getSceneManager()

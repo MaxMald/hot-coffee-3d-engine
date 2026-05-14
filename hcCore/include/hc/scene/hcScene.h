@@ -2,7 +2,6 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/scene/hcSceneGraph.h"
-#include "hc/scene/light/hcLightManager.h"
 #include "hc/scene/camera/hcCameraManager.h"
 
 namespace hc
@@ -83,20 +82,6 @@ namespace hc
      * @return Const reference to the SceneGraph.
      */
     const SceneGraph& getSceneGraph() const;
-
-    /**
-     * @brief Gets a reference to the light manager.
-     *
-     * @return Reference to the LightManager.
-     */
-    LightManager& getLightManager();
-
-    /**
-     * @brief Gets a const reference to the light manager.
-     *
-     * @return Const reference to the LightManager.
-     */
-    const LightManager& getLightManager() const;
 
     /**
      * @brief Gets a reference to the camera manager.
@@ -233,7 +218,6 @@ namespace hc
 
   private:
     SceneGraph m_sceneGraph;
-    LightManager m_lightManager;
     CameraManager m_cameraManager;
     IGameObjectFactory* m_gameObjectFactory;
 

@@ -9,7 +9,7 @@ namespace hc
     enum Type : UInt8
     {
       Directional,
-      Point,
+      Omni,
       Spot
     };
 
@@ -22,7 +22,7 @@ namespace hc
      * @brief Parses a string to obtain the corresponding LightType.
      *
      * @param str The string representation of the LightType (e.g., "Directional",
-     * "Point", "Spot").
+     * "Omni", "Spot").
      * @return The corresponding LightType enum value.
      *
      * @throws std::invalid_argument if the input string does not match any valid

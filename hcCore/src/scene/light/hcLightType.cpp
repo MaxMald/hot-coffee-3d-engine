@@ -10,8 +10,8 @@ namespace hc
       {
       case Type::Directional:
         return "Directional";
-      case Type::Point:
-        return "Point";
+      case Type::Omni:
+        return "Omni";
       case Type::Spot:
         return "Spot";
       default:
@@ -23,8 +23,8 @@ namespace hc
     {
       if (str == "Directional")
         return Type::Directional;
-      else if (str == "Point")
-        return Type::Point;
+      else if (str == "Omni")
+        return Type::Omni;
       else if (str == "Spot")
         return Type::Spot;
       else

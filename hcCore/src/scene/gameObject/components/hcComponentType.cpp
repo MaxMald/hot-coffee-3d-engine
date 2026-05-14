@@ -8,10 +8,14 @@ namespace hc
     {
       if (str == "Mesh")
         return Mesh;
-      else if (str == "Light")
-        return Light;
       else if (str == "Camera")
         return Camera;
+      else if (str == "OmniLight")
+        return OmniLight;
+      else if (str == "SpotLight")
+        return SpotLight;
+      else if (str == "DirectionalLight")
+        return DirectionalLight;
       else
         return Unknown;
     }
@@ -22,10 +26,14 @@ namespace hc
       {
       case Mesh:
         return "Mesh";
-      case Light:
-        return "Light";
       case Camera:
         return "Camera";
+      case OmniLight:
+        return "OmniLight";
+      case SpotLight:
+        return "SpotLight";
+      case DirectionalLight:
+        return "DirectionalLight";
       default:
         return "Unknown";
       }

@@ -8,7 +8,6 @@ namespace hc
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
-    m_lightManager(),
     m_gameObjectFactory(nullptr)
   {
   }
@@ -19,7 +18,6 @@ namespace hc
 
   void Scene::serialize(BinaryWriter& writer) const
   {
-    m_lightManager.serialize(writer);
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     onSerialize(writer);
@@ -28,7 +26,6 @@ namespace hc
   void Scene::deserialize(BinaryReader& reader)
   {
     clear();
-    m_lightManager.deserialize(reader);
     m_cameraManager.deserialize(reader);
     m_sceneGraph.deserialize(reader);
     onDeserialize(reader);
@@ -69,16 +66,6 @@ namespace hc
   const SceneGraph& Scene::getSceneGraph() const
   {
     return m_sceneGraph;
-  }
-
-  LightManager& Scene::getLightManager()
-  {
-    return m_lightManager;
-  }
-
-  const LightManager& Scene::getLightManager() const
-  {
-    return m_lightManager;
   }
 
   CameraManager& Scene::getCameraManager()
@@ -124,7 +111,6 @@ namespace hc
   void Scene::clear()
   {
     m_sceneGraph.clear();
-    m_lightManager.clear();
     m_cameraManager.clear();
   }
 

@@ -17,7 +17,8 @@ namespace hc
     m_componentFactoriesManager(componentFactoriesManager),
     m_children(),
     m_components(),
-    m_drawableComponents()
+    m_drawableComponents(),
+    m_updatableComponents()
   {
   }
 
@@ -101,6 +102,24 @@ namespace hc
 
   void GameObject::update(const Time& elapsedTime)
   {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->preUpdate(elapsedTime.toSeconds());
+    }
+
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->update(elapsedTime.toSeconds());
+    }
+
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->postUpdate(elapsedTime.toSeconds());
+    }
+
     for (auto& child : m_children)
       child->update(elapsedTime);
   }
@@ -207,6 +226,20 @@ namespace hc
       return m_parent->getWorldMatrix() * getMatrix();
     else
       return getMatrix();
+  }
+
+  Vector3f GameObject::getWorldPosition() const
+  {
+    Matrix4 worldMatrix = getWorldMatrix();
+    return Vector3f(worldMatrix.m03, worldMatrix.m13, worldMatrix.m23);
+  }
+
+  Vector3f GameObject::getWorldRotation() const
+  {
+    if (m_parent)
+      return m_parent->getWorldRotation() + getRotation();
+    else
+      return getRotation();
   }
 
   Vector<IComponent*> GameObject::getComponents() const

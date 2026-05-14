@@ -2,12 +2,13 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/hcIDrawable.h"
+#include "hc/scene/gameObject/components/hcIComponent.h"
+#include "hc/scene/gameObject/components/hcIUpdatableComponent.h"
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 
 namespace hc
 {
   class IGameObjectFactory;
-  class IComponent;
 
   /**
    * @class GameObject
@@ -160,6 +161,20 @@ namespace hc
     Matrix4 getWorldMatrix() const;
 
     /**
+     * @brief Computes the world position of this GameObject.
+     *
+     * @return The world position as a Vector3f.
+     */
+    Vector3f getWorldPosition() const;
+
+    /**
+     * @brief Computes the world rotation of this GameObject as Euler angles.
+     *
+     * @return The world rotation as a Vector3f (pitch, yaw, roll).
+     */
+    Vector3f getWorldRotation() const;
+
+    /**
      * @brief Creates and adds a component of the specified type to this
      * GameObject.
      *
@@ -208,6 +223,7 @@ namespace hc
     Vector<UniquePtr<GameObject>> m_children;
     UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
+    Vector<IUpdatableComponent*> m_updatableComponents;
 
     template<typename ComponentType>
     void addComponent(UniquePtr<ComponentType> component);
@@ -252,8 +268,16 @@ namespace hc
 
     ComponentType* componentPtr = component.get();
     m_components[typeIndex] = std::move(component);
+
     IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
     if (drawable)
       m_drawableComponents.push_back(drawable);
+
+    IUpdatableComponent* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr);
+    if (updatable)
+      m_updatableComponents.push_back(updatable);
+
+    IComponent* baseComponentPtr = componentPtr;
+    baseComponentPtr->setGameObject(this);
   }
 }

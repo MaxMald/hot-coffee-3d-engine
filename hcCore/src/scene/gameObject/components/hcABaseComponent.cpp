@@ -27,7 +27,6 @@ namespace hc
   void ABaseComponent::serialize(BinaryWriter& writer) const
   {
     writer.writeUInt16(getType());
-    onSerialize(writer);
   }
 
   void ABaseComponent::deserialize(BinaryReader& reader)
@@ -39,7 +38,6 @@ namespace hc
         "Component type mismatch during deserialization."
       );
     }
-    onDeserialize(reader);
   }
 
   void ABaseComponent::onGameObjectSet()
