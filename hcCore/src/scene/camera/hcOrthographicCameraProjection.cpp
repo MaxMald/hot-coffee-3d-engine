@@ -109,6 +109,12 @@ namespace hc
 
     return m_cachedProjectionMatrix;
   }
+
+  Matrix4 OrthographicCameraProjection::getCachedProjectionMatrix() const
+  {
+    return m_cachedProjectionMatrix;
+  }
+
   void OrthographicCameraProjection::update()
   {
     m_cachedProjectionMatrix = Matrix4::Orthographic(

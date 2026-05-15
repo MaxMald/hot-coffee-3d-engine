@@ -43,6 +43,18 @@ namespace hc
     return m_id;
   }
 
+  void Camera::update()
+  {
+    if (m_projectionType == projectionType::Perspective)
+    {
+      m_perspectiveProjection.update();
+    }
+    else // Orthographic
+    {
+      m_orthographicProjection.update();
+    }
+  }
+
   void Camera::setAspectRatio(float aspectRatio)
   {
     if (aspectRatio <= 0.0f)
@@ -179,6 +191,18 @@ namespace hc
     else // Orthographic
     {
       return m_orthographicProjection.getProjectionMatrix();
+    }
+  }
+
+  Matrix4 Camera::getCachedProjectionMatrix() const
+  {
+    if (m_projectionType == projectionType::Perspective)
+    {
+      return m_perspectiveProjection.getCachedProjectionMatrix();
+    }
+    else // Orthographic
+    {
+      return m_orthographicProjection.getCachedProjectionMatrix();
     }
   }
 

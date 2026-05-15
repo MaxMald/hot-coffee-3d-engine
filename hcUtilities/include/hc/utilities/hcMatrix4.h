@@ -19,6 +19,7 @@ namespace hc
     static constexpr Matrix4 Identity();
     static constexpr Matrix4 Zero();
 
+    static constexpr Vector3f ExtractTranslation(const Matrix4& matrix);
     static constexpr Matrix4 Translate(float tx, float ty, float tz);
     static constexpr Matrix4 Translate(const Vector3f& translation);
     static constexpr Matrix4 Scale(float sx, float sy, float sz);
@@ -110,6 +111,11 @@ namespace hc
       0.0f, 0.0f, 0.0f, 0.0f,
       0.0f, 0.0f, 0.0f, 0.0f
     );
+  }
+
+  constexpr Vector3f Matrix4::ExtractTranslation(const Matrix4& matrix)
+  {
+    return Vector3f(matrix.m03, matrix.m13, matrix.m23);
   }
 
   constexpr Matrix4 Matrix4::Translate(float tx, float ty, float tz)

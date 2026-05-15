@@ -4,11 +4,18 @@
 
 namespace hc
 {
+  class Camera;
+
   /**
    * @brief Contains transformation data required for rendering an object.
    */
   struct HC_CORE_EXPORT RenderContext
   {
+    static RenderContext Create(
+      Camera& camera,
+      const Matrix4& modelTransform
+    );
+
     /**
      * @brief The camera's projection and view matrices.
      */

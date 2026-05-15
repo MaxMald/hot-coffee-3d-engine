@@ -30,6 +30,11 @@ namespace hc
     Matrix4 getProjectionMatrix() override;
 
     /**
+    * @copydoc ICameraProjection::getCachedProjectionMatrix
+    */
+    Matrix4 getCachedProjectionMatrix() const override;
+
+    /**
      * @copydoc ICameraProjection::update
      *
      * Updates the cached projection matrix if any parameters have changed.

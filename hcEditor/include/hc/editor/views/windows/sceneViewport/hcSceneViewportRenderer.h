@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportLightGizmoRenderer.h"
 
 namespace hc::editor
 {
@@ -16,11 +17,21 @@ namespace hc::editor
   public:
     /**
      * @brief Constructs a scene viewport renderer.
-     * 
+     *
+     * @param assetManager The asset manager for loading models and materials.
      * @param graphicsManager The graphics manager for rendering operations.
      */
-    SceneViewportRenderer(IGraphicsManager& graphicsManager);
+    SceneViewportRenderer(
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager
+    );
     ~SceneViewportRenderer();
+
+    /**
+     * @brief Prepares the renderer. Should be called before using the renderer to set up
+     * necessary resources.
+     */
+    void prepare();
 
     /**
      * @brief Resizes the viewport framebuffer to the specified dimensions.
@@ -51,6 +62,19 @@ namespace hc::editor
      * @param camera The camera to render from.
      */
     void renderScene(Scene& scene, Camera& camera);
+
+    /**
+     * @brief Renders the light gizmos for the scene.
+     * 
+     * @param scene The scene containing the lights.
+     * @param camera The camera to render from.
+     * @param activeGameObject The currently active game object.
+     */
+    void renderLightGizmos(
+      const Scene& scene,
+      const Camera& camera,
+      const GameObject* activeGameObject
+    );
 
     /**
      * @brief Gets the texture containing the rendered scene.
@@ -84,7 +108,9 @@ namespace hc::editor
     IGraphicsManager& m_graphicsManager;
     FrameBufferPtr m_frameBuffer;
     Color m_clearColor;
+    bool m_isPrepared;
+    SceneViewportLightGizmoRenderer m_lightGizmoRenderer;
 
-    void assertFrameBufferValid() const;
+    void assertIsValid() const;
   };
 }

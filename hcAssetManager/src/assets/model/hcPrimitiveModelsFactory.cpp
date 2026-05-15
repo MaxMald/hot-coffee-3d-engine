@@ -40,7 +40,7 @@ namespace hc
 
   SharedPtr<Model> PrimitiveModelsFactory::createCube()
   {
-    Buffer<Vertex> vertices(24);
+    Buffer<Vertex> vertices(8);
     BufferUInt32 indices(36);
 
     vertices[0].position = Vector3f(-0.5f, -0.5f, -0.5f);
@@ -83,122 +83,19 @@ namespace hc
     vertices[7].tangent = Vector3f(1.0f, 0.0f, 0.0f);
     vertices[7].texCoord = Vector2f(0.0f, 1.0f);
 
-    vertices[8].position = Vector3f(-0.5f, -0.5f, -0.5f);
-    vertices[8].normal = Vector3f(-1.0f, 0.0f, 0.0f);
-    vertices[8].tangent = Vector3f(0.0f, 0.0f, 1.0f);
-    vertices[8].texCoord = Vector2f(0.0f, 0.0f);
+    UInt32 indexData[36] = {
+      0, 2, 1, 0, 3, 2,
+      4, 5, 6, 4, 6, 7,
+      0, 4, 7, 0, 7, 3,
+      1, 2, 6, 1, 6, 5,
+      0, 1, 5, 0, 5, 4,
+      3, 7, 6, 3, 6, 2
+    };
 
-    vertices[9].position = Vector3f(-0.5f, -0.5f, 0.5f);
-    vertices[9].normal = Vector3f(-1.0f, 0.0f, 0.0f);
-    vertices[9].tangent = Vector3f(0.0f, 0.0f, 1.0f);
-    vertices[9].texCoord = Vector2f(1.0f, 0.0f);
-
-    vertices[10].position = Vector3f(-0.5f, 0.5f, 0.5f);
-    vertices[10].normal = Vector3f(-1.0f, 0.0f, 0.0f);
-    vertices[10].tangent = Vector3f(0.0f, 0.0f, 1.0f);
-    vertices[10].texCoord = Vector2f(1.0f, 1.0f);
-
-    vertices[11].position = Vector3f(-0.5f, 0.5f, -0.5f);
-    vertices[11].normal = Vector3f(-1.0f, 0.0f, 0.0f);
-    vertices[11].tangent = Vector3f(0.0f, 0.0f, 1.0f);
-    vertices[11].texCoord = Vector2f(0.0f, 1.0f);
-
-    vertices[12].position = Vector3f(0.5f, -0.5f, -0.5f);
-    vertices[12].normal = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[12].tangent = Vector3f(0.0f, 0.0f, -1.0f);
-    vertices[12].texCoord = Vector2f(0.0f, 0.0f);
-
-    vertices[13].position = Vector3f(0.5f, -0.5f, 0.5f);
-    vertices[13].normal = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[13].tangent = Vector3f(0.0f, 0.0f, -1.0f);
-    vertices[13].texCoord = Vector2f(1.0f, 0.0f);
-
-    vertices[14].position = Vector3f(0.5f, 0.5f, 0.5f);
-    vertices[14].normal = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[14].tangent = Vector3f(0.0f, 0.0f, -1.0f);
-    vertices[14].texCoord = Vector2f(1.0f, 1.0f);
-
-    vertices[15].position = Vector3f(0.5f, 0.5f, -0.5f);
-    vertices[15].normal = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[15].tangent = Vector3f(0.0f, 0.0f, -1.0f);
-    vertices[15].texCoord = Vector2f(0.0f, 1.0f);
-
-    vertices[16].position = Vector3f(-0.5f, -0.5f, -0.5f);
-    vertices[16].normal = Vector3f(0.0f, -1.0f, 0.0f);
-    vertices[16].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[16].texCoord = Vector2f(0.0f, 0.0f);
-
-    vertices[17].position = Vector3f(0.5f, -0.5f, -0.5f);
-    vertices[17].normal = Vector3f(0.0f, -1.0f, 0.0f);
-    vertices[17].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[17].texCoord = Vector2f(1.0f, 0.0f);
-
-    vertices[18].position = Vector3f(0.5f, -0.5f, 0.5f);
-    vertices[18].normal = Vector3f(0.0f, -1.0f, 0.0f);
-    vertices[18].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[18].texCoord = Vector2f(1.0f, 1.0f);
-
-    vertices[19].position = Vector3f(-0.5f, -0.5f, 0.5f);
-    vertices[19].normal = Vector3f(0.0f, -1.0f, 0.0f);
-    vertices[19].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[19].texCoord = Vector2f(0.0f, 1.0f);
-
-    vertices[20].position = Vector3f(-0.5f, 0.5f, -0.5f);
-    vertices[20].normal = Vector3f(0.0f, 1.0f, 0.0f);
-    vertices[20].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[20].texCoord = Vector2f(0.0f, 0.0f);
-
-    vertices[21].position = Vector3f(0.5f, 0.5f, -0.5f);
-    vertices[21].normal = Vector3f(0.0f, 1.0f, 0.0f);
-    vertices[21].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[21].texCoord = Vector2f(1.0f, 0.0f);
-
-    vertices[22].position = Vector3f(0.5f, 0.5f, 0.5f);
-    vertices[22].normal = Vector3f(0.0f, 1.0f, 0.0f);
-    vertices[22].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[22].texCoord = Vector2f(1.0f, 1.0f);
-
-    vertices[23].position = Vector3f(-0.5f, 0.5f, 0.5f);
-    vertices[23].normal = Vector3f(0.0f, 1.0f, 0.0f);
-    vertices[23].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-    vertices[23].texCoord = Vector2f(0.0f, 1.0f);
-
-    indices[0] = 0;
-    indices[1] = 1;
-    indices[2] = 2;
-    indices[3] = 0;
-    indices[4] = 2;
-    indices[5] = 3;
-    indices[6] = 4;
-    indices[7] = 5;
-    indices[8] = 6;
-    indices[9] = 4;
-    indices[10] = 6;
-    indices[11] = 7;
-    indices[12] = 8;
-    indices[13] = 9;
-    indices[14] = 10;
-    indices[15] = 8;
-    indices[16] = 10;
-    indices[17] = 11;
-    indices[18] = 12;
-    indices[19] = 13;
-    indices[20] = 14;
-    indices[21] = 12;
-    indices[22] = 14;
-    indices[23] = 15;
-    indices[24] = 16;
-    indices[25] = 17;
-    indices[26] = 18;
-    indices[27] = 16;
-    indices[28] = 18;
-    indices[29] = 19;
-    indices[30] = 20;
-    indices[31] = 21;
-    indices[32] = 22;
-    indices[33] = 20;
-    indices[34] = 22;
-    indices[35] = 23;
+    for (UInt32 i = 0; i < 36; ++i)
+    {
+      indices[i] = indexData[i];
+    }
 
     Vector<ModelSubMesh> subMeshes;
     ModelSubMesh subMesh;

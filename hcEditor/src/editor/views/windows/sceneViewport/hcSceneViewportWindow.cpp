@@ -12,7 +12,7 @@ namespace hc::editor
     AWindowView("Scene Viewport", true),
     m_engine(engine),
     m_selectionService(selectionService),
-    m_renderer(m_engine.getGraphicsManager()),
+    m_renderer(m_engine.getAssetManager(), m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
     m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
     m_uvTopLeft(0, 0),
@@ -29,7 +29,9 @@ namespace hc::editor
       m_uvBottomRight = Vector2f(1, 0);
     }
 
+    m_renderer.prepare();
     m_cameraController.prepare();
+
     if (!m_renderer.isValid())
     {
       LogService::Error(
@@ -68,14 +70,17 @@ namespace hc::editor
 
     updateFramebufferSize();
     renderSceneToTexture();
+    renderGizmosToTexture();
 
     ImVec2 viewportPos = ImGui::GetCursorScreenPos();
     drawViewport();
-
+    
     m_gizmoController.draw(
       Vector2f(viewportPos.x, viewportPos.y),
       getContentSize()
     );
+
+    m_engine.getGraphicsManager().executeDrawCommands();
   }
 
   void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)
@@ -120,6 +125,25 @@ namespace hc::editor
     m_renderer.renderScene(
       *contentScene,
       m_cameraController.getCamera()
+    );
+  }
+
+  void SceneViewportWindow::renderGizmosToTexture()
+  {
+    Scene* contentScene = m_engine
+      .getSceneManager()
+      .getScene(EditorSceneNames::CONTENT_SCENE);
+
+    if (!contentScene)
+    {
+      LogService::Error("SceneViewportWindow: Content scene not found. Cannot render to texture.");
+      return;
+    }
+
+    m_renderer.renderLightGizmos(
+      *contentScene,
+      m_cameraController.getCamera(),
+      m_gizmoController.getActiveGameObject()
     );
   }
 

@@ -34,6 +34,11 @@ namespace hc
     const UUID& getUUID() const;
 
     /**
+     * @brief Updates the camera's internal state.
+     */
+    void update();
+
+    /**
      * @brief Sets the aspect ratio of the camera.
      * 
      * @param aspectRatio The new aspect ratio (width/height).
@@ -189,6 +194,13 @@ namespace hc
      * @return The projection matrix.
      */
     Matrix4 getProjectionMatrix();
+
+    /**
+     * @brief Returns the cached projection matrix without recalculating it.
+     *
+     * @return The projection matrix.
+     */
+    Matrix4 getCachedProjectionMatrix() const;
 
     /**
      * @brief Gets the active camera projection implementation.
