@@ -125,7 +125,7 @@ namespace hc
     const float height = 1.0f;
     const float halfHeight = height * 0.5f;
 
-    const UInt32 vertexCount = segments + 1 + segments + 1;
+    const UInt32 vertexCount = (segments + 1) * 2;
     const UInt32 indexCount = segments * 6;
 
     Buffer<Vertex> vertices(vertexCount);

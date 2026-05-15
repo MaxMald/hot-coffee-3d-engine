@@ -14,17 +14,5 @@ namespace hc::editor
       reinterpret_cast<OmniLightComponent*>(component);
 
     OmniLight& omniLight = omniLightComponent->getOmniLight();
-
-    float range = omniLight.getRange();
-    if (ImGui::InputFloat(
-      "Range",
-      &range,
-      0.1f,
-      1.0f,
-      "%.3f"
-    ))
-    {
-      omniLight.setRange(range);
-    }
   }
 }

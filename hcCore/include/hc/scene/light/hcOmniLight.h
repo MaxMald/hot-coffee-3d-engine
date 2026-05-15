@@ -10,16 +10,5 @@ namespace hc
     OmniLight();
 
     ~OmniLight() override = default;
-
-    void serialize(BinaryWriter& writer) const override;
-
-    void deserialize(BinaryReader& reader) override;
-
-    void setRange(float range);
-
-    float getRange() const;
-
-  private:
-    float m_range;
   };
 }

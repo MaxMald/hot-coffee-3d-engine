@@ -75,6 +75,20 @@ namespace hc
     float getIntensity() const;
 
     /**
+     * @brief Sets the range of the light.
+     *
+     * @param range The new range value.
+     */
+    void setRange(float range);
+
+    /**
+     * @brief Gets the range of the light.
+     *
+     * @return The current range value.
+     */
+    float getRange() const;
+
+    /**
      * @brief Sets the position of the light.
      * 
      * @param position The new position vector.
@@ -109,6 +123,7 @@ namespace hc
     lightType::Type m_type;
     Color m_color;
     float m_intensity;
+    float m_range;
     Vector3f m_position;
   };
 }

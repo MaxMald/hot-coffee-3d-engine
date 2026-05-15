@@ -50,6 +50,7 @@ namespace hc
 
   void SpotLight::setOuterConeAngle(float angle)
   {
+    angle = Math::max(0.0f, Math::min(angle, 180.0f));
     m_outerConeAngle = angle;
   }
 

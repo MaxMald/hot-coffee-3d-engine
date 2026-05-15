@@ -49,5 +49,9 @@ namespace hc::editor
       const Camera& camera,
       bool isSelected
     );
+
+    Transform computeSpotlightConeTransform(
+      const SpotLight& spotLight
+    ) const;
   };
 }

@@ -21,7 +21,7 @@ namespace hc::editor
     IMeshManager& meshManager = m_graphicsManager.getMeshManager();
 
     m_coneMesh = meshManager.createMeshFromModel(
-      modelAssetManager.getPrimitive(primitiveModelType::Cube)
+      modelAssetManager.getPrimitive(primitiveModelType::Cone)
     );
   }
 
@@ -120,6 +120,8 @@ namespace hc::editor
     renderContext.transform = gameObject.getWorldMatrix();
     renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
 
+    renderContext.transform *= computeSpotlightConeTransform(spotLight).getMatrix();
+
     m_coneMesh->draw(renderContext);
   }
 
@@ -138,4 +140,21 @@ namespace hc::editor
     // TODO:
     // - Draw billboard/icon mesh with constant-ish screen size.
   }
+
+  Transform SceneViewportLightGizmoRenderer::computeSpotlightConeTransform(
+    const SpotLight& spotLight
+  ) const
+  {
+    Transform coneTransform;
+
+    float coneHeight = Math::cos(spotLight.getOuterConeAngle() * Math::DegToRad);
+    float coneRadius = Math::sin(spotLight.getOuterConeAngle() * Math::DegToRad);
+
+    coneTransform.setPosition(Vector3f(0.0f, 0.0f, -coneHeight * spotLight.getRange() * 0.5f));
+    coneTransform.setRotation(Vector3f(Math::HalfPi, 0.0f, 0.0f));
+    coneTransform.setScale(Vector3f(coneRadius, coneHeight * spotLight.getRange(), coneRadius));
+
+    return coneTransform;
+  }
+  
 }

@@ -9,6 +9,7 @@ namespace hc
     writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
     writer.writeFloat(m_intensity);
+    writer.writeFloat(m_range);
     writer.writeVector3f(m_position);
   }
 
@@ -19,6 +20,7 @@ namespace hc
     m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
+    m_range = reader.readFloat();
     m_position = reader.readVector3f();
   }
 
@@ -49,12 +51,22 @@ namespace hc
 
   void ALight::setIntensity(float intensity)
   {
-    m_intensity = intensity;
+    m_intensity = Math::max(0.0f, intensity);
   }
 
   float ALight::getIntensity() const
   {
     return m_intensity;
+  }
+
+  void ALight::setRange(float range)
+  {
+    m_range = Math::max(0.0f, range);
+  }
+
+  float ALight::getRange() const
+  {
+    return m_range;
   }
 
   void ALight::setPosition(const Vector3f& position)
@@ -83,7 +95,7 @@ namespace hc
     m_type(type),
     m_color{ 1.0f, 1.0f, 1.0f },
     m_intensity(1.0f),
+    m_range(1.0f),
     m_position{ 0.0f, 0.0f, 0.0f }
-  {
-  }
+  {}
 }

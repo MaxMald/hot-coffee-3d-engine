@@ -22,6 +22,10 @@ namespace hc::editor
     if (ImGui::InputFloat("Intensity", &intensity))
       light.setIntensity(intensity);
 
+    float range = light.getRange();
+    if (ImGui::InputFloat("Range", &range))
+      light.setRange(range);
+
     bool enabled = light.isEnabled();
     if (ImGui::Checkbox("Enabled", &enabled))
       light.setEnabled(enabled);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 
 namespace hc
@@ -46,6 +48,21 @@ namespace hc
     static constexpr float sign(float value)
     {
       return (value > 0.0f) ? 1.0f : ((value < 0.0f) ? -1.0f : 0.0f);
+    }
+
+    static float sin(float radians)
+    {
+      return std::sin(radians);
+    }
+
+    static float cos(float radians)
+    {
+      return std::cos(radians);
+    }
+
+    static float tan(float radians)
+    {
+      return std::tan(radians);
     }
 
     static constexpr bool isNearlyEqual(
