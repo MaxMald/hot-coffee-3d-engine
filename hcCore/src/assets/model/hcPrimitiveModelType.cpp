@@ -22,6 +22,8 @@ namespace hc
         return "Plane";
       case Pyramid:
         return "Pyramid";
+      case ConeNoBase:
+        return "ConeNoBase";
       case Count:
         return "Count";
       default:
@@ -47,6 +49,8 @@ namespace hc
         return Plane;
       else if (str == "Pyramid")
         return Pyramid;
+      else if (str == "ConeNoBase")
+        return ConeNoBase;
       else if (str == "Count")
         return Count;
       else

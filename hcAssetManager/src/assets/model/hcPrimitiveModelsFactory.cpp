@@ -30,6 +30,8 @@ namespace hc
       return createPlane();
     case primitiveModelType::Pyramid:
       return createPyramid();
+    case primitiveModelType::ConeNoBase:
+      return createConeNoBase();
     default:
       throw InvalidArgumentException(
         "Unsupported primitive model type: " +
@@ -640,6 +642,86 @@ namespace hc
 
     return MakeShared<Model>(
       PrimitiveModelPathUtilities::GetPrimitiveModelPath(primitiveModelType::Pyramid),
+      vertices,
+      indices,
+      subMeshes,
+      materials
+    );
+  }
+
+  SharedPtr<Model> PrimitiveModelsFactory::createConeNoBase()
+  {
+    const UInt32 segments = 32;
+    const float radius = 0.5f;
+    const float height = 1.0f;
+    const float halfHeight = height * 0.5f;
+
+    const UInt32 vertexCount = segments + 1; // ring + apex
+    const UInt32 indexCount = segments * 3;  // side triangles only
+
+    Buffer<Vertex> vertices(vertexCount);
+    BufferUInt32 indices(indexCount);
+
+    UInt32 vertexIndex = 0;
+    UInt32 indexIndex = 0;
+
+    const float sideNormalY = radius / sqrt(radius * radius + height * height);
+    const float sideNormalXZ = height / sqrt(radius * radius + height * height);
+
+    for (UInt32 i = 0; i < segments; ++i)
+    {
+      float angle = static_cast<float>(i)
+        * 2.0f
+        * Math::Pi
+        / static_cast<float>(segments);
+
+      float x = cos(angle) * radius;
+      float z = sin(angle) * radius;
+
+      vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
+      vertices[vertexIndex].normal = Vector3f(
+        x * sideNormalXZ / radius,
+        sideNormalY,
+        z * sideNormalXZ / radius
+      );
+      vertices[vertexIndex].tangent = Vector3f(-sin(angle), 0.0f, cos(angle));
+      vertices[vertexIndex].texCoord = Vector2f(
+        static_cast<float>(i) / static_cast<float>(segments),
+        1.0f
+      );
+      vertexIndex++;
+    }
+
+    vertices[vertexIndex].position = Vector3f(0.0f, halfHeight, 0.0f);
+    vertices[vertexIndex].normal = Vector3f(0.0f, 1.0f, 0.0f);
+    vertices[vertexIndex].tangent = Vector3f(1.0f, 0.0f, 0.0f);
+    vertices[vertexIndex].texCoord = Vector2f(0.5f, 0.0f);
+    UInt32 apexIndex = vertexIndex;
+
+    for (UInt32 i = 0; i < segments; ++i)
+    {
+      UInt32 next = (i + 1) % segments;
+      indices[indexIndex++] = i;
+      indices[indexIndex++] = apexIndex;
+      indices[indexIndex++] = next;
+    }
+
+    Vector<ModelSubMesh> subMeshes;
+    ModelSubMesh subMesh;
+    subMesh.firstVertexIndex = 0;
+    subMesh.vertexCount = static_cast<UInt32>(vertices.size());
+    subMesh.firstIndexIndex = 0;
+    subMesh.indexCount = static_cast<UInt32>(indices.size());
+    subMesh.materialIndex = 0;
+    subMeshes.push_back(subMesh);
+
+    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    materials.push_back(m_materialDescriptorAssetManager.getDefault());
+
+    return MakeShared<Model>(
+      PrimitiveModelPathUtilities::GetPrimitiveModelPath(
+        primitiveModelType::ConeNoBase
+      ),
       vertices,
       indices,
       subMeshes,

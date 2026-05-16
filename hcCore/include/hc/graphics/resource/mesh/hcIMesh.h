@@ -2,6 +2,7 @@
 
 #include "hc/graphics/resource/hcIGraphicResource.h"
 #include "hc/graphics/hcIDrawable.h"
+#include "hc/graphics/hcDrawType.h"
 
 namespace hc
 {
@@ -42,11 +43,34 @@ namespace hc
     virtual SizeT getMaterialsSize() const = 0;
 
     /**
+     * @brief Returns the material at the specified index.
+     *
+     * @param index The index of the material to retrieve.
+     * 
+     * @return Shared pointer to the material at the specified index.
+     */
+    virtual SharedPtr<IMaterial> getMaterial(UInt32 index) const = 0;
+
+    /**
      * @brief Returns the materials associated with this mesh.
      * 
      * @return A vector of shared pointers to the materials.
      */
     virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
+
+    /**
+     * @brief Returns the draw type of this mesh.
+     *
+     * @return The draw type used for rendering this mesh.
+     */
+    virtual drawType::Type getDrawType() const = 0;
+
+    /**
+     * @brief Sets the draw type for this mesh.
+     *
+     * @param drawType The draw type to use for rendering this mesh.
+     */
+    virtual void setDrawType(drawType::Type drawType) = 0;
 
   protected:
     IMesh() = default;

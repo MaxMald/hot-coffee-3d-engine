@@ -45,6 +45,16 @@ namespace hc
     void endFrame(IWindow&) override;
 
     /**
+     * @copydoc IGraphicsManager::setPolygonFillType
+     */
+    void setPolygonFillType(polygonFillType::Type fillType) override;
+
+    /**
+     * @copydoc IGraphicsManager::getPolygonFillType
+     */
+    polygonFillType::Type getPolygonFillType() const override;
+
+    /**
      * @copydoc IGraphicsManager::getTextureManager
      */
     ITextureManager& getTextureManager() override;

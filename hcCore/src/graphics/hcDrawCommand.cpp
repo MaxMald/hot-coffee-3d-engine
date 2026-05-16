@@ -10,6 +10,7 @@ namespace hc
     float distanceToCamera,
     UInt32 _firstIndex,
     UInt32 _indexCount,
+    polygonFillType::Type _polygonFillType,
     const Variant<OpenGlDrawData>& _apiDrawData
   )
   {
@@ -18,6 +19,7 @@ namespace hc
     this->material = _material;
     this->firstIndex = _firstIndex;
     this->indexCount = _indexCount;
+    this->polygonFillType = _polygonFillType;
     this->apiDrawData = _apiDrawData;
 
     if (!_material)
@@ -39,6 +41,7 @@ namespace hc
     modelMatrix = Matrix4::Identity();
     material = nullptr;
     sortKey = 0;
+    polygonFillType = polygonFillType::Undefined;
     firstIndex = 0;
     indexCount = 0;
     apiDrawData = {};

@@ -21,8 +21,13 @@ namespace hc::editor
     IMeshManager& meshManager = m_graphicsManager.getMeshManager();
 
     m_coneMesh = meshManager.createMeshFromModel(
-      modelAssetManager.getPrimitive(primitiveModelType::Cone)
+      modelAssetManager.getPrimitive(primitiveModelType::ConeNoBase)
     );
+
+    if (m_coneMesh->getMaterialsSize() > 0)
+    {
+      m_coneMesh->getMaterial(0)->getDescriptor()->setDoubleSided(true);
+    }
   }
 
   void SceneViewportLightGizmoRenderer::setEnabled(bool enabled)
@@ -119,9 +124,10 @@ namespace hc::editor
     renderContext.cameraPosition = camera.getPosition();
     renderContext.transform = gameObject.getWorldMatrix();
     renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
-
     renderContext.transform *= computeSpotlightConeTransform(spotLight).getMatrix();
+    renderContext.polygonFillType = polygonFillType::Wireframe;
 
+    polygonFillType::Type originalFillType = m_graphicsManager.getPolygonFillType();
     m_coneMesh->draw(renderContext);
   }
 

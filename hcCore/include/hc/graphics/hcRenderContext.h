@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {
@@ -35,5 +36,10 @@ namespace hc
      * @brief The position of the model in world space, extracted from the transform.
      */
     Vector3f modelPosition;
+
+    /**
+     * @brief The polygon fill type for rendering the object.
+     */
+    polygonFillType::Type polygonFillType = polygonFillType::Undefined;
   };
 }
