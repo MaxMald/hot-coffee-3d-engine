@@ -8,6 +8,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
 #include "hc/graphics/hcOpenGlFrameBuffer.h"
 
 namespace hc
@@ -80,12 +81,10 @@ namespace hc
 
   void OpenGlGraphicsManager::setPolygonFillType(polygonFillType::Type fillType)
   {
-    if (fillType == polygonFillType::Solid)
-      glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    else if (fillType == polygonFillType::Wireframe)
-      glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    else if (fillType == polygonFillType::Point)
-      glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+    glPolygonMode(
+      GL_FRONT_AND_BACK,
+      openGlGraphicsUtilities::getOpenGlPolygonModeFromPolygonFillType(fillType)
+    );
   }
 
   polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
@@ -98,8 +97,13 @@ namespace hc
       return polygonFillType::Wireframe;
     else if (mode[0] == GL_POINT && mode[1] == GL_POINT)
       return polygonFillType::Point;
-    // Default to solid if an unknown mode is returned
-    return polygonFillType::Solid;
+
+    throw RuntimeErrorException(
+      String::Format(
+        "Unsupported OpenGL polygon mode combination: front=%u, back=%u",
+        mode[0], mode[1]
+      )
+    );
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()

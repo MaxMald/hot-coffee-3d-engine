@@ -58,5 +58,39 @@ namespace hc
         );
       }
     }
+
+    UInt32 getOpenGlPolygonModeFromPolygonFillType(polygonFillType::Type fillType)
+    {
+      switch (fillType)
+      {
+      case polygonFillType::Solid:
+        return GL_FILL;
+      case polygonFillType::Wireframe:
+        return GL_LINE;
+      case polygonFillType::Point:
+        return GL_POINT;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported polygon fill type: %d", static_cast<int>(fillType))
+        );
+      }
+    }
+
+    polygonFillType::Type getPolygonFillTypeFromOpenGlPolygonMode(UInt32 glPolygonMode)
+    {
+      switch (glPolygonMode)
+      {
+      case GL_FILL:
+        return polygonFillType::Solid;
+      case GL_LINE:
+        return polygonFillType::Wireframe;
+      case GL_POINT:
+        return polygonFillType::Point;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported OpenGL polygon mode: %u", glPolygonMode)
+        );
+      }
+    }
   }
 }
