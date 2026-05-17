@@ -51,7 +51,7 @@ namespace hc
 
   void ALight::setIntensity(float intensity)
   {
-    m_intensity = Math::max(0.0f, intensity);
+    m_intensity = Math::Max(0.0f, intensity);
   }
 
   float ALight::getIntensity() const
@@ -61,7 +61,7 @@ namespace hc
 
   void ALight::setRange(float range)
   {
-    m_range = Math::max(0.0f, range);
+    m_range = Math::Max(0.0f, range);
   }
 
   float ALight::getRange() const

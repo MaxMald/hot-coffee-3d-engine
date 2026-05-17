@@ -1,4 +1,5 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportLightGizmoRenderer.h"
+#include "hc/editor/graphics/hcMeshShapeFactory.h"
 
 namespace hc::editor
 {
@@ -9,7 +10,10 @@ namespace hc::editor
     m_assetManager(assetManager),
     m_graphicsManager(graphicsManager),
     m_enabled(true),
-    m_coneMesh(nullptr)
+    m_line(nullptr),
+    m_circle(nullptr),
+    m_square(nullptr),
+    m_cube(nullptr)
   {}
 
   SceneViewportLightGizmoRenderer::~SceneViewportLightGizmoRenderer()
@@ -20,14 +24,34 @@ namespace hc::editor
     IModelAssetManager& modelAssetManager = m_assetManager.getModelAssetManager();
     IMeshManager& meshManager = m_graphicsManager.getMeshManager();
 
-    m_coneMesh = meshManager.createMeshFromModel(
-      modelAssetManager.getPrimitive(primitiveModelType::ConeNoBase)
+    m_line = MeshShapeFactory::CreateLine(
+      meshManager,
+      Vector3f(0.0f, 0.0f, 0.0f),
+      Vector3f(0.0f, 0.0f, -1.0f),
+      Color::White()
     );
 
-    if (m_coneMesh->getMaterialsSize() > 0)
-    {
-      m_coneMesh->getMaterial(0)->getDescriptor()->setDoubleSided(true);
-    }
+    m_circle = MeshShapeFactory::CreateCircle(
+      meshManager,
+      0.5f,
+      32,
+      Color::White()
+    );
+
+    m_square = MeshShapeFactory::CreateRectangle(
+      meshManager,
+      1.0f,
+      1.0f,
+      Color::White()
+    );
+
+    m_cube = MeshShapeFactory::CreateBox(
+      meshManager,
+      1.0f,
+      1.0f,
+      1.0f,
+      Color::White()
+    );
   }
 
   void SceneViewportLightGizmoRenderer::setEnabled(bool enabled)
@@ -48,10 +72,6 @@ namespace hc::editor
   {
     if (!m_enabled)
       return;
-
-    //(void)scene;
-    //(void)camera;
-    //(void)activeGameObject;
 
     const Vector<UniquePtr<GameObject>>& rootGameObjects = scene
       .getSceneGraph()
@@ -102,33 +122,51 @@ namespace hc::editor
     bool isSelected
   )
   {
-    //(void)gameObject;
-    //(void)spotLightComponent;
-    //(void)camera;
-    //(void)isSelected;
-
-    // TODO:
-    // - Build cone transform from world position + direction.
-    // - Scale cone from outer angle and desired visualization range.
-    // - Submit translucent cone mesh draw command.
-    // - Optionally add direction line/arrow.
-
     if (!isSelected)
       return;
 
     const SpotLight& spotLight = spotLightComponent.getSpotLight();
-    spotLight.getPosition();
 
+    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
-    renderContext.transform = gameObject.getWorldMatrix();
     renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
-    renderContext.transform *= computeSpotlightConeTransform(spotLight).getMatrix();
-    renderContext.polygonFillType = polygonFillType::Wireframe;
 
-    polygonFillType::Type originalFillType = m_graphicsManager.getPolygonFillType();
-    m_coneMesh->draw(renderContext);
+    // Outer Circle
+    float coneHeight = Math::Cos(spotLight.getOuterConeAngle() * Math::DegToRad);
+    float coneRadius = Math::Sin(spotLight.getOuterConeAngle() * Math::DegToRad);
+
+    coneHeight *= spotLight.getRange();
+    coneRadius *= spotLight.getRange();
+
+    Transform outerCircleTransform;
+    outerCircleTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
+    outerCircleTransform.setPosition(0.0f, 0.0f, -coneHeight);
+    outerCircleTransform.setScale(Vector3f(coneRadius, 1.0f, coneRadius));
+
+    renderContext.transform = cameraWorldMatrix * outerCircleTransform.getMatrix();
+    m_circle->draw(renderContext);
+
+    // Inner Circle
+    coneHeight = Math::Cos(spotLight.getInnerConeAngle() * Math::DegToRad);
+    coneRadius = Math::Sin(spotLight.getInnerConeAngle() * Math::DegToRad);
+
+    coneHeight *= spotLight.getRange();
+    coneRadius *= spotLight.getRange();
+
+    Transform innerCircleTransform = outerCircleTransform;
+    innerCircleTransform.setScale(Vector3f(coneRadius, 1.0f, coneRadius));
+
+    renderContext.transform = cameraWorldMatrix * innerCircleTransform.getMatrix();
+    m_circle->draw(renderContext);
+
+    // Range Line
+    Transform rangeLineTransform;
+    rangeLineTransform.setScale(Vector3f(1.0f, 1.0f, spotLight.getRange()));
+
+    renderContext.transform = cameraWorldMatrix * rangeLineTransform.getMatrix();
+    m_line->draw(renderContext);
   }
 
   void SceneViewportLightGizmoRenderer::drawLightIcon(
@@ -153,8 +191,8 @@ namespace hc::editor
   {
     Transform coneTransform;
 
-    float coneHeight = Math::cos(spotLight.getOuterConeAngle() * Math::DegToRad);
-    float coneRadius = Math::sin(spotLight.getOuterConeAngle() * Math::DegToRad);
+    float coneHeight = Math::Cos(spotLight.getOuterConeAngle() * Math::DegToRad);
+    float coneRadius = Math::Sin(spotLight.getOuterConeAngle() * Math::DegToRad);
 
     coneTransform.setPosition(Vector3f(0.0f, 0.0f, -coneHeight * spotLight.getRange() * 0.5f));
     coneTransform.setRotation(Vector3f(Math::HalfPi, 0.0f, 0.0f));

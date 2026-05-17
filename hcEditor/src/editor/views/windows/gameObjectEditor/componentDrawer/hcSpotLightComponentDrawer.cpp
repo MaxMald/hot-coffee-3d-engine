@@ -24,27 +24,11 @@ namespace hc::editor
     );
 
     float innerConeAngle = spotLight.getInnerConeAngle();
-    if (ImGui::InputFloat(
-      "Inner Cone Angle",
-      &innerConeAngle,
-      0.1f,
-      1.0f,
-      "%.3f"
-    ))
-    {
+    if (ImGui::DragFloat("Inner Cone Angle", &innerConeAngle, 0.5f))
       spotLight.setInnerConeAngle(innerConeAngle);
-    }
 
     float outerConeAngle = spotLight.getOuterConeAngle();
-    if (ImGui::InputFloat(
-      "Outer Cone Angle",
-      &outerConeAngle,
-      0.1f,
-      1.0f,
-      "%.3f"
-    ))
-    {
+    if (ImGui::DragFloat("Outer Cone Angle", &outerConeAngle, 0.5f))
       spotLight.setOuterConeAngle(outerConeAngle);
-    }
   }
 }

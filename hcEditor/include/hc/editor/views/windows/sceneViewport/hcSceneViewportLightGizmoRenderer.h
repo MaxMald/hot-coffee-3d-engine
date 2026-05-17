@@ -28,7 +28,10 @@ namespace hc::editor
     IGraphicsManager& m_graphicsManager;
     bool m_enabled;
 
-    SharedPtr<IMesh> m_coneMesh;
+    SharedPtr<IMesh> m_line;
+    SharedPtr<IMesh> m_circle;
+    SharedPtr<IMesh> m_square;
+    SharedPtr<IMesh> m_cube;
 
     void draw(
       const GameObject& gameObject,

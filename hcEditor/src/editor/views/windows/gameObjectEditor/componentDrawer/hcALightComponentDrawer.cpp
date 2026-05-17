@@ -23,7 +23,7 @@ namespace hc::editor
       light.setIntensity(intensity);
 
     float range = light.getRange();
-    if (ImGui::InputFloat("Range", &range))
+    if (ImGui::DragFloat("Range", &range, 0.5f))
       light.setRange(range);
 
     bool enabled = light.isEnabled();
