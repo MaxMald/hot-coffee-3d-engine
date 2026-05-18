@@ -2,11 +2,13 @@
 
 namespace hc
 {
+  static const float MAX_CONE_ANGLE_RADIANS = Math::Pi;
+
   SpotLight::SpotLight() :
     ALight(lightType::Type::Spot),
     m_direction(0.0f, -1.0f, 0.0f),
-    m_innerConeAngle(15.0f),
-    m_outerConeAngle(30.0f)
+    m_innerConeAngle(Angle::FromDegrees(15.0f)),
+    m_outerConeAngle(Angle::FromDegrees(30.0f))
   {
   }
 
@@ -16,16 +18,16 @@ namespace hc
   {
     ALight::serialize(writer);
     writer.writeVector3f(m_direction);
-    writer.writeFloat(m_innerConeAngle);
-    writer.writeFloat(m_outerConeAngle);
+    writer.writeAngle(m_innerConeAngle);
+    writer.writeAngle(m_outerConeAngle);
   }
 
   void SpotLight::deserialize(BinaryReader& reader)
   {
     ALight::deserialize(reader);
     m_direction = reader.readVector3f();
-    m_innerConeAngle = reader.readFloat();
-    m_outerConeAngle = reader.readFloat();
+    m_innerConeAngle = reader.readAngle();
+    m_outerConeAngle = reader.readAngle();
   }
 
   void SpotLight::setDirection(const Vector3f& direction)
@@ -38,25 +40,30 @@ namespace hc
     return m_direction;
   }
 
-  void SpotLight::setInnerConeAngle(float angle)
+  void SpotLight::setInnerConeAngle(Angle angle)
   {
-    angle = Math::Max(0.0f, Math::Min(angle, m_outerConeAngle));
-    m_innerConeAngle = angle;
+    float angleRadians = angle.toRadians();
+    m_innerConeAngle = Angle::FromRadians(
+      Math::Max(0.0f, Math::Min(angleRadians, MAX_CONE_ANGLE_RADIANS))
+    );
+    m_outerConeAngle = Math::Max(m_outerConeAngle, m_innerConeAngle);
   }
 
-  float SpotLight::getInnerConeAngle() const
+  Angle SpotLight::getInnerConeAngle() const
   {
     return m_innerConeAngle;
   }
 
-  void SpotLight::setOuterConeAngle(float angle)
+  void SpotLight::setOuterConeAngle(Angle angle)
   {
-    angle = Math::Max(0.0f, Math::Min(angle, 180.0f));
-    m_outerConeAngle = angle;
+    float angleRadians = angle.toRadians();;
+    m_outerConeAngle = Angle::FromRadians(
+      Math::Max(0.0f, Math::Min(angleRadians, MAX_CONE_ANGLE_RADIANS))
+    );
     m_innerConeAngle = Math::Min(m_innerConeAngle, m_outerConeAngle);
   }
 
-  float SpotLight::getOuterConeAngle() const
+  Angle SpotLight::getOuterConeAngle() const
   {
     return m_outerConeAngle;
   }

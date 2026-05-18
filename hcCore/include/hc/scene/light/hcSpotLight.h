@@ -19,17 +19,17 @@ namespace hc
 
     const Vector3f& getDirection() const;
 
-    void setInnerConeAngle(float angle);
+    void setInnerConeAngle(Angle angle);
 
-    float getInnerConeAngle() const;
+    Angle getInnerConeAngle() const;
 
-    void setOuterConeAngle(float angle);
+    void setOuterConeAngle(Angle angle);
 
-    float getOuterConeAngle() const;
+    Angle getOuterConeAngle() const;
 
   private:
     Vector3f m_direction;
-    float m_innerConeAngle;
-    float m_outerConeAngle;
+    Angle m_innerConeAngle;
+    Angle m_outerConeAngle;
   };
 }

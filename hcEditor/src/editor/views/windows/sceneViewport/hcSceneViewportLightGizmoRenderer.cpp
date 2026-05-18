@@ -164,8 +164,8 @@ namespace hc::editor
     renderContext.modelPosition = gameObject.getWorldPosition();
 
     // Outer Circle
-    float coneHeight = Math::Cos(spotLight.getOuterConeAngle() * Math::DegToRad);
-    float coneRadius = Math::Sin(spotLight.getOuterConeAngle() * Math::DegToRad);
+    float coneHeight = Math::Cos(spotLight.getOuterConeAngle().toRadians());
+    float coneRadius = Math::Sin(spotLight.getOuterConeAngle().toRadians());
 
     coneHeight *= spotLight.getRange();
     coneRadius *= spotLight.getRange();
@@ -179,8 +179,8 @@ namespace hc::editor
     m_circle->draw(renderContext);
 
     // Inner Circle
-    coneHeight = Math::Cos(spotLight.getInnerConeAngle() * Math::DegToRad);
-    coneRadius = Math::Sin(spotLight.getInnerConeAngle() * Math::DegToRad);
+    coneHeight = Math::Cos(spotLight.getInnerConeAngle().toRadians());
+    coneRadius = Math::Sin(spotLight.getInnerConeAngle().toRadians());
 
     coneHeight *= spotLight.getRange();
     coneRadius *= spotLight.getRange();

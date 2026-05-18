@@ -23,12 +23,12 @@ namespace hc::editor
       ImGuiInputTextFlags_ReadOnly
     );
 
-    float innerConeAngle = spotLight.getInnerConeAngle();
+    float innerConeAngle = spotLight.getInnerConeAngle().toDegrees();
     if (ImGui::DragFloat("Inner Cone Angle", &innerConeAngle, 0.5f))
-      spotLight.setInnerConeAngle(innerConeAngle);
+      spotLight.setInnerConeAngle(Angle::FromDegrees(innerConeAngle));
 
-    float outerConeAngle = spotLight.getOuterConeAngle();
+    float outerConeAngle = spotLight.getOuterConeAngle().toDegrees();
     if (ImGui::DragFloat("Outer Cone Angle", &outerConeAngle, 0.5f))
-      spotLight.setOuterConeAngle(outerConeAngle);
+      spotLight.setOuterConeAngle(Angle::FromDegrees(outerConeAngle));
   }
 }
