@@ -22,26 +22,10 @@ namespace hc
   {
   }
 
-  void MeshComponent::draw(const RenderContext& renderContext)
+  void MeshComponent::serialize(BinaryWriter& writer) const
   {
-    if (!m_mesh)
-      return;
+    ABaseComponent::serialize(writer);
 
-    m_mesh->draw(renderContext);
-  }
-
-  void MeshComponent::setMesh(SharedPtr<IMesh> mesh)
-  {
-    m_mesh = mesh;
-  }
-
-  SharedPtr<IMesh> MeshComponent::getMesh() const
-  {
-    return m_mesh;
-  }
-
-  void MeshComponent::onSerialize(BinaryWriter& writer) const
-  {
     bool hasMesh = (m_mesh != nullptr && m_mesh->getModel() != nullptr);
     writer.writeBool(hasMesh);
 
@@ -57,8 +41,10 @@ namespace hc
     writer.writeString(modelPathStr);
   }
 
-  void MeshComponent::onDeserialize(BinaryReader& reader)
+  void MeshComponent::deserialize(BinaryReader& reader)
   {
+    ABaseComponent::deserialize(reader);
+
     bool hasMesh = reader.readBool();
     if (!hasMesh)
     {
@@ -84,5 +70,23 @@ namespace hc
     {
       m_mesh = m_meshManager.createMeshFromPath(modelPathStr.c_str());
     }
+  }
+
+  void MeshComponent::draw(const RenderContext& renderContext)
+  {
+    if (!m_mesh)
+      return;
+
+    m_mesh->draw(renderContext);
+  }
+
+  void MeshComponent::setMesh(SharedPtr<IMesh> mesh)
+  {
+    m_mesh = mesh;
+  }
+
+  SharedPtr<IMesh> MeshComponent::getMesh() const
+  {
+    return m_mesh;
   }
 }

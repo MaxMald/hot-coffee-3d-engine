@@ -4,6 +4,7 @@
 #include "hc/graphics/resource/material/hcIMaterial.h"
 #include "hc/graphics/resource/material/hcMaterialRenderMode.h"
 #include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {
@@ -16,6 +17,7 @@ namespace hc
   struct OpenGlDrawData
   {
     UInt32 vao = 0;
+    UInt32 drawMode = 0;
   };
 
   /**
@@ -58,6 +60,11 @@ namespace hc
     UInt32 indexCount = 0;
 
     /**
+     * The polygon fill type to use for this draw command (e.g., solid, wireframe, point).
+     */
+    polygonFillType::Type polygonFillType = polygonFillType::Undefined;
+
+    /**
      * Graphics API-specific rendering data.
      */
     Variant<OpenGlDrawData> apiDrawData;
@@ -73,6 +80,7 @@ namespace hc
      * @param distanceToCamera Distance from camera for depth sorting.
      * @param firstIndex Starting index in the index buffer.
      * @param indexCount Number of indices to draw.
+     * @param polygonFillType The polygon fill type to use for this draw command.
      * @param apiDrawData Graphics API-specific rendering data.
      */
     void initialize(
@@ -82,6 +90,7 @@ namespace hc
       float distanceToCamera,
       UInt32 firstIndex,
       UInt32 indexCount,
+      polygonFillType::Type polygonFillType,
       const Variant<OpenGlDrawData>& apiDrawData
     );
 

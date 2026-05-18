@@ -17,7 +17,8 @@ namespace hc
     m_componentFactoriesManager(componentFactoriesManager),
     m_children(),
     m_components(),
-    m_drawableComponents()
+    m_drawableComponents(),
+    m_updatableComponents()
   {
   }
 
@@ -99,10 +100,40 @@ namespace hc
       child->draw(localRenderContext);
   }
 
+  void GameObject::preUpdate(const Time& elapsedTime)
+  {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->preUpdate(elapsedTime.toSeconds());
+    }
+
+    for (auto& child : m_children)
+      child->preUpdate(elapsedTime);
+  }
+
   void GameObject::update(const Time& elapsedTime)
   {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->update(elapsedTime.toSeconds());
+    }
+
     for (auto& child : m_children)
       child->update(elapsedTime);
+  }
+
+  void GameObject::postUpdate(const Time& elapsedTime)
+  {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->postUpdate(elapsedTime.toSeconds());
+    }
+
+    for (auto& child : m_children)
+      child->postUpdate(elapsedTime);
   }
 
   void GameObject::setName(const String& name)
@@ -207,6 +238,20 @@ namespace hc
       return m_parent->getWorldMatrix() * getMatrix();
     else
       return getMatrix();
+  }
+
+  Vector3f GameObject::getWorldPosition() const
+  {
+    Matrix4 worldMatrix = getWorldMatrix();
+    return Matrix4::ExtractTranslation(worldMatrix);
+  }
+
+  Matrix4 GameObject::getWorldRotationMatrix() const
+  {
+    if (m_parent)
+      return m_parent->getWorldRotationMatrix() * Matrix4::Rotation(getRotation());
+    else
+      return Matrix4::Rotation(getRotation());
   }
 
   Vector<IComponent*> GameObject::getComponents() const

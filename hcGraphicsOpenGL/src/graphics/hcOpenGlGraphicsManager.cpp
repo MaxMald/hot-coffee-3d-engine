@@ -8,6 +8,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include "hc/graphics/hcOpenGlFrameBuffer.h"
 
 namespace hc
@@ -40,7 +41,8 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_drawCommands()
+    m_drawCommands(),
+    m_polygonFillType(polygonFillType::Solid)
   {
   }
 
@@ -76,6 +78,20 @@ namespace hc
   void OpenGlGraphicsManager::endFrame(IWindow& window)
   {
     window.swapBuffers();
+  }
+
+  void OpenGlGraphicsManager::setPolygonFillType(polygonFillType::Type fillType)
+  {
+    glPolygonMode(
+      GL_FRONT_AND_BACK,
+      openGlGraphicsUtilities::GetOpenGlPolygonModeFromPolygonFillType(fillType)
+    );
+    m_polygonFillType = fillType;
+  }
+
+  polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
+  {
+    return m_polygonFillType;
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
@@ -193,6 +209,24 @@ namespace hc
       return;
     }
 
+    // Set polygon fill type if specified in the command
+
+    polygonFillType::Type originalPolygonFillType = polygonFillType::Undefined;
+    bool hasDifferentFillType = false;
+
+    if (command.polygonFillType != polygonFillType::Undefined)
+    {
+      originalPolygonFillType = getPolygonFillType();
+      if (command.polygonFillType != originalPolygonFillType)
+      {
+        hasDifferentFillType = true;
+        setPolygonFillType(command.polygonFillType);
+      }
+    }
+
+    // Determine if the material is two-sided and/or transparent to set appropriate OpenGL
+    // states
+
     bool isTwoSided = descriptor->isDoubleSided();
     bool isTransparent = command.material->isTransparent();
 
@@ -213,7 +247,7 @@ namespace hc
       // Pass 1: Render back faces first
       glCullFace(GL_FRONT);
       glDrawElements(
-        GL_TRIANGLES,
+        drawData.drawMode,
         static_cast<GLsizei>(command.indexCount),
         GL_UNSIGNED_INT,
         reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
@@ -222,7 +256,7 @@ namespace hc
       // Pass 2: Render front faces
       glCullFace(GL_BACK);
       glDrawElements(
-        GL_TRIANGLES,
+        drawData.drawMode,
         static_cast<GLsizei>(command.indexCount),
         GL_UNSIGNED_INT,
         reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
@@ -245,7 +279,7 @@ namespace hc
       command.material->updateModelMatrix(command.modelMatrix);
 
       glDrawElements(
-        GL_TRIANGLES,
+        drawData.drawMode,
         static_cast<GLsizei>(command.indexCount),
         GL_UNSIGNED_INT,
         reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
@@ -262,6 +296,10 @@ namespace hc
 
       if (isTwoSided)
         glEnable(GL_CULL_FACE);
-    }   
+    }
+
+    // Restore polygon fill type if it was changed
+    if (hasDifferentFillType)
+      setPolygonFillType(originalPolygonFillType);
   }
 }

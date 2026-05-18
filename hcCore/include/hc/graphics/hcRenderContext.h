@@ -1,14 +1,22 @@
 #pragma once
 
 #include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {
+  class Camera;
+
   /**
    * @brief Contains transformation data required for rendering an object.
    */
   struct HC_CORE_EXPORT RenderContext
   {
+    static RenderContext Create(
+      Camera& camera,
+      const Matrix4& modelTransform
+    );
+
     /**
      * @brief The camera's projection and view matrices.
      */
@@ -28,5 +36,10 @@ namespace hc
      * @brief The position of the model in world space, extracted from the transform.
      */
     Vector3f modelPosition;
+
+    /**
+     * @brief The polygon fill type for rendering the object.
+     */
+    polygonFillType::Type polygonFillType = polygonFillType::Undefined;
   };
 }

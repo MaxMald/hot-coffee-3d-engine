@@ -11,7 +11,6 @@
 #include "hc/editor/views/windows/hcPluginManagerWindow.h"
 #include "hc/editor/views/windows/hcEditorLoggerWindow.h"
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
-#include "hc/editor/views/windows/hcLightManagerWindow.h"
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
@@ -83,9 +82,6 @@ namespace hc::editor
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<SceneGraphWindow>()
-            ))
-            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
-              *editorViewsManager.getView<LightManagerWindow>()
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<CameraManagerWindow>()

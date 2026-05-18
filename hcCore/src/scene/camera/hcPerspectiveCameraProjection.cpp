@@ -29,6 +29,11 @@ namespace hc
     return m_cachedProjectionMatrix;
   }
 
+  Matrix4 PerspectiveCameraProjection::getCachedProjectionMatrix() const
+  {
+    return m_cachedProjectionMatrix;
+  }
+
   void PerspectiveCameraProjection::update()
   {
     m_cachedProjectionMatrix = Matrix4::Perspective(

@@ -79,6 +79,11 @@ namespace hc::editor
     void renderSceneToTexture();
 
     /**
+     * @brief Renders gizmos (e.g. selection outlines, light icons) to the render texture.
+     */
+    void renderGizmosToTexture();
+
+    /**
      * @brief Draws the viewport window with the rendered scene texture.
      */
     void drawViewport();

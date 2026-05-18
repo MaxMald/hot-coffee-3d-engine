@@ -1,0 +1,70 @@
+#include "hc/scene/light/hcSpotLight.h"
+
+namespace hc
+{
+  static const float MAX_CONE_ANGLE_RADIANS = Math::Pi;
+
+  SpotLight::SpotLight() :
+    ALight(lightType::Type::Spot),
+    m_direction(0.0f, -1.0f, 0.0f),
+    m_innerConeAngle(Angle::FromDegrees(15.0f)),
+    m_outerConeAngle(Angle::FromDegrees(30.0f))
+  {
+  }
+
+  SpotLight::~SpotLight() = default;
+
+  void SpotLight::serialize(BinaryWriter& writer) const
+  {
+    ALight::serialize(writer);
+    writer.writeVector3f(m_direction);
+    writer.writeAngle(m_innerConeAngle);
+    writer.writeAngle(m_outerConeAngle);
+  }
+
+  void SpotLight::deserialize(BinaryReader& reader)
+  {
+    ALight::deserialize(reader);
+    m_direction = reader.readVector3f();
+    m_innerConeAngle = reader.readAngle();
+    m_outerConeAngle = reader.readAngle();
+  }
+
+  void SpotLight::setDirection(const Vector3f& direction)
+  {
+    m_direction = direction;
+  }
+
+  const Vector3f& SpotLight::getDirection() const
+  {
+    return m_direction;
+  }
+
+  void SpotLight::setInnerConeAngle(Angle angle)
+  {
+    float angleRadians = angle.toRadians();
+    m_innerConeAngle = Angle::FromRadians(
+      Math::Max(0.0f, Math::Min(angleRadians, MAX_CONE_ANGLE_RADIANS))
+    );
+    m_outerConeAngle = Math::Max(m_outerConeAngle, m_innerConeAngle);
+  }
+
+  Angle SpotLight::getInnerConeAngle() const
+  {
+    return m_innerConeAngle;
+  }
+
+  void SpotLight::setOuterConeAngle(Angle angle)
+  {
+    float angleRadians = angle.toRadians();;
+    m_outerConeAngle = Angle::FromRadians(
+      Math::Max(0.0f, Math::Min(angleRadians, MAX_CONE_ANGLE_RADIANS))
+    );
+    m_innerConeAngle = Math::Min(m_innerConeAngle, m_outerConeAngle);
+  }
+
+  Angle SpotLight::getOuterConeAngle() const
+  {
+    return m_outerConeAngle;
+  }
+}

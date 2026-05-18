@@ -32,6 +32,15 @@ namespace hc
     virtual Matrix4 getProjectionMatrix() = 0;
 
     /**
+     * @brief Gets the cached projection matrix without recomputing it. This should be
+     * used when the projection parameters have not changed since the last update, to
+     * avoid unnecessary calculations.
+     *
+     * @return The cached projection matrix.
+     */
+    virtual Matrix4 getCachedProjectionMatrix() const = 0;
+
+    /**
      * @brief Updates the projection parameters if they have changed.
      */
     virtual void update() = 0;

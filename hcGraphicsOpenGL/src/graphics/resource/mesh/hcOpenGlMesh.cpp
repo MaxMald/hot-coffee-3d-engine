@@ -1,5 +1,7 @@
 #include "hc/graphics/resource/mesh/hcOpenGlMesh.h"
+
 #include <GL/glew.h>
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
@@ -9,11 +11,12 @@ namespace hc
     IGraphicsManager& graphicsManager
   ) :
     m_id(Id::Create()),
+    m_model(model),
+    m_materials(materials),
     m_vao(0),
     m_vbo(0),
     m_ebo(0),
-    m_model(model),
-    m_materials(materials),
+    m_drawMode(GL_TRIANGLES),
     m_graphicsManager(graphicsManager)
   {
     glGenVertexArrays(1, &m_vao);
@@ -112,6 +115,18 @@ namespace hc
     m_materials[index] = material;
   }
 
+  SharedPtr<IMaterial> OpenGlMesh::getMaterial(UInt32 index) const
+  {
+    if (static_cast<SizeT>(index) >= m_materials.size())
+      throw RuntimeErrorException(
+        String::Format("Material index %d is out of bounds for materials size %zu",
+          index, m_materials.size()
+        )
+      );
+
+    return m_materials[index];
+  }
+
   void OpenGlMesh::destroy()
   {
     if (m_ebo != 0)
@@ -138,6 +153,16 @@ namespace hc
     return m_materials;
   }
 
+  drawType::Type OpenGlMesh::getDrawType() const
+  {
+    return openGlGraphicsUtilities::GetDrawTypeFromOpenGlMode(m_drawMode);
+  }
+
+  void OpenGlMesh::setDrawType(drawType::Type drawType)
+  {
+    m_drawMode = openGlGraphicsUtilities::GetOpenGlDrawModeFromDrawType(drawType);
+  }
+
   void OpenGlMesh::bind()
   {
     if (m_vao)
@@ -152,6 +177,11 @@ namespace hc
   UInt32 OpenGlMesh::getVao() const
   {
     return m_vao;
+  }
+
+  UInt32 OpenGlMesh::getDrawMode() const
+  {
+    return m_drawMode;
   }
 
   void OpenGlMesh::drawModelSubMesh(
@@ -185,7 +215,8 @@ namespace hc
       distanceToCamera,
       submesh.firstIndexIndex,
       submesh.indexCount,
-      OpenGlDrawData{ m_vao }
+      renderContext.polygonFillType,
+      OpenGlDrawData{ m_vao, m_drawMode }
     );
 
     m_graphicsManager.draw(command);

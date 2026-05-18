@@ -6,6 +6,7 @@
 #include "hc/graphics/hcDrawCommand.h"
 #include "hc/graphics/hcIFrameBuffer.h"
 #include "hc/graphics/hcGraphicsBackendType.h"
+#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {
@@ -60,6 +61,20 @@ namespace hc
      * @param window Reference to the window where the frame will be presented.
      */
     virtual void endFrame(IWindow&) = 0;
+
+    /**
+     * @brief Sets the polygon fill type for rendering.
+     *
+     * @param fillType The polygon fill type to set.
+     */
+    virtual void setPolygonFillType(polygonFillType::Type fillType) = 0;
+
+    /**
+     * @brief Gets the current polygon fill type used for rendering.
+     *
+     * @return The current polygon fill type.
+     */
+    virtual polygonFillType::Type getPolygonFillType() const = 0;
 
     /**
      * @brief Returns the texture manager.

@@ -82,7 +82,7 @@ namespace hc::editor
       return;
 
     float distanceToTarget = getCameraDistanceToTarget(m_camera);
-    float distanceModifier = Math::clamp(distanceToTarget, 0.01f, 1.0f);
+    float distanceModifier = Math::Clamp(distanceToTarget, 0.01f, 1.0f);
 
     float deltaX = -mouseDelta.x * m_cameraMoveScale * distanceModifier;
     float deltaY = mouseDelta.y * m_cameraMoveScale * distanceModifier;

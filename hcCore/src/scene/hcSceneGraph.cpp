@@ -55,7 +55,19 @@ namespace hc
     for (const UniquePtr<GameObject>& root : m_roots)
     {
       if (root)
+        root->preUpdate(elapsedTime);
+    }
+
+    for (const UniquePtr<GameObject>& root : m_roots)
+    {
+      if (root)
         root->update(elapsedTime);
+    }
+
+    for (const UniquePtr<GameObject>& root : m_roots)
+    {
+      if (root)
+        root->postUpdate(elapsedTime);
     }
   }
 
