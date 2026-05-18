@@ -79,8 +79,6 @@ namespace hc::editor
       Vector2f(viewportPos.x, viewportPos.y),
       getContentSize()
     );
-
-    m_engine.getGraphicsManager().executeDrawCommands();
   }
 
   void SceneViewportWindow::onGameObjectSelected(GameObject* gameObject)
