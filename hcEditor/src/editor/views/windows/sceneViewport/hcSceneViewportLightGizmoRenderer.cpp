@@ -157,11 +157,14 @@ namespace hc::editor
 
     const SpotLight& spotLight = spotLightComponent.getSpotLight();
 
-    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
     renderContext.modelPosition = gameObject.getWorldPosition();
+
+    Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
+    Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
+    Matrix4 cameraWorldMatrix = cameraWorldTranslation * cameraWorldRotation;
 
     // Outer Circle
     float coneHeight = Math::Cos(spotLight.getOuterConeAngle().toRadians());
@@ -211,15 +214,19 @@ namespace hc::editor
 
     const OmniLight& omniLight = omniLightComponent.getOmniLight();
 
-    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
     renderContext.modelPosition = gameObject.getWorldPosition();
 
+    Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
+    Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
+    Matrix4 cameraWorldMatrix = cameraWorldTranslation * cameraWorldRotation;
+
     // Ring 1
     Transform sphereTransform;
     sphereTransform.setScale(Vector3f(omniLight.getRange(), omniLight.getRange(), omniLight.getRange()));
+
     renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
     m_circle->draw(renderContext);
 
@@ -246,15 +253,19 @@ namespace hc::editor
 
     const DirectionalLight& directionalLight = directionalLightComponent.getDirectionalLight();
 
-    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
     renderContext.modelPosition = gameObject.getWorldPosition();
 
+    Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
+    Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
+    Matrix4 cameraWorldMatrix = cameraWorldTranslation * cameraWorldRotation;
+
     // Plane
     Transform planeTransform;
     planeTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
+
     renderContext.transform = cameraWorldMatrix * planeTransform.getMatrix();
     m_square->draw(renderContext);
 
