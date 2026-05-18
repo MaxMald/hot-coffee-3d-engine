@@ -231,15 +231,15 @@ namespace hc
   Vector3f GameObject::getWorldPosition() const
   {
     Matrix4 worldMatrix = getWorldMatrix();
-    return Vector3f(worldMatrix.m03, worldMatrix.m13, worldMatrix.m23);
+    return Matrix4::ExtractTranslation(worldMatrix);
   }
 
-  Vector3f GameObject::getWorldRotation() const
+  Matrix4 GameObject::getWorldRotationMatrix() const
   {
     if (m_parent)
-      return m_parent->getWorldRotation() + getRotation();
+      return m_parent->getWorldRotationMatrix() * Matrix4::Rotation(getRotation());
     else
-      return getRotation();
+      return Matrix4::Rotation(getRotation());
   }
 
   Vector<IComponent*> GameObject::getComponents() const

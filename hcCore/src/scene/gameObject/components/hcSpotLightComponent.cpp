@@ -47,11 +47,9 @@ namespace hc
   {
     m_spotLight.setPosition(m_gameObject->getWorldPosition());
 
-    Vector3f worldRotation = m_gameObject->getWorldRotation();
-    Matrix4 rotationMatrix = Matrix4::Rotation(worldRotation);
-    Vector3f direction = Vector3f(1.0f, 0.0f, 0.0f);
-    direction = (rotationMatrix * Vector4f(direction, 0.0f)).xyz();
-    m_spotLight.setDirection(direction);
+    Matrix4 worldRotation = m_gameObject->getWorldRotationMatrix();
+    Vector3f direction = Vector3f(0.0f, 0.0f, -1.0f);
+    m_spotLight.setDirection((worldRotation * Vector4f(direction, 0.0f)).xyz());
   }
 
   SpotLight& SpotLightComponent::getSpotLight()

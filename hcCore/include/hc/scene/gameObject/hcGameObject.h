@@ -168,11 +168,11 @@ namespace hc
     Vector3f getWorldPosition() const;
 
     /**
-     * @brief Computes the world rotation of this GameObject as Euler angles.
+     * @brief Computes the world rotation of this GameObject as a Matrix4.
      *
-     * @return The world rotation as a Vector3f (pitch, yaw, roll).
+     * @return The world rotation as a Matrix4.
      */
-    Vector3f getWorldRotation() const;
+    Matrix4 getWorldRotationMatrix() const;
 
     /**
      * @brief Creates and adds a component of the specified type to this
