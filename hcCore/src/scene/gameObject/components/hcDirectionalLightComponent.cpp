@@ -45,8 +45,6 @@ namespace hc
 
   void DirectionalLightComponent::updateLight()
   {
-    m_directionalLight.setPosition(m_gameObject->getWorldPosition());
-
     Matrix4 worldRotation = m_gameObject->getWorldRotationMatrix();
     Vector3f direction = Vector3f(0.0f, 0.0f, -1.0f);
     m_directionalLight.setDirection((worldRotation * Vector4f(direction, 0.0f)).xyz());
