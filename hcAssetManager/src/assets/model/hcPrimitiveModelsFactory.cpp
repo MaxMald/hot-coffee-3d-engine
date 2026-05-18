@@ -665,8 +665,8 @@ namespace hc
     UInt32 vertexIndex = 0;
     UInt32 indexIndex = 0;
 
-    const float sideNormalY = radius / sqrt(radius * radius + height * height);
-    const float sideNormalXZ = height / sqrt(radius * radius + height * height);
+    const float sideNormalY = radius / Math::Sqrt(radius * radius + height * height);
+    const float sideNormalXZ = height / Math::Sqrt(radius * radius + height * height);
 
     for (UInt32 i = 0; i < segments; ++i)
     {
