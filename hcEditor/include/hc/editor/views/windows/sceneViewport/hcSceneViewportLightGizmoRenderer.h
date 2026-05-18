@@ -53,6 +53,13 @@ namespace hc::editor
       bool isSelected
     );
 
+    void drawDirectionalLightGizmo(
+      const GameObject& gameObject,
+      const DirectionalLightComponent& directionalLightComponent,
+      const Camera& camera,
+      bool isSelected
+    );
+
     void drawLightIcon(
       const GameObject& gameObject,
       const ALightComponent& lightComponent,

@@ -120,6 +120,19 @@ namespace hc::editor
           (&gameObject == activeGameObject)
         );
       }
+      else if (componentType == componentType::DirectionalLight)
+      {
+        DirectionalLightComponent* directionalLightComponent =
+          reinterpret_cast<DirectionalLightComponent*>(component);
+        directionalLightComponent->updateLight();
+
+        drawDirectionalLightGizmo(
+          gameObject,
+          *directionalLightComponent,
+          camera,
+          (&gameObject == activeGameObject)
+        );
+      }
     }
   }
 
@@ -210,6 +223,37 @@ namespace hc::editor
     sphereTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
     renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
     m_circle->draw(renderContext);
+  }
+
+  void SceneViewportLightGizmoRenderer::drawDirectionalLightGizmo(
+    const GameObject& gameObject,
+    const DirectionalLightComponent& directionalLightComponent,
+    const Camera& camera,
+    bool isSelected
+  )
+  {
+    if (!isSelected)
+      return;
+
+    const DirectionalLight& directionalLight = directionalLightComponent.getDirectionalLight();
+
+    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
+    RenderContext renderContext;
+    renderContext.cameraMatrices = CameraMatrices::Create(camera);
+    renderContext.cameraPosition = camera.getPosition();
+    renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
+
+    // Plane
+    Transform planeTransform;
+    planeTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
+    renderContext.transform = cameraWorldMatrix * planeTransform.getMatrix();
+    m_square->draw(renderContext);
+
+    // Range Line
+    Transform rangeLineTransform;
+    rangeLineTransform.setScale(Vector3f(1.0f, 1.0f, directionalLight.getRange()));
+    renderContext.transform = cameraWorldMatrix * rangeLineTransform.getMatrix();
+    m_line->draw(renderContext);
   }
 
   void SceneViewportLightGizmoRenderer::drawLightIcon(
