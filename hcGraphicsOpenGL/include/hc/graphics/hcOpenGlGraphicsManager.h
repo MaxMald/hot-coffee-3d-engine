@@ -106,6 +106,7 @@ namespace hc
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
     Vector<DrawCommand> m_drawCommands;
+    polygonFillType::Type m_polygonFillType;
 
     /**
      * @copydoc IGraphicsManager::initialize

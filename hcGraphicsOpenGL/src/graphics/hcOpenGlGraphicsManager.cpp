@@ -41,7 +41,8 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_drawCommands()
+    m_drawCommands(),
+    m_polygonFillType(polygonFillType::Solid)
   {
   }
 
@@ -85,25 +86,12 @@ namespace hc
       GL_FRONT_AND_BACK,
       openGlGraphicsUtilities::getOpenGlPolygonModeFromPolygonFillType(fillType)
     );
+    m_polygonFillType = fillType;
   }
 
   polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
   {
-    GLint mode[2];
-    glGetIntegerv(GL_POLYGON_MODE, mode);
-    if (mode[0] == GL_FILL && mode[1] == GL_FILL)
-      return polygonFillType::Solid;
-    else if (mode[0] == GL_LINE && mode[1] == GL_LINE)
-      return polygonFillType::Wireframe;
-    else if (mode[0] == GL_POINT && mode[1] == GL_POINT)
-      return polygonFillType::Point;
-
-    throw RuntimeErrorException(
-      String::Format(
-        "Unsupported OpenGL polygon mode combination: front=%u, back=%u",
-        mode[0], mode[1]
-      )
-    );
+    return m_polygonFillType;
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
