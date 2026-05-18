@@ -90,6 +90,15 @@ namespace hc::editor
     const GameObject* activeGameObject
   )
   {
+    if (&gameObject != activeGameObject)
+    {
+      // TODO:
+      // Currently we skip non-selected games objects, however we may want to draw icons
+      // for non-selected light game objects in the future.
+
+      return;
+    }
+
     for (IComponent* component : gameObject.getComponents())
     {
       componentType::Type componentType = component->getType();
@@ -271,21 +280,4 @@ namespace hc::editor
     // TODO:
     // - Draw billboard/icon mesh with constant-ish screen size.
   }
-
-  Transform SceneViewportLightGizmoRenderer::computeSpotlightConeTransform(
-    const SpotLight& spotLight
-  ) const
-  {
-    Transform coneTransform;
-
-    float coneHeight = Math::Cos(spotLight.getOuterConeAngle() * Math::DegToRad);
-    float coneRadius = Math::Sin(spotLight.getOuterConeAngle() * Math::DegToRad);
-
-    coneTransform.setPosition(Vector3f(0.0f, 0.0f, -coneHeight * spotLight.getRange() * 0.5f));
-    coneTransform.setRotation(Vector3f(Math::HalfPi, 0.0f, 0.0f));
-    coneTransform.setScale(Vector3f(coneRadius, coneHeight * spotLight.getRange(), coneRadius));
-
-    return coneTransform;
-  }
-  
 }

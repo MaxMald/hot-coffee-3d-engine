@@ -27,7 +27,6 @@ namespace hc::editor
     IAssetManager& m_assetManager;
     IGraphicsManager& m_graphicsManager;
     bool m_enabled;
-
     SharedPtr<IMesh> m_line;
     SharedPtr<IMesh> m_circle;
     SharedPtr<IMesh> m_square;
@@ -66,9 +65,5 @@ namespace hc::editor
       const Camera& camera,
       bool isSelected
     );
-
-    Transform computeSpotlightConeTransform(
-      const SpotLight& spotLight
-    ) const;
   };
 }
