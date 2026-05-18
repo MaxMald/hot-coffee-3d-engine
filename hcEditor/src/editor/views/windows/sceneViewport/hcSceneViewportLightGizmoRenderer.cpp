@@ -98,7 +98,6 @@ namespace hc::editor
       {
         SpotLightComponent* spotLightComponent =
           reinterpret_cast<SpotLightComponent*>(component);
-
         spotLightComponent->updateLight();
 
         drawSpotLightGizmo(
@@ -108,9 +107,18 @@ namespace hc::editor
           (&gameObject == activeGameObject)
         );
       }
-      else
+      else if (componentType == componentType::OmniLight)
       {
-        // TODO other light types.
+        OmniLightComponent* omniLightComponent =
+          reinterpret_cast<OmniLightComponent*>(component);
+        omniLightComponent->updateLight();
+
+        drawOmniLightGizmo(
+          gameObject,
+          *omniLightComponent,
+          camera,
+          (&gameObject == activeGameObject)
+        );
       }
     }
   }
@@ -167,6 +175,41 @@ namespace hc::editor
 
     renderContext.transform = cameraWorldMatrix * rangeLineTransform.getMatrix();
     m_line->draw(renderContext);
+  }
+
+  void SceneViewportLightGizmoRenderer::drawOmniLightGizmo(
+    const GameObject& gameObject,
+    const OmniLightComponent& omniLightComponent,
+    const Camera& camera,
+    bool isSelected
+  )
+  {
+    if (!isSelected)
+      return;
+
+    const OmniLight& omniLight = omniLightComponent.getOmniLight();
+
+    Matrix4 cameraWorldMatrix = gameObject.getWorldMatrix();
+    RenderContext renderContext;
+    renderContext.cameraMatrices = CameraMatrices::Create(camera);
+    renderContext.cameraPosition = camera.getPosition();
+    renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
+
+    // Ring 1
+    Transform sphereTransform;
+    sphereTransform.setScale(Vector3f(omniLight.getRange(), omniLight.getRange(), omniLight.getRange()));
+    renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
+    m_circle->draw(renderContext);
+
+    // Ring 2
+    sphereTransform.setRotation(0.0f, 0.0f, Math::HalfPi);
+    renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
+    m_circle->draw(renderContext);
+
+    // Ring 3
+    sphereTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
+    renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
+    m_circle->draw(renderContext);
   }
 
   void SceneViewportLightGizmoRenderer::drawLightIcon(

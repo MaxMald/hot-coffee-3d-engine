@@ -46,6 +46,13 @@ namespace hc::editor
       bool isSelected
     );
 
+    void drawOmniLightGizmo(
+      const GameObject& gameObject,
+      const OmniLightComponent& omniLightComponent,
+      const Camera& camera,
+      bool isSelected
+    );
+
     void drawLightIcon(
       const GameObject& gameObject,
       const ALightComponent& lightComponent,
