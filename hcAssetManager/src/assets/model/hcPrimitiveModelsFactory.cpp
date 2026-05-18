@@ -136,8 +136,8 @@ namespace hc
     UInt32 vertexIndex = 0;
     UInt32 indexIndex = 0;
 
-    const float sideNormalY = radius / sqrt(radius * radius + height * height);
-    const float sideNormalXZ = height / sqrt(radius * radius + height * height);
+    const float sideNormalY = radius / Math::Sqrt(radius * radius + height * height);
+    const float sideNormalXZ = height / Math::Sqrt(radius * radius + height * height);
 
     for (UInt32 i = 0; i < segments; ++i)
     {
@@ -146,12 +146,12 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(x * sideNormalXZ / radius, sideNormalY, z * sideNormalXZ / radius);
-      vertices[vertexIndex].tangent = Vector3f(-sin(angle), 0.0f, cos(angle));
+      vertices[vertexIndex].tangent = Vector3f(-Math::Sin(angle), 0.0f, Math::Cos(angle));
       vertices[vertexIndex].texCoord = Vector2f(static_cast<float>(i) / static_cast<float>(segments), 1.0f);
       vertexIndex++;
     }
@@ -185,14 +185,14 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(0.0f, -1.0f, 0.0f);
       vertices[vertexIndex].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-      float u = (cos(angle) + 1.0f) * 0.5f;
-      float v = (sin(angle) + 1.0f) * 0.5f;
+      float u = (Math::Cos(angle) + 1.0f) * 0.5f;
+      float v = (Math::Sin(angle) + 1.0f) * 0.5f;
       vertices[vertexIndex].texCoord = Vector2f(u, v);
       vertexIndex++;
     }
@@ -247,8 +247,8 @@ namespace hc
         * Math::Pi
         / static_cast<float>(latitudeSegments);
 
-      float sinTheta = sin(theta);
-      float cosTheta = cos(theta);
+      float sinTheta = Math::Sin(theta);
+      float cosTheta = Math::Cos(theta);
 
       for (UInt32 lon = 0; lon <= longitudeSegments; ++lon)
       {
@@ -257,8 +257,8 @@ namespace hc
           * Math::Pi
           / static_cast<float>(longitudeSegments);
 
-        float sinPhi = sin(phi);
-        float cosPhi = cos(phi);
+        float sinPhi = Math::Sin(phi);
+        float cosPhi = Math::Cos(phi);
 
         float x = cosPhi * sinTheta;
         float y = cosTheta;
@@ -336,12 +336,12 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(x / radius, 0.0f, z / radius);
-      vertices[vertexIndex].tangent = Vector3f(-sin(angle), 0.0f, cos(angle));
+      vertices[vertexIndex].tangent = Vector3f(-Math::Sin(angle), 0.0f, Math::Cos(angle));
       vertices[vertexIndex].texCoord = Vector2f(static_cast<float>(i) / static_cast<float>(segments), 1.0f);
       vertexIndex++;
     }
@@ -353,12 +353,12 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(x / radius, 0.0f, z / radius);
-      vertices[vertexIndex].tangent = Vector3f(-sin(angle), 0.0f, cos(angle));
+      vertices[vertexIndex].tangent = Vector3f(-Math::Sin(angle), 0.0f, Math::Cos(angle));
       vertices[vertexIndex].texCoord = Vector2f(static_cast<float>(i) / static_cast<float>(segments), 0.0f);
       vertexIndex++;
     }
@@ -389,14 +389,14 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(0.0f, -1.0f, 0.0f);
       vertices[vertexIndex].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-      float u = (cos(angle) + 1.0f) * 0.5f;
-      float v = (sin(angle) + 1.0f) * 0.5f;
+      float u = (Math::Cos(angle) + 1.0f) * 0.5f;
+      float v = (Math::Sin(angle) + 1.0f) * 0.5f;
       vertices[vertexIndex].texCoord = Vector2f(u, v);
       vertexIndex++;
     }
@@ -423,14 +423,14 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(0.0f, 1.0f, 0.0f);
       vertices[vertexIndex].tangent = Vector3f(1.0f, 0.0f, 0.0f);
-      float u = (cos(angle) + 1.0f) * 0.5f;
-      float v = (sin(angle) + 1.0f) * 0.5f;
+      float u = (Math::Cos(angle) + 1.0f) * 0.5f;
+      float v = (Math::Sin(angle) + 1.0f) * 0.5f;
       vertices[vertexIndex].texCoord = Vector2f(u, v);
       vertexIndex++;
     }
@@ -526,8 +526,8 @@ namespace hc
     const float height = 1.0f;
     const float halfHeight = height * 0.5f;
 
-    const float sideNormalY = halfSize / sqrt(halfSize * halfSize + height * height);
-    const float sideNormalXZ = height / sqrt(halfSize * halfSize + height * height);
+    const float sideNormalY = halfSize / Math::Sqrt(halfSize * halfSize + height * height);
+    const float sideNormalXZ = height / Math::Sqrt(halfSize * halfSize + height * height);
 
     vertices[0].position = Vector3f(-halfSize, -halfHeight, -halfSize);
     vertices[0].normal = Vector3f(0.0f, 0.0f, -sideNormalXZ);
@@ -675,8 +675,8 @@ namespace hc
         * Math::Pi
         / static_cast<float>(segments);
 
-      float x = cos(angle) * radius;
-      float z = sin(angle) * radius;
+      float x = Math::Cos(angle) * radius;
+      float z = Math::Sin(angle) * radius;
 
       vertices[vertexIndex].position = Vector3f(x, -halfHeight, z);
       vertices[vertexIndex].normal = Vector3f(
@@ -684,7 +684,7 @@ namespace hc
         sideNormalY,
         z * sideNormalXZ / radius
       );
-      vertices[vertexIndex].tangent = Vector3f(-sin(angle), 0.0f, cos(angle));
+      vertices[vertexIndex].tangent = Vector3f(-Math::Sin(angle), 0.0f, Math::Cos(angle));
       vertices[vertexIndex].texCoord = Vector2f(
         static_cast<float>(i) / static_cast<float>(segments),
         1.0f

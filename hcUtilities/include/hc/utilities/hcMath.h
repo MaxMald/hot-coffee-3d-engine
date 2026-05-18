@@ -65,6 +65,11 @@ namespace hc
       return std::tan(radians);
     }
 
+    static float Sqrt(float value)
+    {
+      return std::sqrt(value);
+    }
+
     static constexpr bool IsNearlyEqual(
       float a, float b, float epsilon = 1e-6f
     )
