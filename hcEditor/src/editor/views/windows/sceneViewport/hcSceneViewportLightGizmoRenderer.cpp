@@ -161,7 +161,7 @@ namespace hc::editor
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
-    renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
+    renderContext.modelPosition = gameObject.getWorldPosition();
 
     // Outer Circle
     float coneHeight = Math::Cos(spotLight.getOuterConeAngle() * Math::DegToRad);
@@ -215,7 +215,7 @@ namespace hc::editor
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
-    renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
+    renderContext.modelPosition = gameObject.getWorldPosition();
 
     // Ring 1
     Transform sphereTransform;
@@ -250,7 +250,7 @@ namespace hc::editor
     RenderContext renderContext;
     renderContext.cameraMatrices = CameraMatrices::Create(camera);
     renderContext.cameraPosition = camera.getPosition();
-    renderContext.modelPosition = Matrix4::ExtractTranslation(renderContext.transform);
+    renderContext.modelPosition = gameObject.getWorldPosition();
 
     // Plane
     Transform planeTransform;
