@@ -12,11 +12,13 @@ namespace hc
 
   void DirectionalLightComponent::serialize(BinaryWriter& writer) const
   {
+    ABaseComponent::serialize(writer);
     m_directionalLight.serialize(writer);
   }
 
   void DirectionalLightComponent::deserialize(BinaryReader& reader)
   {
+    ABaseComponent::deserialize(reader);
     m_directionalLight.deserialize(reader);
   }
 

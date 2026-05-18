@@ -12,11 +12,13 @@ namespace hc
 
   void OmniLightComponent::serialize(BinaryWriter& writer) const
   {
+    ABaseComponent::serialize(writer);
     m_omniLight.serialize(writer);
   }
 
   void OmniLightComponent::deserialize(BinaryReader& reader)
   {
+    ABaseComponent::deserialize(reader);
     m_omniLight.deserialize(reader);
   }
 

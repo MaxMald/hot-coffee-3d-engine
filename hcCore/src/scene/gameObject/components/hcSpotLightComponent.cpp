@@ -12,11 +12,13 @@ namespace hc
 
   void SpotLightComponent::serialize(BinaryWriter& writer) const
   {
+    ABaseComponent::serialize(writer);
     m_spotLight.serialize(writer);
   }
 
   void SpotLightComponent::deserialize(BinaryReader& reader)
   {
+    ABaseComponent::deserialize(reader);
     m_spotLight.deserialize(reader);
   }
 
