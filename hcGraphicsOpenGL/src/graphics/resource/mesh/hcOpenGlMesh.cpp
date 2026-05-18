@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/mesh/hcOpenGlMesh.h"
 
 #include <GL/glew.h>
-#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
@@ -155,12 +155,12 @@ namespace hc
 
   drawType::Type OpenGlMesh::getDrawType() const
   {
-    return openGlGraphicsUtilities::getDrawTypeFromOpenGlMode(m_drawMode);
+    return openGlGraphicsUtilities::GetDrawTypeFromOpenGlMode(m_drawMode);
   }
 
   void OpenGlMesh::setDrawType(drawType::Type drawType)
   {
-    m_drawMode = openGlGraphicsUtilities::getOpenGlDrawModeFromDrawType(drawType);
+    m_drawMode = openGlGraphicsUtilities::GetOpenGlDrawModeFromDrawType(drawType);
   }
 
   void OpenGlMesh::bind()

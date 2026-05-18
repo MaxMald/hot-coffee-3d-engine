@@ -1,11 +1,11 @@
-#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include <GL/glew.h>
 
 namespace hc
 {
   namespace openGlGraphicsUtilities
   {
-    void checkAndLogPosibleError()
+    void CheckAndLogPossibleError()
     {
       GLenum error = glGetError();
       if (error != GL_NO_ERROR)
@@ -17,7 +17,7 @@ namespace hc
       }
     }
 
-    UInt32 getOpenGlDrawModeFromDrawType(drawType::Type drawType)
+    UInt32 GetOpenGlDrawModeFromDrawType(drawType::Type drawType)
     {
       switch (drawType)
       {
@@ -38,7 +38,7 @@ namespace hc
       }
     }
 
-    drawType::Type getDrawTypeFromOpenGlMode(UInt32 glMode)
+    drawType::Type GetDrawTypeFromOpenGlMode(UInt32 glMode)
     {
       switch (glMode)
       {
@@ -59,7 +59,7 @@ namespace hc
       }
     }
 
-    UInt32 getOpenGlPolygonModeFromPolygonFillType(polygonFillType::Type fillType)
+    UInt32 GetOpenGlPolygonModeFromPolygonFillType(polygonFillType::Type fillType)
     {
       switch (fillType)
       {
@@ -76,7 +76,7 @@ namespace hc
       }
     }
 
-    polygonFillType::Type getPolygonFillTypeFromOpenGlPolygonMode(UInt32 glPolygonMode)
+    polygonFillType::Type GetPolygonFillTypeFromOpenGlPolygonMode(UInt32 glPolygonMode)
     {
       switch (glPolygonMode)
       {

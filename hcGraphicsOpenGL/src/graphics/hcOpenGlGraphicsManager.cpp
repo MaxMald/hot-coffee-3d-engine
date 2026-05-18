@@ -8,7 +8,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
-#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include "hc/graphics/hcOpenGlFrameBuffer.h"
 
 namespace hc
@@ -84,7 +84,7 @@ namespace hc
   {
     glPolygonMode(
       GL_FRONT_AND_BACK,
-      openGlGraphicsUtilities::getOpenGlPolygonModeFromPolygonFillType(fillType)
+      openGlGraphicsUtilities::GetOpenGlPolygonModeFromPolygonFillType(fillType)
     );
     m_polygonFillType = fillType;
   }

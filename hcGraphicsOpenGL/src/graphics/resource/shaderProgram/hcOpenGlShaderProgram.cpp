@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgram.h"
 #include "hc/graphics/resource/shader/hcOpenGlShader.h"
 #include "hc/graphics/resource/texture/hcOpenGlTexture.h"
-#include "hc/graphics/hcOpenGlGraphicsUtilitites.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
@@ -99,7 +99,7 @@ namespace hc
     if (location != -1)
       glUniform1f(location, value);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, Int32 value)
@@ -108,7 +108,7 @@ namespace hc
     if (location != -1)
       glUniform1i(location, value);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, bool value)
@@ -117,7 +117,7 @@ namespace hc
     if (location != -1)
       glUniform1i(location, value ? 1 : 0);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Vector3f& v3f)
@@ -126,7 +126,7 @@ namespace hc
     if (location != -1)
       glUniform3f(location, v3f.x, v3f.y, v3f.z);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Color& color)
@@ -135,7 +135,7 @@ namespace hc
     if (location != -1)
       glUniform4f(location, color.r, color.g, color.b, color.a);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniform(const String& name, const Matrix4& matrix4x4)
@@ -144,7 +144,7 @@ namespace hc
     if (location != -1)
       glUniformMatrix4fv(location, 1, GL_TRUE, matrix4x4.m[0]);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::setUniformTexture(const String& name, Int32 slotLocation)
@@ -153,7 +153,7 @@ namespace hc
     if (location != -1)
       glUniform1i(location, slotLocation);
 
-    openGlGraphicsUtilities::checkAndLogPosibleError();
+    openGlGraphicsUtilities::CheckAndLogPossibleError();
   }
 
   void OpenGlShaderProgram::destroy()
