@@ -100,7 +100,7 @@ namespace hc
       child->draw(localRenderContext);
   }
 
-  void GameObject::update(const Time& elapsedTime)
+  void GameObject::preUpdate(const Time& elapsedTime)
   {
     for (IUpdatableComponent* updatableComponent : m_updatableComponents)
     {
@@ -108,12 +108,24 @@ namespace hc
         updatableComponent->preUpdate(elapsedTime.toSeconds());
     }
 
+    for (auto& child : m_children)
+      child->preUpdate(elapsedTime);
+  }
+
+  void GameObject::update(const Time& elapsedTime)
+  {
     for (IUpdatableComponent* updatableComponent : m_updatableComponents)
     {
       if (updatableComponent)
         updatableComponent->update(elapsedTime.toSeconds());
     }
 
+    for (auto& child : m_children)
+      child->update(elapsedTime);
+  }
+
+  void GameObject::postUpdate(const Time& elapsedTime)
+  {
     for (IUpdatableComponent* updatableComponent : m_updatableComponents)
     {
       if (updatableComponent)
@@ -121,7 +133,7 @@ namespace hc
     }
 
     for (auto& child : m_children)
-      child->update(elapsedTime);
+      child->postUpdate(elapsedTime);
   }
 
   void GameObject::setName(const String& name)

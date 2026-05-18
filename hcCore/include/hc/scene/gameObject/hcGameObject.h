@@ -76,11 +76,25 @@ namespace hc
     virtual void draw(const RenderContext& renderContext) override;
 
     /**
+     * @brief Pre-update step for the GameObject and its children.
+     *
+     * @param elapsedTime Time elapsed since the last update.
+     */
+    void preUpdate(const Time& elapsedTime);
+
+    /**
      * @brief Updates the GameObject and its children.
      *
      * @param elapsedTime Time elapsed since the last update.
      */
     void update(const Time& elapsedTime);
+
+    /**
+     * @brief Post-update step for the GameObject and its children.
+     *
+     * @param elapsedTime Time elapsed since the last update.
+     */
+    void postUpdate(const Time& elapsedTime);
 
     /**
      * @brief Sets the name of the GameObject.
