@@ -17,7 +17,9 @@ namespace hc
       case Type::Point:
         return "Point";
       default:
-        return "Unknown";
+        throw RuntimeErrorException(
+          String::Format("Not implemented polygon fill type: %d", static_cast<Int32>(type))
+        );
       }
     }
 
