@@ -42,13 +42,12 @@ namespace hc
       m_materialManager
     ),
     m_drawCommands(),
-    m_polygonFillType(polygonFillType::Solid)
-  {
-  }
+    m_polygonFillType(polygonFillType::Solid),
+    m_renderPipelineType(renderPipelineType::Forward)
+  {}
 
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
-  {
-  }
+  {}
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
   {
@@ -92,6 +91,23 @@ namespace hc
   polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
   {
     return m_polygonFillType;
+  }
+
+  void OpenGlGraphicsManager::setRenderPipelineType(
+    renderPipelineType::Type renderPipelineType
+  )
+  {
+    // Note:
+    // For now, we only support one render pipeline type, so this function does not
+    // change any internal state. In the future, if multiple render pipeline types
+    // are supported, this function should update the internal state accordingly.
+
+    m_renderPipelineType = renderPipelineType;
+  }
+
+  renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
+  {
+    return m_renderPipelineType;
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
@@ -292,7 +308,7 @@ namespace hc
       {
         glDepthMask(GL_TRUE);
         glDisable(GL_BLEND);
-      } 
+      }
 
       if (isTwoSided)
         glEnable(GL_CULL_FACE);

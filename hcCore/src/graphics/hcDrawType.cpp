@@ -19,7 +19,9 @@ namespace hc
       case Type::Points:
         return "Points";
       default:
-        throw RuntimeErrorException("Not implemented draw type.");
+        throw RuntimeErrorException(
+          String::Format("Not implemented draw type: %d", static_cast<Int32>(type))
+        );
       }
     }
 

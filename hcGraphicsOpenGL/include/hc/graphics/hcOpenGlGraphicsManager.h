@@ -55,6 +55,16 @@ namespace hc
     polygonFillType::Type getPolygonFillType() const override;
 
     /**
+     * @copydoc IGraphicsManager::setRenderPipelineType
+     */
+    void setRenderPipelineType(renderPipelineType::Type renderPipelineType) override;
+
+    /**
+     * @copydoc IGraphicsManager::getRenderPipelineType
+     */
+    renderPipelineType::Type getRenderPipelineType() const override;
+
+    /**
      * @copydoc IGraphicsManager::getTextureManager
      */
     ITextureManager& getTextureManager() override;
@@ -107,6 +117,7 @@ namespace hc
     MeshManager m_meshManager;
     Vector<DrawCommand> m_drawCommands;
     polygonFillType::Type m_polygonFillType;
+    renderPipelineType::Type m_renderPipelineType;
 
     /**
      * @copydoc IGraphicsManager::initialize

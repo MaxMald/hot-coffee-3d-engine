@@ -11,7 +11,9 @@ namespace hc
         case OPENGL:
           return "OpenGL";
         default:
-          return "Unknown";
+          throw RuntimeErrorException(
+            String::Format("Not implemented graphics backend type: %d", static_cast<Int32>(type))
+          );
       }
     }
 
