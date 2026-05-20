@@ -129,7 +129,13 @@ namespace hc
      */
     void destroy() override;
 
+    void executeForwardPass();
+    void executeDeferredGeometryPass();
+    void executeDeferredLightingPass();
+    void executeForwardTransparentPass();
+
     void executeDrawCommand(const DrawCommand& command);
+    bool isValidDrawCommand(const DrawCommand& drawCommand, String& errorMessage);
 
     friend class OpenGlGraphicsPlugin;
   };
