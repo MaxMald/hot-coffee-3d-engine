@@ -215,13 +215,11 @@ namespace hc
       }
 
       materialRenderMode::Type renderMode = command.material->getRenderMode();
-
       if (renderMode != materialRenderMode::Type::AlphaCutout
         && renderMode != materialRenderMode::Type::Opaque)
         return;
 
       bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
-
       if (isTwoSided)
         glDisable(GL_CULL_FACE);
 
