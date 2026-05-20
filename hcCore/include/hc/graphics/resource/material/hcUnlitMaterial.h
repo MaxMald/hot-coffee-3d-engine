@@ -61,7 +61,7 @@ namespace hc
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(const CameraMatrices& cameraMatrices) override;
+    void bind(const CameraMatrices& cameraMatrices, renderPassType::Type renderPass) override;
 
     /**
      * @copydoc IMaterial::updateModelMatrix
