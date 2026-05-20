@@ -2,9 +2,20 @@
 
 namespace hc
 {
+  OpenGlTexture::OpenGlTexture() :
+    m_id(Id::Create()),
+    m_textureId(0),
+    m_width(0),
+    m_height(0),
+    m_channels(0),
+    m_internalFormat(GL_RGBA8),
+    m_format(GL_RGBA),
+    m_type(GL_UNSIGNED_BYTE),
+    m_created(false)
+  {}
+
   OpenGlTexture::OpenGlTexture(SharedPtr<Image> image) :
     m_id(Id::Create()),
-    m_image(image),
     m_textureId(0),
     m_width(0),
     m_height(0),
@@ -17,35 +28,7 @@ namespace hc
     if (!image)
       return;
 
-    m_width = image->getWidth();
-    m_height = image->getHeight();
-    m_channels = image->getChannels();
-
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
-    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
-
-    glTexImage2D(
-      GL_TEXTURE_2D,
-      0,
-      m_internalFormat,
-      static_cast<Int32>(m_width),
-      static_cast<Int32>(m_height),
-      0,
-      m_format,
-      m_type,
-      image->getBuffer().data()
-    );
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    m_created = true;
+    initialize(*image);
   }
 
   OpenGlTexture::OpenGlTexture(
@@ -56,7 +39,6 @@ namespace hc
     GLenum type
   ) :
     m_id(Id::Create()),
-    m_image(nullptr),
     m_textureId(0),
     m_width(width),
     m_height(height),
@@ -66,6 +48,8 @@ namespace hc
     m_type(type),
     m_created(false)
   {
+    m_channels = (format == GL_RGBA) ? 4 : 3;
+
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 
@@ -101,6 +85,110 @@ namespace hc
     return m_id;
   }
 
+  void OpenGlTexture::initialize(const Image& image)
+  {
+    if (m_created)
+      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+
+    if (image.getWidth() == 0 || image.getHeight() == 0)
+      throw InvalidArgumentException(
+        String::Format(
+          "Invalid image dimensions (%ux%u) for texture creation. Dimensions must be greater than zero.",
+          image.getWidth(),
+          image.getHeight()
+        )
+      );
+
+    if (image.getChannels() != 3 && image.getChannels() != 4)
+      throw InvalidArgumentException(
+        String::Format(
+          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
+          image.getChannels()
+        )
+      );
+
+    m_width = image.getWidth();
+    m_height = image.getHeight();
+    m_channels = image.getChannels();
+    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
+    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
+
+    glGenTextures(1, &m_textureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   
+
+    glTexImage2D(
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
+      static_cast<Int32>(m_width),
+      static_cast<Int32>(m_height),
+      0,
+      m_format,
+      m_type,
+      image.getBuffer().data()
+    );
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_created = true;
+  }
+
+  void OpenGlTexture::initialize(UInt32 width, UInt32 height, UInt8 channels)
+  {
+    if (m_created)
+      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+
+    if (width == 0 || height == 0)
+      throw InvalidArgumentException(
+        String::Format(
+          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
+          width,
+          height
+        )
+      );
+
+    if (channels != 3 && channels != 4)
+      throw InvalidArgumentException(
+        String::Format(
+          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
+          channels
+        )
+      );
+
+    m_width = width;
+    m_height = height;
+    m_channels = channels;
+    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
+    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
+
+    glGenTextures(1, &m_textureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
+      static_cast<Int32>(m_width),
+      static_cast<Int32>(m_height),
+      0,
+      m_format,
+      m_type,
+      nullptr
+    );
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_created = true;
+  }
+
   UInt32 OpenGlTexture::getWidth() const
   {
     return m_width;
@@ -111,21 +199,20 @@ namespace hc
     return m_height;
   }
 
+  UInt8 OpenGlTexture::getChannels() const
+  {
+    return m_channels;
+  }
+
   void OpenGlTexture::resize(UInt32 width, UInt32 height)
   {
-    if (!m_created)
-      return;
+    assertIsCreated();
 
     if (width == m_width && height == m_height)
       return;
 
     if (width == 0 || height == 0)
       throw InvalidArgumentException("Texture dimensions must be greater than zero");
-
-    if (m_image != nullptr)
-      throw RuntimeErrorException(
-        "Cannot resize a texture created from an image. Create a new texture instead."
-      );
 
     m_width = width;
     m_height = height;
@@ -178,16 +265,6 @@ namespace hc
     }
   }
 
-  bool OpenGlTexture::isImageBased() const
-  {
-    return m_image != nullptr;
-  }
-
-  SharedPtr<Image> OpenGlTexture::getImage()
-  {
-    return m_image;
-  }
-
   void* OpenGlTexture::getNativeHandle() const
   {
     // Return the address of the GLuint as a void* for interoperability
@@ -197,5 +274,11 @@ namespace hc
   GLuint OpenGlTexture::getTextureId() const
   {
     return m_textureId;
+  }
+
+  void OpenGlTexture::assertIsCreated() const
+  {
+    if (!m_created)
+      throw RuntimeErrorException("Texture has not been created yet.");
   }
 }

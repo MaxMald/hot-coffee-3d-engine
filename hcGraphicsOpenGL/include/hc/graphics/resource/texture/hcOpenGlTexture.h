@@ -14,6 +14,11 @@ namespace hc
   {
   public:
     /**
+     * @brief Default constructor for OpenGlTexture. Creates an uninitialized texture.
+     */
+    OpenGlTexture();
+
+    /**
      * @brief Constructs an OpenGlTexture from the given image.
      *
      * @param image Shared pointer to the image data used for texture creation.
@@ -47,6 +52,16 @@ namespace hc
     const Id& getId() const override;
 
     /**
+     * @copydoc ITexture::initialize
+     */
+    void initialize(const Image& image) override;
+
+    /**
+     * @copydoc ITexture::initialize
+     */
+    void initialize(UInt32 width, UInt32 height, UInt8 channels) override;
+
+    /**
      * @brief Returns the width of the texture in pixels.
      *
      * @return Texture width.
@@ -59,6 +74,11 @@ namespace hc
      * @return Texture height.
      */
     UInt32 getHeight() const override;
+
+    /**
+     * @copydoc ITexture::getChannels
+     */
+    UInt8 getChannels() const override;
 
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created
@@ -96,20 +116,6 @@ namespace hc
     void destroy() override;
 
     /**
-     * @brief Checks if the texture was created from an image.
-     *
-     * @return True if the texture is image-based, false otherwise.
-     */
-    bool isImageBased() const override;
-
-    /**
-     * @brief Returns the image associated with this texture.
-     *
-     * @return Shared pointer to the image.
-     */
-    SharedPtr<Image> getImage() override;
-
-    /**
      * @brief Returns the native OpenGL handle for the texture.
      *
      * @return Pointer to the OpenGL texture handle.
@@ -125,14 +131,15 @@ namespace hc
 
   private:
     Id m_id;
-    SharedPtr<Image> m_image;
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;
-    UInt32 m_channels;
+    UInt8 m_channels;
     GLenum m_internalFormat;
     GLenum m_format;
     GLenum m_type;
     bool m_created;
+
+    void assertIsCreated() const;
   };
 }
