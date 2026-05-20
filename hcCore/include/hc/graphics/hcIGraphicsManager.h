@@ -19,6 +19,7 @@ namespace hc
   class IShaderManager;
   class IShaderProgramManager;
   class IMeshManager;
+  class IGBuffer;
 
   /**
    * @brief Interface for graphics manager classes.
@@ -125,6 +126,13 @@ namespace hc
      * @return Reference to the IMeshManager instance.
      */
     virtual IMeshManager& getMeshManager() = 0;
+
+    /**
+     * @brief Returns the geometry buffer used for deferred rendering.
+     *
+     * @return Reference to the IGBuffer instance.
+     */
+    virtual IGBuffer& getGBuffer() = 0;
 
     /**
      * @brief Creates a framebuffer with the specified dimensions.

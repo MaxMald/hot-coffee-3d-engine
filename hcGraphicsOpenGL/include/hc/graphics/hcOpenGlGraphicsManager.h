@@ -90,6 +90,11 @@ namespace hc
     IMeshManager& getMeshManager() override;
 
     /**
+     * @copydoc IGraphicsManager::getGBuffer
+     */
+    IGBuffer& getGBuffer() override;
+
+    /**
      * @copydoc IGraphicsManager::createFrameBuffer
      */
     FrameBufferPtr createFrameBuffer(

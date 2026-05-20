@@ -141,6 +141,11 @@ namespace hc
     return m_meshManager;
   }
 
+  IGBuffer& OpenGlGraphicsManager::getGBuffer()
+  {
+    // TODO: return the GBuffer instance
+  }
+
   FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(
     UInt32 width,
     UInt32 height
