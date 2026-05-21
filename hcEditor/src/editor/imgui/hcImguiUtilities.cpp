@@ -80,7 +80,7 @@ namespace hc::editor
     }
 
     void DrawTexture(
-      ITexture* texture,
+      const ITexture* texture,
       float width,
       float height
     )
@@ -98,7 +98,7 @@ namespace hc::editor
       }
     }
     void DrawTexture(
-      ITexture* texture,
+      const ITexture* texture,
       float width,
       float height,
       const Vector2f& uvTopLeft,
