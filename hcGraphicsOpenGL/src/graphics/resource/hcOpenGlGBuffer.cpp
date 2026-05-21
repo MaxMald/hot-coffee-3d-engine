@@ -25,7 +25,9 @@ namespace hc
   {}
 
   OpenGlGBuffer::~OpenGlGBuffer()
-  {}
+  {
+    destroy();
+  }
 
   void OpenGlGBuffer::initialize(UInt32 width, UInt32 height)
   {
