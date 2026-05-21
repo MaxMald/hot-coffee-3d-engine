@@ -26,6 +26,8 @@ namespace hc
     const ITexture& getAlbedoAlpha() const override;
     const ITexture& getMaterialParameters() const override;
 
+    void destroy() override;
+
   private:
     bool m_valid;
     UInt32 m_width;

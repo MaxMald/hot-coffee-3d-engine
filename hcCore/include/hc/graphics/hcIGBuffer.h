@@ -101,6 +101,11 @@ namespace hc
      */
     virtual const ITexture& getMaterialParameters() const = 0;
 
+    /**
+     * Destroys all internal resources associated with the geometry buffer.
+     */
+    virtual void destroy() = 0;
+
   protected:
     IGBuffer() = default;
   };

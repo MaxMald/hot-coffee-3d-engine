@@ -234,4 +234,28 @@ namespace hc
     if (!m_valid)
       throw RuntimeErrorException("GBuffer is not valid.");
   }
+
+  void OpenGlGBuffer::destroy()
+  {
+    m_positionTexture.destroy();
+    m_normalRoughnessTexture.destroy();
+    m_albedoAlphaTexture.destroy();
+    m_materialParametersTexture.destroy();
+
+    if (m_depthStencilBufferId != 0)
+    {
+      glDeleteRenderbuffers(1, &m_depthStencilBufferId);
+      m_depthStencilBufferId = 0;
+    }
+
+    if (m_gBufferId != 0)
+    {
+      glDeleteFramebuffers(1, &m_gBufferId);
+      m_gBufferId = 0;
+    }
+
+    m_width = 0;
+    m_height = 0;
+    m_valid = false;
+  }
 }
