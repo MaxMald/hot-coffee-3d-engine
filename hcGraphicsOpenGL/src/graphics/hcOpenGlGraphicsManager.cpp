@@ -102,6 +102,8 @@ namespace hc
       executeDeferredLightingPass();
       executeForwardTransparentPass();
     }
+
+    m_drawCommands.clear();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
@@ -216,7 +218,6 @@ namespace hc
   {
     for (const DrawCommand& command : m_drawCommands)
       executeDrawCommand(command);
-    m_drawCommands.clear();
   }
 
   void OpenGlGraphicsManager::executeDeferredGeometryPass()
