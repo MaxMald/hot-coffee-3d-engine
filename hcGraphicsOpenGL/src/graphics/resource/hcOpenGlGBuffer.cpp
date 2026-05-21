@@ -31,92 +31,100 @@ namespace hc
 
   void OpenGlGBuffer::initialize(UInt32 width, UInt32 height)
   {
-    if (m_valid)
-      throw RuntimeErrorException("GBuffer is already initialized.");
-
-    if (width == 0 || height == 0)
-      throw RuntimeErrorException("GBuffer dimensions must be greater than zero.");
-
-    glGenFramebuffers(1, &m_gBufferId);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
-
-    m_positionTexture.initialize(
-      width, height,
-      GL_RGBA16F, GL_RGBA, GL_FLOAT
-    );
-
-    m_normalRoughnessTexture.initialize(
-      width, height,
-      GL_RGBA16F, GL_RGBA, GL_FLOAT
-    );
-
-    m_albedoAlphaTexture.initialize(
-      width, height,
-      GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
-    );
-
-    m_materialParametersTexture.initialize(
-      width, height,
-      GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
-    );
-
-    glBindTexture(GL_TEXTURE_2D, m_positionTexture.getTextureId());
-    glFramebufferTexture2D(
-      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-      m_positionTexture.getTextureId(), 0
-    );
-
-    glBindTexture(GL_TEXTURE_2D, m_normalRoughnessTexture.getTextureId());
-    glFramebufferTexture2D(
-      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
-      m_normalRoughnessTexture.getTextureId(), 0
-    );
-
-    glBindTexture(GL_TEXTURE_2D, m_albedoAlphaTexture.getTextureId());
-    glFramebufferTexture2D(
-      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,
-      m_albedoAlphaTexture.getTextureId(), 0
-    );
-
-    glBindTexture(GL_TEXTURE_2D, m_materialParametersTexture.getTextureId());
-    glFramebufferTexture2D(
-      GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D,
-      m_materialParametersTexture.getTextureId(), 0
-    );
-
-    glDrawBuffers(4, GBufferColorAttachments);
-
-    glGenRenderbuffers(1, &m_depthStencilBufferId);
-    glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
-    glRenderbufferStorage(
-      GL_RENDERBUFFER,
-      GL_DEPTH24_STENCIL8,
-      width,
-      height
-    );
-
-    glFramebufferRenderbuffer(
-      GL_FRAMEBUFFER,
-      GL_DEPTH_STENCIL_ATTACHMENT,
-      GL_RENDERBUFFER,
-      m_depthStencilBufferId
-    );
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    try
     {
+      if (m_valid)
+        throw RuntimeErrorException("GBuffer is already initialized.");
+
+      if (width == 0 || height == 0)
+        throw InvalidArgumentException("GBuffer dimensions must be greater than zero.");
+
+      glGenFramebuffers(1, &m_gBufferId);
+      glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
+
+      m_positionTexture.initialize(
+        width, height,
+        GL_RGBA16F, GL_RGBA, GL_FLOAT
+      );
+
+      m_normalRoughnessTexture.initialize(
+        width, height,
+        GL_RGBA16F, GL_RGBA, GL_FLOAT
+      );
+
+      m_albedoAlphaTexture.initialize(
+        width, height,
+        GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
+      );
+
+      m_materialParametersTexture.initialize(
+        width, height,
+        GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
+      );
+
+      glBindTexture(GL_TEXTURE_2D, m_positionTexture.getTextureId());
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
+        m_positionTexture.getTextureId(), 0
+      );
+
+      glBindTexture(GL_TEXTURE_2D, m_normalRoughnessTexture.getTextureId());
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
+        m_normalRoughnessTexture.getTextureId(), 0
+      );
+
+      glBindTexture(GL_TEXTURE_2D, m_albedoAlphaTexture.getTextureId());
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D,
+        m_albedoAlphaTexture.getTextureId(), 0
+      );
+
+      glBindTexture(GL_TEXTURE_2D, m_materialParametersTexture.getTextureId());
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D,
+        m_materialParametersTexture.getTextureId(), 0
+      );
+
+      glDrawBuffers(4, GBufferColorAttachments);
+
+      glGenRenderbuffers(1, &m_depthStencilBufferId);
+      glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
+      glRenderbufferStorage(
+        GL_RENDERBUFFER,
+        GL_DEPTH24_STENCIL8,
+        width,
+        height
+      );
+
+      glFramebufferRenderbuffer(
+        GL_FRAMEBUFFER,
+        GL_DEPTH_STENCIL_ATTACHMENT,
+        GL_RENDERBUFFER,
+        m_depthStencilBufferId
+      );
+
+      if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+      {
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        throw RuntimeErrorException("Failed to initialize GBuffer: Incomplete framebuffer.");
+      }
+
       glBindTexture(GL_TEXTURE_2D, 0);
       glBindRenderbuffer(GL_RENDERBUFFER, 0);
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
-      throw RuntimeErrorException("Failed to initialize GBuffer: Incomplete framebuffer.");
+
+      m_width = width;
+      m_height = height;
+      m_valid = true;
     }
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    m_width = width;
-    m_height = height;
-    m_valid = true;
+    catch (const Exception& e)
+    {
+      destroy();
+      throw;
+    }
   }
 
   void OpenGlGBuffer::bindForWriting()

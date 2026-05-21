@@ -19,8 +19,6 @@ namespace hc
      *
      * @param width Buffer width in pixels.
      * @param height Buffer height in pixels.
-     * @param textureManager Reference to the texture manager for creating texture
-     * attachments.
      */
     virtual void initialize(UInt32 width, UInt32 height) = 0;
 

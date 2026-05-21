@@ -284,6 +284,7 @@ namespace hc
     m_channels = (format == GL_RGBA) ? 4 : 3;
     m_format = format;
     m_internalFormat = internalFormat;
+    m_type = type;
 
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);

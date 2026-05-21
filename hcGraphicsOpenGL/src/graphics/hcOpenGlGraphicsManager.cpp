@@ -221,13 +221,11 @@ namespace hc
   }
 
   void OpenGlGraphicsManager::executeDeferredGeometryPass()
-  {
-    String errorMessage;
-
-    m_gBuffer.bindForWriting();
-
+  { 
     for (const DrawCommand& command : m_drawCommands)
     {
+
+      String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))
       {
         LogService::Error(
@@ -235,6 +233,8 @@ namespace hc
         );
         continue;
       }
+
+      m_gBuffer.bindForWriting();
 
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::AlphaCutout
@@ -273,6 +273,8 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDeferredLightingPass()
   {
+
+
     m_gBuffer.bindForReading();
 
     // TODO
@@ -287,6 +289,15 @@ namespace hc
   {
     for (const DrawCommand& command : m_drawCommands)
     {
+      String errorMessage;
+      if (!isValidDrawCommand(command, errorMessage))
+      {
+        LogService::Error(
+          "Invalid draw command, skipping execution: " + errorMessage
+        );
+        continue;
+      }
+
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::Transparent)
         return;
@@ -299,6 +310,16 @@ namespace hc
     const DrawCommand& command
   )
   {
+    String errorMessage;
+    if (!isValidDrawCommand(command, errorMessage))
+    {
+      LogService::Error(
+        "Invalid draw command, skipping execution: " + errorMessage
+      );
+
+      return;
+    }
+
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
     bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
