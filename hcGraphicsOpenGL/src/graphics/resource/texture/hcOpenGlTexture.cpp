@@ -233,12 +233,19 @@ namespace hc
 
   void OpenGlTexture::destroy()
   {
-    if (m_created)
+    if (m_textureId)
     {
       glDeleteTextures(1, &m_textureId);
       m_textureId = 0;
-      m_created = false;
     }
+
+    m_width = 0;
+    m_height = 0;
+    m_channels = 0;
+    m_internalFormat = GL_RGBA8;
+    m_format = GL_RGBA;
+    m_type = GL_UNSIGNED_BYTE;
+    m_created = false;
   }
 
   void* OpenGlTexture::getNativeHandle() const
