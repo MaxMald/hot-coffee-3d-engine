@@ -129,6 +129,24 @@ namespace hc
      */
     GLuint getTextureId() const;
 
+    /**
+     * @brief Initializes the texture with the specified dimensions and format. This
+     * creates an empty texture without pixel data.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param internalFormat The internal format of the texture (e.g., GL_RGBA8).
+     * @param format The format of the pixel data (e.g., GL_RGBA).
+     * @param type The data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      GLenum internalFormat,
+      GLenum format,
+      GLenum type
+    );
+
   private:
     Id m_id;
     GLuint m_textureId;

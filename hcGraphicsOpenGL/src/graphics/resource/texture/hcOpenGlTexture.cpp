@@ -48,31 +48,7 @@ namespace hc
     m_type(type),
     m_created(false)
   {
-    m_channels = (format == GL_RGBA) ? 4 : 3;
-
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(
-      GL_TEXTURE_2D,
-      0,
-      m_internalFormat,
-      static_cast<Int32>(m_width),
-      static_cast<Int32>(m_height),
-      0,
-      m_format,
-      m_type,
-      nullptr
-    );
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    m_created = true;
+    initialize(width, height, internalFormat, format, type);
   }
 
   OpenGlTexture::~OpenGlTexture()
@@ -119,7 +95,7 @@ namespace hc
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     glTexImage2D(
       GL_TEXTURE_2D,
@@ -274,6 +250,56 @@ namespace hc
   GLuint OpenGlTexture::getTextureId() const
   {
     return m_textureId;
+  }
+
+  void OpenGlTexture::initialize(
+    UInt32 width,
+    UInt32 height,
+    GLenum internalFormat,
+    GLenum format,
+    GLenum type
+  )
+  {
+    if (m_created)
+      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+
+    if (width == 0 || height == 0)
+      throw InvalidArgumentException(
+        String::Format(
+          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
+          width,
+          height
+        )
+      );
+
+    m_width = width;
+    m_height = height;
+    m_channels = (format == GL_RGBA) ? 4 : 3;
+    m_format = format;
+    m_internalFormat = internalFormat;
+
+    glGenTextures(1, &m_textureId);
+    glBindTexture(GL_TEXTURE_2D, m_textureId);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(
+      GL_TEXTURE_2D,
+      0,
+      m_internalFormat,
+      static_cast<Int32>(m_width),
+      static_cast<Int32>(m_height),
+      0,
+      m_format,
+      m_type,
+      nullptr
+    );
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+    m_created = true;
   }
 
   void OpenGlTexture::assertIsCreated() const
