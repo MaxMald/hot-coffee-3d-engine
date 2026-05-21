@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class Texture;
+  class ITexture;
 
   /**
    * Interface for geometry buffer resources used by deferred rendering.
@@ -19,6 +19,8 @@ namespace hc
      *
      * @param width Buffer width in pixels.
      * @param height Buffer height in pixels.
+     * @param textureManager Reference to the texture manager for creating texture
+     * attachments.
      */
     virtual void initialize(UInt32 width, UInt32 height) = 0;
 
@@ -50,6 +52,20 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
+     * Gets the width of the geometry buffer attachments.
+     *
+     * @return Buffer width in pixels.
+     */
+    virtual UInt32 getWidth() const = 0;
+
+    /**
+     * Gets the height of the geometry buffer attachments.
+     *
+     * @return Buffer height in pixels.
+     */
+    virtual UInt32 getHeight() const = 0;
+
+    /**
      * Resizes all geometry buffer attachments.
      *
      * @param width New buffer width in pixels.
@@ -60,30 +76,30 @@ namespace hc
     /**
      * Gets the world-space position texture attachment.
      *
-     * @return Shared pointer to the position texture.
+     * @return Const reference to the position texture.
      */
-    virtual SharedPtr<Texture> getPosition() const = 0;
-
-    /**
-     * Gets the albedo and alpha texture attachment.
-     *
-     * @return Shared pointer to the albedo/alpha texture.
-     */
-    virtual SharedPtr<Texture> getAlbedoAlpha() const = 0;
+    virtual const ITexture& getPosition() const = 0;
 
     /**
      * Gets the normal and roughness texture attachment.
      *
-     * @return Shared pointer to the normal/roughness texture.
+     * @return Const reference to the normal/roughness texture.
      */
-    virtual SharedPtr<Texture> getNormalRoughness() const = 0;
+    virtual const ITexture& getNormalRoughness() const = 0;
+
+    /**
+    * Gets the albedo and alpha texture attachment.
+    *
+    * @return Const reference to the albedo/alpha texture.
+    */
+    virtual const ITexture& getAlbedoAlpha() const = 0;
 
     /**
      * Gets the material parameter texture attachment.
      *
-     * @return Shared pointer to the material parameters texture.
+     * @return Const reference to the material parameters texture.
      */
-    virtual SharedPtr<Texture> getMaterialParameters() const = 0;
+    virtual const ITexture& getMaterialParameters() const = 0;
 
   protected:
     IGBuffer() = default;
