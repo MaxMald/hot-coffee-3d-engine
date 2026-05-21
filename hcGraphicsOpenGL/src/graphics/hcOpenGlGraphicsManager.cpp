@@ -170,7 +170,7 @@ namespace hc
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
-    // TODO: return the GBuffer instance
+    return m_gBuffer;
   }
 
   FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(

@@ -176,11 +176,6 @@ namespace hc
     IGraphicsManager();
 
     /**
-     * @brief Initializes the graphics manager.
-     */
-    virtual void initialize() = 0;
-
-    /**
      * @brief Destroys and cleans up the graphics manager.
      */
     virtual void destroy() = 0;

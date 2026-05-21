@@ -12,7 +12,7 @@ namespace hc
   class HC_CORE_EXPORT IGBuffer
   {
   public:
-    virtual ~IGBuffer() = default;
+    virtual ~IGBuffer();
 
     /**
      * Creates and initializes attachments with the given dimensions.
@@ -107,6 +107,6 @@ namespace hc
     virtual void destroy() = 0;
 
   protected:
-    IGBuffer() = default;
+    IGBuffer();
   };
 }
