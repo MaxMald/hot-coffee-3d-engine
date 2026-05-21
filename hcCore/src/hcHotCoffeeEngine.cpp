@@ -124,7 +124,14 @@ namespace hc
         m_windowManager->getWindow(),
         *m_assetManager
       ));
-      m_graphicsManager->initialize();
+      m_graphicsManager->initialize(
+        Rect<UInt32>(
+          0,
+          0,
+          settings.windowSettings.width,
+          settings.windowSettings.height
+        )
+      );
 
       m_sceneManager = SceneManagerFactory::create(
         *m_graphicsManager,

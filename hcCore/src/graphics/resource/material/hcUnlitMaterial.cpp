@@ -55,8 +55,17 @@ namespace hc
     return getRenderMode() == materialRenderMode::Type::AlphaCutout;
   }
 
-  void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
+  void UnlitMaterial::bind(
+    const CameraMatrices& cameraMatrices,
+    renderPassType::Type renderPass
+  )
   {
+    (void)(renderPass);
+
+    // TODO:
+    // Handle different render passes if necessary.
+    // Currently it uses the forward rendering shaders.
+
     if (!m_shaderProgram || !m_descriptor)
       return;
 
@@ -91,6 +100,7 @@ namespace hc
 
   void UnlitMaterial::unbind()
   {
+    // TODO unbind 
   }
 
   SharedPtr<AMaterialDescriptor> UnlitMaterial::getDescriptor() const

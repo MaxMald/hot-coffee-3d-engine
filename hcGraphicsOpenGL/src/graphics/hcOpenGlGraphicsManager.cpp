@@ -42,12 +42,33 @@ namespace hc
       m_materialManager
     ),
     m_drawCommands(),
+    m_viewportRect(0, 0, 1, 1),
+    m_gBuffer(),
     m_polygonFillType(polygonFillType::Solid),
     m_renderPipelineType(renderPipelineType::Forward)
   {}
 
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
   {}
+
+  void OpenGlGraphicsManager::initialize(const Rect<UInt32>& viewportRect)
+  {
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+      throw RuntimeErrorException(
+        "Failed to initialize GLEW: " +
+        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
+      );
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    setViewport(viewportRect);
+  }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
   {
@@ -57,6 +78,9 @@ namespace hc
   void OpenGlGraphicsManager::beginFrame()
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_gBuffer.clear();
   }
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
@@ -68,8 +92,16 @@ namespace hc
   {
     DrawCommandUtilities::SortDrawCommands(m_drawCommands);
 
-    for (const DrawCommand& command : m_drawCommands)
-      executeDrawCommand(command);
+    if (m_renderPipelineType == renderPipelineType::Forward)
+    {
+      executeForwardPass();
+    }
+    else if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+    {
+      executeDeferredGeometryPass();
+      executeDeferredLightingPass();
+      executeForwardTransparentPass();
+    }
 
     m_drawCommands.clear();
   }
@@ -97,10 +129,13 @@ namespace hc
     renderPipelineType::Type renderPipelineType
   )
   {
-    // Note:
-    // For now, we only support one render pipeline type, so this function does not
-    // change any internal state. In the future, if multiple render pipeline types
-    // are supported, this function should update the internal state accordingly.
+    if (renderPipelineType == renderPipelineType::DeferredHybrid)
+    {
+      if (!m_gBuffer.isValid())
+        m_gBuffer.initialize(m_viewportRect.width, m_viewportRect.height);
+      else
+        m_gBuffer.resize(m_viewportRect.width, m_viewportRect.height);
+    }
 
     m_renderPipelineType = renderPipelineType;
   }
@@ -135,6 +170,11 @@ namespace hc
     return m_meshManager;
   }
 
+  IGBuffer& OpenGlGraphicsManager::getGBuffer()
+  {
+    return m_gBuffer;
+  }
+
   FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(
     UInt32 width,
     UInt32 height
@@ -145,37 +185,23 @@ namespace hc
     return frameBufferPtr;
   }
 
-  void OpenGlGraphicsManager::setViewport(
-    UInt32 x,
-    UInt32 y,
-    UInt32 width,
-    UInt32 height
-  )
+  void OpenGlGraphicsManager::setViewport(const Rect<UInt32>& viewportRect)
   {
-    glViewport(x, y, width, height);
+    glViewport(
+      (GLint)viewportRect.x,
+      (GLint)viewportRect.y,
+      (GLsizei)viewportRect.width,
+      (GLsizei)viewportRect.height
+    );
+    m_viewportRect = viewportRect;
+
+    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_gBuffer.resize(viewportRect.width, viewportRect.height);
   }
 
-  void OpenGlGraphicsManager::initialize()
+  Rect<UInt32> OpenGlGraphicsManager::getViewportRect() const
   {
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-      throw RuntimeErrorException(
-        "Failed to initialize GLEW: " +
-        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
-      );
-    }
-
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glViewport(
-      0, 0,
-      static_cast<GLsizei>(m_window.getSize().x),
-      static_cast<GLsizei>(m_window.getSize().y)
-    );
+    return m_viewportRect;
   }
 
   void OpenGlGraphicsManager::destroy()
@@ -185,79 +211,132 @@ namespace hc
     m_shaderProgramManager.clear();
     m_shaderManager.clear();
     m_meshManager.clear();
+    m_gBuffer.destroy();
+  }
+
+  void OpenGlGraphicsManager::executeForwardPass()
+  {
+    for (const DrawCommand& command : m_drawCommands)
+      executeDrawCommand(command);
+  }
+
+  void OpenGlGraphicsManager::executeDeferredGeometryPass()
+  { 
+    for (const DrawCommand& command : m_drawCommands)
+    {
+
+      String errorMessage;
+      if (!isValidDrawCommand(command, errorMessage))
+      {
+        LogService::Error(
+          "Invalid draw command, skipping execution: " + errorMessage
+        );
+        continue;
+      }
+
+      m_gBuffer.bindForWriting();
+
+      materialRenderMode::Type renderMode = command.material->getRenderMode();
+      if (renderMode != materialRenderMode::Type::AlphaCutout
+        && renderMode != materialRenderMode::Type::Opaque)
+        return;
+
+      bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
+      if (isTwoSided)
+        glDisable(GL_CULL_FACE);
+
+      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
+      glBindVertexArray(drawData.vao);
+
+      command.material->bind(
+        command.cameraMatrices,
+        renderPassType::Type::DeferredGeometry
+      );
+      command.material->updateModelMatrix(command.modelMatrix);
+
+      glDrawElements(
+        drawData.drawMode,
+        static_cast<GLsizei>(command.indexCount),
+        GL_UNSIGNED_INT,
+        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
+      );
+
+      command.material->unbind();
+      glBindVertexArray(0);
+
+      if (isTwoSided)
+        glEnable(GL_CULL_FACE);
+    }
+
+    m_gBuffer.unbind();
+  }
+
+  void OpenGlGraphicsManager::executeDeferredLightingPass()
+  {
+
+
+    m_gBuffer.bindForReading();
+
+    // TODO
+    // This pass would typically involve rendering a full-screen quad and applying
+    // lighting calculations in the shader using the G-buffer textures generated in the
+    // geometry pass.
+
+    m_gBuffer.unbind();
+  }
+
+  void OpenGlGraphicsManager::executeForwardTransparentPass()
+  {
+    for (const DrawCommand& command : m_drawCommands)
+    {
+      String errorMessage;
+      if (!isValidDrawCommand(command, errorMessage))
+      {
+        LogService::Error(
+          "Invalid draw command, skipping execution: " + errorMessage
+        );
+        continue;
+      }
+
+      materialRenderMode::Type renderMode = command.material->getRenderMode();
+      if (renderMode != materialRenderMode::Type::Transparent)
+        return;
+
+      executeDrawCommand(command);
+    }
   }
 
   void OpenGlGraphicsManager::executeDrawCommand(
     const DrawCommand& command
   )
   {
-    if (!command.material)
+    String errorMessage;
+    if (!isValidDrawCommand(command, errorMessage))
     {
       LogService::Error(
-        "Draw command has no material assigned, skipping draw call."
+        "Invalid draw command, skipping execution: " + errorMessage
       );
-      return;
-    }
 
-    SharedPtr<AMaterialDescriptor> descriptor = command.material->getDescriptor();
-    if (!descriptor)
-    {
-      LogService::Error(
-        "Draw command's material has no descriptor, skipping draw call."
-      );
-      return;
-    }
-
-    if (!std::holds_alternative<OpenGlDrawData>(command.apiDrawData))
-    {
-      LogService::Error(
-        "Draw command does not contain OpenGL draw data, skipping draw call."
-      );
       return;
     }
 
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-    if (drawData.vao == 0)
-    {
-      LogService::Error(
-        "Draw command has invalid VAO (0), skipping draw call."
-      );
-      return;
-    }
 
-    // Set polygon fill type if specified in the command
-
-    polygonFillType::Type originalPolygonFillType = polygonFillType::Undefined;
-    bool hasDifferentFillType = false;
-
-    if (command.polygonFillType != polygonFillType::Undefined)
-    {
-      originalPolygonFillType = getPolygonFillType();
-      if (command.polygonFillType != originalPolygonFillType)
-      {
-        hasDifferentFillType = true;
-        setPolygonFillType(command.polygonFillType);
-      }
-    }
-
-    // Determine if the material is two-sided and/or transparent to set appropriate OpenGL
-    // states
-
-    bool isTwoSided = descriptor->isDoubleSided();
+    bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
     bool isTransparent = command.material->isTransparent();
 
     if (isTransparent)
     {
       glEnable(GL_BLEND);
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glDepthMask(GL_FALSE);
     }
 
     if (isTwoSided && isTransparent)
-    {
-      glDepthMask(GL_FALSE);
+    { 
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(command.cameraMatrices);
+      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       // Pass 1: Render back faces first
@@ -280,18 +359,14 @@ namespace hc
 
       command.material->unbind();
       glBindVertexArray(0);
-      glDepthMask(GL_TRUE);
     }
     else
     {
       if (isTwoSided)
         glDisable(GL_CULL_FACE);
 
-      if (isTransparent)
-        glDepthMask(GL_FALSE);
-
       glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraMatrices);
+      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       glDrawElements(
@@ -304,18 +379,41 @@ namespace hc
       command.material->unbind();
       glBindVertexArray(0);
 
-      if (isTransparent)
-      {
-        glDepthMask(GL_TRUE);
-        glDisable(GL_BLEND);
-      }
-
       if (isTwoSided)
         glEnable(GL_CULL_FACE);
     }
 
-    // Restore polygon fill type if it was changed
-    if (hasDifferentFillType)
-      setPolygonFillType(originalPolygonFillType);
+    if (isTransparent)
+    {
+      glDepthMask(GL_TRUE);
+      glDisable(GL_BLEND);
+    }
+  }
+
+  bool OpenGlGraphicsManager::isValidDrawCommand(
+    const DrawCommand& drawCommand,
+    String& errorMessage
+  )
+  {
+    if (!drawCommand.material)
+    {
+      errorMessage = "Draw command has no material assigned.";
+      return false;
+    }
+    else if (!std::holds_alternative<OpenGlDrawData>(drawCommand.apiDrawData))
+    {
+      errorMessage = "Draw command has invalid API draw data type, expected OpenGlDrawData.";
+      return false;
+    }
+    else
+    {
+      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(drawCommand.apiDrawData);
+      if (drawData.vao == 0)
+      {
+        errorMessage = "Draw command has invalid VAO (0).";
+        return false;
+      }
+    }
+    return true;
   }
 }

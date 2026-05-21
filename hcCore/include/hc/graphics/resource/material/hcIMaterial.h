@@ -4,6 +4,7 @@
 #include "hc/graphics/resource/material/hcShadingType.h"
 #include "hc/graphics/resource/material/hcMaterialRenderMode.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
+#include "hc/graphics/hcRenderPassType.h"
 
 namespace hc
 {
@@ -57,8 +58,14 @@ namespace hc
 
     /**
      * @brief Binds the material for rendering.
+     *
+     * @param cameraMatrices The camera matrices to use for rendering.
+     * @param renderPass The render pass type.
      */
-    virtual void bind(const CameraMatrices& cameraMatrices) = 0;
+    virtual void bind(
+      const CameraMatrices& cameraMatrices,
+      renderPassType::Type renderPass
+    ) = 0;
 
     /**
      * @brief Updates the model matrix uniform in the shader.

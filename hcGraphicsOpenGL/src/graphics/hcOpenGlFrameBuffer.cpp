@@ -65,12 +65,18 @@ namespace hc
 
       if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
       {
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         throw RuntimeErrorException("Failed to create framebuffer");
       }
 
       m_width = width;
       m_height = height;
       m_isValid = true;
+
+      glBindTexture(GL_TEXTURE_2D, 0);
+      glBindRenderbuffer(GL_RENDERBUFFER, 0);
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
     catch (const Exception&)

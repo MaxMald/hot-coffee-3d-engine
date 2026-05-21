@@ -33,5 +33,6 @@ namespace hc
         throw InvalidArgumentException(
           String::Format("Invalid render pass type string: %s", str.c_str())
         );
+    }
   }
 }
