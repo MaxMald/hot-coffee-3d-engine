@@ -33,6 +33,13 @@ namespace hc
     virtual ~IGraphicsManager();
 
     /**
+     * @brief Initializes the graphics manager with the given viewport dimensions.
+     *
+     * @param viewportRect The rectangle defining the initial viewport dimensions.
+     */
+    virtual void initialize(const Rect<UInt32>& viewportRect) = 0;
+
+    /**
      * @brief Gets the type of graphics backend used by this graphics manager.
      *
      * @return The graphics backend type.
@@ -153,17 +160,17 @@ namespace hc
     /**
      * @brief Sets the rendering viewport dimensions.
      *
-     * @param x The x-coordinate of the viewport's lower-left corner.
-     * @param y The y-coordinate of the viewport's lower-left corner.
-     * @param width The width of the viewport.
-     * @param height The height of the viewport.
+     * @param viewportRect A Rect structure defining the viewport's position and size in
+     * pixels.
      */
-    virtual void setViewport(
-      UInt32 x,
-      UInt32 y,
-      UInt32 width,
-      UInt32 height
-    ) = 0;
+    virtual void setViewport(const Rect<UInt32>& viewportRect) = 0;
+
+    /**
+     * @brief Gets the current viewport dimensions.
+     *
+     * @return A Rect structure containing the viewport's position and size.
+     */
+    virtual Rect<UInt32> getViewportRect() const = 0;
 
   protected:
     IGraphicsManager();

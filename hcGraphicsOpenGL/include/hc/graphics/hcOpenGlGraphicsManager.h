@@ -6,6 +6,7 @@
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/graphics/hcOpenGlGBuffer.h"
 
 namespace hc
 {
@@ -18,6 +19,11 @@ namespace hc
       IAssetManager& assetManager
     );
     virtual ~OpenGlGraphicsManager();
+
+    /**
+     * @copydoc IGraphicsManager::initialize
+     */
+    void initialize(const Rect<UInt32>& viewportRect) override;
 
     /**
      * @copydoc IGraphicsManager::getGraphicsBackendType
@@ -105,12 +111,12 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::setViewport
      */
-    void setViewport(
-      UInt32 x,
-      UInt32 y,
-      UInt32 width,
-      UInt32 height
-    ) override;
+    void setViewport(const Rect<UInt32>& viewportRect) override;
+
+    /**
+     * @copydoc IGraphicsManager::getViewportRect
+     */
+    Rect<UInt32> getViewportRect() const override;
 
   private:
     IAssetManager& m_assetManager;
@@ -121,13 +127,10 @@ namespace hc
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
     Vector<DrawCommand> m_drawCommands;
+    Rect<UInt32> m_viewportRect;
+    OpenGlGBuffer m_gBuffer;
     polygonFillType::Type m_polygonFillType;
     renderPipelineType::Type m_renderPipelineType;
-
-    /**
-     * @copydoc IGraphicsManager::initialize
-     */
-    void initialize() override;
 
     /**
      * @copydoc IGraphicsManager::destroy
