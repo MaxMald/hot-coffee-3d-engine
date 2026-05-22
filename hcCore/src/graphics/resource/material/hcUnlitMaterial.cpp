@@ -7,52 +7,21 @@
 namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
-    m_id(Id::Create()),
-    m_materialId(materialId)
-  {
-  }
+    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false)
+  {}
 
   UnlitMaterial::~UnlitMaterial()
-  {
-  }
-
-  const Id& UnlitMaterial::getId() const
-  {
-    return m_id;
-  }
-
-  UInt16 UnlitMaterial::getMaterialId() const
-  {
-    return m_materialId;
-  }
+  {}
 
   void UnlitMaterial::destroy()
   {
     m_shaderProgram.reset();
-    m_descriptor.reset();
     m_mainTexture.reset();
   }
 
   shadingType::Type UnlitMaterial::getShaderType() const
   {
     return shadingType::Unlit;
-  }
-
-  materialRenderMode::Type UnlitMaterial::getRenderMode() const
-  {
-    if (m_descriptor)
-      return m_descriptor->getRenderMode();
-    return materialRenderMode::Type::Opaque;
-  }
-
-  bool UnlitMaterial::isTransparent() const
-  {
-    return getRenderMode() == materialRenderMode::Type::Transparent;
-  }
-
-  bool UnlitMaterial::isAlphaCutout() const
-  {
-    return getRenderMode() == materialRenderMode::Type::AlphaCutout;
   }
 
   void UnlitMaterial::bind(
@@ -65,8 +34,10 @@ namespace hc
         "UnlitMaterial::bind - UnlitMaterial only supports Forward render pass."
       );
 
-    if (!m_shaderProgram || !m_descriptor)
-      return;
+    if (!m_shaderProgram)
+      throw RuntimeErrorException(
+        "UnlitMaterial::bind - Shader program is not set for this material."
+      );
 
     m_shaderProgram->bind();
 
@@ -74,8 +45,8 @@ namespace hc
     m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
 
-    if (isAlphaCutout())
-      m_shaderProgram->setUniform("uAlphaCutoff", m_descriptor->getAlphaCutoutThreshold());
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      m_shaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
     else
       m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
@@ -102,36 +73,44 @@ namespace hc
     // TODO unbind 
   }
 
-  SharedPtr<AMaterialDescriptor> UnlitMaterial::getDescriptor() const
+  bool UnlitMaterial::isValid() const
   {
-    return m_descriptor;
+    return m_shaderProgram != nullptr && m_shaderProgram->isValid();
   }
 
   void UnlitMaterial::initialize(
+    const UnlitMaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
-    const SharedPtr<UnlitMaterialDescriptor>& descriptor,
     const SharedPtr<ITexture>& mainTexture
   )
   {
+    if (!shaderProgram)
+      throw RuntimeErrorException(
+        "UnlitMaterial::initialize - Shader program cannot be null."
+      );
+
+    m_color = descriptor.getColor();
     m_shaderProgram = shaderProgram;
-    m_descriptor = descriptor;
     m_mainTexture = mainTexture;
   }
 
   const Color& UnlitMaterial::getColor() const
   {
-    if (m_descriptor)
-      return m_descriptor->getColor();
-    else
-    {
-      throw RuntimeErrorException(
-        "UnlitMaterial::getColor - Material descriptor is not set."
-      );
-    } 
+    return m_color;
+  }
+
+  void UnlitMaterial::setColor(const Color& color)
+  {
+    m_color = color;
   }
 
   const SharedPtr<ITexture>& UnlitMaterial::getMainTexture() const
   {
     return m_mainTexture;
+  }
+
+  void UnlitMaterial::setMainTexture(const SharedPtr<ITexture>& mainTexture)
+  {
+    m_mainTexture = mainTexture;
   }
 }

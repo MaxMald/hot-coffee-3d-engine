@@ -106,6 +106,13 @@ namespace hc
      */
     virtual void unbind() = 0;
 
+    /**
+     * @brief Checks if the material is valid and ready for rendering.
+     *
+     * @return True if the material is valid, false otherwise.
+     */
+    virtual bool isValid() const = 0;
+
   protected:
     IMaterial() = default;
   };
