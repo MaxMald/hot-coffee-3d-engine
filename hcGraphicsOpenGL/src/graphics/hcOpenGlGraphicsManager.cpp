@@ -254,7 +254,7 @@ namespace hc
         && renderMode != materialRenderMode::Type::Opaque)
         return;
 
-      bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
+      bool isTwoSided = command.material->isDoubleSided();
       if (isTwoSided)
         glDisable(GL_CULL_FACE);
 
@@ -337,8 +337,8 @@ namespace hc
 
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
-    bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
-    bool isTransparent = command.material->isTransparent();
+    bool isTwoSided = command.material->isDoubleSided();
+    bool isTransparent = command.material->getRenderMode() == materialRenderMode::Type::Transparent;
 
     if (isTransparent)
     {

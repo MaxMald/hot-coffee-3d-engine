@@ -37,8 +37,8 @@ namespace hc
 
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>(materialId);
     material->initialize(
+      *unlitDescriptor,
       shaderProgramManager.getUnlitShaderProgram(),
-      unlitDescriptor,
       mainTexture
     );
 

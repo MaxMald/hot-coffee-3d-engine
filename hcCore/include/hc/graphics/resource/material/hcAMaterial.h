@@ -43,11 +43,6 @@ namespace hc
     void setAlphaCutoutThreshold(float threshold) override final; 
 
     /**
-     * @copydoc IMaterial::setAlphaCutoutThreshold
-     */
-    void setAlphaCutoutThreshold(float threshold) override final;
-
-    /**
      * @copydoc IMaterial::isDoubleSided
      */
     bool isDoubleSided() const override final;
