@@ -50,14 +50,14 @@ namespace hc
     ) = 0;
 
     /**
-     * @brief Gets all cached materials.
+     * @brief Gets all materials.
      *
-     * @return A constant reference to the vector of cached materials.
+     * @return A constant reference to the vector of materials.
      */
     virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
-     * @brief Clears all cached materials.
+     * @brief Clears all materials.
      */
     virtual void clear() = 0;
   };

@@ -24,45 +24,33 @@ namespace hc
     virtual ~MaterialManager() = default;
 
     /**
-     * @brief Creates a material from a material descriptor file.
-     *
-     * @param materialDescriptorPath Path to the material descriptor file.
-     *
-     * @return Shared pointer to the created material.
+     * @copydoc IMaterialManager::createMaterialFromFile
      */
     SharedPtr<IMaterial> createMaterialFromFile(
       const Path& materialDescriptorPath
     ) override;
 
     /**
-     * @brief Creates a material from a material descriptor object.
-     *
-     * @param descriptor Shared pointer to the material descriptor.
-     *
-     * @return Shared pointer to the created material.
+     * @copydoc IMaterialManager::createMaterialFromDescriptor
      */
     SharedPtr<IMaterial> createMaterialFromDescriptor(
       SharedPtr<AMaterialDescriptor> descriptor
     ) override;
 
     /**
-     * @brief Creates a default unlit material.
-     *
-     * @return Shared pointer to the created unlit material.
+     * @copydoc IMaterialManager::createUnlitMaterial
      */
     SharedPtr<UnlitMaterial> createUnlitMaterial(
       const UnlitMaterialDescriptor& descriptor
     ) override;
 
     /**
-     * @brief Gets all cached materials.
-     *
-     * @return A constant reference to the vector of cached materials.
+     * @copydoc IMaterialManager::getMaterials
      */
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
-     * @brief Clears all cached materials.
+     * @copydoc IMaterialManager::clear
      */
     void clear();
 
