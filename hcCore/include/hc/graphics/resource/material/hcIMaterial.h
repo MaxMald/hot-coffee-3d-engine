@@ -42,19 +42,46 @@ namespace hc
     virtual materialRenderMode::Type getRenderMode() const = 0;
 
     /**
-     * @brief Determines if the material is transparent based on its render mode.
-     * 
-     * @return True if the material is transparent, false otherwise.
+     * @brief Sets the render mode of the material, which determines how it should be
+     * rendered (e.g., opaque, transparent).
+     *
+     * @param renderMode The material render mode to set.
      */
-    virtual bool isTransparent() const = 0;
+    virtual void setRenderMode(materialRenderMode::Type renderMode) = 0;
 
     /**
-     * @brief Determines if the material uses alpha cutout rendering based on
-     * its render mode.
-     * 
-     * @return True if the material is an alpha cutout, false otherwise.
+     * @brief Sets the alpha cutout threshold for the material. This value determines
+     * the cutoff point for alpha testing when the material is rendered in alpha cutout
+     * mode.
+     *
+     * @param threshold The alpha cutout threshold to set (range [0.0, 1.0]).
      */
-    virtual bool isAlphaCutout() const = 0;
+    virtual float getAlphaCutoutThreshold() const = 0;
+
+    /**
+     * @brief Sets the alpha cutout threshold for the material. This value determines
+     * the cutoff point for alpha testing when the material is rendered in alpha cutout
+     * mode.
+     *
+     * @param threshold The alpha cutout threshold to set (range [0.0, 1.0]).
+     */
+    virtual void setAlphaCutoutThreshold(float threshold) = 0;
+
+    /**
+     * @brief Determines if the material is double-sided based on its render mode.
+     *
+     * @return True if the material is double-sided, false otherwise.
+     */
+    virtual bool isDoubleSided() const = 0;
+
+    /**
+     * @brief Sets whether the material should be rendered as double-sided, which
+     * means that back-face culling will be disabled and both sides of the geometry
+     * will be rendered.
+     *
+     * @param doubleSided True to make the material double-sided, false for single-sided.
+     */
+    virtual void setDoubleSided(bool doubleSided) = 0;
 
     /**
      * @brief Binds the material for rendering.
@@ -78,13 +105,6 @@ namespace hc
      * @brief Unbinds the material after rendering.
      */
     virtual void unbind() = 0;
-
-    /**
-      * @brief Gets the material descriptor associated with this material.
-      * 
-      * @return Shared pointer to the material descriptor.
-     */
-    virtual SharedPtr<AMaterialDescriptor> getDescriptor() const = 0;
 
   protected:
     IMaterial() = default;
