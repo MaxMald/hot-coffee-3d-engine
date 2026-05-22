@@ -4,6 +4,7 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderer.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportGizmoController.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderTargetSelector.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
 
@@ -43,8 +44,10 @@ namespace hc::editor
     SceneViewportRenderer m_renderer;
     SceneViewportCameraController m_cameraController;
     SceneViewportGizmoController m_gizmoController;
+    SceneViewportRenderTargetSelector m_renderTargetSelector;
     Vector2f m_uvTopLeft;
     Vector2f m_uvBottomRight;
+    
 
     /**
      * @brief Updates the camera controller and viewport state.
@@ -86,6 +89,6 @@ namespace hc::editor
     /**
      * @brief Draws the viewport window with the rendered scene texture.
      */
-    void drawViewport();
+    void drawRenderTarget(const ITexture& texture);
   };
 }

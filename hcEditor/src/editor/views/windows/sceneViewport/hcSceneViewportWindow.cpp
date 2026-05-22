@@ -15,6 +15,7 @@ namespace hc::editor
     m_renderer(m_engine.getAssetManager(), m_engine.getGraphicsManager()),
     m_cameraController(m_engine.getInputManager()),
     m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
+    m_renderTargetSelector(sceneViewportRenderTargetType::FinalColor, m_engine.getGraphicsManager()),
     m_uvTopLeft(0, 0),
     m_uvBottomRight(1, 1)
   {
@@ -71,9 +72,38 @@ namespace hc::editor
     updateFramebufferSize();
     renderSceneToTexture();
     renderGizmosToTexture();
+    m_renderTargetSelector.draw();
 
     ImVec2 viewportPos = ImGui::GetCursorScreenPos();
-    drawViewport();
+
+    sceneViewportRenderTargetType::Type currentRenderTarget =
+      m_renderTargetSelector.getCurrentRenderTarget();
+
+    if (currentRenderTarget == sceneViewportRenderTargetType::FinalColor)
+    {
+      drawRenderTarget(m_renderer.getRenderedTexture());
+    }
+    else
+    {
+      const IGBuffer& gBuffer = m_engine.getGraphicsManager().getGBuffer();
+
+      if (currentRenderTarget == sceneViewportRenderTargetType::GBufferPosition)
+      {
+        drawRenderTarget(gBuffer.getPosition());
+      }
+      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferNormalRoughness)
+      {
+        drawRenderTarget(gBuffer.getNormalRoughness());
+      }
+      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferAlbedoAlpha)
+      {
+        drawRenderTarget(gBuffer.getAlbedoAlpha());
+      }
+      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferMaterialParameters)
+      {
+        drawRenderTarget(gBuffer.getMaterialParameters());
+      }
+    }
     
     m_gizmoController.draw(
       Vector2f(viewportPos.x, viewportPos.y),
@@ -145,12 +175,12 @@ namespace hc::editor
     );
   }
 
-  void SceneViewportWindow::drawViewport()
+  void SceneViewportWindow::drawRenderTarget(const ITexture& texture)
   {
     imguiUtilities::DrawTexture(
-      &(m_renderer.getRenderedTexture()),
-      static_cast<float>(m_renderer.getWidth()),
-      static_cast<float>(m_renderer.getHeight()),
+      &texture,
+      static_cast<float>(texture.getWidth()),
+      static_cast<float>(texture.getHeight()),
       m_uvTopLeft,
       m_uvBottomRight
     );

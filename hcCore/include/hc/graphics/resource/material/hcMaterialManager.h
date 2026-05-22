@@ -1,7 +1,6 @@
 #pragma once
 
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
-#include "hc/graphics/resource/hcResourcesCache.h"
 
 namespace hc
 {
@@ -12,52 +11,46 @@ namespace hc
 
   /**
    * @brief Concrete implementation of the IMaterialManager interface that
-   * manages materials using a cache and a set of material factories.
+   * manages materials using a set of material factories.
    */
-  class HC_CORE_EXPORT MaterialManager :
-    public IMaterialManager,
-    private ResourcesCache<Id, IMaterial>
+  class HC_CORE_EXPORT MaterialManager : public IMaterialManager
   {
   public:
     MaterialManager(
       IAssetManager& assetManager,
       ITextureManager& textureManager,
-      IShaderProgramManager& shaderProgramManager,
-      UniquePtr<MaterialFactoriesManager> materialFactoriesManager
+      IShaderProgramManager& shaderProgramManager
     );
     virtual ~MaterialManager() = default;
 
     /**
-     * @brief Creates a material from a material descriptor file.
-     *
-     * @param materialDescriptorPath Path to the material descriptor file.
-     *
-     * @return Shared pointer to the created material.
+     * @copydoc IMaterialManager::createMaterialFromFile
      */
     SharedPtr<IMaterial> createMaterialFromFile(
       const Path& materialDescriptorPath
     ) override;
 
     /**
-     * @brief Creates a material from a material descriptor object.
-     *
-     * @param descriptor Shared pointer to the material descriptor.
-     *
-     * @return Shared pointer to the created material.
+     * @copydoc IMaterialManager::createMaterialFromDescriptor
      */
     SharedPtr<IMaterial> createMaterialFromDescriptor(
       SharedPtr<AMaterialDescriptor> descriptor
     ) override;
 
     /**
-     * @brief Gets all cached materials.
-     *
-     * @return A constant reference to the vector of cached materials.
+     * @copydoc IMaterialManager::createUnlitMaterial
+     */
+    SharedPtr<UnlitMaterial> createUnlitMaterial(
+      const UnlitMaterialDescriptor& descriptor
+    ) override;
+
+    /**
+     * @copydoc IMaterialManager::getMaterials
      */
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
-     * @brief Clears all cached materials.
+     * @copydoc IMaterialManager::clear
      */
     void clear();
 
@@ -67,10 +60,11 @@ namespace hc
      */
     static UInt16 s_nextMaterialId;
 
-    UniquePtr<MaterialFactoriesManager> m_materialFactoriesManager;
     IAssetManager& m_assetManager;
     IShaderProgramManager& m_shaderProgramManager;
     ITextureManager& m_textureManager;
     Vector<SharedPtr<IMaterial>> m_materials;
+
+    UInt16 generateMaterialId();
   };
 }

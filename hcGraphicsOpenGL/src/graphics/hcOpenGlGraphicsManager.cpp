@@ -1,8 +1,6 @@
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManagerFactory.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
@@ -33,15 +31,14 @@ namespace hc
     m_materialManager(
       m_assetManager,
       m_textureManager,
-      m_shaderProgramManager,
-      MaterialFactoriesManagerFactory::Create()
+      m_shaderProgramManager
     ),
     m_meshManager(
       m_assetManager,
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_drawCommands(),
+    m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
     m_polygonFillType(polygonFillType::Solid),
@@ -85,25 +82,34 @@ namespace hc
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
-    m_drawCommands.push_back(command);
+    m_queueDrawCommands.push_back(command);
   }
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    DrawCommandUtilities::SortDrawCommands(m_drawCommands);
+    DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
     if (m_renderPipelineType == renderPipelineType::Forward)
     {
-      executeForwardPass();
+      executeForwardPass(m_queueDrawCommands);
     }
     else if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
     {
-      executeDeferredGeometryPass();
+      m_deferredGeometryPassCommands.clear();
+      m_deferredForwardPassCommands.clear();
+
+      DrawCommandUtilities::SplitDrawCommandsByPipelinePath(
+        m_queueDrawCommands,
+        m_deferredGeometryPassCommands,
+        m_deferredForwardPassCommands
+      );
+
+      executeDeferredGeometryPass(m_deferredGeometryPassCommands);
       executeDeferredLightingPass();
-      executeForwardTransparentPass();
+      executeDeferredForwardPass(m_deferredForwardPassCommands);
     }
 
-    m_drawCommands.clear();
+    m_queueDrawCommands.clear();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
@@ -214,15 +220,19 @@ namespace hc
     m_gBuffer.destroy();
   }
 
-  void OpenGlGraphicsManager::executeForwardPass()
+  void OpenGlGraphicsManager::executeForwardPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   {
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : drawCommands)
       executeDrawCommand(command);
   }
 
-  void OpenGlGraphicsManager::executeDeferredGeometryPass()
+  void OpenGlGraphicsManager::executeDeferredGeometryPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   { 
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : drawCommands)
     {
 
       String errorMessage;
@@ -239,9 +249,9 @@ namespace hc
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::AlphaCutout
         && renderMode != materialRenderMode::Type::Opaque)
-        return;
+        continue;
 
-      bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
+      bool isTwoSided = command.material->isDoubleSided();
       if (isTwoSided)
         glDisable(GL_CULL_FACE);
 
@@ -285,9 +295,11 @@ namespace hc
     m_gBuffer.unbind();
   }
 
-  void OpenGlGraphicsManager::executeForwardTransparentPass()
+  void OpenGlGraphicsManager::executeDeferredForwardPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   {
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : drawCommands)
     {
       String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))
@@ -300,7 +312,7 @@ namespace hc
 
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::Transparent)
-        return;
+        continue;
 
       executeDrawCommand(command);
     }
@@ -322,8 +334,8 @@ namespace hc
 
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
-    bool isTwoSided = command.material->getDescriptor()->isDoubleSided();
-    bool isTransparent = command.material->isTransparent();
+    bool isTwoSided = command.material->isDoubleSided();
+    bool isTransparent = command.material->getRenderMode() == materialRenderMode::Type::Transparent;
 
     if (isTransparent)
     {

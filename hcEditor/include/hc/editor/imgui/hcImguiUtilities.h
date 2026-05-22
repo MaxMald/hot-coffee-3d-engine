@@ -60,7 +60,7 @@ namespace hc::editor
      * @param height The height to display the texture.
      */
     void DrawTexture(
-      ITexture* texture,
+      const ITexture* texture,
       float width,
       float height
     );
@@ -80,7 +80,7 @@ namespace hc::editor
      * region to display.
      */
     void DrawTexture(
-      ITexture* texture,
+      const ITexture* texture,
       float width,
       float height,
       const Vector2f& uvTopLeft,

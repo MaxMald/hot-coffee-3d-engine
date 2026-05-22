@@ -7,6 +7,8 @@ namespace hc
 {
   class AMaterialDescriptor;
   class IMaterial;
+  class UnlitMaterial;
+  class UnlitMaterialDescriptor;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
   {
@@ -36,14 +38,26 @@ namespace hc
     ) = 0;
 
     /**
-     * @brief Gets all cached materials.
+     * @brief Creates a default unlit material.
      *
-     * @return A constant reference to the vector of cached materials.
+     * @param descriptor Reference to the unlit material descriptor containing the
+     * properties for the unlit material to be created.
+     * 
+     * @return Shared pointer to the created unlit material.
+     */
+    virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
+      const UnlitMaterialDescriptor& descriptor
+    ) = 0;
+
+    /**
+     * @brief Gets all materials.
+     *
+     * @return A constant reference to the vector of materials.
      */
     virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
-     * @brief Clears all cached materials.
+     * @brief Clears all materials.
      */
     virtual void clear() = 0;
   };

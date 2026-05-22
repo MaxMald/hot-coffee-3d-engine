@@ -1,5 +1,4 @@
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
@@ -25,12 +24,8 @@ namespace hc
     if (!_material)
       return;
 
-    SharedPtr<AMaterialDescriptor> descriptor = _material->getDescriptor();
-    if (!descriptor)
-      return;
-
     sortKey = GenerateSortKey(
-      descriptor->getRenderMode(),
+      material->getRenderMode(),
       material->getMaterialId(),
       distanceToCamera
     );
