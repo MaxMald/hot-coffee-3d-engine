@@ -50,6 +50,9 @@ namespace hc
       {
         const DrawCommand& cmd = drawCommands[i];
 
+        if (!cmd.material)
+          continue;
+
         if (cmd.material->getShaderType() == shadingType::Unlit)
         {
           // Unlit materials are rendered in the forward rendering pass to ensure
