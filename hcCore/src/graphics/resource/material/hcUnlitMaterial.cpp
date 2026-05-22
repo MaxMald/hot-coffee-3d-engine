@@ -60,11 +60,10 @@ namespace hc
     renderPassType::Type renderPass
   )
   {
-    (void)(renderPass);
-
-    // TODO:
-    // Handle different render passes if necessary.
-    // Currently it uses the forward rendering shaders.
+    if (renderPass != renderPassType::Type::Forward)
+      throw RuntimeErrorException(
+        "UnlitMaterial::bind - UnlitMaterial only supports Forward render pass."
+      );
 
     if (!m_shaderProgram || !m_descriptor)
       return;
