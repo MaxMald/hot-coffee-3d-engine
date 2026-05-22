@@ -91,6 +91,9 @@ namespace hc
         "UnlitMaterial::initialize - Shader program cannot be null."
       );
 
+    m_renderMode = descriptor.getRenderMode();
+    m_doubleSided = descriptor.isDoubleSided();
+    setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());
     m_color = descriptor.getColor();
     m_shaderProgram = shaderProgram;
     m_mainTexture = mainTexture;
