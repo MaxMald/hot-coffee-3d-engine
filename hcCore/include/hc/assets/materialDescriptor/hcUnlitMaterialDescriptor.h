@@ -16,6 +16,11 @@ namespace hc
   {
   public:
     /**
+     * Constructs a default unlit material descriptor with default properties.
+     */
+    UnlitMaterialDescriptor();
+
+    /**
      * Constructs an unlit material descriptor.
      *
      * @param path The file path to the material descriptor asset

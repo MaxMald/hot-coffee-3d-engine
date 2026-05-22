@@ -33,8 +33,7 @@ namespace hc
     m_materialManager(
       m_assetManager,
       m_textureManager,
-      m_shaderProgramManager,
-      MaterialFactoriesManagerFactory::Create()
+      m_shaderProgramManager
     ),
     m_meshManager(
       m_assetManager,

@@ -7,6 +7,8 @@ namespace hc
 {
   class AMaterialDescriptor;
   class IMaterial;
+  class UnlitMaterial;
+  class UnlitMaterialDescriptor;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
   {
@@ -33,6 +35,18 @@ namespace hc
      */
     virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
       SharedPtr<AMaterialDescriptor> descriptor
+    ) = 0;
+
+    /**
+     * @brief Creates a default unlit material.
+     *
+     * @param descriptor Reference to the unlit material descriptor containing the
+     * properties for the unlit material to be created.
+     * 
+     * @return Shared pointer to the created unlit material.
+     */
+    virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
+      const UnlitMaterialDescriptor& descriptor
     ) = 0;
 
     /**

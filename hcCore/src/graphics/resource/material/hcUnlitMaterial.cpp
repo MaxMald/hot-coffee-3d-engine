@@ -16,6 +16,7 @@ namespace hc
 
   void UnlitMaterial::destroy()
   {
+    m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     m_shaderProgram.reset();
     m_mainTexture.reset();
   }

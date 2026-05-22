@@ -2,6 +2,12 @@
 
 namespace hc
 {
+  UnlitMaterialDescriptor::UnlitMaterialDescriptor() :
+    AMaterialDescriptor(""),
+    m_color(0.5f, 0.5f, 0.5f, 1.0f),
+    m_mainImagePath("")
+  {}
+
   UnlitMaterialDescriptor::UnlitMaterialDescriptor(
     const Path& path,
     const Color& color,
@@ -10,8 +16,7 @@ namespace hc
     AMaterialDescriptor(path),
     m_color(color),
     m_mainImagePath(mainImagePath)
-  {
-  }
+  {}
 
   shadingType::Type UnlitMaterialDescriptor::getShaderType() const
   {
@@ -20,7 +25,7 @@ namespace hc
 
   void UnlitMaterialDescriptor::getImagesPaths(Vector<Path>& paths) const
   {
-    if (!m_mainImagePath.empty()) 
+    if (!m_mainImagePath.empty())
       paths.push_back(m_mainImagePath);
   }
 
