@@ -249,7 +249,7 @@ namespace hc
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::AlphaCutout
         && renderMode != materialRenderMode::Type::Opaque)
-        return;
+        continue;
 
       bool isTwoSided = command.material->isDoubleSided();
       if (isTwoSided)
