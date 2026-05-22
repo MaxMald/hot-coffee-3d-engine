@@ -1,8 +1,6 @@
 #include "hc/graphics/resource/material/hcMaterialManager.h"
 #include "hc/graphics/resource/shaderProgram/hcShaderProgramManager.h"
-#include "hc/graphics/resource/material/hcMaterialFactoriesManager.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
-#include "hc/graphics/resource/material/hcIMaterialFactory.h"
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"

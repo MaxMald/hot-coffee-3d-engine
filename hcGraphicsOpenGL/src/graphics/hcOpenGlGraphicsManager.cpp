@@ -1,8 +1,6 @@
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManagerFactory.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
