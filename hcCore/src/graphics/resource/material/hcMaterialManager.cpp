@@ -130,13 +130,12 @@ namespace hc
   {
     if (s_nextMaterialId == std::numeric_limits<UInt16>::max())
     {
-      LogService::Error(
+      throw RuntimeErrorException(
         String::Format(
           "Maximum number of materials (%u) exceeded; cannot allocate new material IDs.",
           static_cast<UInt32>(std::numeric_limits<UInt16>::max())
         )
       );
-      return 0;
     }
 
     return s_nextMaterialId++;
