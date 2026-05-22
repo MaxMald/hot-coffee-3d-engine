@@ -312,7 +312,7 @@ namespace hc
 
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::Transparent)
-        return;
+        continue;
 
       executeDrawCommand(command);
     }
