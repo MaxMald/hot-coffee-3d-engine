@@ -50,11 +50,10 @@ namespace hc
     virtual void setRenderMode(materialRenderMode::Type renderMode) = 0;
 
     /**
-     * @brief Sets the alpha cutout threshold for the material. This value determines
-     * the cutoff point for alpha testing when the material is rendered in alpha cutout
-     * mode.
+     * @brief Gets the alpha cutout threshold for the material. This value determines the
+     * cutoff point for alpha testing when the material is rendered in alpha cutout mode.
      *
-     * @param threshold The alpha cutout threshold to set (range [0.0, 1.0]).
+     * @return The alpha cutout threshold.
      */
     virtual float getAlphaCutoutThreshold() const = 0;
 
