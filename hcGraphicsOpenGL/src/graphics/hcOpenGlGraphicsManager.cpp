@@ -41,7 +41,7 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_drawCommands(),
+    m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
     m_polygonFillType(polygonFillType::Solid),
@@ -85,25 +85,34 @@ namespace hc
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
-    m_drawCommands.push_back(command);
+    m_queueDrawCommands.push_back(command);
   }
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    DrawCommandUtilities::SortDrawCommands(m_drawCommands);
+    DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
     if (m_renderPipelineType == renderPipelineType::Forward)
     {
-      executeForwardPass();
+      executeForwardPass(m_queueDrawCommands);
     }
     else if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
     {
-      executeDeferredGeometryPass();
+      m_deferredGeometryPassCommands.clear();
+      m_deferredForwardPassCommands.clear();
+
+      DrawCommandUtilities::SplitDrawCommandsByPipelinePath(
+        m_queueDrawCommands,
+        m_deferredGeometryPassCommands,
+        m_deferredForwardPassCommands
+      );
+
+      executeDeferredGeometryPass(m_deferredGeometryPassCommands);
       executeDeferredLightingPass();
-      executeForwardTransparentPass();
+      executeDeferredForwardPass(m_deferredForwardPassCommands);
     }
 
-    m_drawCommands.clear();
+    m_queueDrawCommands.clear();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
@@ -214,15 +223,19 @@ namespace hc
     m_gBuffer.destroy();
   }
 
-  void OpenGlGraphicsManager::executeForwardPass()
+  void OpenGlGraphicsManager::executeForwardPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   {
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : drawCommands)
       executeDrawCommand(command);
   }
 
-  void OpenGlGraphicsManager::executeDeferredGeometryPass()
+  void OpenGlGraphicsManager::executeDeferredGeometryPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   { 
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : m_queueDrawCommands)
     {
 
       String errorMessage;
@@ -285,9 +298,11 @@ namespace hc
     m_gBuffer.unbind();
   }
 
-  void OpenGlGraphicsManager::executeForwardTransparentPass()
+  void OpenGlGraphicsManager::executeDeferredForwardPass(
+    const Vector<DrawCommand>& drawCommands
+  )
   {
-    for (const DrawCommand& command : m_drawCommands)
+    for (const DrawCommand& command : m_queueDrawCommands)
     {
       String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))

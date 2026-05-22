@@ -126,7 +126,11 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
-    Vector<DrawCommand> m_drawCommands;
+
+    Vector<DrawCommand> m_queueDrawCommands;
+    Vector<DrawCommand> m_deferredGeometryPassCommands;
+    Vector<DrawCommand> m_deferredForwardPassCommands;
+
     Rect<UInt32> m_viewportRect;
     OpenGlGBuffer m_gBuffer;
     polygonFillType::Type m_polygonFillType;
@@ -137,10 +141,10 @@ namespace hc
      */
     void destroy() override;
 
-    void executeForwardPass();
-    void executeDeferredGeometryPass();
+    void executeForwardPass(const Vector<DrawCommand>& drawCommands);
+    void executeDeferredGeometryPass(const Vector<DrawCommand>& drawCommands);
     void executeDeferredLightingPass();
-    void executeForwardTransparentPass();
+    void executeDeferredForwardPass(const Vector<DrawCommand>& drawCommands);
 
     void executeDrawCommand(const DrawCommand& command);
     bool isValidDrawCommand(const DrawCommand& drawCommand, String& errorMessage);
