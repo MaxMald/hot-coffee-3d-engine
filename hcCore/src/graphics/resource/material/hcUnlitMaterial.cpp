@@ -7,7 +7,8 @@
 namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
-    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false)
+    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    m_color(0.5f, 0.5f, 0.5f, 1.0f)
   {}
 
   UnlitMaterial::~UnlitMaterial()
