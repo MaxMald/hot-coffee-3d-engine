@@ -235,7 +235,7 @@ namespace hc
     const Vector<DrawCommand>& drawCommands
   )
   { 
-    for (const DrawCommand& command : m_queueDrawCommands)
+    for (const DrawCommand& command : drawCommands)
     {
 
       String errorMessage;
@@ -302,7 +302,7 @@ namespace hc
     const Vector<DrawCommand>& drawCommands
   )
   {
-    for (const DrawCommand& command : m_queueDrawCommands)
+    for (const DrawCommand& command : drawCommands)
     {
       String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))
