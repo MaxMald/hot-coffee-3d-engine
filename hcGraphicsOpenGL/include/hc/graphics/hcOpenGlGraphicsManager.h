@@ -23,7 +23,10 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::initialize
      */
-    void initialize(const Rect<UInt32>& viewportRect) override;
+    void initialize(
+      const GraphicsSettings& graphicsSettings,
+      const Rect<UInt32>& viewportRect
+    ) override;
 
     /**
      * @copydoc IGraphicsManager::getGraphicsBackendType
@@ -59,11 +62,6 @@ namespace hc
      * @copydoc IGraphicsManager::getPolygonFillType
      */
     polygonFillType::Type getPolygonFillType() const override;
-
-    /**
-     * @copydoc IGraphicsManager::setRenderPipelineType
-     */
-    void setRenderPipelineType(renderPipelineType::Type renderPipelineType) override;
 
     /**
      * @copydoc IGraphicsManager::getRenderPipelineType

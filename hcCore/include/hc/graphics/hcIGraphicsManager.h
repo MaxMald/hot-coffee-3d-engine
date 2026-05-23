@@ -20,6 +20,7 @@ namespace hc
   class IShaderProgramManager;
   class IMeshManager;
   class IGBuffer;
+  class GraphicsSettings;
 
   /**
    * @brief Interface for graphics manager classes.
@@ -35,9 +36,13 @@ namespace hc
     /**
      * @brief Initializes the graphics manager with the given viewport dimensions.
      *
+     * @param graphicsSettings The graphics settings to use for initialization.
      * @param viewportRect The rectangle defining the initial viewport dimensions.
      */
-    virtual void initialize(const Rect<UInt32>& viewportRect) = 0;
+    virtual void initialize(
+      const GraphicsSettings& graphicsSettings,
+      const Rect<UInt32>& viewportRect
+    ) = 0;
 
     /**
      * @brief Gets the type of graphics backend used by this graphics manager.
@@ -84,13 +89,6 @@ namespace hc
      * @return The current polygon fill type.
      */
     virtual polygonFillType::Type getPolygonFillType() const = 0;
-
-    /**
-     * @brief Sets the render pipeline type to use for rendering.
-     *
-     * @param renderPipelineType The render pipeline type to set.
-     */
-    virtual void setRenderPipelineType(renderPipelineType::Type renderPipelineType) = 0;
 
     /**
      * @brief Gets the current render pipeline type used for rendering.
@@ -149,7 +147,7 @@ namespace hc
      *
      * @param width The width in pixels.
      * @param height The height in pixels.
-     * 
+     *
      * @return Smart pointer to the created framebuffer.
      */
     virtual FrameBufferPtr createFrameBuffer(

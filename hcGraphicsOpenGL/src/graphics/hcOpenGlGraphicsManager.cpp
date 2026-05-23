@@ -48,7 +48,10 @@ namespace hc
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
   {}
 
-  void OpenGlGraphicsManager::initialize(const Rect<UInt32>& viewportRect)
+  void OpenGlGraphicsManager::initialize(
+    const GraphicsSettings& graphicsSettings,
+    const Rect<UInt32>& viewportRect
+  )
   {
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -59,6 +62,8 @@ namespace hc
         String(reinterpret_cast<const char*>(glewGetErrorString(err)))
       );
     }
+
+    m_renderPipelineType = graphicsSettings.renderPipelineType;
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
@@ -129,21 +134,6 @@ namespace hc
   polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
   {
     return m_polygonFillType;
-  }
-
-  void OpenGlGraphicsManager::setRenderPipelineType(
-    renderPipelineType::Type renderPipelineType
-  )
-  {
-    if (renderPipelineType == renderPipelineType::DeferredHybrid)
-    {
-      if (!m_gBuffer.isValid())
-        m_gBuffer.initialize(m_viewportRect.width, m_viewportRect.height);
-      else
-        m_gBuffer.resize(m_viewportRect.width, m_viewportRect.height);
-    }
-
-    m_renderPipelineType = renderPipelineType;
   }
 
   renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
