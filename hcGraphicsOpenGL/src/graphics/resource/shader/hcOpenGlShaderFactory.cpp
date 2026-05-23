@@ -20,11 +20,34 @@ namespace hc
     );
   }
 
+  SharedPtr<IShader> OpenGlShaderFactory::createLitVertexShader()
+  {
+    return MakeShared<OpenGlShader>(
+      shaderStageType::Vertex,
+      builtInShaders::LitVertexShader
+    );
+  }
+
   SharedPtr<IShader> OpenGlShaderFactory::createUnlitFragmentShader()
   {
     return MakeShared<OpenGlShader>(
       shaderStageType::Fragment,
       builtInShaders::UnlitFragment
     );
+  }
+
+  SharedPtr<IShader> OpenGlShaderFactory::createBlinnPhongForwardFragmentShader()
+  {
+    return MakeShared<OpenGlShader>(
+      shaderStageType::Fragment,
+      builtInShaders::BlinnPhongForwardFragment
+    );
+  }
+
+  SharedPtr<IShader> OpenGlShaderFactory::createBlinnPhongDeferredFragmentShader()
+  {
+    // TODO
+    // Create a blinn-phon deferred
+    throw RuntimeErrorException("Not Implemeted yet.");
   }
 }

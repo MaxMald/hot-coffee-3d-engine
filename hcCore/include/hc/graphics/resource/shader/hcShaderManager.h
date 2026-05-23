@@ -80,12 +80,28 @@ namespace hc
     SharedPtr<IShader> getDefaultVertexShader() override;
 
     /**
+     * @brief Retrieves the lit vertex shader. If it does not exist, creates
+     * and caches it before returning.
+     *
+     * @return Shared pointer to the lit vertex shader.
+     */
+    SharedPtr<IShader> getLitVertexShader() override;
+
+    /**
      * @brief Retrieves the unlit fragment shader. If it does not exist, creates
      * and caches it before returning.
      *
      * @return Shared pointer to the unlit fragment shader.
      */
     SharedPtr<IShader> getUnlitFragmentShader() override;
+
+    /**
+     * @brief Retrieves the Blinn-Phong forward fragment shader. If it does not
+     * exist, creates and caches it before returning.
+     *
+     * @return Shared pointer to the Blinn-Phong forward fragment shader.
+     */
+    SharedPtr<IShader> getBlinnPhongForwardFragmentShader() override;
 
     /**
      * @brief Clears all cached shaders from the manager.
@@ -96,6 +112,8 @@ namespace hc
     UniquePtr<IShaderFactory> m_shaderFactory;
 
     void createDefaultVertexShader();
+    void createLitVertexShader();
     void createUnlitFragmentShader();
+    void createBlinnPhongForwardFragmentShader();
   };
 }

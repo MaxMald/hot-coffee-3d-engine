@@ -40,11 +40,32 @@ namespace hc
     virtual SharedPtr<IShader> createDefaultVertexShader() = 0;
 
     /**
+     * @brief Creates a lit vertex shader.
+     *
+     * @return Shared pointer to the created vertex shader instance.
+     */
+    virtual SharedPtr<IShader> createLitVertexShader() = 0;
+
+    /**
      * @brief Creates an unlit fragment shader.
      * 
      * @return Shared pointer to the created fragment shader instance.
      */
     virtual SharedPtr<IShader> createUnlitFragmentShader() = 0;
+
+    /**
+     * @brief Creates a Blinn-Phong forward fragment shader.
+     *
+     * @return Shared pointer to the created fragment shader instance.
+     */
+    virtual SharedPtr<IShader> createBlinnPhongForwardFragmentShader() = 0;
+
+    /**
+     * @brief Creates a Blinn-Phong deferred fragment shader.
+     *
+     * @return Shared pointer to the created fragment shader instance.
+     */
+    virtual SharedPtr<IShader> createBlinnPhongDeferredFragmentShader() = 0;
 
   protected:
     IShaderFactory() = default;

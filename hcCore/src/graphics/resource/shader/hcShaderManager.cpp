@@ -4,7 +4,9 @@
 namespace hc
 {
   static constexpr const char* DEFAULT_VERTEX_SHADER_KEY = "#_HC_DEFAULT_VERTEX_SHADER";
+  static constexpr const char* LIT_VERTEX_SHADER_KEY = "#_HC_LIT_VERTEX_SHADER";
   static constexpr const char* UNLIT_FRAGMENT_SHADER_KEY = "#_HC_UNLIT_FRAGMENT_SHADER";
+  static constexpr const char* BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY = "#_HC_BLINN_PHONG_FORWARD_FRAGMENT_SHADER";
 
   ShaderManager::ShaderManager(UniquePtr<IShaderFactory> shaderFactory) :
     m_shaderFactory(std::move(shaderFactory))
@@ -96,6 +98,19 @@ namespace hc
     return getCachedResource(UNLIT_FRAGMENT_SHADER_KEY);
   }
 
+  SharedPtr<IShader> ShaderManager::getBlinnPhongForwardFragmentShader()
+  {
+    if (!hasCachedResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY))
+      createBlinnPhongForwardFragmentShader();
+    return getCachedResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY);
+  }
+
+  SharedPtr<IShader> ShaderManager::getLitVertexShader()
+  {
+    if (!hasCachedResource(LIT_VERTEX_SHADER_KEY))
+      createLitVertexShader();
+    return getCachedResource(LIT_VERTEX_SHADER_KEY);
+  }
   void ShaderManager::clear()
   {
     clearCache();
@@ -114,6 +129,19 @@ namespace hc
     cacheResource(DEFAULT_VERTEX_SHADER_KEY, shader);
   }
 
+  void ShaderManager::createLitVertexShader()
+  {
+    SharedPtr<IShader> shader = m_shaderFactory->createLitVertexShader();
+    if (!shader)
+    {
+      throw RuntimeErrorException(
+        "Failed to create lit vertex shader."
+      );
+    }
+
+    cacheResource(LIT_VERTEX_SHADER_KEY, shader);
+  }
+
   void ShaderManager::createUnlitFragmentShader()
   {
     SharedPtr<IShader> shader = m_shaderFactory->createUnlitFragmentShader();
@@ -125,5 +153,18 @@ namespace hc
     }
 
     cacheResource(UNLIT_FRAGMENT_SHADER_KEY, shader);
+  }
+
+  void ShaderManager::createBlinnPhongForwardFragmentShader()
+  {
+    SharedPtr<IShader> shader = m_shaderFactory->createBlinnPhongForwardFragmentShader();
+    if (!shader)
+    {
+      throw RuntimeErrorException(
+        "Failed to create Blinn-Phong forward fragment shader."
+      );
+    }
+
+    cacheResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY, shader);
   }
 }

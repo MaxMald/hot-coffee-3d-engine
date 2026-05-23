@@ -17,13 +17,7 @@ namespace hc
     ~OpenGlShaderFactory() override = default;
 
     /**
-     * @brief Creates an OpenGL shader from the given source string and shader
-     * stage type.
-     * 
-     * @param content The GLSL source code for the shader.
-     * @param type The shader stage type (e.g., vertex, fragment).
-     * 
-     * @return Shared pointer to the created IShader instance.
+     * @copydoc IShaderFactory::createShaderFromStringContent
      */
     SharedPtr<IShader> createShaderFromStringContent(
       const String& content,
@@ -31,17 +25,28 @@ namespace hc
     ) override;
 
     /**
-     * @brief Creates a default OpenGL vertex shader.
-     * 
-     * @return Shared pointer to the created IShader instance.
+     * @copydoc IShaderFactory::createDefaultVertexShader
      */
     SharedPtr<IShader> createDefaultVertexShader() override;
 
     /**
-     * @brief Creates a default OpenGL unlit fragment shader.
-     * 
-     * @return Shared pointer to the created IShader instance.
+     * @copydoc IShaderFactory::createLitVertexShader
+     */
+    SharedPtr<IShader> createLitVertexShader() override;
+
+    /**
+     * @copydoc IShaderFactory::createUnlitFragmentShader
      */
     SharedPtr<IShader> createUnlitFragmentShader() override;
+
+    /**
+     * @copydoc IShaderFactory::createBlinnPhongForwardFragmentShader
+     */
+    SharedPtr<IShader> createBlinnPhongForwardFragmentShader() override;
+
+    /**
+     * @copydoc IShaderFactory::createBlinnPhongDeferredFragmentShader
+     */
+    SharedPtr<IShader> createBlinnPhongDeferredFragmentShader() override;
   };
 }
