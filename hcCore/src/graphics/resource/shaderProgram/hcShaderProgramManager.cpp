@@ -26,6 +26,12 @@ namespace hc
     return m_unlitShaderProgram;
   }
 
+  SharedPtr<IShaderProgram> ShaderProgramManager::getBlinnPhongForwardProgram()
+  {
+    if (!m_blinnPhongForwardProgram)
+      createBlinnPhongForwardProgram();
+  }
+
   void ShaderProgramManager::clear()
   {
     m_unlitShaderProgram.reset();
@@ -58,7 +64,35 @@ namespace hc
 
     m_unlitShaderProgram->attachShader(vertexShader);
     m_unlitShaderProgram->attachShader(fragmentShader);
-
     m_unlitShaderProgram->linkShaders();
+  }
+
+  void ShaderProgramManager::createBlinnPhongForwardProgram()
+  {
+    m_blinnPhongForwardProgram = m_shaderProgramFactory->createShaderProgram();
+    if (!m_blinnPhongForwardProgram)
+    {
+      throw RuntimeErrorException(
+        "Failed to create Blinn-Phong forward shader program."
+      );
+    }
+    SharedPtr<IShader> vertexShader = m_shaderManager.getLitVertexShader();
+    SharedPtr<IShader> fragmentShader = m_shaderManager.getBlinnPhongForwardFragmentShader();
+    if (!vertexShader || !fragmentShader)
+    {
+      throw RuntimeErrorException(
+        "Failed to retrieve shaders for Blinn-Phong forward shader program."
+      );
+    }
+
+    if (!vertexShader->isCompiled())
+      vertexShader->compile();
+
+    if (!fragmentShader->isCompiled())
+      fragmentShader->compile();
+
+    m_blinnPhongForwardProgram->attachShader(vertexShader);
+    m_blinnPhongForwardProgram->attachShader(fragmentShader);
+    m_blinnPhongForwardProgram->linkShaders();
   }
 }

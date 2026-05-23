@@ -26,6 +26,13 @@ namespace hc
     virtual SharedPtr<IShaderProgram> getUnlitShaderProgram() = 0;
 
     /**
+     * @brief Retrieves the default Blinn-Phong shader program for forward rendering.
+     *
+     * @return Shared pointer to the Blinn-Phong forward shader program instance.
+     */
+    virtual SharedPtr<IShaderProgram> getBlinnPhongForwardProgram() = 0;
+
+    /**
      * @brief Clears all managed shader programs and releases associated
      * resources.
      */
