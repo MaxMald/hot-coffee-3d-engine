@@ -100,7 +100,7 @@ namespace hc
     return m_shaderProgram != nullptr && m_shaderProgram->isValid();
   }
 
-  void BlinnPhongMaterial::initilize(
+  void BlinnPhongMaterial::initialize(
     const BlinnPhongMaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,

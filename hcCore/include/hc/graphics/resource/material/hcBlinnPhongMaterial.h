@@ -70,7 +70,7 @@ namespace hc
      * @param specularTexture Shared pointer to the specular texture resource.
      * @param shaderProgram Shared pointer to the shader program used for rendering this material.
      */
-    void initilize(
+    void initialize(
       const BlinnPhongMaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,

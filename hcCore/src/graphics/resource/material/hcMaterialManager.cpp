@@ -148,7 +148,7 @@ namespace hc
       specularTexture = m_whiteTexture;
 
     SharedPtr<BlinnPhongMaterial> material = MakeShared<BlinnPhongMaterial>(generateMaterialId());
-    material->initilize(
+    material->initialize(
       descriptor,
       albedoTexture,
       normalTexture,
