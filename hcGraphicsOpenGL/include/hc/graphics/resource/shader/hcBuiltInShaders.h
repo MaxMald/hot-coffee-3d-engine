@@ -73,22 +73,17 @@ namespace hc
 
       uniform vec4 uColor;
       uniform sampler2D uTexture;
-      uniform bool uUseTexture;
       uniform float uAlphaCutoff;
 
       void main()
       {
         vec4 baseColor = uColor * vColor;
-        if (uUseTexture)
-        {
-          vec4 textureColor = texture(uTexture, vTexCoord);
-          if (uAlphaCutoff > 0.0 && textureColor.a < uAlphaCutoff)
-            discard;
+        vec4 textureColor = texture(uTexture, vTexCoord);
 
-          baseColor *= textureColor;
-        }
-          
-        FragColor = baseColor;
+        if (uAlphaCutoff > 0.0 && textureColor.a < uAlphaCutoff)
+          discard;
+
+        FragColor = baseColor * textureColor;
       }
     )";
 

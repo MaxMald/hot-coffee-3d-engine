@@ -20,7 +20,7 @@ namespace hc
   class IShaderProgramManager;
   class IMeshManager;
   class IGBuffer;
-  class GraphicsSettings;
+  struct GraphicsSettings;
 
   /**
    * @brief Interface for graphics manager classes.
