@@ -91,6 +91,7 @@ namespace hc
     inline const String BlinnPhongForwardFragment = R"(
       #version 330 core
       in vec2 vTexCoord;
+      in vec3 vWorldPos;
       in vec3 vNormal;
       in vec3 vTangent;
       in vec4 vColor;
