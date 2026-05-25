@@ -6,9 +6,12 @@
 namespace hc
 {
   class AMaterialDescriptor;
+  class ITexture;
   class IMaterial;
   class UnlitMaterial;
   class UnlitMaterialDescriptor;
+  class BlinnPhongMaterial;
+  class BlinnPhongMaterialDescriptor;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
   {
@@ -48,6 +51,18 @@ namespace hc
     virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
       const UnlitMaterialDescriptor& descriptor
     ) = 0;
+    
+    /**
+     * @brief Creates a Blinn-Phong material.
+     *
+     * @param descriptor Reference to the Blinn-Phong material descriptor containing the
+     * properties for the Blinn-Phong material to be created.
+     * 
+     * @return Shared pointer to the created Blinn-Phong material.
+     */
+    virtual SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
+      const BlinnPhongMaterialDescriptor& descriptor
+    ) = 0;
 
     /**
      * @brief Gets all materials.
@@ -55,6 +70,24 @@ namespace hc
      * @return A constant reference to the vector of materials.
      */
     virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
+
+    /**
+     * @brief Gets the default textures used when a material does not have a specific
+     * texture assigned.
+     */
+    virtual const SharedPtr<ITexture>& getDefaultAlbedoTexture() const = 0;
+
+    /**
+     * @brief Gets the default normal texture used when a material does not have a
+     * specific normal texture assigned.
+     */
+    virtual const SharedPtr<ITexture>& getDefaultNormalTexture() const = 0;
+
+    /**
+     * @brief Gets the default specular texture used when a material does not have a
+     * specific specular texture assigned.
+     */
+    virtual const SharedPtr<ITexture>& getDefaultSpecularTexture() const = 0;
 
     /**
      * @brief Clears all materials.

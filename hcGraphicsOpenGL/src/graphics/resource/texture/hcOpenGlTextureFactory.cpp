@@ -3,6 +3,11 @@
 
 namespace hc
 {
+  SharedPtr<ITexture> OpenGlTextureFactory::createTexture()
+  {
+    return MakeShared<OpenGlTexture>();
+  }
+
   SharedPtr<ITexture> OpenGlTextureFactory::createTexture(
     SharedPtr<Image> image
   )

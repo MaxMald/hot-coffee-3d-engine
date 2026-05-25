@@ -52,14 +52,19 @@ namespace hc
     const Id& getId() const override;
 
     /**
-     * @copydoc ITexture::initialize
+     * @copydoc ITexture::initialize(const Image&)
      */
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize
+     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8)
      */
     void initialize(UInt32 width, UInt32 height, UInt8 channels) override;
+
+    /**
+     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8, const Color&)
+     */
+    void initialize(UInt32 width, UInt32 height, UInt8 channels, const Color& initColor) override;
 
     /**
      * @brief Returns the width of the texture in pixels.
@@ -138,13 +143,16 @@ namespace hc
      * @param internalFormat The internal format of the texture (e.g., GL_RGBA8).
      * @param format The format of the pixel data (e.g., GL_RGBA).
      * @param type The data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
+     * @param initData Optional pointer to initial pixel data to upload to the texture. If
+     * nullptr, the texture will be created with uninitialized data.
      */
     void initialize(
       UInt32 width,
       UInt32 height,
       GLenum internalFormat,
       GLenum format,
-      GLenum type
+      GLenum type,
+      const void* initData = nullptr
     );
 
   private:
@@ -158,6 +166,9 @@ namespace hc
     GLenum m_type;
     bool m_created;
 
+    static void assertNumberOfChannels(UInt8 channels);
+    static void assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height);
     void assertIsCreated() const;
+    
   };
 }

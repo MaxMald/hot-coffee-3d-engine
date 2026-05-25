@@ -30,6 +30,7 @@ namespace hc
   {
     if (!m_blinnPhongForwardProgram)
       createBlinnPhongForwardProgram();
+    return m_blinnPhongForwardProgram;
   }
 
   void ShaderProgramManager::clear()
@@ -76,6 +77,7 @@ namespace hc
         "Failed to create Blinn-Phong forward shader program."
       );
     }
+
     SharedPtr<IShader> vertexShader = m_shaderManager.getLitVertexShader();
     SharedPtr<IShader> fragmentShader = m_shaderManager.getBlinnPhongForwardFragmentShader();
     if (!vertexShader || !fragmentShader)
