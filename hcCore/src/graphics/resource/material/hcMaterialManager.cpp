@@ -86,6 +86,23 @@ namespace hc
 
       return createUnlitMaterial(*unlitDescriptor);
     }
+    else if (shaderType == shadingType::BlinnPhong)
+    {
+      const BlinnPhongMaterialDescriptor* blinnPhongDescriptor =
+        dynamic_cast<const BlinnPhongMaterialDescriptor*>(descriptor.get());
+
+      if (!blinnPhongDescriptor)
+      {
+        LogService::Error(
+          String::Format(
+            "Failed to cast MaterialDescriptor to BlinnPhongMaterialDescriptor for shader type 'Blinn-Phong'."
+          )
+        );
+        return nullptr;
+      }
+
+      return createBlinnPhongMaterial(*blinnPhongDescriptor);
+    }
 
     throw RuntimeErrorException(
       String::Format(
