@@ -249,7 +249,7 @@ namespace hc
       glBindVertexArray(drawData.vao);
 
       command.material->bind(
-        command.cameraMatrices,
+        command.cameraRenderData,
         renderPassType::Type::DeferredGeometry
       );
       command.material->updateModelMatrix(command.modelMatrix);
@@ -338,7 +338,7 @@ namespace hc
     { 
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
+      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       // Pass 1: Render back faces first
@@ -368,7 +368,7 @@ namespace hc
         glDisable(GL_CULL_FACE);
 
       glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
+      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       glDrawElements(

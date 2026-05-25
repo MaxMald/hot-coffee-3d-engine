@@ -29,6 +29,7 @@ namespace hc
         vNormal = mat3(uModel) * aNormal;
         vTangent = mat3(uModel) * aTangent;
         vColor = aColor;
+
         gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
       }
     )";

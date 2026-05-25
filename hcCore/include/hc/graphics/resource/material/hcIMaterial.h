@@ -8,7 +8,7 @@
 
 namespace hc
 {
-  struct CameraMatrices;
+  struct CameraRenderData;
   class AMaterialDescriptor;
 
   /**
@@ -85,11 +85,11 @@ namespace hc
     /**
      * @brief Binds the material for rendering.
      *
-     * @param cameraMatrices The camera matrices to use for rendering.
+     * @param cameraRenderData The camera matrices to use for rendering.
      * @param renderPass The render pass type.
      */
     virtual void bind(
-      const CameraMatrices& cameraMatrices,
+      const CameraRenderData& cameraRenderData,
       renderPassType::Type renderPass
     ) = 0;
 

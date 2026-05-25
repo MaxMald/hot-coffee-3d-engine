@@ -158,8 +158,7 @@ namespace hc::editor
     const SpotLight& spotLight = spotLightComponent.getSpotLight();
 
     RenderContext renderContext;
-    renderContext.cameraMatrices = CameraMatrices::Create(camera);
-    renderContext.cameraPosition = camera.getPosition();
+    renderContext.cameraRenderData = CameraRenderData::Create(camera);
     renderContext.modelPosition = gameObject.getWorldPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
@@ -215,8 +214,7 @@ namespace hc::editor
     const OmniLight& omniLight = omniLightComponent.getOmniLight();
 
     RenderContext renderContext;
-    renderContext.cameraMatrices = CameraMatrices::Create(camera);
-    renderContext.cameraPosition = camera.getPosition();
+    renderContext.cameraRenderData = CameraRenderData::Create(camera);
     renderContext.modelPosition = gameObject.getWorldPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
@@ -254,8 +252,7 @@ namespace hc::editor
     const DirectionalLight& directionalLight = directionalLightComponent.getDirectionalLight();
 
     RenderContext renderContext;
-    renderContext.cameraMatrices = CameraMatrices::Create(camera);
-    renderContext.cameraPosition = camera.getPosition();
+    renderContext.cameraRenderData = CameraRenderData::Create(camera);
     renderContext.modelPosition = gameObject.getWorldPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());

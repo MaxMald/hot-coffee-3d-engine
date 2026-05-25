@@ -3,7 +3,7 @@
 namespace hc
 {
   void DrawCommand::initialize(
-    const CameraMatrices& _cameraMatrices,
+    const CameraRenderData& _cameraRenderData,
     const Matrix4& _modelMatrix,
     SharedPtr<IMaterial> _material,
     float distanceToCamera,
@@ -13,7 +13,7 @@ namespace hc
     const Variant<OpenGlDrawData>& _apiDrawData
   )
   {
-    this->cameraMatrices = _cameraMatrices;
+    this->cameraRenderData = _cameraRenderData;
     this->modelMatrix = _modelMatrix;
     this->material = _material;
     this->firstIndex = _firstIndex;

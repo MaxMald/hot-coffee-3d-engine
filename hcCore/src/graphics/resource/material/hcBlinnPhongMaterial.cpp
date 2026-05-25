@@ -34,7 +34,7 @@ namespace hc
   }
 
   void BlinnPhongMaterial::bind(
-    const CameraMatrices& cameraMatrices,
+    const CameraRenderData& cameraRenderData,
     renderPassType::Type renderPass
   )
   {
@@ -53,6 +53,13 @@ namespace hc
       );
     }
 
+    // TODO:
+    // Send light data to shader.
+
+    throw RuntimeErrorException(
+      "Not implemented."
+    );
+
     coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Blinn-Phong shader program");
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
@@ -60,12 +67,10 @@ namespace hc
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
+    m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
+    m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
-
-    //m_shaderProgram->setUniform("uCameraPosition", cameraMatrices.);)
-    // TODO: Pass camera position to shader
+    m_shaderProgram->setUniform("uCameraPosition", cameraRenderData.cameraWorldPosition);
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
       m_shaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);

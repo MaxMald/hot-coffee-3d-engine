@@ -96,13 +96,7 @@ namespace hc
       );
     }
 
-    RenderContext renderContext;
-    renderContext.cameraMatrices.viewMatrix = camera->getViewMatrix();
-    renderContext.cameraMatrices.projectionMatrix = camera->getProjectionMatrix();
-    renderContext.cameraPosition = camera->getPosition();
-    renderContext.transform = Matrix4::Identity();
-    renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
-
+    RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
     onBeforeDraw(renderContext);
     m_sceneGraph.draw(renderContext);
     onAfterDraw(renderContext);

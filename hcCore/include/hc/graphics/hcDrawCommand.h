@@ -29,9 +29,9 @@ namespace hc
   struct HC_CORE_EXPORT DrawCommand
   {
     /**
-     * Camera matrices (projection and view) to use for this draw command.
+     * Camera render data.
      */
-    CameraMatrices cameraMatrices;
+    CameraRenderData cameraRenderData;
 
     /**
      * The model-to-world transformation matrix.
@@ -73,8 +73,7 @@ namespace hc
      * Initializes the draw command with rendering data and generates
      * the sort key for proper rendering order.
      *
-     * @param cameraMatrices The camera projection and view matrices to use for this draw
-     * command.
+     * @param cameraRenderData The camera render data to use for this draw command.
      * @param modelMatrix The model-to-world transformation matrix.
      * @param material The material to use for rendering.
      * @param distanceToCamera Distance from camera for depth sorting.
@@ -84,7 +83,7 @@ namespace hc
      * @param apiDrawData Graphics API-specific rendering data.
      */
     void initialize(
-      const CameraMatrices& cameraMatrices,
+      const CameraRenderData& cameraRenderData,
       const Matrix4& modelMatrix,
       SharedPtr<IMaterial> material,
       float distanceToCamera,

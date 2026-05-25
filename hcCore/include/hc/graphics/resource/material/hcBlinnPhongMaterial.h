@@ -37,7 +37,7 @@ namespace hc
      * @copydoc IMaterial::bind
      */
     void bind(
-      const CameraMatrices& cameraMatrices,
+      const CameraRenderData& cameraRenderData,
       renderPassType::Type renderPass
     ) override;
 
