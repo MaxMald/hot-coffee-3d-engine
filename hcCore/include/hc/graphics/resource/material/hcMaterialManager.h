@@ -25,6 +25,11 @@ namespace hc
     virtual ~MaterialManager() = default;
 
     /**
+    * @copydoc IMaterialManager::initialize
+    */
+    void initialize() override;
+
+    /**
      * @copydoc IMaterialManager::createMaterialFromFile
      */
     SharedPtr<IMaterial> createMaterialFromFile(

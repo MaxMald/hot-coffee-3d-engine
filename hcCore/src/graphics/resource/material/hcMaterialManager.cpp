@@ -1,4 +1,6 @@
 #include "hc/graphics/resource/material/hcMaterialManager.h"
+
+#include "hc/utilities/hcCoreAssertions.h"
 #include "hc/graphics/resource/shaderProgram/hcShaderProgramManager.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
@@ -24,6 +26,9 @@ namespace hc
     m_textureManager(textureManager),
     m_whiteTexture(nullptr),
     m_defaultNormalTexture(nullptr)
+  {}
+
+  void MaterialManager::initialize()
   {
     createDefaultTextures();
   }
@@ -184,9 +189,11 @@ namespace hc
   {
     m_whiteTexture = m_textureManager.createTexture();
     m_whiteTexture->initialize(1, 1, 4, Color::White()); // 1x1 white texture
+    coreAssertions::AssertTextureIsValid(m_whiteTexture, "Default white texture");
 
     m_defaultNormalTexture = m_textureManager.createTexture();
     m_defaultNormalTexture->initialize(1, 1, 4, Color(0.5f, 0.5f, 1.0f, 1.0f)); // 1x1 normal texture (0.5, 0.5, 1.0)
+    coreAssertions::AssertTextureIsValid(m_defaultNormalTexture, "Default normal texture");
   }
 
   SharedPtr<ITexture> MaterialManager::getTextureFromPath(const Path& texturePath)

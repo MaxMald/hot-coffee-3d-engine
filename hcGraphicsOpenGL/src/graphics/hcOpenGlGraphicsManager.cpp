@@ -70,6 +70,8 @@ namespace hc
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     setViewport(viewportRect);
+
+    m_materialManager.initialize();
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const

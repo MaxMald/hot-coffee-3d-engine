@@ -19,6 +19,11 @@ namespace hc
     virtual ~IMaterialManager() = default;
 
     /**
+     * @brief Initializes the material manager and loads any necessary resources.
+     */
+    virtual void initialize() = 0;
+
+    /**
      * @brief Creates a material from a material descriptor file.
      *
      * @param materialDescriptorPath Path to the material descriptor file.
