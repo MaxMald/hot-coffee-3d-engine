@@ -3,19 +3,21 @@
 
 namespace hc
 {
-  CameraMatrices CameraMatrices::Create(Camera& camera)
+  CameraRenderData CameraRenderData::Create(Camera& camera)
   {
-    CameraMatrices cameraMatrices;
-    cameraMatrices.projectionMatrix = camera.getProjectionMatrix();
-    cameraMatrices.viewMatrix = camera.getViewMatrix();
-    return cameraMatrices;
+    CameraRenderData cameraRenderData;
+    cameraRenderData.projectionMatrix = camera.getProjectionMatrix();
+    cameraRenderData.viewMatrix = camera.getViewMatrix();
+    cameraRenderData.cameraWorldPosition = camera.getPosition();
+    return cameraRenderData;
   }
 
-  CameraMatrices CameraMatrices::Create(const Camera& camera)
+  CameraRenderData CameraRenderData::Create(const Camera& camera)
   {
-    CameraMatrices cameraMatrices;
-    cameraMatrices.projectionMatrix = camera.getCachedProjectionMatrix();
-    cameraMatrices.viewMatrix = camera.getViewMatrix();
-    return cameraMatrices;
+    CameraRenderData cameraRenderData;
+    cameraRenderData.projectionMatrix = camera.getCachedProjectionMatrix();
+    cameraRenderData.viewMatrix = camera.getViewMatrix();
+    cameraRenderData.cameraWorldPosition = camera.getPosition();
+    return cameraRenderData;
   }
 }

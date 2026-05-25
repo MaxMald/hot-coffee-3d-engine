@@ -14,11 +14,12 @@ namespace hc
     ~OpenGlTextureFactory() override = default;
 
     /**
-     * @brief Creates an OpenGL texture instance from the given image.
-     * 
-     * @param image Shared pointer to the image data.
-     * 
-     * @return Shared pointer to the created ITexture instance.
+     * @copydoc ITextureFactory::createTexture()
+     */
+    SharedPtr<ITexture> createTexture() override;
+
+    /**
+     * @copydoc ITextureFactory::createTexture(SharedPtr<Image>)
      */
     SharedPtr<ITexture> createTexture(SharedPtr<Image> image) override;
   };

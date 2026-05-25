@@ -34,6 +34,18 @@ namespace hc
     virtual void initialize(UInt32 width, UInt32 height, UInt8 channels) = 0;
 
     /**
+     * @brief Initializes the texture with the given dimensions and fills it with the
+     * specified color. The texture will be created with pixel data initialized to the
+     * provided color.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param channels The number of color channels in the texture.
+     * @param initColor The color to initialize the texture's pixel data with.
+     */
+    virtual void initialize(UInt32 width, UInt32 height, UInt8 channels, const Color& initColor) = 0;
+
+    /**
      * @brief Gets the width of the texture in pixels.
      * 
      * @return Texture width as an unsigned 32-bit integer.

@@ -12,20 +12,14 @@ namespace hc
    */
   struct HC_CORE_EXPORT RenderContext
   {
-    static RenderContext Create(
-      Camera& camera,
-      const Matrix4& modelTransform
-    );
+    static RenderContext Create(Camera& camera, const Matrix4& modelTransform);
+
+    static RenderContext Create(const Camera& camera, const Matrix4& modelTransform);
 
     /**
-     * @brief The camera's projection and view matrices.
+     * @brief The render data for the camera.
      */
-    CameraMatrices cameraMatrices;
-
-    /**
-     * @brief The position of the camera in world space.
-     */
-    Vector3f cameraPosition;
+    CameraRenderData cameraRenderData;
 
     /**
      * @brief The transform matrix for the rendered object.

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/utilities/hcCoreAssertions.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/plugins/hcIPlugin.h"

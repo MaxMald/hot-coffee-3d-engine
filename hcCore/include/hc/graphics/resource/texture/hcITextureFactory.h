@@ -19,6 +19,14 @@ namespace hc
     virtual ~ITextureFactory() = default;
 
     /**
+     * @brief Creates an uninitialized-empty texture.
+     *
+     * @return Shared pointer to the created texture instance. nullptr if
+     * creation fails.
+     */
+    virtual SharedPtr<ITexture> createTexture() = 0;
+
+    /**
      * @brief Creates a texture from the given image.
      *
      * @param image Shared pointer to the image used for texture creation.

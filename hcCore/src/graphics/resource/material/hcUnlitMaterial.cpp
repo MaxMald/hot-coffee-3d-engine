@@ -1,4 +1,6 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
+
+#include "hc/utilities/hcCoreAssertions.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/hcCameraMatrices.h"
@@ -27,7 +29,7 @@ namespace hc
   }
 
   void UnlitMaterial::bind(
-    const CameraMatrices& cameraMatrices,
+    const CameraRenderData& cameraRenderData,
     renderPassType::Type renderPass
   )
   {
@@ -36,15 +38,13 @@ namespace hc
         "UnlitMaterial::bind - UnlitMaterial only supports Forward render pass."
       );
 
-    if (!m_shaderProgram)
-      throw RuntimeErrorException(
-        "UnlitMaterial::bind - Shader program is not set for this material."
-      );
+    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Unlit shader program");
+    coreAssertions::AssertTextureIsValid(m_mainTexture, "Main texture");
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
+    m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
+    m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
@@ -52,17 +52,8 @@ namespace hc
     else
       m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
-    if (m_mainTexture)
-    {
-      m_shaderProgram->setUniform("uUseTexture", true);
-      m_mainTexture->bind(0);
-      m_shaderProgram->setUniformTexture("uTexture", 0);
-    }
-    else
-    {
-      // TODO Bind to a default white texture
-      m_shaderProgram->setUniform("uUseTexture", false);
-    }
+    m_mainTexture->bind(0);
+    m_shaderProgram->setUniformTexture("uTexture", 0);
   }
 
   void UnlitMaterial::updateModelMatrix(const Matrix4& modelMatrix)
@@ -86,10 +77,8 @@ namespace hc
     const SharedPtr<ITexture>& mainTexture
   )
   {
-    if (!shaderProgram)
-      throw RuntimeErrorException(
-        "UnlitMaterial::initialize - Shader program cannot be null."
-      );
+    coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
+    coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
     m_renderMode = descriptor.getRenderMode();
     m_doubleSided = descriptor.isDoubleSided();

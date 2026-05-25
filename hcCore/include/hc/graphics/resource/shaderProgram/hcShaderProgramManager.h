@@ -30,15 +30,17 @@ namespace hc
     ~ShaderProgramManager() override;
 
     /**
-     * @brief Retrieves the default unlit shader program.
-     * 
-     * @return Shared pointer to the unlit shader program instance.
+     * @copydoc IShaderProgramManager::getUnlitShaderProgram
      */
     SharedPtr<IShaderProgram> getUnlitShaderProgram() override;
 
     /**
-     * @brief Clears all managed shader programs and releases associated
-     * resources.
+     * @copydoc IShaderProgramManager::getBlinnPhongForwardProgram
+     */
+    SharedPtr<IShaderProgram> getBlinnPhongForwardProgram() override;
+
+    /**
+     * @copydoc IShaderProgramManager::clear
      */
     void clear() override;
 
@@ -46,10 +48,16 @@ namespace hc
     UniquePtr<IShaderProgramFactory> m_shaderProgramFactory;
     IShaderManager& m_shaderManager;
     SharedPtr<IShaderProgram> m_unlitShaderProgram;
+    SharedPtr<IShaderProgram> m_blinnPhongForwardProgram;
 
     /**
      * @brief Creates the unlit shader program and caches it.
      */
     void createUnlitShaderProgram();
+
+    /**
+     * @brief Creates the Blinn-Phong forward shader program and caches it.
+     */
+    void createBlinnPhongForwardProgram();
   };
 }

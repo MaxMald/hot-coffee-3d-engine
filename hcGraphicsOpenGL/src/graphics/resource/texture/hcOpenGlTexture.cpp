@@ -66,51 +66,18 @@ namespace hc
     if (m_created)
       throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
 
-    if (image.getWidth() == 0 || image.getHeight() == 0)
-      throw InvalidArgumentException(
-        String::Format(
-          "Invalid image dimensions (%ux%u) for texture creation. Dimensions must be greater than zero.",
-          image.getWidth(),
-          image.getHeight()
-        )
-      );
+    assertNumberOfChannels(image.getChannels());
+    GLenum format = (image.getChannels() == 4) ? GL_RGBA : GL_RGB;
+    GLenum internalFormat = (image.getChannels() == 4) ? GL_RGBA8 : GL_RGB8;
 
-    if (image.getChannels() != 3 && image.getChannels() != 4)
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
-          image.getChannels()
-        )
-      );
-
-    m_width = image.getWidth();
-    m_height = image.getHeight();
-    m_channels = image.getChannels();
-    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
-    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
-
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(
-      GL_TEXTURE_2D,
-      0,
-      m_internalFormat,
-      static_cast<Int32>(m_width),
-      static_cast<Int32>(m_height),
-      0,
-      m_format,
-      m_type,
+    initialize(
+      image.getWidth(),
+      image.getHeight(),
+      internalFormat,
+      format,
+      GL_UNSIGNED_BYTE,
       image.getBuffer().data()
     );
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    m_created = true;
   }
 
   void OpenGlTexture::initialize(UInt32 width, UInt32 height, UInt8 channels)
@@ -118,51 +85,60 @@ namespace hc
     if (m_created)
       throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
 
-    if (width == 0 || height == 0)
-      throw InvalidArgumentException(
-        String::Format(
-          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
-          width,
-          height
-        )
-      );
+    assertDimensionsAreGreaterThanZero(width, height);
+    assertNumberOfChannels(channels);
 
-    if (channels != 3 && channels != 4)
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
-          channels
-        )
-      );
+    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+    GLenum internalFormat = (channels == 4) ? GL_RGBA8 : GL_RGB8;
 
-    m_width = width;
-    m_height = height;
-    m_channels = channels;
-    m_format = (m_channels == 4) ? GL_RGBA : GL_RGB;
-    m_internalFormat = (m_channels == 4) ? GL_RGBA8 : GL_RGB8;
-
-    glGenTextures(1, &m_textureId);
-    glBindTexture(GL_TEXTURE_2D, m_textureId);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    glTexImage2D(
-      GL_TEXTURE_2D,
-      0,
-      m_internalFormat,
-      static_cast<Int32>(m_width),
-      static_cast<Int32>(m_height),
-      0,
-      m_format,
-      m_type,
-      nullptr
+    initialize(
+      width,
+      height,
+      internalFormat,
+      format,
+      GL_UNSIGNED_BYTE
     );
+  }
 
-    glBindTexture(GL_TEXTURE_2D, 0);
-    m_created = true;
+  void OpenGlTexture::initialize(
+    UInt32 width,
+    UInt32 height,
+    UInt8 channels,
+    const Color& initColor
+  )
+  {
+    if (m_created)
+      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+
+    assertDimensionsAreGreaterThanZero(width, height);
+    assertNumberOfChannels(channels);
+
+    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
+    GLenum internalFormat = (channels == 4) ? GL_RGBA8 : GL_RGB8;
+
+    BufferByte initData(width * height * channels);
+    Byte r = static_cast<Byte>(initColor.r * 255);
+    Byte g = static_cast<Byte>(initColor.g * 255);
+    Byte b = static_cast<Byte>(initColor.b * 255);
+    Byte a = static_cast<Byte>(initColor.a * 255);
+
+    for (size_t i = 0; i < width * height; ++i)
+    {
+      initData[i * channels + 0] = r;
+      initData[i * channels + 1] = g;
+      initData[i * channels + 2] = b;
+      if (channels == 4)
+        initData[i * channels + 3] = a;
+    }
+
+    initialize(
+      width,
+      height,
+      internalFormat,
+      format,
+      GL_UNSIGNED_BYTE,
+      initData.data()
+    );
   }
 
   UInt32 OpenGlTexture::getWidth() const
@@ -264,20 +240,14 @@ namespace hc
     UInt32 height,
     GLenum internalFormat,
     GLenum format,
-    GLenum type
+    GLenum type,
+    const void* initData
   )
   {
     if (m_created)
       throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
 
-    if (width == 0 || height == 0)
-      throw InvalidArgumentException(
-        String::Format(
-          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
-          width,
-          height
-        )
-      );
+    assertDimensionsAreGreaterThanZero(width, height);
 
     m_width = width;
     m_height = height;
@@ -289,8 +259,8 @@ namespace hc
     glGenTextures(1, &m_textureId);
     glBindTexture(GL_TEXTURE_2D, m_textureId);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -303,11 +273,34 @@ namespace hc
       0,
       m_format,
       m_type,
-      nullptr
+      initData
     );
 
     glBindTexture(GL_TEXTURE_2D, 0);
     m_created = true;
+  }
+
+  void OpenGlTexture::assertNumberOfChannels(UInt8 channels)
+  {
+    if (channels != 3 && channels != 4)
+      throw InvalidArgumentException(
+        String::Format(
+          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
+          channels
+        )
+      );
+  }
+
+  void OpenGlTexture::assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height)
+  {
+    if (width == 0 || height == 0)
+      throw InvalidArgumentException(
+        String::Format(
+          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
+          width,
+          height
+        )
+      );
   }
 
   void OpenGlTexture::assertIsCreated() const

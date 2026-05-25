@@ -67,12 +67,24 @@ namespace hc
      * and caches it before returning.
      */
     virtual SharedPtr<IShader> getDefaultVertexShader() = 0;
+
+    /**
+     * @brief Retrieves the lit vertex shader. If it does not exist, creates and
+     * caches it before returning.
+     */
+    virtual SharedPtr<IShader> getLitVertexShader() = 0;
     
     /**
      * @brief Retrieves the unlit fragment shader. If it does not exist, creates
      * and caches it before returning.
      */
     virtual SharedPtr<IShader> getUnlitFragmentShader() = 0;
+
+    /**
+     * @brief Retrieves the Blinn-Phong forward fragment shader. If it does not
+     * exist, creates and caches it before returning.
+     */
+    virtual SharedPtr<IShader> getBlinnPhongForwardFragmentShader() = 0;
 
     /**
      * @brief Clears all cached shaders from the manager.

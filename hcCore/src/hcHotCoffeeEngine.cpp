@@ -125,6 +125,7 @@ namespace hc
         *m_assetManager
       ));
       m_graphicsManager->initialize(
+        settings.graphicsSettings,
         Rect<UInt32>(
           0,
           0,

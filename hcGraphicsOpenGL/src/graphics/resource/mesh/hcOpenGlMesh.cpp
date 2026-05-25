@@ -44,7 +44,7 @@ namespace hc
     if (!m_model)
       return;
 
-    float distanceToCamera = (renderContext.cameraPosition - renderContext.modelPosition).length();
+    float distanceToCamera = (renderContext.cameraRenderData.cameraWorldPosition - renderContext.modelPosition).length();
 
     const Vector<ModelSubMesh>& subMeshes = m_model->getSubMeshes();
     for (const ModelSubMesh& submesh : subMeshes)
@@ -209,7 +209,7 @@ namespace hc
 
     DrawCommand command;
     command.initialize(
-      renderContext.cameraMatrices,
+      renderContext.cameraRenderData,
       renderContext.transform,
       material,
       distanceToCamera,

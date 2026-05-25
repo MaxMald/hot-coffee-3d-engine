@@ -48,7 +48,10 @@ namespace hc
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
   {}
 
-  void OpenGlGraphicsManager::initialize(const Rect<UInt32>& viewportRect)
+  void OpenGlGraphicsManager::initialize(
+    const GraphicsSettings& graphicsSettings,
+    const Rect<UInt32>& viewportRect
+  )
   {
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
@@ -60,11 +63,15 @@ namespace hc
       );
     }
 
+    m_renderPipelineType = graphicsSettings.renderPipelineType;
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     setViewport(viewportRect);
+
+    m_materialManager.initialize();
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -129,21 +136,6 @@ namespace hc
   polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
   {
     return m_polygonFillType;
-  }
-
-  void OpenGlGraphicsManager::setRenderPipelineType(
-    renderPipelineType::Type renderPipelineType
-  )
-  {
-    if (renderPipelineType == renderPipelineType::DeferredHybrid)
-    {
-      if (!m_gBuffer.isValid())
-        m_gBuffer.initialize(m_viewportRect.width, m_viewportRect.height);
-      else
-        m_gBuffer.resize(m_viewportRect.width, m_viewportRect.height);
-    }
-
-    m_renderPipelineType = renderPipelineType;
   }
 
   renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
@@ -259,7 +251,7 @@ namespace hc
       glBindVertexArray(drawData.vao);
 
       command.material->bind(
-        command.cameraMatrices,
+        command.cameraRenderData,
         renderPassType::Type::DeferredGeometry
       );
       command.material->updateModelMatrix(command.modelMatrix);
@@ -348,7 +340,7 @@ namespace hc
     { 
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
+      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       // Pass 1: Render back faces first
@@ -378,7 +370,7 @@ namespace hc
         glDisable(GL_CULL_FACE);
 
       glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraMatrices, renderPassType::Type::Forward);
+      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix);
 
       glDrawElements(

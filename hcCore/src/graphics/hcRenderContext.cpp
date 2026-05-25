@@ -3,14 +3,19 @@
 
 namespace hc
 {
-  RenderContext RenderContext::Create(
-    Camera& camera,
-    const Matrix4& modelTransform
-  )
+  RenderContext RenderContext::Create(Camera& camera, const Matrix4& modelTransform)
   {
     RenderContext renderContext;
-    renderContext.cameraMatrices = CameraMatrices::Create(camera);
-    renderContext.cameraPosition = camera.getPosition();
+    renderContext.cameraRenderData = CameraRenderData::Create(camera);
+    renderContext.transform = modelTransform;
+    renderContext.modelPosition = Matrix4::ExtractTranslation(modelTransform);
+    return renderContext;
+  }
+
+  RenderContext RenderContext::Create(const Camera& camera, const Matrix4& modelTransform)
+  {
+    RenderContext renderContext;
+    renderContext.cameraRenderData = CameraRenderData::Create(camera);
     renderContext.transform = modelTransform;
     renderContext.modelPosition = Matrix4::ExtractTranslation(modelTransform);
     return renderContext;

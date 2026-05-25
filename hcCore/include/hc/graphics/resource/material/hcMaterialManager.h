@@ -4,6 +4,7 @@
 
 namespace hc
 {
+  class ITexture;
   class ITextureManager;
   class IShaderProgramManager;
   class IAssetManager;
@@ -22,6 +23,11 @@ namespace hc
       IShaderProgramManager& shaderProgramManager
     );
     virtual ~MaterialManager() = default;
+
+    /**
+    * @copydoc IMaterialManager::initialize
+    */
+    void initialize() override;
 
     /**
      * @copydoc IMaterialManager::createMaterialFromFile
@@ -45,9 +51,31 @@ namespace hc
     ) override;
 
     /**
+     * @copydoc IMaterialManager::createBlinnPhongMaterial
+     */
+    SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
+      const BlinnPhongMaterialDescriptor& descriptor
+    ) override;
+
+    /**
      * @copydoc IMaterialManager::getMaterials
      */
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
+
+    /**
+     * @copydoc IMaterialManager::getDefaultAlbedoTexture
+     */
+    const SharedPtr<ITexture>& getDefaultAlbedoTexture() const override;
+
+    /** 
+     * @copydoc IMaterialManager::getDefaultNormalTexture
+     */
+    const SharedPtr<ITexture>& getDefaultNormalTexture() const override;
+
+    /**
+     * @copydoc IMaterialManager::getDefaultSpecularTexture
+     */
+    const SharedPtr<ITexture>& getDefaultSpecularTexture() const override;
 
     /**
      * @copydoc IMaterialManager::clear
@@ -64,7 +92,11 @@ namespace hc
     IShaderProgramManager& m_shaderProgramManager;
     ITextureManager& m_textureManager;
     Vector<SharedPtr<IMaterial>> m_materials;
+    SharedPtr<ITexture> m_whiteTexture;
+    SharedPtr<ITexture> m_defaultNormalTexture;
 
     UInt16 generateMaterialId();
+    void createDefaultTextures();
+    SharedPtr<ITexture> getTextureFromPath(const Path& texturePath);
   };
 }
