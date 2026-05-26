@@ -13,6 +13,12 @@ namespace hc
     LightFrameData& lightFrameData
   )
   {
+    // TODO
+    //
+    // Lights should be filtered based on the camera's view frustum to only include lights
+    // that affect the visible scene. For now, we gather all lights in the scene graph
+    // without filtering.
+
     LightFrameData lightFrameData;
 
     const Vector<UniquePtr<GameObject>>& roots = sceneGraph.getRoots();

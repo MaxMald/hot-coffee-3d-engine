@@ -100,6 +100,7 @@ namespace hc
     }
 
     // Gather light frame data and upload it to the graphics manager
+
     m_lightFrameData.numDirectionalLights = 0;
     m_lightFrameData.numOmniLights = 0;
     m_lightFrameData.numSpotLights = 0;
