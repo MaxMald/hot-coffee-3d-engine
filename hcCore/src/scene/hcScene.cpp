@@ -1,5 +1,7 @@
 #include "hc/scene/hcScene.h"
 #include "hc/graphics/hcRenderContext.h"
+#include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
@@ -8,6 +10,7 @@ namespace hc
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
+    m_lightFrameData(),
     m_gameObjectFactory(nullptr)
   {
   }
@@ -78,16 +81,16 @@ namespace hc
     return m_cameraManager;
   }
 
-  void Scene::draw()
+  void Scene::draw(IGraphicsManager& graphicsManager)
   {
     Camera* activeCamera = m_cameraManager.getActiveCamera();
     if (activeCamera)
-      draw(activeCamera);
+      draw(graphicsManager, activeCamera);
     else
-      draw(&(m_cameraManager.getDefaultCamera()));
+      draw(graphicsManager, &(m_cameraManager.getDefaultCamera()));
   }
 
-  void Scene::draw(Camera* camera)
+  void Scene::draw(IGraphicsManager& graphicsManager, Camera* camera)
   {
     if (!camera)
     {
@@ -96,7 +99,17 @@ namespace hc
       );
     }
 
+    // Gather light frame data and upload it to the graphics manager
+    m_lightFrameData.numDirectionalLights = 0;
+    m_lightFrameData.numOmniLights = 0;
+    m_lightFrameData.numSpotLights = 0;
+    SceneGraphLightFrameDataGatherer::Gather(m_sceneGraph, m_lightFrameData);
+
+    graphicsManager.uploadLightFrameData(m_lightFrameData);
+
+    // Draw the scene graph with the provided render context
     RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
+
     onBeforeDraw(renderContext);
     m_sceneGraph.draw(renderContext);
     onAfterDraw(renderContext);

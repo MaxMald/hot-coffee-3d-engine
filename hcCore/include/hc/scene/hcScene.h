@@ -3,11 +3,13 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
+#include "hc/graphics/lightFrameData/hcLightFrameData.h"
 
 namespace hc
 {
   class IGameObjectFactory;
   class SceneManager;
+  class IGraphicsManager;
 
   /**
    * @brief Represents a 3D scene containing game objects, lights, and cameras.
@@ -100,15 +102,18 @@ namespace hc
     /**
      * @brief Draws the scene using the active camera. If no active camera is set,
      * the default camera will be used.
+     * 
+     * @param graphicsManager The graphics manager to use for drawing the scene.
      */
-    void draw();
+    void draw(IGraphicsManager& graphicsManager);
 
     /**
      * @brief Draws the scene using the specified camera.
-      *
-      * @param camera The camera to use for drawing the scene.
+     *
+     * @param graphicsManager The graphics manager to use for drawing the scene.
+     * @param camera The camera to use for drawing the scene.
      */
-    void draw(Camera* camera);
+    void draw(IGraphicsManager& graphicsManager, Camera* camera);
 
     /**
      * @brief Clears the scene graph, lights, and cameras.
@@ -219,6 +224,7 @@ namespace hc
   private:
     SceneGraph m_sceneGraph;
     CameraManager m_cameraManager;
+    LightFrameData m_lightFrameData;
     IGameObjectFactory* m_gameObjectFactory;
 
     /**
