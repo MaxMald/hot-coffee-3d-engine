@@ -212,6 +212,15 @@ namespace hc
     bool hasComponent() const;
 
     /**
+     * @brief Gets the component of the specified type attached to this
+     * GameObject.
+     *
+     * @return Pointer to the component, or nullptr if not found.
+     */
+    template<typename ComponentType>
+    ComponentType* getComponent() const;
+
+    /**
      * @brief Gets all components attached to this GameObject.
      * 
      * @return Vector of pointers to all components. The order of components in
@@ -273,6 +282,18 @@ namespace hc
   {
     TypeIndex typeIndex(typeid(ComponentType));
     return m_components.find(typeIndex) != m_components.end();
+  }
+
+  template<typename ComponentType>
+  inline ComponentType* GameObject::getComponent() const
+  {
+    TypeIndex typeIndex(typeid(ComponentType));
+    auto it = m_components.find(typeIndex);
+    if (it != m_components.end())
+    {
+      return static_cast<ComponentType*>(it->second.get());
+    }
+    return nullptr;
   }
 
   template<typename ComponentType>

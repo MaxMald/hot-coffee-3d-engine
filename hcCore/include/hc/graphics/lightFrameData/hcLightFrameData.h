@@ -14,9 +14,9 @@ namespace hc
    */
   struct alignas(16) HC_CORE_EXPORT LightFrameData
   {
-    static constexpr UINT32 MAX_OMNI_LIGHTS = 16;
-    static constexpr UINT32 MAX_SPOT_LIGHTS = 8;
-    static constexpr UINT32 MAX_DIRECTIONAL_LIGHTS = 4;
+    static constexpr UInt32 MAX_OMNI_LIGHTS = 16;
+    static constexpr UInt32 MAX_SPOT_LIGHTS = 8;
+    static constexpr UInt32 MAX_DIRECTIONAL_LIGHTS = 4;
 
     DirectionalLightFrameData directionalLights[MAX_DIRECTIONAL_LIGHTS];
     OmniLightFrameData omniLights[MAX_OMNI_LIGHTS];

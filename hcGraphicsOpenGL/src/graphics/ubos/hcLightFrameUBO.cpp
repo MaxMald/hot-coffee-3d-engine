@@ -19,8 +19,11 @@ namespace hc
   {
     glGenBuffers(1, &m_ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(LightFrameData), nullptr, GL_DYNAMIC_DRAW);
+
+    LightFrameData emptyData{};
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(LightFrameData), &emptyData, GL_DYNAMIC_DRAW);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
     m_isInitialized = true;
   }
 

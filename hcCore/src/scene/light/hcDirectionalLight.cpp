@@ -31,4 +31,12 @@ namespace hc
   {
     return m_direction;
   }
+
+  DirectionalLightFrameData DirectionalLight::toFrameData() const
+  {
+    DirectionalLightFrameData frameData;
+    frameData.directionAndIntensity = Vector4f(m_direction.normalized(), m_intensity);
+    frameData.color = m_color;
+    return frameData;
+  }
 }

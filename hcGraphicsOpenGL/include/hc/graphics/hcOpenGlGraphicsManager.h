@@ -7,6 +7,7 @@
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include "hc/graphics/hcOpenGlGBuffer.h"
+#include "hc/graphics/ubos/hcLightFrameUBO.h"
 
 namespace hc
 {
@@ -37,6 +38,11 @@ namespace hc
      * @copydoc IGraphicsManager::beginFrame
      */
     void beginFrame() override;
+
+    /**
+     * @copydoc IGraphicsManager::uploadLightFrameData
+     */
+    void uploadLightFrameData(const LightFrameData& lightFrameData) override;
 
     /**
      * @copydoc IGraphicsManager::draw
@@ -124,6 +130,7 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
+    LightFrameUBO m_lightFrameUBO;
 
     Vector<DrawCommand> m_queueDrawCommands;
     Vector<DrawCommand> m_deferredGeometryPassCommands;

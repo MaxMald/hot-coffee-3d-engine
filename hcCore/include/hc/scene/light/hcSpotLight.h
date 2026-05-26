@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/scene/light/hcALight.h"
+#include "hc/graphics/lightFrameData/hcSpotLightFrameData.h"
 
 namespace hc
 {
@@ -26,6 +27,8 @@ namespace hc
     void setOuterConeAngle(Angle angle);
 
     Angle getOuterConeAngle() const;
+
+    SpotLightFrameData toFrameData() const;
 
   private:
     Vector3f m_direction;

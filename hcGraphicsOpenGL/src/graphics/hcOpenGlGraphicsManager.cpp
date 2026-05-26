@@ -38,6 +38,7 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
+    m_lightFrameUBO(),
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
@@ -71,6 +72,7 @@ namespace hc
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     setViewport(viewportRect);
 
+    m_lightFrameUBO.initialize();
     m_materialManager.initialize();
   }
 
@@ -85,6 +87,11 @@ namespace hc
 
     if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
       m_gBuffer.clear();
+  }
+
+  void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
+  {
+    m_lightFrameUBO.upload(lightFrameData);
   }
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
@@ -210,6 +217,7 @@ namespace hc
     m_shaderManager.clear();
     m_meshManager.clear();
     m_gBuffer.destroy();
+    m_lightFrameUBO.destroy();
   }
 
   void OpenGlGraphicsManager::executeForwardPass(
