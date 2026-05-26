@@ -11,6 +11,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
+
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
     IAssetManager& assetManager
@@ -101,6 +103,8 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
+    m_lightFrameUBO.bind(LIGHTS_BINDING_POINT);
+
     DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
     if (m_renderPipelineType == renderPipelineType::Forward)
