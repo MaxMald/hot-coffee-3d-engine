@@ -14,26 +14,14 @@ namespace hc
    */
   struct alignas(16) HC_CORE_EXPORT DirectionalLightFrameData
   {
-    Vector4f direction;        ///< Normalized light direction (w unused).
-    Color    color;            ///< Linear RGB emission color.
-    float    intensity = 0.0f; ///< Scalar multiplier applied to color.
-    float    padding0 = 0.0f;
-    float    padding1 = 0.0f;
-    float    padding2 = 0.0f;
+    Vector4f directionAndIntensity; ///< Normalized light direction. W component stores intensity.
+    Color    color;                 ///< Linear RGB emission color.
   };
 
-  static_assert(sizeof(DirectionalLightFrameData) == 48,
+  static_assert(sizeof(DirectionalLightFrameData) == 32,
     "DirectionalLightFrameData size mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, direction) == 0,
-    "DirectionalLightFrameData::direction offset mismatch.");
+  static_assert(offsetof(DirectionalLightFrameData, directionAndIntensity) == 0,
+    "DirectionalLightFrameData::directionAndIntensity offset mismatch.");
   static_assert(offsetof(DirectionalLightFrameData, color) == 16,
     "DirectionalLightFrameData::color offset mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, intensity) == 32,
-    "DirectionalLightFrameData::intensity offset mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, padding0) == 36,
-    "DirectionalLightFrameData::padding0 offset mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, padding1) == 40,
-    "DirectionalLightFrameData::padding1 offset mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, padding2) == 44,
-    "DirectionalLightFrameData::padding2 offset mismatch.");
 }
