@@ -248,8 +248,7 @@ namespace hc
     Vector<IDrawable*> m_drawableComponents;
     Vector<IUpdatableComponent*> m_updatableComponents;
 
-    template<typename ComponentType>
-    void addComponent(UniquePtr<ComponentType> component);
+    void addComponent(UniquePtr<IComponent> component);
 
     /**
      * @brief Destroys this GameObject and all its children, releasing resources.
@@ -294,25 +293,5 @@ namespace hc
       return static_cast<ComponentType*>(it->second.get());
     }
     return nullptr;
-  }
-
-  template<typename ComponentType>
-  void GameObject::addComponent(UniquePtr<ComponentType> component)
-  {
-    TypeIndex typeIndex(typeid(ComponentType));
-
-    ComponentType* componentPtr = component.get();
-    m_components[typeIndex] = std::move(component);
-
-    IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
-    if (drawable)
-      m_drawableComponents.push_back(drawable);
-
-    IUpdatableComponent* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr);
-    if (updatable)
-      m_updatableComponents.push_back(updatable);
-
-    IComponent* baseComponentPtr = componentPtr;
-    baseComponentPtr->setGameObject(this);
   }
 }
