@@ -19,8 +19,6 @@ namespace hc
     // that affect the visible scene. For now, we gather all lights in the scene graph
     // without filtering.
 
-    LightFrameData lightFrameData;
-
     const Vector<UniquePtr<GameObject>>& roots = sceneGraph.getRoots();
     for (const UniquePtr<GameObject>& root : roots)
     {
