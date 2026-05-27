@@ -146,6 +146,7 @@ namespace hc
       uniform sampler2D uNormalMap;
       uniform sampler2D uSpecularMap;
       uniform float uAlphaCutoff;
+      uniform float uShininess;
       uniform vec3 uCameraPosition;
 
       float calculateAttenuation(float distance, float range)
@@ -155,13 +156,13 @@ namespace hc
         return attenuation * attenuation; // quadratic falloff
       }
 
-      vec3 calculateOmniLight(OmniLightData light, vec3 normal, vec3 viewDir, vec3 worldPos)
+      vec3 calculateOmniLight(OmniLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
       {
         vec3 lightDir = normalize(light.position.xyz - worldPos);
         vec3 halfDir = normalize(lightDir + viewDir);
 
         float diff = max(dot(normal, lightDir), 0.0);
-        float specBase = pow(max(dot(normal, halfDir), 0.0), 16.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
         float specStrength = texture(uSpecularMap, vTexCoord).r;
         float spec = specBase * specStrength;
         float distance = length(light.position.xyz - worldPos);
@@ -170,26 +171,26 @@ namespace hc
         return (diff + spec) * light.color.rgb * light.intensity * attenuation;
       }
 
-      vec3 calculateDirectionalLight(DirectionalLightData light, vec3 normal, vec3 viewDir)
+      vec3 calculateDirectionalLight(DirectionalLightData light, vec3 normal, vec3 viewDir, float shininess)
       {
         vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
         vec3 halfDir = normalize(lightDir + viewDir);
 
         float diff = max(dot(normal, lightDir), 0.0);
-        float specBase = pow(max(dot(normal, halfDir), 0.0), 16.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
         float specStrength = texture(uSpecularMap, vTexCoord).r;
         float spec = specBase * specStrength;
 
         return (diff + spec) * light.color.rgb * light.directionAndIntensity.w;
       }
 
-      vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos)
+      vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
       {
         vec3 lightDir = normalize(light.position.xyz - worldPos);
         vec3 halfDir = normalize(lightDir + viewDir);
 
         float diff = max(dot(normal, lightDir), 0.0);
-        float specBase = pow(max(dot(normal, halfDir), 0.0), 16.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
         float specStrength = texture(uSpecularMap, vTexCoord).r;
         float spec = specBase * specStrength;
         float distance = length(light.position.xyz - worldPos);
@@ -228,13 +229,13 @@ namespace hc
         vec3 totalLighting = vec3(0.05);
 
         for (int i = 0; i < numOmniLights; ++i)
-          totalLighting += calculateOmniLight(omniLights[i], normalWS, viewDir, vWorldPos);
+          totalLighting += calculateOmniLight(omniLights[i], normalWS, viewDir, vWorldPos, uShininess);
 
         for (int i = 0; i < numDirectionalLights; ++i)
-          totalLighting += calculateDirectionalLight(directionalLights[i], normalWS, viewDir);
+          totalLighting += calculateDirectionalLight(directionalLights[i], normalWS, viewDir, uShininess);
 
         for (int i = 0; i < numSpotLights; ++i)
-          totalLighting += calculateSpotLight(spotLights[i], normalWS, viewDir, vWorldPos);
+          totalLighting += calculateSpotLight(spotLights[i], normalWS, viewDir, vWorldPos, uShininess);
 
         FragColor = vec4(baseColor.rgb * totalLighting, baseColor.a);
       }

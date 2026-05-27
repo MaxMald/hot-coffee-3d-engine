@@ -65,6 +65,7 @@ namespace hc
     return MakeShared<BlinnPhongMaterialDescriptor>(
       "",
       GetVertexColorDiffuseFromMaterial(material),
+      GetShininessFromMaterial(material),
       GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
       GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
       GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
@@ -94,5 +95,17 @@ namespace hc
       return fileDirectory / textureRelativePath;
     }
     return Path();
+  }
+
+  float AssimpMaterialDescriptorParser::GetShininessFromMaterial(
+    const aiMaterial* material
+  )
+  {
+    float shininess = 16.0f;
+    material->Get(AI_MATKEY_SHININESS, shininess);
+    float strength = 1.0f;
+    material->Get(AI_MATKEY_SHININESS_STRENGTH, strength);
+
+    return Math::Clamp(shininess * strength, 1.0f, 256.0f);
   }
 }

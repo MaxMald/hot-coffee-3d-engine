@@ -50,6 +50,7 @@
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
+#include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
 #include "hc/graphics/resource/mesh/hcIMeshManager.h"
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/hcCameraMatrices.h"

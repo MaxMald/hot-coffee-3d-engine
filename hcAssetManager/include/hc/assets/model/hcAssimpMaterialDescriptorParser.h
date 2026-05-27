@@ -69,5 +69,7 @@ namespace hc
       const aiMaterial* material,
       aiTextureType textureType
     );
+
+    static float GetShininessFromMaterial(const aiMaterial* material);
   };
 }
