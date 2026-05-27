@@ -22,8 +22,11 @@ namespace hc
     OmniLightFrameData omniLights[MAX_OMNI_LIGHTS];
     SpotLightFrameData spotLights[MAX_SPOT_LIGHTS];
 
-    Int32 numSpotLights = 0;
-    Int32 numOmniLights = 0;
     Int32 numDirectionalLights = 0;
+    Int32 numOmniLights = 0;
+    Int32 numSpotLights = 0;
+    Int32 padding = 0; ///< Padding to ensure 16-byte alignment.
   };
+
+  static_assert(sizeof(LightFrameData) % 16 == 0, "LightFrameData must be 16-byte aligned");
 }

@@ -7,7 +7,7 @@ namespace hc
   namespace builtInShaders
   {
     inline const String VertexShader = R"(
-      #version 330 core
+      #version 420 core
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;
       layout(location = 2) in vec3 aTangent;
@@ -35,7 +35,7 @@ namespace hc
     )";
 
     inline const String LitVertexShader = R"(
-      #version 330 core
+      #version 420 core
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;
       layout(location = 2) in vec3 aTangent;
@@ -67,7 +67,7 @@ namespace hc
     )";
 
     inline const String UnlitFragment = R"(
-      #version 330 core
+      #version 420 core
       in vec2 vTexCoord;
       in vec4 vColor;
       out vec4 FragColor;
@@ -89,10 +89,10 @@ namespace hc
     )";
 
     inline const String BlinnPhongForwardFragment = R"(
-      #version 330 core
+      #version 420 core
 
       #define MAX_OMNI_LIGHTS 16
-      #define MAX_POINT_LIGHTS 8
+      #define MAX_SPOT_LIGHTS 8
       #define MAX_DIRECTIONAL_LIGHTS 4
 
       struct SpotLightData
@@ -124,12 +124,13 @@ namespace hc
 
       layout(std140, binding = 2) uniform LightBlock
       {
-        SpotLightData spotLights[MAX_OMNI_LIGHTS];
-        OmniLightData omniLights[MAX_POINT_LIGHTS];
         DirectionalLightData directionalLights[MAX_DIRECTIONAL_LIGHTS];
-        int numSpotLights;
-        int numOmniLights;
+        OmniLightData omniLights[MAX_OMNI_LIGHTS];
+        SpotLightData spotLights[MAX_SPOT_LIGHTS];
         int numDirectionalLights;
+        int numOmniLights;
+        int numSpotLights;
+        int padding; ///< Padding to ensure 16-byte alignment.
       };
 
       in vec2 vTexCoord;

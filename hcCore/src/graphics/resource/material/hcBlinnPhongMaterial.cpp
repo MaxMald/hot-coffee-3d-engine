@@ -53,13 +53,6 @@ namespace hc
       );
     }
 
-    // TODO:
-    // Send light data to shader.
-
-    throw RuntimeErrorException(
-      "Not implemented."
-    );
-
     coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Blinn-Phong shader program");
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");

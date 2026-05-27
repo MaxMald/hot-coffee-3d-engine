@@ -29,7 +29,10 @@ namespace hc
 
     const sf::ContextSettings contextSettings{
       .depthBits = 24,
-      .stencilBits = 8
+      .stencilBits = 8,
+      .antiAliasingLevel = 0,
+      .majorVersion = 4,
+      .minorVersion = 2
     };
 
     m_sfmlWindow = MakeShared<sf::Window>(

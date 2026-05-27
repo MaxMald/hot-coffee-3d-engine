@@ -36,7 +36,9 @@ namespace hc
   void LightFrameUBO::upload(const LightFrameData& lightFrameData)
   {
     assertIsInitialized();
+    glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightFrameData), &lightFrameData);
+    glBindBuffer(GL_UNIFORM_BUFFER, 0);
   }
 
   void LightFrameUBO::unbind()
