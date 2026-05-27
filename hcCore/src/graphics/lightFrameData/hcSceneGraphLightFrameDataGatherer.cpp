@@ -63,6 +63,9 @@ namespace hc
     LightFrameData& lightFrameData
   )
   {
+    if (!directionalLightComponent->getLight().isEnabled())
+      return;
+
     if (lightFrameData.numDirectionalLights >= LightFrameData::MAX_DIRECTIONAL_LIGHTS)
     {
       LogService::Warning(
@@ -84,6 +87,9 @@ namespace hc
     LightFrameData& lightFrameData
   )
   {
+    if (!omniLightComponent->getLight().isEnabled())
+      return;
+
     if (lightFrameData.numOmniLights >= LightFrameData::MAX_OMNI_LIGHTS)
     {
       LogService::Warning(
@@ -105,6 +111,9 @@ namespace hc
     LightFrameData& lightFrameData
   )
   {
+    if (!spotLightComponent->getLight().isEnabled())
+      return;
+
     if (lightFrameData.numSpotLights >= LightFrameData::MAX_SPOT_LIGHTS)
     {
       LogService::Warning(
