@@ -199,7 +199,7 @@ namespace hc
         float theta = dot(-light.direction.xyz, lightDir);
         if (theta > light.outerConeCos)
         {
-          float epsilon = light.innerConeCos - light.outerConeCos;
+          float epsilon = clamp(light.innerConeCos - light.outerConeCos, 0.001, 1.0);
           float intensity = clamp((theta - light.outerConeCos) / epsilon, 0.0, 1.0);
           return (diff + spec) * light.color.rgb * light.intensity * attenuation * intensity;
         }
