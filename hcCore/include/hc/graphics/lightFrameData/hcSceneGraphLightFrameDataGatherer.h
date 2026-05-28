@@ -31,13 +31,13 @@ namespace hc
      * @param lightFrameData Reference to a LightFrameData structure to populate with the
      * gathered data.
      */
-    static LightFrameData Gather(
+    static void Gather(
       const SceneGraph& sceneGraph,
       LightFrameData& lightFrameData
     );
 
   private:
-    static void GatherFromGameObject(
+    static bool GatherFromGameObject(
       const UniquePtr<GameObject>& gameObject,
       LightFrameData& lightFrameData
     );

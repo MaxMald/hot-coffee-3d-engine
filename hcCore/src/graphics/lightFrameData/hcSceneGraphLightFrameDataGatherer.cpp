@@ -8,7 +8,7 @@
 
 namespace hc
 {
-  LightFrameData SceneGraphLightFrameDataGatherer::Gather(
+  void SceneGraphLightFrameDataGatherer::Gather(
     const SceneGraph& sceneGraph,
     LightFrameData& lightFrameData
   )
@@ -19,26 +19,26 @@ namespace hc
     // that affect the visible scene. For now, we gather all lights in the scene graph
     // without filtering.
 
+    if (lightFrameData.numDirectionalLights >= LightFrameData::MAX_DIRECTIONAL_LIGHTS &&
+      lightFrameData.numOmniLights >= LightFrameData::MAX_OMNI_LIGHTS &&
+      lightFrameData.numSpotLights >= LightFrameData::MAX_SPOT_LIGHTS)
+    {
+      LogService::Warning(
+        "Maximum number of lights reached. Additional lights in the scene will be ignored."
+      );
+
+      return;
+    }
+
     const Vector<UniquePtr<GameObject>>& roots = sceneGraph.getRoots();
     for (const UniquePtr<GameObject>& root : roots)
     {
-      if (lightFrameData.numDirectionalLights >= LightFrameData::MAX_DIRECTIONAL_LIGHTS &&
-        lightFrameData.numOmniLights >= LightFrameData::MAX_OMNI_LIGHTS &&
-        lightFrameData.numSpotLights >= LightFrameData::MAX_SPOT_LIGHTS)
-      {
-        LogService::Warning(
-          "Maximum number of lights reached. Additional lights in the scene will be ignored."
-        );
+      if (!GatherFromGameObject(root, lightFrameData))
         break;
-      }
-
-      GatherFromGameObject(root, lightFrameData);
     }
-
-    return lightFrameData;
   }
 
-  void SceneGraphLightFrameDataGatherer::GatherFromGameObject(
+  bool SceneGraphLightFrameDataGatherer::GatherFromGameObject(
     const UniquePtr<GameObject>& gameObject,
     LightFrameData& lightFrameData
   )
@@ -56,6 +56,25 @@ namespace hc
     SpotLightComponent* spotLightComponent = gameObject->getComponent<SpotLightComponent>();
     if (spotLightComponent)
       GatherFromSpotLightComponent(spotLightComponent, lightFrameData);
+
+    if (lightFrameData.numDirectionalLights >= LightFrameData::MAX_DIRECTIONAL_LIGHTS &&
+      lightFrameData.numOmniLights >= LightFrameData::MAX_OMNI_LIGHTS &&
+      lightFrameData.numSpotLights >= LightFrameData::MAX_SPOT_LIGHTS)
+    {
+      LogService::Warning(
+        "Maximum number of lights reached. Additional lights in the scene will be ignored."
+      );
+
+      return false;
+    }
+
+    for (const UniquePtr<GameObject>& child : gameObject->getChildren())
+    {
+      if (!GatherFromGameObject(child, lightFrameData))
+        return false;
+    }
+
+    return true;
   }
 
   void SceneGraphLightFrameDataGatherer::GatherFromDirectionalLightComponent(
