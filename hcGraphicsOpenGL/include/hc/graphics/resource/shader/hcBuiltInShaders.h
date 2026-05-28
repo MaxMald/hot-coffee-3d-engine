@@ -152,7 +152,7 @@ namespace hc
       float calculateAttenuation(float distance, float range)
       {
         // Quadratic attenuation that clamps to 0 at the light's range
-        float attenuation = clamp(1.0 - distance / range, 0.0, 1.0);
+        float attenuation = clamp(1.0 - distance / range, 0.001, 1.0);
         return attenuation * attenuation; // quadratic falloff
       }
 
