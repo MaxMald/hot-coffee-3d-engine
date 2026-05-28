@@ -87,9 +87,9 @@ namespace hc::editor
     {
       const IGBuffer& gBuffer = m_engine.getGraphicsManager().getGBuffer();
 
-      if (currentRenderTarget == sceneViewportRenderTargetType::GBufferPosition)
+      if (currentRenderTarget == sceneViewportRenderTargetType::GBufferPositionAndDepth)
       {
-        drawRenderTarget(gBuffer.getPosition());
+        drawRenderTarget(gBuffer.getPositionAndDepth());
       }
       else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferNormalRoughness)
       {

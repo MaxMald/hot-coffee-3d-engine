@@ -18,7 +18,7 @@ namespace hc
     m_height(0),
     m_gBufferId(0),
     m_depthStencilBufferId(0),
-    m_positionTexture(),
+    m_positionAndDepthTexture(),
     m_normalRoughnessTexture(),
     m_albedoAlphaTexture(),
     m_materialParametersTexture()
@@ -42,7 +42,7 @@ namespace hc
       glGenFramebuffers(1, &m_gBufferId);
       glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
 
-      m_positionTexture.initialize(
+      m_positionAndDepthTexture.initialize(
         width, height,
         GL_RGBA16F, GL_RGBA, GL_FLOAT
       );
@@ -62,10 +62,10 @@ namespace hc
         GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
       );
 
-      glBindTexture(GL_TEXTURE_2D, m_positionTexture.getTextureId());
+      glBindTexture(GL_TEXTURE_2D, m_positionAndDepthTexture.getTextureId());
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
-        m_positionTexture.getTextureId(), 0
+        m_positionAndDepthTexture.getTextureId(), 0
       );
 
       glBindTexture(GL_TEXTURE_2D, m_normalRoughnessTexture.getTextureId());
@@ -138,7 +138,7 @@ namespace hc
   {
     assertIsValid();
 
-    m_positionTexture.bind(0);
+    m_positionAndDepthTexture.bind(0);
     m_normalRoughnessTexture.bind(1);
     m_albedoAlphaTexture.bind(2);
     m_materialParametersTexture.bind(3);
@@ -157,7 +157,7 @@ namespace hc
   {
     assertIsValid();
 
-    m_positionTexture.unbind(0);
+    m_positionAndDepthTexture.unbind(0);
     m_normalRoughnessTexture.unbind(1);
     m_albedoAlphaTexture.unbind(2);
     m_materialParametersTexture.unbind(3);
@@ -189,7 +189,7 @@ namespace hc
     if (width == 0 || height == 0)
       throw RuntimeErrorException("GBuffer dimensions must be greater than zero.");
 
-    m_positionTexture.resize(width, height);
+    m_positionAndDepthTexture.resize(width, height);
     m_normalRoughnessTexture.resize(width, height);
     m_albedoAlphaTexture.resize(width, height);
     m_materialParametersTexture.resize(width, height);
@@ -219,9 +219,9 @@ namespace hc
     m_height = height;
   }
 
-  const ITexture& OpenGlGBuffer::getPosition() const
+  const ITexture& OpenGlGBuffer::getPositionAndDepth() const
   {
-    return m_positionTexture;
+    return m_positionAndDepthTexture;
   }
 
   const ITexture& OpenGlGBuffer::getAlbedoAlpha() const
@@ -247,7 +247,7 @@ namespace hc
 
   void OpenGlGBuffer::destroy()
   {
-    m_positionTexture.destroy();
+    m_positionAndDepthTexture.destroy();
     m_normalRoughnessTexture.destroy();
     m_albedoAlphaTexture.destroy();
     m_materialParametersTexture.destroy();

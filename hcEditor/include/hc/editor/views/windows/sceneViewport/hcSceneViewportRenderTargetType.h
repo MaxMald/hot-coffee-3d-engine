@@ -9,7 +9,7 @@ namespace hc::editor
     enum Type : UInt8
     {
       FinalColor = 0,
-      GBufferPosition,
+      GBufferPositionAndDepth,
       GBufferNormalRoughness,
       GBufferAlbedoAlpha,
       GBufferMaterialParameters,

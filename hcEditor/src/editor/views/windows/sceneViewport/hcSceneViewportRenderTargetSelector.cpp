@@ -5,7 +5,7 @@ namespace hc::editor
 {
   static const char* RENDER_TARGET_NAMES[] = {
     "Final Color",
-    "GBuffer Position",
+    "GBuffer Position + Depth",
     "GBuffer Normal + Roughness",
     "GBuffer Albedo + Alpha",
     "GBuffer Material Parameters"

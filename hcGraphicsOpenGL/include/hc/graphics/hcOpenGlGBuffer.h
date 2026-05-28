@@ -21,7 +21,7 @@ namespace hc
     UInt32 getHeight() const override;
     void resize(UInt32 width, UInt32 height) override;
 
-    const ITexture& getPosition() const override;
+    const ITexture& getPositionAndDepth() const override;
     const ITexture& getNormalRoughness() const override;
     const ITexture& getAlbedoAlpha() const override;
     const ITexture& getMaterialParameters() const override;
@@ -34,7 +34,7 @@ namespace hc
     UInt32 m_height;
     UInt32 m_gBufferId;
     UInt32 m_depthStencilBufferId;
-    OpenGlTexture m_positionTexture;
+    OpenGlTexture m_positionAndDepthTexture;
     OpenGlTexture m_normalRoughnessTexture;
     OpenGlTexture m_albedoAlphaTexture;
     OpenGlTexture m_materialParametersTexture;

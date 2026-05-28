@@ -72,11 +72,11 @@ namespace hc
     virtual void resize(UInt32 width, UInt32 height) = 0;
 
     /**
-     * Gets the world-space position texture attachment.
+     * Gets the world-space position texture attachment, and the pixel depth (non-linear).
      *
      * @return Const reference to the position texture.
      */
-    virtual const ITexture& getPosition() const = 0;
+    virtual const ITexture& getPositionAndDepth() const = 0;
 
     /**
      * Gets the normal and roughness texture attachment.
@@ -94,6 +94,11 @@ namespace hc
 
     /**
      * Gets the material parameter texture attachment.
+     *
+     * - x component: specular strength
+     * - y component: free
+     * - z component: free
+     * - w component: free
      *
      * @return Const reference to the material parameters texture.
      */

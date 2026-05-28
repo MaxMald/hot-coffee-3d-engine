@@ -10,8 +10,8 @@ namespace hc::editor
       {
       case FinalColor:
         return "Final Color";
-      case GBufferPosition: return
-        "GBuffer Position";
+      case GBufferPositionAndDepth: return
+        "GBuffer Position + Depth";
       case GBufferNormalRoughness: return
         "GBuffer Normal + Roughness";
       case GBufferAlbedoAlpha: return
@@ -29,8 +29,8 @@ namespace hc::editor
     {
       if (str == "Final Color")
         return FinalColor;
-      if (str == "GBuffer Position")
-        return GBufferPosition;
+      if (str == "GBuffer Position + Depth")
+        return GBufferPositionAndDepth;
       if (str == "GBuffer Normal + Roughness")
         return GBufferNormalRoughness;
       if (str == "GBuffer Albedo + Alpha")
