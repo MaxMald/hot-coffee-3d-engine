@@ -11,6 +11,7 @@ namespace hc
   BlinnPhongMaterial::BlinnPhongMaterial(UInt16 materialId) :
     AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
+    m_shininess(16.0f),
     m_albedoTexture(nullptr),
     m_normalTexture(nullptr),
     m_specularTexture(nullptr),
@@ -53,13 +54,6 @@ namespace hc
       );
     }
 
-    // TODO:
-    // Send light data to shader.
-
-    throw RuntimeErrorException(
-      "Not implemented."
-    );
-
     coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Blinn-Phong shader program");
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
@@ -70,6 +64,7 @@ namespace hc
     m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
     m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
+    m_shaderProgram->setUniform("uShininess", m_shininess);
     m_shaderProgram->setUniform("uCameraPosition", cameraRenderData.cameraWorldPosition);
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
@@ -118,6 +113,7 @@ namespace hc
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
     m_color = descriptor.getColor();
+    m_shininess = descriptor.getShininess();
     m_alphaCutoutThreshold = descriptor.getAlphaCutoutThreshold();
     m_doubleSided = descriptor.isDoubleSided();
     m_renderMode = descriptor.getRenderMode();
@@ -136,6 +132,16 @@ namespace hc
   void BlinnPhongMaterial::setColor(const Color& color)
   {
     m_color = color;
+  }
+
+  float BlinnPhongMaterial::getShininess() const
+  {
+    return m_shininess;
+  }
+
+  void BlinnPhongMaterial::setShininess(float shininess)
+  {
+    m_shininess = Math::Clamp(shininess, 1.0f, 256.0f);
   }
 
   const SharedPtr<ITexture>& BlinnPhongMaterial::getAlbedoTexture() const

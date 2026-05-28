@@ -5,6 +5,7 @@
 
 namespace hc
 {
+  class IGraphicsManager;
   class IGameObjectFactory;
 
   /**
@@ -15,7 +16,7 @@ namespace hc
   class HC_CORE_EXPORT SceneManager : public NonCopyable
   {
   public:
-    SceneManager();
+    SceneManager(IGraphicsManager& graphicsManager);
     ~SceneManager();
 
     /**
@@ -123,6 +124,7 @@ namespace hc
     void destroy();
 
   private:
+    IGraphicsManager& m_graphicsManager;
     UnorderedMap<String, UniquePtr<Scene>> m_scenes;
     Scene* m_activeScene;
     UniquePtr<IGameObjectFactory> m_gameObjectFactory;

@@ -17,6 +17,8 @@ namespace hc
      *
      * @param path The file path to the material descriptor asset
      * @param color The base color of the material
+     * @param shininess The shininess of the material, controlling the specular highlight
+     * size. Clamped between 1.0 and 256.0.
      * @param albedoImagePath The file path to the albedo texture image
      * @param normalImagePath The file path to the normal map image
      * @param specularImagePath The file path to the specular texture image
@@ -24,6 +26,7 @@ namespace hc
     BlinnPhongMaterialDescriptor(
       const Path& path,
       const Color& color,
+      float shininess,
       const Path& albedoImagePath,
       const Path& normalImagePath,
       const Path& specularImagePath
@@ -48,6 +51,13 @@ namespace hc
     const Color& getColor() const;
 
     /**
+     * @brief Gets the shininess of the material.
+     *
+     * @return The shininess of the material
+     */
+    float getShininess() const;
+
+    /**
      * @brief Gets the file path for the albedo texture image.
       *
       * @return The path to the albedo texture asset
@@ -70,6 +80,7 @@ namespace hc
 
   private:
     Color m_color;
+    float m_shininess;
     Path m_albedoImagePath;
     Path m_normalImagePath;
     Path m_specularImagePath;

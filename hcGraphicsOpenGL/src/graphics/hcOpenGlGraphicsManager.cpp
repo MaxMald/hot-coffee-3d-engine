@@ -11,6 +11,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
+
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
     IAssetManager& assetManager
@@ -38,6 +40,7 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
+    m_lightFrameUBO(),
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
@@ -71,6 +74,7 @@ namespace hc
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     setViewport(viewportRect);
 
+    m_lightFrameUBO.initialize();
     m_materialManager.initialize();
   }
 
@@ -87,6 +91,11 @@ namespace hc
       m_gBuffer.clear();
   }
 
+  void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
+  {
+    m_lightFrameUBO.upload(lightFrameData);
+  }
+
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
     m_queueDrawCommands.push_back(command);
@@ -94,6 +103,8 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
+    m_lightFrameUBO.bind(LIGHTS_BINDING_POINT);
+
     DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
     if (m_renderPipelineType == renderPipelineType::Forward)
@@ -210,6 +221,7 @@ namespace hc
     m_shaderManager.clear();
     m_meshManager.clear();
     m_gBuffer.destroy();
+    m_lightFrameUBO.destroy();
   }
 
   void OpenGlGraphicsManager::executeForwardPass(

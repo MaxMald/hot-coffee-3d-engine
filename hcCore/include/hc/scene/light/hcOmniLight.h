@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/scene/light/hcALight.h"
+#include "hc/graphics/lightFrameData/hcOmniLightFrameData.h"
 
 namespace hc
 {
@@ -10,5 +11,7 @@ namespace hc
     OmniLight();
 
     ~OmniLight() override = default;
+
+    OmniLightFrameData toFrameData() const;
   };
 }

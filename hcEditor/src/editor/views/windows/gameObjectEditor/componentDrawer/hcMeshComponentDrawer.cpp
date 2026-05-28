@@ -100,6 +100,26 @@ namespace hc::editor
       if (ImGui::SliderFloat("Alpha Cutoff", &alphaCutoff, 0.0f, 1.0f))
         material->setAlphaCutoutThreshold(alphaCutoff);
     }
+
+    // TODO
+    // 
+    // This is a temporary solution to expose shader-specific properties in the editor.
+    // Improve this by implementing a more flexible system for material property editing
+    // that can handle different shader types and their unique properties without
+    // hardcoding checks for specific shader types.
+
+    if (material->getShaderType() == shadingType::BlinnPhong)
+    {
+      SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
+        std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
+
+      if (blinnPhongMaterial)
+      {
+        float shininess = blinnPhongMaterial->getShininess();
+        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
+          blinnPhongMaterial->setShininess(shininess);
+      }
+    }
   }
 
   void MeshComponentDrawer::onMeshFileSelected(

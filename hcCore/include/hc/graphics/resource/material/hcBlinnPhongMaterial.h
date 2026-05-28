@@ -93,6 +93,22 @@ namespace hc
     void setColor(const Color& color);
 
     /**
+     * @brief Gets the shininess of the material, which controls the size of the
+     * specular highlight.
+     *
+     * @return The shininess value of the material.
+     */
+    float getShininess() const;
+
+    /**
+     * @brief Sets the shininess of the material, which controls the size of the
+     * specular highlight. The value is clamped between 1.0 and 256.0.
+     *
+     * @param shininess The shininess value to set for the material.
+     */
+    void setShininess(float shininess);
+
+    /**
      * @brief Gets the albedo texture associated with the material.
      *
      * @return Shared pointer to the albedo texture resource.
@@ -136,6 +152,7 @@ namespace hc
 
   private:
     Color m_color;
+    float m_shininess;
     SharedPtr<ITexture> m_albedoTexture;
     SharedPtr<ITexture> m_normalTexture;
     SharedPtr<ITexture> m_specularTexture;

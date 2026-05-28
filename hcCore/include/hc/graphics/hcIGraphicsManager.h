@@ -21,6 +21,7 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   struct GraphicsSettings;
+  struct LightFrameData;
 
   /**
    * @brief Interface for graphics manager classes.
@@ -55,6 +56,13 @@ namespace hc
      * @brief Begins a new rendering frame.
      */
     virtual void beginFrame() = 0;
+
+    /**
+     * @brief Uploads the aggregated light data for the current frame to the GPU.
+     *
+     * @param lightFrameData The aggregated light data for the current frame.
+     */
+    virtual void uploadLightFrameData(const LightFrameData& lightFrameData) = 0;
 
     /**
      * @brief Issues a draw command to render graphics for the current frame.

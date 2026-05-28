@@ -24,13 +24,6 @@ namespace hc
     virtual void deserialize(BinaryReader& reader) override;
 
     /**
-     * @brief Gets the unique identifier of the light.
-     * 
-     * @return The UUID of the light.
-     */
-    const UUID& getUUID() const;
-
-    /**
      * @brief Gets the type of the light.
      * 
      * @return The current light type.
@@ -115,15 +108,13 @@ namespace hc
     bool isEnabled() const;
 
   protected:
-    ALight(lightType::Type type);
-
-  private:
-    UUID m_id;
     bool enabled;
     lightType::Type m_type;
     Color m_color;
     float m_intensity;
     float m_range;
     Vector3f m_position;
+
+    ALight(lightType::Type type);
   };
 }

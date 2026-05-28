@@ -28,12 +28,10 @@ namespace hc
     m_frameClock(),
     m_eventListeners(),
     m_initialized(false)
-  {
-  }
+  {}
 
   HotCoffeeEngine::~HotCoffeeEngine()
-  {
-  }
+  {}
 
   const PluginManager& HotCoffeeEngine::getPluginManager() const
   {
@@ -114,7 +112,7 @@ namespace hc
       JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
-                 
+
       m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
       m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);

@@ -47,7 +47,7 @@ namespace hc
   void GameObject::deserialize(BinaryReader& reader)
   {
     Transform::deserialize(reader);
-    m_name = reader.readString();   
+    m_name = reader.readString();
 
     SizeT childCount = reader.readSizeT();
     for (SizeT i = 0; i < childCount; ++i)
@@ -271,6 +271,25 @@ namespace hc
 
     for (const auto& pair : m_components)
       outComponents.push_back(pair.second.get());
+  }
+
+  void GameObject::addComponent(UniquePtr<IComponent> component)
+  {
+    if (!component)
+      throw InvalidArgumentException("Cannot add a null component.");
+
+    TypeIndex typeIndex(typeid(*component));
+    IComponent* componentPtr = component.get();
+
+    m_components[typeIndex] = std::move(component);
+
+    if (auto* drawable = dynamic_cast<IDrawable*>(componentPtr))
+      m_drawableComponents.push_back(drawable);
+
+    if (auto* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr))
+      m_updatableComponents.push_back(updatable);
+
+    componentPtr->setGameObject(this);
   }
 
   void GameObject::destroy()

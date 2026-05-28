@@ -212,6 +212,15 @@ namespace hc
     bool hasComponent() const;
 
     /**
+     * @brief Gets the component of the specified type attached to this
+     * GameObject.
+     *
+     * @return Pointer to the component, or nullptr if not found.
+     */
+    template<typename ComponentType>
+    ComponentType* getComponent() const;
+
+    /**
      * @brief Gets all components attached to this GameObject.
      * 
      * @return Vector of pointers to all components. The order of components in
@@ -239,8 +248,7 @@ namespace hc
     Vector<IDrawable*> m_drawableComponents;
     Vector<IUpdatableComponent*> m_updatableComponents;
 
-    template<typename ComponentType>
-    void addComponent(UniquePtr<ComponentType> component);
+    void addComponent(UniquePtr<IComponent> component);
 
     /**
      * @brief Destroys this GameObject and all its children, releasing resources.
@@ -276,22 +284,14 @@ namespace hc
   }
 
   template<typename ComponentType>
-  void GameObject::addComponent(UniquePtr<ComponentType> component)
+  inline ComponentType* GameObject::getComponent() const
   {
     TypeIndex typeIndex(typeid(ComponentType));
-
-    ComponentType* componentPtr = component.get();
-    m_components[typeIndex] = std::move(component);
-
-    IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
-    if (drawable)
-      m_drawableComponents.push_back(drawable);
-
-    IUpdatableComponent* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr);
-    if (updatable)
-      m_updatableComponents.push_back(updatable);
-
-    IComponent* baseComponentPtr = componentPtr;
-    baseComponentPtr->setGameObject(this);
+    auto it = m_components.find(typeIndex);
+    if (it != m_components.end())
+    {
+      return static_cast<ComponentType*>(it->second.get());
+    }
+    return nullptr;
   }
 }

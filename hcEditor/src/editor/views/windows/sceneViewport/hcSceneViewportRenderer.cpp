@@ -59,7 +59,7 @@ namespace hc::editor
     assertIsValid();
     m_frameBuffer->bind();
     m_frameBuffer->clear(m_clearColor);
-    scene.draw(&(camera));
+    scene.draw(m_graphicsManager, &camera);
     m_graphicsManager.executeDrawCommands();
     m_frameBuffer->unbind();
   }

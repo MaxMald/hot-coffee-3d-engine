@@ -5,13 +5,15 @@ namespace hc
   BlinnPhongMaterialDescriptor::BlinnPhongMaterialDescriptor(
     const Path& path,
     const Color& color,
-    const Path& colorImagePath,
+    float shininess,
+    const Path& albedoImagePath,
     const Path& normalImagePath,
     const Path& specularImagePath
   ) :
     AMaterialDescriptor(path),
     m_color(color),
-    m_albedoImagePath(colorImagePath),
+    m_shininess(Math::Clamp(shininess, 1.0f, 256.0f)),
+    m_albedoImagePath(albedoImagePath),
     m_normalImagePath(normalImagePath),
     m_specularImagePath(specularImagePath)
   {}
@@ -34,6 +36,11 @@ namespace hc
   const Color& BlinnPhongMaterialDescriptor::getColor() const
   {
     return m_color;
+  }
+
+  float BlinnPhongMaterialDescriptor::getShininess() const
+  {
+    return m_shininess;
   }
 
   const Path& BlinnPhongMaterialDescriptor::getAlbedoImagePath() const

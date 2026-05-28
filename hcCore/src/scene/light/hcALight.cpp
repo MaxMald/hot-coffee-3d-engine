@@ -4,7 +4,6 @@ namespace hc
 {
   void ALight::serialize(BinaryWriter& writer) const
   {
-    m_id.serialize(writer);
     writer.writeBool(enabled);
     writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
@@ -15,18 +14,12 @@ namespace hc
 
   void ALight::deserialize(BinaryReader& reader)
   {
-    m_id.deserialize(reader);
     enabled = reader.readBool();
     m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_range = reader.readFloat();
     m_position = reader.readVector3f();
-  }
-
-  const UUID& ALight::getUUID() const
-  {
-    return m_id;
   }
 
   lightType::Type ALight::getType() const
@@ -90,7 +83,6 @@ namespace hc
   }
 
   ALight::ALight(lightType::Type type) :
-    m_id(UUID::Generate()),
     enabled(true),
     m_type(type),
     m_color{ 1.0f, 1.0f, 1.0f },
