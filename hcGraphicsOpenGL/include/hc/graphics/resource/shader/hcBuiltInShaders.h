@@ -6,7 +6,7 @@ namespace hc
 {
   namespace builtInShaders
   {
-    inline const String VertexShader = R"(
+    inline const String UnlitVertex = R"(
       #version 420 core
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;
@@ -34,7 +34,7 @@ namespace hc
       }
     )";
 
-    inline const String LitVertexShader = R"(
+    inline const String LitVertex = R"(
       #version 420 core
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;

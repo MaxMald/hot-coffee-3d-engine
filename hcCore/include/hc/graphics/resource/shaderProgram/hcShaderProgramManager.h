@@ -11,8 +11,7 @@ namespace hc
    * @brief Manages shader program resources and their creation.
    *
    * Provides functionality for creating, caching, and retrieving shader
-   * programs, including the default unlit shader program. Implements the
-   * IShaderProgramManager interface.
+   * programs, including custom and built-in shader programs.
    */
   class HC_CORE_EXPORT ShaderProgramManager : public IShaderProgramManager
   {
@@ -30,14 +29,32 @@ namespace hc
     ~ShaderProgramManager() override;
 
     /**
-     * @copydoc IShaderProgramManager::getUnlitShaderProgram
+     * @copydoc IShaderProgramManager::createShaderProgram
      */
-    SharedPtr<IShaderProgram> getUnlitShaderProgram() override;
+    SharedPtr<IShaderProgram> createShaderProgram(
+      const String& programKey,
+      SharedPtr<IShader> vertexShader,
+      SharedPtr<IShader> fragmentShader
+    ) override;
 
     /**
-     * @copydoc IShaderProgramManager::getBlinnPhongForwardProgram
+     * @copydoc IShaderProgramManager::getShaderProgram
      */
-    SharedPtr<IShaderProgram> getBlinnPhongForwardProgram() override;
+    SharedPtr<IShaderProgram> getShaderProgram(
+      const String& programKey
+    ) const override;
+
+    /**
+     * @copydoc IShaderProgramManager::hasShaderProgram
+     */
+    bool hasShaderProgram(const String& programKey) const override;
+
+    /**
+     * @copydoc IShaderProgramManager::getBuiltInShaderProgram
+     */
+    SharedPtr<IShaderProgram> getBuiltInShaderProgram(
+      builtInShaderProgramType::Type type
+    ) override;
 
     /**
      * @copydoc IShaderProgramManager::clear
@@ -47,17 +64,13 @@ namespace hc
   private:
     UniquePtr<IShaderProgramFactory> m_shaderProgramFactory;
     IShaderManager& m_shaderManager;
-    SharedPtr<IShaderProgram> m_unlitShaderProgram;
-    SharedPtr<IShaderProgram> m_blinnPhongForwardProgram;
+    UnorderedMap<builtInShaderProgramType::Type, SharedPtr<IShaderProgram>> m_builtInShaderPrograms;
+    UnorderedMap<String, SharedPtr<IShaderProgram>> m_customShaderPrograms;
 
-    /**
-     * @brief Creates the unlit shader program and caches it.
-     */
-    void createUnlitShaderProgram();
-
-    /**
-     * @brief Creates the Blinn-Phong forward shader program and caches it.
-     */
-    void createBlinnPhongForwardProgram();
+    void createBuiltInShaderProgram(
+      builtInShaderProgramType::Type type,
+      SharedPtr<IShader> vertexShader,
+      SharedPtr<IShader> fragmentShader
+    );
   };
 }

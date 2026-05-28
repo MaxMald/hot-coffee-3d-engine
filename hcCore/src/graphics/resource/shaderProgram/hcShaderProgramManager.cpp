@@ -11,50 +11,144 @@ namespace hc
     IShaderManager& shaderManager
   ) :
     m_shaderProgramFactory(std::move(shaderProgramFactory)),
-    m_shaderManager(shaderManager)
-  {
-  }
+    m_shaderManager(shaderManager),
+    m_builtInShaderPrograms(),
+    m_customShaderPrograms()
+  {}
 
   ShaderProgramManager::~ShaderProgramManager()
   {
+    clear();
   }
 
-  SharedPtr<IShaderProgram> ShaderProgramManager::getUnlitShaderProgram()
+  SharedPtr<IShaderProgram> ShaderProgramManager::createShaderProgram(
+    const String& programKey,
+    SharedPtr<IShader> vertexShader,
+    SharedPtr<IShader> fragmentShader
+  )
   {
-    if (!m_unlitShaderProgram)
-      createUnlitShaderProgram();
-    return m_unlitShaderProgram;
+    if (hasShaderProgram(programKey))
+    {
+      throw RuntimeErrorException(
+        String::Format("Shader program with key '%s' already exists.", programKey.c_str())
+      );
+    }
+
+    SharedPtr<IShaderProgram> shaderProgram = m_shaderProgramFactory->createShaderProgram();
+    if (!shaderProgram)
+    {
+      throw RuntimeErrorException(
+        String::Format("Failed to create shader program with key '%s'.", programKey.c_str())
+      );
+    }
+
+    if (!vertexShader || !fragmentShader)
+    {
+      throw RuntimeErrorException(
+        String::Format("Invalid shaders provided for shader program with key '%s'.", programKey.c_str())
+      );
+    }
+
+    if (!vertexShader->isCompiled())
+      vertexShader->compile();
+    if (!fragmentShader->isCompiled())
+      fragmentShader->compile();
+
+    shaderProgram->attachShader(vertexShader);
+    shaderProgram->attachShader(fragmentShader);
+    shaderProgram->linkShaders();
+
+    m_customShaderPrograms[programKey] = shaderProgram;
+    return shaderProgram;
   }
 
-  SharedPtr<IShaderProgram> ShaderProgramManager::getBlinnPhongForwardProgram()
+  SharedPtr<IShaderProgram> ShaderProgramManager::getShaderProgram(
+    const String& programKey
+  ) const
   {
-    if (!m_blinnPhongForwardProgram)
-      createBlinnPhongForwardProgram();
-    return m_blinnPhongForwardProgram;
+    if (hasShaderProgram(programKey))
+      return m_customShaderPrograms.at(programKey);
+    return nullptr;
+  }
+
+  bool ShaderProgramManager::hasShaderProgram(const String& programKey) const
+  {
+    return m_customShaderPrograms.find(programKey) != m_customShaderPrograms.end();
+  }
+
+  SharedPtr<IShaderProgram> ShaderProgramManager::getBuiltInShaderProgram(
+    builtInShaderProgramType::Type type
+  )
+  {
+    if (m_builtInShaderPrograms.find(type) != m_builtInShaderPrograms.end())
+      return m_builtInShaderPrograms.at(type);
+
+    if (type == builtInShaderProgramType::Unlit)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::UnlitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::UnlitFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::BlinnPhongForward)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::BlinnPhongForwardFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::BlinnPhongDeferredGeometry)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::BlinnPhongDeferredFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::DeferredLighting)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::FullScreenTriangleVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::DeferredLightingFragment)
+      );
+    }
+    else
+    {
+      throw RuntimeErrorException(
+        String::Format("ShaderProgramManager: Built-in shader program type %d is not implemented.", type)
+      );
+    }
+
+    return m_builtInShaderPrograms.at(type);
   }
 
   void ShaderProgramManager::clear()
   {
-    m_unlitShaderProgram.reset();
+    m_builtInShaderPrograms.clear();
+    m_customShaderPrograms.clear();
   }
 
-  void ShaderProgramManager::createUnlitShaderProgram()
+  void ShaderProgramManager::createBuiltInShaderProgram(
+    builtInShaderProgramType::Type type,
+    SharedPtr<IShader> vertexShader,
+    SharedPtr<IShader> fragmentShader
+  )
   {
-    m_unlitShaderProgram = m_shaderProgramFactory->createShaderProgram();
-    if (!m_unlitShaderProgram)
+    SharedPtr<IShaderProgram> shaderProgram = m_shaderProgramFactory->createShaderProgram();
+    if (!shaderProgram)
     {
       throw RuntimeErrorException(
-        "Failed to create unlit shader program."
+        String::Format("Failed to create shader program for built-in type %d.", type)
       );
     }
-
-    SharedPtr<IShader> vertexShader = m_shaderManager.getDefaultVertexShader();
-    SharedPtr<IShader> fragmentShader = m_shaderManager.getUnlitFragmentShader();
 
     if (!vertexShader || !fragmentShader)
     {
       throw RuntimeErrorException(
-        "Failed to retrieve shaders for unlit shader program."
+        String::Format("Failed to retrieve shaders for built-in shader program type %d.", type)
       );
     }
 
@@ -63,38 +157,10 @@ namespace hc
     if (!fragmentShader->isCompiled())
       fragmentShader->compile();
 
-    m_unlitShaderProgram->attachShader(vertexShader);
-    m_unlitShaderProgram->attachShader(fragmentShader);
-    m_unlitShaderProgram->linkShaders();
-  }
+    shaderProgram->attachShader(vertexShader);
+    shaderProgram->attachShader(fragmentShader);
+    shaderProgram->linkShaders();
 
-  void ShaderProgramManager::createBlinnPhongForwardProgram()
-  {
-    m_blinnPhongForwardProgram = m_shaderProgramFactory->createShaderProgram();
-    if (!m_blinnPhongForwardProgram)
-    {
-      throw RuntimeErrorException(
-        "Failed to create Blinn-Phong forward shader program."
-      );
-    }
-
-    SharedPtr<IShader> vertexShader = m_shaderManager.getLitVertexShader();
-    SharedPtr<IShader> fragmentShader = m_shaderManager.getBlinnPhongForwardFragmentShader();
-    if (!vertexShader || !fragmentShader)
-    {
-      throw RuntimeErrorException(
-        "Failed to retrieve shaders for Blinn-Phong forward shader program."
-      );
-    }
-
-    if (!vertexShader->isCompiled())
-      vertexShader->compile();
-
-    if (!fragmentShader->isCompiled())
-      fragmentShader->compile();
-
-    m_blinnPhongForwardProgram->attachShader(vertexShader);
-    m_blinnPhongForwardProgram->attachShader(fragmentShader);
-    m_blinnPhongForwardProgram->linkShaders();
+    m_builtInShaderPrograms[type] = shaderProgram;
   }
 }

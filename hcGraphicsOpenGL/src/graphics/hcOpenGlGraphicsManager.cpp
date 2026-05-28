@@ -239,7 +239,6 @@ namespace hc
   { 
     for (const DrawCommand& command : drawCommands)
     {
-
       String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))
       {
@@ -267,7 +266,10 @@ namespace hc
         command.cameraRenderData,
         renderPassType::Type::DeferredGeometry
       );
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(
+        command.modelMatrix,
+        renderPassType::Type::DeferredGeometry
+      );
 
       glDrawElements(
         drawData.drawMode,
@@ -288,8 +290,6 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDeferredLightingPass()
   {
-
-
     m_gBuffer.bindForReading();
 
     // TODO
@@ -354,7 +354,7 @@ namespace hc
       glBindVertexArray(drawData.vao);
 
       command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       // Pass 1: Render back faces first
       glCullFace(GL_FRONT);
@@ -384,7 +384,7 @@ namespace hc
 
       glBindVertexArray(drawData.vao);
       command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       glDrawElements(
         drawData.drawMode,

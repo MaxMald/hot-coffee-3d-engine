@@ -97,8 +97,13 @@ namespace hc
      * @brief Updates the model matrix uniform in the shader.
      * 
      * @param modelMatrix The model matrix to set.
+     * @param renderPass The render pass type, which may affect how the model matrix is
+     * used in the shader.
      */
-    virtual void updateModelMatrix(const Matrix4& modelMatrix) = 0;
+    virtual void updateModelMatrix(
+      const Matrix4& modelMatrix,
+      renderPassType::Type renderPass
+    ) = 0;
 
     /**
      * @brief Unbinds the material after rendering.

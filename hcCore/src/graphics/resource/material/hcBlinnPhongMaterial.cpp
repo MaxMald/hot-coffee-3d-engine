@@ -15,7 +15,8 @@ namespace hc
     m_albedoTexture(nullptr),
     m_normalTexture(nullptr),
     m_specularTexture(nullptr),
-    m_shaderProgram(nullptr)
+    m_forwardShaderProgram(nullptr),
+    m_deferredGeometryShaderProgram(nullptr)
   {}
 
   BlinnPhongMaterial::~BlinnPhongMaterial()
@@ -26,7 +27,8 @@ namespace hc
     m_albedoTexture.reset();
     m_normalTexture.reset();
     m_specularTexture.reset();
-    m_shaderProgram.reset();
+    m_forwardShaderProgram.reset();
+    m_deferredGeometryShaderProgram.reset();
   }
 
   shadingType::Type BlinnPhongMaterial::getShaderType() const
@@ -41,48 +43,53 @@ namespace hc
   {
     assertIsValid();
 
-    if (renderPassType::Type::Forward != renderPass)
-    {
-      // NOTE:
-      // For now, Blinn-Phong material only supports forward rendering pass.
-
-      // TODO:
-      // Implement support for deferred rendering pass.
-
-      throw InvalidArgumentException(
-        "Blinn-Phong material only supports forward rendering pass."
-      );
-    }
-
-    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Blinn-Phong shader program");
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
 
-    m_shaderProgram->bind();
-
-    m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
-    m_shaderProgram->setUniform("uColor", getColor());
-    m_shaderProgram->setUniform("uShininess", m_shininess);
-    m_shaderProgram->setUniform("uCameraPosition", cameraRenderData.cameraWorldPosition);
-
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_shaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
+    if (renderPassType::Type::Forward == renderPass)
+      bindForwardPass(cameraRenderData);
+    else if (renderPassType::Type::DeferredGeometry == renderPass)
+      bindDeferredGeometryPass(cameraRenderData);
     else
-      m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
-        
-    m_albedoTexture->bind(0);
-    m_shaderProgram->setUniformTexture("uAlbedo", 0);
-    m_normalTexture->bind(1);
-    m_shaderProgram->setUniformTexture("uNormalMap", 1);
-    m_specularTexture->bind(2);
-    m_shaderProgram->setUniformTexture("uSpecularMap", 2);
+      throw InvalidArgumentException(
+        String::Format(
+          "Unsuported render pass type for Blinn-Phong material: %d",
+          static_cast<Int32>(renderPass)
+        )
+      );
   }
 
-  void BlinnPhongMaterial::updateModelMatrix(const Matrix4 & modelMatrix)
+  void BlinnPhongMaterial::updateModelMatrix(
+    const Matrix4& modelMatrix,
+    renderPassType::Type renderPass
+  )
   {
-    m_shaderProgram->setUniform("uModel", modelMatrix);
+    if (renderPassType::Type::Forward == renderPass)
+    {
+      coreAssertions::AssertShaderProgramIsValid(
+        m_forwardShaderProgram,
+        "Blinn-Phong forward shader program"
+      );
+
+      m_forwardShaderProgram->setUniform("uModel", modelMatrix);
+    }      
+    else if (renderPassType::Type::DeferredGeometry == renderPass)
+    {
+      coreAssertions::AssertShaderProgramIsValid(
+        m_deferredGeometryShaderProgram,
+        "Blinn-Phong deferred geometry shader program"
+      );
+
+      m_deferredGeometryShaderProgram->setUniform("uModel", modelMatrix);
+    }
+    else
+      throw InvalidArgumentException(
+        String::Format(
+          "Unsuported render pass type for Blinn-Phong material: %d",
+          static_cast<Int32>(renderPass)
+        )
+      );
   }
 
   void BlinnPhongMaterial::unbind()
@@ -92,7 +99,8 @@ namespace hc
 
   bool BlinnPhongMaterial::isValid() const
   {
-    return m_shaderProgram != nullptr && m_shaderProgram->isValid();
+    return m_forwardShaderProgram != nullptr && m_forwardShaderProgram->isValid() &&
+           m_deferredGeometryShaderProgram != nullptr && m_deferredGeometryShaderProgram->isValid();
   }
 
   void BlinnPhongMaterial::initialize(
@@ -100,12 +108,18 @@ namespace hc
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,
-    const SharedPtr<IShaderProgram>& shaderProgram
+    const SharedPtr<IShaderProgram>& forwardShaderProgram,
+    const SharedPtr<IShaderProgram>& deferredGeometryShaderProgram  
   )
   {
-    if (!shaderProgram)
+    if (!forwardShaderProgram)
       throw InvalidArgumentException(
-        "Shader program cannot be null when initializing Blinn-Phong material."
+        "Forward shader program cannot be null when initializing Blinn-Phong material."
+      );
+
+    if (!deferredGeometryShaderProgram)
+      throw InvalidArgumentException(
+        "Deferred geometry shader program cannot be null when initializing Blinn-Phong material."
       );
 
     coreAssertions::AssertTextureIsValid(albedoTexture, "Albedo");
@@ -121,7 +135,8 @@ namespace hc
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
     m_specularTexture = specularTexture;
-    m_shaderProgram = shaderProgram;
+    m_forwardShaderProgram = forwardShaderProgram;
+    m_deferredGeometryShaderProgram = deferredGeometryShaderProgram;
   }
 
   const Color& BlinnPhongMaterial::getColor() const
@@ -180,5 +195,60 @@ namespace hc
       throw RuntimeErrorException(
         "Blinn-Phong material is not valid."
       );
+  }
+
+  void BlinnPhongMaterial::bindForwardPass(const CameraRenderData& cameraRenderData)
+  {
+    coreAssertions::AssertShaderProgramIsValid(
+      m_forwardShaderProgram,
+      "Blinn-Phong forward shader program"
+    );
+
+    m_forwardShaderProgram->bind();
+
+    m_forwardShaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
+    m_forwardShaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
+    m_forwardShaderProgram->setUniform("uColor", m_color);
+    m_forwardShaderProgram->setUniform("uShininess", m_shininess);
+    m_forwardShaderProgram->setUniform("uCameraPosition", cameraRenderData.cameraWorldPosition);
+
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      m_forwardShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
+    else
+      m_forwardShaderProgram->setUniform("uAlphaCutoff", 0.0f);
+
+    m_albedoTexture->bind(0);
+    m_forwardShaderProgram->setUniformTexture("uAlbedo", 0);
+    m_normalTexture->bind(1);
+    m_forwardShaderProgram->setUniformTexture("uNormalMap", 1);
+    m_specularTexture->bind(2);
+    m_forwardShaderProgram->setUniformTexture("uSpecularMap", 2);
+  }
+
+  void BlinnPhongMaterial::bindDeferredGeometryPass(const CameraRenderData& cameraRenderData)
+  {
+    coreAssertions::AssertShaderProgramIsValid(
+      m_deferredGeometryShaderProgram,
+      "Blinn-Phong deferred geometry shader program"
+    );
+
+    m_deferredGeometryShaderProgram->bind();
+
+    m_deferredGeometryShaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
+    m_deferredGeometryShaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
+    m_deferredGeometryShaderProgram->setUniform("uColor", m_color);
+    m_deferredGeometryShaderProgram->setUniform("uShininess", m_shininess);
+
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
+    else
+      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", 0.0f);
+
+    m_albedoTexture->bind(0);
+    m_deferredGeometryShaderProgram->setUniformTexture("uAlbedo", 0);
+    m_normalTexture->bind(1);
+    m_deferredGeometryShaderProgram->setUniformTexture("uNormalMap", 1);
+    m_specularTexture->bind(2);
+    m_deferredGeometryShaderProgram->setUniformTexture("uSpecularMap", 2);
   }
 }

@@ -36,12 +36,18 @@ namespace hc
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(const CameraRenderData& cameraRenderData, renderPassType::Type renderPass) override;
+    void bind(
+      const CameraRenderData& cameraRenderData,
+      renderPassType::Type renderPass
+    ) override;
 
     /**
      * @copydoc IMaterial::updateModelMatrix
      */
-    void updateModelMatrix(const Matrix4& modelMatrix) override;
+    void updateModelMatrix(
+      const Matrix4& modelMatrix,
+      renderPassType::Type renderPass
+    ) override;
 
     /**
      * @copydoc IMaterial::unbind

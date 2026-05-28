@@ -56,8 +56,17 @@ namespace hc
     m_shaderProgram->setUniformTexture("uTexture", 0);
   }
 
-  void UnlitMaterial::updateModelMatrix(const Matrix4& modelMatrix)
+  void UnlitMaterial::updateModelMatrix(
+    const Matrix4& modelMatrix,
+    renderPassType::Type renderPass
+  )
   {
+    if (renderPass != renderPassType::Type::Forward)
+      throw RuntimeErrorException(
+        "UnlitMaterial::updateModelMatrix - UnlitMaterial only supports Forward render pass."
+      );
+
+    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Unlit shader program");
     m_shaderProgram->setUniform("uModel", modelMatrix);
   }
 

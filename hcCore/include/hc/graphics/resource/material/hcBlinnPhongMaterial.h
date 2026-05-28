@@ -44,7 +44,10 @@ namespace hc
     /**
      * @copydoc IMaterial::updateModelMatrix
      */
-    void updateModelMatrix(const Matrix4& modelMatrix) override;
+    void updateModelMatrix(
+      const Matrix4& modelMatrix,
+      renderPassType::Type renderPass
+    ) override;
 
     /**
      * @copydoc IMaterial::unbind
@@ -68,14 +71,16 @@ namespace hc
      * @param albedoTexture Shared pointer to the albedo texture resource.
      * @param normalTexture Shared pointer to the normal map texture resource.
      * @param specularTexture Shared pointer to the specular texture resource.
-     * @param shaderProgram Shared pointer to the shader program used for rendering this material.
+     * @param forwardShaderProgram Shared pointer to the shader program used for forward rendering this material.
+     * @param deferredGeometryShaderProgram Shared pointer to the shader program used for deferred geometry rendering this material.
      */
     void initialize(
       const BlinnPhongMaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& specularTexture,
-      const SharedPtr<IShaderProgram>& shaderProgram
+      const SharedPtr<IShaderProgram>& forwardShaderProgram,
+      const SharedPtr<IShaderProgram>& deferredGeometryShaderProgram
     );
 
     /**
@@ -156,8 +161,12 @@ namespace hc
     SharedPtr<ITexture> m_albedoTexture;
     SharedPtr<ITexture> m_normalTexture;
     SharedPtr<ITexture> m_specularTexture;
-    SharedPtr<IShaderProgram> m_shaderProgram;
+
+    SharedPtr<IShaderProgram> m_forwardShaderProgram;
+    SharedPtr<IShaderProgram> m_deferredGeometryShaderProgram;
 
     void assertIsValid() const;
+    void bindForwardPass(const CameraRenderData& cameraRenderData);
+    void bindDeferredGeometryPass(const CameraRenderData& cameraRenderData);
   };
 }

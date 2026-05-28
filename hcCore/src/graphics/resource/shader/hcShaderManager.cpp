@@ -3,18 +3,16 @@
 
 namespace hc
 {
-  static constexpr const char* DEFAULT_VERTEX_SHADER_KEY = "#_HC_DEFAULT_VERTEX_SHADER";
-  static constexpr const char* LIT_VERTEX_SHADER_KEY = "#_HC_LIT_VERTEX_SHADER";
-  static constexpr const char* UNLIT_FRAGMENT_SHADER_KEY = "#_HC_UNLIT_FRAGMENT_SHADER";
-  static constexpr const char* BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY = "#_HC_BLINN_PHONG_FORWARD_FRAGMENT_SHADER";
-
   ShaderManager::ShaderManager(UniquePtr<IShaderFactory> shaderFactory) :
-    m_shaderFactory(std::move(shaderFactory))
+    m_shaderFactory(std::move(shaderFactory)),
+    m_builtInShaders(static_cast<SizeT>(builtInShaderType::Count)),
+    m_customShaders()
   {
   }
 
   ShaderManager::~ShaderManager()
   {
+    clear();
   }
 
   SharedPtr<IShader> ShaderManager::createShaderFromFile(
@@ -23,8 +21,8 @@ namespace hc
   )
   {
     String shaderKey = shaderPath.string();
-    if (hasCachedResource(shaderKey))
-      return getCachedResource(shaderKey);
+    if (m_customShaders.find(shaderKey) != m_customShaders.end())
+      return m_customShaders[shaderKey];
 
     Optional<String> shaderCode = fileUtilities::LoadStringFromFile(
       shaderPath
@@ -54,8 +52,15 @@ namespace hc
     shaderStageType::Type type
   )
   {
-    if (hasCachedResource(shaderKey))
-      return getCachedResource(shaderKey);
+    if (hasShader(shaderKey))
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Shader with key '%s' already exists in the cache.",
+          shaderKey.c_str()
+        )
+      );
+    }
 
     SharedPtr<IShader> shader = m_shaderFactory->createShaderFromStringContent(
       shaderCode,
@@ -73,98 +78,45 @@ namespace hc
       return nullptr;
     }
 
-    cacheResource(shaderKey, shader);
+    m_customShaders.insert({ shaderKey, shader });
     return shader;
   }
 
-  SharedPtr<IShader> ShaderManager::getShader(
-    const String& shaderKey
-  ) const
+  SharedPtr<IShader> ShaderManager::getShader(const String& shaderKey) const
   {
-    return getCachedResource(shaderKey);
+    if (m_customShaders.find(shaderKey) != m_customShaders.end())
+      return m_customShaders.at(shaderKey);
+    return nullptr;
   }
 
-  SharedPtr<IShader> ShaderManager::getDefaultVertexShader()
+  bool ShaderManager::hasShader(const String& shaderKey) const
   {
-    if (!hasCachedResource(DEFAULT_VERTEX_SHADER_KEY))
-      createDefaultVertexShader();
-    return getCachedResource(DEFAULT_VERTEX_SHADER_KEY);
+    return m_customShaders.find(shaderKey) != m_customShaders.end();
   }
 
-  SharedPtr<IShader> ShaderManager::getUnlitFragmentShader()
+  SharedPtr<IShader> ShaderManager::getBuiltInShader(const builtInShaderType::Type type)
   {
-    if (!hasCachedResource(UNLIT_FRAGMENT_SHADER_KEY))
-      createUnlitFragmentShader();
-    return getCachedResource(UNLIT_FRAGMENT_SHADER_KEY);
+    if (m_builtInShaders.find(type) != m_builtInShaders.end())
+      return m_builtInShaders[type];
+
+    SharedPtr<IShader> shader = m_shaderFactory->createBuiltInShaderType(type);
+    if (!shader)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Failed to create built-in shader of type: %d",
+          static_cast<int>(type)
+        )
+      );
+    }
+
+    m_builtInShaders.insert({ type, shader });
+    return shader;
   }
 
-  SharedPtr<IShader> ShaderManager::getBlinnPhongForwardFragmentShader()
-  {
-    if (!hasCachedResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY))
-      createBlinnPhongForwardFragmentShader();
-    return getCachedResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY);
-  }
-
-  SharedPtr<IShader> ShaderManager::getLitVertexShader()
-  {
-    if (!hasCachedResource(LIT_VERTEX_SHADER_KEY))
-      createLitVertexShader();
-    return getCachedResource(LIT_VERTEX_SHADER_KEY);
-  }
   void ShaderManager::clear()
   {
-    clearCache();
-  }
-
-  void ShaderManager::createDefaultVertexShader()
-  {
-    SharedPtr<IShader> shader = m_shaderFactory->createDefaultVertexShader();
-    if (!shader)
-    {
-      throw RuntimeErrorException(
-        "Failed to create default vertex shader."
-      );
-    }
-
-    cacheResource(DEFAULT_VERTEX_SHADER_KEY, shader);
-  }
-
-  void ShaderManager::createLitVertexShader()
-  {
-    SharedPtr<IShader> shader = m_shaderFactory->createLitVertexShader();
-    if (!shader)
-    {
-      throw RuntimeErrorException(
-        "Failed to create lit vertex shader."
-      );
-    }
-
-    cacheResource(LIT_VERTEX_SHADER_KEY, shader);
-  }
-
-  void ShaderManager::createUnlitFragmentShader()
-  {
-    SharedPtr<IShader> shader = m_shaderFactory->createUnlitFragmentShader();
-    if (!shader)
-    {
-      throw RuntimeErrorException(
-        "Failed to create unlit fragment shader."
-      );
-    }
-
-    cacheResource(UNLIT_FRAGMENT_SHADER_KEY, shader);
-  }
-
-  void ShaderManager::createBlinnPhongForwardFragmentShader()
-  {
-    SharedPtr<IShader> shader = m_shaderFactory->createBlinnPhongForwardFragmentShader();
-    if (!shader)
-    {
-      throw RuntimeErrorException(
-        "Failed to create Blinn-Phong forward fragment shader."
-      );
-    }
-
-    cacheResource(BLINN_PHONG_FORWARD_FRAGMENT_SHADER_KEY, shader);
+    m_builtInShaders.clear();
+    m_customShaders.clear();
   }
 }

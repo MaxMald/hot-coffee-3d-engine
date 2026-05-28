@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/resource/shader/hcBuiltInShaderType.h"
 
 namespace hc
 {
@@ -33,39 +34,19 @@ namespace hc
     ) = 0;
 
     /**
-     * @brief Creates a default vertex shader.
-     * 
-     * @return Shared pointer to the created vertex shader instance.
-     */
-    virtual SharedPtr<IShader> createDefaultVertexShader() = 0;
-
-    /**
-     * @brief Creates a lit vertex shader.
+     * @brief Creates a built-in shader of the specified type.
      *
-     * @return Shared pointer to the created vertex shader instance.
-     */
-    virtual SharedPtr<IShader> createLitVertexShader() = 0;
-
-    /**
-     * @brief Creates an unlit fragment shader.
-     * 
-     * @return Shared pointer to the created fragment shader instance.
-     */
-    virtual SharedPtr<IShader> createUnlitFragmentShader() = 0;
-
-    /**
-     * @brief Creates a Blinn-Phong forward fragment shader.
+     * @param type The type of the built-in shader to create.
      *
-     * @return Shared pointer to the created fragment shader instance.
-     */
-    virtual SharedPtr<IShader> createBlinnPhongForwardFragmentShader() = 0;
-
-    /**
-     * @brief Creates a Blinn-Phong deferred fragment shader.
+     * @return Shared pointer to the created built-in shader instance. nullptr if
+     * creation fails.
      *
-     * @return Shared pointer to the created fragment shader instance.
+     * @throws RuntimeErrorException if the built-in shader for the specified type does
+     * not exist or is not implemented.
      */
-    virtual SharedPtr<IShader> createBlinnPhongDeferredFragmentShader() = 0;
+    virtual SharedPtr<IShader> createBuiltInShaderType(
+      builtInShaderType::Type type
+    ) = 0;
 
   protected:
     IShaderFactory() = default;
