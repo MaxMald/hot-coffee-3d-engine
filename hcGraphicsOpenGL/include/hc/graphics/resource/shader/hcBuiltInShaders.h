@@ -309,5 +309,154 @@ namespace hc
         gl_Position = vec4(positions[gl_VertexID], 0.0, 1.0);
       }
     )";
+
+    inline const String DeferredLightingFragment = R"(
+      #version 420 core
+
+      #define MAX_OMNI_LIGHTS 16
+      #define MAX_SPOT_LIGHTS 8
+      #define MAX_DIRECTIONAL_LIGHTS 4
+
+      struct SpotLightData
+      {
+        vec4 position;
+        vec4 direction;
+        vec4 color;
+        float range;
+        float innerConeCos;
+        float intensity;
+        float outerConeCos;
+      };
+
+      struct OmniLightData
+      {
+        vec4 position;
+        vec4 color;
+        float range;
+        float intensity;
+        float padding0;
+        float padding1;
+      };
+
+      struct DirectionalLightData
+      {
+        vec4 directionAndIntensity;
+        vec4 color;
+      };
+
+      layout(std140, binding = 2) uniform LightBlock
+      {
+        DirectionalLightData directionalLights[MAX_DIRECTIONAL_LIGHTS];
+        OmniLightData omniLights[MAX_OMNI_LIGHTS];
+        SpotLightData spotLights[MAX_SPOT_LIGHTS];
+        int numDirectionalLights;
+        int numOmniLights;
+        int numSpotLights;
+        int padding; ///< Padding to ensure 16-byte alignment.
+      };
+
+      uniform sampler2D uPositionAndDepth;
+      uniform sampler2D uNormalRoughness;
+      uniform sampler2D uAlbedoAlpha;
+      uniform sampler2D uMaterialParameters;
+      uniform vec3 uCameraPosition;
+
+      in vec2 vTexCoord;
+
+      out vec4 FragColor;
+
+      float calculateAttenuation(float distance, float range)
+      {
+        // Quadratic attenuation that clamps to 0 at the light's range
+        float attenuation = clamp(1.0 - distance / range, 0.001, 1.0);
+        return attenuation * attenuation; // quadratic falloff
+      }
+
+      vec3 calculateOmniLight(OmniLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float specularStrength, float shininess)
+      {
+        vec3 lightDir = normalize(light.position.xyz - worldPos);
+        vec3 halfDir = normalize(lightDir + viewDir);
+
+        float diff = max(dot(normal, lightDir), 0.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
+        float spec = specBase * specularStrength;
+        float distance = length(light.position.xyz - worldPos);
+        float attenuation = calculateAttenuation(distance, light.range);
+
+        return (diff + spec) * light.color.rgb * light.intensity * attenuation;
+      }
+
+      vec3 calculateDirectionalLight(DirectionalLightData light, vec3 normal, vec3 viewDir, float specularStrength, float shininess)
+      {
+        vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
+        vec3 halfDir = normalize(lightDir + viewDir);
+
+        float diff = max(dot(normal, lightDir), 0.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
+        float spec = specBase * specularStrength;
+
+        return (diff + spec) * light.color.rgb * light.directionAndIntensity.w;
+      }
+
+      vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float specularStrength, float shininess)
+      {
+        vec3 lightDir = normalize(light.position.xyz - worldPos);
+        vec3 halfDir = normalize(lightDir + viewDir);
+
+        float diff = max(dot(normal, lightDir), 0.0);
+        float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
+        float spec = specBase * specularStrength;
+        float distance = length(light.position.xyz - worldPos);
+        float attenuation = calculateAttenuation(distance, light.range);
+
+        float theta = dot(-light.direction.xyz, lightDir);
+        if (theta > light.outerConeCos)
+        {
+          float epsilon = clamp(light.innerConeCos - light.outerConeCos, 0.001, 1.0);
+          float intensity = clamp((theta - light.outerConeCos) / epsilon, 0.0, 1.0);
+          return (diff + spec) * light.color.rgb * light.intensity * attenuation * intensity;
+        }
+        else
+        {
+          return vec3(0.0);
+        }
+      }
+
+      void main()
+      {
+        vec4 positionAndDepth = texture(uPositionAndDepth, vTexCoord);
+        vec3 worldPos = positionAndDepth.xyz;
+        float depth = positionAndDepth.w;
+
+        if (depth >= 1.0)
+          discard; // No geometry at this pixel
+
+        vec4 normalRoughness = texture(uNormalRoughness, vTexCoord);
+        vec3 normal = normalRoughness.xyz;
+        float roughness = normalRoughness.w;
+        float shininess = 256.0 * (1.0 - roughness); // Convert roughness back to shininess
+
+        vec4 albedoAlpha = texture(uAlbedoAlpha, vTexCoord);
+        vec3 albedo = albedoAlpha.rgb;
+        float alpha = albedoAlpha.a;
+        if (alpha < 0.01)
+          discard; // Transparent pixel
+
+        vec4 materialParams = texture(uMaterialParameters, vTexCoord);
+        float specularStrength = materialParams.r;
+        
+        vec3 viewDir = normalize(uCameraPosition - worldPos);
+
+        vec3 totalLighting = vec3(0.05);
+        for (int i = 0; i < numOmniLights; ++i)
+          totalLighting += calculateOmniLight(omniLights[i], normal, viewDir, worldPos, specularStrength, shininess);
+        for (int i = 0; i < numDirectionalLights; ++i)
+          totalLighting += calculateDirectionalLight(directionalLights[i], normal, viewDir, specularStrength, shininess);
+        for (int i = 0; i < numSpotLights; ++i)
+          totalLighting += calculateSpotLight(spotLights[i], normal, viewDir, worldPos, specularStrength, shininess);
+
+        FragColor = vec4(albedo * totalLighting, alpha);
+      }
+    )";
   }
 }
