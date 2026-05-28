@@ -74,6 +74,7 @@ namespace hc
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     setViewport(viewportRect);
 
+    m_gBuffer.initialize(viewportRect.width, viewportRect.height);
     m_lightFrameUBO.initialize();
     m_materialManager.initialize();
   }
