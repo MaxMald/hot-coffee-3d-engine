@@ -99,6 +99,9 @@ namespace hc
       );
     }
 
+    camera->update();
+    graphicsManager.updateCameraRenderData(CameraRenderData::Create(*camera));
+
     // Gather light frame data and upload it to the graphics manager
 
     m_lightFrameData.numDirectionalLights = 0;

@@ -40,6 +40,11 @@ namespace hc
     void beginFrame() override;
 
     /**
+     * @copydoc IGraphicsManager::updateCameraRenderData
+     */
+    void updateCameraRenderData(const CameraRenderData& cameraRenderData) override;
+
+    /**
      * @copydoc IGraphicsManager::uploadLightFrameData
      */
     void uploadLightFrameData(const LightFrameData& lightFrameData) override;
@@ -130,6 +135,7 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
+    CameraRenderData m_currentCameraRenderData;
     LightFrameUBO m_lightFrameUBO;
 
     Vector<DrawCommand> m_queueDrawCommands;

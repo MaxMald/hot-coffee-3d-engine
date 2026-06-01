@@ -40,6 +40,7 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
+    m_currentCameraRenderData(),
     m_lightFrameUBO(),
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
@@ -73,7 +74,6 @@ namespace hc
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    setViewport(viewportRect);
 
     m_gBuffer.initialize(viewportRect.width, viewportRect.height);
     m_lightFrameUBO.initialize();
@@ -81,6 +81,8 @@ namespace hc
     m_deferredLightingShaderProgram = m_shaderProgramManager.getBuiltInShaderProgram(
       builtInShaderProgramType::DeferredLighting
     );
+
+    setViewport(viewportRect);
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -94,6 +96,17 @@ namespace hc
 
     if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
       m_gBuffer.clear();
+  }
+
+  void OpenGlGraphicsManager::updateCameraRenderData(
+    const CameraRenderData& cameraRenderData
+  )
+  {
+    m_currentCameraRenderData = cameraRenderData;
+
+    // TODO
+    // 
+    // Upload camera data to GPU via UBO
   }
 
   void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
@@ -201,16 +214,23 @@ namespace hc
 
   void OpenGlGraphicsManager::setViewport(const Rect<UInt32>& viewportRect)
   {
+    if (viewportRect.width == 0 || viewportRect.height == 0)
+      throw InvalidArgumentException("Viewport dimensions must be greater than zero.");
+
+    if (viewportRect == m_viewportRect)
+      return;
+
     glViewport(
       (GLint)viewportRect.x,
       (GLint)viewportRect.y,
       (GLsizei)viewportRect.width,
       (GLsizei)viewportRect.height
     );
-    m_viewportRect = viewportRect;
 
     if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
       m_gBuffer.resize(viewportRect.width, viewportRect.height);
+
+    m_viewportRect = viewportRect;
   }
 
   Rect<UInt32> OpenGlGraphicsManager::getViewportRect() const
@@ -295,6 +315,7 @@ namespace hc
   void OpenGlGraphicsManager::executeDeferredLightingPass()
   {
     m_deferredLightingShaderProgram->bind();
+    m_deferredLightingShaderProgram->setUniform("uCameraPosition", m_currentCameraRenderData.cameraWorldPosition);
     m_gBuffer.bindForReading();
 
     glDrawArrays(
