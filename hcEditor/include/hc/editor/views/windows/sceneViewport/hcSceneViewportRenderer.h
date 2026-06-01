@@ -110,6 +110,8 @@ namespace hc::editor
     Color m_clearColor;
     bool m_isPrepared;
     SceneViewportLightGizmoRenderer m_lightGizmoRenderer;
+    UInt32 m_width;
+    UInt32 m_height;
 
     void assertIsValid() const;
   };
