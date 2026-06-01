@@ -138,6 +138,8 @@ namespace hc
 
     Rect<UInt32> m_viewportRect;
     OpenGlGBuffer m_gBuffer;
+    SharedPtr<IShaderProgram> m_deferredLightingShaderProgram;
+
     polygonFillType::Type m_polygonFillType;
     renderPipelineType::Type m_renderPipelineType;
 

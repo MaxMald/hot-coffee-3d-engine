@@ -44,6 +44,7 @@ namespace hc
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
+    m_deferredLightingShaderProgram(nullptr), // <- me quedé aquí
     m_polygonFillType(polygonFillType::Solid),
     m_renderPipelineType(renderPipelineType::Forward)
   {}
@@ -77,6 +78,9 @@ namespace hc
     m_gBuffer.initialize(viewportRect.width, viewportRect.height);
     m_lightFrameUBO.initialize();
     m_materialManager.initialize();
+    m_deferredLightingShaderProgram = m_shaderProgramManager.getBuiltInShaderProgram(
+      builtInShaderProgramType::DeferredLighting
+    );
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -290,12 +294,14 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDeferredLightingPass()
   {
+    m_deferredLightingShaderProgram->bind();
     m_gBuffer.bindForReading();
 
-    // TODO
-    // This pass would typically involve rendering a full-screen quad and applying
-    // lighting calculations in the shader using the G-buffer textures generated in the
-    // geometry pass.
+    glDrawArrays(
+      GL_TRIANGLES,
+      0,
+      3
+    );
 
     m_gBuffer.unbind();
   }
