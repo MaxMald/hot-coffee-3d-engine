@@ -10,7 +10,7 @@ namespace hc
     m_depthStencilBufferId(0),
     m_colorTexture(nullptr),
     m_isValid(false),
-    m_isBound(false),
+    m_isBound(false), // <- Esto es peligroso, puede que otro buffer se bindee (como el gbuffer) y este quede con isBound = true, quitarlo
     m_previousViewport{ 0, 0, 0, 0 }
   {
   }

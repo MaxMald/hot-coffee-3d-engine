@@ -78,6 +78,7 @@ namespace hc::editor
 
     m_frameBuffer->bind();
     m_frameBuffer->clear(m_clearColor);
+    m_frameBuffer->unbind();
 
     // Render the scene to the framebuffer
     scene.draw(m_graphicsManager, &camera);
