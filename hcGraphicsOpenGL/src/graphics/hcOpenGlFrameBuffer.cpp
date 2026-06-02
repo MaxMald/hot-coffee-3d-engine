@@ -10,7 +10,6 @@ namespace hc
     m_depthStencilBufferId(0),
     m_colorTexture(nullptr),
     m_isValid(false),
-    m_isBound(false), // <- Esto es peligroso, puede que otro buffer se bindee (como el gbuffer) y este quede con isBound = true, quitarlo
     m_previousViewport{ 0, 0, 0, 0 }
   {
   }
@@ -89,14 +88,9 @@ namespace hc
   void OpenGlFrameBuffer::bind()
   {
     assertValid();
-
-    if (m_isBound)
-      return;
-
     savePreviousViewport();
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
     glViewport(0, 0, m_width, m_height);
-    m_isBound = true;
   }
 
   void OpenGlFrameBuffer::bindForReadingOnly()
@@ -115,12 +109,8 @@ namespace hc
   {
     assertValid();
 
-    if (!m_isBound)
-      return;
-
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     restorePreviousViewport();
-    m_isBound = false;
   }
 
   void OpenGlFrameBuffer::resize(UInt32 width, UInt32 height)
@@ -178,9 +168,6 @@ namespace hc
   {
     assertValid();
 
-    if (!m_isBound)
-      throw RuntimeErrorException("Framebuffer must be bound before clearing");
-
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
@@ -192,12 +179,8 @@ namespace hc
 
   void OpenGlFrameBuffer::cleanup()
   {
-    if (m_isBound)
-    {
-      glBindFramebuffer(GL_FRAMEBUFFER, 0);
-      restorePreviousViewport();
-      m_isBound = false;
-    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    restorePreviousViewport();
 
     if (m_depthStencilBufferId != 0)
     {
@@ -240,16 +223,25 @@ namespace hc
 
   void OpenGlFrameBuffer::savePreviousViewport()
   {
+    // TODO
+    //
+    // I am not enterily sure if this is the correct way to save the previous viewport. I
+    // will need to do more research on this topic to confirm that this is the correct
+    // approach.
+
     glGetIntegerv(GL_VIEWPORT, m_previousViewport);
   }
 
   void OpenGlFrameBuffer::restorePreviousViewport()
   {
-    if (m_isBound)
-    {
-      glViewport(m_previousViewport[0], m_previousViewport[1],
-        m_previousViewport[2], m_previousViewport[3]);
-    }
+    // TODO
+    //
+    // I am not enterily sure if this is the correct way to save the previous viewport. I
+    // will need to do more research on this topic to confirm that this is the correct
+    // approach.
+
+    glViewport(m_previousViewport[0], m_previousViewport[1],
+      m_previousViewport[2], m_previousViewport[3]);
   }
 
   void OpenGlFrameBuffer::assertValid() const
