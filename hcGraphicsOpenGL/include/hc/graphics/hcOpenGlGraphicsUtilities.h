@@ -7,6 +7,11 @@ namespace hc
   namespace openGlGraphicsUtilities
   {
     /**
+     * @brief Asserts that there are no OpenGL errors.
+     */
+    void AssertOpenGlHasNoError();
+
+    /**
     * @brief Checks for OpenGL errors and logs them if any are found.
     */
     void CheckAndLogPossibleError();

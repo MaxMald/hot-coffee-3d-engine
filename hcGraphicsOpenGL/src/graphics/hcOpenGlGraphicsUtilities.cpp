@@ -5,6 +5,18 @@ namespace hc
 {
   namespace openGlGraphicsUtilities
   {
+    void AssertOpenGlHasNoError()
+    {
+      GLenum error = glGetError();
+      if (error != GL_NO_ERROR)
+      {
+        throw RuntimeErrorException(
+          String("OpenGL error: ") +
+          String(reinterpret_cast<const char*>(glewGetErrorString(error)))
+        );
+      }
+    }
+
     void CheckAndLogPossibleError()
     {
       GLenum error = glGetError();
