@@ -52,6 +52,18 @@ namespace hc
     virtual void bind() = 0;
 
     /**
+     * @brief Binds this framebuffer for reading only, without affecting the draw
+     * bindings.
+     */
+    virtual void bindForReadingOnly() = 0;
+
+    /**
+     * @brief Binds this framebuffer for drawing only, without affecting the read
+     * bindings.
+     */
+    virtual void bindForDrawingOnly() = 0;
+
+    /**
      * @brief Unbinds this framebuffer, restoring the default render
      * target.
      */
@@ -110,6 +122,15 @@ namespace hc
      * dangling references.
      */
     virtual void cleanup() = 0;
+
+    /**
+     * @brief Copies the depth buffer from this framebuffer to the destination framebuffer.
+     *
+     * This is useful for post-processing effects that require depth information after
+     * rendering to an off-screen framebuffer. The destination framebuffer must have a
+     * compatible depth attachment for this operation to succeed.
+     */
+    virtual void copyDepthTo(IFrameBuffer& destinationFrameBuffer) = 0;
 
     /**
      * @brief Destroys the framebuffer and releases all associated resources.

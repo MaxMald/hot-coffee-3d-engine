@@ -33,6 +33,16 @@ namespace hc
     void bind() override;
 
     /**
+     * @copydoc IFrameBuffer::bindForReadingOnly
+     */
+    void bindForReadingOnly() override;
+
+    /**
+     * @copydoc IFrameBuffer::bindForDrawingOnly
+     */
+    void bindForDrawingOnly() override;
+
+    /**
      * @copydoc IFrameBuffer::unbind
      */
     void unbind() override;
@@ -71,6 +81,11 @@ namespace hc
      * @copydoc IFrameBuffer::cleanup
      */
     void cleanup() override;
+
+    /**
+     * @copydoc IFrameBuffer::copyDepthTo
+     */
+    void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
 
     /**
      * @copydoc IFrameBuffer::destroy

@@ -10,6 +10,6 @@ namespace hc
     /**
      * @brief The type of render pipeline to use.
      */
-    renderPipelineType::Type renderPipelineType = renderPipelineType::Forward;
+    renderPipelineType::Type renderPipelineType = renderPipelineType::DeferredHybrid;
   };
 }

@@ -12,21 +12,25 @@ namespace hc
     ~OpenGlGBuffer() override;
 
     void initialize(UInt32 width, UInt32 height) override;
-    void bindForWriting() override;
-    void bindForReading() override;
-    void clear() override;
+    void bind() override;
+    void bindForReadingOnly() override;
+    void bindForDrawingOnly() override;
     void unbind() override;
-    bool isValid() const override;
+    void resize(UInt32 width, UInt32 height) override;
+    virtual ITexture& getColorTexture() override;
     UInt32 getWidth() const override;
     UInt32 getHeight() const override;
-    void resize(UInt32 width, UInt32 height) override;
+    void clear(const Color& clearColor) override;
+    bool isValid() const override;
+    void cleanup() override;
+    void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
+    void destroy() override;
 
-    const ITexture& getPosition() const override;
+    void bindGTexturesForReading() override;
+    const ITexture& getPositionAndDepth() const override;
     const ITexture& getNormalRoughness() const override;
     const ITexture& getAlbedoAlpha() const override;
     const ITexture& getMaterialParameters() const override;
-
-    void destroy() override;
 
   private:
     bool m_valid;
@@ -34,7 +38,7 @@ namespace hc
     UInt32 m_height;
     UInt32 m_gBufferId;
     UInt32 m_depthStencilBufferId;
-    OpenGlTexture m_positionTexture;
+    OpenGlTexture m_positionAndDepthTexture;
     OpenGlTexture m_normalRoughnessTexture;
     OpenGlTexture m_albedoAlphaTexture;
     OpenGlTexture m_materialParametersTexture;

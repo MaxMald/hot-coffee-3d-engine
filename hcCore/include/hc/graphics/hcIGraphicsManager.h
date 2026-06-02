@@ -21,6 +21,7 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   struct GraphicsSettings;
+  struct CameraRenderData;
   struct LightFrameData;
 
   /**
@@ -58,11 +59,37 @@ namespace hc
     virtual void beginFrame() = 0;
 
     /**
+     * @brief Updates the camera render data for the current frame.
+     *
+     * @param cameraRenderData The camera render data for the current frame.
+     */
+    virtual void updateCameraRenderData(const CameraRenderData& cameraRenderData) = 0;
+
+    /**
      * @brief Uploads the aggregated light data for the current frame to the GPU.
      *
      * @param lightFrameData The aggregated light data for the current frame.
      */
     virtual void uploadLightFrameData(const LightFrameData& lightFrameData) = 0;
+
+    /**
+     * @brief Sets the render target for all subsequent draw calls.
+     *
+     * The specified framebuffer becomes the active render target until
+     * changed. If not set, rendering defaults to the window's framebuffer.
+     *
+     * @param frameBuffer The framebuffer to render to. Pass nullptr to revert
+     * to the window's default framebuffer.
+     */
+    virtual void setRenderTarget(IFrameBuffer* frameBuffer) = 0;
+
+    /**
+     * @brief Gets the current render target framebuffer.
+     *
+     * @return The current render target, or nullptr if rendering to the
+     * window's default framebuffer.
+     */
+    virtual IFrameBuffer* getRenderTarget() const = 0;
 
     /**
      * @brief Issues a draw command to render graphics for the current frame.

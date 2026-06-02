@@ -40,10 +40,13 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
+    m_currentCameraRenderData(),
     m_lightFrameUBO(),
+    m_customRenderTarget(nullptr),
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
+    m_deferredLightingShaderProgram(nullptr), // <- me quedé aquí
     m_polygonFillType(polygonFillType::Solid),
     m_renderPipelineType(renderPipelineType::Forward)
   {}
@@ -72,10 +75,15 @@ namespace hc
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    setViewport(viewportRect);
 
+    m_gBuffer.initialize(viewportRect.width, viewportRect.height);
     m_lightFrameUBO.initialize();
     m_materialManager.initialize();
+    m_deferredLightingShaderProgram = m_shaderProgramManager.getBuiltInShaderProgram(
+      builtInShaderProgramType::DeferredLighting
+    );
+
+    setViewport(viewportRect);
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -88,12 +96,44 @@ namespace hc
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
-      m_gBuffer.clear();
+      m_gBuffer.clear(Color::Black()); // TODO - make this configurable
+  }
+
+  void OpenGlGraphicsManager::updateCameraRenderData(
+    const CameraRenderData& cameraRenderData
+  )
+  {
+    m_currentCameraRenderData = cameraRenderData;
+
+    // TODO
+    // 
+    // Upload camera data to GPU via UBO
   }
 
   void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
   {
     m_lightFrameUBO.upload(lightFrameData);
+  }
+
+  void OpenGlGraphicsManager::setRenderTarget(IFrameBuffer* frameBuffer)
+  {
+    if (frameBuffer)
+    {
+      if (!frameBuffer->isValid())
+        throw InvalidArgumentException("Invalid framebuffer provided as render target.");
+
+      frameBuffer->bind();
+    }
+    else
+    {
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+    m_customRenderTarget = frameBuffer;
+  }
+
+  IFrameBuffer* OpenGlGraphicsManager::getRenderTarget() const
+  {
+    return m_customRenderTarget;
   }
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
@@ -196,16 +236,23 @@ namespace hc
 
   void OpenGlGraphicsManager::setViewport(const Rect<UInt32>& viewportRect)
   {
+    if (viewportRect.width == 0 || viewportRect.height == 0)
+      throw InvalidArgumentException("Viewport dimensions must be greater than zero.");
+
+    if (viewportRect == m_viewportRect)
+      return;
+
     glViewport(
       (GLint)viewportRect.x,
       (GLint)viewportRect.y,
       (GLsizei)viewportRect.width,
       (GLsizei)viewportRect.height
     );
-    m_viewportRect = viewportRect;
 
     if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
       m_gBuffer.resize(viewportRect.width, viewportRect.height);
+
+    m_viewportRect = viewportRect;
   }
 
   Rect<UInt32> OpenGlGraphicsManager::getViewportRect() const
@@ -228,17 +275,28 @@ namespace hc
     const Vector<DrawCommand>& drawCommands
   )
   {
+    if (m_customRenderTarget)
+    {
+      if (!m_customRenderTarget->isValid())
+        throw RuntimeErrorException("Invalid framebuffer set as render target.");
+      m_customRenderTarget->bind();
+    }
+
     for (const DrawCommand& command : drawCommands)
       executeDrawCommand(command);
+
+    if (m_customRenderTarget)
+      m_customRenderTarget->unbind();
   }
 
   void OpenGlGraphicsManager::executeDeferredGeometryPass(
     const Vector<DrawCommand>& drawCommands
   )
-  { 
+  {
+    m_gBuffer.bind();
+
     for (const DrawCommand& command : drawCommands)
     {
-
       String errorMessage;
       if (!isValidDrawCommand(command, errorMessage))
       {
@@ -247,8 +305,6 @@ namespace hc
         );
         continue;
       }
-
-      m_gBuffer.bindForWriting();
 
       materialRenderMode::Type renderMode = command.material->getRenderMode();
       if (renderMode != materialRenderMode::Type::AlphaCutout
@@ -266,7 +322,10 @@ namespace hc
         command.cameraRenderData,
         renderPassType::Type::DeferredGeometry
       );
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(
+        command.modelMatrix,
+        renderPassType::Type::DeferredGeometry
+      );
 
       glDrawElements(
         drawData.drawMode,
@@ -287,22 +346,50 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDeferredLightingPass()
   {
+    if (m_customRenderTarget)
+    {
+      if (!m_customRenderTarget->isValid())
+        throw RuntimeErrorException("Invalid framebuffer set as render target.");
+      m_customRenderTarget->bind();
+    }
 
+    m_deferredLightingShaderProgram->bind();
+    m_deferredLightingShaderProgram->setUniform("uCameraPosition", m_currentCameraRenderData.cameraWorldPosition);
+    m_gBuffer.bindGTexturesForReading();
 
-    m_gBuffer.bindForReading();
-
-    // TODO
-    // This pass would typically involve rendering a full-screen quad and applying
-    // lighting calculations in the shader using the G-buffer textures generated in the
-    // geometry pass.
+    glDrawArrays(GL_TRIANGLES, 0, 3);
 
     m_gBuffer.unbind();
+
+    if (m_customRenderTarget)
+      m_customRenderTarget->unbind();
   }
 
   void OpenGlGraphicsManager::executeDeferredForwardPass(
     const Vector<DrawCommand>& drawCommands
   )
   {
+    if (m_customRenderTarget)
+    {
+      if (!m_customRenderTarget->isValid())
+        throw RuntimeErrorException("Invalid framebuffer set as render target.");
+
+      m_gBuffer.copyDepthTo(*m_customRenderTarget);
+      m_customRenderTarget->bind();
+    }
+    else
+    {
+      m_gBuffer.bindForReadingOnly();
+      glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0); // Bind default framebuffer for drawing
+      glBlitFramebuffer(
+        0, 0, m_gBuffer.getWidth(), m_gBuffer.getHeight(),
+        0, 0, m_viewportRect.width, m_viewportRect.height,
+        GL_DEPTH_BUFFER_BIT,
+        GL_NEAREST
+      );
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
     for (const DrawCommand& command : drawCommands)
     {
       String errorMessage;
@@ -314,12 +401,11 @@ namespace hc
         continue;
       }
 
-      materialRenderMode::Type renderMode = command.material->getRenderMode();
-      if (renderMode != materialRenderMode::Type::Transparent)
-        continue;
-
       executeDrawCommand(command);
     }
+
+    if (m_customRenderTarget)
+      m_customRenderTarget->unbind();
   }
 
   void OpenGlGraphicsManager::executeDrawCommand(
@@ -349,11 +435,11 @@ namespace hc
     }
 
     if (isTwoSided && isTransparent)
-    { 
+    {
       glBindVertexArray(drawData.vao);
 
       command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       // Pass 1: Render back faces first
       glCullFace(GL_FRONT);
@@ -383,7 +469,7 @@ namespace hc
 
       glBindVertexArray(drawData.vao);
       command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
-      command.material->updateModelMatrix(command.modelMatrix);
+      command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       glDrawElements(
         drawData.drawMode,

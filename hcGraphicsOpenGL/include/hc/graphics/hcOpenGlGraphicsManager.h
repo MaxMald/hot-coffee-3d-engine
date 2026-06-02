@@ -40,9 +40,24 @@ namespace hc
     void beginFrame() override;
 
     /**
+     * @copydoc IGraphicsManager::updateCameraRenderData
+     */
+    void updateCameraRenderData(const CameraRenderData& cameraRenderData) override;
+
+    /**
      * @copydoc IGraphicsManager::uploadLightFrameData
      */
     void uploadLightFrameData(const LightFrameData& lightFrameData) override;
+
+    /**
+     * @copydoc IGraphicsManager::setRenderTarget
+     */
+    void setRenderTarget(IFrameBuffer* frameBuffer) override;
+
+    /**
+     * @copydoc IGraphicsManager::getRenderTarget
+     */
+    IFrameBuffer* getRenderTarget() const override;
 
     /**
      * @copydoc IGraphicsManager::draw
@@ -50,7 +65,7 @@ namespace hc
     void draw(const DrawCommand& command) override;
 
     /**
-     * @copydoc IGraphicsManager::executeDrawCommands
+     * @copydoc IGraphicsManager::executeDrawCommands()
      */
     void executeDrawCommands() override;
 
@@ -130,7 +145,9 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
+    CameraRenderData m_currentCameraRenderData;
     LightFrameUBO m_lightFrameUBO;
+    IFrameBuffer* m_customRenderTarget;
 
     Vector<DrawCommand> m_queueDrawCommands;
     Vector<DrawCommand> m_deferredGeometryPassCommands;
@@ -138,6 +155,8 @@ namespace hc
 
     Rect<UInt32> m_viewportRect;
     OpenGlGBuffer m_gBuffer;
+    SharedPtr<IShaderProgram> m_deferredLightingShaderProgram;
+
     polygonFillType::Type m_polygonFillType;
     renderPipelineType::Type m_renderPipelineType;
 

@@ -12,42 +12,31 @@ namespace hc
     return MakeShared<OpenGlShader>(type, content);
   }
 
-  SharedPtr<IShader> OpenGlShaderFactory::createDefaultVertexShader()
+  SharedPtr<IShader> OpenGlShaderFactory::createBuiltInShaderType(builtInShaderType::Type type)
   {
-    return MakeShared<OpenGlShader>(
-      shaderStageType::Vertex,
-      builtInShaders::VertexShader
-    );
-  }
-
-  SharedPtr<IShader> OpenGlShaderFactory::createLitVertexShader()
-  {
-    return MakeShared<OpenGlShader>(
-      shaderStageType::Vertex,
-      builtInShaders::LitVertexShader
-    );
-  }
-
-  SharedPtr<IShader> OpenGlShaderFactory::createUnlitFragmentShader()
-  {
-    return MakeShared<OpenGlShader>(
-      shaderStageType::Fragment,
-      builtInShaders::UnlitFragment
-    );
-  }
-
-  SharedPtr<IShader> OpenGlShaderFactory::createBlinnPhongForwardFragmentShader()
-  {
-    return MakeShared<OpenGlShader>(
-      shaderStageType::Fragment,
-      builtInShaders::BlinnPhongForwardFragment
-    );
-  }
-
-  SharedPtr<IShader> OpenGlShaderFactory::createBlinnPhongDeferredFragmentShader()
-  {
-    // TODO
-    // Create a blinn-phon deferred
-    throw RuntimeErrorException("Not Implemeted yet.");
+    switch (type)
+    {
+    case builtInShaderType::UnlitVertex:
+      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::UnlitVertex);
+    case builtInShaderType::UnlitFragment:
+      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::UnlitFragment);
+    case builtInShaderType::LitVertex:
+      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::LitVertex);
+    case builtInShaderType::BlinnPhongForwardFragment:
+      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::BlinnPhongForwardFragment);
+    case builtInShaderType::BlinnPhongDeferredFragment:
+      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::BlinnPhongDeferredFragment);
+    case builtInShaderType::FullScreenTriangleVertex:
+      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::FullScreenTriangleVertex);
+    case builtInShaderType::DeferredLightingFragment:
+      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::DeferredLightingFragment);
+    default:
+      throw RuntimeErrorException(
+        String::Format(
+          "Built-in shader type '%u' is not implemented in OpenGlShaderFactory.",
+          static_cast<UInt32>(type)
+        )
+      );
+    }
   }
 }

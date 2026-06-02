@@ -25,28 +25,10 @@ namespace hc
     ) override;
 
     /**
-     * @copydoc IShaderFactory::createDefaultVertexShader
+     * @copydoc IShaderFactory::createBuiltInShaderType
      */
-    SharedPtr<IShader> createDefaultVertexShader() override;
-
-    /**
-     * @copydoc IShaderFactory::createLitVertexShader
-     */
-    SharedPtr<IShader> createLitVertexShader() override;
-
-    /**
-     * @copydoc IShaderFactory::createUnlitFragmentShader
-     */
-    SharedPtr<IShader> createUnlitFragmentShader() override;
-
-    /**
-     * @copydoc IShaderFactory::createBlinnPhongForwardFragmentShader
-     */
-    SharedPtr<IShader> createBlinnPhongForwardFragmentShader() override;
-
-    /**
-     * @copydoc IShaderFactory::createBlinnPhongDeferredFragmentShader
-     */
-    SharedPtr<IShader> createBlinnPhongDeferredFragmentShader() override;
+    SharedPtr<IShader> createBuiltInShaderType(
+      builtInShaderType::Type type
+    ) override;
   };
 }

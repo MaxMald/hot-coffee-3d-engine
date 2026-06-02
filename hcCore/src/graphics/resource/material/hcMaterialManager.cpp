@@ -123,7 +123,7 @@ namespace hc
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>(generateMaterialId());
     material->initialize(
       descriptor,
-      m_shaderProgramManager.getUnlitShaderProgram(),
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::Unlit),
       mainTexture
     );
 
@@ -153,7 +153,8 @@ namespace hc
       albedoTexture,
       normalTexture,
       specularTexture,
-      m_shaderProgramManager.getBlinnPhongForwardProgram()
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongForward),
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongDeferredGeometry)
     );
 
     m_materials.push_back(material);
