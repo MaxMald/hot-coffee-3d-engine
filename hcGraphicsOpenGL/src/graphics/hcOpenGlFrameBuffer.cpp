@@ -9,7 +9,7 @@ namespace hc
     m_frameBufferId(0),
     m_depthStencilBufferId(0),
     m_colorTexture(),
-    m_isValid(false)
+    m_valid(false)
   {
   }
 
@@ -20,7 +20,7 @@ namespace hc
 
   void OpenGlFrameBuffer::initialize(UInt32 width, UInt32 height)
   {
-    if (m_isValid)
+    if (m_valid)
       throw RuntimeErrorException("Framebuffer is already initialized");
 
     if (width == 0 || height == 0)
@@ -80,7 +80,7 @@ namespace hc
 
     m_width = width;
     m_height = height;
-    m_isValid = true;
+    m_valid = true;
 
     glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFrameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
@@ -141,7 +141,7 @@ namespace hc
       glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId);
       if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
       {
-        m_isValid = false;
+        m_valid = false;
         throw RuntimeErrorException("Failed to resize framebuffer");
       }
     }
@@ -204,7 +204,7 @@ namespace hc
 
   bool OpenGlFrameBuffer::isValid() const
   {
-    return m_isValid;
+    return m_valid;
   }
 
   void OpenGlFrameBuffer::cleanup()
@@ -239,7 +239,7 @@ namespace hc
     m_colorTexture.destroy();
     m_width = 0;
     m_height = 0;
-    m_isValid = false;
+    m_valid = false;
   }
 
   void OpenGlFrameBuffer::copyDepthTo(IFrameBuffer& destinationFrameBuffer)
@@ -283,7 +283,7 @@ namespace hc
 
   void OpenGlFrameBuffer::assertValid() const
   {
-    if (!m_isValid)
+    if (!m_valid)
       throw RuntimeErrorException("Framebuffer is not initialized or is invalid");
   }
 }

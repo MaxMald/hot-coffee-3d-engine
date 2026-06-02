@@ -20,24 +20,19 @@ namespace hc
     const Id& getId() const override;
 
     /**
+     * @copydoc IShaderProgram::initialize
+     */
+    void initialize(const Vector<SharedPtr<IShader>>& shaders) override;
+
+    /**
      * @copydoc IShaderProgram::bind
      */
     void bind() override;
 
     /**
-     * @copydoc IShaderProgram::linkShaders
-     */
-    void linkShaders() override;
-
-    /**
      * @copydoc IShaderProgram::isValid
      */
     bool isValid() const override;
-
-    /**
-     * @copydoc IShaderProgram::attachShader
-     */
-    void attachShader(SharedPtr<IShader> shader) override;
 
     /**
      * @copydoc IShaderProgram::setUniform
@@ -82,9 +77,11 @@ namespace hc
   private:
     Id m_id;
     GLuint m_programId;
-    bool m_linked;
+    bool m_valid;
     UnorderedMap<String, GLint> m_uniformLocationCache;
 
+    void assertIsValid() const;
     GLint getUniformLocation(const String& name);
+    void attachShader(SharedPtr<IShader> shader);
   };
 }

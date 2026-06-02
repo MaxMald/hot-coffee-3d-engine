@@ -96,7 +96,7 @@ namespace hc
     UInt32 m_frameBufferId;
     UInt32 m_depthStencilBufferId;
     OpenGlTexture m_colorTexture;
-    bool m_isValid;
+    bool m_valid;
 
     void assertValid() const;
   };
