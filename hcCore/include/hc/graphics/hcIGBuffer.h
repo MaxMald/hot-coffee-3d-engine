@@ -14,6 +14,11 @@ namespace hc
   class HC_CORE_EXPORT IGBuffer : public IFrameBuffer
   {
   public:
+    static inline constexpr float CLEAR_COLOR_POSITION_AND_DEPTH[4] = { 0.0f, 0.0f, 0.0f, -1.0f };
+    static inline constexpr float CLEAR_COLOR_NORMAL_AND_ROUGHNESS[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    static inline constexpr float CLEAR_COLOR_ALBEDO_AND_ALPHA[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    static inline constexpr float CLEAR_COLOR_MATERIAL_PARAMETERS[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
     virtual ~IGBuffer();
 
     /**

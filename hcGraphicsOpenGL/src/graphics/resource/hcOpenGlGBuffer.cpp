@@ -216,7 +216,12 @@ namespace hc
     assertIsValid();
 
     glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
-    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+
+    glClearBufferfv(GL_COLOR, 0, IGBuffer::CLEAR_COLOR_POSITION_AND_DEPTH);
+    glClearBufferfv(GL_COLOR, 1, IGBuffer::CLEAR_COLOR_NORMAL_AND_ROUGHNESS);
+    glClearBufferfv(GL_COLOR, 2, IGBuffer::CLEAR_COLOR_ALBEDO_AND_ALPHA);
+    glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_MATERIAL_PARAMETERS);
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }

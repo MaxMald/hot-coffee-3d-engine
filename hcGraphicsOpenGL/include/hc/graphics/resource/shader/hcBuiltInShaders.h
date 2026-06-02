@@ -428,7 +428,7 @@ namespace hc
         vec3 worldPos = positionAndDepth.xyz;
         float depth = positionAndDepth.w;
 
-        if (depth >= 1.0)
+        if (depth < 0.0)
           discard; // No geometry at this pixel
 
         vec4 normalRoughness = texture(uNormalRoughness, vTexCoord);

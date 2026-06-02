@@ -5,10 +5,9 @@ namespace hc
 {
   ShaderManager::ShaderManager(UniquePtr<IShaderFactory> shaderFactory) :
     m_shaderFactory(std::move(shaderFactory)),
-    m_builtInShaders(static_cast<SizeT>(builtInShaderType::Count)),
+    m_builtInShaders(),
     m_customShaders()
-  {
-  }
+  {}
 
   ShaderManager::~ShaderManager()
   {
