@@ -99,6 +99,18 @@ namespace hc
     m_isBound = true;
   }
 
+  void OpenGlFrameBuffer::bindForReadingOnly()
+  {
+    assertValid();
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferId);
+  }
+
+  void OpenGlFrameBuffer::bindForDrawingOnly()
+  {
+    assertValid();
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_frameBufferId);
+  }
+
   void OpenGlFrameBuffer::unbind()
   {
     assertValid();
@@ -201,6 +213,23 @@ namespace hc
 
     m_colorTexture.reset();
     m_isValid = false;
+  }
+
+  void OpenGlFrameBuffer::copyDepthTo(IFrameBuffer& destinationFrameBuffer)
+  {
+    assertValid();
+    if (!destinationFrameBuffer.isValid())
+      throw InvalidArgumentException("Destination framebuffer is not valid");
+
+    bindForReadingOnly();
+    destinationFrameBuffer.bindForDrawingOnly();
+    glBlitFramebuffer(
+      0, 0, m_width, m_height,
+      0, 0, destinationFrameBuffer.getWidth(), destinationFrameBuffer.getHeight(),
+      GL_DEPTH_BUFFER_BIT,
+      GL_NEAREST
+    );
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
   void OpenGlFrameBuffer::destroy()

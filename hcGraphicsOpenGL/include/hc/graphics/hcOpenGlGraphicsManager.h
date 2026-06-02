@@ -50,12 +50,22 @@ namespace hc
     void uploadLightFrameData(const LightFrameData& lightFrameData) override;
 
     /**
+     * @copydoc IGraphicsManager::setRenderTarget
+     */
+    void setRenderTarget(IFrameBuffer* frameBuffer) override;
+
+    /**
+     * @copydoc IGraphicsManager::getRenderTarget
+     */
+    IFrameBuffer* getRenderTarget() const override;
+
+    /**
      * @copydoc IGraphicsManager::draw
      */
     void draw(const DrawCommand& command) override;
 
     /**
-     * @copydoc IGraphicsManager::executeDrawCommands
+     * @copydoc IGraphicsManager::executeDrawCommands()
      */
     void executeDrawCommands() override;
 
@@ -137,6 +147,7 @@ namespace hc
     MeshManager m_meshManager;
     CameraRenderData m_currentCameraRenderData;
     LightFrameUBO m_lightFrameUBO;
+    IFrameBuffer* m_customRenderTarget;
 
     Vector<DrawCommand> m_queueDrawCommands;
     Vector<DrawCommand> m_deferredGeometryPassCommands;

@@ -33,6 +33,7 @@ namespace hc::editor
       );
       m_width = MIN_FRAMEBUFFER_SIZE;
       m_height = MIN_FRAMEBUFFER_SIZE;
+      m_graphicsManager.setRenderTarget(m_frameBuffer.get());
       m_lightGizmoRenderer.prepare();
       m_isPrepared = true;
     }
@@ -74,11 +75,16 @@ namespace hc::editor
   void SceneViewportRenderer::renderScene(Scene& scene, Camera& camera)
   {
     assertIsValid();
+
+    // Clear the framebuffer before rendering the scene
     m_frameBuffer->bind();
     m_frameBuffer->clear(m_clearColor);
+    m_frameBuffer->unbind();
+
+    // Render the scene to the framebuffer
     scene.draw(m_graphicsManager, &camera);
     m_graphicsManager.executeDrawCommands();
-    m_frameBuffer->unbind();
+    
   }
 
   void SceneViewportRenderer::renderLightGizmos(

@@ -127,30 +127,22 @@ namespace hc
     }
   }
 
-  void OpenGlGBuffer::bindForWriting()
+  void OpenGlGBuffer::bind()
   {
     assertIsValid();
-
     glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
   }
 
-  void OpenGlGBuffer::bindForReading()
+  void OpenGlGBuffer::bindForReadingOnly()
   {
     assertIsValid();
-
-    m_positionAndDepthTexture.bind(0);
-    m_normalRoughnessTexture.bind(1);
-    m_albedoAlphaTexture.bind(2);
-    m_materialParametersTexture.bind(3);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBufferId);
   }
 
-  void OpenGlGBuffer::clear()
+  void OpenGlGBuffer::bindForDrawingOnly()
   {
     assertIsValid();
-
-    glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_gBufferId);
   }
 
   void OpenGlGBuffer::unbind()
@@ -162,21 +154,6 @@ namespace hc
     m_albedoAlphaTexture.unbind(2);
     m_materialParametersTexture.unbind(3);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  }
-
-  bool OpenGlGBuffer::isValid() const
-  {
-    return m_valid;
-  }
-
-  UInt32 OpenGlGBuffer::getWidth() const
-  {
-    return m_width;
-  }
-
-  UInt32 OpenGlGBuffer::getHeight() const
-  {
-    return m_height;
   }
 
   void OpenGlGBuffer::resize(UInt32 width, UInt32 height)
@@ -217,6 +194,67 @@ namespace hc
 
     m_width = width;
     m_height = height;
+  }
+
+  ITexture& OpenGlGBuffer::getColorTexture()
+  {
+    return m_albedoAlphaTexture;
+  }
+
+  UInt32 OpenGlGBuffer::getWidth() const
+  {
+    return m_width;
+  }
+
+  UInt32 OpenGlGBuffer::getHeight() const
+  {
+    return m_height;
+  }
+
+  void OpenGlGBuffer::clear(const Color& clearColor)
+  {
+    assertIsValid();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
+    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  }
+
+  bool OpenGlGBuffer::isValid() const
+  {
+    return m_valid;
+  }
+
+  void OpenGlGBuffer::cleanup()
+  {
+    destroy();
+  }
+
+  void OpenGlGBuffer::copyDepthTo(IFrameBuffer& destinationFrameBuffer)
+  {
+    assertIsValid();
+
+    bindForReadingOnly();
+    destinationFrameBuffer.bindForDrawingOnly();
+
+    glBlitFramebuffer(
+      0, 0, m_width, m_height,
+      0, 0, destinationFrameBuffer.getWidth(), destinationFrameBuffer.getHeight(),
+      GL_DEPTH_BUFFER_BIT,
+      GL_NEAREST
+    );
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  }
+
+  void OpenGlGBuffer::bindGTexturesForReading()
+  {
+    assertIsValid();
+    m_positionAndDepthTexture.bind(0);
+    m_normalRoughnessTexture.bind(1);
+    m_albedoAlphaTexture.bind(2);
+    m_materialParametersTexture.bind(3);
   }
 
   const ITexture& OpenGlGBuffer::getPositionAndDepth() const

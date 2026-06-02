@@ -355,10 +355,10 @@ namespace hc
         int padding; ///< Padding to ensure 16-byte alignment.
       };
 
-      uniform sampler2D uPositionAndDepth;
-      uniform sampler2D uNormalRoughness;
-      uniform sampler2D uAlbedoAlpha;
-      uniform sampler2D uMaterialParameters;
+      layout(binding = 0) uniform sampler2D uPositionAndDepth;
+      layout(binding = 1) uniform sampler2D uNormalRoughness;
+      layout(binding = 2) uniform sampler2D uAlbedoAlpha;
+      layout(binding = 3) uniform sampler2D uMaterialParameters;
       uniform vec3 uCameraPosition;
 
       in vec2 vTexCoord;

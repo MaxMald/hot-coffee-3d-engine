@@ -73,6 +73,25 @@ namespace hc
     virtual void uploadLightFrameData(const LightFrameData& lightFrameData) = 0;
 
     /**
+     * @brief Sets the render target for all subsequent draw calls.
+     *
+     * The specified framebuffer becomes the active render target until
+     * changed. If not set, rendering defaults to the window's framebuffer.
+     *
+     * @param frameBuffer The framebuffer to render to. Pass nullptr to revert
+     * to the window's default framebuffer.
+     */
+    virtual void setRenderTarget(IFrameBuffer* frameBuffer) = 0;
+
+    /**
+     * @brief Gets the current render target framebuffer.
+     *
+     * @return The current render target, or nullptr if rendering to the
+     * window's default framebuffer.
+     */
+    virtual IFrameBuffer* getRenderTarget() const = 0;
+
+    /**
      * @brief Issues a draw command to render graphics for the current frame.
      *
      * @param command The draw command containing rendering instructions.
