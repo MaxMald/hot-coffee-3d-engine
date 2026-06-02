@@ -19,6 +19,7 @@
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
+#include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
 
 // Menu Items
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
@@ -74,6 +75,9 @@ namespace hc::editor
       mainMenuBar->addMenu(
         menuBuilder
           .beginMenu("Windows")
+            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+              *editorViewsManager.getView<GraphicsWindow>()
+            ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<PluginManagerWindow>()
             ))

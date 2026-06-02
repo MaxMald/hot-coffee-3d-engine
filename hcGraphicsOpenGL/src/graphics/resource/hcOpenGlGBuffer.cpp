@@ -211,7 +211,7 @@ namespace hc
     return m_height;
   }
 
-  void OpenGlGBuffer::clear(const Color& clearColor)
+  void OpenGlGBuffer::clear(const Color&)
   {
     assertIsValid();
 
@@ -222,7 +222,7 @@ namespace hc
     glClearBufferfv(GL_COLOR, 2, IGBuffer::CLEAR_COLOR_ALBEDO_AND_ALPHA);
     glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_MATERIAL_PARAMETERS);
 
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
