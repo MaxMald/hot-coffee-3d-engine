@@ -86,7 +86,7 @@ namespace hc
     else
       throw InvalidArgumentException(
         String::Format(
-          "Unsuported render pass type for Blinn-Phong material: %d",
+          "Unsupported render pass type for Blinn-Phong material: %d",
           static_cast<Int32>(renderPass)
         )
       );
