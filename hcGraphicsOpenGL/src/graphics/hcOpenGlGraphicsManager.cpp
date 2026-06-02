@@ -128,7 +128,7 @@ namespace hc
     {
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-    m_customRenderTarget = std::move(frameBuffer);
+    m_customRenderTarget = frameBuffer;
   }
 
   IFrameBuffer* OpenGlGraphicsManager::getRenderTarget() const
