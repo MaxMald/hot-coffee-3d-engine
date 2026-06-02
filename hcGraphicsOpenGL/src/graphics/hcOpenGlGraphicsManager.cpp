@@ -280,7 +280,7 @@ namespace hc
     m_shaderProgramManager.clear();
     m_shaderManager.clear();
     m_meshManager.clear();
-    m_gBuffer.destroy();
+    m_gBuffer.cleanup();
     m_lightFrameUBO.destroy();
   }
 

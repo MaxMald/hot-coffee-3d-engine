@@ -1,12 +1,10 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include <GL/glew.h>
+#include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 
 namespace hc
 {
-  class OpenGlTexture;
-
   /**
    * @brief OpenGL implementation of the framebuffer interface.
    *
@@ -95,14 +93,11 @@ namespace hc
   private:
     UInt32 m_width;
     UInt32 m_height;
-    GLuint m_frameBufferId;
-    GLuint m_depthStencilBufferId;
-    UniquePtr<OpenGlTexture> m_colorTexture;
+    UInt32 m_frameBufferId;
+    UInt32 m_depthStencilBufferId;
+    OpenGlTexture m_colorTexture;
     bool m_isValid;
-    GLint m_previousViewport[4];
 
-    void savePreviousViewport();
-    void restorePreviousViewport();
     void assertValid() const;
   };
 }
