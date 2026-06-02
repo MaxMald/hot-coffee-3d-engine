@@ -169,7 +169,7 @@ namespace hc
     assertValid();
 
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   }
 
   bool OpenGlFrameBuffer::isValid() const
@@ -225,9 +225,9 @@ namespace hc
   {
     // TODO
     //
-    // I am not enterily sure if this is the correct way to save the previous viewport. I
-    // will need to do more research on this topic to confirm that this is the correct
-    // approach.
+    // I am not enterily sure if this is necessary at all. Probably, this should be
+    // handled by the caller, since the framebuffer itself should not be responsible for
+    // managing the viewport state. However, I will need to do more research
 
     glGetIntegerv(GL_VIEWPORT, m_previousViewport);
   }
@@ -236,9 +236,9 @@ namespace hc
   {
     // TODO
     //
-    // I am not enterily sure if this is the correct way to save the previous viewport. I
-    // will need to do more research on this topic to confirm that this is the correct
-    // approach.
+    // I am not enterily sure if this is necessary at all. Probably, this should be
+    // handled by the caller, since the framebuffer itself should not be responsible for
+    // managing the viewport state. However, I will need to do more research
 
     glViewport(m_previousViewport[0], m_previousViewport[1],
       m_previousViewport[2], m_previousViewport[3]);
