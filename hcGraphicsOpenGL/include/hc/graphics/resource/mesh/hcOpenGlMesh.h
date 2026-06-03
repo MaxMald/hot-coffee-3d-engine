@@ -14,17 +14,11 @@ namespace hc
   {
   public:
     /**
-     * @brief Constructs an OpenGlMesh with the given model and materials.
+     * @brief Constructs an OpenGlMesh with the given graphics manager.
      *
-     * @param model Shared pointer to the model data.
-     * @param materials Vector of shared pointers to materials used by the mesh.
      * @param graphicsManager Reference to the graphics manager for resource management.
      */
-    OpenGlMesh(
-      SharedPtr<Model> model,
-      Vector<SharedPtr<IMaterial>> materials,
-      IGraphicsManager& graphicsManager
-    );
+    OpenGlMesh(IGraphicsManager& graphicsManager);
     ~OpenGlMesh() override;
 
     /**
@@ -42,16 +36,41 @@ namespace hc
     void draw(const RenderContext& renderContext) override;
 
     /**
-     * @brief Returns the model associated with this mesh.
-     *
-     * @return Shared pointer to the model.
+     * @copydoc IMesh::initialize(const Model&, const Vector<SharedPtr<IMaterial>>&)
      */
-    SharedPtr<Model> getModel() const override;
+    void initialize(
+      const Model& model,
+      const Vector<SharedPtr<IMaterial>>& materials
+    ) override;
 
     /**
-     * @brief Updates the mesh data or state.
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<SharedPtr<IMaterial>>&)
      */
-    void update() override;
+    void initialize(
+      const Buffer<Vertex>& vertices,
+      const BufferUInt32& indices,
+      const Vector<SharedPtr<IMaterial>>& materials
+    ) override;
+
+    /**
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<ModelSubMesh>&, const Vector<SharedPtr<IMaterial>>&)
+     */
+    void initialize(
+      const Buffer<Vertex>& vertices,
+      const BufferUInt32& indices,
+      const Vector<ModelSubMesh>& subMeshes,
+      const Vector<SharedPtr<IMaterial>>& materials
+    ) override;
+
+    /**
+     * @copydoc IMesh::update(const Model&)
+     */
+    void update(const Model& model) override;
+
+    /**
+     * @copydoc IMesh::update(const Buffer<Vertex>&, const BufferUInt32&)
+     */
+    void update(const Buffer<Vertex>& vertices, const BufferUInt32& indices) override;
 
     /**
      * @brief Sets the material at the specified index for this mesh.
@@ -96,6 +115,21 @@ namespace hc
     void setDrawType(drawType::Type drawType) override;
 
     /**
+     * @copydoc IGraphicResource::isValid
+     */
+    bool isValid() const override;
+
+    /**
+     * @copydoc IGraphicResource::getSourcePath
+     */
+    Path getSourcePath() const override;
+
+    /**
+     * @copydoc IGraphicResource::setSourcePath
+     */
+    void setSourcePath(const Path& path) override;
+
+    /**
      * @brief Binds the mesh's VAO for rendering.
      */
     void bind();
@@ -107,32 +141,40 @@ namespace hc
 
     /**
      * @brief Returns the OpenGL VAO handle.
-     * 
+     *
      * @return VAO identifier.
      */
     UInt32 getVao() const;
 
     /**
      * @brief Returns the OpenGL draw mode.
-     * 
+     *
      * @return Draw mode identifier.
      */
     UInt32 getDrawMode() const;
 
   private:
     Id m_id;
-    SharedPtr<Model> m_model;
+    bool m_valid;
+    Path m_sourcePath;
     Vector<SharedPtr<IMaterial>> m_materials;
+    Vector<ModelSubMesh> m_subMeshes;
     UInt32 m_vao;
     UInt32 m_vbo;
     UInt32 m_ebo;
     UInt32 m_drawMode;
     IGraphicsManager& m_graphicsManager;
 
+    void assertIsValid() const;
+    void createBuffers();
     void drawModelSubMesh(
       const RenderContext& renderContext,
       float distanceToCamera,
       const ModelSubMesh& submesh
+    );
+    void updateVertexAndIndexBuffers(
+      const Buffer<Vertex>& vertices,
+      const BufferUInt32& indices
     );
   };
 }

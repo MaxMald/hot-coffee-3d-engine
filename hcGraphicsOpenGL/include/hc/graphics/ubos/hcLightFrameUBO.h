@@ -21,7 +21,7 @@ namespace hc
     UInt32 m_ubo;
     bool m_isInitialized;
 
-    void assertIsInitialized() const
+    void assertIsValid() const
     {
       if (!m_isInitialized)
         throw RuntimeErrorException("LightFrameUBO is not initialized.");

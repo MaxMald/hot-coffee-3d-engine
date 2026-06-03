@@ -5,14 +5,10 @@ namespace hc
 {
   OpenGlMeshFactory::OpenGlMeshFactory(IGraphicsManager& graphicsManager) :
     m_graphicsManager(graphicsManager)
-  {
-  }
+  {}
 
-  SharedPtr<IMesh> OpenGlMeshFactory::createMesh(
-    SharedPtr<Model> model,
-    Vector<SharedPtr<IMaterial>>& materials
-  )
+  SharedPtr<IMesh> OpenGlMeshFactory::createMesh()
   {
-    return MakeShared<OpenGlMesh>(model, materials, m_graphicsManager);
+    return MakeShared<OpenGlMesh>(m_graphicsManager);
   }
 }

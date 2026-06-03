@@ -23,6 +23,13 @@ namespace hc
     virtual ~IMeshManager() = default;
 
     /**
+     * @brief Creates a new uninitialized mesh instance.
+     *
+     * @return Shared pointer to the created mesh.
+     */
+    virtual SharedPtr<IMesh> createMesh() = 0;
+
+    /**
      * @brief Creates a mesh from a file path.
      * 
      * @param path The file path to load the mesh from.

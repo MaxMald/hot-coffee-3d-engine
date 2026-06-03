@@ -23,15 +23,9 @@ namespace hc
     /**
      * @brief Creates an OpenGL mesh instance.
      *
-     * @param model Shared pointer to the model data.
-     * @param materials Reference to a vector of shared pointers to materials.
-     *
-     * @return Shared pointer to the created IMesh instance.
+     * @return Shared pointer to the created IMesh instance. nullptr if creation fails.
      */
-    SharedPtr<IMesh> createMesh(
-      SharedPtr<Model> model,
-      Vector<SharedPtr<IMaterial>>& materials
-    ) override;
+    SharedPtr<IMesh> createMesh() override;
 
   private:
     IGraphicsManager& m_graphicsManager;
