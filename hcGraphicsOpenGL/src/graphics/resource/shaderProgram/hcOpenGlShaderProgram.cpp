@@ -188,9 +188,9 @@ namespace hc
         "Attempted to attach a null shader to the shader program."
       );
 
-    if (!shader->isCompiled())
+    if (!shader->isValid())
       throw InvalidArgumentException(
-        "Attempted to attach a shader that has not been compiled to the shader program."
+        "Attempted to attach a shader that is not valid to the shader program."
       );
 
     auto glShader = std::dynamic_pointer_cast<OpenGlShader>(shader);

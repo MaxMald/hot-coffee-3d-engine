@@ -44,15 +44,10 @@ namespace hc
 
     if (!vertexShader || !fragmentShader)
     {
-      throw RuntimeErrorException(
+      throw InvalidArgumentException(
         String::Format("Invalid shaders provided for shader program with key '%s'.", programKey.c_str())
       );
     }
-
-    if (!vertexShader->isCompiled())
-      vertexShader->compile();
-    if (!fragmentShader->isCompiled())
-      fragmentShader->compile();
 
     Vector<SharedPtr<IShader>> shaders = { vertexShader, fragmentShader };
     shaderProgram->initialize(shaders);
@@ -151,15 +146,10 @@ namespace hc
 
     if (!vertexShader || !fragmentShader)
     {
-      throw RuntimeErrorException(
+      throw InvalidArgumentException(
         String::Format("Failed to retrieve shaders for built-in shader program type %d.", type)
       );
     }
-
-    if (!vertexShader->isCompiled())
-      vertexShader->compile();
-    if (!fragmentShader->isCompiled())
-      fragmentShader->compile();
 
     Vector<SharedPtr<IShader>> shaders = { vertexShader, fragmentShader };
     shaderProgram->initialize(shaders);

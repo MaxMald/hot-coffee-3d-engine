@@ -22,15 +22,15 @@ namespace hc
     /**
      * @brief Creates a shader from the given string content and stage type.
      *
-     * @param content The shader source code as a string.
      * @param type The shader stage type (e.g., vertex, fragment).
+     * @param content The shader source code as a string.
      *
      * @return Shared pointer to the created shader instance. nullptr if creation
      * fails.
      */
     virtual SharedPtr<IShader> createShaderFromStringContent(
-      const String& content,
-      shaderStageType::Type type
+      shaderStageType::Type type,
+      const String& content
     ) = 0;
 
     /**

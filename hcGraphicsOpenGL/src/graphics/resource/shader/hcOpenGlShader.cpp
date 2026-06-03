@@ -1,22 +1,22 @@
 #include "hc/graphics/resource/shader/hcOpenGlShader.h"
 
+#include <GL/glew.h>
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
+
 namespace hc
 {
-  OpenGlShader::OpenGlShader(shaderStageType::Type stageType, const String& source)
-    : 
+  OpenGlShader::OpenGlShader() :
     m_id(Id::Create()),
-    m_stageType(stageType),
-    m_source(source),
-    m_compiled(false),
+    m_stageType(shaderStageType::Vertex),
+    m_valid(false),
     m_shaderId(0)
-  {
-  }
+  {}
 
   OpenGlShader::~OpenGlShader()
   {
     destroy();
   }
-  
+
   const Id& OpenGlShader::getId() const
   {
     return m_id;
@@ -30,7 +30,55 @@ namespace hc
       m_shaderId = 0;
     }
 
-    m_compiled = false;
+    m_valid = false;
+  }
+
+  void OpenGlShader::initialize(shaderStageType::Type stageType, const String& source)
+  {
+    if (m_valid)
+      throw RuntimeErrorException("Shader is already initialized.");
+
+    try
+    {
+      GLenum glStage;
+      switch (stageType)
+      {
+      case shaderStageType::Vertex:
+        glStage = GL_VERTEX_SHADER;
+        break;
+      case shaderStageType::Fragment:
+        glStage = GL_FRAGMENT_SHADER;
+        break;
+      default:
+        throw RuntimeErrorException("Unsupported shader stage type.");
+        return;
+      }
+
+      m_shaderId = static_cast<UInt32>(glCreateShader(glStage));
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      const char* src = source.c_str();
+      glShaderSource(m_shaderId, 1, &src, nullptr);
+      glCompileShader(m_shaderId);
+
+      GLint compileStatus = GL_FALSE;
+      glGetShaderiv(static_cast<GLuint>(m_shaderId), GL_COMPILE_STATUS, &compileStatus);
+      if (compileStatus != GL_TRUE)
+      {
+        char log[1024];
+        glGetShaderInfoLog(static_cast<GLuint>(m_shaderId), sizeof(log), nullptr, log);
+
+        throw RuntimeErrorException("OpenGL shader compilation failed: " + String(log));
+      }
+    }
+    catch (...)
+    {
+      destroy();
+      throw;
+    }
+
+    m_stageType = stageType;
+    m_valid = true;
   }
 
   shaderStageType::Type OpenGlShader::getStageType() const
@@ -38,58 +86,12 @@ namespace hc
     return m_stageType;
   }
 
-  bool OpenGlShader::isCompiled() const
+  bool OpenGlShader::isValid() const
   {
-    return m_compiled;
+    return m_valid;
   }
 
-  void OpenGlShader::compile()
-  {
-    if (m_compiled)
-      return;
-
-    GLenum glStage;
-    switch (m_stageType)
-    {
-    case shaderStageType::Vertex:
-      glStage = GL_VERTEX_SHADER;
-      break;
-    case shaderStageType::Fragment:
-      glStage = GL_FRAGMENT_SHADER;
-      break;
-    default:
-      LogService::Error(
-        "Unsupported shader stage type for OpenGL shader compilation."
-      );
-      return;
-    }
-
-    m_shaderId = glCreateShader(glStage);
-    const char* src = m_source.c_str();
-    glShaderSource(m_shaderId, 1, &src, nullptr);
-    glCompileShader(m_shaderId);
-
-    GLint compileStatus = GL_FALSE;
-    glGetShaderiv(m_shaderId, GL_COMPILE_STATUS, &compileStatus);
-    if (compileStatus != GL_TRUE)
-    {
-      char log[1024];
-      glGetShaderInfoLog(m_shaderId, sizeof(log), nullptr, log);
-
-      LogService::Error(
-        "OpenGL shader compilation failed: " + String(log)
-      );
-
-      glDeleteShader(m_shaderId);
-      m_shaderId = 0;
-      m_compiled = false;
-      return;
-    }
-
-    m_compiled = true;
-  }
-
-  GLuint OpenGlShader::getShaderId() const
+  UInt32 OpenGlShader::getShaderId() const
   {
     return m_shaderId;
   }
