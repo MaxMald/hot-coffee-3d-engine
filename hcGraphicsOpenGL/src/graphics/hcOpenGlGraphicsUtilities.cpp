@@ -10,9 +10,21 @@ namespace hc
       GLenum error = glGetError();
       if (error != GL_NO_ERROR)
       {
+        String errorMessage;
+        switch (error)
+        {
+          case GL_INVALID_ENUM:                  errorMessage = "INVALID_ENUM"; break;
+          case GL_INVALID_VALUE:                 errorMessage = "INVALID_VALUE"; break;
+          case GL_INVALID_OPERATION:             errorMessage = "INVALID_OPERATION"; break;
+          case GL_STACK_OVERFLOW:                errorMessage = "STACK_OVERFLOW"; break;
+          case GL_STACK_UNDERFLOW:               errorMessage = "STACK_UNDERFLOW"; break;
+          case GL_OUT_OF_MEMORY:                 errorMessage = "OUT_OF_MEMORY"; break;
+          case GL_INVALID_FRAMEBUFFER_OPERATION: errorMessage = "INVALID_FRAMEBUFFER_OPERATION"; break;
+          default: errorMessage = "UNKNOWN_ERROR"; break;
+        }
+
         throw RuntimeErrorException(
-          String("OpenGL error: ") +
-          String(reinterpret_cast<const char*>(glewGetErrorString(error)))
+          String::Format("OpenGL error: %s", errorMessage.c_str())
         );
       }
     }
