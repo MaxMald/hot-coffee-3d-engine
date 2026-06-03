@@ -15,57 +15,73 @@ namespace hc
     virtual ~IShaderProgram() = default;
 
     /**
+     * @brief Initializes the shader program with a set of shaders.
+     */
+    virtual void initialize(const Vector<SharedPtr<IShader>>& shaders) = 0;
+
+    /**
      * @brief Binds this program for rendering.
      */
     virtual void bind() = 0;
 
     /**
-     * @brief Links the attached shaders into a complete shader program.
-     */
-    virtual void linkShaders() = 0;
-
-    /**
-     * @brief Returns true if the program is successfully linked and ready.
+     * @brief Returns true if the program is initialized and ready for use.
      */
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Attaches a shader to this program.
-     */
-    virtual void attachShader(SharedPtr<IShader> shader) = 0;
-
-    /**
      * @brief Sets a float uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, float value) = 0;
 
     /**
      * @brief Sets an integer uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, Int32 value) = 0;
 
     /**
      * @brief Sets a boolean uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, bool value) = 0;
 
     /**
      * @brief Sets a 3D vector uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, const Vector3f& v3f) = 0;
 
     /**
      * @brief Sets a color uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, const Color& color) = 0;
 
     /**
      * @brief Sets a 4x4 matrix uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniform(const String& name, const Matrix4& matrix4x4) = 0;
 
     /**
      * @brief Sets a texture uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
      */
     virtual void setUniformTexture(const String& name, Int32 slotLocation) = 0;
   };

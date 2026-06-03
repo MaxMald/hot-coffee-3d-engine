@@ -5,11 +5,20 @@
 namespace hc
 {
   SharedPtr<IShader> OpenGlShaderFactory::createShaderFromStringContent(
-    const String& content,
-    shaderStageType::Type type
+    shaderStageType::Type type,
+    const String& content
   )
   {
-    return MakeShared<OpenGlShader>(type, content);
+    SharedPtr<OpenGlShader> shader = MakeShared<OpenGlShader>();
+    shader->initialize(type, content);
+
+    if (!shader->isValid())
+    {
+      shader.reset();
+      throw RuntimeErrorException("Failed to create shader from string content.");
+    }
+
+    return shader;
   }
 
   SharedPtr<IShader> OpenGlShaderFactory::createBuiltInShaderType(builtInShaderType::Type type)
@@ -17,19 +26,19 @@ namespace hc
     switch (type)
     {
     case builtInShaderType::UnlitVertex:
-      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::UnlitVertex);
+      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::UnlitVertex);
     case builtInShaderType::UnlitFragment:
-      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::UnlitFragment);
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::UnlitFragment);
     case builtInShaderType::LitVertex:
-      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::LitVertex);
+      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::LitVertex);
     case builtInShaderType::BlinnPhongForwardFragment:
-      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::BlinnPhongForwardFragment);
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::BlinnPhongForwardFragment);
     case builtInShaderType::BlinnPhongDeferredFragment:
-      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::BlinnPhongDeferredFragment);
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::BlinnPhongDeferredFragment);
     case builtInShaderType::FullScreenTriangleVertex:
-      return MakeShared<OpenGlShader>(shaderStageType::Vertex, builtInShaders::FullScreenTriangleVertex);
+      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::FullScreenTriangleVertex);
     case builtInShaderType::DeferredLightingFragment:
-      return MakeShared<OpenGlShader>(shaderStageType::Fragment, builtInShaders::DeferredLightingFragment);
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::DeferredLightingFragment);
     default:
       throw RuntimeErrorException(
         String::Format(

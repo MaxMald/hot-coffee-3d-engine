@@ -20,8 +20,8 @@ namespace hc
      * @copydoc IShaderFactory::createShaderFromStringContent
      */
     SharedPtr<IShader> createShaderFromStringContent(
-      const String& content,
-      shaderStageType::Type type
+      shaderStageType::Type type,
+      const String& content
     ) override;
 
     /**

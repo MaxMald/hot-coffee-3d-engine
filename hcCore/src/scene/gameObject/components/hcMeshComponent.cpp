@@ -26,13 +26,21 @@ namespace hc
   {
     ABaseComponent::serialize(writer);
 
-    bool hasMesh = (m_mesh != nullptr && m_mesh->getModel() != nullptr);
+    // TODO
+    //
+    // Currently we only serialize the mesh by its source path, which means we can only
+    // reconstruct the mesh during deserialization if it was originally created from a
+    // model file. This is a limitation that should be addressed in the future by implementing a more
+    // robust serialization mechanism that can handle meshes created procedurally or from
+    // other sources.
+
+    bool hasMesh = (m_mesh != nullptr && !m_mesh->getSourcePath().empty());
     writer.writeBool(hasMesh);
 
     if (!hasMesh)
       return;
 
-    Path modelPath = m_mesh->getModel()->getPath();
+    Path modelPath = m_mesh->getSourcePath();
     String modelPathStr = modelPath.generic_string();
 
     if (m_assetManager.hasRootPath())

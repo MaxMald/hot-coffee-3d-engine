@@ -1,6 +1,5 @@
 #pragma once
 
-#include <GL/glew.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 
 namespace hc
@@ -11,14 +10,7 @@ namespace hc
   class OpenGlShader : public IShader
   {
   public:
-    /**
-     * @brief Constructs an OpenGlShader with the given stage type and source
-     * code.
-     *
-     * @param stageType The shader stage type (e.g., vertex, fragment).
-     * @param source The GLSL source code for the shader.
-     */
-    OpenGlShader(shaderStageType::Type stageType, const String& source);
+    OpenGlShader();
     ~OpenGlShader() override;
 
     /**
@@ -34,32 +26,36 @@ namespace hc
     void destroy() override;
 
     /**
-     * @brief Returns the stage type of the shader (vertex, fragment, etc.).
+     * @brief Initializes the shader with the specified stage type and source code.
+     *
+     * Compiles the shader source code and creates an OpenGL shader object.
+     *
+     * @param stageType The type of shader stage (e.g., vertex, fragment).
+     * @param source The source code of the shader.
+     */
+    void initialize(shaderStageType::Type stageType, const String& source) override;
+
+    /**
+     * @copydoc IShader::initialize
      */
     shaderStageType::Type getStageType() const override;
 
     /**
-     * @brief Checks if the shader has been successfully compiled.
+     * @copydoc IShader::isValid
      */
-    bool isCompiled() const override;
-
-    /**
-     * @brief Compiles the shader from its source code.
-     */
-    void compile() override;
+    bool isValid() const override;
 
     /**
      * @brief Returns the OpenGL shader object ID.
      *
      * @return The OpenGL shader ID.
      */
-    GLuint getShaderId() const;
+    UInt32 getShaderId() const;
 
   private:
     Id m_id;
     shaderStageType::Type m_stageType;
-    String m_source;
-    bool m_compiled;
-    GLuint m_shaderId;
+    bool m_valid;
+    UInt32 m_shaderId;
   };
 }

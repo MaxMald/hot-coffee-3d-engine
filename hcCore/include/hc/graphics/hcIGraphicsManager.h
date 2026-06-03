@@ -126,6 +126,13 @@ namespace hc
     virtual polygonFillType::Type getPolygonFillType() const = 0;
 
     /**
+     * @brief Sets the render pipeline type for rendering (e.g., forward or deferred hybrid).
+     *
+     * @param renderPipelineType The render pipeline type to set.
+     */
+    virtual void setRenderPipelineType(renderPipelineType::Type renderPipelineType) = 0;
+
+    /**
      * @brief Gets the current render pipeline type used for rendering.
      *
      * @return The current render pipeline type.

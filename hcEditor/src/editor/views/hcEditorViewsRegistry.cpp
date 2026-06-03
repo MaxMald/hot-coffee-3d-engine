@@ -9,6 +9,7 @@
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 #include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
+#include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
 #include "hc/editor/views/mainMenuBar/hcMainMenuBarFactory.h"
@@ -89,6 +90,9 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<MaterialManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getMaterialManager(),
         materialDrawerManagerFactory::create()
+      ));
+      viewsManager.registerView(MakeUnique<GraphicsWindow>(
+        hotCoffeeEngine.getGraphicsManager()
       ));
 
       viewsManager.registerView(

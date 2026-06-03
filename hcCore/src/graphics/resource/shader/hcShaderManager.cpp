@@ -62,8 +62,8 @@ namespace hc
     }
 
     SharedPtr<IShader> shader = m_shaderFactory->createShaderFromStringContent(
-      shaderCode,
-      type
+      type,
+      shaderCode
     );
 
     if (!shader)

@@ -44,19 +44,18 @@ namespace hc
 
     if (!vertexShader || !fragmentShader)
     {
-      throw RuntimeErrorException(
+      throw InvalidArgumentException(
         String::Format("Invalid shaders provided for shader program with key '%s'.", programKey.c_str())
       );
     }
 
-    if (!vertexShader->isCompiled())
-      vertexShader->compile();
-    if (!fragmentShader->isCompiled())
-      fragmentShader->compile();
+    Vector<SharedPtr<IShader>> shaders = { vertexShader, fragmentShader };
+    shaderProgram->initialize(shaders);
 
-    shaderProgram->attachShader(vertexShader);
-    shaderProgram->attachShader(fragmentShader);
-    shaderProgram->linkShaders();
+    if (!shaderProgram->isValid())
+      throw RuntimeErrorException(
+        String::Format("Failed to initialize shader program with key '%s'.", programKey.c_str())
+      );
 
     m_customShaderPrograms[programKey] = shaderProgram;
     return shaderProgram;
@@ -147,19 +146,17 @@ namespace hc
 
     if (!vertexShader || !fragmentShader)
     {
-      throw RuntimeErrorException(
+      throw InvalidArgumentException(
         String::Format("Failed to retrieve shaders for built-in shader program type %d.", type)
       );
     }
 
-    if (!vertexShader->isCompiled())
-      vertexShader->compile();
-    if (!fragmentShader->isCompiled())
-      fragmentShader->compile();
-
-    shaderProgram->attachShader(vertexShader);
-    shaderProgram->attachShader(fragmentShader);
-    shaderProgram->linkShaders();
+    Vector<SharedPtr<IShader>> shaders = { vertexShader, fragmentShader };
+    shaderProgram->initialize(shaders);
+    if (!shaderProgram->isValid())
+      throw RuntimeErrorException(
+        String::Format("Failed to initialize shader program for built-in type %d.", type)
+      );
 
     m_builtInShaderPrograms[type] = shaderProgram;
   }

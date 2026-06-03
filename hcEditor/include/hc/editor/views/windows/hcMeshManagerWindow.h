@@ -27,6 +27,5 @@ namespace hc::editor
     void onDraw() override;
     void drawMeshInfo(const SharedPtr<IMesh>& mesh);
     void drawMaterialsInfo(const Vector<SharedPtr<IMaterial>>& materials);
-    void drawSubMeshesInfo(const Vector<ModelSubMesh>& subMeshes);
   };
 }

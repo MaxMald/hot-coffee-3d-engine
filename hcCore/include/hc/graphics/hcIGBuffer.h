@@ -10,6 +10,10 @@ namespace hc
 
   /**
    * Interface for geometry buffer resources used by deferred rendering.
+   *
+   * @note The parameter of type Color of the clear(const Color&) method inherited from
+   * IFrameBuffer is not used for IGBuffer. Instead, it uses the predefined clear color
+   * constants for each attachment when clearing the GBuffer.
    */
   class HC_CORE_EXPORT IGBuffer : public IFrameBuffer
   {

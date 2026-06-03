@@ -37,6 +37,11 @@ namespace hc
     virtual ~MeshManager() = default;
 
     /**
+     * @copydoc IMeshManager::createMesh
+     */
+    SharedPtr<IMesh> createMesh() override;
+
+    /**
      * @brief Creates a mesh from the specified file path.
      *
      * @param path Path to the mesh asset.

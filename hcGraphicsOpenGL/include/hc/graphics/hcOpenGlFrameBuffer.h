@@ -1,12 +1,10 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include <GL/glew.h>
+#include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 
 namespace hc
 {
-  class OpenGlTexture;
-
   /**
    * @brief OpenGL implementation of the framebuffer interface.
    *
@@ -78,9 +76,9 @@ namespace hc
     bool isValid() const override;
 
     /**
-     * @copydoc IFrameBuffer::cleanup
+     * @copydoc IFrameBuffer::destroy
      */
-    void cleanup() override;
+    void destroy() override;
 
     /**
      * @copydoc IFrameBuffer::copyDepthTo
@@ -88,22 +86,18 @@ namespace hc
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
 
     /**
-     * @copydoc IFrameBuffer::destroy
+     * @copydoc IFrameBuffer::destroySelf
      */
-    void destroy() override;
+    void destroySelf() override;
 
   private:
     UInt32 m_width;
     UInt32 m_height;
-    GLuint m_frameBufferId;
-    GLuint m_depthStencilBufferId;
-    UniquePtr<OpenGlTexture> m_colorTexture;
-    bool m_isValid;
-    bool m_isBound;
-    GLint m_previousViewport[4];
+    UInt32 m_frameBufferId;
+    UInt32 m_depthStencilBufferId;
+    OpenGlTexture m_colorTexture;
+    bool m_valid;
 
-    void savePreviousViewport();
-    void restorePreviousViewport();
     void assertValid() const;
   };
 }

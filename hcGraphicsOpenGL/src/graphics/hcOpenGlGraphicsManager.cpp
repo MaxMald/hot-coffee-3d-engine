@@ -189,6 +189,19 @@ namespace hc
     return m_polygonFillType;
   }
 
+  void OpenGlGraphicsManager::setRenderPipelineType(
+    renderPipelineType::Type renderPipelineType
+  )
+  {
+    if (m_renderPipelineType == renderPipelineType)
+      return;
+
+    if (renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_gBuffer.resize(m_viewportRect.width, m_viewportRect.height);
+
+    m_renderPipelineType = renderPipelineType;
+  }
+
   renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
   {
     return m_renderPipelineType;

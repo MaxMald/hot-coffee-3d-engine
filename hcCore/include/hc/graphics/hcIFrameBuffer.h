@@ -70,7 +70,7 @@ namespace hc
     virtual void unbind() = 0;
 
     /**
-     * @brief Resizes the framebuffer to the specified dimensions. 
+     * @brief Resizes the framebuffer to the specified dimensions.
      * 
      * @param width The new width in pixels.
      * @param height The new height in pixels.
@@ -99,9 +99,7 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
-     * @brief Clears the framebuffer's color buffer with the specified clear color. Must
-     * bind the framebuffer before calling this method, otherwise an exception will be
-     * thrown.
+     * @brief Clears the framebuffer's color buffer with the specified clear color.
      *
      * @param clearColor The color to clear the framebuffer with.
      */
@@ -115,34 +113,33 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Performs cleanup of framebuffer resources without destroying the object
-     * itself.
-     *
-     * You should unbind the framebuffer before calling this method to avoid issues with
-     * dangling references.
+     * @brief Destroys the framebuffer and releases all associated resources.
      */
-    virtual void cleanup() = 0;
+    virtual void destroy() = 0;
 
     /**
-     * @brief Copies the depth buffer from this framebuffer to the destination framebuffer.
+     * @brief Copies the depth buffer from this framebuffer to the destination
+     * framebuffer.
      *
-     * This is useful for post-processing effects that require depth information after
-     * rendering to an off-screen framebuffer. The destination framebuffer must have a
-     * compatible depth attachment for this operation to succeed.
+     * The destination framebuffer must have a compatible depth attachment for this
+     * operation to succeed.
      */
     virtual void copyDepthTo(IFrameBuffer& destinationFrameBuffer) = 0;
 
     /**
      * @brief Destroys the framebuffer and releases all associated resources.
      *
-     * This method performs cleanup and self-deletion to ensure the object
-     * is destroyed in the same module where it was allocated, maintaining
-     * heap consistency across DLL boundaries.
+     * @warning This method should ONLY be called on heap-allocated objects managed
+     * by FrameBufferPtr. Do not call destroySelf() on stack-allocated or member objects,
+     * as it will cause undefined behavior and heap corruption.
      *
-     * You should unbind the framebuffer before calling this method to avoid issues
-     * with dangling references.
+     * This method performs cleanup and self-deletion to ensure the object is destroyed in
+     * the same module where it was allocated, maintaining heap consistency across DLL
+     * boundaries.
+     *
+     * @see cleanup() for cleaning up member objects without deallocation.
      */
-    virtual void destroy() = 0;
+    virtual void destroySelf() = 0;
 
   protected:
     IFrameBuffer() = default;

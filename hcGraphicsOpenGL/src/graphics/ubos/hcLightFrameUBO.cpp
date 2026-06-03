@@ -29,13 +29,13 @@ namespace hc
 
   void LightFrameUBO::bind(UInt32 bindingIndex)
   {
-    assertIsInitialized();
+    assertIsValid();
     glBindBufferBase(GL_UNIFORM_BUFFER, bindingIndex, m_ubo);
   }
 
   void LightFrameUBO::upload(const LightFrameData& lightFrameData)
   {
-    assertIsInitialized();
+    assertIsValid();
     glBindBuffer(GL_UNIFORM_BUFFER, m_ubo);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(LightFrameData), &lightFrameData);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);

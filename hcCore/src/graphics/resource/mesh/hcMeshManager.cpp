@@ -5,6 +5,7 @@
 #include "hc/graphics/resource/mesh/hcIMeshFactory.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
+#include "hc/graphics/resource/mesh/hcIMesh.h"
 
 namespace hc
 {
@@ -17,6 +18,11 @@ namespace hc
     m_meshFactory(std::move(meshFactory)),
     m_materialManager(materialManager)
   {
+  }
+
+  SharedPtr<IMesh> MeshManager::createMesh()
+  {
+    return m_meshFactory->createMesh();
   }
 
   SharedPtr<IMesh> MeshManager::createMeshFromPath(const Path& path)
@@ -39,9 +45,7 @@ namespace hc
     return createMeshFromModel(model);
   }
 
-  SharedPtr<IMesh> MeshManager::createMeshFromModel(
-    const SharedPtr<Model>& model
-  )
+  SharedPtr<IMesh> MeshManager::createMeshFromModel(const SharedPtr<Model>& model)
   {
     if (!model)
     {
@@ -54,17 +58,26 @@ namespace hc
     if (hasCachedResource(model->getId()))
       return getCachedResource(model->getId());
 
-    Vector<SharedPtr<IMaterial>> materials = createMaterialsFromModel(model);
-    SharedPtr<IMesh> mesh = m_meshFactory->createMesh(
-      model,
-      materials
-    );
-
+    SharedPtr<IMesh> mesh = m_meshFactory->createMesh();
     if (!mesh)
     {
       LogService::Error(
         String::Format(
           "MeshManager::createMeshFromModel: Failed to create mesh from model with Id '%s'.",
+          model->getId().toString().c_str()
+        )
+      );
+      return nullptr;
+    }
+
+    Vector<SharedPtr<IMaterial>> materials = createMaterialsFromModel(model);
+
+    mesh->initialize(*model, materials);
+    if (!mesh->isValid())
+    {
+      LogService::Error(
+        String::Format(
+          "MeshManager::createMeshFromModel: Failed to initialize mesh from model with Id '%s'.",
           model->getId().toString().c_str()
         )
       );
