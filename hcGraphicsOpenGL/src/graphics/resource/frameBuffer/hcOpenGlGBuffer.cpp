@@ -1,4 +1,4 @@
-#include "hc/graphics/hcOpenGlGBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
 
 #include <GL/glew.h>
 #include <hc/graphics/resource/texture/hcITexture.h>

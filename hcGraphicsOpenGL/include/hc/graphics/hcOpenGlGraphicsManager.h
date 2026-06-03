@@ -5,8 +5,8 @@
 #include <hc/graphics/resource/material/hcMaterialManager.h>
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
+#include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include "hc/graphics/hcOpenGlGBuffer.h"
 #include "hc/graphics/ubos/hcLightFrameUBO.h"
 
 namespace hc

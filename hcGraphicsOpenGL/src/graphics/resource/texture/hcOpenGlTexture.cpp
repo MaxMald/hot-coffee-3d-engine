@@ -67,7 +67,7 @@ namespace hc
     if (m_created)
       throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
 
-    assertNumberOfChannels(image.getChannels());
+    assertNumberOfChannels(static_cast<UInt8>(image.getChannels()));
     GLenum format = (image.getChannels() == 4) ? GL_RGBA : GL_RGB;
     GLenum internalFormat = (image.getChannels() == 4) ? GL_RGBA8 : GL_RGB8;
 

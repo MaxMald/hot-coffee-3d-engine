@@ -1,4 +1,4 @@
-#include "hc/graphics/hcOpenGlFrameBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
 #include <GL/glew.h>
 
 namespace hc

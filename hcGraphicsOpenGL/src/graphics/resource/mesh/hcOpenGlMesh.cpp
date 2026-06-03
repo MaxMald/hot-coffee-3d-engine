@@ -84,9 +84,9 @@ namespace hc
 
     ModelSubMesh defaultSubMesh;
     defaultSubMesh.firstVertexIndex = 0;
-    defaultSubMesh.vertexCount = vertices.size();
+    defaultSubMesh.vertexCount = static_cast<UInt32>(vertices.size());
     defaultSubMesh.firstIndexIndex = 0;
-    defaultSubMesh.indexCount = indices.size();
+    defaultSubMesh.indexCount = static_cast<UInt32>(indices.size());
     defaultSubMesh.materialIndex = 0;
 
     m_subMeshes = { defaultSubMesh };
