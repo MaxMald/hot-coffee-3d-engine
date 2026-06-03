@@ -113,10 +113,9 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Performs cleanup of framebuffer resources without deallocating memory. Use
-     * for member objects.
+     * @brief Destroys the framebuffer and releases all associated resources.
      */
-    virtual void cleanup() = 0;
+    virtual void destroy() = 0;
 
     /**
      * @brief Copies the depth buffer from this framebuffer to the destination

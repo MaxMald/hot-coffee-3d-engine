@@ -26,7 +26,7 @@ namespace hc
 
   OpenGlGBuffer::~OpenGlGBuffer()
   {
-    cleanup();
+    destroy();
   }
 
   void OpenGlGBuffer::initialize(UInt32 width, UInt32 height)
@@ -128,7 +128,7 @@ namespace hc
       glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFrameBuffer);
       glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
 
-      cleanup();
+      destroy();
       throw;
     }
 
@@ -273,7 +273,7 @@ namespace hc
     return m_valid;
   }
 
-  void OpenGlGBuffer::cleanup()
+  void OpenGlGBuffer::destroy()
   {
     if (m_depthStencilBufferId != 0)
     {

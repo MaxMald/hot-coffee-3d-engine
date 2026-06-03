@@ -22,7 +22,7 @@ namespace hc
     UInt32 getHeight() const override;
     void clear(const Color& clearColor) override;
     bool isValid() const override;
-    void cleanup() override;
+    void destroy() override;
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
     void destroySelf() override;
 

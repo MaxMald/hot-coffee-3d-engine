@@ -76,9 +76,9 @@ namespace hc
     bool isValid() const override;
 
     /**
-     * @copydoc IFrameBuffer::cleanup
+     * @copydoc IFrameBuffer::destroy
      */
-    void cleanup() override;
+    void destroy() override;
 
     /**
      * @copydoc IFrameBuffer::copyDepthTo
