@@ -100,7 +100,7 @@ namespace hc
     }
 
     camera->update();
-    graphicsManager.updateCameraRenderData(CameraRenderData::Create(*camera));
+    graphicsManager.uploadCameraRenderData(CameraRenderData::Create(*camera));
 
     // Gather light frame data and upload it to the graphics manager
 

@@ -59,11 +59,11 @@ namespace hc
     virtual void beginFrame() = 0;
 
     /**
-     * @brief Updates the camera render data for the current frame.
+     * @brief Uploads the camera render data for the current frame to the GPU.
      *
      * @param cameraRenderData The camera render data for the current frame.
      */
-    virtual void updateCameraRenderData(const CameraRenderData& cameraRenderData) = 0;
+    virtual void uploadCameraRenderData(const CameraRenderData& cameraRenderData) = 0;
 
     /**
      * @brief Uploads the aggregated light data for the current frame to the GPU.

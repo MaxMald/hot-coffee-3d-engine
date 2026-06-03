@@ -40,9 +40,9 @@ namespace hc
     void beginFrame() override;
 
     /**
-     * @copydoc IGraphicsManager::updateCameraRenderData
+     * @copydoc IGraphicsManager::uploadCameraRenderData
      */
-    void updateCameraRenderData(const CameraRenderData& cameraRenderData) override;
+    void uploadCameraRenderData(const CameraRenderData& cameraRenderData) override;
 
     /**
      * @copydoc IGraphicsManager::uploadLightFrameData
