@@ -8,6 +8,15 @@ namespace hc
   {
     inline const String UnlitVertex = R"(
       #version 420 core
+
+      layout(std140, binding = 1) uniform CameraFrameBlock
+      {
+        mat4 projection;
+        mat4 view;
+        vec3 cameraPosition;
+        float cPadding0;
+      };
+
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;
       layout(location = 2) in vec3 aTangent;
@@ -15,8 +24,6 @@ namespace hc
       layout(location = 4) in vec4 aColor;
 
       uniform mat4 uModel;
-      uniform mat4 uView;
-      uniform mat4 uProjection;
 
       out vec2 vTexCoord;
       out vec3 vNormal;
@@ -30,12 +37,21 @@ namespace hc
         vTangent = mat3(uModel) * aTangent;
         vColor = aColor;
 
-        gl_Position = uProjection * uView * uModel * vec4(aPosition, 1.0);
+        gl_Position = projection * view * uModel * vec4(aPosition, 1.0);
       }
     )";
 
     inline const String LitVertex = R"(
       #version 420 core
+
+      layout(std140, binding = 1) uniform CameraFrameBlock
+      {
+        mat4 projection;
+        mat4 view;
+        vec3 cameraPosition;
+        float cPadding0;
+      };
+
       layout(location = 0) in vec3 aPosition;
       layout(location = 1) in vec3 aNormal;
       layout(location = 2) in vec3 aTangent;
@@ -43,8 +59,6 @@ namespace hc
       layout(location = 4) in vec4 aColor;
 
       uniform mat4 uModel;
-      uniform mat4 uView;
-      uniform mat4 uProjection;
 
       out vec2 vTexCoord;
       out vec3 vWorldPos;
@@ -62,7 +76,7 @@ namespace hc
         vTangent = normalize(mat3(uModel) * aTangent);
         vColor = aColor;
 
-        gl_Position = uProjection * uView * worldPos;
+        gl_Position = projection * view * worldPos;
       }
     )";
 
@@ -90,6 +104,14 @@ namespace hc
 
     inline const String BlinnPhongForwardFragment = R"(
       #version 420 core
+
+      layout(std140, binding = 1) uniform CameraFrameBlock
+      {
+        mat4 projection;
+        mat4 view;
+        vec3 cameraPosition;
+        float cPadding0;
+      };
 
       #define MAX_OMNI_LIGHTS 16
       #define MAX_SPOT_LIGHTS 8
@@ -130,7 +152,7 @@ namespace hc
         int numDirectionalLights;
         int numOmniLights;
         int numSpotLights;
-        int padding; ///< Padding to ensure 16-byte alignment.
+        int lPadding0;
       };
 
       in vec2 vTexCoord;
@@ -147,7 +169,6 @@ namespace hc
       uniform sampler2D uSpecularMap;
       uniform float uAlphaCutoff;
       uniform float uShininess;
-      uniform vec3 uCameraPosition;
 
       float calculateAttenuation(float distance, float range)
       {
@@ -225,7 +246,7 @@ namespace hc
         vec3 normalTS = texture(uNormalMap, vTexCoord).xyz * 2.0 - 1.0;
         vec3 normalWS = normalize(TBN * normalTS);
 
-        vec3 viewDir = normalize(uCameraPosition - vWorldPos);
+        vec3 viewDir = normalize(cameraPosition - vWorldPos);
         vec3 totalLighting = vec3(0.05);
 
         for (int i = 0; i < numOmniLights; ++i)
@@ -313,6 +334,14 @@ namespace hc
     inline const String DeferredLightingFragment = R"(
       #version 420 core
 
+      layout(std140, binding = 1) uniform CameraFrameBlock
+      {
+        mat4 projection;
+        mat4 view;
+        vec3 cameraPosition;
+        float cPadding0;
+      };
+
       #define MAX_OMNI_LIGHTS 16
       #define MAX_SPOT_LIGHTS 8
       #define MAX_DIRECTIONAL_LIGHTS 4
@@ -352,14 +381,13 @@ namespace hc
         int numDirectionalLights;
         int numOmniLights;
         int numSpotLights;
-        int padding; ///< Padding to ensure 16-byte alignment.
+        int lPadding0;
       };
 
       layout(binding = 0) uniform sampler2D uPositionAndDepth;
       layout(binding = 1) uniform sampler2D uNormalRoughness;
       layout(binding = 2) uniform sampler2D uAlbedoAlpha;
       layout(binding = 3) uniform sampler2D uMaterialParameters;
-      uniform vec3 uCameraPosition;
 
       in vec2 vTexCoord;
 
@@ -445,7 +473,7 @@ namespace hc
         vec4 materialParams = texture(uMaterialParameters, vTexCoord);
         float specularStrength = materialParams.r;
         
-        vec3 viewDir = normalize(uCameraPosition - worldPos);
+        vec3 viewDir = normalize(cameraPosition - worldPos);
 
         vec3 totalLighting = vec3(0.05);
         for (int i = 0; i < numOmniLights; ++i)

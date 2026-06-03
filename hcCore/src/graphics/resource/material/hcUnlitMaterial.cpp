@@ -29,7 +29,7 @@ namespace hc
   }
 
   void UnlitMaterial::bind(
-    const CameraRenderData& cameraRenderData,
+    const CameraRenderData&,
     renderPassType::Type renderPass
   )
   {
@@ -43,8 +43,6 @@ namespace hc
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
