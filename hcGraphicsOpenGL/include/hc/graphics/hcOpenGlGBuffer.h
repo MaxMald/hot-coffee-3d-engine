@@ -24,7 +24,7 @@ namespace hc
     bool isValid() const override;
     void cleanup() override;
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
-    void destroy() override;
+    void destroySelf() override;
 
     void bindGTexturesForReading() override;
     const ITexture& getPositionAndDepth() const override;

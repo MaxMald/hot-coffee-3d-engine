@@ -86,9 +86,9 @@ namespace hc
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
 
     /**
-     * @copydoc IFrameBuffer::destroy
+     * @copydoc IFrameBuffer::destroySelf
      */
-    void destroy() override;
+    void destroySelf() override;
 
   private:
     UInt32 m_width;

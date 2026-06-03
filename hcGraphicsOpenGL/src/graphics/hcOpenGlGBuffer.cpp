@@ -381,7 +381,7 @@ namespace hc
       throw RuntimeErrorException("GBuffer is not valid.");
   }
 
-  void OpenGlGBuffer::destroy()
+  void OpenGlGBuffer::destroySelf()
   {
     delete this;
   }

@@ -131,7 +131,7 @@ namespace hc
      * @brief Destroys the framebuffer and releases all associated resources.
      *
      * @warning This method should ONLY be called on heap-allocated objects managed
-     * by FrameBufferPtr. Do not call destroy() on stack-allocated or member objects,
+     * by FrameBufferPtr. Do not call destroySelf() on stack-allocated or member objects,
      * as it will cause undefined behavior and heap corruption.
      *
      * This method performs cleanup and self-deletion to ensure the object is destroyed in
@@ -140,7 +140,7 @@ namespace hc
      *
      * @see cleanup() for cleaning up member objects without deallocation.
      */
-    virtual void destroy() = 0;
+    virtual void destroySelf() = 0;
 
   protected:
     IFrameBuffer() = default;

@@ -276,7 +276,7 @@ namespace hc
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
   }
 
-  void OpenGlFrameBuffer::destroy()
+  void OpenGlFrameBuffer::destroySelf()
   {
     delete this;
   }

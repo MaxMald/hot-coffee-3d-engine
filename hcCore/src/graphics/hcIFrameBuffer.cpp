@@ -5,8 +5,6 @@ namespace hc
   void FrameBufferDeleter::operator()(IFrameBuffer* frameBuffer) const
   {
     if (frameBuffer)
-    {
-      frameBuffer->destroy();
-    }
+      frameBuffer->destroySelf();
   }
 }
