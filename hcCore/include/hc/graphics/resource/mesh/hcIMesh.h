@@ -22,7 +22,7 @@ namespace hc
     /**
      * @brief Initializes the mesh with the given model and materials.
      *
-     * @param model Shared pointer to the model to associate with this mesh.
+     * @param model Reference to the model to associate with this mesh.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
      */
     virtual void initialize(
