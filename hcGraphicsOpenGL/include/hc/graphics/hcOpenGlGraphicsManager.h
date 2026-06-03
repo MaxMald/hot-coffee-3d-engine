@@ -7,7 +7,7 @@
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
 #include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
-#include "hc/graphics/ubos/hcLightFrameUBO.h"
+#include "hc/graphics/ubos/hcUniformBufferObject.h"
 
 namespace hc
 {
@@ -150,8 +150,8 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
-    CameraRenderData m_currentCameraRenderData;
     LightFrameUBO m_lightFrameUBO;
+    CameraFrameUBO m_cameraFrameUBO;
     IFrameBuffer* m_customRenderTarget;
 
     Vector<DrawCommand> m_queueDrawCommands;
