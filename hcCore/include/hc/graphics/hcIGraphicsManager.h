@@ -21,7 +21,7 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   struct GraphicsSettings;
-  struct CameraRenderData;
+  struct CameraFrameData;
   struct LightFrameData;
 
   /**
@@ -59,11 +59,11 @@ namespace hc
     virtual void beginFrame() = 0;
 
     /**
-     * @brief Uploads the camera render data for the current frame to the GPU.
+     * @brief Uploads the camera frame data for the current frame to the GPU.
      *
-     * @param cameraRenderData The camera render data for the current frame.
+     * @param cameraFrameData The camera frame data for the current frame.
      */
-    virtual void uploadCameraRenderData(const CameraRenderData& cameraRenderData) = 0;
+    virtual void uploadCameraFrameData(const CameraFrameData& cameraFrameData) = 0;
 
     /**
      * @brief Uploads the aggregated light data for the current frame to the GPU.

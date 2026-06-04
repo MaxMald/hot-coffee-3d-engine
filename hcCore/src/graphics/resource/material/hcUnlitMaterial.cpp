@@ -3,7 +3,6 @@
 #include "hc/utilities/hcCoreAssertions.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 
 namespace hc

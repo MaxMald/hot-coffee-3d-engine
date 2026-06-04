@@ -11,27 +11,27 @@ namespace hc
    * matrices, as well as the camera's world position. The struct is aligned to 16 bytes
    * (alignas(16)) to satisfy std140/std430 layout requirements for GPU buffers.
    */
-  struct alignas(16) HC_CORE_EXPORT CameraRenderData
+  struct alignas(16) HC_CORE_EXPORT CameraFrameData
   {
     /**
-     * @brief Creates a CameraRenderData instance from the given camera.
+     * @brief Creates a CameraFrameData instance from the given camera.
      *
      * @param camera The camera to extract data from.
      * 
-     * @return A CameraRenderData instance based on the given camera.
+     * @return A CameraFrameData instance based on the given camera.
      */
-    static CameraRenderData Create(Camera& camera);
+    static CameraFrameData Create(Camera& camera);
 
     /**
-     * @brief Creates a CameraRenderData instance from the given camera (const version).
+     * @brief Creates a CameraFrameData instance from the given camera (const version).
      * This version uses the cached projection matrix. Make sure to update the camera
      * before calling this if you want to ensure the projection matrix is up to date.
      *
      * @param camera The camera to extract data from.
      *
-     * @return A CameraRenderData instance based on the given camera.
+     * @return A CameraFrameData instance based on the given camera.
      */
-    static CameraRenderData Create(const Camera& camera);
+    static CameraFrameData Create(const Camera& camera);
 
     Matrix4   projectionMatrix = Matrix4::Identity();           ///< Projection matrix transforming camera space to clip space.
     Matrix4   viewMatrix = Matrix4::Identity();                 ///< View matrix transforming world space to camera space.
@@ -39,5 +39,5 @@ namespace hc
     float     padding0 = 0.0f;
   };
 
-  static_assert(sizeof(CameraRenderData) % 16 == 0, "CameraRenderData must be 16-byte aligned");
+  static_assert(sizeof(CameraFrameData) % 16 == 0, "CameraFrameData must be 16-byte aligned");
 }

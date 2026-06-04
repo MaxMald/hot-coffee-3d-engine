@@ -8,7 +8,6 @@
 
 namespace hc
 {
-  struct CameraRenderData;
   class AMaterialDescriptor;
 
   /**

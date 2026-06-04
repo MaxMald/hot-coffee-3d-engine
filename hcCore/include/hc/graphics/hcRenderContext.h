@@ -1,6 +1,5 @@
 #pragma once
 
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc

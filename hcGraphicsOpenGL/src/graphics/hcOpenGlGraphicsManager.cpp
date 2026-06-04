@@ -86,7 +86,7 @@ namespace hc
     setViewport(viewportRect);
 
     m_lightFrameUBO.initialize(LightFrameData{});
-    m_cameraFrameUBO.initialize(CameraRenderData{});
+    m_cameraFrameUBO.initialize(CameraFrameData{});
     m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
     m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
   }
@@ -104,11 +104,11 @@ namespace hc
       m_gBuffer.clear(Color::Black()); // TODO - make this configurable
   }
 
-  void OpenGlGraphicsManager::uploadCameraRenderData(
-    const CameraRenderData& cameraRenderData
+  void OpenGlGraphicsManager::uploadCameraFrameData(
+    const CameraFrameData& cameraFrameData
   )
   {
-    CameraRenderData transposedCameraData = cameraRenderData;
+    CameraFrameData transposedCameraData = cameraFrameData;
     transposedCameraData.projectionMatrix.transpose();
     transposedCameraData.viewMatrix.transpose();
     m_cameraFrameUBO.upload(transposedCameraData);

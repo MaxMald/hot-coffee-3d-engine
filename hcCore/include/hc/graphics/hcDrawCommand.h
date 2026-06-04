@@ -3,7 +3,6 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
 #include "hc/graphics/resource/material/hcMaterialRenderMode.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc

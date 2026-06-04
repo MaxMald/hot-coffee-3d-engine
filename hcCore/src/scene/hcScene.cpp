@@ -2,6 +2,7 @@
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
+#include "hc/graphics/hcCameraFrameData.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
@@ -100,8 +101,7 @@ namespace hc
     }
 
     camera->update();
-    CameraRenderData cameraRenderData = CameraRenderData::Create(*camera);
-    graphicsManager.uploadCameraRenderData(cameraRenderData);
+    graphicsManager.uploadCameraFrameData(CameraFrameData::Create(*camera));
 
     // Gather light frame data and upload it to the graphics manager
 

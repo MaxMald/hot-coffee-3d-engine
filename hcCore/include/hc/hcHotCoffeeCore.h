@@ -54,7 +54,7 @@
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
-#include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/hcCameraFrameData.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 

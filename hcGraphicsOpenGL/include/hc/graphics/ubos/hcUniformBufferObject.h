@@ -164,5 +164,5 @@ namespace hc
   }
 
   using LightFrameUBO = UniformBufferObject<LightFrameData>;
-  using CameraFrameUBO = UniformBufferObject<CameraRenderData>;
+  using CameraFrameUBO = UniformBufferObject<CameraFrameData>;
 }
