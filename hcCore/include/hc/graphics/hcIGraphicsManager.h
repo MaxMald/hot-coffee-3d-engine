@@ -3,8 +3,8 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/window/hcIWindow.h"
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/graphics/hcIFrameBuffer.h"
 #include "hc/graphics/hcGraphicsBackendType.h"
 #include "hc/graphics/hcPolygonFillType.h"
 #include "hc/graphics/hcRenderPipelineType.h"
@@ -21,7 +21,7 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   struct GraphicsSettings;
-  struct CameraRenderData;
+  struct CameraFrameData;
   struct LightFrameData;
 
   /**
@@ -59,11 +59,11 @@ namespace hc
     virtual void beginFrame() = 0;
 
     /**
-     * @brief Updates the camera render data for the current frame.
+     * @brief Uploads the camera frame data for the current frame to the GPU.
      *
-     * @param cameraRenderData The camera render data for the current frame.
+     * @param cameraFrameData The camera frame data for the current frame.
      */
-    virtual void updateCameraRenderData(const CameraRenderData& cameraRenderData) = 0;
+    virtual void uploadCameraFrameData(const CameraFrameData& cameraFrameData) = 0;
 
     /**
      * @brief Uploads the aggregated light data for the current frame to the GPU.

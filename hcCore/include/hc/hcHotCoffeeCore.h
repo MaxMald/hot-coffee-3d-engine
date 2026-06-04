@@ -38,7 +38,6 @@
 #include "hc/serialization/hcFileFormats.h"
 #include "hc/serialization/hcSceneSerializer.h"
 #include "hc/graphics/hcPolygonFillType.h"
-#include "hc/graphics/hcIGBuffer.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
 #include "hc/graphics/resource/shader/hcIShader.h"
@@ -53,10 +52,12 @@
 #include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
 #include "hc/graphics/resource/mesh/hcIMeshManager.h"
 #include "hc/graphics/resource/mesh/hcIMesh.h"
-#include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
+#include "hc/graphics/hcCameraFrameData.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/graphics/hcIFrameBuffer.h"
+
 #include "hc/inputManager/hcInputManager.h"
 #include "hc/hcIGameLoopListener.h"
 

@@ -1,4 +1,4 @@
-#include "hc/graphics/hcIGBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
 
 namespace hc
 {

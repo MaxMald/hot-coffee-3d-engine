@@ -29,7 +29,7 @@ namespace hc
   {
     assertIsValid();
 
-    Vector3f cameraToModel = renderContext.modelPosition - renderContext.cameraRenderData.cameraWorldPosition;
+    Vector3f cameraToModel = renderContext.modelPosition - renderContext.cameraWorldPosition;
     float distanceToCamera = cameraToModel.length();
 
     const Vector<ModelSubMesh>& subMeshes = m_subMeshes;
@@ -84,9 +84,9 @@ namespace hc
 
     ModelSubMesh defaultSubMesh;
     defaultSubMesh.firstVertexIndex = 0;
-    defaultSubMesh.vertexCount = vertices.size();
+    defaultSubMesh.vertexCount = static_cast<UInt32>(vertices.size());
     defaultSubMesh.firstIndexIndex = 0;
-    defaultSubMesh.indexCount = indices.size();
+    defaultSubMesh.indexCount = static_cast<UInt32>(indices.size());
     defaultSubMesh.materialIndex = 0;
 
     m_subMeshes = { defaultSubMesh };
@@ -298,7 +298,6 @@ namespace hc
 
     DrawCommand command;
     command.initialize(
-      renderContext.cameraRenderData,
       renderContext.transform,
       material,
       distanceToCamera,

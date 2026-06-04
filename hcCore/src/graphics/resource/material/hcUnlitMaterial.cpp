@@ -3,7 +3,6 @@
 #include "hc/utilities/hcCoreAssertions.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 
 namespace hc
@@ -28,10 +27,7 @@ namespace hc
     return shadingType::Unlit;
   }
 
-  void UnlitMaterial::bind(
-    const CameraRenderData& cameraRenderData,
-    renderPassType::Type renderPass
-  )
+  void UnlitMaterial::bind(renderPassType::Type renderPass)
   {
     if (renderPass != renderPassType::Type::Forward)
       throw RuntimeErrorException(
@@ -43,8 +39,6 @@ namespace hc
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)

@@ -5,12 +5,13 @@
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
-#include "hc/graphics/hcOpenGlFrameBuffer.h"
 
 namespace hc
 {
+  static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
   static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
 
   OpenGlGraphicsManager::OpenGlGraphicsManager(
@@ -40,13 +41,13 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_currentCameraRenderData(),
     m_lightFrameUBO(),
+    m_cameraFrameUBO(),
     m_customRenderTarget(nullptr),
     m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
     m_gBuffer(),
-    m_deferredLightingShaderProgram(nullptr), // <- me quedé aquí
+    m_deferredLightingShaderProgram(nullptr),
     m_polygonFillType(polygonFillType::Solid),
     m_renderPipelineType(renderPipelineType::Forward)
   {}
@@ -77,13 +78,17 @@ namespace hc
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
     m_gBuffer.initialize(viewportRect.width, viewportRect.height);
-    m_lightFrameUBO.initialize();
     m_materialManager.initialize();
     m_deferredLightingShaderProgram = m_shaderProgramManager.getBuiltInShaderProgram(
       builtInShaderProgramType::DeferredLighting
     );
 
     setViewport(viewportRect);
+
+    m_lightFrameUBO.initialize(LightFrameData{});
+    m_cameraFrameUBO.initialize(CameraFrameData{});
+    m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
+    m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -99,15 +104,14 @@ namespace hc
       m_gBuffer.clear(Color::Black()); // TODO - make this configurable
   }
 
-  void OpenGlGraphicsManager::updateCameraRenderData(
-    const CameraRenderData& cameraRenderData
+  void OpenGlGraphicsManager::uploadCameraFrameData(
+    const CameraFrameData& cameraFrameData
   )
   {
-    m_currentCameraRenderData = cameraRenderData;
-
-    // TODO
-    // 
-    // Upload camera data to GPU via UBO
+    CameraFrameData transposedCameraData = cameraFrameData;
+    transposedCameraData.projectionMatrix.transpose();
+    transposedCameraData.viewMatrix.transpose();
+    m_cameraFrameUBO.upload(transposedCameraData);
   }
 
   void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
@@ -143,8 +147,6 @@ namespace hc
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    m_lightFrameUBO.bind(LIGHTS_BINDING_POINT);
-
     DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
     if (m_renderPipelineType == renderPipelineType::Forward)
@@ -282,6 +284,7 @@ namespace hc
     m_meshManager.clear();
     m_gBuffer.destroy();
     m_lightFrameUBO.destroy();
+    m_cameraFrameUBO.destroy();
   }
 
   void OpenGlGraphicsManager::executeForwardPass(
@@ -331,10 +334,7 @@ namespace hc
       const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(
-        command.cameraRenderData,
-        renderPassType::Type::DeferredGeometry
-      );
+      command.material->bind(renderPassType::Type::DeferredGeometry);
       command.material->updateModelMatrix(
         command.modelMatrix,
         renderPassType::Type::DeferredGeometry
@@ -367,7 +367,6 @@ namespace hc
     }
 
     m_deferredLightingShaderProgram->bind();
-    m_deferredLightingShaderProgram->setUniform("uCameraPosition", m_currentCameraRenderData.cameraWorldPosition);
     m_gBuffer.bindGTexturesForReading();
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
@@ -451,7 +450,7 @@ namespace hc
     {
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
+      command.material->bind(renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       // Pass 1: Render back faces first
@@ -481,7 +480,7 @@ namespace hc
         glDisable(GL_CULL_FACE);
 
       glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
+      command.material->bind(renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       glDrawElements(

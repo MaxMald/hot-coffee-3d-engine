@@ -3,7 +3,6 @@
 #include "hc/utilities/hcCoreAssertions.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
 
 namespace hc
@@ -36,10 +35,7 @@ namespace hc
     return shadingType::Type::BlinnPhong;
   }
 
-  void BlinnPhongMaterial::bind(
-    const CameraRenderData& cameraRenderData,
-    renderPassType::Type renderPass
-  )
+  void BlinnPhongMaterial::bind(renderPassType::Type renderPass)
   {
     assertIsValid();
 
@@ -48,9 +44,9 @@ namespace hc
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
 
     if (renderPassType::Type::Forward == renderPass)
-      bindForwardPass(cameraRenderData);
+      bindForwardPass();
     else if (renderPassType::Type::DeferredGeometry == renderPass)
-      bindDeferredGeometryPass(cameraRenderData);
+      bindDeferredGeometryPass();
     else
       throw InvalidArgumentException(
         String::Format(
@@ -197,7 +193,7 @@ namespace hc
       );
   }
 
-  void BlinnPhongMaterial::bindForwardPass(const CameraRenderData& cameraRenderData)
+  void BlinnPhongMaterial::bindForwardPass()
   {
     coreAssertions::AssertShaderProgramIsValid(
       m_forwardShaderProgram,
@@ -206,11 +202,8 @@ namespace hc
 
     m_forwardShaderProgram->bind();
 
-    m_forwardShaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
-    m_forwardShaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_forwardShaderProgram->setUniform("uColor", m_color);
     m_forwardShaderProgram->setUniform("uShininess", m_shininess);
-    m_forwardShaderProgram->setUniform("uCameraPosition", cameraRenderData.cameraWorldPosition);
 
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
       m_forwardShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
@@ -225,7 +218,7 @@ namespace hc
     m_forwardShaderProgram->setUniformTexture("uSpecularMap", 2);
   }
 
-  void BlinnPhongMaterial::bindDeferredGeometryPass(const CameraRenderData& cameraRenderData)
+  void BlinnPhongMaterial::bindDeferredGeometryPass()
   {
     coreAssertions::AssertShaderProgramIsValid(
       m_deferredGeometryShaderProgram,
@@ -234,8 +227,6 @@ namespace hc
 
     m_deferredGeometryShaderProgram->bind();
 
-    m_deferredGeometryShaderProgram->setUniform("uProjection", cameraRenderData.projectionMatrix);
-    m_deferredGeometryShaderProgram->setUniform("uView", cameraRenderData.viewMatrix);
     m_deferredGeometryShaderProgram->setUniform("uColor", m_color);
     m_deferredGeometryShaderProgram->setUniform("uShininess", m_shininess);
 

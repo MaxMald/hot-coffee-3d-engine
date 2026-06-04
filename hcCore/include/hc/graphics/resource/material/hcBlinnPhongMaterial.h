@@ -36,10 +36,7 @@ namespace hc
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(
-      const CameraRenderData& cameraRenderData,
-      renderPassType::Type renderPass
-    ) override;
+    void bind(renderPassType::Type renderPass) override;
 
     /**
      * @copydoc IMaterial::updateModelMatrix
@@ -166,7 +163,7 @@ namespace hc
     SharedPtr<IShaderProgram> m_deferredGeometryShaderProgram;
 
     void assertIsValid() const;
-    void bindForwardPass(const CameraRenderData& cameraRenderData);
-    void bindDeferredGeometryPass(const CameraRenderData& cameraRenderData);
+    void bindForwardPass();
+    void bindDeferredGeometryPass();
   };
 }

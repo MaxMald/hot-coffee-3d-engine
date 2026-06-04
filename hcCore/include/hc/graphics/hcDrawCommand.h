@@ -3,7 +3,6 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
 #include "hc/graphics/resource/material/hcMaterialRenderMode.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
@@ -28,11 +27,6 @@ namespace hc
    */
   struct HC_CORE_EXPORT DrawCommand
   {
-    /**
-     * Camera render data.
-     */
-    CameraRenderData cameraRenderData;
-
     /**
      * The model-to-world transformation matrix.
      */
@@ -73,7 +67,6 @@ namespace hc
      * Initializes the draw command with rendering data and generates
      * the sort key for proper rendering order.
      *
-     * @param cameraRenderData The camera render data to use for this draw command.
      * @param modelMatrix The model-to-world transformation matrix.
      * @param material The material to use for rendering.
      * @param distanceToCamera Distance from camera for depth sorting.
@@ -83,7 +76,6 @@ namespace hc
      * @param apiDrawData Graphics API-specific rendering data.
      */
     void initialize(
-      const CameraRenderData& cameraRenderData,
       const Matrix4& modelMatrix,
       SharedPtr<IMaterial> material,
       float distanceToCamera,
