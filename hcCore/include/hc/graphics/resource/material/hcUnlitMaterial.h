@@ -36,10 +36,7 @@ namespace hc
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(
-      const CameraRenderData& cameraRenderData,
-      renderPassType::Type renderPass
-    ) override;
+    void bind(renderPassType::Type renderPass) override;
 
     /**
      * @copydoc IMaterial::updateModelMatrix

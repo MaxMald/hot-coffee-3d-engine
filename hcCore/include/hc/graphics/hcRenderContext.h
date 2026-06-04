@@ -17,14 +17,15 @@ namespace hc
     static RenderContext Create(const Camera& camera, const Matrix4& modelTransform);
 
     /**
-     * @brief The render data for the camera.
-     */
-    CameraRenderData cameraRenderData;
-
-    /**
      * @brief The transform matrix for the rendered object.
      */
     Matrix4 transform = Matrix4::Identity();
+
+    /**
+     * @brief The position of the camera in world space, extracted from the camera's view
+     * matrix.
+     */
+    Vector3f cameraWorldPosition;
 
     /**
      * @brief The position of the model in world space, extracted from the transform.

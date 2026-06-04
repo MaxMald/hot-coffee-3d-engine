@@ -28,10 +28,7 @@ namespace hc
     return shadingType::Unlit;
   }
 
-  void UnlitMaterial::bind(
-    const CameraRenderData&,
-    renderPassType::Type renderPass
-  )
+  void UnlitMaterial::bind(renderPassType::Type renderPass)
   {
     if (renderPass != renderPassType::Type::Forward)
       throw RuntimeErrorException(

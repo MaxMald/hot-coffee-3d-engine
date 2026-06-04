@@ -29,7 +29,7 @@ namespace hc
   {
     assertIsValid();
 
-    Vector3f cameraToModel = renderContext.modelPosition - renderContext.cameraRenderData.cameraWorldPosition;
+    Vector3f cameraToModel = renderContext.modelPosition - renderContext.cameraWorldPosition;
     float distanceToCamera = cameraToModel.length();
 
     const Vector<ModelSubMesh>& subMeshes = m_subMeshes;
@@ -298,7 +298,6 @@ namespace hc
 
     DrawCommand command;
     command.initialize(
-      renderContext.cameraRenderData,
       renderContext.transform,
       material,
       distanceToCamera,

@@ -108,7 +108,10 @@ namespace hc
     const CameraRenderData& cameraRenderData
   )
   {
-    m_cameraFrameUBO.upload(cameraRenderData);
+    CameraRenderData transposedCameraData = cameraRenderData;
+    transposedCameraData.projectionMatrix.transpose();
+    transposedCameraData.viewMatrix.transpose();
+    m_cameraFrameUBO.upload(transposedCameraData);
   }
 
   void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
@@ -331,10 +334,7 @@ namespace hc
       const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(
-        command.cameraRenderData,
-        renderPassType::Type::DeferredGeometry
-      );
+      command.material->bind(renderPassType::Type::DeferredGeometry);
       command.material->updateModelMatrix(
         command.modelMatrix,
         renderPassType::Type::DeferredGeometry
@@ -450,7 +450,7 @@ namespace hc
     {
       glBindVertexArray(drawData.vao);
 
-      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
+      command.material->bind(renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       // Pass 1: Render back faces first
@@ -480,7 +480,7 @@ namespace hc
         glDisable(GL_CULL_FACE);
 
       glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraRenderData, renderPassType::Type::Forward);
+      command.material->bind(renderPassType::Type::Forward);
       command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
 
       glDrawElements(

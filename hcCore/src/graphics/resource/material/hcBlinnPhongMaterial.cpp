@@ -36,10 +36,7 @@ namespace hc
     return shadingType::Type::BlinnPhong;
   }
 
-  void BlinnPhongMaterial::bind(
-    const CameraRenderData& cameraRenderData,
-    renderPassType::Type renderPass
-  )
+  void BlinnPhongMaterial::bind(renderPassType::Type renderPass)
   {
     assertIsValid();
 
@@ -48,9 +45,9 @@ namespace hc
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
 
     if (renderPassType::Type::Forward == renderPass)
-      bindForwardPass(cameraRenderData);
+      bindForwardPass();
     else if (renderPassType::Type::DeferredGeometry == renderPass)
-      bindDeferredGeometryPass(cameraRenderData);
+      bindDeferredGeometryPass();
     else
       throw InvalidArgumentException(
         String::Format(
@@ -197,7 +194,7 @@ namespace hc
       );
   }
 
-  void BlinnPhongMaterial::bindForwardPass(const CameraRenderData&)
+  void BlinnPhongMaterial::bindForwardPass()
   {
     coreAssertions::AssertShaderProgramIsValid(
       m_forwardShaderProgram,
@@ -222,7 +219,7 @@ namespace hc
     m_forwardShaderProgram->setUniformTexture("uSpecularMap", 2);
   }
 
-  void BlinnPhongMaterial::bindDeferredGeometryPass(const CameraRenderData&)
+  void BlinnPhongMaterial::bindDeferredGeometryPass()
   {
     coreAssertions::AssertShaderProgramIsValid(
       m_deferredGeometryShaderProgram,
