@@ -21,8 +21,7 @@ namespace hc
     Matrix4 transform = Matrix4::Identity();
 
     /**
-     * @brief The position of the camera in world space, extracted from the camera's view
-     * matrix.
+     * @brief The position of the camera in world space.
      */
     Vector3f cameraWorldPosition;
 

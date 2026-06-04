@@ -159,6 +159,7 @@ namespace hc::editor
 
     RenderContext renderContext;
     renderContext.modelPosition = gameObject.getWorldPosition();
+    renderContext.cameraWorldPosition = camera.getPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
     Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
@@ -214,6 +215,7 @@ namespace hc::editor
 
     RenderContext renderContext;
     renderContext.modelPosition = gameObject.getWorldPosition();
+    renderContext.cameraWorldPosition = camera.getPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
     Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
@@ -251,6 +253,7 @@ namespace hc::editor
 
     RenderContext renderContext;
     renderContext.modelPosition = gameObject.getWorldPosition();
+    renderContext.cameraWorldPosition = camera.getPosition();
 
     Matrix4 cameraWorldTranslation = Matrix4::Translate(gameObject.getWorldPosition());
     Matrix4 cameraWorldRotation = gameObject.getWorldRotationMatrix();
