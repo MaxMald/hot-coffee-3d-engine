@@ -279,6 +279,7 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_deferredHybridRenderPipeline.destroy();
     m_materialManager.clear();
     m_textureManager.clear();
     m_shaderProgramManager.clear();

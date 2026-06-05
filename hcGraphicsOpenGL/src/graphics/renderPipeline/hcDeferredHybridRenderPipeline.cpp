@@ -1,4 +1,6 @@
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
+
+#include <GL/glew.h>
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
 
@@ -182,7 +184,7 @@ namespace hc
   )
   {
     glDrawElements(
-      drawMode,
+      static_cast<GLenum>(drawMode),
       static_cast<GLsizei>(command.indexCount),
       GL_UNSIGNED_INT,
       reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))

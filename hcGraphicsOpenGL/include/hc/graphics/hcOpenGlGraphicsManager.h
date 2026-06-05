@@ -1,14 +1,13 @@
 #pragma once
 
+#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <hc/graphics/resource/texture/hcTextureManager.h>
 #include <hc/graphics/resource/mesh/hcMeshManager.h>
 #include <hc/graphics/resource/material/hcMaterialManager.h>
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
-#include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
-#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
 
 namespace hc
