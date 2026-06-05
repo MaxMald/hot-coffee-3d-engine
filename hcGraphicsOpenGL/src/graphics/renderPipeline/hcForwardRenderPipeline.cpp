@@ -38,9 +38,11 @@ namespace hc
     GLboolean depthMaskEnabled;
     glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskEnabled);
 
-    GLint blendSrc, blendDst;
-    glGetIntegerv(GL_BLEND_SRC_ALPHA, &blendSrc);
-    glGetIntegerv(GL_BLEND_DST_ALPHA, &blendDst);
+    GLint blendSrcRGB, blendDstRGB, blendSrcAlpha, blendDstAlpha;
+    glGetIntegerv(GL_BLEND_SRC_RGB, &blendSrcRGB);
+    glGetIntegerv(GL_BLEND_DST_RGB, &blendDstRGB);
+    glGetIntegerv(GL_BLEND_SRC_ALPHA, &blendSrcAlpha);
+    glGetIntegerv(GL_BLEND_DST_ALPHA, &blendDstAlpha);
 
     // Set state for rendering transparent object
 
@@ -65,11 +67,17 @@ namespace hc
 
     // Restore previous state after rendering transparent object
 
-    if (blendEnabled) glEnable(GL_BLEND);
-    else glDisable(GL_BLEND);
-    
+    if (!blendEnabled)
+      glDisable(GL_BLEND);
+
+    glBlendFuncSeparate(
+      static_cast<GLenum>(blendSrcRGB),
+      static_cast<GLenum>(blendDstRGB),
+      static_cast<GLenum>(blendSrcAlpha),
+      static_cast<GLenum>(blendDstAlpha)
+    );
+
     glDepthMask(depthMaskEnabled);
-    glBlendFunc(blendSrc, blendDst);
   }
 
   void ForwardRenderPipeline::executeTransparentTwoSidedDrawCommand(
@@ -79,6 +87,8 @@ namespace hc
     // Save current state before rendering transparent object
 
     GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
+    GLint cullFaceMode;
+    glGetIntegerv(GL_CULL_FACE_MODE, &cullFaceMode);
 
     // Set state for rendering transparent object
 
@@ -102,8 +112,10 @@ namespace hc
 
     // Restore previous state after rendering transparent two-sided object
 
-    if (cullFaceEnabled) glEnable(GL_CULL_FACE);
-    else glDisable(GL_CULL_FACE);
+    if (!cullFaceEnabled)
+      glDisable(GL_CULL_FACE);
+
+    glCullFace(static_cast<GLenum>(cullFaceMode));
   }
 
   void ForwardRenderPipeline::executeOpaqueDrawCommand(const DrawCommand& command)
@@ -128,11 +140,13 @@ namespace hc
     const DrawCommand & command
   )
   {
-    // Save current state before rendering transparent object
+    // Save current state before rendering opaque object
 
     GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
+    GLint cullFaceMode;
+    glGetIntegerv(GL_CULL_FACE_MODE, &cullFaceMode);
 
-    // Set state for rendering transparent object
+    // Set state for rendering opaque object
 
     glDisable(GL_CULL_FACE);
 
@@ -146,8 +160,10 @@ namespace hc
 
     // Restore previous state after rendering opaque two-sided object
 
-    if (cullFaceEnabled) glEnable(GL_CULL_FACE);
-    else glDisable(GL_CULL_FACE);
+    if (cullFaceEnabled)
+      glEnable(GL_CULL_FACE);
+
+    glCullFace(static_cast<GLenum>(cullFaceMode));
   }
 
   void ForwardRenderPipeline::bindMaterialForDrawCommand(const DrawCommand & command)

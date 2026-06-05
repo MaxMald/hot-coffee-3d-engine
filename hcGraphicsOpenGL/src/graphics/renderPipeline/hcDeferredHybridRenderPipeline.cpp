@@ -144,8 +144,8 @@ namespace hc
     unbindMaterialForDrawCommand(command);
     glBindVertexArray(0);
 
-    if (!cullFaceEnabled) glEnable(GL_CULL_FACE);
-    else glDisable(GL_CULL_FACE);
+    if (cullFaceEnabled)
+      glEnable(GL_CULL_FACE);
   }
 
   void DeferredHybridRenderPipeline::executeDeferredLightingPass()
