@@ -62,6 +62,16 @@ namespace hc
       aiTextureType textureType
     );
 
+    // Blinn-Phong specific properties
     static float GetShininessFromMaterial(const aiMaterial* material);
+
+    // Common Properties
+    static void ParseCommonMaterialPropertiesFromMaterial(
+      const aiMaterial* material,
+      SharedPtr<AMaterialDescriptor>& materialDescriptor
+    );
+    static bool GetDoubleSidedFromMaterial(const aiMaterial* material);
+    static materialRenderMode::Type GetRenderModeFromMaterial(const aiMaterial* material);
+    static float GetAlphaCutoutThresholdFromMaterial(const aiMaterial* material);
   };
 }
