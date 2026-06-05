@@ -1,12 +1,13 @@
 #pragma once
 
+#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <hc/graphics/resource/texture/hcTextureManager.h>
 #include <hc/graphics/resource/mesh/hcMeshManager.h>
 #include <hc/graphics/resource/material/hcMaterialManager.h>
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
-#include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
-#include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
+#include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
 
 namespace hc
@@ -155,12 +156,11 @@ namespace hc
     IFrameBuffer* m_customRenderTarget;
 
     Vector<DrawCommand> m_queueDrawCommands;
-    Vector<DrawCommand> m_deferredGeometryPassCommands;
-    Vector<DrawCommand> m_deferredForwardPassCommands;
 
     Rect<UInt32> m_viewportRect;
-    OpenGlGBuffer m_gBuffer;
-    SharedPtr<IShaderProgram> m_deferredLightingShaderProgram;
+
+    ForwardRenderPipeline m_forwardRenderPipeline;
+    DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
 
     polygonFillType::Type m_polygonFillType;
     renderPipelineType::Type m_renderPipelineType;
@@ -170,9 +170,6 @@ namespace hc
      */
     void destroy() override;
 
-    void executeForwardPass(const Vector<DrawCommand>& drawCommands);
-    void executeDeferredGeometryPass(const Vector<DrawCommand>& drawCommands);
-    void executeDeferredLightingPass();
     void executeDeferredForwardPass(const Vector<DrawCommand>& drawCommands);
 
     void executeDrawCommand(const DrawCommand& command);
