@@ -103,10 +103,13 @@ namespace hc
   {
     float shininess = 0.0f;
     bool hasShininess = material->Get(AI_MATKEY_SHININESS, shininess) == aiReturn_SUCCESS;
-    if (hasShininess)
-      shininess = shininess * 2.56f; // Shininess is usually in the range [0, 100], so we scale it to [0, 256]
-    else
-      shininess = 16.0f;
+    if (!hasShininess)
+      return 16.0f;
+
+    // Blender FBX exports shininess as (1 - roughness)^2 * 100.
+    // sqrt(x / 100) undoes the squaring, recovering the linear [0, 1]
+    // shininess factor, which is then scaled to the Phong exponent range.
+    shininess = Math::Sqrt(shininess / 100.0f) * 256.0f;
 
     return Math::Clamp(shininess, 1.0f, 256.0f);
   }
