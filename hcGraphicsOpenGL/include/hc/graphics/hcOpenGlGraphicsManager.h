@@ -1,11 +1,14 @@
 #pragma once
 
+#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <hc/graphics/resource/texture/hcTextureManager.h>
 #include <hc/graphics/resource/mesh/hcMeshManager.h>
 #include <hc/graphics/resource/material/hcMaterialManager.h>
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
-#include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
+#include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
+#include "hc/graphics/ubos/hcUniformBufferObject.h"
 
 namespace hc
 {
@@ -20,9 +23,42 @@ namespace hc
     virtual ~OpenGlGraphicsManager();
 
     /**
+     * @copydoc IGraphicsManager::initialize
+     */
+    void initialize(
+      const GraphicsSettings& graphicsSettings,
+      const Rect<UInt32>& viewportRect
+    ) override;
+
+    /**
+     * @copydoc IGraphicsManager::getGraphicsBackendType
+     */
+    graphicsBackendType::Type getGraphicsBackendType() const override;
+
+    /**
      * @copydoc IGraphicsManager::beginFrame
      */
     void beginFrame() override;
+
+    /**
+     * @copydoc IGraphicsManager::uploadCameraFrameData
+     */
+    void uploadCameraFrameData(const CameraFrameData& cameraFrameData) override;
+
+    /**
+     * @copydoc IGraphicsManager::uploadLightFrameData
+     */
+    void uploadLightFrameData(const LightFrameData& lightFrameData) override;
+
+    /**
+     * @copydoc IGraphicsManager::setRenderTarget
+     */
+    void setRenderTarget(IFrameBuffer* frameBuffer) override;
+
+    /**
+     * @copydoc IGraphicsManager::getRenderTarget
+     */
+    IFrameBuffer* getRenderTarget() const override;
 
     /**
      * @copydoc IGraphicsManager::draw
@@ -30,7 +66,7 @@ namespace hc
     void draw(const DrawCommand& command) override;
 
     /**
-     * @copydoc IGraphicsManager::executeDrawCommands
+     * @copydoc IGraphicsManager::executeDrawCommands()
      */
     void executeDrawCommands() override;
 
@@ -38,6 +74,26 @@ namespace hc
      * @copydoc IGraphicsManager::endFrame
      */
     void endFrame(IWindow&) override;
+
+    /**
+     * @copydoc IGraphicsManager::setPolygonFillType
+     */
+    void setPolygonFillType(polygonFillType::Type fillType) override;
+
+    /**
+     * @copydoc IGraphicsManager::getPolygonFillType
+     */
+    polygonFillType::Type getPolygonFillType() const override;
+
+    /**
+     * @copydoc IGraphicsManager::setRenderPipelineType
+     */
+    void setRenderPipelineType(renderPipelineType::Type renderPipelineType) override;
+
+    /**
+     * @copydoc IGraphicsManager::getRenderPipelineType
+     */
+    renderPipelineType::Type getRenderPipelineType() const override;
 
     /**
      * @copydoc IGraphicsManager::getTextureManager
@@ -64,6 +120,29 @@ namespace hc
      */
     IMeshManager& getMeshManager() override;
 
+    /**
+     * @copydoc IGraphicsManager::getGBuffer
+     */
+    IGBuffer& getGBuffer() override;
+
+    /**
+     * @copydoc IGraphicsManager::createFrameBuffer
+     */
+    FrameBufferPtr createFrameBuffer(
+      UInt32 width,
+      UInt32 height
+    ) override;
+
+    /**
+     * @copydoc IGraphicsManager::setViewport
+     */
+    void setViewport(const Rect<UInt32>& viewportRect) override;
+
+    /**
+     * @copydoc IGraphicsManager::getViewportRect
+     */
+    Rect<UInt32> getViewportRect() const override;
+
   private:
     IAssetManager& m_assetManager;
     IWindow& m_window;
@@ -72,19 +151,29 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
-    Vector<DrawCommand> m_drawCommands;
+    LightFrameUBO m_lightFrameUBO;
+    CameraFrameUBO m_cameraFrameUBO;
+    IFrameBuffer* m_customRenderTarget;
 
-    /**
-     * @copydoc IGraphicsManager::initialize
-     */
-    void initialize() override;
+    Vector<DrawCommand> m_queueDrawCommands;
+
+    Rect<UInt32> m_viewportRect;
+
+    ForwardRenderPipeline m_forwardRenderPipeline;
+    DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
+
+    polygonFillType::Type m_polygonFillType;
+    renderPipelineType::Type m_renderPipelineType;
 
     /**
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
 
+    void executeDeferredForwardPass(const Vector<DrawCommand>& drawCommands);
+
     void executeDrawCommand(const DrawCommand& command);
+    bool isValidDrawCommand(const DrawCommand& drawCommand, String& errorMessage);
 
     friend class OpenGlGraphicsPlugin;
   };

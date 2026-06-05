@@ -6,7 +6,10 @@ namespace
   constexpr const hc::Char* COMPONENT_TYPES[] =
   {
     "Mesh",
-    "Camera"
+    "Camera",
+    "OmniLight",
+    "SpotLight",
+    "DirectionalLight"
   };
 }
 
@@ -51,12 +54,12 @@ namespace hc::editor
       return;
     }
 
-    componentType::Type selectedType = componentType::FromString(
-      COMPONENT_TYPES[m_selectedComponentTypeIndex]
-    );
-
     try
     {
+      componentType::Type selectedType = componentType::FromString(
+        COMPONENT_TYPES[m_selectedComponentTypeIndex]
+      );
+
       switch (selectedType)
       {
       case componentType::Type::Mesh:
@@ -64,6 +67,15 @@ namespace hc::editor
         break;
       case componentType::Type::Camera:
         createComponent<CameraComponent>(gameObject);
+        break;
+      case componentType::Type::OmniLight:
+        createComponent<OmniLightComponent>(gameObject);
+        break;
+      case componentType::Type::SpotLight:
+        createComponent<SpotLightComponent>(gameObject);
+        break;
+      case componentType::Type::DirectionalLight:
+        createComponent<DirectionalLightComponent>(gameObject);
         break;
       default:
         LogService::Error(

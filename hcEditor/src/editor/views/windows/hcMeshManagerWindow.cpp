@@ -9,6 +9,10 @@ namespace hc::editor
   {
   }
 
+  void MeshManagerWindow::destroy()
+  {
+  }
+
   void MeshManagerWindow::onDraw()
   {
     const Vector<SharedPtr<IMesh>>& meshes = m_meshManager.getMeshes();
@@ -31,18 +35,13 @@ namespace hc::editor
   void MeshManagerWindow::drawMeshInfo(const SharedPtr<IMesh>& mesh)
   {
     const Vector<SharedPtr<IMaterial>>& materials = mesh->getMaterials();
-    const Vector<ModelSubMesh>& subMeshes = mesh->getModel()->getSubMeshes();
-    
-    ImGui::Text("Model ID: %s", mesh->getModel()->getId().toString().c_str());
+
+    String path = mesh->getSourcePath().empty() ? "N/A" : mesh->getSourcePath().generic_string();
+    ImGui::Text("Source Path: %s", path.c_str());
     ImGui::Separator();
     if (ImGui::TreeNode("Materials"))
     {
       drawMaterialsInfo(materials);
-      ImGui::TreePop();
-    }
-    if (ImGui::TreeNode("SubMeshes"))
-    {
-      drawSubMeshesInfo(subMeshes);
       ImGui::TreePop();
     }
   }
@@ -67,46 +66,6 @@ namespace hc::editor
 
       ImGui::TableSetColumnIndex(1);
       ImGui::Text("%s", material->getId().toString().c_str());
-    }
-    ImGui::EndTable();
-  }
-
-  void MeshManagerWindow::drawSubMeshesInfo(
-    const Vector<ModelSubMesh>& subMeshes
-  )
-  {
-    ImGui::BeginTable("SubMeshes", 6, ImGuiTableFlags_Borders);
-
-    ImGui::TableSetupColumn("Index", ImGuiTableColumnFlags_WidthFixed, 100.0f);
-    ImGui::TableSetupColumn("Material Index", ImGuiTableColumnFlags_WidthFixed, 100.0f);
-    ImGui::TableSetupColumn("First Vertex Index");
-    ImGui::TableSetupColumn("Vertex Count");
-    ImGui::TableSetupColumn("First Index Index");
-    ImGui::TableSetupColumn("Index Count");
-    ImGui::TableHeadersRow();
-
-    for (int row = 0; row < subMeshes.size(); ++row)
-    {
-      const ModelSubMesh& subMesh = subMeshes[row];
-      ImGui::TableNextRow();
-
-      ImGui::TableSetColumnIndex(0);
-      ImGui::Text("%d", row);
-
-      ImGui::TableSetColumnIndex(1);
-      ImGui::Text("%d", subMesh.materialIndex);
-
-      ImGui::TableSetColumnIndex(2);
-      ImGui::Text("%d", subMesh.firstVertexIndex);
-
-      ImGui::TableSetColumnIndex(3);
-      ImGui::Text("%d", subMesh.vertexCount);
-
-      ImGui::TableSetColumnIndex(4);
-      ImGui::Text("%d", subMesh.firstIndexIndex);
-
-      ImGui::TableSetColumnIndex(5);
-      ImGui::Text("%d", subMesh.indexCount);
     }
     ImGui::EndTable();
   }

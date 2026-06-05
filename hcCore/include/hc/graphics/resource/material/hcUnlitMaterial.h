@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/graphics/resource/material/hcIMaterial.h"
+#include "hc/graphics/resource/material/hcAMaterial.h"
 
 namespace hc
 {
@@ -11,7 +11,7 @@ namespace hc
   /**
    * @brief Represents a material that is rendered without lighting effects.
    */
-  class HC_CORE_EXPORT UnlitMaterial : public IMaterial
+  class HC_CORE_EXPORT UnlitMaterial : public AMaterial
   {
   public:
     /**
@@ -24,16 +24,6 @@ namespace hc
     ~UnlitMaterial() override;
 
     /**
-     * @copydoc IMaterial::getId
-     */
-    const Id& getId() const override;
-
-    /**
-     * @copydoc IMaterial::getMaterialId
-     */
-    UInt16 getMaterialId() const override;
-
-    /**
      * @copydoc IMaterial::destroy
      */
     void destroy() override;
@@ -44,29 +34,17 @@ namespace hc
     shadingType::Type getShaderType() const override;
 
     /**
-     * @copydoc IMaterial::getRenderMode
-     */
-    materialRenderMode::Type getRenderMode() const override;
-
-    /**
-     * @copydoc IMaterial::isTransparent
-     */
-    bool isTransparent() const override;
-
-    /**
-     * @copydoc IMaterial::isAlphaCutout
-     */
-    bool isAlphaCutout() const;
-
-    /**
      * @copydoc IMaterial::bind
      */
-    void bind(const CameraMatrices& cameraMatrices) override;
+    void bind(renderPassType::Type renderPass) override;
 
     /**
      * @copydoc IMaterial::updateModelMatrix
      */
-    void updateModelMatrix(const Matrix4& modelMatrix) override;
+    void updateModelMatrix(
+      const Matrix4& modelMatrix,
+      renderPassType::Type renderPass
+    ) override;
 
     /**
      * @copydoc IMaterial::unbind
@@ -74,40 +52,54 @@ namespace hc
     void unbind() override;
 
     /**
-     * @copydoc IMaterial::getDescriptor
+     * @copydoc IMaterial::isValid
      */
-    SharedPtr<AMaterialDescriptor> getDescriptor() const override;
+    bool isValid() const override;
 
     /**
      * @brief Initializes the unlit material with a descriptor and main texture.
      *
-     * @param descriptor Shared pointer to the unlit material descriptor.
+     * @param descriptor Reference to the unlit material descriptor.
+     * @param shaderProgram Shared pointer to the shader program used for rendering the
+     * material.
      * @param mainTexture Shared pointer to the main texture (can be nullptr).
      */
     void initialize(
+      const UnlitMaterialDescriptor& descriptor,
       const SharedPtr<IShaderProgram>& shaderProgram,
-      const SharedPtr<UnlitMaterialDescriptor>& descriptor,
       const SharedPtr<ITexture>& mainTexture
     );
 
     /**
      * @brief Gets the color property of the material.
-     * 
+     *
      * @return The color used by the material.
      */
     const Color& getColor() const;
 
     /**
+     * @brief Sets the color property of the material.
+     *
+     * @param color The new color to use for the material.
+     */
+    void setColor(const Color& color);
+
+    /**
      * @brief Gets the main texture used by the material.
-     * 
+     *
      * @return Shared pointer to the main texture, or nullptr if not set.
      */
     const SharedPtr<ITexture>& getMainTexture() const;
 
+    /**
+     * @brief Sets the main texture for the material.
+     *
+     * @param mainTexture Shared pointer to the new main texture (can be nullptr).
+     */
+    void setMainTexture(const SharedPtr<ITexture>& mainTexture);
+
   private:
-    Id m_id;
-    UInt16 m_materialId;
-    SharedPtr<UnlitMaterialDescriptor> m_descriptor;
+    Color m_color;
     SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;
   };

@@ -19,6 +19,11 @@ namespace hc::editor
     virtual ~FileDialogView() = default;
 
     /**
+     * @copydoc IView::update
+     */
+    void update(const Time& elapsedTime) override;
+
+    /**
      * @brief Draws the file dialog view and handles dialog rendering.
      */
     void draw() override;

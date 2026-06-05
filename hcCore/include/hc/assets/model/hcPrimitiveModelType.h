@@ -15,6 +15,7 @@ namespace hc
       Cylinder,
       Plane,
       Pyramid,
+      ConeNoBase,
       Count
     };
 

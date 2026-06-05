@@ -2,13 +2,14 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/scene/hcSceneGraph.h"
-#include "hc/scene/light/hcLightManager.h"
 #include "hc/scene/camera/hcCameraManager.h"
+#include "hc/graphics/lightFrameData/hcLightFrameData.h"
 
 namespace hc
 {
   class IGameObjectFactory;
   class SceneManager;
+  class IGraphicsManager;
 
   /**
    * @brief Represents a 3D scene containing game objects, lights, and cameras.
@@ -85,20 +86,6 @@ namespace hc
     const SceneGraph& getSceneGraph() const;
 
     /**
-     * @brief Gets a reference to the light manager.
-     *
-     * @return Reference to the LightManager.
-     */
-    LightManager& getLightManager();
-
-    /**
-     * @brief Gets a const reference to the light manager.
-     *
-     * @return Const reference to the LightManager.
-     */
-    const LightManager& getLightManager() const;
-
-    /**
      * @brief Gets a reference to the camera manager.
      *
      * @return Reference to the CameraManager.
@@ -111,6 +98,22 @@ namespace hc
      * @return Const reference to the CameraManager.
      */
     const CameraManager& getCameraManager() const;
+
+    /**
+     * @brief Draws the scene using the active camera. If no active camera is set,
+     * the default camera will be used.
+     * 
+     * @param graphicsManager The graphics manager to use for drawing the scene.
+     */
+    void draw(IGraphicsManager& graphicsManager);
+
+    /**
+     * @brief Draws the scene using the specified camera.
+     *
+     * @param graphicsManager The graphics manager to use for drawing the scene.
+     * @param camera The camera to use for drawing the scene.
+     */
+    void draw(IGraphicsManager& graphicsManager, Camera* camera);
 
     /**
      * @brief Clears the scene graph, lights, and cameras.
@@ -220,8 +223,8 @@ namespace hc
 
   private:
     SceneGraph m_sceneGraph;
-    LightManager m_lightManager;
     CameraManager m_cameraManager;
+    LightFrameData m_lightFrameData;
     IGameObjectFactory* m_gameObjectFactory;
 
     /**
@@ -241,11 +244,6 @@ namespace hc
      * @brief Deactivates the scene.
      */
     void deactivate();
-
-    /**
-     * @brief Draws the scene using the active or default camera.
-     */
-    void draw();
 
     /**
      * @brief Updates the scene and its game objects.

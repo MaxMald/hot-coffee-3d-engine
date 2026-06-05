@@ -17,6 +17,14 @@ namespace hc
     virtual ~IShader() = default;
 
     /**
+     * @brief Initializes the shader with the specified stage type and source code.
+     *
+     * @param stageType The type of shader stage (e.g., vertex, fragment).
+     * @param source The source code of the shader.
+     */
+    virtual void initialize(shaderStageType::Type stageType, const String& source) = 0;
+
+    /**
      * @brief Returns the stage type of the shader.
      *
      * @return The shader stage type (e.g., vertex, fragment).
@@ -24,15 +32,10 @@ namespace hc
     virtual shaderStageType::Type getStageType() const = 0;
 
     /**
-     * @brief Checks if the shader is compiled.
-     * 
-     * @return True if the shader is compiled, false otherwise.
+     * @brief Checks if the shader is valid and can be used in a shader program.
+     *
+     * @return True if the shader is valid, false otherwise.
      */
-    virtual bool isCompiled() const = 0;
-
-    /**
-     * @brief Compiles the shader.
-     */
-    virtual void compile() = 0;
+    virtual bool isValid() const = 0;
   };
 }

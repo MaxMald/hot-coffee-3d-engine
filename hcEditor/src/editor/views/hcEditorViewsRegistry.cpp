@@ -6,10 +6,10 @@
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
 #include "hc/editor/views/windows/hcProjectBrowserWindow.h"
 #include "hc/editor/views/windows/gameObjectEditor/hcGameObjectEditorWindow.h"
-#include "hc/editor/views/windows/hcLightManagerWindow.h"
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 #include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
+#include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
 #include "hc/editor/views/mainMenuBar/hcMainMenuBarFactory.h"
@@ -17,6 +17,7 @@
 #include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/services/hcEditorServiceManager.h"
@@ -43,8 +44,9 @@ namespace hc::editor
         hotCoffeeEngine.getSceneManager(),
         editorServiceManager.getService<GameObjectSelectionService>()
       ));
-      viewsManager.registerView(MakeUnique<LightManagerWindow>(
-        hotCoffeeEngine.getSceneManager()
+      viewsManager.registerView(MakeUnique<SceneViewportWindow>(
+        hotCoffeeEngine,
+        editorServiceManager.getService<GameObjectSelectionService>()
       ));
       viewsManager.registerView(MakeUnique<CameraManagerWindow>(
         hotCoffeeEngine.getSceneManager()
@@ -88,6 +90,9 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<MaterialManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getMaterialManager(),
         materialDrawerManagerFactory::create()
+      ));
+      viewsManager.registerView(MakeUnique<GraphicsWindow>(
+        hotCoffeeEngine.getGraphicsManager()
       ));
 
       viewsManager.registerView(

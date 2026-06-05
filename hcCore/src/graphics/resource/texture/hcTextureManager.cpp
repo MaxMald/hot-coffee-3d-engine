@@ -19,6 +19,20 @@ namespace hc
   {
   }
 
+  SharedPtr<ITexture> TextureManager::createTexture()
+  {
+    SharedPtr<ITexture> texture = m_textureFactory->createTexture();
+    if (!texture)
+    {
+      LogService::Error("Failed to create empty texture.");
+      return nullptr;
+    }
+
+    m_textures.push_back(texture);
+    return texture;
+  }
+
+
   SharedPtr<ITexture> TextureManager::createTextureFromImage(
     SharedPtr<Image> image
   )

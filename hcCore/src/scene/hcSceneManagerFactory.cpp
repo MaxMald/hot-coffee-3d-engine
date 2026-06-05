@@ -14,7 +14,7 @@ namespace hc
       IAssetManager& assetManager
     )
     {
-      UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>();
+      UniquePtr<SceneManager> sceneManager = MakeUnique<SceneManager>(graphicsManager);
       UniquePtr<ComponentFactoriesManager> componentFactoriesManager =
         MakeUnique<ComponentFactoriesManager>();
 

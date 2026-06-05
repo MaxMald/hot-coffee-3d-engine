@@ -18,7 +18,7 @@ namespace hc
   public:
     /**
      * @brief Constructs a buffer with the given size.
-     * 
+     *
      * @param size Number of elements to allocate.
      */
     Buffer(SizeT size);
@@ -34,7 +34,7 @@ namespace hc
     /**
      * @brief Initializes the buffer with data from a source pointer. Allocates
      * and copies the given number of elements.
-     * 
+     *
      * @param src Pointer to source data.
      * @param count Number of elements to copy.
      */
@@ -43,7 +43,7 @@ namespace hc
     /**
      * @brief Initializes the buffer by taking ownership of an existing buffer.
      * No copy is performed; ownership is transferred.
-     * 
+     *
      * @param src Unique pointer to the source buffer.
      * @param count Number of elements in the buffer.
      */
@@ -51,14 +51,14 @@ namespace hc
 
     /**
      * @brief Returns a pointer to the buffer data.
-     * 
+     *
      * @return Pointer to the buffer data.
      */
     T* data();
 
     /**
      * @brief Returns a const pointer to the buffer data.
-     * 
+     *
      * @return Const pointer to the buffer data.
      */
     const T* data() const;
@@ -68,6 +68,14 @@ namespace hc
      * @return Buffer size.
      */
     SizeT size() const;
+
+    /**
+     * @brief Resets the buffer with a new size. Allocates memory for the
+     * given number of elements, but does not initialize them.
+     *
+     * @param size Number of elements to allocate.
+     */
+    void reset(SizeT size);
 
   protected:
     UniquePtr<T[]> m_data;
@@ -170,6 +178,13 @@ namespace hc
   SizeT Buffer<T>::size() const
   {
     return m_size;
+  }
+
+  template<typename T>
+  inline void Buffer<T>::reset(SizeT size)
+  {
+    m_data.reset(size ? new T[size] : nullptr);
+    m_size = size;
   }
 
   using BufferByte = Buffer<Byte>;

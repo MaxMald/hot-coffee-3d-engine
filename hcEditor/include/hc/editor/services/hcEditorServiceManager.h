@@ -71,9 +71,10 @@ namespace hc::editor
     void update(const Time& elapsedTime);
 
     /**
-     * @brief Removes all registered services.
+     * @brief Destroys all registered services by calling their destroy() method and
+     * clears the service registry.
      */
-    void clear();
+    void destroy();
 
   private:
     ServiceManager<IEditorService> m_serviceManager;

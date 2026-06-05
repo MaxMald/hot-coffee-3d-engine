@@ -72,6 +72,13 @@ namespace hc
      */
     SharedPtr<Model> createPyramid();
 
+    /**
+     * Creates a cone model without a base, with default dimensions.
+     *
+     * @return A shared pointer to the created cone model without a base.
+     */
+    SharedPtr<Model> createConeNoBase();
+
   private:
     IMaterialDescriptorAssetManager& m_materialDescriptorAssetManager;
   };

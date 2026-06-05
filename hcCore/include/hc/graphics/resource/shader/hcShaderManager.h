@@ -11,12 +11,9 @@ namespace hc
    * @brief Manages shader resources and their creation, caching, and retrieval.
    *
    * Provides functionality for creating shaders from files or string content,
-   * caching shader instances, and accessing default shaders. Implements the
-   * IShaderManager interface and uses ResourcesCache for shader caching.
+   * caching shader instances, and accessing built-in shaders.
    */
-  class HC_CORE_EXPORT ShaderManager :
-    public IShaderManager,
-    private ResourcesCache<String, IShader>
+  class HC_CORE_EXPORT ShaderManager : public IShaderManager
   {
   public:
     /**
@@ -29,14 +26,7 @@ namespace hc
     ~ShaderManager() override;
 
     /**
-     * @brief Creates a shader from the specified file path. Returns a cached
-     * instance if it already exists.
-     *
-     * @param shaderPath Path to the shader file.
-     * @param type The type of the shader stage.
-     *
-     * @return Shared pointer to the created or cached shader, or nullptr on
-     * failure.
+     * @copydoc IShaderManager::createShaderFromFile
      */
     SharedPtr<IShader> createShaderFromFile(
       const Path& shaderPath,
@@ -44,15 +34,7 @@ namespace hc
     ) override;
 
     /**
-     * @brief Creates a shader from the given string content. Returns a cached
-     * instance if it already exists.
-     *
-     * @param shaderKey Unique key identifying the shader.
-     * @param shaderCode The source code of the shader.
-     * @param type The type of the shader stage.
-     *
-     * @return Shared pointer to the created or cached shader, or nullptr on
-     * failure.
+     * @copydoc IShaderManager::createShaderFromString
      */
     SharedPtr<IShader> createShaderFromString(
       const String& shaderKey,
@@ -61,31 +43,19 @@ namespace hc
     ) override;
 
     /**
-     * @brief Retrieves a cached shader by its key.
-     *
-     * @param shaderKey Unique key identifying the shader.
-     *
-     * @return Shared pointer to the cached shader, or nullptr if not found.
+     * @copydoc IShaderManager::getShader
      */
-    SharedPtr<IShader> getShader(
-      const String& shaderKey
-    ) const override;
+    SharedPtr<IShader> getShader(const String& shaderKey) const override;
 
     /**
-     * @brief Retrieves the default vertex shader. If it does not exist, creates
-     * and caches it before returning.
-     *
-     * @return Shared pointer to the default vertex shader.
+     * @copydoc IShaderManager::hasShader
      */
-    SharedPtr<IShader> getDefaultVertexShader() override;
+    bool hasShader(const String& shaderKey) const override;
 
     /**
-     * @brief Retrieves the unlit fragment shader. If it does not exist, creates
-     * and caches it before returning.
-     *
-     * @return Shared pointer to the unlit fragment shader.
+     * @copydoc IShaderManager::getBuiltInShader
      */
-    SharedPtr<IShader> getUnlitFragmentShader() override;
+    SharedPtr<IShader> getBuiltInShader(const builtInShaderType::Type type) override;
 
     /**
      * @brief Clears all cached shaders from the manager.
@@ -94,8 +64,7 @@ namespace hc
 
   private:
     UniquePtr<IShaderFactory> m_shaderFactory;
-
-    void createDefaultVertexShader();
-    void createUnlitFragmentShader();
+    UnorderedMap<builtInShaderType::Type, SharedPtr<IShader>> m_builtInShaders;
+    UnorderedMap<String, SharedPtr<IShader>> m_customShaders;
   };
 }

@@ -28,12 +28,10 @@ namespace hc
     m_frameClock(),
     m_eventListeners(),
     m_initialized(false)
-  {
-  }
+  {}
 
   HotCoffeeEngine::~HotCoffeeEngine()
-  {
-  }
+  {}
 
   const PluginManager& HotCoffeeEngine::getPluginManager() const
   {
@@ -114,7 +112,7 @@ namespace hc
       JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
-                 
+
       m_assetManager = &(AssetManagerPluginAccessor::GetAssetManager(m_pluginManager));
       m_windowManager = &(WindowManagerPluginAccessor::GetWindowManager(m_pluginManager));
       m_windowManager->createWindow(settings.windowSettings);
@@ -124,7 +122,15 @@ namespace hc
         m_windowManager->getWindow(),
         *m_assetManager
       ));
-      m_graphicsManager->initialize();
+      m_graphicsManager->initialize(
+        settings.graphicsSettings,
+        Rect<UInt32>(
+          0,
+          0,
+          settings.windowSettings.width,
+          settings.windowSettings.height
+        )
+      );
 
       m_sceneManager = SceneManagerFactory::create(
         *m_graphicsManager,
@@ -158,6 +164,13 @@ namespace hc
       );
     }
 
+    run();
+  }
+
+  void HotCoffeeEngine::run()
+  {
+    assertEngineIsInitialized();
+
     IWindow& window = m_windowManager->getWindow();
     m_frameClock.start();
 
@@ -183,8 +196,17 @@ namespace hc
             break;
       }
 
-      m_sceneManager->update(m_frameClock.getElapsedTime());
+      Time elapsedTime = m_frameClock.getElapsedTime();
+
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onBeforeSceneUpdate(elapsedTime);
+
+      m_sceneManager->update(elapsedTime);
       m_graphicsManager->beginFrame();
+
+      for (IGameLoopListener* listener : m_eventListeners)
+        listener->onBeforeSceneRender();
+
       m_sceneManager->draw();
       m_graphicsManager->executeDrawCommands();
 

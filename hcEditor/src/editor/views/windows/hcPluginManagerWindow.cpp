@@ -15,6 +15,10 @@ namespace hc::editor
   {
   }
 
+  void PluginManagerWindow::destroy()
+  {
+  }
+
   void PluginManagerWindow::onDraw()
   {
     const UnorderedMap<String, SharedPtr<IPluginSlot>>& pluginSlots =

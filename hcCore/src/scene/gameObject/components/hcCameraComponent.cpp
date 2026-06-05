@@ -20,6 +20,41 @@ namespace hc
     cameraManager.destroyCamera(m_camera->getUUID());
   }
 
+  void CameraComponent::serialize(BinaryWriter& writer) const
+  {
+    ABaseComponent::serialize(writer);
+
+    bool hasCamera = (m_camera != nullptr);
+    writer.writeBool(hasCamera);
+
+    if (hasCamera)
+      m_camera->getUUID().serialize(writer);
+  }
+
+  void CameraComponent::deserialize(BinaryReader& reader)
+  {
+    ABaseComponent::deserialize(reader);
+
+    bool hasCamera = reader.readBool();
+    if (hasCamera)
+    {
+      UUID cameraId;
+      cameraId.deserialize(reader);
+      CameraManager& cameraManager = getCameraManager();
+      m_camera = cameraManager.getCamera(cameraId);
+
+      if (!m_camera)
+        throw RuntimeErrorException(
+          "Failed to deserialize CameraComponent: Camera with ID " +
+          cameraId.toString() + " not found."
+        );
+    }
+    else
+    {
+      m_camera = nullptr;
+    }
+  }
+
   const Vector3f& CameraComponent::getPosition() const
   {
     assertCameraExists();
@@ -66,37 +101,6 @@ namespace hc
   {
     assertCameraExists();
     return m_camera->getCameraProjection();
-  }
-
-  void CameraComponent::onSerialize(BinaryWriter& writer) const
-  {
-    bool hasCamera = (m_camera != nullptr);
-    writer.writeBool(hasCamera);
-
-    if (hasCamera)
-      m_camera->getUUID().serialize(writer);
-  }
-
-  void CameraComponent::onDeserialize(BinaryReader& reader)
-  {
-    bool hasCamera = reader.readBool();
-    if (hasCamera)
-    {
-      UUID cameraId;
-      cameraId.deserialize(reader);
-      CameraManager& cameraManager = getCameraManager();
-      m_camera = cameraManager.getCamera(cameraId);
-
-      if (!m_camera)
-        throw RuntimeErrorException(
-          "Failed to deserialize CameraComponent: Camera with ID " +
-          cameraId.toString() + " not found."
-        );
-    }
-    else
-    {
-      m_camera = nullptr;
-    }
   }
 
   CameraManager& CameraComponent::getCameraManager()

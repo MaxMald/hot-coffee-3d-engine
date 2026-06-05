@@ -1,5 +1,8 @@
 #include "hc/scene/hcScene.h"
 #include "hc/graphics/hcRenderContext.h"
+#include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
+#include "hc/graphics/hcCameraFrameData.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
@@ -8,7 +11,7 @@ namespace hc
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
-    m_lightManager(),
+    m_lightFrameData(),
     m_gameObjectFactory(nullptr)
   {
   }
@@ -19,7 +22,6 @@ namespace hc
 
   void Scene::serialize(BinaryWriter& writer) const
   {
-    m_lightManager.serialize(writer);
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     onSerialize(writer);
@@ -28,7 +30,6 @@ namespace hc
   void Scene::deserialize(BinaryReader& reader)
   {
     clear();
-    m_lightManager.deserialize(reader);
     m_cameraManager.deserialize(reader);
     m_sceneGraph.deserialize(reader);
     onDeserialize(reader);
@@ -71,16 +72,6 @@ namespace hc
     return m_sceneGraph;
   }
 
-  LightManager& Scene::getLightManager()
-  {
-    return m_lightManager;
-  }
-
-  const LightManager& Scene::getLightManager() const
-  {
-    return m_lightManager;
-  }
-
   CameraManager& Scene::getCameraManager()
   {
     return m_cameraManager;
@@ -91,10 +82,47 @@ namespace hc
     return m_cameraManager;
   }
 
+  void Scene::draw(IGraphicsManager& graphicsManager)
+  {
+    Camera* activeCamera = m_cameraManager.getActiveCamera();
+    if (activeCamera)
+      draw(graphicsManager, activeCamera);
+    else
+      draw(graphicsManager, &(m_cameraManager.getDefaultCamera()));
+  }
+
+  void Scene::draw(IGraphicsManager& graphicsManager, Camera* camera)
+  {
+    if (!camera)
+    {
+      throw RuntimeErrorException(
+        "Scene::draw: Null camera provided. Drawing cannot proceed."
+      );
+    }
+
+    camera->update();
+    graphicsManager.uploadCameraFrameData(CameraFrameData::Create(*camera));
+
+    // Gather light frame data and upload it to the graphics manager
+
+    m_lightFrameData.numDirectionalLights = 0;
+    m_lightFrameData.numOmniLights = 0;
+    m_lightFrameData.numSpotLights = 0;
+    SceneGraphLightFrameDataGatherer::Gather(m_sceneGraph, m_lightFrameData);
+
+    graphicsManager.uploadLightFrameData(m_lightFrameData);
+
+    // Draw the scene graph with the provided render context
+    RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
+
+    onBeforeDraw(renderContext);
+    m_sceneGraph.draw(renderContext);
+    onAfterDraw(renderContext);
+  }
+
   void Scene::clear()
   {
     m_sceneGraph.clear();
-    m_lightManager.clear();
     m_cameraManager.clear();
   }
 
@@ -192,33 +220,6 @@ namespace hc
   void Scene::deactivate()
   {
     onDeactivate();
-  }
-
-  void Scene::draw()
-  {
-    RenderContext renderContext;
-
-    Camera* activeCamera = m_cameraManager.getActiveCamera();
-    if (activeCamera)
-    {
-      renderContext.cameraMatrices.viewMatrix = activeCamera->getViewMatrix();
-      renderContext.cameraMatrices.projectionMatrix = activeCamera->getProjectionMatrix();
-      renderContext.cameraPosition = activeCamera->getPosition();
-    }
-    else
-    {
-      Camera& defaultCamera = m_cameraManager.getDefaultCamera();
-      renderContext.cameraMatrices.viewMatrix = defaultCamera.getViewMatrix();
-      renderContext.cameraMatrices.projectionMatrix = defaultCamera.getProjectionMatrix();
-      renderContext.cameraPosition = defaultCamera.getPosition();
-    }
-
-    renderContext.transform = Matrix4::Identity();
-    renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
-
-    onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext);
-    onAfterDraw(renderContext);
   }
 
   void Scene::update(const Time& elapsedTime)

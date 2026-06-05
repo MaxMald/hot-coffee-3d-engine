@@ -2,12 +2,13 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/hcIDrawable.h"
+#include "hc/scene/gameObject/components/hcIComponent.h"
+#include "hc/scene/gameObject/components/hcIUpdatableComponent.h"
 #include "hc/scene/gameObject/components/factories/hcComponentFactoriesManager.h"
 
 namespace hc
 {
   class IGameObjectFactory;
-  class IComponent;
 
   /**
    * @class GameObject
@@ -75,11 +76,25 @@ namespace hc
     virtual void draw(const RenderContext& renderContext) override;
 
     /**
+     * @brief Pre-update step for the GameObject and its children.
+     *
+     * @param elapsedTime Time elapsed since the last update.
+     */
+    void preUpdate(const Time& elapsedTime);
+
+    /**
      * @brief Updates the GameObject and its children.
      *
      * @param elapsedTime Time elapsed since the last update.
      */
     void update(const Time& elapsedTime);
+
+    /**
+     * @brief Post-update step for the GameObject and its children.
+     *
+     * @param elapsedTime Time elapsed since the last update.
+     */
+    void postUpdate(const Time& elapsedTime);
 
     /**
      * @brief Sets the name of the GameObject.
@@ -160,6 +175,20 @@ namespace hc
     Matrix4 getWorldMatrix() const;
 
     /**
+     * @brief Computes the world position of this GameObject.
+     *
+     * @return The world position as a Vector3f.
+     */
+    Vector3f getWorldPosition() const;
+
+    /**
+     * @brief Computes the world rotation of this GameObject as a Matrix4.
+     *
+     * @return The world rotation as a Matrix4.
+     */
+    Matrix4 getWorldRotationMatrix() const;
+
+    /**
      * @brief Creates and adds a component of the specified type to this
      * GameObject.
      *
@@ -181,6 +210,15 @@ namespace hc
      */
     template<typename ComponentType>
     bool hasComponent() const;
+
+    /**
+     * @brief Gets the component of the specified type attached to this
+     * GameObject.
+     *
+     * @return Pointer to the component, or nullptr if not found.
+     */
+    template<typename ComponentType>
+    ComponentType* getComponent() const;
 
     /**
      * @brief Gets all components attached to this GameObject.
@@ -208,9 +246,9 @@ namespace hc
     Vector<UniquePtr<GameObject>> m_children;
     UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
     Vector<IDrawable*> m_drawableComponents;
+    Vector<IUpdatableComponent*> m_updatableComponents;
 
-    template<typename ComponentType>
-    void addComponent(UniquePtr<ComponentType> component);
+    void addComponent(UniquePtr<IComponent> component);
 
     /**
      * @brief Destroys this GameObject and all its children, releasing resources.
@@ -246,14 +284,14 @@ namespace hc
   }
 
   template<typename ComponentType>
-  void GameObject::addComponent(UniquePtr<ComponentType> component)
+  inline ComponentType* GameObject::getComponent() const
   {
     TypeIndex typeIndex(typeid(ComponentType));
-
-    ComponentType* componentPtr = component.get();
-    m_components[typeIndex] = std::move(component);
-    IDrawable* drawable = dynamic_cast<IDrawable*>(componentPtr);
-    if (drawable)
-      m_drawableComponents.push_back(drawable);
+    auto it = m_components.find(typeIndex);
+    if (it != m_components.end())
+    {
+      return static_cast<ComponentType*>(it->second.get());
+    }
+    return nullptr;
   }
 }

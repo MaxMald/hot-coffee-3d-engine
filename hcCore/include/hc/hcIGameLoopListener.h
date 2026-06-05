@@ -26,6 +26,22 @@ namespace hc
     virtual bool onEvent(const Event& event) = 0;
 
     /**
+     * @brief Called before the scene is updated in each frame.
+     *
+     * @param elapsedTime The time elapsed since the last frame update.
+     *
+     * Override this method to perform custom logic before the scene is updated.
+     */
+    virtual void onBeforeSceneUpdate(const Time& elapsedTime) = 0;
+
+    /**
+     * @brief Called before the scene is drawn in each frame.
+     *
+     * Override this method to perform custom logic before the scene is rendered.
+     */
+    virtual void onBeforeSceneRender() = 0;
+
+    /**
      * @brief Called after the scene is rendered in each frame.
       *
       * Override this method to perform custom logic after the scene has been rendered.

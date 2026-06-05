@@ -45,7 +45,6 @@ namespace hc
     {
       try
       {
-        // Open the file for binary reading
         std::ifstream inputFile(filePath, std::ios::binary);
         if (!inputFile)
         {

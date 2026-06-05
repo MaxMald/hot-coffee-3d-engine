@@ -26,6 +26,15 @@ namespace hc::editor
     void destroy() override;
 
     /**
+     * @brief Returns the first selected GameObject, or nullptr if none are
+     * selected.
+     * 
+     * @return Pointer to the first selected GameObject, or nullptr if no
+     * GameObjects are selected.
+     */
+    GameObject* getFirstSelectedGameObject() const;
+
+    /**
      * @brief Returns the currently selected GameObjects.
      * 
      * @return A constant reference to the vector of selected GameObjects.
@@ -59,6 +68,13 @@ namespace hc::editor
      * @return true if the GameObject is selected, false otherwise.
      */
     bool isGameObjectSelected(GameObject* gameObject) const;
+
+    /**
+     * @brief Checks if there are any selected GameObjects.
+     * 
+     * @return true if there are selected GameObjects, false otherwise.
+     */
+    bool hasSelectedGameObjects() const;
 
     /**
      * @brief Subscribes a listener to selection change events.

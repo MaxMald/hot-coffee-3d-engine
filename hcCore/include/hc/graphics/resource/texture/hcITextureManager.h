@@ -23,6 +23,13 @@ namespace hc
     virtual ~ITextureManager() = default;
 
     /**
+    * @brief Creates an uninitialized-empty texture.
+    *
+    * @return Shared pointer to the created texture.
+    */
+    virtual SharedPtr<ITexture> createTexture() = 0;
+
+    /**
      * @brief Creates a texture from a given image.
      *
      * @param image Shared pointer to the source image.

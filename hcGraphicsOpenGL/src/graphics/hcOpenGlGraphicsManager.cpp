@@ -1,16 +1,19 @@
 #include "hc/graphics/hcOpenGlGraphicsManager.h"
 
 #include <GL/glew.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManager.h>
-#include <hc/graphics/resource/material/hcMaterialFactoriesManagerFactory.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
+  static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
+  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
+
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
     IAssetManager& assetManager
@@ -31,45 +34,184 @@ namespace hc
     m_materialManager(
       m_assetManager,
       m_textureManager,
-      m_shaderProgramManager,
-      MaterialFactoriesManagerFactory::Create()
+      m_shaderProgramManager
     ),
     m_meshManager(
       m_assetManager,
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_drawCommands()
-  {
-  }
+    m_lightFrameUBO(),
+    m_cameraFrameUBO(),
+    m_customRenderTarget(nullptr),
+    m_queueDrawCommands(),
+    m_viewportRect(0, 0, 1, 1),
+    m_forwardRenderPipeline(),
+    m_deferredHybridRenderPipeline(m_forwardRenderPipeline),
+    m_polygonFillType(polygonFillType::Solid),
+    m_renderPipelineType(renderPipelineType::Forward)
+  {}
 
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
+  {}
+
+  void OpenGlGraphicsManager::initialize(
+    const GraphicsSettings& graphicsSettings,
+    const Rect<UInt32>& viewportRect
+  )
   {
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK)
+    {
+      throw RuntimeErrorException(
+        "Failed to initialize GLEW: " +
+        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
+      );
+    }
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    
+    m_materialManager.initialize();
+    setViewport(viewportRect);
+
+    m_renderPipelineType = graphicsSettings.renderPipelineType;
+    m_deferredHybridRenderPipeline.initialize(
+      viewportRect,
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::DeferredLighting)
+    );
+
+    m_lightFrameUBO.initialize(LightFrameData{});
+    m_cameraFrameUBO.initialize(CameraFrameData{});
+    m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
+    m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
+  }
+
+  graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
+  {
+    return graphicsBackendType::OPENGL;
   }
 
   void OpenGlGraphicsManager::beginFrame()
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_deferredHybridRenderPipeline.clearGBuffer();
+  }
+
+  void OpenGlGraphicsManager::uploadCameraFrameData(
+    const CameraFrameData& cameraFrameData
+  )
+  {
+    CameraFrameData transposedCameraData = cameraFrameData;
+    transposedCameraData.projectionMatrix.transpose();
+    transposedCameraData.viewMatrix.transpose();
+    m_cameraFrameUBO.upload(transposedCameraData);
+  }
+
+  void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
+  {
+    m_lightFrameUBO.upload(lightFrameData);
+  }
+
+  void OpenGlGraphicsManager::setRenderTarget(IFrameBuffer* frameBuffer)
+  {
+    if (frameBuffer)
+    {
+      if (!frameBuffer->isValid())
+        throw InvalidArgumentException("Invalid framebuffer provided as render target.");
+      frameBuffer->bind();
+    }
+    else
+    {
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
+
+    m_customRenderTarget = frameBuffer;
+  }
+
+  IFrameBuffer* OpenGlGraphicsManager::getRenderTarget() const
+  {
+    return m_customRenderTarget;
   }
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
-    m_drawCommands.push_back(command);
+    String errorMessage;
+    if (!isValidDrawCommand(command, errorMessage))
+    {
+      LogService::Error("Invalid draw command, it will be discarded. Error: " + errorMessage);
+      return;
+    }
+
+    m_queueDrawCommands.push_back(command);
   }
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    DrawCommandUtilities::SortDrawCommands(m_drawCommands);
+    DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
 
-    for (const DrawCommand& command : m_drawCommands)
-      executeDrawCommand(command);
+    if (m_renderPipelineType == renderPipelineType::Forward)
+    {
+      m_forwardRenderPipeline.executeDrawCommands(
+        m_queueDrawCommands,
+        m_customRenderTarget
+      );
+    }
+    else if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+    {
+      m_deferredHybridRenderPipeline.executeDrawCommands(
+        m_queueDrawCommands,
+        m_customRenderTarget
+      );
+    }
+    else
+    {
+      throw RuntimeErrorException("Unsupported render pipeline type set in graphics manager.");
+    }
 
-    m_drawCommands.clear();
+    m_queueDrawCommands.clear();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
   {
     window.swapBuffers();
+  }
+
+  void OpenGlGraphicsManager::setPolygonFillType(polygonFillType::Type fillType)
+  {
+    glPolygonMode(
+      GL_FRONT_AND_BACK,
+      openGlGraphicsUtilities::GetOpenGlPolygonModeFromPolygonFillType(fillType)
+    );
+    m_polygonFillType = fillType;
+  }
+
+  polygonFillType::Type OpenGlGraphicsManager::getPolygonFillType() const
+  {
+    return m_polygonFillType;
+  }
+
+  void OpenGlGraphicsManager::setRenderPipelineType(
+    renderPipelineType::Type renderPipelineType
+  )
+  {
+    if (m_renderPipelineType == renderPipelineType)
+      return;
+
+    if (renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_deferredHybridRenderPipeline.updateViewportSize(m_viewportRect);
+
+    m_renderPipelineType = renderPipelineType;
+  }
+
+  renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
+  {
+    return m_renderPipelineType;
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
@@ -97,145 +239,80 @@ namespace hc
     return m_meshManager;
   }
 
-  void OpenGlGraphicsManager::initialize()
+  IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK)
-    {
-      throw RuntimeErrorException(
-        "Failed to initialize GLEW: " +
-        String(reinterpret_cast<const char*>(glewGetErrorString(err)))
-      );
-    }
+    return m_deferredHybridRenderPipeline.getGBuffer();
+  }
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_BACK);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(UInt32 width, UInt32 height)
+  {
+    FrameBufferPtr frameBufferPtr = FrameBufferPtr(new OpenGlFrameBuffer());
+    frameBufferPtr->initialize(width, height);
+    return frameBufferPtr;
+  }
+
+  void OpenGlGraphicsManager::setViewport(const Rect<UInt32>& viewportRect)
+  {
+    if (viewportRect.width == 0 || viewportRect.height == 0)
+      throw InvalidArgumentException("Viewport dimensions must be greater than zero.");
+
+    if (viewportRect == m_viewportRect)
+      return;
+
     glViewport(
-      0, 0,
-      static_cast<GLsizei>(m_window.getSize().x),
-      static_cast<GLsizei>(m_window.getSize().y)
+      (GLint)viewportRect.x,
+      (GLint)viewportRect.y,
+      (GLsizei)viewportRect.width,
+      (GLsizei)viewportRect.height
     );
+
+    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
+      m_deferredHybridRenderPipeline.updateViewportSize(viewportRect);
+
+    m_viewportRect = viewportRect;
+  }
+
+  Rect<UInt32> OpenGlGraphicsManager::getViewportRect() const
+  {
+    return m_viewportRect;
   }
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_deferredHybridRenderPipeline.destroy();
     m_materialManager.clear();
     m_textureManager.clear();
     m_shaderProgramManager.clear();
     m_shaderManager.clear();
     m_meshManager.clear();
+    m_lightFrameUBO.destroy();
+    m_cameraFrameUBO.destroy();
   }
 
-  void OpenGlGraphicsManager::executeDrawCommand(
-    const DrawCommand& command
+  bool OpenGlGraphicsManager::isValidDrawCommand(
+    const DrawCommand& drawCommand,
+    String& errorMessage
   )
   {
-    if (!command.material)
+    if (!drawCommand.material)
     {
-      LogService::Error(
-        "Draw command has no material assigned, skipping draw call."
-      );
-      return;
+      errorMessage = "Draw command has no material assigned.";
+      return false;
     }
-
-    SharedPtr<AMaterialDescriptor> descriptor = command.material->getDescriptor();
-    if (!descriptor)
+    else if (!std::holds_alternative<OpenGlDrawData>(drawCommand.apiDrawData))
     {
-      LogService::Error(
-        "Draw command's material has no descriptor, skipping draw call."
-      );
-      return;
-    }
-
-    if (!std::holds_alternative<OpenGlDrawData>(command.apiDrawData))
-    {
-      LogService::Error(
-        "Draw command does not contain OpenGL draw data, skipping draw call."
-      );
-      return;
-    }
-
-    const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-    if (drawData.vao == 0)
-    {
-      LogService::Error(
-        "Draw command has invalid VAO (0), skipping draw call."
-      );
-      return;
-    }
-
-    bool isTwoSided = descriptor->isDoubleSided();
-    bool isTransparent = command.material->isTransparent();
-
-    if (isTransparent)
-    {
-      glEnable(GL_BLEND);
-      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    if (isTwoSided && isTransparent)
-    {
-      glDepthMask(GL_FALSE);
-      glBindVertexArray(drawData.vao);
-
-      command.material->bind(command.cameraMatrices);
-      command.material->updateModelMatrix(command.modelMatrix);
-
-      // Pass 1: Render back faces first
-      glCullFace(GL_FRONT);
-      glDrawElements(
-        GL_TRIANGLES,
-        static_cast<GLsizei>(command.indexCount),
-        GL_UNSIGNED_INT,
-        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-      );
-
-      // Pass 2: Render front faces
-      glCullFace(GL_BACK);
-      glDrawElements(
-        GL_TRIANGLES,
-        static_cast<GLsizei>(command.indexCount),
-        GL_UNSIGNED_INT,
-        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-      );
-
-      command.material->unbind();
-      glBindVertexArray(0);
-      glDepthMask(GL_TRUE);
+      errorMessage = "Draw command has invalid API draw data type, expected OpenGlDrawData.";
+      return false;
     }
     else
     {
-      if (isTwoSided)
-        glDisable(GL_CULL_FACE);
-
-      if (isTransparent)
-        glDepthMask(GL_FALSE);
-
-      glBindVertexArray(drawData.vao);
-      command.material->bind(command.cameraMatrices);
-      command.material->updateModelMatrix(command.modelMatrix);
-
-      glDrawElements(
-        GL_TRIANGLES,
-        static_cast<GLsizei>(command.indexCount),
-        GL_UNSIGNED_INT,
-        reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-      );
-
-      command.material->unbind();
-      glBindVertexArray(0);
-
-      if (isTransparent)
+      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(drawCommand.apiDrawData);
+      if (drawData.vao == 0)
       {
-        glDepthMask(GL_TRUE);
-        glDisable(GL_BLEND);
-      } 
-
-      if (isTwoSided)
-        glEnable(GL_CULL_FACE);
-    }   
+        errorMessage = "Draw command has invalid VAO (0).";
+        return false;
+      }
+    }
+    return true;
   }
 }

@@ -15,6 +15,8 @@ namespace hc::editor
     EditorLoggerWindow(EditorLogHistory& logHistory);
     virtual ~EditorLoggerWindow();
 
+    void destroy() override;
+
   protected:
     EditorLogHistory& m_logHistory;
     bool m_autoScroll;

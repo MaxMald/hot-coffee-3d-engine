@@ -30,6 +30,11 @@ namespace hc
     ~TextureManager() override;
 
     /**
+     * @copydoc ITextureManager::createTexture
+     */
+    SharedPtr<ITexture> createTexture() override;
+
+    /**
      * @brief Creates a texture from the given image.
      *
      * @param image Shared pointer to the image used for texture creation.

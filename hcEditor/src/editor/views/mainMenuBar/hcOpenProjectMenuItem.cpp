@@ -2,11 +2,11 @@
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/fileDialog/hcFileDialogRequest.h"
+#include "hc/editor/serialization/hcFileFormats.h"
 #include "imgui.h"
 
 namespace hc::editor
 {
-  static constexpr const char* PROJECT_FILE_EXTENSION = ".hotCoffeeProj";
   static constexpr const char* OPEN_PROJECT_DIALOG_KEY = "OpenProject";
 
   OpenProjectMenuItem::OpenProjectMenuItem(
@@ -31,7 +31,7 @@ namespace hc::editor
       FileDialogRequest request(
         OPEN_PROJECT_DIALOG_KEY,
         "Choose Project",
-        PROJECT_FILE_EXTENSION,
+        serialization::fileFormats::Project::FILE_EXTENSION,
         this,
         config
       );
@@ -43,7 +43,7 @@ namespace hc::editor
   void OpenProjectMenuItem::onFileSelected(
     const String& dialogKey,
     const Path& filePathName,
-    const Path& currentPath
+    const Path&
   )
   {
     if (dialogKey == OPEN_PROJECT_DIALOG_KEY)

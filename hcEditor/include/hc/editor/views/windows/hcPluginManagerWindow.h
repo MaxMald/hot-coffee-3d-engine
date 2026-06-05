@@ -15,6 +15,8 @@ namespace hc::editor
     PluginManagerWindow(const PluginManager& pluginManager);
     virtual ~PluginManagerWindow();
 
+    void destroy() override;
+
   protected:
     const PluginManager& m_pluginManager;
 

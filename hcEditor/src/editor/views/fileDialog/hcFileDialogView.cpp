@@ -3,6 +3,10 @@
 
 namespace hc::editor
 {
+  void FileDialogView::update(const Time&)
+  {
+  }
+
   void FileDialogView::draw()
   {
     for (auto it = m_requests.begin(); it != m_requests.end(); )

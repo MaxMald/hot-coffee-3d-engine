@@ -3,7 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
 #include "hc/graphics/resource/material/hcMaterialRenderMode.h"
-#include "hc/graphics/hcCameraMatrices.h"
+#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {
@@ -16,6 +16,7 @@ namespace hc
   struct OpenGlDrawData
   {
     UInt32 vao = 0;
+    UInt32 drawMode = 0;
   };
 
   /**
@@ -26,11 +27,6 @@ namespace hc
    */
   struct HC_CORE_EXPORT DrawCommand
   {
-    /**
-     * Camera matrices (projection and view) to use for this draw command.
-     */
-    CameraMatrices cameraMatrices;
-
     /**
      * The model-to-world transformation matrix.
      */
@@ -58,6 +54,11 @@ namespace hc
     UInt32 indexCount = 0;
 
     /**
+     * The polygon fill type to use for this draw command (e.g., solid, wireframe, point).
+     */
+    polygonFillType::Type polygonFillType = polygonFillType::Undefined;
+
+    /**
      * Graphics API-specific rendering data.
      */
     Variant<OpenGlDrawData> apiDrawData;
@@ -66,22 +67,21 @@ namespace hc
      * Initializes the draw command with rendering data and generates
      * the sort key for proper rendering order.
      *
-     * @param cameraMatrices The camera projection and view matrices to use for this draw
-     * command.
      * @param modelMatrix The model-to-world transformation matrix.
      * @param material The material to use for rendering.
      * @param distanceToCamera Distance from camera for depth sorting.
      * @param firstIndex Starting index in the index buffer.
      * @param indexCount Number of indices to draw.
+     * @param polygonFillType The polygon fill type to use for this draw command.
      * @param apiDrawData Graphics API-specific rendering data.
      */
     void initialize(
-      const CameraMatrices& cameraMatrices,
       const Matrix4& modelMatrix,
       SharedPtr<IMaterial> material,
       float distanceToCamera,
       UInt32 firstIndex,
       UInt32 indexCount,
+      polygonFillType::Type polygonFillType,
       const Variant<OpenGlDrawData>& apiDrawData
     );
 

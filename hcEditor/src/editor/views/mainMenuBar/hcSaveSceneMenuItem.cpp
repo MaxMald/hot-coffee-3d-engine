@@ -58,8 +58,6 @@ namespace hc::editor
           LogService::Error("Failed to save scene to path: " + savePath.string());
           return;
         }
-
-        LogService::Message("Scene saved successfully to: " + savePath.string());
       },
       true
     );

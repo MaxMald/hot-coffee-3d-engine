@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/resource/shader/hcBuiltInShaderType.h"
 
 namespace hc
 {
@@ -21,30 +22,31 @@ namespace hc
     /**
      * @brief Creates a shader from the given string content and stage type.
      *
-     * @param content The shader source code as a string.
      * @param type The shader stage type (e.g., vertex, fragment).
+     * @param content The shader source code as a string.
      *
      * @return Shared pointer to the created shader instance. nullptr if creation
      * fails.
      */
     virtual SharedPtr<IShader> createShaderFromStringContent(
-      const String& content,
-      shaderStageType::Type type
+      shaderStageType::Type type,
+      const String& content
     ) = 0;
 
     /**
-     * @brief Creates a default vertex shader.
-     * 
-     * @return Shared pointer to the created vertex shader instance.
+     * @brief Creates a built-in shader of the specified type.
+     *
+     * @param type The type of the built-in shader to create.
+     *
+     * @return Shared pointer to the created built-in shader instance. nullptr if
+     * creation fails.
+     *
+     * @throws RuntimeErrorException if the built-in shader for the specified type does
+     * not exist or is not implemented.
      */
-    virtual SharedPtr<IShader> createDefaultVertexShader() = 0;
-
-    /**
-     * @brief Creates an unlit fragment shader.
-     * 
-     * @return Shared pointer to the created fragment shader instance.
-     */
-    virtual SharedPtr<IShader> createUnlitFragmentShader() = 0;
+    virtual SharedPtr<IShader> createBuiltInShaderType(
+      builtInShaderType::Type type
+    ) = 0;
 
   protected:
     IShaderFactory() = default;

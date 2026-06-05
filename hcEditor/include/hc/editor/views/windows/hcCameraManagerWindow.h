@@ -10,6 +10,8 @@ namespace hc::editor
     CameraManagerWindow(SceneManager& sceneManager);
     ~CameraManagerWindow();
 
+    void destroy() override;
+
   private:
     SceneManager& m_sceneManager;
     Vector<Camera*> m_cameras;

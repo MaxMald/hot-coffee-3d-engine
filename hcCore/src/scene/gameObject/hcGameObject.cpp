@@ -17,7 +17,8 @@ namespace hc
     m_componentFactoriesManager(componentFactoriesManager),
     m_children(),
     m_components(),
-    m_drawableComponents()
+    m_drawableComponents(),
+    m_updatableComponents()
   {
   }
 
@@ -46,7 +47,7 @@ namespace hc
   void GameObject::deserialize(BinaryReader& reader)
   {
     Transform::deserialize(reader);
-    m_name = reader.readString();   
+    m_name = reader.readString();
 
     SizeT childCount = reader.readSizeT();
     for (SizeT i = 0; i < childCount; ++i)
@@ -99,10 +100,40 @@ namespace hc
       child->draw(localRenderContext);
   }
 
+  void GameObject::preUpdate(const Time& elapsedTime)
+  {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->preUpdate(elapsedTime.toSeconds());
+    }
+
+    for (auto& child : m_children)
+      child->preUpdate(elapsedTime);
+  }
+
   void GameObject::update(const Time& elapsedTime)
   {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->update(elapsedTime.toSeconds());
+    }
+
     for (auto& child : m_children)
       child->update(elapsedTime);
+  }
+
+  void GameObject::postUpdate(const Time& elapsedTime)
+  {
+    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    {
+      if (updatableComponent)
+        updatableComponent->postUpdate(elapsedTime.toSeconds());
+    }
+
+    for (auto& child : m_children)
+      child->postUpdate(elapsedTime);
   }
 
   void GameObject::setName(const String& name)
@@ -209,6 +240,20 @@ namespace hc
       return getMatrix();
   }
 
+  Vector3f GameObject::getWorldPosition() const
+  {
+    Matrix4 worldMatrix = getWorldMatrix();
+    return Matrix4::ExtractTranslation(worldMatrix);
+  }
+
+  Matrix4 GameObject::getWorldRotationMatrix() const
+  {
+    if (m_parent)
+      return m_parent->getWorldRotationMatrix() * Matrix4::Rotation(getRotation());
+    else
+      return Matrix4::Rotation(getRotation());
+  }
+
   Vector<IComponent*> GameObject::getComponents() const
   {
     Vector<IComponent*> components;
@@ -226,6 +271,25 @@ namespace hc
 
     for (const auto& pair : m_components)
       outComponents.push_back(pair.second.get());
+  }
+
+  void GameObject::addComponent(UniquePtr<IComponent> component)
+  {
+    if (!component)
+      throw InvalidArgumentException("Cannot add a null component.");
+
+    TypeIndex typeIndex(typeid(*component));
+    IComponent* componentPtr = component.get();
+
+    m_components[typeIndex] = std::move(component);
+
+    if (auto* drawable = dynamic_cast<IDrawable*>(componentPtr))
+      m_drawableComponents.push_back(drawable);
+
+    if (auto* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr))
+      m_updatableComponents.push_back(updatable);
+
+    componentPtr->setGameObject(this);
   }
 
   void GameObject::destroy()

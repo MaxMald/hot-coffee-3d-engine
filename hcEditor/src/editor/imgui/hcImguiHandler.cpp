@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
+#include <ImGuizmo.h>
 
 #if HC_PLATFORM == HC_PLATFORM_WIN32
 #include "imgui_impl_win32.h"
@@ -143,6 +144,7 @@ namespace hc::editor
 #endif
       ImGui::NewFrame();
       ImGui::DockSpaceOverViewport(0, nullptr, ImGuiDockNodeFlags_PassthruCentralNode);
+      ImGuizmo::BeginFrame();
     }
 
     void endFrame()

@@ -25,7 +25,12 @@ namespace hc
      * Constructs a mesh component with no mesh attached.
      */
     MeshComponent(IMeshManager& meshManager, IAssetManager& assetManager);
+
     ~MeshComponent() override;
+
+    void serialize(BinaryWriter& writer) const override;
+
+    void deserialize(BinaryReader& reader) override;
 
     /**
      * Draws the mesh using the provided render context.
@@ -54,15 +59,5 @@ namespace hc
     SharedPtr<IMesh> m_mesh;
     IMeshManager& m_meshManager;
     IAssetManager& m_assetManager;
-
-    /**
-     * @copydoc ABaseComponent::onSerialize
-     */
-    void onSerialize(BinaryWriter& writer) const override;
-
-    /**
-     * @copydoc ABaseComponent::onDeserialize
-     */
-    void onDeserialize(BinaryReader& reader) override;
   };
 }

@@ -1,35 +1,24 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
+
+#include "hc/utilities/hcCoreAssertions.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
-#include "hc/graphics/hcCameraMatrices.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 
 namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
-    m_id(Id::Create()),
-    m_materialId(materialId)
-  {
-  }
+    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    m_color(0.5f, 0.5f, 0.5f, 1.0f)
+  {}
 
   UnlitMaterial::~UnlitMaterial()
-  {
-  }
-
-  const Id& UnlitMaterial::getId() const
-  {
-    return m_id;
-  }
-
-  UInt16 UnlitMaterial::getMaterialId() const
-  {
-    return m_materialId;
-  }
+  {}
 
   void UnlitMaterial::destroy()
   {
+    m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     m_shaderProgram.reset();
-    m_descriptor.reset();
     m_mainTexture.reset();
   }
 
@@ -38,91 +27,87 @@ namespace hc
     return shadingType::Unlit;
   }
 
-  materialRenderMode::Type UnlitMaterial::getRenderMode() const
+  void UnlitMaterial::bind(renderPassType::Type renderPass)
   {
-    if (m_descriptor)
-      return m_descriptor->getRenderMode();
-    return materialRenderMode::Type::Opaque;
-  }
+    if (renderPass != renderPassType::Type::Forward)
+      throw RuntimeErrorException(
+        "UnlitMaterial::bind - UnlitMaterial only supports Forward render pass."
+      );
 
-  bool UnlitMaterial::isTransparent() const
-  {
-    return getRenderMode() == materialRenderMode::Type::Transparent;
-  }
-
-  bool UnlitMaterial::isAlphaCutout() const
-  {
-    return getRenderMode() == materialRenderMode::Type::AlphaCutout;
-  }
-
-  void UnlitMaterial::bind(const CameraMatrices& cameraMatrices)
-  {
-    if (!m_shaderProgram || !m_descriptor)
-      return;
+    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Unlit shader program");
+    coreAssertions::AssertTextureIsValid(m_mainTexture, "Main texture");
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uProjection", cameraMatrices.projectionMatrix);
-    m_shaderProgram->setUniform("uView", cameraMatrices.viewMatrix);
     m_shaderProgram->setUniform("uColor", getColor());
 
-    if (isAlphaCutout())
-      m_shaderProgram->setUniform("uAlphaCutoff", m_descriptor->getAlphaCutoutThreshold());
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      m_shaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
     else
       m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
-    if (m_mainTexture)
-    {
-      m_shaderProgram->setUniform("uUseTexture", true);
-      m_mainTexture->bind(0);
-      m_shaderProgram->setUniformTexture("uTexture", 0);
-    }
-    else
-    {
-      // TODO Bind to a default white texture
-      m_shaderProgram->setUniform("uUseTexture", false);
-    }
+    m_mainTexture->bind(0);
+    m_shaderProgram->setUniformTexture("uTexture", 0);
   }
 
-  void UnlitMaterial::updateModelMatrix(const Matrix4& modelMatrix)
+  void UnlitMaterial::updateModelMatrix(
+    const Matrix4& modelMatrix,
+    renderPassType::Type renderPass
+  )
   {
+    if (renderPass != renderPassType::Type::Forward)
+      throw RuntimeErrorException(
+        "UnlitMaterial::updateModelMatrix - UnlitMaterial only supports Forward render pass."
+      );
+
+    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Unlit shader program");
     m_shaderProgram->setUniform("uModel", modelMatrix);
   }
 
   void UnlitMaterial::unbind()
   {
+    // TODO unbind 
   }
 
-  SharedPtr<AMaterialDescriptor> UnlitMaterial::getDescriptor() const
+  bool UnlitMaterial::isValid() const
   {
-    return m_descriptor;
+    return m_shaderProgram != nullptr && m_shaderProgram->isValid();
   }
 
   void UnlitMaterial::initialize(
+    const UnlitMaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
-    const SharedPtr<UnlitMaterialDescriptor>& descriptor,
     const SharedPtr<ITexture>& mainTexture
   )
   {
+    coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
+    coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
+
+    m_renderMode = descriptor.getRenderMode();
+    m_doubleSided = descriptor.isDoubleSided();
+    setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());
+    m_color = descriptor.getColor();
     m_shaderProgram = shaderProgram;
-    m_descriptor = descriptor;
     m_mainTexture = mainTexture;
   }
 
   const Color& UnlitMaterial::getColor() const
   {
-    if (m_descriptor)
-      return m_descriptor->getColor();
-    else
-    {
-      throw RuntimeErrorException(
-        "UnlitMaterial::getColor - Material descriptor is not set."
-      );
-    } 
+    return m_color;
+  }
+
+  void UnlitMaterial::setColor(const Color& color)
+  {
+    m_color = color;
   }
 
   const SharedPtr<ITexture>& UnlitMaterial::getMainTexture() const
   {
     return m_mainTexture;
+  }
+
+  void UnlitMaterial::setMainTexture(const SharedPtr<ITexture>& mainTexture)
+  {
+    m_mainTexture = mainTexture;
   }
 }

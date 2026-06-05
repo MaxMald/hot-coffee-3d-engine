@@ -3,6 +3,7 @@
 #include "hc/hcAssetManagerPrerequisites.h"
 
 struct aiMaterial;
+enum aiTextureType;
 
 namespace hc
 {
@@ -42,7 +43,7 @@ namespace hc
      * 
      * @return The corresponding engine shading type
      */
-    static shadingType::Type DetermineShadingType(const aiMaterial* material);
+    static shadingType::Type GetShadingTypeFromMaterial(const aiMaterial* material);
 
     /**
      * Parses an unlit material descriptor from an Assimp material.
@@ -56,5 +57,19 @@ namespace hc
       const Path& fileDirectory,
       const aiMaterial* material
     );
+
+    static SharedPtr<AMaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
+      const Path& fileDirectory,
+      const aiMaterial* material
+    );
+
+    static Color GetVertexColorDiffuseFromMaterial(const aiMaterial* material);
+    static Path GetTexturePathFromMaterial(
+      const Path& fileDirectory,
+      const aiMaterial* material,
+      aiTextureType textureType
+    );
+
+    static float GetShininessFromMaterial(const aiMaterial* material);
   };
 }

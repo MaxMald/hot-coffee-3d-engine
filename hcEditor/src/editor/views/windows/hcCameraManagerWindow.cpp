@@ -15,6 +15,10 @@ namespace hc::editor
 
   CameraManagerWindow::~CameraManagerWindow() = default;
 
+  void CameraManagerWindow::destroy()
+  {
+  }
+
   void CameraManagerWindow::onDraw()
   {
     Scene* activeScene = m_sceneManager.getActiveScene();

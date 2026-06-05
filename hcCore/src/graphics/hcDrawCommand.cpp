@@ -1,34 +1,29 @@
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
   void DrawCommand::initialize(
-    const CameraMatrices& _cameraMatrices,
     const Matrix4& _modelMatrix,
     SharedPtr<IMaterial> _material,
     float distanceToCamera,
     UInt32 _firstIndex,
     UInt32 _indexCount,
+    polygonFillType::Type _polygonFillType,
     const Variant<OpenGlDrawData>& _apiDrawData
   )
   {
-    this->cameraMatrices = _cameraMatrices;
     this->modelMatrix = _modelMatrix;
     this->material = _material;
     this->firstIndex = _firstIndex;
     this->indexCount = _indexCount;
+    this->polygonFillType = _polygonFillType;
     this->apiDrawData = _apiDrawData;
 
     if (!_material)
       return;
 
-    SharedPtr<AMaterialDescriptor> descriptor = _material->getDescriptor();
-    if (!descriptor)
-      return;
-
     sortKey = GenerateSortKey(
-      descriptor->getRenderMode(),
+      material->getRenderMode(),
       material->getMaterialId(),
       distanceToCamera
     );
@@ -39,6 +34,7 @@ namespace hc
     modelMatrix = Matrix4::Identity();
     material = nullptr;
     sortKey = 0;
+    polygonFillType = polygonFillType::Undefined;
     firstIndex = 0;
     indexCount = 0;
     apiDrawData = {};

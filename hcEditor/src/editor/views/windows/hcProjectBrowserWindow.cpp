@@ -32,6 +32,11 @@ namespace hc::editor
     m_projectManager.unsubscribeListener(this);
   }
 
+  void ProjectBrowserWindow::destroy()
+  {
+    m_directoryNavigator.clear();
+  }
+
   void ProjectBrowserWindow::onProjectOpened()
   {
     if (!m_projectManager.isProjectOpen())

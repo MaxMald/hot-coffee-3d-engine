@@ -83,26 +83,42 @@ namespace hc::editor
     ImGui::Text("Material ID: %u", material->getMaterialId());
     ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
 
-    SharedPtr<AMaterialDescriptor> descriptor = material->getDescriptor();
-    if (!descriptor)
-      return;
-
-    materialRenderMode::Type currentRenderMode = descriptor->getRenderMode();
+    materialRenderMode::Type currentRenderMode =  material->getRenderMode();
     const char* renderModeOptions[] = { "Background", "Opaque", "AlphaCutout", "Transparent" };
     int currentItem = static_cast<int>(currentRenderMode);
 
     if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 4))
-      descriptor->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
+      material->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
 
-    bool isTwoSided = descriptor->isDoubleSided();
+    bool isTwoSided = material->isDoubleSided();
     if (ImGui::Checkbox("Two-Sided", &isTwoSided))
-      descriptor->setDoubleSided(isTwoSided);
+      material->setDoubleSided(isTwoSided);
 
-    if (descriptor->getRenderMode() == materialRenderMode::Type::AlphaCutout)
+    if (material->getRenderMode() == materialRenderMode::Type::AlphaCutout)
     {
-      float alphaCutoff = descriptor->getAlphaCutoutThreshold();
+      float alphaCutoff = material->getAlphaCutoutThreshold();
       if (ImGui::SliderFloat("Alpha Cutoff", &alphaCutoff, 0.0f, 1.0f))
-        descriptor->setAlphaCutoutThreshold(alphaCutoff);
+        material->setAlphaCutoutThreshold(alphaCutoff);
+    }
+
+    // TODO
+    // 
+    // This is a temporary solution to expose shader-specific properties in the editor.
+    // Improve this by implementing a more flexible system for material property editing
+    // that can handle different shader types and their unique properties without
+    // hardcoding checks for specific shader types.
+
+    if (material->getShaderType() == shadingType::BlinnPhong)
+    {
+      SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
+        std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
+
+      if (blinnPhongMaterial)
+      {
+        float shininess = blinnPhongMaterial->getShininess();
+        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
+          blinnPhongMaterial->setShininess(shininess);
+      }
     }
   }
 

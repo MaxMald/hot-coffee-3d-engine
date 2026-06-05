@@ -3,7 +3,8 @@
 
 namespace hc
 {
-  SceneManager::SceneManager() :
+  SceneManager::SceneManager(IGraphicsManager& graphicsManager) :
+    m_graphicsManager(graphicsManager),
     m_scenes(),
     m_activeScene(nullptr),
     m_gameObjectFactory(nullptr)
@@ -32,7 +33,7 @@ namespace hc
   void SceneManager::draw()
   {
     if (m_activeScene)
-      m_activeScene->draw();
+      m_activeScene->draw(m_graphicsManager);
   }
 
   bool SceneManager::removeScene(const String& name)

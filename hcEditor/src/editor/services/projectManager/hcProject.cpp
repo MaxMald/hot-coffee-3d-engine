@@ -1,11 +1,23 @@
 #include "hc/editor/services/projectManager/hcProject.h"
-
-#include "hc/editor/services/projectManager/hcProjectFileContentLoader.h"
+#include "hc/editor/serialization/hcFileFormats.h"
 
 namespace hc::editor
 {
+  Project* Project::CreateEmpty()
+  {
+    Project* newProject = new Project();
+    newProject->m_majorVersion = hc::editor::serialization::fileFormats::Project::MAJOR_VERSION;
+    newProject->m_minorVersion = hc::editor::serialization::fileFormats::Project::MINOR_VERSION;
+    newProject->m_patchVersion = hc::editor::serialization::fileFormats::Project::PATCH_VERSION;
+    return newProject;
+  }
+
   Project::Project() :
-    m_projectFileContent()
+    m_majorVersion(0),
+    m_minorVersion(0),
+    m_patchVersion(0),
+    m_projectFilePath(),
+    m_relativePathToLastOpenedScene()
   {
   }
 
@@ -13,32 +25,54 @@ namespace hc::editor
   {
   }
 
-  bool Project::loadFromFile(const Path& filePath)
+  void Project::serialize(BinaryWriter& writer) const
   {
-    Json json = Json::loadFromFile(filePath);
-    if (json.isNull())
-      return false;
-
-    auto optionalContent = projectFileContentLoader::loadFromJson(json);
-    if (!optionalContent.has_value())
-      return false;
-
-    m_projectFileContent = optionalContent.value();
-    return true;
+    writer.writeUInt32(hc::editor::serialization::fileFormats::Project::MAGIC);
+    writer.writeUInt16(m_majorVersion);
+    writer.writeUInt16(m_minorVersion);
+    writer.writeUInt16(m_patchVersion);
+    writer.writeString(m_relativePathToLastOpenedScene);
   }
 
-  bool Project::saveToFile(const Path& filePath) const
+  void Project::deserialize(BinaryReader& reader)
   {
-    return false;
+    m_projectFilePath.clear();
+
+    UInt32 magic = reader.readUInt32();
+    if (magic != hc::editor::serialization::fileFormats::Project::MAGIC)
+      throw InvalidArgumentException("Invalid project file format.");
+
+    m_majorVersion = reader.readUInt16();
+    m_minorVersion = reader.readUInt16();
+    m_patchVersion = reader.readUInt16();
+    m_relativePathToLastOpenedScene = reader.readString();
   }
 
-  ProjectFileContent& Project::getProjectFileContent()
+  void Project::setProjectFilePath(const Path& path)
   {
-    return m_projectFileContent;
+    m_projectFilePath = path;
   }
 
-  const ProjectFileContent& Project::getProjectFileContent() const
+  const Path& Project::getProjectFilePath() const
   {
-    return m_projectFileContent;
+    return m_projectFilePath;
+  }
+
+  void Project::setPathToLastOpenedScene(const Path& absolutePath)
+  {
+    if (m_projectFilePath.empty())
+      throw RuntimeErrorException(
+        "Project file path must be set before setting the last opened scene path."
+      );
+
+    m_relativePathToLastOpenedScene = AssetPath::ToRelative(
+      absolutePath,
+      m_projectFilePath.parent_path()
+    );
+  }
+
+  const String& Project::getPathToLastOpenedScene() const
+  {
+    return m_relativePathToLastOpenedScene;
   }
 }
