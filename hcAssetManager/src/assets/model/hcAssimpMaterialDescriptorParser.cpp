@@ -101,11 +101,13 @@ namespace hc
     const aiMaterial* material
   )
   {
-    float shininess = 16.0f;
-    material->Get(AI_MATKEY_SHININESS, shininess);
-    float strength = 1.0f;
-    material->Get(AI_MATKEY_SHININESS_STRENGTH, strength);
+    float shininess = 0.0f;
+    bool hasShininess = material->Get(AI_MATKEY_SHININESS, shininess) == aiReturn_SUCCESS;
+    if (hasShininess)
+      shininess = shininess * 2.56f; // Shininess is usually in the range [0, 100], so we scale it to [0, 256]
+    else
+      shininess = 16.0f;
 
-    return Math::Clamp(shininess * strength, 1.0f, 256.0f);
+    return Math::Clamp(shininess, 1.0f, 256.0f);
   }
 }
