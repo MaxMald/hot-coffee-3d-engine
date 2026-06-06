@@ -147,8 +147,8 @@ namespace hc
     aiString name;
     if (material->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS)
     {
-      std::string nameStr(name.C_Str());
-      if (nameStr.find(SUFFIX_DOUBLE_SIDED) != std::string::npos)
+      String nameStr(name.C_Str());
+      if (nameStr.find(SUFFIX_DOUBLE_SIDED) != String::npos)
         return true;
     }
 
@@ -189,18 +189,18 @@ namespace hc
     aiString name;
     if (material->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS)
     {
-      std::string nameStr(name.C_Str());
-      if (nameStr.find(SUFFIX_ALPHA_CUTOUT) != std::string::npos)
+      String nameStr(name.C_Str());
+      if (nameStr.find(SUFFIX_ALPHA_CUTOUT) != String::npos)
       {
         // Extract the alpha cutout threshold from the material name suffix
         SizeT suffixPos = nameStr.find(SUFFIX_ALPHA_CUTOUT);
-        std::string thresholdStr = nameStr.substr(suffixPos + strlen(SUFFIX_ALPHA_CUTOUT));
+        String thresholdStr = nameStr.substr(suffixPos + strlen(SUFFIX_ALPHA_CUTOUT));
         try
         {
           float threshold = std::stof(thresholdStr);
           return Math::Clamp(threshold * 0.01f, 0.0f, 1.0f);
         }
-        catch (...)
+        catch (const Exception&)
         {
           return 0.5f;
         }
