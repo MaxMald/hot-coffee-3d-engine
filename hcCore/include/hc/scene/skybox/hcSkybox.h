@@ -12,7 +12,6 @@ namespace hc
   public:
     Skybox(SharedPtr<ICubeMap> cubeMap);
     ~Skybox();
-
     void initialize(
       const UInt32 width,
       const UInt32 height,
@@ -24,7 +23,7 @@ namespace hc
       const Image& back,
       const Image& front
     );
-    bool isValid() const;
+    bool isReadyToRender() const;
     const ICubeMap& getCubeMap() const;
     const Path& getRightImagePath() const;
     const Path& getLeftImagePath() const;

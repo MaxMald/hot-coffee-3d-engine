@@ -9,8 +9,8 @@ namespace hc
     m_rightImagePath(), m_leftImagePath(), m_topImagePath(),
     m_bottomImagePath(), m_backImagePath(), m_frontImagePath()
   {
-    if (m_cubeMap == nullptr)
-      throw RuntimeErrorException("Skybox initialization failed: CubeMap is null.");
+    if (cubeMap == nullptr)
+      throw RuntimeErrorException("CubeMap pointer cannot be null.");
   }
 
   Skybox::~Skybox()
@@ -31,7 +31,10 @@ namespace hc
   )
   {
     if (m_cubeMap == nullptr)
-      throw RuntimeErrorException("Skybox initialization failed: CubeMap is null.");
+      throw RuntimeErrorException("CubeMap is undefined.");
+
+    if (m_cubeMap->isValid())
+      destroy();
 
     m_cubeMap->initialize(
       width, height, channels,
@@ -47,7 +50,7 @@ namespace hc
     m_frontImagePath = front.getPath();
   }
 
-  bool Skybox::isValid() const
+  bool Skybox::isReadyToRender() const
   {
     return m_cubeMap != nullptr && m_cubeMap->isValid();
   }
@@ -55,7 +58,7 @@ namespace hc
   const ICubeMap& Skybox::getCubeMap() const
   {
     if (m_cubeMap == nullptr)
-      throw RuntimeErrorException("Skybox cube map is null.");
+      throw RuntimeErrorException("CubeMap is undefined.");
     return *m_cubeMap;
   }
 
@@ -93,5 +96,12 @@ namespace hc
   {
     if (m_cubeMap != nullptr)
       m_cubeMap->destroy();
+
+    m_rightImagePath.clear();
+    m_leftImagePath.clear();
+    m_topImagePath.clear();
+    m_bottomImagePath.clear();
+    m_backImagePath.clear();
+    m_frontImagePath.clear();
   }
 }
