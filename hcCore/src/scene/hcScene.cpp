@@ -4,6 +4,7 @@
 #include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
 #include "hc/graphics/hcCameraFrameData.h"
 #include "hc/scene/camera/hcCamera.h"
+#include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc

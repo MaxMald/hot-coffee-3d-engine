@@ -7,13 +7,16 @@ namespace hc::editor
 {
   EditorSceneManager::EditorSceneManager(
     Scene* editorScene,
+    IAssetManager& assetManager,
+    IGraphicsManager& graphicsManager,
     ProjectManager& projectManager
   ) :
+    m_assetManager(assetManager),
+    m_graphicsManager(graphicsManager),
     m_projectManager(projectManager),
     m_editorScene(editorScene),
     m_currentScenePath()
-  {
-  }
+  {}
 
   // Set editor scene instead
 
@@ -32,7 +35,12 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
-    if (SceneSerializer::Deserialize(*m_editorScene, scenePath))
+    if (SceneSerializer::Deserialize(
+      *m_editorScene,
+      scenePath,
+      m_assetManager,
+      m_graphicsManager
+    ))
     {
       m_currentScenePath = scenePath;
       updateLastOpenedSceneInProject();

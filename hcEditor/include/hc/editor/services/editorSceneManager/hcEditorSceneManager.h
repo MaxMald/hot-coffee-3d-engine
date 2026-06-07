@@ -24,11 +24,15 @@ namespace hc::editor
      *
      * @param editorScene Pointer to the Scene instance that represents the editor's
      * scene.
+     * @param assetManager Reference to the asset manager for managing assets.
+     * @param graphicsManager Reference to the graphics manager for rendering.
      * @param projectManager Reference to the ProjectManager for subscribing to project
      * events.
      */
     EditorSceneManager(
       Scene* editorScene,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager,
       ProjectManager& projectManager
     );
     virtual ~EditorSceneManager() = default;
@@ -92,6 +96,8 @@ namespace hc::editor
     void onProjectClosed() override;
 
   private:
+    IAssetManager& m_assetManager;
+    IGraphicsManager& m_graphicsManager;
     ProjectManager& m_projectManager;
     Scene* m_editorScene;
     Path m_currentScenePath;
