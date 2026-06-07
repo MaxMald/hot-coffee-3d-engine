@@ -1,6 +1,8 @@
-#include "hc/serialization/hcSceneSerializer.h"
+#include "hc/serialization/scene/hcSceneSerializer.h"
+
 #include <fstream>
 #include "hc/serialization/hcFileFormats.h"
+#include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 #include "hc/scene/hcScene.h"
 #include "hc/hcVersion.h"
 

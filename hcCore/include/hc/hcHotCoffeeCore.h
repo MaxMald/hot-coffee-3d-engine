@@ -36,7 +36,7 @@
 #include "hc/scene/light/hcDirectionalLight.h"
 #include "hc/serialization/hcJsonSerializer.h"
 #include "hc/serialization/hcFileFormats.h"
-#include "hc/serialization/hcSceneSerializer.h"
+#include "hc/serialization/scene/hcSceneSerializer.h"
 #include "hc/graphics/hcPolygonFillType.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
