@@ -10,7 +10,7 @@ namespace hc::serialization
   void SkyboxSerializer::Serialize(const Skybox& skybox, BinaryWriter& writer)
   {
     const ICubeMap& cubeMap = skybox.getCubeMap();
-    if (!skybox.isValid())
+    if (!skybox.isInitialized())
     {
       writer.writeBool(false);
       return;

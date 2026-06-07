@@ -5,6 +5,8 @@
 namespace hc
 {
   class Scene;
+  class IAssetManager;
+  class IGraphicsManager;
 
   namespace serialization
   {
@@ -37,18 +39,26 @@ namespace hc
       /**
        * @brief Deserializes a scene from a .hcscene file.
        *
-       * Reads and validates the file header, then populates the provided
-       * scene object with the deserialized data. The existing scene content
-       * is cleared before deserialization. Returns false if the file cannot
-       * be opened, has an invalid format, or if an exception occurs.
+       * Reads and validates the file header, then populates the provided scene object
+       * with the deserialized data. The existing scene content is cleared before
+       * deserialization. Returns false if the file cannot be opened, has an invalid
+       * format, or if an exception occurs.
        *
-       * @param scene Reference to the Scene object to populate with
-       * deserialized data.
+       * @param scene Reference to the Scene object to populate with deserialized data.
        * @param filePath The path to the input .hcscene file.
+       * @param assetManager Reference to the asset manager for resolving asset
+       * dependencies during deserialization.
+       * @param graphicsManager Reference to the graphics manager for creating any
+       * graphics-related resources during deserialization.
        *
        * @return True if deserialization was successful, false otherwise.
        */
-      static bool Deserialize(Scene& scene, const Path& filePath);
+      static bool Deserialize(
+        Scene& scene,
+        const Path& filePath,
+        IAssetManager& assetManager,
+        IGraphicsManager& graphicsManager
+      );
 
       /**
        * @brief Deserializes a scene from a .hcscene file and returns a new
@@ -59,11 +69,19 @@ namespace hc
        * or if an exception occurs during deserialization.
        *
        * @param filePath The path to the input .hcscene file.
+       * @param assetManager Reference to the asset manager for resolving asset
+       * dependencies during deserialization.
+       * @param graphicsManager Reference to the graphics manager for creating any
+       * graphics-related resources during deserialization.
        *
        * @return A unique pointer to the deserialized Scene object, or nullptr
        * on failure.
        */
-      static UniquePtr<Scene> Deserialize(const Path& filePath);
+      static UniquePtr<Scene> Deserialize(
+        const Path& filePath,
+        IAssetManager& assetManager,
+        IGraphicsManager& graphicsManager
+      );
 
     private:
       /**

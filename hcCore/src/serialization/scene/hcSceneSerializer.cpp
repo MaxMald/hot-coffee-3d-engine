@@ -31,6 +31,13 @@ namespace hc
 
         SerializeHeader(writer);
         scene.serialize(writer);
+
+        bool hasSkybox = scene.hasSkybox();
+        writer.writeBool(hasSkybox);
+        if (hasSkybox)
+          SkyboxSerializer::Serialize(scene.getSceneSkybox(), writer);
+          
+
         return true;
       }
       catch (const std::exception& e)
@@ -43,10 +50,17 @@ namespace hc
       }
     }
 
-    bool SceneSerializer::Deserialize(Scene& scene, const Path& filePath)
+    bool SceneSerializer::Deserialize(
+      Scene& scene,
+      const Path& filePath,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager
+    )
     {
       try
       {
+        scene.destroy();
+
         std::ifstream inputFile(filePath, std::ios::binary);
         if (!inputFile)
         {
@@ -60,6 +74,14 @@ namespace hc
 
         VerifyHeader(reader);
         scene.deserialize(reader);
+
+        bool hasSkybox = reader.readBool();
+        if (hasSkybox)
+        {
+          scene.createSceneSkybox(graphicsManager);
+          SkyboxSerializer::Deserialize(scene.getSceneSkybox(), reader, assetManager);
+        }
+
         return true;
       }
       catch (const std::exception& e)
@@ -72,12 +94,16 @@ namespace hc
       }
     }
 
-    UniquePtr<Scene> SceneSerializer::Deserialize(const Path& filePath)
+    UniquePtr<Scene> SceneSerializer::Deserialize(
+      const Path& filePath,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager
+    )
     {
       try
       {
         UniquePtr<Scene> scene = MakeUnique<Scene>();
-        if (Deserialize(*scene, filePath))
+        if (Deserialize(*scene, filePath, assetManager, graphicsManager))
           return scene;
         else
           return nullptr;
