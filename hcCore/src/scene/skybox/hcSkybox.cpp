@@ -50,7 +50,7 @@ namespace hc
     m_frontImagePath = front.getPath();
   }
 
-  bool Skybox::isReadyToRender() const
+  bool Skybox::isInitialized() const
   {
     return m_cubeMap != nullptr && m_cubeMap->isValid();
   }

@@ -23,7 +23,7 @@ namespace hc
       const Image& back,
       const Image& front
     );
-    bool isReadyToRender() const;
+    bool isInitialized() const;
     const ICubeMap& getCubeMap() const;
     const Path& getRightImagePath() const;
     const Path& getLeftImagePath() const;
