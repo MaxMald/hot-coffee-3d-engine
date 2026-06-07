@@ -172,6 +172,11 @@ namespace hc
      */
     void clear();
 
+    /**
+     * @brief Destroys the scene, performing cleanup and clearing contents.
+     */
+    void destroy();
+
   protected:
     /**
      * @brief Called after the scene is initialized.
@@ -304,11 +309,6 @@ namespace hc
      * @param elapsedTime The elapsed time since the last update.
      */
     void update(const Time& elapsedTime);
-
-    /**
-     * @brief Destroys the scene, performing cleanup and clearing contents.
-     */
-    void destroy();
 
     friend class SceneManager;
   };
