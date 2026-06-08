@@ -10,7 +10,7 @@ namespace hc
     {
       RGBA8,
       RGB8,
-      COUNT
+      Count
     };
 
     inline UInt8 GetChannelCount(Type format)

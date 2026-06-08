@@ -36,15 +36,15 @@ namespace hc::editor
     Path m_bottomImagePath;
     Path m_backImagePath;
     Path m_frontImagePath;
-    String m_formatStrings[colorFormatType::COUNT];
-    const char* m_formatItems[colorFormatType::COUNT];
+    String m_formatStrings[colorFormatType::Count];
+    const char* m_formatItems[colorFormatType::Count];
 
     void onDraw() override;
 
     void clear();
     bool canSave() const;
     bool canSaveAs() const;
-    bool save(const Path& path);
+    bool save(const Path& path) const;
     bool load(const Path& path);
   };
 }

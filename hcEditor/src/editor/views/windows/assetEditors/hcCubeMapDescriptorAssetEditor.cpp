@@ -28,7 +28,7 @@ namespace hc::editor
     m_formatStrings(),
     m_formatItems()
   {
-    for (UInt8 i = 0; i < colorFormatType::COUNT; ++i)
+    for (UInt8 i = 0; i < colorFormatType::Count; ++i)
     {
       m_formatStrings[i] = colorFormatType::ToString(static_cast<colorFormatType::Type>(i));
       m_formatItems[i] = m_formatStrings[i].c_str();
@@ -62,7 +62,7 @@ namespace hc::editor
       m_faceSize = static_cast<UInt32>(faceSizeInput);
 
     Int32 selectedFormat = static_cast<Int32>(m_format);
-    if (ImGui::Combo("Format", &selectedFormat, m_formatItems, colorFormatType::COUNT))
+    if (ImGui::Combo("Format", &selectedFormat, m_formatItems, colorFormatType::Count))
       m_format = static_cast<colorFormatType::Type>(selectedFormat);
 
     // Input fields for each cube map face
@@ -194,7 +194,7 @@ namespace hc::editor
       m_faceSize > 0;
   }
 
-  bool CubeMapDescriptorAssetEditor::save(const Path& path)
+  bool CubeMapDescriptorAssetEditor::save(const Path& path) const
   {
     try
     {
