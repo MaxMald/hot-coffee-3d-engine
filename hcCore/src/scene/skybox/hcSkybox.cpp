@@ -39,7 +39,7 @@ namespace hc
     try
     {
       m_cubeMap->initialize(
-        width, height, channels,
+        width, height, static_cast<colorFormatType::Type>(channels),
         right, left, top,
         bottom, back, front
       );

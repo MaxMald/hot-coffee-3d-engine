@@ -13,7 +13,7 @@ namespace hc
     void initialize(
       const UInt32 width,
       const UInt32 height,
-      const UInt8 channels,
+      const colorFormatType::Type format,
       const Image& right,
       const Image& left,
       const Image& top,
@@ -25,7 +25,7 @@ namespace hc
     bool isValid() const override;
     UInt32 getFaceWidth() const override;
     UInt32 getFaceHeight() const override;
-    UInt8 getChannels() const override;
+    colorFormatType::Type getFormat() const override;
     void destroy() override;
 
     UInt32 getId() const;
@@ -35,7 +35,7 @@ namespace hc
     bool m_valid;
     UInt32 m_faceWidth;
     UInt32 m_faceHeight;
-    UInt8 m_channels;
+    colorFormatType::Type m_format;
 
     static void assertImageSize(const Image& image, const UInt32 width, const UInt32 height);
     void assertIsValid() const;

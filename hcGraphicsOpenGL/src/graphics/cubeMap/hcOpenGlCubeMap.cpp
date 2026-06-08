@@ -10,7 +10,7 @@ namespace hc
     m_valid(false),
     m_faceHeight(0),
     m_faceWidth(0),
-    m_channels(0)
+    m_format(colorFormatType::Type::RGBA8)
   {}
 
   OpenGlCubeMap::~OpenGlCubeMap()
@@ -21,7 +21,7 @@ namespace hc
   void OpenGlCubeMap::initialize(
     const UInt32 width,
     const UInt32 height,
-    const UInt8 channels,
+    const colorFormatType::Type format,
     const Image & right,
     const Image & left,
     const Image & top,
@@ -43,11 +43,8 @@ namespace hc
     assertImageSize(back, width, height);
     assertImageSize(front, width, height);
 
-    if (channels != 3 && channels != 4)
-      throw RuntimeErrorException("Cube map must have either 3 or 4 channels");
-
-    GLenum format = (channels == 3) ? GL_RGB : GL_RGBA;
-    GLenum internalFormat = (channels == 3) ? GL_RGB8 : GL_RGBA8;
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(format);
+    GLenum internalFormat = (glFormat == GL_RGB) ? GL_RGB8 : GL_RGBA8;
     GLint currentCubeMapTexture = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
 
@@ -59,42 +56,42 @@ namespace hc
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, right.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, left.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, top.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, bottom.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, back.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internalFormat,
-        width, height, 0, format,
+        width, height, 0, glFormat,
         GL_UNSIGNED_BYTE, front.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
@@ -116,7 +113,7 @@ namespace hc
     glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
     m_faceWidth = width;
     m_faceHeight = height;
-    m_channels = channels;
+    m_format = format;
     m_valid = true;
   }
 
@@ -135,9 +132,9 @@ namespace hc
     return m_faceHeight;
   }
 
-  UInt8 OpenGlCubeMap::getChannels() const
+  colorFormatType::Type OpenGlCubeMap::getFormat() const
   {
-    return m_channels;
+    return colorFormatType::Type();
   }
 
   void OpenGlCubeMap::destroy()
@@ -153,7 +150,7 @@ namespace hc
       m_id = 0;
     }
 
-    m_channels = 0;
+    m_format = colorFormatType::Type::RGBA8;
     m_faceHeight = 0;
     m_faceWidth = 0;
     m_valid = false;

@@ -18,7 +18,7 @@ namespace hc::serialization
 
     writer.writeUInt32(cubeMap.getFaceWidth());
     writer.writeUInt32(cubeMap.getFaceHeight());
-    writer.writeUInt8(cubeMap.getChannels());
+    writer.writeUInt8(static_cast<UInt8>(cubeMap.getFormat()));
     writer.writePath(skybox.getRightImagePath());
     writer.writePath(skybox.getLeftImagePath());
     writer.writePath(skybox.getTopImagePath());

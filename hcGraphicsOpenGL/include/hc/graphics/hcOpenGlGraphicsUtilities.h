@@ -35,5 +35,10 @@ namespace hc
      * @brief Converts an OpenGL polygon mode to the corresponding polygon fill type.
      */
     polygonFillType::Type GetPolygonFillTypeFromOpenGlPolygonMode(UInt32 glPolygonMode);
+
+    /**
+     * @brief Converts a color format type to the corresponding OpenGL format.
+     */
+    UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat);
   }
 }

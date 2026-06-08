@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/utilities/hcColorFormatType.h"
 
 namespace hc
 {
@@ -14,7 +15,7 @@ namespace hc
     virtual void initialize(
       const UInt32 width,
       const UInt32 height,
-      const UInt8 channels,
+      const colorFormatType::Type format,
       const Image& right,
       const Image& left,
       const Image& top,
@@ -26,7 +27,7 @@ namespace hc
     virtual bool isValid() const = 0;
     virtual UInt32 getFaceWidth() const = 0;
     virtual UInt32 getFaceHeight() const = 0;
-    virtual UInt8 getChannels() const = 0;
+    virtual colorFormatType::Type getFormat() const = 0;
     virtual void destroy() = 0;
 
   protected:
