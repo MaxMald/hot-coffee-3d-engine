@@ -1,0 +1,48 @@
+#pragma once
+
+#include "hc/editor/views/windows/hcAWindowView.h"
+#include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
+
+namespace hc::editor
+{
+  class ProjectManager;
+  class ProjectFileDialogView;
+
+  class CubeMapDescriptorAssetEditor :
+    public AWindowView,
+    public IProjectManagerListener
+  {
+  public:
+    CubeMapDescriptorAssetEditor(
+      ProjectManager& projectManager,
+      ProjectFileDialogView& fileDialog
+    );
+    ~CubeMapDescriptorAssetEditor() = default;
+
+    void onProjectOpened() override;
+    void onProjectClosed() override;
+
+  private:
+    ProjectManager& m_projectManager;
+    ProjectFileDialogView& m_fileDialog;
+    Vector<String> m_cubeMapDescriptorExtensions;
+    Path m_assetPath;
+    bool m_useRelativePaths;
+    UInt32 m_faceSize;
+    UInt8 m_channels;
+    Path m_rightImagePath;
+    Path m_leftImagePath;
+    Path m_topImagePath;
+    Path m_bottomImagePath;
+    Path m_backImagePath;
+    Path m_frontImagePath;
+
+    void onDraw() override;
+
+    void clear();
+    bool canSave() const;
+    bool canSaveAs() const;
+    bool save(const Path& path);
+    bool load(const Path& path);
+  };
+}
