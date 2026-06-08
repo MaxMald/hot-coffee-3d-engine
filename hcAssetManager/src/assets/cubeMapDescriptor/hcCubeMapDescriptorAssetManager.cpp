@@ -1,6 +1,6 @@
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptorAssetManager.h"
 
-#include <iostream>
+#include <fstream>
 
 namespace hc
 {

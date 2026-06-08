@@ -4,9 +4,8 @@
 
 namespace hc
 {
-  struct CubeMapDescriptor : public Asset, public ISerializable
+  struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public ISerializable
   {
-  public:
     UInt32 m_faceWidth;
     UInt32 m_faceHeight;
     UInt8 m_channels;
