@@ -6,15 +6,15 @@ namespace hc
 {
   struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public ISerializable
   {
-    UInt32 m_faceWidth;
-    UInt32 m_faceHeight;
-    UInt8 m_channels;
-    Path m_rightImagePath;
-    Path m_leftImagePath;
-    Path m_topImagePath;
-    Path m_bottomImagePath;
-    Path m_backImagePath;
-    Path m_frontImagePath;
+    UInt32 faceWidth;
+    UInt32 faceHeight;
+    UInt8 channels;
+    Path rightImagePath;
+    Path leftImagePath;
+    Path topImagePath;
+    Path bottomImagePath;
+    Path backImagePath;
+    Path frontImagePath;
 
     CubeMapDescriptor();
     CubeMapDescriptor(const Path& path);
@@ -22,5 +22,7 @@ namespace hc
 
     void serialize(BinaryWriter& writer) const override;
     void deserialize(BinaryReader& reader) override;
+
+    void clear();
   };
 }
