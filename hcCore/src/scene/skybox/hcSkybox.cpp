@@ -36,11 +36,18 @@ namespace hc
     if (m_cubeMap->isValid())
       destroy();
 
-    m_cubeMap->initialize(
-      width, height, channels,
-      right, left, top,
-      bottom, back, front
-    );
+    try
+    {
+      m_cubeMap->initialize(
+        width, height, channels,
+        right, left, top,
+        bottom, back, front
+      );
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException("Failed to initialize CubeMap: " + String(e.what()));
+    }
 
     m_rightImagePath = right.getPath();
     m_leftImagePath = left.getPath();
