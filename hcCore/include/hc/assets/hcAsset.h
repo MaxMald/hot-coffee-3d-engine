@@ -10,8 +10,7 @@ namespace hc
    * Represents a loadable resource with a unique identifier and file path.
    * Assets are managed by the AssetManager and cannot be copied.
    */
-  class HC_CORE_EXPORT Asset :
-    public NonCopyable
+  class HC_CORE_EXPORT Asset
   {
   public:
     virtual ~Asset() = default;
