@@ -33,6 +33,19 @@ namespace hc::editor
       m_formatStrings[i] = colorFormatType::ToString(static_cast<colorFormatType::Type>(i));
       m_formatItems[i] = m_formatStrings[i].c_str();
     }
+
+    m_projectManager.subscribeListener(this);
+  }
+
+  CubeMapDescriptorAssetEditor::~CubeMapDescriptorAssetEditor()
+  {
+    destroy();
+  }
+
+  void CubeMapDescriptorAssetEditor::destroy()
+  {
+    clear();
+    m_projectManager.unsubscribeListener(this);
   }
 
   void CubeMapDescriptorAssetEditor::onProjectOpened()

@@ -17,8 +17,9 @@ namespace hc::editor
       ProjectManager& projectManager,
       ProjectFileDialogView& fileDialog
     );
-    ~CubeMapDescriptorAssetEditor() = default;
+    ~CubeMapDescriptorAssetEditor();
 
+    void destroy() override;
     void onProjectOpened() override;
     void onProjectClosed() override;
 

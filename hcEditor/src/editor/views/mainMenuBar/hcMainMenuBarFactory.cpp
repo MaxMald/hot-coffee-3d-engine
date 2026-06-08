@@ -20,6 +20,7 @@
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 #include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
+#include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 
 // Menu Items
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
@@ -107,6 +108,15 @@ namespace hc::editor
             ))
           .endMenu()
           .build()
+      );
+
+      mainMenuBar->addMenu(menuBuilder
+        .beginMenu("Assets")
+          .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+            *editorViewsManager.getView<CubeMapDescriptorAssetEditor>()
+          ))
+        .endMenu()
+        .build()
       );
 
       return std::move(mainMenuBar);
