@@ -9,13 +9,12 @@ namespace hc
     UInt32 faceWidth;
     UInt32 faceHeight;
     UInt8 channels;
-    bool hasRelativePaths;
-    Path rightImagePath;
-    Path leftImagePath;
-    Path topImagePath;
-    Path bottomImagePath;
-    Path backImagePath;
-    Path frontImagePath;
+    String rightImagePath;
+    String leftImagePath;
+    String topImagePath;
+    String bottomImagePath;
+    String backImagePath;
+    String frontImagePath;
 
     CubeMapDescriptor();
     CubeMapDescriptor(const Path& path);
