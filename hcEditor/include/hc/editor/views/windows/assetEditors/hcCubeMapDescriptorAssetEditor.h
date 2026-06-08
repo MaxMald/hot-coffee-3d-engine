@@ -29,13 +29,15 @@ namespace hc::editor
     Path m_assetPath;
     bool m_useRelativePaths;
     UInt32 m_faceSize;
-    UInt8 m_channels;
+    colorFormatType::Type m_format;
     Path m_rightImagePath;
     Path m_leftImagePath;
     Path m_topImagePath;
     Path m_bottomImagePath;
     Path m_backImagePath;
     Path m_frontImagePath;
+    String m_formatStrings[colorFormatType::COUNT];
+    const char* m_formatItems[colorFormatType::COUNT];
 
     void onDraw() override;
 
