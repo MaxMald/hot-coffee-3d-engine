@@ -24,6 +24,16 @@ namespace hc::serialization
     };
     
     /**
+     * @brief Cube map descriptor file format (.hccubemapd).
+     */
+    struct HC_CORE_EXPORT CubeMapDescriptor
+    {
+      static constexpr UInt32 MAGIC_NUMBER = 0x48434344;  // "HCCD" in hex
+      static constexpr UInt32 VERSION = 1;
+      static constexpr const char* FILE_EXTENSION = ".hccubemapd";
+    };
+    
+    /**
      * @brief Prefab file format (.hcprefab).
      */
     /*
