@@ -4,6 +4,7 @@
 #include "hc/assets/model/hcModelAssetManager.h"
 #include "hc/assets/image/hcImageAssetManager.h"
 #include "hc/assets/materialDescriptor/hcMaterialDescriptorAssetManager.h"
+#include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptorAssetManager.h"
 
 namespace hc
 {
@@ -22,61 +23,55 @@ namespace hc
     virtual ~AssetManager() = default;
 
     /**
-     * Retrieves the model asset manager.
-     *
-     * @return Reference to the model asset manager instance
+     * @copydoc IAssetManager::getModelAssetManager
      */
     IModelAssetManager& getModelAssetManager() override;
 
     /**
-     * Retrieves the image asset manager.
-     *
-     * @return Reference to the image asset manager instance
+     * @copydoc IAssetManager::getImageAssetManager
      */
     IImageAssetManager& getImageAssetManager() override;
 
     /**
-     * Retrieves the material descriptor asset manager.
-     *
-     * @return Reference to the material descriptor asset manager
+     * @copydoc IAssetManager::getMaterialDescriptorAssetManager
      */
     IMaterialDescriptorAssetManager& getMaterialDescriptorAssetManager() override;
 
     /**
-     * Clears all asset groups from all sub-managers.
+     * @copydoc IAssetManager::getCubeMapDescriptorAssetManager
+     */
+    ICubeMapDescriptorAssetManager& getCubeMapDescriptorAssetManager() override;
+
+    /**
+     * @copydoc IAssetManager::clear
      */
     void clear() override;
 
     /**
-     * Destroys the asset manager, clearing all assets and resources.
+     * @copydoc IAssetManager::destroy
      */
     void destroy() override;
 
     /**
-     * Sets the root path for asset loading.
-     *
-     * @param rootPath The root directory path where assets are located
+     * @copydoc IAssetManager::setRootPath
      */
-    void setRootPath(const Path& rootPath);
+    void setRootPath(const Path& rootPath) override;
 
     /**
-     * Gets the root path for asset loading.
-     *
-     * @returns The root directory path where assets are located
+     * @copydoc IAssetManager::getRootPath
      */
-    const Path& getRootPath() const;
+    const Path& getRootPath() const override;
 
     /**
-     * Checks if a root path has been set for asset loading.
-     *
-     * @return true if a root path is set, false otherwise
+     * @copydoc IAssetManager::hasRootPath
      */
-    bool hasRootPath() const;
+    bool hasRootPath() const override;
 
   private:
     MaterialDescriptorAssetManager m_materialDescriptorAssetManager;
     ModelAssetManager m_modelAssetManager;
     ImageAssetManager m_imageAssetManager;
+    CubeMapDescriptorAssetManager m_cubeMapDescriptorAssetManager;
     Path m_rootPath;
   };
 }

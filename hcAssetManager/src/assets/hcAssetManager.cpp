@@ -6,6 +6,7 @@ namespace hc
     m_materialDescriptorAssetManager(),
     m_modelAssetManager(m_materialDescriptorAssetManager),
     m_imageAssetManager(),
+    m_cubeMapDescriptorAssetManager(),
     m_rootPath()
   {
   }
@@ -25,11 +26,17 @@ namespace hc
     return m_materialDescriptorAssetManager;
   }
 
+  ICubeMapDescriptorAssetManager& AssetManager::getCubeMapDescriptorAssetManager()
+  {
+    return m_cubeMapDescriptorAssetManager;
+  }
+
   void AssetManager::clear()
   {
     m_materialDescriptorAssetManager.clear();
     m_modelAssetManager.clear();
     m_imageAssetManager.clear();
+    m_cubeMapDescriptorAssetManager.clear();
   }
 
   void AssetManager::destroy()
