@@ -4,22 +4,21 @@ namespace hc
 {
   CubeMapDescriptor::CubeMapDescriptor() :
     Asset(""),
-    faceWidth(0), faceHeight(0), channels(4),
+    faceSize(0), channels(4),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
 
   CubeMapDescriptor::CubeMapDescriptor(const Path& path) :
     Asset(path),
-    faceWidth(0), faceHeight(0), channels(4),
+    faceSize(0), channels(4),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
 
   void CubeMapDescriptor::serialize(BinaryWriter & writer) const
   {
-    writer.writeUInt32(faceWidth);
-    writer.writeUInt32(faceHeight);
+    writer.writeUInt32(faceSize);
     writer.writeUInt8(channels);
     writer.writeString(rightImagePath);
     writer.writeString(leftImagePath);
@@ -32,8 +31,7 @@ namespace hc
   void CubeMapDescriptor::deserialize(BinaryReader & reader)
   {
     clear();
-    faceWidth = reader.readUInt32();
-    faceHeight = reader.readUInt32();
+    faceSize = reader.readUInt32();
     channels = reader.readUInt8();
     rightImagePath = reader.readString();
     leftImagePath = reader.readString();
@@ -46,8 +44,7 @@ namespace hc
   void CubeMapDescriptor::clear()
   {
     m_path.clear();
-    faceWidth = 0;
-    faceHeight = 0;
+    faceSize = 0;
     channels = 4;
     rightImagePath.clear();
     leftImagePath.clear();

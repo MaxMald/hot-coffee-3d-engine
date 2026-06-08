@@ -6,8 +6,7 @@ namespace hc
 {
   struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public ISerializable
   {
-    UInt32 faceWidth;
-    UInt32 faceHeight;
+    UInt32 faceSize;
     UInt8 channels;
     String rightImagePath;
     String leftImagePath;
