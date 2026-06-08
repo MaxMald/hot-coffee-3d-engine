@@ -4,14 +4,14 @@ namespace hc
 {
   CubeMapDescriptor::CubeMapDescriptor() :
     Asset(""),
-    faceWidth(0), faceHeight(0), channels(4),
+    faceWidth(0), faceHeight(0), channels(4), hasRelativePaths(false),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
 
   CubeMapDescriptor::CubeMapDescriptor(const Path& path) :
     Asset(path),
-    faceWidth(0), faceHeight(0), channels(4),
+    faceWidth(0), faceHeight(0), channels(4), hasRelativePaths(false),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
@@ -22,6 +22,7 @@ namespace hc
     writer.writeUInt32(faceWidth);
     writer.writeUInt32(faceHeight);
     writer.writeUInt8(channels);
+    writer.writeBool(hasRelativePaths);
     writer.writePath(rightImagePath);
     writer.writePath(leftImagePath);
     writer.writePath(topImagePath);
@@ -37,6 +38,7 @@ namespace hc
     faceWidth = reader.readUInt32();
     faceHeight = reader.readUInt32();
     channels = reader.readUInt8();
+    hasRelativePaths = reader.readBool();
     rightImagePath = reader.readPath();
     leftImagePath = reader.readPath();
     topImagePath = reader.readPath();
@@ -51,6 +53,7 @@ namespace hc
     faceWidth = 0;
     faceHeight = 0;
     channels = 4;
+    hasRelativePaths = false;
     rightImagePath.clear();
     leftImagePath.clear();
     topImagePath.clear();

@@ -9,6 +9,7 @@ namespace hc
     UInt32 faceWidth;
     UInt32 faceHeight;
     UInt8 channels;
+    bool hasRelativePaths;
     Path rightImagePath;
     Path leftImagePath;
     Path topImagePath;
