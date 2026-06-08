@@ -93,6 +93,13 @@ namespace hc::editor
     return m_currentScenePath;
   }
 
+  Scene& EditorSceneManager::getEditorScene()
+  {
+    if (!m_editorScene)
+      throw RuntimeErrorException("Editor scene is undefined or invalid");
+    return *m_editorScene;
+  }
+
   void EditorSceneManager::onProjectOpened()
   {
     if (isSceneOpen())

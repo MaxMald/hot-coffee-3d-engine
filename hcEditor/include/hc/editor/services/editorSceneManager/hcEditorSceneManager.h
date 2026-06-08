@@ -9,7 +9,7 @@ namespace hc::editor
 
   /**
    * @brief Manages the editor's scene, allowing opening, saving, and closing scenes.
-   * 
+   *
    * Listens to project events to ensure scene management is in sync with the current
    * project state.
    */
@@ -82,6 +82,15 @@ namespace hc::editor
      * @return A reference to the path of the current scene.
      */
     const Path& getCurrentScenePath() const;
+
+    /**
+     * @brief Gets a reference to the editor's scene.
+     *
+     * @return Reference to the editor's Scene instance.
+     *
+     * @throw RuntimeErrorException If the editor scene is undefined or invalid.
+     */
+    Scene& getEditorScene();
 
   protected:
 
