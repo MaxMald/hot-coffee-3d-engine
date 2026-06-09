@@ -62,6 +62,7 @@ namespace hc
         defaultData[i] = 255;
 
       defaultImage = MakeShared<Image>(
+        Path(),
         descriptor->faceSize,
         descriptor->faceSize,
         static_cast<UInt8>(numChannels),
