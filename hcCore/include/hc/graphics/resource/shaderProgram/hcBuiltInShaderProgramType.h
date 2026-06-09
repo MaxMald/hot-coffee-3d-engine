@@ -11,7 +11,8 @@ namespace hc
       Unlit = 0,
       BlinnPhongForward,
       BlinnPhongDeferredGeometry,
-      DeferredLighting
+      DeferredLighting,
+      Skybox
     };
 
     HC_CORE_EXPORT String ToString(Type type);
