@@ -20,8 +20,32 @@ namespace hc
         throw IOException("Failed to open file for reading.");
 
       BinaryReader reader(file);
-      SharedPtr<CubeMapDescriptor> cubeMapDescriptor = MakeShared<CubeMapDescriptor>(path);
+
+      SharedPtr<CubeMapDescriptor> cubeMapDescriptor = MakeShared<CubeMapDescriptor>();
       cubeMapDescriptor->deserialize(reader);
+      cubeMapDescriptor->setPath(path);
+
+      Path basePath = path.parent_path();
+
+      cubeMapDescriptor->rightImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->rightImagePath, basePath
+      ).generic_string();
+      cubeMapDescriptor->leftImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->leftImagePath, basePath
+      ).generic_string();
+      cubeMapDescriptor->topImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->topImagePath, basePath
+      ).generic_string();
+      cubeMapDescriptor->bottomImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->bottomImagePath, basePath
+      ).generic_string();
+      cubeMapDescriptor->backImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->backImagePath, basePath
+      ).generic_string();
+      cubeMapDescriptor->frontImagePath = AssetPath::ToAbsolute(
+        cubeMapDescriptor->frontImagePath, basePath
+      ).generic_string();
+
       m_loadedCubeMapDescriptors[path] = cubeMapDescriptor;
       return cubeMapDescriptor;
     }
