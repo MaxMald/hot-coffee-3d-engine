@@ -4,6 +4,12 @@
 
 namespace hc
 {
+  // TODO
+  //
+  // Assets are not no-copyable, that is they can be copied. Because of this, we should
+  // create a new ID when copied. Also, consider using the utilities' UUID class instead
+  // of ID.
+
   /**
    * Base class for all engine assets.
    *

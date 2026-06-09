@@ -76,8 +76,6 @@ namespace hc
      * @brief Gets a reference to the scene's skybox for modification.
      *
      * @return Reference to the Skybox.
-     *
-     * @throw RuntimeErrorException If no skybox is set for the scene.
      */
     Skybox& getSceneSkybox();
 
@@ -85,8 +83,6 @@ namespace hc
      * @brief Gets a const reference to the scene's skybox.
      *
      * @return Const reference to the Skybox.
-     *
-     * @throw RuntimeErrorException If no skybox is set for the scene.
      */
     const Skybox& getSceneSkybox() const;
 
