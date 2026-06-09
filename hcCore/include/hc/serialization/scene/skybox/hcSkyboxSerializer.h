@@ -6,6 +6,7 @@ namespace hc
 {
   class Skybox;
   class IAssetManager;
+  class IGraphicsManager;
 
   namespace serialization
   {
@@ -13,7 +14,12 @@ namespace hc
     {
     public:
       static void Serialize(const Skybox& skybox, BinaryWriter& writer);
-      static void Deserialize(Skybox& skybox, BinaryReader& reader, IAssetManager& assetManager);
+      static void Deserialize(
+        Skybox& skybox,
+        BinaryReader& reader,
+        IAssetManager& assetManager,
+        IGraphicsManager& graphicsManager
+      );
     };
   }
 }
