@@ -14,7 +14,7 @@ namespace hc
     m_cameraManager(),
     m_lightFrameData(),
     m_gameObjectFactory(nullptr),
-    m_skybox(nullptr)
+    m_skybox()
   {
   }
 
@@ -65,41 +65,14 @@ namespace hc
     return rootPtr;
   }
 
-  Skybox& Scene::createSceneSkybox(IGraphicsManager& graphicsManager)
-  {
-    if (m_skybox)
-      throw RuntimeErrorException("Skybox already exists for the scene.");
-
-    m_skybox = MakeUnique<Skybox>(graphicsManager.createCubeMap());
-    return *m_skybox;
-  }
-
-  bool Scene::hasSkybox() const
-  {
-    return m_skybox != nullptr;
-  }
-
   Skybox& Scene::getSceneSkybox()
   {
-    if (!m_skybox)
-      throw RuntimeErrorException("No skybox is set for the scene.");
-    return *m_skybox;
+    return m_skybox;
   }
 
   const Skybox& Scene::getSceneSkybox() const
   {
-    if (!m_skybox)
-      throw RuntimeErrorException("No skybox is set for the scene.");
-    return *m_skybox;
-  }
-
-  void Scene::destroySceneSkybox()
-  {
-    if (m_skybox)
-    {
-      m_skybox->destroy();
-      m_skybox.reset();
-    }
+    return m_skybox;
   }
 
   SceneGraph& Scene::getSceneGraph()
@@ -273,6 +246,5 @@ namespace hc
   {
     onDestroy();
     clear();
-    destroySceneSkybox();
   }
 }

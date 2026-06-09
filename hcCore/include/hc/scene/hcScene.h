@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
+#include "hc/scene/skybox/hcSkybox.h"
 #include "hc/graphics/lightFrameData/hcLightFrameData.h"
 
 namespace hc
@@ -10,7 +11,6 @@ namespace hc
   class IGameObjectFactory;
   class SceneManager;
   class IGraphicsManager;
-  class Skybox;
 
   /**
    * @brief Represents a 3D scene containing game objects, lights, and cameras.
@@ -73,31 +73,6 @@ namespace hc
     GameObject* createRootGameObject(const String& name);
 
     /**
-     * @brief Creates a new skybox for the scene using the provided graphics manager.
-     *
-     * Scenes does not have a skybox by default. This method creates a new skybox and
-     * associates it with the scene.
-     *
-     * If a skybox already exists for the scene, a RuntimeErrorException is thrown. Check
-     * hasSkybox() before calling this method to avoid exceptions.
-     *
-     * @param graphicsManager The graphics manager to use for creating the skybox.
-     *
-     * @return Reference to the created Skybox.
-     *
-     * @throw RuntimeErrorException If the skybox cannot be created, or if the skybox
-     * already exists.
-     */
-    Skybox& createSceneSkybox(IGraphicsManager& graphicsManager);
-
-    /**
-     * @brief Checks if the scene has a skybox.
-     *
-     * @return True if a skybox is set for the scene, false otherwise.
-     */
-    bool hasSkybox() const;
-
-    /**
      * @brief Gets a reference to the scene's skybox for modification.
      *
      * @return Reference to the Skybox.
@@ -114,14 +89,6 @@ namespace hc
      * @throw RuntimeErrorException If no skybox is set for the scene.
      */
     const Skybox& getSceneSkybox() const;
-
-    /**
-     * @brief Destroys the scene's skybox, releasing all associated resources.
-     *
-     * After calling this method, the scene will no longer have a skybox until
-     * createSceneSkybox() is called again.
-     */
-    void destroySceneSkybox();
 
     /**
      * @brief Gets a reference to the scene graph for modification.
@@ -283,7 +250,7 @@ namespace hc
     CameraManager m_cameraManager;
     LightFrameData m_lightFrameData;
     IGameObjectFactory* m_gameObjectFactory;
-    UniquePtr<Skybox> m_skybox;
+    Skybox m_skybox;
 
     /**
      * @brief Initializes the scene with a GameObjectFactory.
