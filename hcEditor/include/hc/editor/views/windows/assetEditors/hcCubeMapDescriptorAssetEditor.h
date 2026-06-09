@@ -28,7 +28,6 @@ namespace hc::editor
     ProjectFileDialogView& m_fileDialog;
     Vector<String> m_cubeMapDescriptorExtensions;
     Path m_assetPath;
-    bool m_useRelativePaths;
     UInt32 m_faceSize;
     colorFormatType::Type m_format;
     Path m_rightImagePath;

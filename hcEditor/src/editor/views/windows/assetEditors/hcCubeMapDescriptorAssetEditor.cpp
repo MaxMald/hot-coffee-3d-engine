@@ -18,7 +18,6 @@ namespace hc::editor
     m_assetPath(),
     m_faceSize(0),
     m_format(colorFormatType::RGBA8),
-    m_useRelativePaths(true),
     m_rightImagePath(),
     m_leftImagePath(),
     m_topImagePath(),
@@ -67,7 +66,6 @@ namespace hc::editor
     }
 
     ImGui::LabelText("Asset Path", "%s", m_assetPath.empty() ? "New Asset" : m_assetPath.generic_string().c_str());
-    ImGui::Checkbox("Use Relative Paths", &m_useRelativePaths);
 
     // Input fields for face dimensions and channels
     Int32 faceSizeInput = static_cast<Int32>(m_faceSize);
@@ -173,7 +171,6 @@ namespace hc::editor
   void CubeMapDescriptorAssetEditor::clear()
   {
     m_assetPath.clear();
-    m_useRelativePaths = true;
     m_faceSize = 0;
     m_format = colorFormatType::RGBA8;
     m_rightImagePath.clear();
@@ -216,25 +213,13 @@ namespace hc::editor
       descriptorToSave.faceSize = m_faceSize;
       descriptorToSave.format = m_format;
 
-      if (m_useRelativePaths)
-      {
-        Path baseDir = path.parent_path();
-        descriptorToSave.rightImagePath = AssetPath::ToRelative(m_rightImagePath, baseDir);
-        descriptorToSave.leftImagePath = AssetPath::ToRelative(m_leftImagePath, baseDir);
-        descriptorToSave.topImagePath = AssetPath::ToRelative(m_topImagePath, baseDir);
-        descriptorToSave.bottomImagePath = AssetPath::ToRelative(m_bottomImagePath, baseDir);
-        descriptorToSave.backImagePath = AssetPath::ToRelative(m_backImagePath, baseDir);
-        descriptorToSave.frontImagePath = AssetPath::ToRelative(m_frontImagePath, baseDir);
-      }
-      else
-      {
-        descriptorToSave.rightImagePath = m_rightImagePath.generic_string();
-        descriptorToSave.leftImagePath = m_leftImagePath.generic_string();
-        descriptorToSave.topImagePath = m_topImagePath.generic_string();
-        descriptorToSave.bottomImagePath = m_bottomImagePath.generic_string();
-        descriptorToSave.backImagePath = m_backImagePath.generic_string();
-        descriptorToSave.frontImagePath = m_frontImagePath.generic_string();
-      }
+      Path baseDir = path.parent_path();
+      descriptorToSave.rightImagePath = AssetPath::ToRelative(m_rightImagePath, baseDir);
+      descriptorToSave.leftImagePath = AssetPath::ToRelative(m_leftImagePath, baseDir);
+      descriptorToSave.topImagePath = AssetPath::ToRelative(m_topImagePath, baseDir);
+      descriptorToSave.bottomImagePath = AssetPath::ToRelative(m_bottomImagePath, baseDir);
+      descriptorToSave.backImagePath = AssetPath::ToRelative(m_backImagePath, baseDir);
+      descriptorToSave.frontImagePath = AssetPath::ToRelative(m_frontImagePath, baseDir);
 
       std::ofstream file(path, std::ios::out | std::ios::binary);
       if (!file.is_open())
