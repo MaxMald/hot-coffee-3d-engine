@@ -12,7 +12,8 @@ namespace hc
   {
     bool SceneSerializer::Serialize(
       const Scene& scene,
-      const Path& filePath
+      const Path& filePath,
+      const IAssetManager& assetManager
     )
     {
       try
@@ -31,12 +32,7 @@ namespace hc
 
         SerializeHeader(writer);
         scene.serialize(writer);
-
-        bool hasSkybox = scene.hasSkybox();
-        writer.writeBool(hasSkybox);
-        if (hasSkybox)
-          SkyboxSerializer::Serialize(scene.getSceneSkybox(), writer);
-          
+        SkyboxSerializer::Serialize(scene.getSceneSkybox(), writer, assetManager);
 
         return true;
       }
@@ -74,13 +70,7 @@ namespace hc
 
         VerifyHeader(reader);
         scene.deserialize(reader);
-
-        bool hasSkybox = reader.readBool();
-        if (hasSkybox)
-        {
-          scene.createSceneSkybox(graphicsManager);
-          SkyboxSerializer::Deserialize(scene.getSceneSkybox(), reader, assetManager);
-        }
+        SkyboxSerializer::Deserialize(scene.getSceneSkybox(), reader, assetManager, graphicsManager);
 
         return true;
       }

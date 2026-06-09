@@ -45,6 +45,7 @@
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
 #include "hc/graphics/cubeMap/hcICubeMap.h"
+#include "hc/graphics/cubeMap/hcCubeMapFactory.h"
 #include "hc/graphics/resource/shader/hcIShader.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/shader/hcIShaderManager.h"

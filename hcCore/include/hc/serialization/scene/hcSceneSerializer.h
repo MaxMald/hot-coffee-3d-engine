@@ -24,17 +24,23 @@ namespace hc
       /**
        * @brief Serializes a scene to a .hcscene file.
        *
-       * Writes the file header (magic number, format version, engine version)
-       * followed by the complete scene data including lights, cameras, and the
-       * scene graph hierarchy. Returns false if the file cannot be opened or
-       * if an exception occurs during serialization.
+       * Writes the file header (magic number, format version, engine version) followed by
+       * the complete scene data including lights, cameras, and the scene graph hierarchy.
+       * Returns false if the file cannot be opened or if an exception occurs during
+       * serialization.
        *
        * @param scene The scene to serialize.
        * @param filePath The path to the output .hcscene file.
+       * @param assetManager Reference to the asset manager for resolving relative asset
+       * paths during serialization.
        *
        * @return True if serialization was successful, false otherwise.
        */
-      static bool Serialize(const Scene& scene, const Path& filePath);
+      static bool Serialize(
+        const Scene& scene,
+        const Path& filePath,
+        const IAssetManager& assetManager
+      );
 
       /**
        * @brief Deserializes a scene from a .hcscene file.

@@ -6,6 +6,7 @@
 namespace hc::editor
 {
   class ProjectManager;
+  class IEditorSceneManagerListener;
 
   /**
    * @brief Manages the editor's scene, allowing opening, saving, and closing scenes.
@@ -92,6 +93,20 @@ namespace hc::editor
      */
     Scene& getEditorScene();
 
+    /**
+     * @brief Subscribes a listener to editor scene manager events.
+     *
+     * @param listener Pointer to the IEditorSceneManagerListener to subscribe.
+     */
+    void subscribeListener(IEditorSceneManagerListener* listener);
+
+    /**
+     * @brief Unsubscribes a listener from editor scene manager events.
+     *
+     * @param listener Pointer to the IEditorSceneManagerListener to unsubscribe.
+     */
+    void unsubscribeListener(IEditorSceneManagerListener* listener);
+
   protected:
 
     /**
@@ -110,6 +125,7 @@ namespace hc::editor
     ProjectManager& m_projectManager;
     Scene* m_editorScene;
     Path m_currentScenePath;
+    Vector<IEditorSceneManagerListener*> m_listeners;
 
     void updateLastOpenedSceneInProject();
     void assertSceneIsValid() const;

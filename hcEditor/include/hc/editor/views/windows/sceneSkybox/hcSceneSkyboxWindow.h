@@ -5,35 +5,29 @@
 namespace hc::editor
 {
   class EditorSceneManager;
+  class ProjectFileDialogView;
 
   class SceneSkyboxWindow : public AWindowView
   {
   public:
     SceneSkyboxWindow(
       EditorSceneManager& editorSceneManager,
+      ProjectFileDialogView& projectFileDialogView,
       IAssetManager& assetManager,
       IGraphicsManager& graphicsManager
     );
     ~SceneSkyboxWindow() override;
 
+    void destroy() override;
+
   private:
     EditorSceneManager& m_editorSceneManager;
+    ProjectFileDialogView& m_projectFileDialogView;
     IAssetManager& m_assetManager;
     IGraphicsManager& m_graphicsManager;
-
-    UInt32 m_faceWidth;
-    UInt32 m_faceHeight;
-    UInt8 m_faceChannels;
-    Path m_rightImagePath;
-    Path m_leftImagePath;
-    Path m_topImagePath;
-    Path m_bottomImagePath;
-    Path m_backImagePath;
-    Path m_frontImagePath;
+    Vector<String> m_cubeMapDescriptorExtensions;
 
     void onDraw() override;
-    bool updateSkybox();
-    void getValuesFromScene(const Scene& scene);
-    void clearValues();
+    void updateSkyboxCubeMap(const Path& cubeMapDescriptorPath);
   };
 }

@@ -1,6 +1,22 @@
 #include "hc/editor/views/hcEditorViewsRegistry.h"
+
+#include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
+#include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
+
+// Services
+#include "hc/editor/services/hcEditorServiceManager.h"
+#include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
+#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+
+// Views
 #include "hc/editor/views/hcEditorViewsManager.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
+#include "hc/editor/views/mainMenuBar/hcMainMenuBarFactory.h"
+#include "hc/editor/views/mainMenuBar/hcMainMenuBar.h"
+#include "hc/editor/views/fileDialog/hcFileDialogView.h"
+
+// Views / Windows
 #include "hc/editor/views/windows/hcPluginManagerWindow.h"
 #include "hc/editor/views/windows/hcEditorLoggerWindow.h"
 #include "hc/editor/views/windows/hcSceneGraphWindow.h"
@@ -10,20 +26,13 @@
 #include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
 #include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
-#include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
-#include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
-#include "hc/editor/views/mainMenuBar/hcMainMenuBarFactory.h"
-#include "hc/editor/views/mainMenuBar/hcMainMenuBar.h"
-#include "hc/editor/views/fileDialog/hcFileDialogView.h"
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
-#include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
-#include "hc/editor/services/hcEditorServiceManager.h"
-#include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAssetManagerDrawersRegistry.h"
+#include "hc/editor/views/windows/sceneSkybox/hcSceneSkyboxWindow.h"
 
 namespace hc::editor
 {
@@ -97,6 +106,13 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<CubeMapDescriptorAssetEditor>(
         editorServiceManager.getService<ProjectManager>(),
         *projectFileSelector
+      ));
+
+      viewsManager.registerView(MakeUnique<SceneSkyboxWindow>(
+        editorServiceManager.getService<EditorSceneManager>(),
+        *projectFileSelector,
+        hotCoffeeEngine.getAssetManager(),
+        hotCoffeeEngine.getGraphicsManager()
       ));
 
       // The order of registration matters for some views, such as the main menu bar which

@@ -2,201 +2,108 @@
 
 #include <imgui.h>
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
-#include "hc/editor/views/windows/sceneSkybox/hcSceneSkyboxWindow.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {
   SceneSkyboxWindow::SceneSkyboxWindow(
     EditorSceneManager& editorSceneManager,
+    ProjectFileDialogView& projectFileDialogView,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager
   ) :
     AWindowView("Scene Skybox", false, Vector2f(400.0f, 300.0f)),
     m_editorSceneManager(editorSceneManager),
+    m_projectFileDialogView(projectFileDialogView),
     m_assetManager(assetManager),
     m_graphicsManager(graphicsManager),
-    m_faceWidth(0), m_faceHeight(0), m_faceChannels(4),
-    m_rightImagePath(), m_leftImagePath(), m_topImagePath(),
-    m_bottomImagePath(), m_backImagePath(), m_frontImagePath()
+    m_cubeMapDescriptorExtensions({ hc::serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION })
   {}
 
   SceneSkyboxWindow::~SceneSkyboxWindow()
+  {
+    destroy();
+  }
+
+  void SceneSkyboxWindow::destroy()
   {}
 
   void SceneSkyboxWindow::onDraw()
   {
     if (!m_editorSceneManager.isSceneOpen())
     {
-      clearValues();
-      setOpen(false);
+      ImGui::Text("No scene is currently open. Please open a scene to edit its skybox.");
       return;
     }
 
-    // Should have listeners to know if a scene is opened or closed.
+    Skybox& skybox = m_editorSceneManager.getEditorScene().getSceneSkybox();
+    String cubeMapDescriptorSourcePath;
 
-    if (ImGui::Button("Cancel"))
+    if (skybox.hasCubeMap())
     {
-      clearValues();
-      setOpen(false);
+      const ICubeMap& cubeMap = skybox.getCubeMap();
+      cubeMapDescriptorSourcePath = cubeMap.getCubeMapDescriptorSourcePath().generic_string();
+
+      if (!cubeMap.isValid())
+        ImGui::Text("NOTE: Current skybox cube map is invalid. Please update the skybox with valid images.");
     }
 
-    if (ImGui::Button("Update Skybox"))
+    ImGui::Text(
+      "Current Cube Map Descriptor Source Path: %s",
+      cubeMapDescriptorSourcePath.empty() ? "None" : cubeMapDescriptorSourcePath.c_str()
+    );
+
+    if (ImGui::Button("Select CubeMap"))
     {
-      if (updateSkybox())
-      {
-        ImGui::Text("Skybox updated successfully.");
-        clearValues();
-        setOpen(false);
-      }
-      else
-      {
-        ImGui::Text("Failed to update skybox. Check logs for details.");
-      }
+      m_projectFileDialogView.openFileSelector(
+        "Select Cube Map Descriptor",
+        m_cubeMapDescriptorExtensions,
+        [this](const Path& selectedPath)
+        {
+          updateSkyboxCubeMap(selectedPath);
+        },
+        false
+      );
     }
 
     ImGui::SameLine();
+
+    if (ImGui::Button("Ok"))
+    {
+      setOpen(false);
+    }
   }
 
-  bool hc::editor::SceneSkyboxWindow::updateSkybox()
+  void SceneSkyboxWindow::updateSkyboxCubeMap(const Path& cubeMapDescriptorPath)
   {
-    Scene& currentScene = m_editorSceneManager.getEditorScene();
-    if (!currentScene.hasSkybox())
-    {
-      try
-      {
-        currentScene.createSceneSkybox(m_graphicsManager);
-      }
-      catch (const RuntimeErrorException& e)
-      {
-        LogService::Error("Failed to create skybox: " + String(e.what()));
-        return false;
-      }
-    }
-
-    if (!currentScene.hasSkybox())
-    {
-      LogService::Error("Scene does not have a skybox.");
-      return false;
-    }
-
-    if (m_faceWidth == 0 || m_faceHeight == 0)
-    {
-      LogService::Error("Invalid skybox face dimensions.");
-      return false;
-    }
-
-    if (m_faceChannels != 3 && m_faceChannels != 4)
-    {
-      LogService::Error("Invalid skybox face channels. Must be 3 (RGB) or 4 (RGBA).");
-      return false;
-    }
-
-    if (m_rightImagePath.empty() || m_leftImagePath.empty() || m_topImagePath.empty() ||
-      m_bottomImagePath.empty() || m_backImagePath.empty() || m_frontImagePath.empty())
-    {
-      LogService::Error("All skybox face image paths must be specified.");
-      return false;
-    }
-
-    IImageAssetManager& imageAssetManager = m_assetManager.getImageAssetManager();
-    SharedPtr<Image> rightImage = imageAssetManager.load(m_rightImagePath);
-    SharedPtr<Image> leftImage = imageAssetManager.load(m_leftImagePath);
-    SharedPtr<Image> topImage = imageAssetManager.load(m_topImagePath);
-    SharedPtr<Image> bottomImage = imageAssetManager.load(m_bottomImagePath);
-    SharedPtr<Image> backImage = imageAssetManager.load(m_backImagePath);
-    SharedPtr<Image> frontImage = imageAssetManager.load(m_frontImagePath);
-
-    if (!rightImage)
-    {
-      LogService::Error("Failed to load right face image: " + m_rightImagePath.string());
-      return false;
-    }
-
-    if (!leftImage)
-    {
-      LogService::Error("Failed to load left face image: " + m_leftImagePath.string());
-      return false;
-    }
-
-    if (!topImage)
-    {
-      LogService::Error("Failed to load top face image: " + m_topImagePath.string());
-      return false;
-    }
-
-    if (!bottomImage)
-    {
-      LogService::Error("Failed to load bottom face image: " + m_bottomImagePath.string());
-      return false;
-    }
-
-    if (!backImage)
-    {
-      LogService::Error("Failed to load back face image: " + m_backImagePath.string());
-      return false;
-    }
-
-    if (!frontImage)
-    {
-      LogService::Error("Failed to load front face image: " + m_frontImagePath.string());
-      return false;
-    }
-
     try
     {
-      Skybox& skybox = currentScene.getSceneSkybox();
-      skybox.initialize(
-        m_faceWidth,
-        m_faceHeight,
-        m_faceChannels,
-        *rightImage,
-        *leftImage,
-        *topImage,
-        *bottomImage,
-        *backImage,
-        *frontImage
+      if (!m_editorSceneManager.isSceneOpen())
+        throw RuntimeErrorException("No scene is currently open. Cannot update skybox cube map.");
+
+      SharedPtr<ICubeMap> newCubeMap = CubeMapFactory::CreateFromDescriptor(
+        cubeMapDescriptorPath,
+        m_assetManager,
+        m_graphicsManager
       );
+
+      if (!newCubeMap)
+        throw RuntimeErrorException(
+          "Failed to create a cube map from the selected descriptor. Please check the descriptor and its referenced images."
+        );
+
+      if (!newCubeMap->isValid())
+        throw RuntimeErrorException(
+          "Failed to create a valid cube map from the selected descriptor. Please check the descriptor and its referenced images."
+        );
+
+      Skybox& skybox = m_editorSceneManager.getEditorScene().getSceneSkybox();
+      skybox.destroy();
+      skybox.initialize(newCubeMap);
     }
     catch (const Exception& e)
     {
-      LogService::Error("Failed to initialize skybox: " + String(e.what()));
-      return false;
+      LogService::Error(String("Error updating skybox cube map: ") + e.what());
     }
-
-    return true;
-  }
-
-  void SceneSkyboxWindow::getValuesFromScene(
-    const Scene& scene
-  )
-  {
-    if (!scene.hasSkybox())
-      return;
-
-    const Skybox& skybox = scene.getSceneSkybox();
-
-    m_faceWidth = skybox.getCubeMap().getFaceWidth();
-    m_faceHeight = skybox.getCubeMap().getFaceHeight();
-    m_faceChannels = skybox.getCubeMap().getChannels();
-
-    m_rightImagePath = skybox.getRightImagePath();
-    m_leftImagePath = skybox.getLeftImagePath();
-    m_topImagePath = skybox.getTopImagePath();
-    m_bottomImagePath = skybox.getBottomImagePath();
-    m_backImagePath = skybox.getBackImagePath();
-    m_frontImagePath = skybox.getFrontImagePath();
-  }
-
-  void SceneSkyboxWindow::clearValues()
-  {
-    m_faceWidth = 0;
-    m_faceHeight = 0;
-    m_faceChannels = 4;
-    m_rightImagePath.clear();
-    m_leftImagePath.clear();
-    m_topImagePath.clear();
-    m_bottomImagePath.clear();
-    m_backImagePath.clear();
-    m_frontImagePath.clear();
   }
 }

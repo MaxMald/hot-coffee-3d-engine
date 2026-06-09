@@ -6,10 +6,15 @@
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/image/hcIImageAssetManager.h"
+#include "hc/assets/hcAssetPath.h"
 
 namespace hc::serialization
 {
-  void SkyboxSerializer::Serialize(const Skybox& skybox, BinaryWriter& writer)
+  void SkyboxSerializer::Serialize(
+    const Skybox& skybox,
+    BinaryWriter& writer,
+    const IAssetManager& assetManager
+  )
   {
     if (!skybox.hasCubeMap())
     {
@@ -17,8 +22,19 @@ namespace hc::serialization
       return;
     }
 
+    writer.writeBool(true);
     const ICubeMap& cubeMap = skybox.getCubeMap();
-    writer.writePath(cubeMap.getCubeMapDescriptorSourcePath());
+
+    Path descriptorSourcePath = cubeMap.getCubeMapDescriptorSourcePath();
+    String pathToSerialize = descriptorSourcePath.generic_string();
+
+    if (assetManager.hasRootPath())
+    {
+      const Path& rootPath = assetManager.getRootPath();
+      pathToSerialize = AssetPath::ToRelative(descriptorSourcePath, rootPath);
+    }
+
+    writer.writeString(pathToSerialize);
   }
 
   void SkyboxSerializer::Deserialize(
@@ -34,17 +50,32 @@ namespace hc::serialization
       return;
     }
 
-    Path cubeMapDescriptorSourcePath = reader.readPath();
-    if (cubeMapDescriptorSourcePath.empty())
+    String sourcePathStr = reader.readString();
+    if (sourcePathStr.empty())
     {
       skybox.destroy();
       return;
     }
 
+    Path sourcePath(sourcePathStr.c_str());
+    if (AssetPath::IsRelative(sourcePath))
+    {
+      if (!assetManager.hasRootPath())
+      {
+        skybox.destroy();
+        throw RuntimeErrorException(
+          "Cannot resolve relative asset path without a root path set in the asset manager."
+        );
+      }
+
+      const Path& rootPath = assetManager.getRootPath();
+      sourcePath = AssetPath::ToAbsolute(sourcePathStr, rootPath);
+    }
+
     try
     {
       SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromDescriptor(
-        cubeMapDescriptorSourcePath, assetManager, graphicsManager
+        sourcePath, assetManager, graphicsManager
       );
 
       skybox.destroy();

@@ -13,7 +13,11 @@ namespace hc
     struct HC_CORE_EXPORT SkyboxSerializer
     {
     public:
-      static void Serialize(const Skybox& skybox, BinaryWriter& writer);
+      static void Serialize(
+        const Skybox& skybox,
+        BinaryWriter& writer,
+        const IAssetManager& assetManager
+      );
       static void Deserialize(
         Skybox& skybox,
         BinaryReader& reader,
