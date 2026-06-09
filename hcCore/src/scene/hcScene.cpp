@@ -4,6 +4,7 @@
 #include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
 #include "hc/graphics/hcCameraFrameData.h"
 #include "hc/scene/camera/hcCamera.h"
+#include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc
@@ -12,12 +13,14 @@ namespace hc
     m_sceneGraph(),
     m_cameraManager(),
     m_lightFrameData(),
-    m_gameObjectFactory(nullptr)
+    m_gameObjectFactory(nullptr),
+    m_skybox()
   {
   }
 
   Scene::~Scene()
   {
+    destroy();
   }
 
   void Scene::serialize(BinaryWriter& writer) const
@@ -60,6 +63,16 @@ namespace hc
     GameObject* rootPtr = root.get();
     m_sceneGraph.addRoot(std::move(root));
     return rootPtr;
+  }
+
+  Skybox& Scene::getSceneSkybox()
+  {
+    return m_skybox;
+  }
+
+  const Skybox& Scene::getSceneSkybox() const
+  {
+    return m_skybox;
   }
 
   SceneGraph& Scene::getSceneGraph()

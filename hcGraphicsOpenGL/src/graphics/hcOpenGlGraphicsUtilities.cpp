@@ -116,5 +116,20 @@ namespace hc
         );
       }
     }
+
+    UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat)
+    {
+      switch (colorFormat)
+      {
+      case colorFormatType::RGBA8:
+        return GL_RGBA;
+      case colorFormatType::RGB8:
+        return GL_RGB;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+        );
+      }
+    }
   }
 }

@@ -4,6 +4,7 @@
 #include "hc/assets/image/hcIImageAssetManager.h"
 #include "hc/assets/model/hcIModelAssetManager.h"
 #include "hc/assets/materialDescriptor/hcIMaterialDescriptorAssetManager.h"
+#include "hc/assets/cubeMapDescriptor/hcICubeMapDescriptorAssetManager.h"
 
 namespace hc
 {
@@ -38,6 +39,13 @@ namespace hc
      * @return Reference to the material descriptor asset manager
      */
     virtual IMaterialDescriptorAssetManager& getMaterialDescriptorAssetManager() = 0;
+
+    /**
+     * Retrieves the cube map descriptor asset manager.
+     *
+     * @return Reference to the cube map descriptor asset manager
+     */
+    virtual ICubeMapDescriptorAssetManager& getCubeMapDescriptorAssetManager() = 0;
 
     /**
      * Clears all asset groups from the manager.

@@ -6,6 +6,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
+#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
@@ -249,6 +250,11 @@ namespace hc
     FrameBufferPtr frameBufferPtr = FrameBufferPtr(new OpenGlFrameBuffer());
     frameBufferPtr->initialize(width, height);
     return frameBufferPtr;
+  }
+
+  SharedPtr<ICubeMap> OpenGlGraphicsManager::createCubeMap()
+  {
+    return MakeShared<OpenGlCubeMap>();
   }
 
   void OpenGlGraphicsManager::setViewport(const Rect<UInt32>& viewportRect)

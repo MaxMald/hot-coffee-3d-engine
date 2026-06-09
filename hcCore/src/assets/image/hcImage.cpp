@@ -33,6 +33,10 @@ namespace hc
 
   UInt32 Image::getChannels() const
   {
+    // TODO
+    //
+    // Images should use color format type instead of channels.
+
     return m_channels;
   }
 

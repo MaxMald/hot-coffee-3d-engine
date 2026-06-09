@@ -6,10 +6,11 @@
 namespace hc::editor
 {
   class ProjectManager;
+  class IEditorSceneManagerListener;
 
   /**
    * @brief Manages the editor's scene, allowing opening, saving, and closing scenes.
-   * 
+   *
    * Listens to project events to ensure scene management is in sync with the current
    * project state.
    */
@@ -24,11 +25,15 @@ namespace hc::editor
      *
      * @param editorScene Pointer to the Scene instance that represents the editor's
      * scene.
+     * @param assetManager Reference to the asset manager for managing assets.
+     * @param graphicsManager Reference to the graphics manager for rendering.
      * @param projectManager Reference to the ProjectManager for subscribing to project
      * events.
      */
     EditorSceneManager(
       Scene* editorScene,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager,
       ProjectManager& projectManager
     );
     virtual ~EditorSceneManager() = default;
@@ -79,6 +84,29 @@ namespace hc::editor
      */
     const Path& getCurrentScenePath() const;
 
+    /**
+     * @brief Gets a reference to the editor's scene.
+     *
+     * @return Reference to the editor's Scene instance.
+     *
+     * @throw RuntimeErrorException If the editor scene is undefined or invalid.
+     */
+    Scene& getEditorScene();
+
+    /**
+     * @brief Subscribes a listener to editor scene manager events.
+     *
+     * @param listener Pointer to the IEditorSceneManagerListener to subscribe.
+     */
+    void subscribeListener(IEditorSceneManagerListener* listener);
+
+    /**
+     * @brief Unsubscribes a listener from editor scene manager events.
+     *
+     * @param listener Pointer to the IEditorSceneManagerListener to unsubscribe.
+     */
+    void unsubscribeListener(IEditorSceneManagerListener* listener);
+
   protected:
 
     /**
@@ -92,9 +120,12 @@ namespace hc::editor
     void onProjectClosed() override;
 
   private:
+    IAssetManager& m_assetManager;
+    IGraphicsManager& m_graphicsManager;
     ProjectManager& m_projectManager;
     Scene* m_editorScene;
     Path m_currentScenePath;
+    Vector<IEditorSceneManagerListener*> m_listeners;
 
     void updateLastOpenedSceneInProject();
     void assertSceneIsValid() const;

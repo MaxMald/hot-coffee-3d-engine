@@ -20,6 +20,7 @@ namespace hc
   class IShaderProgramManager;
   class IMeshManager;
   class IGBuffer;
+  class ICubeMap;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
@@ -196,6 +197,13 @@ namespace hc
       UInt32 width,
       UInt32 height
     ) = 0;
+
+    /**
+     * @brief Creates a cube map texture.
+     *
+     * @return Smart pointer to the created cube map texture.
+     */
+    virtual SharedPtr<ICubeMap> createCubeMap() = 0;
 
     /**
      * @brief Sets the rendering viewport dimensions.

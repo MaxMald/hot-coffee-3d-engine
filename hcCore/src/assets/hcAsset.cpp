@@ -13,6 +13,11 @@ namespace hc
     return m_path;
   }
 
+  void Asset::setPath(const Path& path)
+  {
+    m_path = path;
+  }
+
   Id Asset::getId() const
   {
     return m_id;

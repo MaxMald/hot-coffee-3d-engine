@@ -134,6 +134,11 @@ namespace hc
     ) override;
 
     /**
+     * @copydoc IGraphicsManager::createCubeMap
+     */
+    SharedPtr<ICubeMap> createCubeMap() override;
+
+    /**
      * @copydoc IGraphicsManager::setViewport
      */
     void setViewport(const Rect<UInt32>& viewportRect) override;
@@ -154,9 +159,7 @@ namespace hc
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
     IFrameBuffer* m_customRenderTarget;
-
     Vector<DrawCommand> m_queueDrawCommands;
-
     Rect<UInt32> m_viewportRect;
 
     ForwardRenderPipeline m_forwardRenderPipeline;
@@ -170,9 +173,6 @@ namespace hc
      */
     void destroy() override;
 
-    void executeDeferredForwardPass(const Vector<DrawCommand>& drawCommands);
-
-    void executeDrawCommand(const DrawCommand& command);
     bool isValidDrawCommand(const DrawCommand& drawCommand, String& errorMessage);
 
     friend class OpenGlGraphicsPlugin;
