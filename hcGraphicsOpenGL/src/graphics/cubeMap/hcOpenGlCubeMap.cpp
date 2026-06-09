@@ -10,7 +10,8 @@ namespace hc
     m_valid(false),
     m_faceHeight(0),
     m_faceWidth(0),
-    m_format(colorFormatType::Type::RGBA8)
+    m_format(colorFormatType::Type::RGBA8),
+    m_cubeMapDescriptorSourcePath()
   {}
 
   OpenGlCubeMap::~OpenGlCubeMap()
@@ -27,7 +28,8 @@ namespace hc
     const Image & top,
     const Image & bottom,
     const Image & back,
-    const Image & front
+    const Image & front,
+    const Path& cubeMapDescriptorSourcePath
   )
   {
     if (m_valid)
@@ -111,9 +113,11 @@ namespace hc
     }
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+
     m_faceWidth = width;
     m_faceHeight = height;
     m_format = format;
+    m_cubeMapDescriptorSourcePath = cubeMapDescriptorSourcePath;
     m_valid = true;
   }
 
@@ -137,6 +141,11 @@ namespace hc
     return colorFormatType::Type();
   }
 
+  const Path& OpenGlCubeMap::getCubeMapDescriptorSourcePath() const
+  {
+    return m_cubeMapDescriptorSourcePath;
+  }
+
   void OpenGlCubeMap::destroy()
   {
     if (m_id != 0)
@@ -150,6 +159,7 @@ namespace hc
       m_id = 0;
     }
 
+    m_cubeMapDescriptorSourcePath.clear();
     m_format = colorFormatType::Type::RGBA8;
     m_faceHeight = 0;
     m_faceWidth = 0;

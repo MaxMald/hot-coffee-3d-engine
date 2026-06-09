@@ -21,13 +21,23 @@ namespace hc
       const Image& top,
       const Image& bottom,
       const Image& back,
-      const Image& front
+      const Image& front,
+      const Path& cubeMapDescriptorSourcePath = Path()
     ) = 0;
 
     virtual bool isValid() const = 0;
     virtual UInt32 getFaceWidth() const = 0;
     virtual UInt32 getFaceHeight() const = 0;
     virtual colorFormatType::Type getFormat() const = 0;
+
+    /**
+     * Get the file path of the cube map descriptor source used to create this skybox.
+     * This path is used for serialization and deserialization purposes.
+     *
+     * @return The file path of the cube map descriptor source.
+     */
+    virtual const Path& getCubeMapDescriptorSourcePath() const = 0;
+
     virtual void destroy() = 0;
 
   protected:
