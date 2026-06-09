@@ -23,6 +23,13 @@ namespace hc
     const Path& getPath() const;
 
     /**
+     * Sets the file or resource path of the asset.
+     *
+     * @param path The new path to set for the asset
+     */
+    void setPath(const Path& path);
+
+    /**
      * Gets the unique identifier of the asset.
      *
      * @return The asset's identifier
