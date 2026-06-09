@@ -40,7 +40,12 @@ namespace hc
     colorFormatType::Type m_format;
     Path m_cubeMapDescriptorSourcePath;
 
-    static void assertImageSize(const Image& image, const UInt32 width, const UInt32 height);
+    static void assertImageFormat(
+      const Image& image,
+      const UInt32 width,
+      const UInt32 height,
+      const colorFormatType::Type expectedFormat
+    );
     void assertIsValid() const;
   };
 }

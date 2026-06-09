@@ -38,12 +38,12 @@ namespace hc
     if (width == 0 || height == 0)
       throw RuntimeErrorException("Cube map dimensions must be greater than zero");
 
-    assertImageSize(right, width, height);
-    assertImageSize(left, width, height);
-    assertImageSize(top, width, height);
-    assertImageSize(bottom, width, height);
-    assertImageSize(back, width, height);
-    assertImageSize(front, width, height);
+    assertImageFormat(right, width, height, format);
+    assertImageFormat(left, width, height, format);
+    assertImageFormat(top, width, height, format);
+    assertImageFormat(bottom, width, height, format);
+    assertImageFormat(back, width, height, format);
+    assertImageFormat(front, width, height, format);
 
     GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(format);
     GLenum internalFormat = (glFormat == GL_RGB) ? GL_RGB8 : GL_RGBA8;
@@ -138,7 +138,7 @@ namespace hc
 
   colorFormatType::Type OpenGlCubeMap::getFormat() const
   {
-    return colorFormatType::Type();
+    return m_format;
   }
 
   const Path& OpenGlCubeMap::getCubeMapDescriptorSourcePath() const
@@ -171,14 +171,23 @@ namespace hc
     return m_id;
   }
 
-  void OpenGlCubeMap::assertImageSize(
+  void OpenGlCubeMap::assertImageFormat(
     const Image & image,
-    const UInt32 width,
-    const UInt32 height
+    const UInt32 expectedWidth,
+    const UInt32 expectedHeight,
+    const colorFormatType::Type expectedFormat
   )
   {
-    if (image.getHeight() != height || image.getWidth() != width)
+    if (image.getHeight() != expectedHeight || image.getWidth() != expectedWidth)
       throw RuntimeErrorException("Cube map image has invalid dimensions");
+
+    // TODO
+    //
+    // Images should use color format type instead of channels.
+
+    UInt8 expectedChannels = static_cast<UInt8>(colorFormatType::GetChannelCount(expectedFormat));
+    if (image.getChannels() != expectedChannels)
+      throw RuntimeErrorException("Cube map image has invalid format");
   }
 
   void OpenGlCubeMap::assertIsValid() const
