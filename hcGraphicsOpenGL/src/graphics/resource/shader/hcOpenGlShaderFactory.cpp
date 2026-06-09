@@ -39,6 +39,10 @@ namespace hc
       return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::FullScreenTriangleVertex);
     case builtInShaderType::DeferredLightingFragment:
       return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::DeferredLightingFragment);
+    case builtInShaderType::SkyboxVertex:
+      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::SkyboxVertex);
+    case builtInShaderType::SkyboxFragment:
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::SkyboxFragment);
     default:
       throw RuntimeErrorException(
         String::Format(
