@@ -1,6 +1,8 @@
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
 
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
+#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
 
 namespace hc
 {
@@ -73,7 +75,7 @@ namespace hc
     m_lightFrameUBO.upload(lightFrameData);
   }
 
-  void FrameRenderer::setSkybox(const SharedPtr<ICubeMap>&skybox)
+  void FrameRenderer::setSkybox(const SharedPtr<OpenGlCubeMap>&skybox)
   {
     m_skybox = skybox;
   }
@@ -145,10 +147,14 @@ namespace hc
 
     DrawCommandUtilities::SortDrawCommands(m_drawCommands);
 
+    FrameRenderContext frameRenderContext;
+    frameRenderContext.customFrameBuffer = m_currentRenderTarget;
+    frameRenderContext.skyboxCubeMap = m_skybox;
+
     if (m_currentRenderPipelineType == renderPipelineType::DeferredHybrid)
-      m_deferredHybridRenderPipeline.execute(m_drawCommands, m_currentRenderTarget);
+      m_deferredHybridRenderPipeline.execute(m_drawCommands, frameRenderContext);
     else if (m_currentRenderPipelineType == renderPipelineType::Forward)
-      m_forwardRenderPipeline.execute(m_drawCommands, m_currentRenderTarget);
+      m_forwardRenderPipeline.execute(m_drawCommands, frameRenderContext);
     else
       throw RuntimeErrorException("Frame Renderer: Not implemented render pipeline type.");
 

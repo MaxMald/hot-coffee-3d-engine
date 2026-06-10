@@ -7,6 +7,8 @@
 
 namespace hc
 {
+  struct FrameRenderContext;
+
   class ForwardRenderPipeline
   {
   public:
@@ -16,7 +18,7 @@ namespace hc
     void initialize(IShaderProgramManager& shaderProgramManager);
     void execute(
       const Vector<DrawCommand>& drawCommands,
-      IFrameBuffer* currentRenderTarget
+      const FrameRenderContext& frameRenderContext
     );
     void destroy();
 

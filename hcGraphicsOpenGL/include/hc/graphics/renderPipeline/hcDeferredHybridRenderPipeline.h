@@ -10,6 +10,8 @@
 
 namespace hc
 {
+  struct FrameRenderContext;
+
   class DeferredHybridRenderPipeline
   {
   public:
@@ -25,7 +27,7 @@ namespace hc
     OpenGlGBuffer& getGBuffer();
     void execute(
       const Vector<DrawCommand>& drawCommands,
-      IFrameBuffer* currentRenderTarget
+      const FrameRenderContext& frameRenderContext
     );
     void destroy();
 

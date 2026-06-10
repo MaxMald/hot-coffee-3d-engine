@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/hcDrawCommandUtilities.h"
+#include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
 
 namespace hc
 {
@@ -78,7 +79,7 @@ namespace hc
 
   void DeferredHybridRenderPipeline::execute(
     const Vector<DrawCommand>& drawCommands,
-    IFrameBuffer* currentRenderTarget
+    const FrameRenderContext& frameRenderContext
   )
   {
     assertIsInitialized();
@@ -95,11 +96,14 @@ namespace hc
     );
 
     m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
-    m_deferredLightingRenderPass.execute(currentRenderTarget);
-    copyDepthBufferToCurrentRenderTarget(currentRenderTarget);
-    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, currentRenderTarget);
-    // TODO - m_skyboxRenderPass.execute(currentRenderTarget);
-    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, currentRenderTarget);
+    m_deferredLightingRenderPass.execute(frameRenderContext.customFrameBuffer);
+    copyDepthBufferToCurrentRenderTarget(frameRenderContext.customFrameBuffer);
+    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, frameRenderContext.customFrameBuffer);
+
+    if (frameRenderContext.skyboxCubeMap)
+      m_skyboxRenderPass.execute(*(frameRenderContext.skyboxCubeMap));
+
+    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, frameRenderContext.customFrameBuffer);
   }
 
   OpenGlGBuffer& DeferredHybridRenderPipeline::getGBuffer()

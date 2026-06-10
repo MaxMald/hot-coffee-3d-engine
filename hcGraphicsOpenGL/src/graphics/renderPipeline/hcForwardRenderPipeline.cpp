@@ -1,5 +1,7 @@
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
+
 #include <GL/glew.h>
+#include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
 
 namespace hc
 {
@@ -40,7 +42,7 @@ namespace hc
 
   void ForwardRenderPipeline::execute(
     const Vector<DrawCommand>& drawCommands,
-    IFrameBuffer * currentRenderTarget
+    const FrameRenderContext& frameRenderContext
   )
   {
     assertIsInitialized();
@@ -54,9 +56,12 @@ namespace hc
       m_forwardTransparentCommands
     );
 
-    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, currentRenderTarget);
-    // TODO - skybox pass
-    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, currentRenderTarget);
+    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, frameRenderContext.customFrameBuffer);
+
+    if (frameRenderContext.skyboxCubeMap)
+      m_skyboxRenderPass.execute(*(frameRenderContext.skyboxCubeMap));
+
+    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, frameRenderContext.customFrameBuffer);
   }
 
   void ForwardRenderPipeline::destroy()
