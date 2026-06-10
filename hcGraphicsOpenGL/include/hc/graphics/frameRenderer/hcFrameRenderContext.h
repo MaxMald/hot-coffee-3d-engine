@@ -9,6 +9,6 @@ namespace hc
   struct FrameRenderContext
   {
     IFrameBuffer* customFrameBuffer = nullptr;
-    SharedPtr<OpenGlCubeMap> skyboxCubeMap = nullptr;
+    OpenGlCubeMap* skyboxCubeMap = nullptr;
   };
 }

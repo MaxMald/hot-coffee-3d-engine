@@ -75,14 +75,16 @@ namespace hc
     m_lightFrameUBO.upload(lightFrameData);
   }
 
-  void FrameRenderer::setSkybox(const SharedPtr<OpenGlCubeMap>&skybox)
+  void FrameRenderer::setSkybox(OpenGlCubeMap* skybox)
   {
+    if (skybox && !skybox->isValid())
+      throw InvalidArgumentException("Invalid skybox provided. The skybox must be initialized and valid.");
     m_skybox = skybox;
   }
 
   void FrameRenderer::removeSkybox()
   {
-    m_skybox.reset();
+    m_skybox = nullptr;
   }
 
   void FrameRenderer::setRenderTarget(IFrameBuffer * frameBuffer)
@@ -180,6 +182,7 @@ namespace hc
     m_deferredHybridRenderPipeline.destroy();
     m_lightFrameUBO.destroy();
     m_cameraFrameUBO.destroy();
+    m_skybox = nullptr;
     m_initialized = false;
   }
 

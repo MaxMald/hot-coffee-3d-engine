@@ -105,12 +105,22 @@ namespace hc
     m_isInitialized = true;
   }
 
-  void SkyboxRenderPass::execute(OpenGlCubeMap& cubeMap)
+  void SkyboxRenderPass::execute(OpenGlCubeMap* cubeMap, IFrameBuffer* frameBuffer)
   {
+    if (cubeMap == nullptr)
+      return;
+
     assertIsInitialized();
 
-    if (!cubeMap.isValid())
+    if (!cubeMap->isValid())
       throw RuntimeErrorException("Invalid cube map provided to skybox render pass.");
+
+    if (frameBuffer)
+    {
+      if (!frameBuffer->isValid())
+        throw RuntimeErrorException("Invalid framebuffer provided to skybox render pass.");
+      frameBuffer->bind();
+    }
 
     GLint currentTextureCubeMap = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentTextureCubeMap);
@@ -131,14 +141,14 @@ namespace hc
     glDepthFunc(GL_LEQUAL);
     glDepthMask(GL_FALSE);
     glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    glCullFace(GL_BACK);
 
     try
     {
       m_skyboxShaderProgram->bind();
 
       glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GLuint>(cubeMap.getId()));
+      glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GLuint>(cubeMap->getId()));
       glBindVertexArray(m_boxVao);
       glDrawArrays(GL_TRIANGLES, 0, 36);
     }
@@ -154,6 +164,7 @@ namespace hc
         glDisable(GL_CULL_FACE);
       glCullFace(static_cast<GLenum>(currentCullFaceMode));
 
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
       throw;
     }
 
@@ -166,6 +177,9 @@ namespace hc
     if (!cullFaceEnabled)
       glDisable(GL_CULL_FACE);
     glCullFace(static_cast<GLenum>(currentCullFaceMode));
+
+    if (frameBuffer)
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
   void SkyboxRenderPass::destroy()

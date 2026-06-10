@@ -105,6 +105,14 @@ namespace hc
     return m_frameRenderer.getRenderTarget();
   }
 
+  void OpenGlGraphicsManager::setSkybox(ICubeMap* skyboxCubeMap)
+  {
+    if (skyboxCubeMap)
+      m_frameRenderer.setSkybox(reinterpret_cast<OpenGlCubeMap*>(skyboxCubeMap));
+    else
+      m_frameRenderer.removeSkybox();
+  }
+
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
     m_frameRenderer.queueDrawCommand(command);

@@ -504,7 +504,7 @@ namespace hc
 
       void main()
       {
-        vDirection = aPosition;
+        vDirection = vec3(aPosition.xy, -aPosition.z); // Flip Z to match OpenGL's coordinate system
         gl_Position = projection * mat4(mat3(view)) * vec4(aPosition, 1.0);
         gl_Position = gl_Position.xyww; // Force depth to 1.0 to ensure skybox is rendered behind all geometry
       }

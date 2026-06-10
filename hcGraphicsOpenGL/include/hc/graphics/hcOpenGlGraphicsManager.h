@@ -59,6 +59,11 @@ namespace hc
     IFrameBuffer* getRenderTarget() const override;
 
     /**
+     * @copydoc IGraphicsManager::setSkybox
+     */
+    void setSkybox(ICubeMap* skyboxCubeMap) override;
+
+    /**
      * @copydoc IGraphicsManager::draw
      */
     void draw(const DrawCommand& command) override;

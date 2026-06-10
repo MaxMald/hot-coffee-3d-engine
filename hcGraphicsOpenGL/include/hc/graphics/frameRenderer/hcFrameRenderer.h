@@ -21,7 +21,7 @@ namespace hc
     renderPipelineType::Type getCurrentRenderPipelineType() const;
     void uploadCameraFrameData(const CameraFrameData& cameraFrameData);
     void uploadLightFrameData(const LightFrameData& lightFrameData);
-    void setSkybox(const SharedPtr<OpenGlCubeMap>& skybox);
+    void setSkybox(OpenGlCubeMap* skybox);
     void removeSkybox();
     void setRenderTarget(IFrameBuffer* frameBuffer);
     IFrameBuffer* getRenderTarget() const;
@@ -40,7 +40,7 @@ namespace hc
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
     Vector<DrawCommand> m_drawCommands;
-    SharedPtr<OpenGlCubeMap> m_skybox;
+    OpenGlCubeMap* m_skybox;
     renderPipelineType::Type m_currentRenderPipelineType;
     IFrameBuffer* m_currentRenderTarget;
     bool m_initialized;

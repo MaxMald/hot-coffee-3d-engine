@@ -101,7 +101,7 @@ namespace hc
     m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, frameRenderContext.customFrameBuffer);
 
     if (frameRenderContext.skyboxCubeMap)
-      m_skyboxRenderPass.execute(*(frameRenderContext.skyboxCubeMap));
+      m_skyboxRenderPass.execute(frameRenderContext.skyboxCubeMap, frameRenderContext.customFrameBuffer);
 
     m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, frameRenderContext.customFrameBuffer);
   }

@@ -125,12 +125,21 @@ namespace hc
 
     graphicsManager.uploadLightFrameData(m_lightFrameData);
 
+    // Skybox
+    if (m_skybox.isValid())
+      graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
+    else
+      graphicsManager.setSkybox(nullptr);
+
     // Draw the scene graph with the provided render context
     RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
 
     onBeforeDraw(renderContext);
     m_sceneGraph.draw(renderContext);
+    graphicsManager.executeDrawCommands();
     onAfterDraw(renderContext);
+
+    graphicsManager.setSkybox(nullptr);
   }
 
   void Scene::clear()

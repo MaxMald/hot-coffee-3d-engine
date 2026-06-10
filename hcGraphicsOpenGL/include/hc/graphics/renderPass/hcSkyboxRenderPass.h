@@ -13,7 +13,7 @@ namespace hc
     ~SkyboxRenderPass();
 
     void initialize(const SharedPtr<IShaderProgram>& skyboxShaderProgram);
-    void execute(OpenGlCubeMap& cubeMap);
+    void execute(OpenGlCubeMap* cubeMap, IFrameBuffer* frameBuffer);
     void destroy();
 
   private:
