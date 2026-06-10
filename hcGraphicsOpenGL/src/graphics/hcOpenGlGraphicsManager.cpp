@@ -7,14 +7,10 @@
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
 #include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
-#include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
-  static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
-  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
-
   OpenGlGraphicsManager::OpenGlGraphicsManager(
     IWindow& window,
     IAssetManager& assetManager
@@ -42,15 +38,9 @@ namespace hc
       MakeUnique<OpenGlMeshFactory>(*this),
       m_materialManager
     ),
-    m_lightFrameUBO(),
-    m_cameraFrameUBO(),
-    m_customRenderTarget(nullptr),
-    m_queueDrawCommands(),
     m_viewportRect(0, 0, 1, 1),
-    m_forwardRenderPipeline(),
-    m_deferredHybridRenderPipeline(m_forwardRenderPipeline),
-    m_polygonFillType(polygonFillType::Solid),
-    m_renderPipelineType(renderPipelineType::Forward)
+    m_frameRenderer(),
+    m_polygonFillType(polygonFillType::Solid)
   {}
 
   OpenGlGraphicsManager::~OpenGlGraphicsManager()
@@ -77,18 +67,9 @@ namespace hc
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     
     m_materialManager.initialize();
+    m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
+    m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
     setViewport(viewportRect);
-
-    m_renderPipelineType = graphicsSettings.renderPipelineType;
-    m_deferredHybridRenderPipeline.initialize(
-      viewportRect,
-      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::DeferredLighting)
-    );
-
-    m_lightFrameUBO.initialize(LightFrameData{});
-    m_cameraFrameUBO.initialize(CameraFrameData{});
-    m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
-    m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -99,83 +80,39 @@ namespace hc
   void OpenGlGraphicsManager::beginFrame()
   {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
-      m_deferredHybridRenderPipeline.clearGBuffer();
+    m_frameRenderer.clearFrame();
   }
 
   void OpenGlGraphicsManager::uploadCameraFrameData(
     const CameraFrameData& cameraFrameData
   )
   {
-    CameraFrameData transposedCameraData = cameraFrameData;
-    transposedCameraData.projectionMatrix.transpose();
-    transposedCameraData.viewMatrix.transpose();
-    m_cameraFrameUBO.upload(transposedCameraData);
+    m_frameRenderer.uploadCameraFrameData(cameraFrameData);
   }
 
   void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
   {
-    m_lightFrameUBO.upload(lightFrameData);
+    m_frameRenderer.uploadLightFrameData(lightFrameData);
   }
 
   void OpenGlGraphicsManager::setRenderTarget(IFrameBuffer* frameBuffer)
   {
-    if (frameBuffer)
-    {
-      if (!frameBuffer->isValid())
-        throw InvalidArgumentException("Invalid framebuffer provided as render target.");
-      frameBuffer->bind();
-    }
-    else
-    {
-      glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    }
-
-    m_customRenderTarget = frameBuffer;
+    m_frameRenderer.setRenderTarget(frameBuffer);
   }
 
   IFrameBuffer* OpenGlGraphicsManager::getRenderTarget() const
   {
-    return m_customRenderTarget;
+    return m_frameRenderer.getRenderTarget();
   }
 
   void OpenGlGraphicsManager::draw(const DrawCommand& command)
   {
-    String errorMessage;
-    if (!isValidDrawCommand(command, errorMessage))
-    {
-      LogService::Error("Invalid draw command, it will be discarded. Error: " + errorMessage);
-      return;
-    }
-
-    m_queueDrawCommands.push_back(command);
+    m_frameRenderer.queueDrawCommand(command);
   }
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    DrawCommandUtilities::SortDrawCommands(m_queueDrawCommands);
-
-    if (m_renderPipelineType == renderPipelineType::Forward)
-    {
-      m_forwardRenderPipeline.executeDrawCommands(
-        m_queueDrawCommands,
-        m_customRenderTarget
-      );
-    }
-    else if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
-    {
-      m_deferredHybridRenderPipeline.executeDrawCommands(
-        m_queueDrawCommands,
-        m_customRenderTarget
-      );
-    }
-    else
-    {
-      throw RuntimeErrorException("Unsupported render pipeline type set in graphics manager.");
-    }
-
-    m_queueDrawCommands.clear();
+    m_frameRenderer.execute();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
@@ -201,18 +138,12 @@ namespace hc
     renderPipelineType::Type renderPipelineType
   )
   {
-    if (m_renderPipelineType == renderPipelineType)
-      return;
-
-    if (renderPipelineType == renderPipelineType::DeferredHybrid)
-      m_deferredHybridRenderPipeline.updateViewportSize(m_viewportRect);
-
-    m_renderPipelineType = renderPipelineType;
+    m_frameRenderer.setRenderPipeline(renderPipelineType);
   }
 
   renderPipelineType::Type OpenGlGraphicsManager::getRenderPipelineType() const
   {
-    return m_renderPipelineType;
+    return m_frameRenderer.getCurrentRenderPipelineType();
   }
 
   ITextureManager& OpenGlGraphicsManager::getTextureManager()
@@ -242,7 +173,7 @@ namespace hc
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
-    return m_deferredHybridRenderPipeline.getGBuffer();
+    return m_frameRenderer.getGBuffer();
   }
 
   FrameBufferPtr OpenGlGraphicsManager::createFrameBuffer(UInt32 width, UInt32 height)
@@ -272,9 +203,7 @@ namespace hc
       (GLsizei)viewportRect.height
     );
 
-    if (m_renderPipelineType == renderPipelineType::DeferredHybrid)
-      m_deferredHybridRenderPipeline.updateViewportSize(viewportRect);
-
+    m_frameRenderer.onViewportChanged(viewportRect);
     m_viewportRect = viewportRect;
   }
 
@@ -285,40 +214,11 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
-    m_deferredHybridRenderPipeline.destroy();
+    m_frameRenderer.destroy();
     m_materialManager.clear();
     m_textureManager.clear();
     m_shaderProgramManager.clear();
     m_shaderManager.clear();
     m_meshManager.clear();
-    m_lightFrameUBO.destroy();
-    m_cameraFrameUBO.destroy();
-  }
-
-  bool OpenGlGraphicsManager::isValidDrawCommand(
-    const DrawCommand& drawCommand,
-    String& errorMessage
-  )
-  {
-    if (!drawCommand.material)
-    {
-      errorMessage = "Draw command has no material assigned.";
-      return false;
-    }
-    else if (!std::holds_alternative<OpenGlDrawData>(drawCommand.apiDrawData))
-    {
-      errorMessage = "Draw command has invalid API draw data type, expected OpenGlDrawData.";
-      return false;
-    }
-    else
-    {
-      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(drawCommand.apiDrawData);
-      if (drawData.vao == 0)
-      {
-        errorMessage = "Draw command has invalid VAO (0).";
-        return false;
-      }
-    }
-    return true;
   }
 }

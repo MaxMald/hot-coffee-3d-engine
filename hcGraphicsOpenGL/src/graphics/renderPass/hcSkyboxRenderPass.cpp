@@ -1,4 +1,4 @@
-#include "hc/graphics/renderPipeline/skyboxRenderPass/hcSkyboxRenderPass.h"
+#include "hc/graphics/renderPass/hcSkyboxRenderPass.h"
 
 #include <GL/glew.h>
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
@@ -105,7 +105,7 @@ namespace hc
     m_isInitialized = true;
   }
 
-  void SkyboxRenderPass::draw(OpenGlCubeMap& cubeMap)
+  void SkyboxRenderPass::execute(OpenGlCubeMap& cubeMap)
   {
     assertIsInitialized();
 

@@ -1,31 +1,69 @@
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 
 #include <GL/glew.h>
-#include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
 
 namespace hc
 {
-  DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
-    ForwardRenderPipeline& forwardRenderPipeline
-  ) :
-    m_forwardRenderPipeline(forwardRenderPipeline),
+  DeferredHybridRenderPipeline::DeferredHybridRenderPipeline() :
+    m_deferredGeometryRenderPass(),
+    m_deferredLightingRenderPass(),
+    m_forwardOpaqueRenderPass(),
+    m_forwardTransparentRenderPass(),
+    m_skyboxRenderPass(),
     m_gBuffer(),
-    m_deferredLightingShaderProgram(nullptr),
-    m_deferredGeometryPassCommands(),
-    m_deferredForwardPassCommands()
+    m_deferredOpaqueCommands(),
+    m_forwardOpaqueCommands(),
+    m_forwardTransparentCommands(),
+    m_initialized(false)
   {}
+
+  DeferredHybridRenderPipeline::~DeferredHybridRenderPipeline()
+  {
+    destroy();
+  }
+
+  void DeferredHybridRenderPipeline::destroy()
+  {
+    m_deferredOpaqueCommands.clear();
+    m_forwardOpaqueCommands.clear();
+    m_forwardTransparentCommands.clear();
+    m_deferredGeometryRenderPass.destroy();
+    m_deferredLightingRenderPass.destroy();
+    m_skyboxRenderPass.destroy();
+    m_gBuffer.destroy();
+    m_initialized = false;
+  }
 
   void DeferredHybridRenderPipeline::initialize(
     const Rect<UInt32>& viewportRect,
-    SharedPtr<IShaderProgram> deferredLightingShaderProgram
+    IShaderProgramManager& shaderProgramManager
   )
   {
-    if (!deferredLightingShaderProgram || !deferredLightingShaderProgram->isValid())
-      throw InvalidArgumentException("Invalid shader program provided for deferred lighting pass.");
+    if (m_initialized)
+      throw RuntimeErrorException("DeferredHybridRenderPipeline is already initialized.");
 
-    m_gBuffer.initialize(viewportRect.width, viewportRect.height);
-    m_deferredLightingShaderProgram = deferredLightingShaderProgram;
+    try
+    {
+      m_gBuffer.initialize(viewportRect.width, viewportRect.height);
+      m_deferredGeometryRenderPass.initialize(&m_gBuffer);
+      m_deferredLightingRenderPass.initialize(
+        &m_gBuffer,
+        shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::DeferredLighting)
+      );
+      m_skyboxRenderPass.initialize(
+        shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::Skybox)
+      );
+    }
+    catch (const Exception& e)
+    {
+      destroy();
+      throw RuntimeErrorException(
+        "Failed to initialize DeferredHybridRenderPipeline: " + String(e.what())
+      );
+    }
+    
+    m_initialized = true;
   }
 
   void DeferredHybridRenderPipeline::clearGBuffer()
@@ -38,8 +76,70 @@ namespace hc
     m_gBuffer.resize(viewportRect.width, viewportRect.height);
   }
 
-  void DeferredHybridRenderPipeline::executeDrawCommands(
+  void DeferredHybridRenderPipeline::execute(
     const Vector<DrawCommand>& drawCommands,
+    IFrameBuffer* currentRenderTarget
+  )
+  {
+    assertIsInitialized();
+
+    m_deferredOpaqueCommands.clear();
+    m_forwardOpaqueCommands.clear();
+    m_forwardTransparentCommands.clear();
+
+    SplitDrawCommandsByRenderPass(
+      drawCommands,
+      m_deferredOpaqueCommands,
+      m_forwardOpaqueCommands,
+      m_forwardTransparentCommands
+    );
+
+    m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
+    m_deferredLightingRenderPass.execute(currentRenderTarget);
+    copyDepthBufferToCurrentRenderTarget(currentRenderTarget);
+    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, currentRenderTarget);
+    // TODO - m_skyboxRenderPass.execute(currentRenderTarget);
+    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, currentRenderTarget);
+  }
+
+  OpenGlGBuffer& DeferredHybridRenderPipeline::getGBuffer()
+  {
+    return m_gBuffer;
+  }
+
+  void DeferredHybridRenderPipeline::SplitDrawCommandsByRenderPass(
+    const Vector<DrawCommand>& drawCommands,
+    Vector<DrawCommand>& deferredOpaqueCommands,
+    Vector<DrawCommand>& forwardOpaqueCommands,
+    Vector<DrawCommand>& forwardTransparentCommands
+  )
+  {
+    for (SizeT i = 0; i < drawCommands.size(); ++i)
+    {
+      const DrawCommand& cmd = drawCommands[i];
+
+      if (!cmd.material)
+        continue;
+
+      if (cmd.material->getShaderType() == shadingType::Unlit)
+      {
+        forwardOpaqueCommands.push_back(cmd);
+        continue;
+      }
+
+      if (cmd.material->getRenderMode() == materialRenderMode::Type::Opaque ||
+        cmd.material->getRenderMode() == materialRenderMode::Type::AlphaCutout)
+      {
+        deferredOpaqueCommands.push_back(cmd);
+      }
+      else
+      {
+        forwardTransparentCommands.push_back(cmd);
+      }
+    }
+  }
+
+  void DeferredHybridRenderPipeline::copyDepthBufferToCurrentRenderTarget(
     IFrameBuffer* currentRenderTarget
   )
   {
@@ -47,25 +147,9 @@ namespace hc
     {
       if (!currentRenderTarget->isValid())
         throw RuntimeErrorException("Invalid framebuffer set as render target.");
-    }
 
-    m_deferredGeometryPassCommands.clear();
-    m_deferredForwardPassCommands.clear();
-    DrawCommandUtilities::SplitDrawCommandsByPipelinePath(
-      drawCommands,
-      m_deferredGeometryPassCommands,
-      m_deferredForwardPassCommands
-    );
-
-    executeDeferredGeometryPass(m_deferredGeometryPassCommands);
-
-    if (currentRenderTarget)
-      currentRenderTarget->bind();
-
-    executeDeferredLightingPass();
-
-    if (currentRenderTarget)
       m_gBuffer.copyDepthTo(*currentRenderTarget);
+    }
     else
     {
       // If no custom render target, copy the depth buffer from the GBuffer to the default
@@ -81,113 +165,11 @@ namespace hc
       );
       glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
-
-    m_forwardRenderPipeline.executeDrawCommands(
-      m_deferredForwardPassCommands,
-      currentRenderTarget
-    );
-
-    if (currentRenderTarget)
-      currentRenderTarget->unbind();
   }
 
-  void DeferredHybridRenderPipeline::destroy()
+  void DeferredHybridRenderPipeline::assertIsInitialized() const
   {
-    m_deferredForwardPassCommands.clear();
-    m_deferredGeometryPassCommands.clear();
-    m_gBuffer.destroy();
-  }
-
-  OpenGlGBuffer& DeferredHybridRenderPipeline::getGBuffer()
-  {
-    return m_gBuffer;
-  }
-
-  void DeferredHybridRenderPipeline::executeDeferredGeometryPass(
-    const Vector<DrawCommand>& drawCommands
-  )
-  {
-    m_gBuffer.bind();
-
-    for (const DrawCommand& command : drawCommands)
-    {
-      if (command.material->isDoubleSided())
-      {
-        executeTwoSidedDrawCommand(command);
-      }
-      else
-      {
-        const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-
-        glBindVertexArray(drawData.vao);
-        bindMaterialForDrawCommand(command);
-        drawElements(command, drawData.drawMode);
-        unbindMaterialForDrawCommand(command);
-        glBindVertexArray(0);
-      }
-    }
-
-    m_gBuffer.unbind();
-  }
-
-  void DeferredHybridRenderPipeline::executeTwoSidedDrawCommand(
-    const DrawCommand& command
-  )
-  {
-    GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
-
-    glDisable(GL_CULL_FACE);
-
-    const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-
-    glBindVertexArray(drawData.vao);
-    bindMaterialForDrawCommand(command);
-    drawElements(command, drawData.drawMode);
-    unbindMaterialForDrawCommand(command);
-    glBindVertexArray(0);
-
-    if (cullFaceEnabled)
-      glEnable(GL_CULL_FACE);
-  }
-
-  void DeferredHybridRenderPipeline::executeDeferredLightingPass()
-  {
-    m_deferredLightingShaderProgram->bind();
-    m_gBuffer.bindGTexturesForReading();
-
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-
-    m_gBuffer.unbind();
-  }
-
-  void DeferredHybridRenderPipeline::bindMaterialForDrawCommand(
-    const DrawCommand& command
-  )
-  {
-    command.material->bind(renderPassType::Type::DeferredGeometry);
-    command.material->updateModelMatrix(
-      command.modelMatrix,
-      renderPassType::Type::DeferredGeometry
-    );
-  }
-
-  void DeferredHybridRenderPipeline::unbindMaterialForDrawCommand(
-    const DrawCommand& command
-  )
-  {
-    command.material->unbind();
-  }
-
-  void DeferredHybridRenderPipeline::drawElements(
-    const DrawCommand& command,
-    UInt32 drawMode
-  )
-  {
-    glDrawElements(
-      static_cast<GLenum>(drawMode),
-      static_cast<GLsizei>(command.indexCount),
-      GL_UNSIGNED_INT,
-      reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-    );
+    if (!m_initialized)
+      throw RuntimeErrorException("DeferredHybridRenderPipeline is not initialized.");
   }
 }

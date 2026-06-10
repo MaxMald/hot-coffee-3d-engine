@@ -1,28 +1,39 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/graphics/renderPass/hcForwardOpaqueRenderPass.h"
+#include "hc/graphics/renderPass/hcForwardTransparentRenderPass.h"
+#include "hc/graphics/renderPass/hcSkyboxRenderPass.h"
 
 namespace hc
 {
   class ForwardRenderPipeline
   {
   public:
-    ForwardRenderPipeline() = default;
-    ~ForwardRenderPipeline() = default;
+    ForwardRenderPipeline();
+    ~ForwardRenderPipeline();
 
-    void executeDrawCommands(
+    void initialize(IShaderProgramManager& shaderProgramManager);
+    void execute(
       const Vector<DrawCommand>& drawCommands,
       IFrameBuffer* currentRenderTarget
     );
+    void destroy();
 
   private:
-    void executeDrawCommand(const DrawCommand& command);
-    void executeTransparentDrawCommand(const DrawCommand& command);
-    void executeTransparentTwoSidedDrawCommand(const DrawCommand& command);
-    void executeOpaqueDrawCommand(const DrawCommand& command);
-    void executeOpaqueTwoSidedDrawCommand(const DrawCommand& command);
-    void bindMaterialForDrawCommand(const DrawCommand& command);
-    void unbindMaterialForDrawCommand(const DrawCommand& command);
-    void drawElements(const DrawCommand& command, UInt32 drawMode);
+    ForwardOpaqueRenderPass m_forwardOpaqueRenderPass;
+    ForwardTransparentRenderPass m_forwardTransparentRenderPass;
+    SkyboxRenderPass m_skyboxRenderPass;
+    Vector<DrawCommand> m_forwardOpaqueCommands;
+    Vector<DrawCommand> m_forwardTransparentCommands;
+    bool m_isInitialized;
+
+    static void SplitDrawCommandsByRenderPass(
+      const Vector<DrawCommand>& drawCommands,
+      Vector<DrawCommand>& forwardOpaqueCommands,
+      Vector<DrawCommand>& forwardTransparentCommands
+    );
+
+    void assertIsInitialized() const;
   };
 }

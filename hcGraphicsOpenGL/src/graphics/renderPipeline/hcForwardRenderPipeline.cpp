@@ -3,187 +3,91 @@
 
 namespace hc
 {
-  void ForwardRenderPipeline::executeDrawCommands(
-    const Vector<DrawCommand>&drawCommands,
+  ForwardRenderPipeline::ForwardRenderPipeline() :
+    m_forwardOpaqueRenderPass(),
+    m_forwardTransparentRenderPass(),
+    m_skyboxRenderPass(),
+    m_forwardOpaqueCommands(),
+    m_forwardTransparentCommands(),
+    m_isInitialized(false)
+  {}
+
+  ForwardRenderPipeline::~ForwardRenderPipeline()
+  {
+    destroy();
+  }
+
+  void ForwardRenderPipeline::initialize(IShaderProgramManager& shaderProgramManager)
+  {
+    if (m_isInitialized)
+      throw RuntimeErrorException("ForwardRenderPipeline is already initialized.");
+
+    try
+    {
+      m_skyboxRenderPass.initialize(
+        shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::Skybox)
+      );
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException(
+        "Failed to initialize ForwardRenderPipeline: " + String(e.what())
+      );
+    }
+
+    m_isInitialized = true;
+  }
+
+  void ForwardRenderPipeline::execute(
+    const Vector<DrawCommand>& drawCommands,
     IFrameBuffer * currentRenderTarget
   )
   {
-    if (currentRenderTarget)
-    {
-      if (!currentRenderTarget->isValid())
-        throw RuntimeErrorException("Invalid framebuffer set as render target.");
-      currentRenderTarget->bind();
-    }
+    assertIsInitialized();
 
-    for (const DrawCommand& command : drawCommands)
-      executeDrawCommand(command);
+    m_forwardOpaqueCommands.clear();
+    m_forwardTransparentCommands.clear();
 
-    if (currentRenderTarget)
-      currentRenderTarget->unbind();
-  }
-
-  void ForwardRenderPipeline::executeDrawCommand(const DrawCommand & command)
-  {
-    if (command.material->getRenderMode() == materialRenderMode::Type::Transparent)
-      executeTransparentDrawCommand(command);
-    else
-      executeOpaqueDrawCommand(command);
-  }
-
-  void ForwardRenderPipeline::executeTransparentDrawCommand(const DrawCommand& command)
-  {
-    // Save current state before rendering transparent object
-
-    GLboolean blendEnabled = glIsEnabled(GL_BLEND);
-    GLboolean depthMaskEnabled;
-    glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskEnabled);
-
-    GLint blendSrcRGB, blendDstRGB, blendSrcAlpha, blendDstAlpha;
-    glGetIntegerv(GL_BLEND_SRC_RGB, &blendSrcRGB);
-    glGetIntegerv(GL_BLEND_DST_RGB, &blendDstRGB);
-    glGetIntegerv(GL_BLEND_SRC_ALPHA, &blendSrcAlpha);
-    glGetIntegerv(GL_BLEND_DST_ALPHA, &blendDstAlpha);
-
-    // Set state for rendering transparent object
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDepthMask(GL_FALSE);
-
-    if (command.material->isDoubleSided())
-    {
-      executeTransparentTwoSidedDrawCommand(command);
-    }
-    else // Single-sided transparent object
-    {
-      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-
-      glBindVertexArray(drawData.vao);
-      bindMaterialForDrawCommand(command);
-      drawElements(command, drawData.drawMode);
-      unbindMaterialForDrawCommand(command);
-      glBindVertexArray(0);
-    }
-
-    // Restore previous state after rendering transparent object
-
-    if (!blendEnabled)
-      glDisable(GL_BLEND);
-
-    glBlendFuncSeparate(
-      static_cast<GLenum>(blendSrcRGB),
-      static_cast<GLenum>(blendDstRGB),
-      static_cast<GLenum>(blendSrcAlpha),
-      static_cast<GLenum>(blendDstAlpha)
+    SplitDrawCommandsByRenderPass(
+      drawCommands,
+      m_forwardOpaqueCommands,
+      m_forwardTransparentCommands
     );
 
-    glDepthMask(depthMaskEnabled);
+    m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, currentRenderTarget);
+    // TODO - skybox pass
+    m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, currentRenderTarget);
   }
 
-  void ForwardRenderPipeline::executeTransparentTwoSidedDrawCommand(
-    const DrawCommand& command
+  void ForwardRenderPipeline::destroy()
+  {
+    m_skyboxRenderPass.destroy();
+    m_isInitialized = false;
+  }
+
+  void ForwardRenderPipeline::SplitDrawCommandsByRenderPass(
+    const Vector<DrawCommand>& drawCommands,
+    Vector<DrawCommand>& forwardOpaqueCommands,
+    Vector<DrawCommand>& forwardTransparentCommands
   )
   {
-    // Save current state before rendering transparent object
-
-    GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
-    GLint cullFaceMode;
-    glGetIntegerv(GL_CULL_FACE_MODE, &cullFaceMode);
-
-    // Set state for rendering transparent object
-
-    glEnable(GL_CULL_FACE);
-
-    const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-
-    glBindVertexArray(drawData.vao);
-    bindMaterialForDrawCommand(command);
-
-    // Pass 1: Render back faces first
-    glCullFace(GL_FRONT);
-    drawElements(command, drawData.drawMode);
-
-    // Pass 2: Render front faces
-    glCullFace(GL_BACK);
-    drawElements(command, drawData.drawMode);
-
-    unbindMaterialForDrawCommand(command);
-    glBindVertexArray(0);
-
-    // Restore previous state after rendering transparent two-sided object
-
-    if (!cullFaceEnabled)
-      glDisable(GL_CULL_FACE);
-
-    glCullFace(static_cast<GLenum>(cullFaceMode));
-  }
-
-  void ForwardRenderPipeline::executeOpaqueDrawCommand(const DrawCommand& command)
-  {
-    if (command.material->isDoubleSided())
+    for (SizeT i = 0; i < drawCommands.size(); ++i)
     {
-      executeOpaqueTwoSidedDrawCommand(command);
-    }
-    else // Single-sided opaque object
-    {
-      const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
+      const DrawCommand& cmd = drawCommands[i];
 
-      glBindVertexArray(drawData.vao);
-      bindMaterialForDrawCommand(command);
-      drawElements(command, drawData.drawMode);
-      unbindMaterialForDrawCommand(command);
-      glBindVertexArray(0);
+      if (!cmd.material)
+        continue;
+
+      if (cmd.material->getRenderMode() == materialRenderMode::Type::Transparent)
+        forwardTransparentCommands.push_back(cmd);
+      else
+        forwardOpaqueCommands.push_back(cmd);
     }
   }
 
-  void ForwardRenderPipeline::executeOpaqueTwoSidedDrawCommand(
-    const DrawCommand & command
-  )
+  void ForwardRenderPipeline::assertIsInitialized() const
   {
-    // Save current state before rendering opaque object
-
-    GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
-    GLint cullFaceMode;
-    glGetIntegerv(GL_CULL_FACE_MODE, &cullFaceMode);
-
-    // Set state for rendering opaque object
-
-    glDisable(GL_CULL_FACE);
-
-    const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
-
-    glBindVertexArray(drawData.vao);
-    bindMaterialForDrawCommand(command);
-    drawElements(command, drawData.drawMode);
-    unbindMaterialForDrawCommand(command);
-    glBindVertexArray(0);
-
-    // Restore previous state after rendering opaque two-sided object
-
-    if (cullFaceEnabled)
-      glEnable(GL_CULL_FACE);
-
-    glCullFace(static_cast<GLenum>(cullFaceMode));
-  }
-
-  void ForwardRenderPipeline::bindMaterialForDrawCommand(const DrawCommand & command)
-  {
-    command.material->bind(renderPassType::Type::Forward);
-    command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
-  }
-
-  void ForwardRenderPipeline::unbindMaterialForDrawCommand(const DrawCommand & command)
-  {
-    command.material->unbind();
-  }
-
-  void ForwardRenderPipeline::drawElements(const DrawCommand & command, UInt32 drawMode)
-  {
-    glDrawElements(
-      static_cast<GLenum>(drawMode),
-      static_cast<GLsizei>(command.indexCount),
-      GL_UNSIGNED_INT,
-      reinterpret_cast<void*>(command.firstIndex * sizeof(UInt32))
-    );
+    if (!m_isInitialized)
+      throw RuntimeErrorException("ForwardRenderPipeline is not initialized.");
   }
 }
