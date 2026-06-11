@@ -17,6 +17,7 @@ namespace hc
       case Type::DeferredLightingFragment: return "DeferredLightingFragment";
       case Type::SkyboxVertex: return "SkyboxVertex";
       case Type::SkyboxFragment: return "SkyboxFragment";
+      case Type::FinalPassFragment: return "FinalPassFragment";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid built-in shader type: %d", static_cast<Int32>(type))
@@ -35,6 +36,7 @@ namespace hc
       if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
       if (str == "SkyboxVertex") return Type::SkyboxVertex;
       if (str == "SkyboxFragment") return Type::SkyboxFragment;
+      if (str == "FinalPassFragment") return Type::FinalPassFragment;
       throw InvalidArgumentException(
         String::Format("Invalid built-in shader type string: %s", str.c_str())
       );

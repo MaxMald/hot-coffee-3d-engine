@@ -12,7 +12,9 @@ namespace hc
       BlinnPhongForward,
       BlinnPhongDeferredGeometry,
       DeferredLighting,
-      Skybox
+      Skybox,
+      FinalPass,
+      Count
     };
 
     HC_CORE_EXPORT String ToString(Type type);

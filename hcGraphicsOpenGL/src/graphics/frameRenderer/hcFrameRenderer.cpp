@@ -161,6 +161,10 @@ namespace hc
       throw RuntimeErrorException("Frame Renderer: Not implemented render pipeline type.");
 
     m_drawCommands.clear();
+
+    // Gamme Correction
+
+
   }
 
   OpenGlGBuffer& FrameRenderer::getGBuffer()
