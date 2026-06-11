@@ -19,9 +19,6 @@ namespace hc
     m_finalPassShaderProgram = finalPassShaderProgram;
   }
 
-  void FinalRenderPass::execute(ITexture& sceneTexture, IFrameBuffer* finalFrameBuffer)
-  {}
-
   void FinalRenderPass::execute(
     ITexture& sceneTexture,
     IFrameBuffer* finalFrameBuffer
