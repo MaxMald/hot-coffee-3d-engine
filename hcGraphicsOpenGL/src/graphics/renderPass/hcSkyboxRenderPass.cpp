@@ -98,6 +98,7 @@ namespace hc
       destroy();
       glBindVertexArray(currentVao);
       glBindBuffer(GL_ARRAY_BUFFER, currentVbo);
+      throw;
     }
 
     glBindVertexArray(currentVao);
