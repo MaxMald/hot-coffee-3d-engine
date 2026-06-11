@@ -20,6 +20,7 @@ namespace hc
   class IShaderProgramManager;
   class IMeshManager;
   class IGBuffer;
+  class ICubeMap;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
@@ -90,6 +91,14 @@ namespace hc
      * window's default framebuffer.
      */
     virtual IFrameBuffer* getRenderTarget() const = 0;
+
+    /**
+     * @brief Sets the skybox cube map to be used for rendering the skybox.
+     *
+     * @param skyboxCubeMap Pointer to the cube map texture to use as the skybox. Pass
+     * nullptr to disable skybox rendering.
+     */
+    virtual void setSkybox(ICubeMap* skyboxCubeMap) = 0;
 
     /**
      * @brief Issues a draw command to render graphics for the current frame.
@@ -196,6 +205,13 @@ namespace hc
       UInt32 width,
       UInt32 height
     ) = 0;
+
+    /**
+     * @brief Creates a cube map texture.
+     *
+     * @return Smart pointer to the created cube map texture.
+     */
+    virtual SharedPtr<ICubeMap> createCubeMap() = 0;
 
     /**
      * @brief Sets the rendering viewport dimensions.

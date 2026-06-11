@@ -114,6 +114,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::DeferredLightingFragment)
       );
     }
+    else if (type == builtInShaderProgramType::Skybox)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::SkyboxVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::SkyboxFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

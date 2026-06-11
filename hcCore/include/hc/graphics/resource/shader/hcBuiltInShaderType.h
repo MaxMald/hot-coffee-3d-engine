@@ -15,6 +15,8 @@ namespace hc
       BlinnPhongDeferredFragment,
       FullScreenTriangleVertex,
       DeferredLightingFragment,
+      SkyboxVertex,
+      SkyboxFragment,
       Count
     };
 

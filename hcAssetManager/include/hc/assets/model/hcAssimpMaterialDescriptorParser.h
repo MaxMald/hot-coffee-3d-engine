@@ -45,14 +45,6 @@ namespace hc
      */
     static shadingType::Type GetShadingTypeFromMaterial(const aiMaterial* material);
 
-    /**
-     * Parses an unlit material descriptor from an Assimp material.
-     *
-     * @param fileDirectory The directory for resolving texture paths
-     * @param material The Assimp material to parse
-     * 
-     * @return A shared pointer to the created unlit material descriptor
-     */
     static SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
       const aiMaterial* material
@@ -70,6 +62,16 @@ namespace hc
       aiTextureType textureType
     );
 
+    // Blinn-Phong specific properties
     static float GetShininessFromMaterial(const aiMaterial* material);
+
+    // Common Properties
+    static void ParseCommonMaterialPropertiesFromMaterial(
+      const aiMaterial* material,
+      SharedPtr<AMaterialDescriptor>& materialDescriptor
+    );
+    static bool GetDoubleSidedFromMaterial(const aiMaterial* material);
+    static materialRenderMode::Type GetRenderModeFromMaterial(const aiMaterial* material);
+    static float GetAlphaCutoutThresholdFromMaterial(const aiMaterial* material);
   };
 }

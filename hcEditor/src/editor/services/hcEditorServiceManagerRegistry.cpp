@@ -23,6 +23,8 @@ namespace hc::editor
       serviceManager.registerService<EditorSceneManager>(
         MakeUnique<EditorSceneManager>(
           editorScene,
+          engine.getAssetManager(),
+          engine.getGraphicsManager(),
           serviceManager.getService<ProjectManager>()
         )
       );

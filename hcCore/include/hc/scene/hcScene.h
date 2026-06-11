@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
+#include "hc/scene/skybox/hcSkybox.h"
 #include "hc/graphics/lightFrameData/hcLightFrameData.h"
 
 namespace hc
@@ -72,6 +73,20 @@ namespace hc
     GameObject* createRootGameObject(const String& name);
 
     /**
+     * @brief Gets a reference to the scene's skybox for modification.
+     *
+     * @return Reference to the Skybox.
+     */
+    Skybox& getSceneSkybox();
+
+    /**
+     * @brief Gets a const reference to the scene's skybox.
+     *
+     * @return Const reference to the Skybox.
+     */
+    const Skybox& getSceneSkybox() const;
+
+    /**
      * @brief Gets a reference to the scene graph for modification.
      *
      * @return Reference to the SceneGraph.
@@ -119,6 +134,11 @@ namespace hc
      * @brief Clears the scene graph, lights, and cameras.
      */
     void clear();
+
+    /**
+     * @brief Destroys the scene, performing cleanup and clearing contents.
+     */
+    void destroy();
 
   protected:
     /**
@@ -226,6 +246,7 @@ namespace hc
     CameraManager m_cameraManager;
     LightFrameData m_lightFrameData;
     IGameObjectFactory* m_gameObjectFactory;
+    Skybox m_skybox;
 
     /**
      * @brief Initializes the scene with a GameObjectFactory.
@@ -251,11 +272,6 @@ namespace hc
      * @param elapsedTime The elapsed time since the last update.
      */
     void update(const Time& elapsedTime);
-
-    /**
-     * @brief Destroys the scene, performing cleanup and clearing contents.
-     */
-    void destroy();
 
     friend class SceneManager;
   };

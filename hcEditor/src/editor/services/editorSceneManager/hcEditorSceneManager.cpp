@@ -1,4 +1,6 @@
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
+
+#include "hc/editor/services/editorSceneManager/hcIEditorSceneManagerListener.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 
 using hc::serialization::SceneSerializer;
@@ -7,13 +9,17 @@ namespace hc::editor
 {
   EditorSceneManager::EditorSceneManager(
     Scene* editorScene,
+    IAssetManager& assetManager,
+    IGraphicsManager& graphicsManager,
     ProjectManager& projectManager
   ) :
+    m_assetManager(assetManager),
+    m_graphicsManager(graphicsManager),
     m_projectManager(projectManager),
     m_editorScene(editorScene),
-    m_currentScenePath()
-  {
-  }
+    m_currentScenePath(),
+    m_listeners()
+  {}
 
   // Set editor scene instead
 
@@ -25,6 +31,7 @@ namespace hc::editor
   void EditorSceneManager::destroy()
   {
     m_projectManager.unsubscribeListener(this);
+    m_listeners.clear();
   }
 
   bool EditorSceneManager::openScene(const Path& scenePath)
@@ -32,7 +39,12 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
-    if (SceneSerializer::Deserialize(*m_editorScene, scenePath))
+    if (SceneSerializer::Deserialize(
+      *m_editorScene,
+      scenePath,
+      m_assetManager,
+      m_graphicsManager
+    ))
     {
       m_currentScenePath = scenePath;
       updateLastOpenedSceneInProject();
@@ -40,6 +52,12 @@ namespace hc::editor
       LogService::Message(
         "Scene opened successfully: " + scenePath.string()
       );
+
+      for (auto* listener : m_listeners)
+      {
+        if (listener)
+          listener->onSceneOpened();
+      }
 
       return true;
     }
@@ -50,7 +68,7 @@ namespace hc::editor
   bool EditorSceneManager::saveScene(const Path& scenePath)
   {
     assertSceneIsValid();
-    if (SceneSerializer::Serialize(*m_editorScene, scenePath))
+    if (SceneSerializer::Serialize(*m_editorScene, scenePath, m_assetManager))
     {
       m_currentScenePath = scenePath;
       updateLastOpenedSceneInProject();
@@ -73,6 +91,12 @@ namespace hc::editor
 
     m_editorScene->clear();
     m_currentScenePath.clear();
+
+    for (auto* listener : m_listeners)
+    {
+      if (listener)
+        listener->onSceneClosed();
+    }
   }
 
   bool EditorSceneManager::isSceneOpen() const
@@ -83,6 +107,33 @@ namespace hc::editor
   const Path& EditorSceneManager::getCurrentScenePath() const
   {
     return m_currentScenePath;
+  }
+
+  Scene& EditorSceneManager::getEditorScene()
+  {
+    if (!m_editorScene)
+      throw RuntimeErrorException("Editor scene is undefined or invalid");
+    return *m_editorScene;
+  }
+
+  void EditorSceneManager::subscribeListener(IEditorSceneManagerListener* listener)
+  {
+    if (!listener)
+      return;
+
+    auto it = std::find(m_listeners.begin(), m_listeners.end(), listener);
+    if (it == m_listeners.end())
+      m_listeners.push_back(listener);
+  }
+
+  void EditorSceneManager::unsubscribeListener(IEditorSceneManagerListener * listener)
+  {
+    if (!listener)
+      return;
+
+    auto it = std::find(m_listeners.begin(), m_listeners.end(), listener);
+    if (it != m_listeners.end())
+      m_listeners.erase(it);
   }
 
   void EditorSceneManager::onProjectOpened()

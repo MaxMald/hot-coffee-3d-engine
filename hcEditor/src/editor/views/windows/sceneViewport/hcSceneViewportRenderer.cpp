@@ -76,13 +76,9 @@ namespace hc::editor
   {
     assertIsValid();
 
-    m_frameBuffer->bind();
     m_frameBuffer->clear(m_clearColor);
-    m_frameBuffer->unbind();
-
     // Render the scene to the framebuffer
     scene.draw(m_graphicsManager, &camera);
-    m_graphicsManager.executeDrawCommands();
   }
 
   void SceneViewportRenderer::renderLightGizmos(
@@ -91,10 +87,8 @@ namespace hc::editor
     const GameObject* activeGameObject)
   {
     assertIsValid();
-    m_frameBuffer->bind();
     m_lightGizmoRenderer.draw(scene, camera, activeGameObject);
     m_graphicsManager.executeDrawCommands();
-    m_frameBuffer->unbind();
   }
 
   ITexture& SceneViewportRenderer::getRenderedTexture() const

@@ -1,6 +1,8 @@
-#include "hc/serialization/hcSceneSerializer.h"
+#include "hc/serialization/scene/hcSceneSerializer.h"
+
 #include <fstream>
 #include "hc/serialization/hcFileFormats.h"
+#include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 #include "hc/scene/hcScene.h"
 #include "hc/hcVersion.h"
 
@@ -10,7 +12,8 @@ namespace hc
   {
     bool SceneSerializer::Serialize(
       const Scene& scene,
-      const Path& filePath
+      const Path& filePath,
+      const IAssetManager& assetManager
     )
     {
       try
@@ -29,6 +32,8 @@ namespace hc
 
         SerializeHeader(writer);
         scene.serialize(writer);
+        SkyboxSerializer::Serialize(scene.getSceneSkybox(), writer, assetManager);
+
         return true;
       }
       catch (const std::exception& e)
@@ -41,10 +46,17 @@ namespace hc
       }
     }
 
-    bool SceneSerializer::Deserialize(Scene& scene, const Path& filePath)
+    bool SceneSerializer::Deserialize(
+      Scene& scene,
+      const Path& filePath,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager
+    )
     {
       try
       {
+        scene.destroy();
+
         std::ifstream inputFile(filePath, std::ios::binary);
         if (!inputFile)
         {
@@ -58,6 +70,8 @@ namespace hc
 
         VerifyHeader(reader);
         scene.deserialize(reader);
+        SkyboxSerializer::Deserialize(scene.getSceneSkybox(), reader, assetManager, graphicsManager);
+
         return true;
       }
       catch (const std::exception& e)
@@ -70,12 +84,16 @@ namespace hc
       }
     }
 
-    UniquePtr<Scene> SceneSerializer::Deserialize(const Path& filePath)
+    UniquePtr<Scene> SceneSerializer::Deserialize(
+      const Path& filePath,
+      IAssetManager& assetManager,
+      IGraphicsManager& graphicsManager
+    )
     {
       try
       {
         UniquePtr<Scene> scene = MakeUnique<Scene>();
-        if (Deserialize(*scene, filePath))
+        if (Deserialize(*scene, filePath, assetManager, graphicsManager))
           return scene;
         else
           return nullptr;
