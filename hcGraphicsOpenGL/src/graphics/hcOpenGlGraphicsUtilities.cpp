@@ -126,9 +126,9 @@ namespace hc
       case colorFormatType::RGB8:
         return GL_RGB;
       case colorFormatType::SRGB8:
-        return GL_SRGB;
+        return GL_RGB;
       case colorFormatType::SRGBA8:
-        return GL_SRGB_ALPHA;
+        return GL_RGBA;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
@@ -145,9 +145,9 @@ namespace hc
       case colorFormatType::RGB8:
         return GL_RGB8;
       case colorFormatType::SRGB8:
-        return GL_RGB8;
+        return GL_SRGB8;
       case colorFormatType::SRGBA8:
-        return GL_RGBA8;
+        return GL_SRGB8_ALPHA8;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
