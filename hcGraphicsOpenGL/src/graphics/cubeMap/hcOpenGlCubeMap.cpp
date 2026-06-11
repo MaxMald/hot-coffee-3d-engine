@@ -87,14 +87,14 @@ namespace hc
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internalFormat,
         width, height, 0, glFormat,
-        GL_UNSIGNED_BYTE, back.getBuffer().data()
+        GL_UNSIGNED_BYTE, front.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internalFormat,
         width, height, 0, glFormat,
-        GL_UNSIGNED_BYTE, front.getBuffer().data()
+        GL_UNSIGNED_BYTE, back.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 

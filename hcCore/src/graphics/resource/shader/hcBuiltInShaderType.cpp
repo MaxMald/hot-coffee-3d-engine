@@ -15,6 +15,8 @@ namespace hc
       case Type::BlinnPhongDeferredFragment: return "BlinnPhongDeferredFragment";
       case Type::FullScreenTriangleVertex: return "FullScreenTriangleVertex";
       case Type::DeferredLightingFragment: return "DeferredLightingFragment";
+      case Type::SkyboxVertex: return "SkyboxVertex";
+      case Type::SkyboxFragment: return "SkyboxFragment";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid built-in shader type: %d", static_cast<Int32>(type))
@@ -31,6 +33,8 @@ namespace hc
       if (str == "BlinnPhongDeferredFragment") return Type::BlinnPhongDeferredFragment;
       if (str == "FullScreenTriangleVertex") return Type::FullScreenTriangleVertex;
       if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
+      if (str == "SkyboxVertex") return Type::SkyboxVertex;
+      if (str == "SkyboxFragment") return Type::SkyboxFragment;
       throw InvalidArgumentException(
         String::Format("Invalid built-in shader type string: %s", str.c_str())
       );

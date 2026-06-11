@@ -208,7 +208,6 @@ namespace hc
         listener->onBeforeSceneRender();
 
       m_sceneManager->draw();
-      m_graphicsManager->executeDrawCommands();
 
       for (IGameLoopListener* listener : m_eventListeners)
         listener->onAfterSceneRender();

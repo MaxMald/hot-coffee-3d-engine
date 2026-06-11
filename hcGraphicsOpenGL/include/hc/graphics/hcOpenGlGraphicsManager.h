@@ -6,9 +6,7 @@
 #include <hc/graphics/resource/material/hcMaterialManager.h>
 #include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
-#include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
-#include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
-#include "hc/graphics/ubos/hcUniformBufferObject.h"
+#include "hc/graphics/frameRenderer/hcFrameRenderer.h"
 
 namespace hc
 {
@@ -59,6 +57,11 @@ namespace hc
      * @copydoc IGraphicsManager::getRenderTarget
      */
     IFrameBuffer* getRenderTarget() const override;
+
+    /**
+     * @copydoc IGraphicsManager::setSkybox
+     */
+    void setSkybox(ICubeMap* skyboxCubeMap) override;
 
     /**
      * @copydoc IGraphicsManager::draw
@@ -156,24 +159,14 @@ namespace hc
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
-    LightFrameUBO m_lightFrameUBO;
-    CameraFrameUBO m_cameraFrameUBO;
-    IFrameBuffer* m_customRenderTarget;
-    Vector<DrawCommand> m_queueDrawCommands;
     Rect<UInt32> m_viewportRect;
-
-    ForwardRenderPipeline m_forwardRenderPipeline;
-    DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
-
+    FrameRenderer m_frameRenderer;
     polygonFillType::Type m_polygonFillType;
-    renderPipelineType::Type m_renderPipelineType;
 
     /**
      * @copydoc IGraphicsManager::destroy
      */
     void destroy() override;
-
-    bool isValidDrawCommand(const DrawCommand& drawCommand, String& errorMessage);
 
     friend class OpenGlGraphicsPlugin;
   };

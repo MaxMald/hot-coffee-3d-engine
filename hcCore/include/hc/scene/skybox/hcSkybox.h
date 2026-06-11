@@ -16,6 +16,7 @@ namespace hc
     bool isValid() const;
     bool hasCubeMap() const;
     const ICubeMap& getCubeMap() const;
+    ICubeMap& getCubeMap();
     void destroy();
 
   protected:

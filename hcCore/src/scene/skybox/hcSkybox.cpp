@@ -36,6 +36,13 @@ namespace hc
     return *m_cubeMap;
   }
 
+  ICubeMap& Skybox::getCubeMap()
+  {
+    if (m_cubeMap == nullptr)
+      throw RuntimeErrorException("CubeMap is undefined.");
+    return *m_cubeMap;
+  }
+
   void Skybox::destroy()
   {
     m_cubeMap = nullptr;

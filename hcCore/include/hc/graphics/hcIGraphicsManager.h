@@ -93,6 +93,14 @@ namespace hc
     virtual IFrameBuffer* getRenderTarget() const = 0;
 
     /**
+     * @brief Sets the skybox cube map to be used for rendering the skybox.
+     *
+     * @param skyboxCubeMap Pointer to the cube map texture to use as the skybox. Pass
+     * nullptr to disable skybox rendering.
+     */
+    virtual void setSkybox(ICubeMap* skyboxCubeMap) = 0;
+
+    /**
      * @brief Issues a draw command to render graphics for the current frame.
      *
      * @param command The draw command containing rendering instructions.
