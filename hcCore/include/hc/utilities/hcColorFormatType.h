@@ -12,6 +12,7 @@ namespace hc
       RGB8,
       SRGBA8,
       SRGB8,
+      RGBA16F,
       Count
     };
 
@@ -20,11 +21,10 @@ namespace hc
       switch (format)
       {
       case RGBA8:
+      case SRGBA8:
+      case RGBA16F:
         return 4;
       case RGB8:
-        return 3;
-      case SRGBA8:
-        return 4;
       case SRGB8:
         return 3;
       default:
@@ -42,6 +42,8 @@ namespace hc
       case SRGBA8:
       case SRGB8:
         return 8;
+      case RGBA16F:
+        return 16;
       default:
         throw RuntimeErrorException(
           String::Format("Not implemented: getBitsPerChannel for color format type %d", static_cast<UInt8>(format)));
@@ -60,6 +62,8 @@ namespace hc
         return "SRGBA8";
       case SRGB8:
         return "SRGB8";
+      case RGBA16F:
+        return "RGBA16F";
       default:
         throw RuntimeErrorException(
           String::Format("Not implemented: toString for color format type %d", static_cast<UInt8>(format)));
@@ -76,6 +80,8 @@ namespace hc
         return SRGBA8;
       if (str == "SRGB8")
         return SRGB8;
+      if (str == "RGBA16F")
+        return RGBA16F;
       throw RuntimeErrorException(
         String::Format("Not implemented: fromString for color format type string '%s'", str.c_str()));
     }

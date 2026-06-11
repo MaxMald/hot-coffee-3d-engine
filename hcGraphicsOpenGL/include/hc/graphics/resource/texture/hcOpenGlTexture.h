@@ -30,15 +30,15 @@ namespace hc
     *
     * @param width The width of the texture in pixels.
     * @param height The height of the texture in pixels.
-    * @param internalFormat The internal format of the texture (default is GL_RGBA8).
-    * @param format The format of the pixel data (default is GL_RGBA).
+    * @param internalColorFormat The internal color format of the texture (e.g., RGBA8, RGB8).
+    * @param colorFormat The color format of the texture (e.g., RGBA8, RGB8).
     * @param type The data type of the pixel data (default is GL_UNSIGNED_BYTE).
     */
     OpenGlTexture(
       UInt32 width,
       UInt32 height,
-      GLenum internalFormat = GL_RGBA8,
-      GLenum format = GL_RGBA,
+      colorFormatType::Type internalColorFormat,
+      colorFormatType::Type colorFormat,
       GLenum type = GL_UNSIGNED_BYTE
     );
 
@@ -57,14 +57,25 @@ namespace hc
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorFormatType::Type)
      */
-    void initialize(UInt32 width, UInt32 height, colorFormatType::Type format) override;
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type internalColorFormat,
+      colorFormatType::Type colorFormat
+    ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, const Color&)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorFormatType::Type, const Color&)
      */
-    void initialize(UInt32 width, UInt32 height, colorFormatType::Type format, const Color& initColor) override;
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type internalColorFormat,
+      colorFormatType::Type colorFormat,
+      const Color& initColor
+    ) override;
 
     /**
      * @brief Returns the width of the texture in pixels.
@@ -81,9 +92,14 @@ namespace hc
     UInt32 getHeight() const override;
 
     /**
-     * @copydoc ITexture::getChannels
+     * @copydoc ITexture::getInternalFormat
      */
-    UInt8 getChannels() const override;
+    colorFormatType::Type getInternalFormat() const override;
+
+    /**
+     * @copydoc ITexture::getColorFormat
+     */
+    colorFormatType::Type getColorFormat() const override;
 
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created
@@ -140,8 +156,8 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param internalFormat The internal format of the texture (e.g., GL_RGBA8).
-     * @param format The format of the pixel data (e.g., GL_RGBA).
+     * @param internalFormat The internal color format of the texture (e.g., RGBA8, RGB8).
+     * @param colorFormat The color format of the texture (e.g., RGBA8, RGB8).
      * @param type The data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
      * @param initData Optional pointer to initial pixel data to upload to the texture. If
      * nullptr, the texture will be created with uninitialized data.
@@ -149,8 +165,8 @@ namespace hc
     void initialize(
       UInt32 width,
       UInt32 height,
-      GLenum internalFormat,
-      GLenum format,
+      colorFormatType::Type internalFormat,
+      colorFormatType::Type colorFormat,
       GLenum type,
       const void* initData = nullptr
     );
@@ -161,8 +177,8 @@ namespace hc
     UInt32 m_width;
     UInt32 m_height;
     UInt8 m_channels;
-    GLenum m_internalFormat;
-    GLenum m_format;
+    colorFormatType::Type m_internalFormat;
+    colorFormatType::Type m_colorFormat;
     GLenum m_type;
     bool m_created;
 

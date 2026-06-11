@@ -42,11 +42,6 @@ namespace hc
     UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat);
 
     /**
-     * @brief Converts a color format type to the corresponding OpenGL internal format.
-     */
-    UInt32 GetOpenGlInternalFormatFromColorFormatType(colorFormatType::Type colorFormat);
-
-    /**
      * @brief Gets the number of color channels from an OpenGL format.
      */
     UInt8 GetChannelCountFromOpenGlFormat(UInt32 glFormat);

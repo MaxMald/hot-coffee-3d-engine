@@ -206,11 +206,11 @@ namespace hc
   void MaterialManager::createDefaultTextures()
   {
     m_whiteTexture = m_textureManager.createTexture();
-    m_whiteTexture->initialize(1, 1, 4, Color::White()); // 1x1 white texture
+    m_whiteTexture->initialize(1, 1, colorFormatType::RGBA8, colorFormatType::RGBA8, Color::White()); // 1x1 white texture
     coreAssertions::AssertTextureIsValid(m_whiteTexture, "Default white texture");
 
     m_defaultNormalTexture = m_textureManager.createTexture();
-    m_defaultNormalTexture->initialize(1, 1, 4, Color(0.5f, 0.5f, 1.0f, 1.0f)); // 1x1 normal texture (0.5, 0.5, 1.0)
+    m_defaultNormalTexture->initialize(1, 1, colorFormatType::RGBA8, colorFormatType::RGBA8, Color(0.5f, 0.5f, 1.0f, 1.0f)); // 1x1 normal texture (0.5, 0.5, 1.0)
     coreAssertions::AssertTextureIsValid(m_defaultNormalTexture, "Default normal texture");
   }
 

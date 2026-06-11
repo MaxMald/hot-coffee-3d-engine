@@ -30,9 +30,15 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
+     * @param internalFormat The internal color format of the texture.
      * @param format The color format of the texture.
      */
-    virtual void initialize(UInt32 width, UInt32 height, colorFormatType::Type format) = 0;
+    virtual void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type internalFormat,
+      colorFormatType::Type format
+    ) = 0;
 
     /**
      * @brief Initializes the texture with the given dimensions and fills it with the
@@ -41,32 +47,38 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
+     * @param internalFormat The internal color format of the texture.
      * @param format The color format of the texture.
      * @param initColor The color to initialize the texture's pixel data with.
      */
-    virtual void initialize(UInt32 width, UInt32 height, colorFormatType::Type format, const Color& initColor) = 0;
+    virtual void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type internalFormat,
+      colorFormatType::Type format,
+      const Color& initColor
+    ) = 0;
 
     /**
      * @brief Gets the width of the texture in pixels.
-     * 
+     *
      * @return Texture width as an unsigned 32-bit integer.
      */
     virtual UInt32 getWidth() const = 0;
 
     /**
      * @brief Gets the height of the texture in pixels.
-     * 
+     *
      * @return Texture height as an unsigned 32-bit integer.
      */
     virtual UInt32 getHeight() const = 0;
 
     /**
-     * @brief Gets the number of color channels in the texture (e.g., 3 for RGB, 4 for
-     * RGBA).
+     * @brief Gets the internal color format of the texture (e.g., RGBA8, RGB8).
      *
-     * @return Number of color channels as an unsigned 8-bit integer.
+     * @return The internal color format type of the texture.
      */
-    virtual UInt8 getChannels() const = 0;
+    virtual colorFormatType::Type getInternalFormat() const = 0;
 
     /**
      * @brief Gets the color format of the texture (e.g., RGBA8, RGB8).
@@ -78,7 +90,7 @@ namespace hc
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created
      * from an image is not allowed, create a new texture instead.
-     * 
+     *
      * @param width The new width of the texture in pixels.
      * @param height The new height of the texture in pixels.
      */
@@ -86,14 +98,14 @@ namespace hc
 
     /**
      * @brief Binds the texture to the specified slot for rendering.
-     * 
+     *
      * @param slot The texture slot to bind to (default is 0).
      */
     virtual void bind(UInt32 slot = 0) const = 0;
 
     /**
      * @brief Unbinds the texture from the specified slot.
-     * 
+     *
      * @param slot The texture slot to unbind from (default is 0).
      */
     virtual void unbind(UInt32 slot = 0) const = 0;
@@ -107,7 +119,7 @@ namespace hc
 
     /**
      * @brief Gets the native graphics API handle for the texture.
-     * 
+     *
      * @return Pointer to the native texture handle.
      */
     virtual void* getNativeHandle() const = 0;

@@ -126,28 +126,11 @@ namespace hc
       case colorFormatType::RGB8:
         return GL_RGB;
       case colorFormatType::SRGB8:
-        return GL_RGB;
+        return GL_SRGB;
       case colorFormatType::SRGBA8:
-        return GL_RGBA;
-      default:
-        throw RuntimeErrorException(
-          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
-        );
-      }
-    }
-
-    UInt32 GetOpenGlInternalFormatFromColorFormatType(colorFormatType::Type colorFormat)
-    {
-      switch (colorFormat)
-      {
-      case colorFormatType::RGBA8:
-        return GL_RGBA8;
-      case colorFormatType::RGB8:
-        return GL_RGB8;
-      case colorFormatType::SRGB8:
-        return GL_SRGB8;
-      case colorFormatType::SRGBA8:
-        return GL_SRGB8_ALPHA8;
+        return GL_SRGB_ALPHA;
+      case colorFormatType::RGBA16F:
+        return GL_RGBA16F;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
