@@ -10,6 +10,8 @@ namespace hc
     {
       RGBA8,
       RGB8,
+      SRGBA8,
+      SRGB8,
       Count
     };
 
@@ -20,6 +22,10 @@ namespace hc
       case RGBA8:
         return 4;
       case RGB8:
+        return 3;
+      case SRGBA8:
+        return 4;
+      case SRGB8:
         return 3;
       default:
         throw RuntimeErrorException(
@@ -33,6 +39,8 @@ namespace hc
       {
       case RGBA8:
       case RGB8:
+      case SRGBA8:
+      case SRGB8:
         return 8;
       default:
         throw RuntimeErrorException(
@@ -48,6 +56,10 @@ namespace hc
         return "RGBA8";
       case RGB8:
         return "RGB8";
+      case SRGBA8:
+        return "SRGBA8";
+      case SRGB8:
+        return "SRGB8";
       default:
         throw RuntimeErrorException(
           String::Format("Not implemented: toString for color format type %d", static_cast<UInt8>(format)));
@@ -60,6 +72,10 @@ namespace hc
         return RGBA8;
       if (str == "RGB8")
         return RGB8;
+      if (str == "SRGBA8")
+        return SRGBA8;
+      if (str == "SRGB8")
+        return SRGB8;
       throw RuntimeErrorException(
         String::Format("Not implemented: fromString for color format type string '%s'", str.c_str()));
     }
