@@ -125,21 +125,19 @@ namespace hc
       if (!cmd.material)
         continue;
 
+      if (cmd.material->getRenderMode() == materialRenderMode::Type::Transparent)
+      {
+        forwardTransparentCommands.push_back(cmd);
+        continue;
+      }
+
       if (cmd.material->getShaderType() == shadingType::Unlit)
       {
         forwardOpaqueCommands.push_back(cmd);
         continue;
       }
 
-      if (cmd.material->getRenderMode() == materialRenderMode::Type::Opaque ||
-        cmd.material->getRenderMode() == materialRenderMode::Type::AlphaCutout)
-      {
-        deferredOpaqueCommands.push_back(cmd);
-      }
-      else
-      {
-        forwardTransparentCommands.push_back(cmd);
-      }
+      deferredOpaqueCommands.push_back(cmd);
     }
   }
 
