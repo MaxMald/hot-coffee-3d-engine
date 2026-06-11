@@ -57,14 +57,14 @@ namespace hc
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type)
      */
-    void initialize(UInt32 width, UInt32 height, UInt8 channels) override;
+    void initialize(UInt32 width, UInt32 height, colorFormatType::Type format) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8, const Color&)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, const Color&)
      */
-    void initialize(UInt32 width, UInt32 height, UInt8 channels, const Color& initColor) override;
+    void initialize(UInt32 width, UInt32 height, colorFormatType::Type format, const Color& initColor) override;
 
     /**
      * @brief Returns the width of the texture in pixels.
@@ -166,7 +166,6 @@ namespace hc
     GLenum m_type;
     bool m_created;
 
-    static void assertNumberOfChannels(UInt8 channels);
     static void assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height);
     void assertIsCreated() const;
     

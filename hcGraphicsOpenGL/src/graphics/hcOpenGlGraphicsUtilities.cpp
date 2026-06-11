@@ -125,9 +125,49 @@ namespace hc
         return GL_RGBA;
       case colorFormatType::RGB8:
         return GL_RGB;
+      case colorFormatType::SRGB8:
+        return GL_SRGB;
+      case colorFormatType::SRGBA8:
+        return GL_SRGB_ALPHA;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+        );
+      }
+    }
+
+    UInt32 GetOpenGlInternalFormatFromColorFormatType(colorFormatType::Type colorFormat)
+    {
+      switch (colorFormat)
+      {
+      case colorFormatType::RGBA8:
+        return GL_RGBA8;
+      case colorFormatType::RGB8:
+        return GL_RGB8;
+      case colorFormatType::SRGB8:
+        return GL_RGB8;
+      case colorFormatType::SRGBA8:
+        return GL_RGBA8;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+        );
+      }
+    }
+
+    UInt8 GetChannelCountFromOpenGlFormat(UInt32 glFormat)
+    {
+      switch (glFormat)
+      {
+      case GL_RGBA:
+      case GL_SRGB_ALPHA:
+        return 4;
+      case GL_RGB:
+      case GL_SRGB:
+        return 3;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported OpenGL format: %u", glFormat)
         );
       }
     }

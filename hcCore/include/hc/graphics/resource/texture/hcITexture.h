@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hc/utilities/hcColorFormatType.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
@@ -29,9 +30,9 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param channels The number of color channels in the texture.
+     * @param format The color format of the texture.
      */
-    virtual void initialize(UInt32 width, UInt32 height, UInt8 channels) = 0;
+    virtual void initialize(UInt32 width, UInt32 height, colorFormatType::Type format) = 0;
 
     /**
      * @brief Initializes the texture with the given dimensions and fills it with the
@@ -40,10 +41,10 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param channels The number of color channels in the texture.
+     * @param format The color format of the texture.
      * @param initColor The color to initialize the texture's pixel data with.
      */
-    virtual void initialize(UInt32 width, UInt32 height, UInt8 channels, const Color& initColor) = 0;
+    virtual void initialize(UInt32 width, UInt32 height, colorFormatType::Type format, const Color& initColor) = 0;
 
     /**
      * @brief Gets the width of the texture in pixels.
@@ -66,6 +67,13 @@ namespace hc
      * @return Number of color channels as an unsigned 8-bit integer.
      */
     virtual UInt8 getChannels() const = 0;
+
+    /**
+     * @brief Gets the color format of the texture (e.g., RGBA8, RGB8).
+     *
+     * @return The color format type of the texture.
+     */
+    virtual colorFormatType::Type getColorFormat() const = 0;
 
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created
