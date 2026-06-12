@@ -12,6 +12,11 @@ namespace hc
     SharedPtr<Image> image
   )
   {
-    return MakeShared<OpenGlTexture>(image);
+    if (!image)
+      throw InvalidArgumentException("Image pointer cannot be null when creating a texture.");
+
+    SharedPtr<OpenGlTexture> texture = MakeShared<OpenGlTexture>();
+    texture->initialize(*image);
+    return texture;
   }
 }

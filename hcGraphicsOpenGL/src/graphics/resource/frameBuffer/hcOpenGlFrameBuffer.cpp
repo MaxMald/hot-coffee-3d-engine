@@ -40,8 +40,7 @@ namespace hc
       m_colorTexture.initialize(
         width, height,
         colorFormatType::RGBA8,
-        colorFormatType::RGBA8,
-        GL_UNSIGNED_BYTE
+        colorSpaceType::Linear
       );
 
       if (!m_colorTexture.isValid())

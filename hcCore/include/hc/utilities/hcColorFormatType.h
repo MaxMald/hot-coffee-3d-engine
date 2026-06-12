@@ -8,8 +8,8 @@ namespace hc
   {
     enum Type : UInt8
     {
-      RGBA8,
       RGB8,
+      RGBA8,
       RGB16F,
       RGBA16F,
       Count

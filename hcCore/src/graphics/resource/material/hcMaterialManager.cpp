@@ -139,11 +139,19 @@ namespace hc
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
-    SharedPtr<ITexture> normalTexture = getTextureFromPath(descriptor.getNormalImagePath());
+    SharedPtr<ITexture> normalTexture = getTextureFromPath(
+      descriptor.getNormalImagePath(),
+      colorSpaceType::Linear
+    );
+
     if (!normalTexture)
       normalTexture = m_defaultNormalTexture;
 
-    SharedPtr<ITexture> specularTexture = getTextureFromPath(descriptor.getSpecularImagePath());
+    SharedPtr<ITexture> specularTexture = getTextureFromPath(
+      descriptor.getSpecularImagePath(),
+      colorSpaceType::Linear
+    );
+
     if (!specularTexture)
       specularTexture = m_whiteTexture;
 
@@ -206,11 +214,23 @@ namespace hc
   void MaterialManager::createDefaultTextures()
   {
     m_whiteTexture = m_textureManager.createTexture();
-    m_whiteTexture->initialize(1, 1, colorFormatType::RGBA8, colorFormatType::RGBA8, Color::White()); // 1x1 white texture
+    m_whiteTexture->initialize(
+      1, 1,
+      colorFormatType::RGBA8,
+      colorSpaceType::Linear,
+      Color::White()
+    ); // 1x1 white texture
+
     coreAssertions::AssertTextureIsValid(m_whiteTexture, "Default white texture");
 
     m_defaultNormalTexture = m_textureManager.createTexture();
-    m_defaultNormalTexture->initialize(1, 1, colorFormatType::RGBA8, colorFormatType::RGBA8, Color(0.5f, 0.5f, 1.0f, 1.0f)); // 1x1 normal texture (0.5, 0.5, 1.0)
+    m_defaultNormalTexture->initialize(
+      1, 1,
+      colorFormatType::RGBA8,
+      colorSpaceType::Linear,
+      Color(0.5f, 0.5f, 1.0f, 1.0f)
+    ); // 1x1 normal texture (0.5, 0.5, 1.0)
+
     coreAssertions::AssertTextureIsValid(m_defaultNormalTexture, "Default normal texture");
   }
 
@@ -220,6 +240,46 @@ namespace hc
       return nullptr;
 
     SharedPtr<ITexture> texture = m_textureManager.createTextureFromFile(texturePath);
+    if (!texture)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to load texture from path '%s'.",
+          texturePath.string().c_str()
+        )
+      );
+
+      return nullptr;
+    }
+
+    if (!texture->isValid())
+    {
+      LogService::Error(
+        String::Format(
+          "Texture from path '%s' is invalid.",
+          texturePath.string().c_str()
+        )
+      );
+
+      return nullptr;
+    }
+
+    return texture;
+  }
+
+  SharedPtr<ITexture> MaterialManager::getTextureFromPath(
+    const Path& texturePath,
+    colorSpaceType::Type colorSpace
+  )
+  {
+    if (texturePath.empty())
+      return nullptr;
+
+    SharedPtr<ITexture> texture = m_textureManager.createTextureFromFile(
+      texturePath,
+      colorSpace
+    );
+
     if (!texture)
     {
       LogService::Error(

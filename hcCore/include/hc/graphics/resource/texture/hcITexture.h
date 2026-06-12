@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcColorSpaceType.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
@@ -26,18 +27,32 @@ namespace hc
 
     /**
      * @brief Initializes the texture with the given dimensions. The texture will be
-     * created with empty pixel data.
+     * created with empty pixel data. Color space will default to Linear.
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param internalFormat The internal color format of the texture.
      * @param format The color format of the texture.
      */
     virtual void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type internalFormat,
       colorFormatType::Type format
+    ) = 0;
+
+    /**
+     * @brief Initializes the texture with the given dimensions and color space. The
+     * texture will be created with empty pixel data.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param format The color format of the texture.
+     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     */
+    virtual void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type format,
+      colorSpaceType::Type colorSpace
     ) = 0;
 
     /**
@@ -47,15 +62,15 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param internalFormat The internal color format of the texture.
      * @param format The color format of the texture.
+     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
      * @param initColor The color to initialize the texture's pixel data with.
      */
     virtual void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type internalFormat,
       colorFormatType::Type format,
+      colorSpaceType::Type colorSpace,
       const Color& initColor
     ) = 0;
 
@@ -74,18 +89,18 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
-     * @brief Gets the internal color format of the texture (e.g., RGBA8, RGB8).
-     *
-     * @return The internal color format type of the texture.
-     */
-    virtual colorFormatType::Type getInternalFormat() const = 0;
-
-    /**
      * @brief Gets the color format of the texture (e.g., RGBA8, RGB8).
      *
      * @return The color format type of the texture.
      */
     virtual colorFormatType::Type getColorFormat() const = 0;
+
+    /**
+     * @brief Gets the color space of the texture (e.g., sRGB, Linear).
+     *
+     * @return The color space type of the texture.
+     */
+    virtual colorSpaceType::Type getColorSpace() const = 0;
 
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created

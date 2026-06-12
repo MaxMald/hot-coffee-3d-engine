@@ -27,7 +27,7 @@ namespace hc
       }
     }
 
-    inline Type GetColorSpaceTypeFromString(const String& colorSpaceStr)
+    inline Type FromString(const String& colorSpaceStr)
     {
       if (colorSpaceStr == "SRGB")
         return SRGB;
@@ -36,5 +36,6 @@ namespace hc
       else
         throw RuntimeErrorException(
           String::Format("Not implemented: getColorSpaceTypeFromString for color space type string '%s'", colorSpaceStr.c_str()));
+    }
   }
 }

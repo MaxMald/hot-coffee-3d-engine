@@ -65,7 +65,8 @@ namespace hc
         Path(),
         descriptor->faceSize,
         descriptor->faceSize,
-        static_cast<UInt8>(numChannels),
+        descriptor->format,
+        colorSpaceType::SRGB,
         std::move(defaultData)
       );
     }
@@ -144,7 +145,7 @@ namespace hc
 
     SharedPtr<ICubeMap> cubeMap = graphicsManager.createCubeMap();
     cubeMap->initialize(
-      descriptor->faceSize, descriptor->faceSize, descriptor->format,
+      descriptor->faceSize, descriptor->faceSize,
       *rightImage, *leftImage, *topImage,
       *bottomImage, *backImage, *frontImage,
       cubeMapDescriptorSourcePath

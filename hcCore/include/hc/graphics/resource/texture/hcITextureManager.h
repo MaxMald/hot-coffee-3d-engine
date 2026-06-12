@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/utilities/hcColorSpaceType.h"
 
 namespace hc
 {
@@ -42,10 +43,23 @@ namespace hc
      * @brief Creates a texture from an image file.
      *
      * @param filePath Path to the image file.
-     * 
+     *
      * @return Shared pointer to the created texture.
      */
     virtual SharedPtr<ITexture> createTextureFromFile(const Path& filePath) = 0;
+
+    /**
+     * @brief Creates a texture from an image file.
+     *
+     * @param filePath Path to the image file.
+     * @param colorSpace Color space of the texture.
+     * 
+     * @return Shared pointer to the created texture.
+     */
+    virtual SharedPtr<ITexture> createTextureFromFile(
+      const Path& filePath,
+      colorSpaceType::Type colorSpace
+    ) = 0;
 
     /**
      * @brief Gets a list of all managed textures.
