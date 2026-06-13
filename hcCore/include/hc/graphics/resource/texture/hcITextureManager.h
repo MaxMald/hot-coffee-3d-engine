@@ -1,6 +1,25 @@
+/**
+ * @todo Fix texture caching for images loaded with different color spaces.
+ *
+ * createTextureFromFile() currently mutates the cached Image's color space
+ * before forwarding to createTextureFromImage(). Textures are cached using
+ * only the Image identifier, so requesting the same image with different
+ * color spaces may return an existing texture created with a different
+ * color space than requested.
+ *
+ * Additionally, mutating the shared Image instance can affect other systems
+ * that reference the same cached image.
+ *
+ * Possible solutions:
+ * - Include color space in the texture cache key.
+ * - Avoid mutating cached Image instances.
+ * - Treat image color space as immutable after loading.
+ */
+
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/utilities/hcColorSpaceType.h"
 
 namespace hc
 {
@@ -42,10 +61,23 @@ namespace hc
      * @brief Creates a texture from an image file.
      *
      * @param filePath Path to the image file.
-     * 
+     *
      * @return Shared pointer to the created texture.
      */
     virtual SharedPtr<ITexture> createTextureFromFile(const Path& filePath) = 0;
+
+    /**
+     * @brief Creates a texture from an image file.
+     *
+     * @param filePath Path to the image file.
+     * @param colorSpace Color space of the texture.
+     * 
+     * @return Shared pointer to the created texture.
+     */
+    virtual SharedPtr<ITexture> createTextureFromFile(
+      const Path& filePath,
+      colorSpaceType::Type colorSpace
+    ) = 0;
 
     /**
      * @brief Gets a list of all managed textures.

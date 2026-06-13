@@ -83,6 +83,28 @@ namespace hc
     return createTextureFromImage(image);
   }
 
+  SharedPtr<ITexture> TextureManager::createTextureFromFile(
+    const Path& filePath,
+    colorSpaceType::Type colorSpace
+  )
+  {
+    SharedPtr<Image> image = m_assetManager.getImageAssetManager().load(filePath);
+    if (!image)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to create texture. Could not load image from file: %s",
+          filePath.c_str()
+        )
+      );
+
+      return nullptr;
+    }
+
+    image->setColorSpace(colorSpace);
+    return createTextureFromImage(image);
+  }
+
   const Vector<SharedPtr<ITexture>>& TextureManager::getTextures()
   {
     return m_textures;

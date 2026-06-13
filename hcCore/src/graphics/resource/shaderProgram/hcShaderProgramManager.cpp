@@ -122,6 +122,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::SkyboxFragment)
       );
     }
+    else if (type == builtInShaderProgramType::FinalPass)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::FullScreenTriangleVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::FinalPassFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

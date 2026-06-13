@@ -39,7 +39,8 @@ namespace hc
     {
       m_colorTexture.initialize(
         width, height,
-        GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE
+        colorFormatType::RGBA8,
+        colorSpaceType::Linear
       );
 
       if (!m_colorTexture.isValid())

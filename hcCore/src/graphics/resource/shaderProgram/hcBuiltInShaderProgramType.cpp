@@ -13,6 +13,7 @@ namespace hc
       case Type::BlinnPhongDeferredGeometry: return "BlinnPhongDeferredGeometry";
       case Type::DeferredLighting: return "DeferredLighting";
       case Type::Skybox: return "Skybox";
+      case Type::FinalPass: return "FinalPass";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -27,6 +28,7 @@ namespace hc
       if (str == "BlinnPhongDeferredGeometry") return Type::BlinnPhongDeferredGeometry;
       if (str == "DeferredLighting") return Type::DeferredLighting;
       if (str == "Skybox") return Type::Skybox;
+      if (str == "FinalPass") return Type::FinalPass;
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())
       );

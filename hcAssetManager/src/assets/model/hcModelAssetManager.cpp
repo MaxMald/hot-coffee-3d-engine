@@ -189,6 +189,10 @@ namespace hc
         mesh->mNormals[assimpVertexIndex].z
       );
     }
+    else
+    {
+      outVertex.normal = Vector3(0.0f, 1.0f, 0.0f);
+    }
 
     if (mesh->mTextureCoords[0])
     {
@@ -196,6 +200,10 @@ namespace hc
         mesh->mTextureCoords[0][assimpVertexIndex].x,
         mesh->mTextureCoords[0][assimpVertexIndex].y
       );
+    }
+    else
+    {
+      outVertex.texCoord = Vector2(0.0f, 0.0f);
     }
 
     if (mesh->mTangents)
@@ -206,6 +214,10 @@ namespace hc
         mesh->mTangents[assimpVertexIndex].z
       );
     }
+    else
+    {
+      outVertex.tangent = Vector3(1.0f, 0.0f, 0.0f);
+    }
 
     if (mesh->mColors[0])
     {
@@ -215,6 +227,10 @@ namespace hc
         mesh->mColors[0][assimpVertexIndex].b,
         mesh->mColors[0][assimpVertexIndex].a
       );
+    }
+    else
+    {
+      outVertex.color = Color(1.0f, 1.0f, 1.0f, 1.0f);
     }
   }
 

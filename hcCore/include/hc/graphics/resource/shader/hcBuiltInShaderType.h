@@ -17,6 +17,7 @@ namespace hc
       DeferredLightingFragment,
       SkyboxVertex,
       SkyboxFragment,
+      FinalPassFragment,
       Count
     };
 

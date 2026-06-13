@@ -55,6 +55,14 @@ namespace hc
     SharedPtr<ITexture> createTextureFromFile(const Path& filePath) override;
 
     /**
+     * @copydoc ITextureManager::createTextureFromFile(const Path&, colorSpaceType::Type)
+     */
+    SharedPtr<ITexture> createTextureFromFile(
+      const Path& filePath,
+      colorSpaceType::Type colorSpace
+    ) override;
+
+    /**
      * @brief Returns a vector of all managed texture instances.
      * 
      * @return Const reference to the vector of texture instances.

@@ -22,9 +22,6 @@ namespace hc
 
     constexpr Vector2();
     constexpr Vector2(T xVal, T yVal);
-    constexpr Vector2(const Vector2& other);
-
-    constexpr Vector2& operator=(const Vector2& other);
 
     // Arithmetic operators
     constexpr Vector2 operator+(const Vector2& rhs) const;
@@ -54,12 +51,6 @@ namespace hc
 
   template <typename T>
   constexpr Vector2<T>::Vector2(T xVal, T yVal) : x(xVal), y(yVal) {}
-
-  template <typename T>
-  constexpr Vector2<T>::Vector2(const Vector2& other) = default;
-
-  template <typename T>
-  constexpr Vector2<T>& Vector2<T>::operator=(const Vector2& other) = default;
 
   template <typename T>
   constexpr Vector2<T> Vector2<T>::operator+(const Vector2& rhs) const

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "hc/utilities/hcColorSpaceType.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 
 namespace hc
@@ -98,5 +99,9 @@ namespace hc
     UInt16 generateMaterialId();
     void createDefaultTextures();
     SharedPtr<ITexture> getTextureFromPath(const Path& texturePath);
+    SharedPtr<ITexture> getTextureFromPath(
+      const Path& texturePath,
+      colorSpaceType::Type colorSpace
+    );
   };
 }

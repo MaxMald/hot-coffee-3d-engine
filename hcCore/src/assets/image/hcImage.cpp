@@ -6,13 +6,15 @@ namespace hc
     const Path& path,
     UInt32 width,
     UInt32 height,
-    UInt32 channels,
+    colorFormatType::Type format,
+    colorSpaceType::Type colorSpace,
     BufferByte&& buffer
   ) :
     Asset(path),
     m_width(width),
     m_height(height),
-    m_channels(channels),
+    m_format(format),
+    m_colorSpace(colorSpace),
     m_data(std::move(buffer))
   {
   }
@@ -31,13 +33,19 @@ namespace hc
     return m_height;
   }
 
-  UInt32 Image::getChannels() const
+  colorFormatType::Type Image::getFormat() const
   {
-    // TODO
-    //
-    // Images should use color format type instead of channels.
+    return m_format;
+  }
 
-    return m_channels;
+  colorSpaceType::Type Image::getColorSpace() const
+  {
+    return m_colorSpace;
+  }
+
+  void Image::setColorSpace(colorSpaceType::Type colorSpace)
+  {
+    m_colorSpace = colorSpace;
   }
 
   BufferByte& Image::getBuffer()

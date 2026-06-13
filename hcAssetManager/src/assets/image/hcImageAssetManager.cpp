@@ -10,38 +10,55 @@ namespace hc
     if (isLoaded(path))
       return m_loadedImages.at(path);
 
+    // TODO
+    //
+    // Method should determine the color format and color space of the loaded image. For
+    // now, we will assume all loaded images are in RGBA8 format and sRGB color space, but
+    // this may not always be the case.
+
     Int32 width = 0;
     Int32 height = 0;
     Int32 channels = 0;
+    Byte* data = nullptr;
+    SharedPtr<Image> image = nullptr;
 
-    Byte* data = stbi_load(
-      path.string().c_str(),
-      reinterpret_cast<int*>(&width),
-      reinterpret_cast<int*>(&height),
-      reinterpret_cast<int*>(&channels),
-      STBI_rgb_alpha
-    );
+    try
+    {
+      data = stbi_load(
+        path.string().c_str(),
+        reinterpret_cast<int*>(&width),
+        reinterpret_cast<int*>(&height),
+        reinterpret_cast<int*>(&channels),
+        STBI_rgb_alpha
+      );
 
-    if (!data)
+      if (!data)
+        return nullptr;
+
+      SizeT bufferSize = static_cast<SizeT>(width)
+        * static_cast<SizeT>(height)
+        * NUM_CHANNELS;
+
+      BufferByte buffer(bufferSize);
+      buffer.initialize(data, bufferSize);
+
+      image = MakeShared<Image>(
+        path,
+        static_cast<UInt32>(width),
+        static_cast<UInt32>(height),
+        colorFormatType::RGBA8,
+        colorSpaceType::SRGB,
+        std::move(buffer)
+      );
+    }
+    catch (const Exception& e)
+    {
+      if (data)
+        stbi_image_free(data);
       return nullptr;
-
-    SizeT bufferSize = static_cast<SizeT>(width)
-      * static_cast<SizeT>(height)
-      * NUM_CHANNELS;
-
-    BufferByte buffer(bufferSize);
-    buffer.initialize(data, bufferSize);
-
-    SharedPtr<Image> image = MakeShared<Image>(
-      path,
-      static_cast<UInt32>(width),
-      static_cast<UInt32>(height),
-      NUM_CHANNELS,
-      std::move(buffer)
-    );
+    }
 
     stbi_image_free(data);
-
     m_loadedImages[path] = image;
     return image;
   }

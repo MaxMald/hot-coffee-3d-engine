@@ -1,4 +1,5 @@
 #include "hc/graphics/resource/texture/hcOpenGlTexture.h"
+
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
@@ -8,49 +9,10 @@ namespace hc
     m_textureId(0),
     m_width(0),
     m_height(0),
-    m_channels(0),
-    m_internalFormat(GL_RGBA8),
-    m_format(GL_RGBA),
-    m_type(GL_UNSIGNED_BYTE),
+    m_colorFormat(colorFormatType::RGBA8),
+    m_colorSpace(colorSpaceType::Linear),
     m_created(false)
   {}
-
-  OpenGlTexture::OpenGlTexture(SharedPtr<Image> image) :
-    m_id(Id::Create()),
-    m_textureId(0),
-    m_width(0),
-    m_height(0),
-    m_channels(0),
-    m_internalFormat(GL_RGBA8),
-    m_format(GL_RGBA),
-    m_type(GL_UNSIGNED_BYTE),
-    m_created(false)
-  {
-    if (!image)
-      return;
-
-    initialize(*image);
-  }
-
-  OpenGlTexture::OpenGlTexture(
-    UInt32 width,
-    UInt32 height,
-    GLenum internalFormat,
-    GLenum format,
-    GLenum type
-  ) :
-    m_id(Id::Create()),
-    m_textureId(0),
-    m_width(width),
-    m_height(height),
-    m_channels(0),
-    m_internalFormat(internalFormat),
-    m_format(format),
-    m_type(type),
-    m_created(false)
-  {
-    initialize(width, height, internalFormat, format, type);
-  }
 
   OpenGlTexture::~OpenGlTexture()
   {
@@ -64,47 +26,51 @@ namespace hc
 
   void OpenGlTexture::initialize(const Image& image)
   {
-    if (m_created)
-      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
-
-    assertNumberOfChannels(static_cast<UInt8>(image.getChannels()));
-    GLenum format = (image.getChannels() == 4) ? GL_RGBA : GL_RGB;
-    GLenum internalFormat = (image.getChannels() == 4) ? GL_RGBA8 : GL_RGB8;
-
     initialize(
       image.getWidth(),
       image.getHeight(),
-      internalFormat,
-      format,
-      GL_UNSIGNED_BYTE,
+      image.getFormat(),
+      image.getColorSpace(),
       image.getBuffer().data()
-    );
-  }
-
-  void OpenGlTexture::initialize(UInt32 width, UInt32 height, UInt8 channels)
-  {
-    if (m_created)
-      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
-
-    assertDimensionsAreGreaterThanZero(width, height);
-    assertNumberOfChannels(channels);
-
-    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
-    GLenum internalFormat = (channels == 4) ? GL_RGBA8 : GL_RGB8;
-
-    initialize(
-      width,
-      height,
-      internalFormat,
-      format,
-      GL_UNSIGNED_BYTE
     );
   }
 
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    UInt8 channels,
+    colorFormatType::Type colorFormat
+  )
+  {
+    initialize(
+      width,
+      height,
+      colorFormat,
+      colorSpaceType::Linear,
+      nullptr
+    );
+  }
+
+  void OpenGlTexture::initialize(
+    UInt32 width,
+    UInt32 height,
+    colorFormatType::Type colorFormat,
+    colorSpaceType::Type colorSpace
+  )
+  {
+    initialize(
+      width,
+      height,
+      colorFormat,
+      colorSpace,
+      nullptr
+    );
+  }
+
+  void OpenGlTexture::initialize(
+    UInt32 width,
+    UInt32 height,
+    colorFormatType::Type colorFormat,
+    colorSpaceType::Type colorSpace,
     const Color& initColor
   )
   {
@@ -112,34 +78,64 @@ namespace hc
       throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
 
     assertDimensionsAreGreaterThanZero(width, height);
-    assertNumberOfChannels(channels);
 
-    GLenum format = (channels == 4) ? GL_RGBA : GL_RGB;
-    GLenum internalFormat = (channels == 4) ? GL_RGBA8 : GL_RGB8;
-
-    BufferByte initData(width * height * channels);
-    Byte r = static_cast<Byte>(initColor.r * 255);
-    Byte g = static_cast<Byte>(initColor.g * 255);
-    Byte b = static_cast<Byte>(initColor.b * 255);
-    Byte a = static_cast<Byte>(initColor.a * 255);
-
-    for (size_t i = 0; i < width * height; ++i)
+    switch (colorFormat)
     {
-      initData[i * channels + 0] = r;
-      initData[i * channels + 1] = g;
-      initData[i * channels + 2] = b;
-      if (channels == 4)
-        initData[i * channels + 3] = a;
+    case colorFormatType::RGB8:
+    {
+      BufferByte initData(0);
+      TextureBufferFactory::CreateRGB8(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
     }
-
-    initialize(
-      width,
-      height,
-      internalFormat,
-      format,
-      GL_UNSIGNED_BYTE,
-      initData.data()
-    );
+    break;
+    case colorFormatType::RGBA8:
+    {
+      BufferByte initData(0);
+      TextureBufferFactory::CreateRGBA8(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    case colorFormatType::RGB16F:
+    {
+      BufferFloat initData(0);
+      TextureBufferFactory::CreateRGB16F(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    case colorFormatType::RGBA16F:
+    {
+      BufferFloat initData(0);
+      TextureBufferFactory::CreateRGBA16F(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    default:
+      throw InvalidArgumentException("Unsupported color format type for texture initialization.");
+    }
   }
 
   UInt32 OpenGlTexture::getWidth() const
@@ -152,9 +148,14 @@ namespace hc
     return m_height;
   }
 
-  UInt8 OpenGlTexture::getChannels() const
+  colorFormatType::Type OpenGlTexture::getColorFormat() const
   {
-    return m_channels;
+    return m_colorFormat;
+  }
+
+  colorSpaceType::Type OpenGlTexture::getColorSpace() const
+  {
+    return m_colorSpace;
   }
 
   void OpenGlTexture::resize(UInt32 width, UInt32 height)
@@ -176,9 +177,11 @@ namespace hc
       glTexImage2D(
         GL_TEXTURE_2D,
         0,
-        m_internalFormat,
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(m_colorFormat, m_colorSpace)),
         static_cast<Int32>(width), static_cast<Int32>(height),
-        0, m_format, m_type,
+        0,
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(m_colorFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromColorFormatType(m_colorFormat)),
         nullptr
       );
 
@@ -241,10 +244,8 @@ namespace hc
 
     m_width = 0;
     m_height = 0;
-    m_channels = 0;
-    m_internalFormat = GL_RGBA8;
-    m_format = GL_RGBA;
-    m_type = GL_UNSIGNED_BYTE;
+    m_colorFormat = colorFormatType::RGBA8;
+    m_colorSpace = colorSpaceType::Linear;
     m_created = false;
   }
 
@@ -262,9 +263,8 @@ namespace hc
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    GLenum internalFormat,
-    GLenum format,
-    GLenum type,
+    colorFormatType::Type colorFormat,
+    colorSpaceType::Type colorSpace,
     const void* initData
   )
   {
@@ -289,9 +289,11 @@ namespace hc
       glTexImage2D(
         GL_TEXTURE_2D,
         0,
-        internalFormat,
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(colorFormat, colorSpace)),
         static_cast<Int32>(width), static_cast<Int32>(height),
-        0, format, type,
+        0,
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(colorFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromColorFormatType(colorFormat)),
         initData
       );
 
@@ -311,24 +313,11 @@ namespace hc
 
     m_width = width;
     m_height = height;
-    m_channels = (format == GL_RGBA) ? 4 : 3;
-    m_format = format;
-    m_internalFormat = internalFormat;
-    m_type = type;
+    m_colorSpace = colorSpace;
+    m_colorFormat = colorFormat;
     m_created = true;
 
     glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
-  }
-
-  void OpenGlTexture::assertNumberOfChannels(UInt8 channels)
-  {
-    if (channels != 3 && channels != 4)
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported number of channels (%u) in image for texture creation. Only 3 (RGB) and 4 (RGBA) are supported.",
-          channels
-        )
-      );
   }
 
   void OpenGlTexture::assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height)
