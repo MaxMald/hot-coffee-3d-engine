@@ -43,6 +43,8 @@ namespace hc
       return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::SkyboxVertex);
     case builtInShaderType::SkyboxFragment:
       return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::SkyboxFragment);
+    case builtInShaderType::FinalPassFragment:
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::FinalPassFragment);
     default:
       throw RuntimeErrorException(
         String::Format(

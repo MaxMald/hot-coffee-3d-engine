@@ -13,7 +13,6 @@ namespace hc
     void initialize(
       const UInt32 width,
       const UInt32 height,
-      const colorFormatType::Type format,
       const Image& right,
       const Image& left,
       const Image& top,
@@ -26,7 +25,6 @@ namespace hc
     bool isValid() const override;
     UInt32 getFaceWidth() const override;
     UInt32 getFaceHeight() const override;
-    colorFormatType::Type getFormat() const override;
     const Path& getCubeMapDescriptorSourcePath() const override;
     void destroy() override;
 
@@ -37,15 +35,14 @@ namespace hc
     bool m_valid;
     UInt32 m_faceWidth;
     UInt32 m_faceHeight;
-    colorFormatType::Type m_format;
     Path m_cubeMapDescriptorSourcePath;
 
-    static void assertImageFormat(
+    static void assertImageSize(
       const Image& image,
       const UInt32 width,
-      const UInt32 height,
-      const colorFormatType::Type expectedFormat
+      const UInt32 height
     );
+
     void assertIsValid() const;
   };
 }

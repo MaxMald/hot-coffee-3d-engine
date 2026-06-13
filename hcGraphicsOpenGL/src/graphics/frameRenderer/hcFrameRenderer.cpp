@@ -12,6 +12,8 @@ namespace hc
   FrameRenderer::FrameRenderer() :
     m_forwardRenderPipeline(),
     m_deferredHybridRenderPipeline(),
+    m_finalRenderPass(),
+    m_frameBufferA(),
     m_lightFrameUBO(),
     m_cameraFrameUBO(),
     m_drawCommands(),
@@ -38,6 +40,8 @@ namespace hc
     {
       m_forwardRenderPipeline.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
+      m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
+      m_frameBufferA.initialize(viewportRect.width, viewportRect.height);
       m_lightFrameUBO.initialize(LightFrameData{});
       m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
       m_cameraFrameUBO.initialize(CameraFrameData{});
@@ -150,7 +154,7 @@ namespace hc
     DrawCommandUtilities::SortDrawCommands(m_drawCommands);
 
     FrameRenderContext frameRenderContext;
-    frameRenderContext.customFrameBuffer = m_currentRenderTarget;
+    frameRenderContext.customFrameBuffer = &m_frameBufferA;
     frameRenderContext.skyboxCubeMap = m_skybox;
 
     if (m_currentRenderPipelineType == renderPipelineType::DeferredHybrid)
@@ -160,6 +164,7 @@ namespace hc
     else
       throw RuntimeErrorException("Frame Renderer: Not implemented render pipeline type.");
 
+    m_finalRenderPass.execute(m_frameBufferA.getColorTexture(), m_currentRenderTarget);
     m_drawCommands.clear();
   }
 
@@ -174,12 +179,15 @@ namespace hc
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     if (m_currentRenderPipelineType == renderPipelineType::DeferredHybrid)
       m_deferredHybridRenderPipeline.clearGBuffer();
+    m_frameBufferA.clear(Color(0.0f, 0.0f, 0.0f, 1.0f));
   }
 
   void FrameRenderer::destroy()
   {
     m_forwardRenderPipeline.destroy();
     m_deferredHybridRenderPipeline.destroy();
+    m_finalRenderPass.destroy();
+    m_frameBufferA.destroy();
     m_lightFrameUBO.destroy();
     m_cameraFrameUBO.destroy();
     m_skybox = nullptr;
@@ -189,6 +197,7 @@ namespace hc
   void FrameRenderer::onViewportChanged(const Rect<UInt32>&viewportRect)
   {
     m_deferredHybridRenderPipeline.updateViewportSize(viewportRect);
+    m_frameBufferA.resize(viewportRect.width, viewportRect.height);
   }
 
   void FrameRenderer::assertIsInitialized() const

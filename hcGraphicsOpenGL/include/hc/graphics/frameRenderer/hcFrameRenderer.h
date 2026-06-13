@@ -1,6 +1,8 @@
 #pragma once
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
+#include "hc/graphics/renderPass/hcFinalRenderPass.h"
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
@@ -37,6 +39,8 @@ namespace hc
   private:
     ForwardRenderPipeline m_forwardRenderPipeline;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
+    FinalRenderPass m_finalRenderPass;
+    OpenGlFrameBuffer m_frameBufferA;
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
     Vector<DrawCommand> m_drawCommands;

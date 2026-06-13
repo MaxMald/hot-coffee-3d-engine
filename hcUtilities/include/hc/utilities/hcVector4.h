@@ -24,10 +24,7 @@ namespace hc
 
     constexpr Vector4();
     constexpr Vector4(T xVal, T yVal, T zVal, T wVal);
-    constexpr Vector4(const Vector4& other);
     constexpr Vector4(const Vector3<T>& vector3, T wVal);
-
-    constexpr Vector4& operator=(const Vector4& other);
 
     // Arithmetic operators
     constexpr Vector4 operator+(const Vector4& rhs) const;
@@ -61,14 +58,8 @@ namespace hc
     : x(xVal), y(yVal), z(zVal), w(wVal) {}
 
   template <typename T>
-  constexpr Vector4<T>::Vector4(const Vector4& other) = default;
-
-  template <typename T>
   constexpr Vector4<T>::Vector4(const Vector3<T>& vector3, T wVal)
     : x(vector3.x), y(vector3.y), z(vector3.z), w(wVal) {}
-
-  template <typename T>
-  constexpr Vector4<T>& Vector4<T>::operator=(const Vector4& other) = default;
 
   template <typename T>
   constexpr Vector4<T> Vector4<T>::operator+(const Vector4& rhs) const

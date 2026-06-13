@@ -117,6 +117,28 @@ namespace hc
       }
     }
 
+    UInt32 GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(
+      colorFormatType::Type colorFormat,
+      colorSpaceType::Type spaceColor
+    )
+    {
+      switch (colorFormat)
+      {
+      case colorFormatType::RGBA8:
+        return spaceColor == colorSpaceType::SRGB ? GL_SRGB8_ALPHA8 : GL_RGBA8;
+      case colorFormatType::RGB8:
+        return spaceColor == colorSpaceType::SRGB ? GL_SRGB8 : GL_RGB8;
+      case colorFormatType::RGB16F:
+        return GL_RGB16F;
+      case colorFormatType::RGBA16F:
+        return GL_RGBA16F;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+        );
+      }
+    }
+
     UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat)
     {
       switch (colorFormat)
@@ -125,6 +147,27 @@ namespace hc
         return GL_RGBA;
       case colorFormatType::RGB8:
         return GL_RGB;
+      case colorFormatType::RGB16F:
+        return GL_RGB;
+      case colorFormatType::RGBA16F:
+        return GL_RGBA;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+        );
+      }
+    }
+
+    UInt32 GetOpenGLDataTypeFromColorFormatType(colorFormatType::Type colorFormat)
+    {
+      switch (colorFormat)
+      {
+      case colorFormatType::RGBA8:
+      case colorFormatType::RGB8:
+        return GL_UNSIGNED_BYTE;
+      case colorFormatType::RGB16F:
+      case colorFormatType::RGBA16F:
+        return GL_FLOAT;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))

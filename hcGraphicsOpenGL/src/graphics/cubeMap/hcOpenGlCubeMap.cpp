@@ -10,7 +10,6 @@ namespace hc
     m_valid(false),
     m_faceHeight(0),
     m_faceWidth(0),
-    m_format(colorFormatType::Type::RGBA8),
     m_cubeMapDescriptorSourcePath()
   {}
 
@@ -22,13 +21,12 @@ namespace hc
   void OpenGlCubeMap::initialize(
     const UInt32 width,
     const UInt32 height,
-    const colorFormatType::Type format,
-    const Image & right,
-    const Image & left,
-    const Image & top,
-    const Image & bottom,
-    const Image & back,
-    const Image & front,
+    const Image& right,
+    const Image& left,
+    const Image& top,
+    const Image& bottom,
+    const Image& back,
+    const Image& front,
     const Path& cubeMapDescriptorSourcePath
   )
   {
@@ -38,15 +36,13 @@ namespace hc
     if (width == 0 || height == 0)
       throw RuntimeErrorException("Cube map dimensions must be greater than zero");
 
-    assertImageFormat(right, width, height, format);
-    assertImageFormat(left, width, height, format);
-    assertImageFormat(top, width, height, format);
-    assertImageFormat(bottom, width, height, format);
-    assertImageFormat(back, width, height, format);
-    assertImageFormat(front, width, height, format);
+    assertImageSize(right, width, height);
+    assertImageSize(left, width, height);
+    assertImageSize(top, width, height);
+    assertImageSize(bottom, width, height);
+    assertImageSize(back, width, height);
+    assertImageSize(front, width, height);
 
-    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(format);
-    GLenum internalFormat = (glFormat == GL_RGB) ? GL_RGB8 : GL_RGBA8;
     GLint currentCubeMapTexture = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
 
@@ -57,43 +53,55 @@ namespace hc
       glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(right.getFormat(), right.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(right.getFormat()),
         GL_UNSIGNED_BYTE, right.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(left.getFormat(), left.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(left.getFormat()),
         GL_UNSIGNED_BYTE, left.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(top.getFormat(), top.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(top.getFormat()),
         GL_UNSIGNED_BYTE, top.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(bottom.getFormat(), bottom.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(bottom.getFormat()),
         GL_UNSIGNED_BYTE, bottom.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(front.getFormat(), front.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(front.getFormat()),
         GL_UNSIGNED_BYTE, front.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
-        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, internalFormat,
-        width, height, 0, glFormat,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0,
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(back.getFormat(), back.getColorSpace()),
+        width, height, 0,
+        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(back.getFormat()),
         GL_UNSIGNED_BYTE, back.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
@@ -116,7 +124,6 @@ namespace hc
 
     m_faceWidth = width;
     m_faceHeight = height;
-    m_format = format;
     m_cubeMapDescriptorSourcePath = cubeMapDescriptorSourcePath;
     m_valid = true;
   }
@@ -134,11 +141,6 @@ namespace hc
   UInt32 OpenGlCubeMap::getFaceHeight() const
   {
     return m_faceHeight;
-  }
-
-  colorFormatType::Type OpenGlCubeMap::getFormat() const
-  {
-    return m_format;
   }
 
   const Path& OpenGlCubeMap::getCubeMapDescriptorSourcePath() const
@@ -160,7 +162,6 @@ namespace hc
     }
 
     m_cubeMapDescriptorSourcePath.clear();
-    m_format = colorFormatType::Type::RGBA8;
     m_faceHeight = 0;
     m_faceWidth = 0;
     m_valid = false;
@@ -171,23 +172,14 @@ namespace hc
     return m_id;
   }
 
-  void OpenGlCubeMap::assertImageFormat(
-    const Image & image,
+  void OpenGlCubeMap::assertImageSize(
+    const Image& image,
     const UInt32 expectedWidth,
-    const UInt32 expectedHeight,
-    const colorFormatType::Type expectedFormat
+    const UInt32 expectedHeight
   )
   {
     if (image.getHeight() != expectedHeight || image.getWidth() != expectedWidth)
       throw RuntimeErrorException("Cube map image has invalid dimensions");
-
-    // TODO
-    //
-    // Images should use color format type instead of channels.
-
-    UInt8 expectedChannels = static_cast<UInt8>(colorFormatType::GetChannelCount(expectedFormat));
-    if (image.getChannels() != expectedChannels)
-      throw RuntimeErrorException("Cube map image has invalid format");
   }
 
   void OpenGlCubeMap::assertIsValid() const

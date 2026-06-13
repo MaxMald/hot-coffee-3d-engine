@@ -15,7 +15,6 @@ namespace hc
     virtual void initialize(
       const UInt32 width,
       const UInt32 height,
-      const colorFormatType::Type format,
       const Image& right,
       const Image& left,
       const Image& top,
@@ -28,7 +27,6 @@ namespace hc
     virtual bool isValid() const = 0;
     virtual UInt32 getFaceWidth() const = 0;
     virtual UInt32 getFaceHeight() const = 0;
-    virtual colorFormatType::Type getFormat() const = 0;
 
     /**
      * Get the file path of the cube map descriptor source used to create this skybox.

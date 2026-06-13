@@ -25,9 +25,6 @@ namespace hc
 
     constexpr Vector3();
     constexpr Vector3(T xVal, T yVal, T zVal);
-    constexpr Vector3(const Vector3& other);
-
-    constexpr Vector3& operator=(const Vector3& other);
 
     // Arithmetic operators
     constexpr Vector3 operator+(const Vector3& rhs) const;
@@ -58,12 +55,6 @@ namespace hc
 
   template <typename T>
   constexpr Vector3<T>::Vector3(T xVal, T yVal, T zVal) : x(xVal), y(yVal), z(zVal) {}
-
-  template <typename T>
-  constexpr Vector3<T>::Vector3(const Vector3& other) = default;
-
-  template <typename T>
-  constexpr Vector3<T>& Vector3<T>::operator=(const Vector3& other) = default;
 
   template <typename T>
   constexpr Vector3<T> Vector3<T>::operator+(const Vector3& rhs) const

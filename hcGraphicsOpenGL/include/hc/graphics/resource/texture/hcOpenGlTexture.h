@@ -17,31 +17,6 @@ namespace hc
      * @brief Default constructor for OpenGlTexture. Creates an uninitialized texture.
      */
     OpenGlTexture();
-
-    /**
-     * @brief Constructs an OpenGlTexture from the given image.
-     *
-     * @param image Shared pointer to the image data used for texture creation.
-     */
-    OpenGlTexture(SharedPtr<Image> image);
-
-    /**
-    * @brief Constructs an empty OpenGlTexture with specified dimensions and format.
-    *
-    * @param width The width of the texture in pixels.
-    * @param height The height of the texture in pixels.
-    * @param internalFormat The internal format of the texture (default is GL_RGBA8).
-    * @param format The format of the pixel data (default is GL_RGBA).
-    * @param type The data type of the pixel data (default is GL_UNSIGNED_BYTE).
-    */
-    OpenGlTexture(
-      UInt32 width,
-      UInt32 height,
-      GLenum internalFormat = GL_RGBA8,
-      GLenum format = GL_RGBA,
-      GLenum type = GL_UNSIGNED_BYTE
-    );
-
     ~OpenGlTexture() override;
 
     /**
@@ -57,14 +32,34 @@ namespace hc
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type)
      */
-    void initialize(UInt32 width, UInt32 height, UInt8 channels) override;
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type colorFormat
+    ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, UInt8, const Color&)
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type)
      */
-    void initialize(UInt32 width, UInt32 height, UInt8 channels, const Color& initColor) override;
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type colorFormat,
+      colorSpaceType::Type colorSpace
+    ) override;
+
+    /**
+     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type, const Color&)
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      colorFormatType::Type colorFormat,
+      colorSpaceType::Type colorSpace,
+      const Color& initColor
+    ) override;
 
     /**
      * @brief Returns the width of the texture in pixels.
@@ -81,9 +76,14 @@ namespace hc
     UInt32 getHeight() const override;
 
     /**
-     * @copydoc ITexture::getChannels
+     * @copydoc ITexture::getColorFormat
      */
-    UInt8 getChannels() const override;
+    colorFormatType::Type getColorFormat() const override;
+
+    /**
+    * @copydoc ITexture::getColorSpace
+    */
+    colorSpaceType::Type getColorSpace() const override;
 
     /**
      * @brief Resizes the texture to the specified dimensions. Resizing a texture created
@@ -135,24 +135,21 @@ namespace hc
     GLuint getTextureId() const;
 
     /**
-     * @brief Initializes the texture with the specified dimensions and format. This
-     * creates an empty texture without pixel data.
+     * @brief Internal method to initialize the texture with specified parameters. This is
+     * called by the public initialize methods after validating parameters.
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param internalFormat The internal format of the texture (e.g., GL_RGBA8).
-     * @param format The format of the pixel data (e.g., GL_RGBA).
-     * @param type The data type of the pixel data (e.g., GL_UNSIGNED_BYTE).
-     * @param initData Optional pointer to initial pixel data to upload to the texture. If
-     * nullptr, the texture will be created with uninitialized data.
+     * @param colorFormat The color format of the texture.
+     * @param colorSpace The color space of the texture.
+     * @param initData Optional pointer to initial pixel data to upload to the texture.
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      GLenum internalFormat,
-      GLenum format,
-      GLenum type,
-      const void* initData = nullptr
+      colorFormatType::Type colorFormat,
+      colorSpaceType::Type colorSpace,
+      const void* initData
     );
 
   private:
@@ -160,13 +157,10 @@ namespace hc
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;
-    UInt8 m_channels;
-    GLenum m_internalFormat;
-    GLenum m_format;
-    GLenum m_type;
+    colorFormatType::Type m_colorFormat;
+    colorSpaceType::Type m_colorSpace;
     bool m_created;
 
-    static void assertNumberOfChannels(UInt8 channels);
     static void assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height);
     void assertIsCreated() const;
     

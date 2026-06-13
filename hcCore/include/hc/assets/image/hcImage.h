@@ -1,5 +1,7 @@
 #pragma once
 
+#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcColorSpaceType.h"
 #include "hc/assets/hcAsset.h"
 
 namespace hc
@@ -14,7 +16,8 @@ namespace hc
       const Path& path,
       UInt32 width,
       UInt32 height,
-      UInt32 channels,
+      colorFormatType::Type format,
+      colorSpaceType::Type colorSpace,
       BufferByte&& buffer
     );
 
@@ -35,11 +38,25 @@ namespace hc
     UInt32 getHeight() const;
 
     /**
-     * @brief Gets the number of color channels in the image.
-     * 
-     * @return Number of channels.
+     * @brief Gets the color format of the image.
+     *
+     * @return Image color format.
      */
-    UInt32 getChannels() const;
+    colorFormatType::Type getFormat() const;
+
+    /**
+     * @brief Gets the color space of the image.
+     *
+     * @return Image color space.
+     */
+    colorSpaceType::Type getColorSpace() const;
+
+    /**
+     * @brief Sets the color space of the image.
+     *
+     * @param colorSpace The new color space to set for the image.
+     */
+    void setColorSpace(colorSpaceType::Type colorSpace);
 
     /**
      * @brief Gets the buffer containing the image's image data.
@@ -58,7 +75,8 @@ namespace hc
   private:
     UInt32 m_width;
     UInt32 m_height;
-    UInt32 m_channels;
+    colorFormatType::Type m_format;
+    colorSpaceType::Type m_colorSpace;
     BufferByte m_data;
   };
 }
