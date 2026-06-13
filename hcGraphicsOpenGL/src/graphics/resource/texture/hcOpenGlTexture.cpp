@@ -79,35 +79,63 @@ namespace hc
 
     assertDimensionsAreGreaterThanZero(width, height);
 
-    // TODO
-    //
-    // Carefull here, if we add more color formats we need to make sure to handle them
-    // correctly, for example if we add a format with 16-bit channels we need to adjust
-    // the way we fill the initData buffer accordingly
-
-    UInt8 channels = colorFormatType::GetChannelCount(colorFormat);
-    BufferByte initData(width * height * static_cast<SizeT>(channels));
-    Byte r = static_cast<Byte>(initColor.r * 255);
-    Byte g = static_cast<Byte>(initColor.g * 255);
-    Byte b = static_cast<Byte>(initColor.b * 255);
-    Byte a = static_cast<Byte>(initColor.a * 255);
-
-    for (size_t i = 0; i < width * height; ++i)
+    switch (colorFormat)
     {
-      initData[i * channels + 0] = r;
-      initData[i * channels + 1] = g;
-      initData[i * channels + 2] = b;
-      if (channels == 4)
-        initData[i * channels + 3] = a;
+    case colorFormatType::RGB8:
+    {
+      BufferByte initData;
+      TextureBufferFactory::CreateRGB8(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
     }
-
-    initialize(
-      width,
-      height,
-      colorFormat,
-      colorSpace,
-      initData.data()
-    );
+    break;
+    case colorFormatType::RGBA8:
+    {
+      BufferByte initData;
+      TextureBufferFactory::CreateRGBA8(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    case colorFormatType::RGB16F:
+    {
+      BufferFloat initData;
+      TextureBufferFactory::CreateRGB16F(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    case colorFormatType::RGBA16F:
+    {
+      BufferFloat initData;
+      TextureBufferFactory::CreateRGBA16F(width, height, initColor, initData);
+      initialize(
+        width,
+        height,
+        colorFormat,
+        colorSpace,
+        initData.data()
+      );
+    }
+    break;
+    default:
+      throw InvalidArgumentException("Unsupported color format type for texture initialization.");
+    }
   }
 
   UInt32 OpenGlTexture::getWidth() const
@@ -216,8 +244,8 @@ namespace hc
 
     m_width = 0;
     m_height = 0;
-    m_colorFormat = colorFormatType::Type::RGBA8;
-    m_colorSpace = colorSpaceType::Type::Linear;
+    m_colorFormat = colorFormatType::RGBA8;
+    m_colorSpace = colorSpaceType::Linear;
     m_created = false;
   }
 
