@@ -83,7 +83,7 @@ namespace hc
     {
     case colorFormatType::RGB8:
     {
-      BufferByte initData;
+      BufferByte initData(0);
       TextureBufferFactory::CreateRGB8(width, height, initColor, initData);
       initialize(
         width,
@@ -96,7 +96,7 @@ namespace hc
     break;
     case colorFormatType::RGBA8:
     {
-      BufferByte initData;
+      BufferByte initData(0);
       TextureBufferFactory::CreateRGBA8(width, height, initColor, initData);
       initialize(
         width,
@@ -109,7 +109,7 @@ namespace hc
     break;
     case colorFormatType::RGB16F:
     {
-      BufferFloat initData;
+      BufferFloat initData(0);
       TextureBufferFactory::CreateRGB16F(width, height, initColor, initData);
       initialize(
         width,
@@ -122,7 +122,7 @@ namespace hc
     break;
     case colorFormatType::RGBA16F:
     {
-      BufferFloat initData;
+      BufferFloat initData(0);
       TextureBufferFactory::CreateRGBA16F(width, height, initColor, initData);
       initialize(
         width,
