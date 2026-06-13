@@ -22,11 +22,8 @@ namespace hc
     };
 
     constexpr Color();
-    constexpr Color(const Color& other);
     constexpr Color(float r, float g, float b, float a = 1.0f);
     constexpr Color(const Vector4f& v);
-
-    constexpr Color& operator=(const Color& other);
 
     constexpr bool operator==(const Color& rhs) const;
     constexpr bool operator!=(const Color& rhs) const;
@@ -47,25 +44,12 @@ namespace hc
     : r(0.0f), g(0.0f), b(0.0f), a(1.0f) {
   }
 
-  constexpr Color::Color(const Color& other)
-    : r(other.r), g(other.g), b(other.b), a(other.a) {
-  }
-
   constexpr Color::Color(float r, float g, float b, float a)
     : r(r), g(g), b(b), a(a) {
   }
 
   constexpr Color::Color(const Vector4f& v)
     : r(v.x), g(v.y), b(v.z), a(v.w) {
-  }
-
-  constexpr Color& Color::operator=(const Color& other)
-  {
-    r = other.r;
-    g = other.g;
-    b = other.b;
-    a = other.a;
-    return *this;
   }
 
   constexpr bool Color::operator==(const Color& rhs) const
