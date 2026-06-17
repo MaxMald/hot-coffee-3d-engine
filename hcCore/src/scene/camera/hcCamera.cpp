@@ -160,6 +160,14 @@ namespace hc
     recalculateUp();
   }
 
+  void Camera::lookAt(const Vector3f& target, const Vector3f& up)
+  {
+    m_direction = (target - m_position).normalized();
+    m_up = up.normalized();
+    Vector3f right = m_direction.cross(m_up).normalized();
+    m_up = right.cross(m_direction).normalized();
+  }
+
   void Camera::rotate(const Vector3f& eulerAngles)
   {
     Matrix4 rotationMatrix = Matrix4::Rotation(eulerAngles);

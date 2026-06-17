@@ -36,7 +36,7 @@ namespace hc
     template<typename T>
     static constexpr T Abs(T value)
     {
-      return (value < T(0)) ? -value : value;
+      return std::abs(value);
     }
 
     template<typename T>
@@ -70,16 +70,16 @@ namespace hc
       return std::sqrt(value);
     }
 
-    static constexpr bool IsNearlyEqual(
+    static bool IsNearlyEqual(
       float a, float b, float epsilon = 1e-6f
     )
     {
-      return Abs(a - b) <= epsilon;
+      return std::abs(a - b) <= epsilon;
     }
 
-    static constexpr bool IsNearlyZero(float value, float epsilon = 1e-6f)
+    static bool IsNearlyZero(float value, float epsilon = 1e-6f)
     {
-      return Abs(value) <= epsilon;
+      return std::abs(value) <= epsilon;
     }
   };
 }

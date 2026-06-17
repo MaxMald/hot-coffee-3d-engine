@@ -125,14 +125,18 @@ namespace hc::editor
     float pitch = -mouseDelta.y * m_cameraMoveScale;
 
     Matrix4 yawRotation = Matrix4::RotationAxis(m_camera.getUp(), yaw);
-    Matrix4 pitchRotation = Matrix4::RotationAxis(m_camera.getRight(), pitch);
+    Vector3f rightAfterYaw = (yawRotation * Vector4f(m_camera.getRight(), 0.0f)).xyz();
+    Matrix4 pitchRotation = Matrix4::RotationAxis(rightAfterYaw, pitch);
     Matrix4 combinedRotation = yawRotation * pitchRotation;
 
     Vector3f targetToCamera = m_camera.getPosition() - m_target;
-    Vector4f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 0.0f));
+    Vector3f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 0.0f)).xyz();
 
-    m_camera.setPosition(m_target + rotatedVector.xyz());
-    m_camera.lookAt(m_target);
+    if (!Math::IsNearlyEqual(rotatedVector.normalized().dot(Vector3f(0.0f, 1.0f, 0.0f)), 1.0f, 0.0001f))
+    {
+      m_camera.setPosition(m_target + rotatedVector);
+      m_camera.lookAt(m_target, Vector3f(0.0f, 1.0f, 0.0f));
+    }
   }
 
   void SceneViewportCameraController::roll()
