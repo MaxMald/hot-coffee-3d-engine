@@ -132,11 +132,12 @@ namespace hc::editor
     Vector3f targetToCamera = m_camera.getPosition() - m_target;
     Vector3f rotatedVector = (combinedRotation * Vector4f(targetToCamera, 0.0f)).xyz();
 
-    if (!Math::IsNearlyEqual(rotatedVector.normalized().dot(Vector3f(0.0f, 1.0f, 0.0f)), 1.0f, 0.0001f))
-    {
-      m_camera.setPosition(m_target + rotatedVector);
-      m_camera.lookAt(m_target, Vector3f(0.0f, 1.0f, 0.0f));
-    }
+    float cosAngle = rotatedVector.normalized().dot(Vector3f(0.0f, 1.0f, 0.0f));
+    if (Math::IsNearlyEqual(cosAngle, 1.0f, 0.0001f) || Math::IsNearlyEqual(cosAngle, -1.0f, 0.0001f))
+      return;
+
+    m_camera.setPosition(m_target + rotatedVector);
+    m_camera.lookAt(m_target, Vector3f(0.0f, 1.0f, 0.0f));
   }
 
   void SceneViewportCameraController::roll()
