@@ -6,7 +6,7 @@ namespace hc::editor
 
   SceneViewportGizmoController::SceneViewportGizmoController(
     InputManager& inputManager,
-    Camera& camera
+    SceneViewportCamera& camera
   ) :
     m_inputManager(inputManager),
     m_activeGameObject(nullptr),
@@ -17,8 +17,7 @@ namespace hc::editor
   }
 
   SceneViewportGizmoController::~SceneViewportGizmoController()
-  {
-  }
+  {}
 
   void SceneViewportGizmoController::update(const Time& elapsedTime)
   {
@@ -79,8 +78,8 @@ namespace hc::editor
     const Vector2f& windowSize
   )
   {
-    Matrix4 view = m_camera.getViewMatrix();
-    Matrix4 projection = m_camera.getProjectionMatrix();
+    Matrix4 view = m_camera.getCamera().getViewMatrix();
+    Matrix4 projection = m_camera.getCamera().getProjectionMatrix();
 
     // ImGuizmo expects column-major matrices, so we need to transpose them
     view.transpose();
@@ -126,7 +125,7 @@ namespace hc::editor
     const Vector2f& windowSize
   )
   {
-    Matrix4 view = m_camera.getViewMatrix();
+    Matrix4 view = m_camera.getCamera().getViewMatrix();
     view.transpose();
 
     ImGuizmo::ViewManipulate(
@@ -142,6 +141,8 @@ namespace hc::editor
     direction.y = -view.m12;
     direction.z = -view.m22;
 
-    m_camera.setDirection(direction);
+    Vector3f target = m_camera.getTarget();
+    Vector3f cameraPosition = target - direction * m_camera.getDistanceToTarget();
+    m_camera.setCameraPosition(cameraPosition);
   }
 }

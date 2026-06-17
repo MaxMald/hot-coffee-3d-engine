@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCamera.h"
 
 namespace hc::editor
 {
@@ -22,11 +23,11 @@ namespace hc::editor
     virtual ~SceneViewportCameraController() = default;
 
     /**
-     * @brief Gets the camera being controlled.
+     * @brief Gets the camera controlled by this controller.
      * 
      * @return Reference to the controlled camera.
      */
-    Camera& getCamera();
+    SceneViewportCamera& getCamera();
 
     /**
      * @brief Prepares the camera controller for use.
@@ -41,22 +42,17 @@ namespace hc::editor
     void update(const Time& elapsedTime);
 
   private:
-    Camera m_camera;
+    SceneViewportCamera m_camera;
     InputManager& m_inputManager;
-    float m_cameraMoveScale;
-    float m_cameraZoomScale;
-    float m_cameraRollScale;
-    float m_minDistanceToTarget;
-    Vector3f m_target;
 
     bool isMouseMiddleButtonPressed() const;
     bool isShiftKeyPressed() const;
     bool isAltKeyPressed() const;
     bool isScrollingVertically() const;
-    void localMove();
+    void localXYMovement();
+    void localZMovement();
     void zoom();
     void orbit();
     void roll();
-    float getCameraDistanceToTarget(const Camera& camera) const;
   };
 }

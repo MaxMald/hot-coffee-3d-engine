@@ -8,7 +8,7 @@ namespace hc::editor
   SceneViewportCamera::SceneViewportCamera() :
     m_camera(),
     m_target(0.0f, 0.0f, 0.0f),
-    m_cameraOrbitSensitivity(0.005f),
+    m_cameraOrbitSensitivity(0.010f),
     m_cameraMovementScale(0.005f),
     m_cameraScrollSensitivity(0.1f),
     m_rollSensitivity(0.01f)

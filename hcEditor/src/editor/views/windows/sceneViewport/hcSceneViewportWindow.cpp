@@ -135,7 +135,7 @@ namespace hc::editor
       return;
 
     m_renderer.resize(width, height);
-    m_cameraController.getCamera().setAspectRatio(width, height);
+    m_cameraController.getCamera().getCamera().setAspectRatio(width, height);
   }
 
   void SceneViewportWindow::renderSceneToTexture()
@@ -152,7 +152,7 @@ namespace hc::editor
 
     m_renderer.renderScene(
       *contentScene,
-      m_cameraController.getCamera()
+      m_cameraController.getCamera().getCamera()
     );
   }
 
@@ -170,7 +170,7 @@ namespace hc::editor
 
     m_renderer.renderLightGizmos(
       *contentScene,
-      m_cameraController.getCamera(),
+      m_cameraController.getCamera().getCamera(),
       m_gizmoController.getActiveGameObject()
     );
   }
