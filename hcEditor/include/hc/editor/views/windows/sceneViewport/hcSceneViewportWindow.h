@@ -1,7 +1,8 @@
 #pragma once
 
 #include "hc/editor/views/windows/hcAWindowView.h"
-#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraController.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCamera.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraInputController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderer.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportGizmoController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderTargetSelector.h"
@@ -41,8 +42,9 @@ namespace hc::editor
   protected:
     HotCoffeeEngine& m_engine;
     GameObjectSelectionService& m_selectionService;
+    SceneViewportCamera m_camera;
     SceneViewportRenderer m_renderer;
-    SceneViewportCameraController m_cameraController;
+    SceneViewportCameraInputController m_cameraInputController;
     SceneViewportGizmoController m_gizmoController;
     SceneViewportRenderTargetSelector m_renderTargetSelector;
     Vector2f m_uvTopLeft;

@@ -1,26 +1,17 @@
-#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraController.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraInputController.h"
 #include "hc/editor/scenes/hcEditorSceneNames.h"
 
 namespace hc::editor
 {
-  SceneViewportCameraController::SceneViewportCameraController(
+  SceneViewportCameraInputController::SceneViewportCameraInputController(
+    SceneViewportCamera& camera,
     InputManager& inputManager
   ) :
-    m_camera(),
+    m_camera(camera),
     m_inputManager(inputManager)
   {}
 
-  SceneViewportCamera& SceneViewportCameraController::getCamera()
-  {
-    return m_camera;
-  }
-
-  void SceneViewportCameraController::prepare()
-  {
-    m_camera.setCameraPosition(Vector3f(0.0f, 0.0f, 5.0f));
-  }
-
-  void SceneViewportCameraController::update(const Time&)
+  void SceneViewportCameraInputController::update(const Time&)
   {
     if (isMouseMiddleButtonPressed())
     {
@@ -40,24 +31,24 @@ namespace hc::editor
     }
   }
 
-  bool SceneViewportCameraController::isMouseMiddleButtonPressed() const
+  bool SceneViewportCameraInputController::isMouseMiddleButtonPressed() const
   {
     return m_inputManager.isMouseButtonPressed(mouseButtonKey::Middle);
   }
 
-  bool SceneViewportCameraController::isShiftKeyPressed() const
+  bool SceneViewportCameraInputController::isShiftKeyPressed() const
   {
     return m_inputManager.isKeyboardKeyPressed(keyboardKey::LShift) ||
       m_inputManager.isKeyboardKeyPressed(keyboardKey::RShift);
   }
 
-  bool SceneViewportCameraController::isAltKeyPressed() const
+  bool SceneViewportCameraInputController::isAltKeyPressed() const
   {
     return m_inputManager.isKeyboardKeyPressed(keyboardKey::LAlt) ||
       m_inputManager.isKeyboardKeyPressed(keyboardKey::RAlt);
   }
 
-  bool SceneViewportCameraController::isScrollingVertically() const
+  bool SceneViewportCameraInputController::isScrollingVertically() const
   {
     float scrollDelta = m_inputManager
       .getMouseState()
@@ -67,14 +58,14 @@ namespace hc::editor
     return scrollDelta != 0.0f;
   }
 
-  void SceneViewportCameraController::localXYMovement()
+  void SceneViewportCameraInputController::localXYMovement()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     m_camera.truck(-mouseDelta.x);
     m_camera.pedestal(mouseDelta.y);
   }
 
-  void SceneViewportCameraController::localZMovement()
+  void SceneViewportCameraInputController::localZMovement()
   {
     float scrollDelta = m_inputManager
       .getMouseState()
@@ -83,7 +74,7 @@ namespace hc::editor
     m_camera.dolly(scrollDelta);
   }
 
-  void SceneViewportCameraController::zoom()
+  void SceneViewportCameraInputController::zoom()
   {
     float scrollDelta = m_inputManager
       .getMouseState()
@@ -92,7 +83,7 @@ namespace hc::editor
     m_camera.zoom(scrollDelta);
   }
 
-  void SceneViewportCameraController::orbit()
+  void SceneViewportCameraInputController::orbit()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     if (mouseDelta.x == 0 && mouseDelta.y == 0)
@@ -106,7 +97,7 @@ namespace hc::editor
     );
   }
 
-  void SceneViewportCameraController::roll()
+  void SceneViewportCameraInputController::roll()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
     if (mouseDelta.x == 0)

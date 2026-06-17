@@ -11,28 +11,17 @@ namespace hc::editor
    * Provides orbit, zoom, pan, and roll controls for navigating
    * the 3D scene using mouse and keyboard input.
    */
-  class SceneViewportCameraController
+  class SceneViewportCameraInputController
   {
   public:
     /**
      * @brief Constructs a camera controller.
-     * 
+     *
+     * @param camera The scene viewport camera to control.
      * @param inputManager The input manager for handling user input.
      */
-    SceneViewportCameraController(InputManager& inputManager);
-    virtual ~SceneViewportCameraController() = default;
-
-    /**
-     * @brief Gets the camera controlled by this controller.
-     * 
-     * @return Reference to the controlled camera.
-     */
-    SceneViewportCamera& getCamera();
-
-    /**
-     * @brief Prepares the camera controller for use.
-     */
-    void prepare();
+    SceneViewportCameraInputController(SceneViewportCamera& camera, InputManager& inputManager);
+    virtual ~SceneViewportCameraInputController() = default;
 
     /**
      * @brief Updates the camera based on user input.
@@ -42,7 +31,7 @@ namespace hc::editor
     void update(const Time& elapsedTime);
 
   private:
-    SceneViewportCamera m_camera;
+    SceneViewportCamera& m_camera;
     InputManager& m_inputManager;
 
     bool isMouseMiddleButtonPressed() const;
