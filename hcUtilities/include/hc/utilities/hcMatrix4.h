@@ -153,8 +153,7 @@ namespace hc
     Matrix4 rx = RotationX(eulerAngles.x);
     Matrix4 ry = RotationY(eulerAngles.y);
     Matrix4 rz = RotationZ(eulerAngles.z);
-
-    return ry * rx * rz;
+    return rz * ry * rx;
   }
 
   inline Matrix4 Matrix4::RotationX(float angleRadians)

@@ -83,7 +83,6 @@ namespace hc
     Matrix4 translation = Matrix4::Translate(m_position);
     Matrix4 scale = Matrix4::Scale(m_scale);
     Matrix4 rotation = Matrix4::Rotation(m_rotation);
-
     return translation * rotation * scale;
   }
 }

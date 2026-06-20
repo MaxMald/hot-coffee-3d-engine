@@ -85,16 +85,16 @@ namespace hc::editor
     view.transpose();
     projection.transpose();
 
-    Matrix4 imGuizmoModel;
-    Vector3f translation = m_activeGameObject->getPosition();
+    Vector3f position = m_activeGameObject->getPosition();
     Vector3f rotation = m_activeGameObject->getRotation() * Math::RadToDeg;
     Vector3f scale = m_activeGameObject->getScale();
+    Matrix4 composedMatrix;
 
     ImGuizmo::RecomposeMatrixFromComponents(
-      &(translation.x),
+      &(position.x),
       &(rotation.x),
       &(scale.x),
-      imGuizmoModel.m[0]
+      composedMatrix.m[0]
     );
 
     bool changed = ImGuizmo::Manipulate(
@@ -102,21 +102,22 @@ namespace hc::editor
       projection.m[0],
       m_currentOperation,
       m_currentMode,
-      imGuizmoModel.m[0]
+      composedMatrix.m[0]
     );
 
     if (!changed)
       return;
 
-    ImGuizmo::DecomposeMatrixToComponents(
-      imGuizmoModel.m[0],
-      &(translation.x),
+     ImGuizmo::DecomposeMatrixToComponents(
+      composedMatrix.m[0],
+      &(position.x),
       &(rotation.x),
       &(scale.x)
     );
 
-    m_activeGameObject->setPosition(translation);
-    m_activeGameObject->setRotation(rotation * Math::DegToRad);
+    m_activeGameObject->setPosition(position);
+    Vector3f deltaRotation = (rotation * Math::DegToRad) - m_activeGameObject->getRotation();
+    m_activeGameObject->setRotation(m_activeGameObject->getRotation() + deltaRotation);
     m_activeGameObject->setScale(scale);
   }
 
