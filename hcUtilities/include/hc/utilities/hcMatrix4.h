@@ -11,30 +11,94 @@ namespace hc
    *
    * Represents a 4x4 matrix with float components.
    *
+   * Conventions used by this type:
+   * - Math uses column vectors: v' = M * v
+   * - Matrix composition is right-to-left: A * B applies B first, then A
+   * - Translation is stored in the last column (m03, m13, m23)
+   * - The underlying memory layout is row-major
+   *
    * Members can be accessed via m[4][4], m00/m01/.../m33, or as four Vector4f rows.
    */
   struct Matrix4
   {
-    // Common matrices
+    /**
+     * @brief Returns the identity matrix.
+     *
+     * Useful as the neutral element for composition:
+     * Identity() * M == M and M * Identity() == M.
+     */
     static constexpr Matrix4 Identity();
+    /**
+     * @brief Returns the zero matrix.
+     */
     static constexpr Matrix4 Zero();
 
+    /**
+     * @brief Extracts translation from the last column of the matrix.
+     */
     static constexpr Vector3f ExtractTranslation(const Matrix4& matrix);
+
+    /**
+     * @brief Builds a translation matrix.
+     */
     static constexpr Matrix4 Translate(float tx, float ty, float tz);
+
+    /**
+     * @brief Builds a translation matrix from a Vector3f.
+     */
     static constexpr Matrix4 Translate(const Vector3f& translation);
+
+    /**
+     * @brief Builds a scale matrix.
+     */
     static constexpr Matrix4 Scale(float sx, float sy, float sz);
+
+    /**
+     * @brief Builds a scale matrix from a Vector3f.
+     */
     static constexpr Matrix4 Scale(const Vector3f& scaleFactors);
+
+    /**
+     * @brief Builds a rotation matrix from Euler angles.
+     *
+     * This helper uses the class's column-vector convention, so the matrix is applied as
+     * v' = R * v.
+     *
+     * The order of multiplication matters: because matrix multiplication is evaluated
+     * right-to-left for vectors, the effective application order is Z, then Y, then X.
+     * In other words, a vector is rotated around its local Z axis first, then its local Y
+     * axis, and finally its local X axis.
+     *
+     * This matches the common pitch/yaw/roll interpretation only if your code expects
+     * the angles in that order and the same axis convention.
+     *
+     * @param eulerAngles Rotation angles in radians, interpreted as (x, y, z).
+     * 
+     * @return The combined rotation matrix.
+     */
     static Matrix4 Rotation(const Vector3f& eulerAngles);
     static Matrix4 RotationX(float angleRadians);
     static Matrix4 RotationY(float angleRadians);
     static Matrix4 RotationZ(float angleRadians);
     static Matrix4 RotationAxis(const Vector3f& axis, float angleRadians);
+
+    /**
+     * @brief Builds a right-handed look-at view matrix.
+     */
     static Matrix4 LookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up);
+
+    /**
+     * @brief Builds an orthographic projection matrix.
+     */
     static Matrix4 Orthographic(
       float left, float right,
       float bottom, float top,
       float nearPlane, float farPlane
     );
+
+    /**
+     * @brief Builds a right-handed perspective projection matrix.
+     */
     static Matrix4 Perspective(
       float fovYRadians,
       float aspectRatio,
@@ -44,6 +108,11 @@ namespace hc
 
     union
     {
+      /**
+       * @brief Raw row-major storage.
+       *
+       * This is memory layout only; math semantics still follow column vectors.
+       */
       float m[4][4];
 
       struct
