@@ -65,9 +65,9 @@ namespace hc
      * v' = R * v.
      *
      * The order of multiplication matters: because matrix multiplication is evaluated
-     * right-to-left for vectors, the effective application order is Z, then Y, then X.
-     * In other words, a vector is rotated around its local Z axis first, then its local Y
-     * axis, and finally its local X axis.
+     * right-to-left for vectors, the effective application order is X, then Y, then Z.
+     * In other words, a vector is rotated around its local X axis first, then its local Y
+     * axis, and finally its local Z axis.
      *
      * This matches the common pitch/yaw/roll interpretation only if your code expects
      * the angles in that order and the same axis convention.
