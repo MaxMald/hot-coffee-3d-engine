@@ -1,5 +1,4 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraInputController.h"
-#include "hc/editor/scenes/hcEditorSceneNames.h"
 
 namespace hc::editor
 {

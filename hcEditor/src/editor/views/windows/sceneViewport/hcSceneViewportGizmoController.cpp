@@ -116,8 +116,7 @@ namespace hc::editor
     );
 
     m_activeGameObject->setPosition(position);
-    Vector3f deltaRotation = (rotation * Math::DegToRad) - m_activeGameObject->getRotation();
-    m_activeGameObject->setRotation(m_activeGameObject->getRotation() + deltaRotation);
+    m_activeGameObject->setRotation(rotation * Math::DegToRad);
     m_activeGameObject->setScale(scale);
   }
 

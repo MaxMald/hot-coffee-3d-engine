@@ -34,7 +34,11 @@ namespace hc::editor
   void SceneViewportCamera::setTarget(const Vector3f& target)
   {
     float expectedDistance = (target - m_camera.getPosition()).length();
-    if (expectedDistance < MINIMUM_DISTANCE_TO_TARGET)
+    if (Math::IsNearlyEqual(expectedDistance, 0.0f, EPSILON))
+    {
+      m_camera.setPosition(target + Vector3f(0.0f, 0.0f, MINIMUM_DISTANCE_TO_TARGET));
+    }
+    else if (expectedDistance < MINIMUM_DISTANCE_TO_TARGET)
     {
       Vector3f direction = (target - m_camera.getPosition()).normalized();
       m_camera.setPosition(target - direction * MINIMUM_DISTANCE_TO_TARGET);
@@ -104,7 +108,11 @@ namespace hc::editor
   void SceneViewportCamera::setCameraPosition(const Vector3f& position)
   {
     float expectedDistance = (m_target - position).length();
-    if (expectedDistance < MINIMUM_DISTANCE_TO_TARGET)
+    if (Math::IsNearlyEqual(expectedDistance, 0.0f, EPSILON))
+    {
+      m_camera.setPosition(m_target + Vector3f(0.0f, 0.0f, MINIMUM_DISTANCE_TO_TARGET));
+    }
+    else if (expectedDistance < MINIMUM_DISTANCE_TO_TARGET)
     {
       Vector3f direction = (position - m_target).normalized();
       m_camera.setPosition(m_target + direction * MINIMUM_DISTANCE_TO_TARGET);
