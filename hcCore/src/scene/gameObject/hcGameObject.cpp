@@ -19,8 +19,7 @@ namespace hc
     m_components(),
     m_drawableComponents(),
     m_updatableComponents()
-  {
-  }
+  {}
 
   GameObject::~GameObject()
   {
@@ -62,7 +61,7 @@ namespace hc
     {
       componentType::Type componentType = static_cast<componentType::Type>(
         reader.peekUInt16()
-      );
+        );
 
       UniquePtr<IComponent> component = m_componentFactoriesManager
         .createComponent(componentType);

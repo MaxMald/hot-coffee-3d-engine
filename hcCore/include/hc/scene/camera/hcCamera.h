@@ -161,6 +161,17 @@ namespace hc
     void lookAt(const Vector3f& target);
 
     /**
+     * @brief Orients the camera to look at a specific target point in world space,
+     * using a specified up vector to determine the camera's roll.
+     *
+     * @param target The point in world space to look at.
+     * @param up The up vector to use for orienting the camera. This determines
+     * the camera's roll around the direction vector. It should not be parallel
+     * to the direction vector.
+     */
+    void lookAt(const Vector3f& target, const Vector3f& up);
+
+    /**
      * @brief Rotates the camera by specified Euler angles (in radians).
      *
      * @param eulerAngles The rotation angles around the X, Y, and Z axes.

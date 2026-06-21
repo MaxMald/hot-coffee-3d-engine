@@ -12,9 +12,10 @@ namespace hc::editor
     AWindowView("Scene Viewport", true),
     m_engine(engine),
     m_selectionService(selectionService),
+    m_camera(),
     m_renderer(m_engine.getAssetManager(), m_engine.getGraphicsManager()),
-    m_cameraController(m_engine.getInputManager()),
-    m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
+    m_cameraInputController(m_camera, m_engine.getInputManager()),
+    m_gizmoController(m_engine.getInputManager(), m_camera),
     m_renderTargetSelector(sceneViewportRenderTargetType::FinalColor, m_engine.getGraphicsManager()),
     m_uvTopLeft(0, 0),
     m_uvBottomRight(1, 1)
@@ -31,7 +32,7 @@ namespace hc::editor
     }
 
     m_renderer.prepare();
-    m_cameraController.prepare();
+    m_camera.setCameraPosition(Vector3f(0.0f, 0.0f, 5.0f));
 
     if (!m_renderer.isValid())
     {
@@ -59,7 +60,7 @@ namespace hc::editor
   {
     if (isFocused())
     {
-      m_cameraController.update(elapsedTime);
+      m_cameraInputController.update(elapsedTime);
       m_gizmoController.update(elapsedTime);
     }
   }
@@ -135,7 +136,7 @@ namespace hc::editor
       return;
 
     m_renderer.resize(width, height);
-    m_cameraController.getCamera().setAspectRatio(width, height);
+    m_camera.getCamera().setAspectRatio(width, height);
   }
 
   void SceneViewportWindow::renderSceneToTexture()
@@ -152,7 +153,7 @@ namespace hc::editor
 
     m_renderer.renderScene(
       *contentScene,
-      m_cameraController.getCamera()
+      m_camera.getCamera()
     );
   }
 
@@ -170,7 +171,7 @@ namespace hc::editor
 
     m_renderer.renderLightGizmos(
       *contentScene,
-      m_cameraController.getCamera(),
+      m_camera.getCamera(),
       m_gizmoController.getActiveGameObject()
     );
   }

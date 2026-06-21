@@ -1,14 +1,15 @@
 #pragma once
 
-#include "hc/editor/hcEditorPrerequisites.h"
 #include <ImGuizmo.h>
+#include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportCamera.h"
 
 namespace hc::editor
 {
   class SceneViewportGizmoController
   {
   public:
-    SceneViewportGizmoController(InputManager& inputManager, Camera& camera);
+    SceneViewportGizmoController(InputManager& inputManager, SceneViewportCamera& camera);
     ~SceneViewportGizmoController();
 
     void update(const Time& elapsedTime);
@@ -21,7 +22,7 @@ namespace hc::editor
   private:
     InputManager& m_inputManager;
     GameObject* m_activeGameObject;
-    Camera& m_camera;
+    SceneViewportCamera& m_camera;
     ImGuizmo::OPERATION m_currentOperation;
     ImGuizmo::MODE m_currentMode;
 
