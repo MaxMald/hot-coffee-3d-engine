@@ -12,9 +12,12 @@ namespace hc::editor
     m_activeGameObject(nullptr),
     m_camera(camera),
     m_currentOperation(ImGuizmo::OPERATION::TRANSLATE),
-    m_currentMode(ImGuizmo::MODE::LOCAL)
-  {
-  }
+    m_currentMode(ImGuizmo::MODE::LOCAL),
+    m_snapValues(1.0f, 1.0f, 1.0f),
+    m_usingSnap(false),
+    m_drawingGrid(true),
+    m_gridSize(100.0f)
+  {}
 
   SceneViewportGizmoController::~SceneViewportGizmoController()
   {}
@@ -23,12 +26,10 @@ namespace hc::editor
   {
     if (m_inputManager.getKeyboardKeyState(keyboardKey::T).isPressed())
       m_currentOperation = ImGuizmo::OPERATION::TRANSLATE;
-    else if (m_inputManager.getKeyboardKeyState(keyboardKey::R).isPressed())
+    else if (m_inputManager.getKeyboardKeyState(keyboardKey::E).isPressed())
       m_currentOperation = ImGuizmo::OPERATION::ROTATE;
-    else if (m_inputManager.getKeyboardKeyState(keyboardKey::S).isPressed())
+    else if (m_inputManager.getKeyboardKeyState(keyboardKey::R).isPressed())
       m_currentOperation = ImGuizmo::OPERATION::SCALE;
-    else if (m_inputManager.getKeyboardKeyState(keyboardKey::Q).isPressed())
-      m_currentMode = (m_currentMode == ImGuizmo::MODE::LOCAL) ? ImGuizmo::MODE::WORLD : ImGuizmo::MODE::LOCAL;
   }
 
   void SceneViewportGizmoController::draw(
@@ -48,6 +49,9 @@ namespace hc::editor
     );
 
     drawCubeView(windowPosition, windowSize);
+
+    if (m_drawingGrid)
+      drawGrid();
 
     if (m_activeGameObject)
       drawGizmo(windowPosition, windowSize);
@@ -71,6 +75,66 @@ namespace hc::editor
   void SceneViewportGizmoController::clearActiveGameObject()
   {
     m_activeGameObject = nullptr;
+  }
+
+  UInt32 SceneViewportGizmoController::getGizmoMode() const
+  {
+    return static_cast<UInt32>(m_currentMode);
+  }
+
+  void SceneViewportGizmoController::setGizmoMode(UInt32 mode)
+  {
+    m_currentMode = static_cast<ImGuizmo::MODE>(mode);
+  }
+
+  UInt32 SceneViewportGizmoController::getGizmoOperation() const
+  {
+    return static_cast<UInt32>(m_currentOperation);
+  }
+
+  void SceneViewportGizmoController::setGizmoOperation(UInt32 operation)
+  {
+    m_currentOperation = static_cast<ImGuizmo::OPERATION>(operation);
+  }
+
+  bool SceneViewportGizmoController::isDrawingGrid() const
+  {
+    return m_drawingGrid;
+  }
+
+  void SceneViewportGizmoController::setDrawingGrid(bool drawingGrid)
+  {
+    m_drawingGrid = drawingGrid;
+  }
+
+  float SceneViewportGizmoController::getGridSize() const
+  {
+    return m_gridSize;
+  }
+
+  void SceneViewportGizmoController::setGridSize(float gridSize)
+  {
+    m_gridSize = gridSize;
+  }
+
+  bool SceneViewportGizmoController::isUsingSnap() const
+  {
+    return m_usingSnap;
+  }
+
+  void SceneViewportGizmoController::setUsingSnap(bool usingSnap)
+  {
+    m_usingSnap = usingSnap;
+  }
+
+  Vector3f SceneViewportGizmoController::getSnapValues() const
+  {
+    return m_snapValues;
+  }
+
+  void SceneViewportGizmoController::setSnapValues(const Vector3f& snapValues)
+  {
+    m_snapValues = snapValues;
   }
 
   void SceneViewportGizmoController::drawGizmo(
@@ -102,13 +166,15 @@ namespace hc::editor
       projection.m[0],
       m_currentOperation,
       m_currentMode,
-      composedMatrix.m[0]
+      composedMatrix.m[0],
+      (float*)0,
+      m_usingSnap ? &(m_snapValues.x) : nullptr
     );
 
     if (!changed)
       return;
 
-     ImGuizmo::DecomposeMatrixToComponents(
+    ImGuizmo::DecomposeMatrixToComponents(
       composedMatrix.m[0],
       &(position.x),
       &(rotation.x),
@@ -135,7 +201,7 @@ namespace hc::editor
       ImVec2(CUBE_VIEW_SIZE, CUBE_VIEW_SIZE),
       0x10101000
     );
-    
+
     Vector3f direction;
     direction.x = -view.m02;
     direction.y = -view.m12;
@@ -144,5 +210,21 @@ namespace hc::editor
     Vector3f target = m_camera.getTarget();
     Vector3f cameraPosition = target - direction * m_camera.getDistanceToTarget();
     m_camera.setCameraPosition(cameraPosition);
+  }
+
+  void SceneViewportGizmoController::drawGrid()
+  {
+    Matrix4 view = m_camera.getCamera().getViewMatrix();
+    view.transpose();
+    Matrix4 projection = m_camera.getCamera().getProjectionMatrix();
+    projection.transpose();
+    Matrix4 identityMatrix = Matrix4::Identity();
+
+    ImGuizmo::DrawGrid(
+      view.m[0],
+      projection.m[0],
+      identityMatrix.m[0],
+      m_gridSize
+    );
   }
 }

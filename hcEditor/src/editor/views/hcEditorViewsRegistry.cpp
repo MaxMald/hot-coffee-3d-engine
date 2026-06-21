@@ -29,6 +29,7 @@
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
+#include "hc/editor/views/windows/sceneViewportSettings/hcSceneViewportSettingsWindow.h"
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAssetManagerDrawersRegistry.h"
@@ -54,9 +55,14 @@ namespace hc::editor
         hotCoffeeEngine.getSceneManager(),
         editorServiceManager.getService<GameObjectSelectionService>()
       ));
-      viewsManager.registerView(MakeUnique<SceneViewportWindow>(
+
+      UniquePtr<SceneViewportWindow> sceneViewportWindow = MakeUnique<SceneViewportWindow>(
         hotCoffeeEngine,
         editorServiceManager.getService<GameObjectSelectionService>()
+      );
+      viewsManager.registerView(MakeUnique<SceneViewportSettingsWindow>(
+        *sceneViewportWindow,
+        hotCoffeeEngine.getGraphicsManager()
       ));
       viewsManager.registerView(MakeUnique<CameraManagerWindow>(
         hotCoffeeEngine.getSceneManager()
@@ -123,6 +129,7 @@ namespace hc::editor
       viewsManager.registerView(std::move(assetManagerWindow));
       viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
+      viewsManager.registerView(std::move(sceneViewportWindow));
 
       // The main menu bar is registered last to ensure it can access all other views when
       // being created.
