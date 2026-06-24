@@ -141,7 +141,7 @@ namespace hc::editor
         // it, show an error and do not change the selection
 
         LogService::Error(
-          "SceneViewportWindow: Cannot switch to GBuffer render target because the current render pipeline does not support it."
+          "SceneViewportSettingsWindow: Cannot switch to GBuffer render target because the current render pipeline does not support it."
         );
       }
       else
