@@ -50,5 +50,6 @@ namespace hc
     bool m_initialized;
 
     void assertIsInitialized() const;
+    void copyDepthBuffer(IFrameBuffer& from, IFrameBuffer* to);
   };
 }

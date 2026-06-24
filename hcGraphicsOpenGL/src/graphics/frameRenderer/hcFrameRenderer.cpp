@@ -165,6 +165,7 @@ namespace hc
       throw RuntimeErrorException("Frame Renderer: Not implemented render pipeline type.");
 
     m_finalRenderPass.execute(m_frameBufferA.getColorTexture(), m_currentRenderTarget);
+    copyDepthBuffer(m_frameBufferA, m_currentRenderTarget);
     m_drawCommands.clear();
   }
 
@@ -204,5 +205,34 @@ namespace hc
   {
     if (!m_initialized)
       throw RuntimeErrorException("FrameRenderer is not initialized.");
+  }
+
+  void FrameRenderer::copyDepthBuffer(IFrameBuffer& from, IFrameBuffer* to)
+  {
+    if (!from.isValid())
+      throw RuntimeErrorException("Invalid framebuffer provided as source for depth buffer copy.");
+
+    if (to)
+    {
+      if (!to->isValid())
+        throw RuntimeErrorException("Invalid framebuffer set as render target.");
+
+      from.copyDepthTo(*to);
+    }
+    else
+    {
+      // If no destination render target, copy the depth buffer from the source
+      // framebuffer to the default framebuffer
+
+      from.bindForReadingOnly();
+      glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+      glBlitFramebuffer(
+        0, 0, from.getWidth(), from.getHeight(),
+        0, 0, from.getWidth(), from.getHeight(),
+        GL_DEPTH_BUFFER_BIT,
+        GL_NEAREST
+      );
+      glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    }
   }
 }
