@@ -140,6 +140,7 @@ namespace hc::editor
         // If user selects a GBuffer target but the current render pipeline does not support
         // it, show an error and do not change the selection
 
+        viewportWindow.setCurrentRenderTarget(sceneViewportRenderTargetType::FinalColor);
         LogService::Error(
           "SceneViewportWindow: Cannot switch to GBuffer render target because the current render pipeline does not support it."
         );

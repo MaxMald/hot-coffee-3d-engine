@@ -167,7 +167,7 @@ namespace hc::editor
       m_currentOperation,
       m_currentMode,
       composedMatrix.m[0],
-      (float*)0,
+      nullptr,
       m_usingSnap ? &(m_snapValues.x) : nullptr
     );
 
