@@ -142,7 +142,7 @@ namespace hc::editor
 
         viewportWindow.setCurrentRenderTarget(sceneViewportRenderTargetType::FinalColor);
         LogService::Error(
-          "SceneViewportWindow: Cannot switch to GBuffer render target because the current render pipeline does not support it."
+          "SceneViewportSettingsWindow: Cannot switch to GBuffer render target because the current render pipeline does not support it."
         );
       }
       else
