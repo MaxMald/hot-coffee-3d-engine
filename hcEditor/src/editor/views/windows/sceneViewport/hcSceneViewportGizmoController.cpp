@@ -15,7 +15,7 @@ namespace hc::editor
     m_currentMode(ImGuizmo::MODE::LOCAL),
     m_snapValues(1.0f, 1.0f, 1.0f),
     m_usingSnap(false),
-    m_drawingGrid(true),
+    m_drawingGrid(false),
     m_gridSize(100.0f)
   {}
 
