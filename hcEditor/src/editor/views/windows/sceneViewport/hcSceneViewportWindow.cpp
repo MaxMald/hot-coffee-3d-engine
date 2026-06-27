@@ -12,12 +12,13 @@ namespace hc::editor
     AWindowView("Scene Viewport", true),
     m_engine(engine),
     m_selectionService(selectionService),
+    m_camera(),
     m_renderer(m_engine.getAssetManager(), m_engine.getGraphicsManager()),
-    m_cameraController(m_engine.getInputManager()),
-    m_gizmoController(m_engine.getInputManager(), m_cameraController.getCamera()),
-    m_renderTargetSelector(sceneViewportRenderTargetType::FinalColor, m_engine.getGraphicsManager()),
+    m_cameraInputController(m_camera, m_engine.getInputManager()),
+    m_gizmoController(m_engine.getInputManager(), m_camera),
     m_uvTopLeft(0, 0),
-    m_uvBottomRight(1, 1)
+    m_uvBottomRight(1, 1),
+    m_currentRenderTarget(sceneViewportRenderTargetType::FinalColor)
   {
     graphicsBackendType::Type backendType = m_engine
       .getGraphicsManager()
@@ -31,7 +32,7 @@ namespace hc::editor
     }
 
     m_renderer.prepare();
-    m_cameraController.prepare();
+    m_camera.setCameraPosition(Vector3f(0.0f, 0.0f, 5.0f));
 
     if (!m_renderer.isValid())
     {
@@ -50,6 +51,76 @@ namespace hc::editor
     }
   }
 
+  UInt32 SceneViewportWindow::getGizmoMode() const
+  {
+    return m_gizmoController.getGizmoMode();
+  }
+
+  void SceneViewportWindow::setGizmoMode(UInt32 mode)
+  {
+    m_gizmoController.setGizmoMode(mode);
+  }
+
+  UInt32 SceneViewportWindow::getGizmoOperation() const
+  {
+    return m_gizmoController.getGizmoOperation();
+  }
+
+  void SceneViewportWindow::setGizmoOperation(UInt32 operation)
+  {
+    m_gizmoController.setGizmoOperation(operation);
+  }
+
+  bool SceneViewportWindow::isDrawingGrid() const
+  {
+    return m_gizmoController.isDrawingGrid();
+  }
+
+  void SceneViewportWindow::setDrawingGrid(bool drawingGrid)
+  {
+    m_gizmoController.setDrawingGrid(drawingGrid);
+  }
+
+  bool SceneViewportWindow::isUsingSnap() const
+  {
+    return m_gizmoController.isUsingSnap();
+  }
+
+  void SceneViewportWindow::setUsingSnap(bool usingSnap)
+  {
+    m_gizmoController.setUsingSnap(usingSnap);
+  }
+
+  float SceneViewportWindow::getGridSize() const
+  {
+    return m_gizmoController.getGridSize();
+  }
+
+  void SceneViewportWindow::setGridSize(float gridSize)
+  {
+    m_gizmoController.setGridSize(gridSize);
+  }
+
+  Vector3f SceneViewportWindow::getSnapValues() const
+  {
+    return m_gizmoController.getSnapValues();
+  }
+
+  void SceneViewportWindow::setSnapValues(const Vector3f& snapValues)
+  {
+    m_gizmoController.setSnapValues(snapValues);
+  }
+
+  sceneViewportRenderTargetType::Type SceneViewportWindow::getCurrentRenderTarget() const
+  {
+    return m_currentRenderTarget;
+  }
+
+  void SceneViewportWindow::setCurrentRenderTarget(sceneViewportRenderTargetType::Type renderTarget)
+  {
+    m_currentRenderTarget = renderTarget;
+  }
+
   void SceneViewportWindow::destroy()
   {
     m_selectionService.unsubscribe(this);
@@ -59,7 +130,7 @@ namespace hc::editor
   {
     if (isFocused())
     {
-      m_cameraController.update(elapsedTime);
+      m_cameraInputController.update(elapsedTime);
       m_gizmoController.update(elapsedTime);
     }
   }
@@ -72,14 +143,10 @@ namespace hc::editor
     updateFramebufferSize();
     renderSceneToTexture();
     renderGizmosToTexture();
-    m_renderTargetSelector.draw();
 
     ImVec2 viewportPos = ImGui::GetCursorScreenPos();
 
-    sceneViewportRenderTargetType::Type currentRenderTarget =
-      m_renderTargetSelector.getCurrentRenderTarget();
-
-    if (currentRenderTarget == sceneViewportRenderTargetType::FinalColor)
+    if (m_currentRenderTarget == sceneViewportRenderTargetType::FinalColor)
     {
       drawRenderTarget(m_renderer.getRenderedTexture());
     }
@@ -87,24 +154,24 @@ namespace hc::editor
     {
       const IGBuffer& gBuffer = m_engine.getGraphicsManager().getGBuffer();
 
-      if (currentRenderTarget == sceneViewportRenderTargetType::GBufferPositionAndDepth)
+      if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferPositionAndDepth)
       {
         drawRenderTarget(gBuffer.getPositionAndDepth());
       }
-      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferNormalRoughness)
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferNormalRoughness)
       {
         drawRenderTarget(gBuffer.getNormalRoughness());
       }
-      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferAlbedoAlpha)
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferAlbedoAlpha)
       {
         drawRenderTarget(gBuffer.getAlbedoAlpha());
       }
-      else if (currentRenderTarget == sceneViewportRenderTargetType::GBufferMaterialParameters)
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferMaterialParameters)
       {
         drawRenderTarget(gBuffer.getMaterialParameters());
       }
     }
-    
+
     m_gizmoController.draw(
       Vector2f(viewportPos.x, viewportPos.y),
       getContentSize()
@@ -135,7 +202,7 @@ namespace hc::editor
       return;
 
     m_renderer.resize(width, height);
-    m_cameraController.getCamera().setAspectRatio(width, height);
+    m_camera.getCamera().setAspectRatio(width, height);
   }
 
   void SceneViewportWindow::renderSceneToTexture()
@@ -152,7 +219,7 @@ namespace hc::editor
 
     m_renderer.renderScene(
       *contentScene,
-      m_cameraController.getCamera()
+      m_camera.getCamera()
     );
   }
 
@@ -170,7 +237,7 @@ namespace hc::editor
 
     m_renderer.renderLightGizmos(
       *contentScene,
-      m_cameraController.getCamera(),
+      m_camera.getCamera(),
       m_gizmoController.getActiveGameObject()
     );
   }
