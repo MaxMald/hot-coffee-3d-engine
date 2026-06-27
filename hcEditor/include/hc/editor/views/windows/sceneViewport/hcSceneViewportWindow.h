@@ -5,7 +5,7 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportCameraInputController.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderer.h"
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportGizmoController.h"
-#include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderTargetSelector.h"
+#include "hc/editor/views/windows/sceneViewport/hcSceneViewportRenderTargetType.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
 
@@ -34,9 +34,20 @@ namespace hc::editor
       GameObjectSelectionService& selectionService
     );
 
-    /**
-     * @brief Destroys the viewport window and releases resources.
-     */
+    UInt32 getGizmoMode() const;
+    void setGizmoMode(UInt32 mode);
+    UInt32 getGizmoOperation() const;
+    void setGizmoOperation(UInt32 operation);
+    bool isDrawingGrid() const;
+    void setDrawingGrid(bool drawingGrid);
+    bool isUsingSnap() const;
+    void setUsingSnap(bool usingSnap);
+    float getGridSize() const;
+    void setGridSize(float gridSize);
+    Vector3f getSnapValues() const;
+    void setSnapValues(const Vector3f& snapValues);
+    sceneViewportRenderTargetType::Type getCurrentRenderTarget() const;
+    void setCurrentRenderTarget(sceneViewportRenderTargetType::Type renderTarget);
     void destroy() override;
 
   protected:
@@ -46,10 +57,9 @@ namespace hc::editor
     SceneViewportRenderer m_renderer;
     SceneViewportCameraInputController m_cameraInputController;
     SceneViewportGizmoController m_gizmoController;
-    SceneViewportRenderTargetSelector m_renderTargetSelector;
     Vector2f m_uvTopLeft;
     Vector2f m_uvBottomRight;
-    
+    sceneViewportRenderTargetType::Type m_currentRenderTarget;
 
     /**
      * @brief Updates the camera controller and viewport state.
