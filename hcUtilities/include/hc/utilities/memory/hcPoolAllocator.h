@@ -8,9 +8,9 @@ namespace hc
   namespace memory
   {
     /**
-     * @brief A memory allocator suitable for use with STL containers, backed by a
+     * @brief A memory allocator adapter suitable for use with STL containers, backed by a
      * PoolStorage.
-     * 
+     *
      * @tparam T The type of objects to allocate.
      */
     template<typename T>
