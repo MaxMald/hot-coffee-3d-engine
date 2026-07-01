@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdlib>
+#include "hc/utilities/memory/hcMemory.h"
 
 namespace
 {
@@ -13,13 +14,6 @@ namespace
   };
 
   static_assert(sizeof(AllocationHeader) % alignof(std::max_align_t) == 0);
-
-  hc::SizeT AlignForwardAdjustment(const void* address, hc::SizeT alignment)
-  {
-    const hc::SizeT mask = alignment - 1;
-    const hc::SizeT misalignment = reinterpret_cast<std::uintptr_t>(address) & mask;
-    return misalignment == 0 ? 0 : alignment - misalignment;
-  }
 }
 
 namespace hc::memory
@@ -71,11 +65,11 @@ namespace hc::memory
     if (size == 0)
       throw InvalidArgumentException("Size must be greater than zero.");
 
-    Byte* const base = static_cast<Byte*>(m_memory);
-    Byte* const current = base + m_current;
+    UIntPtr const base = reinterpret_cast<UIntPtr>(m_memory);
+    UIntPtr const current = base + m_current;
 
     const SizeT headerAlignment = alignof(AllocationHeader);
-    const SizeT headerOffset = AlignForwardAdjustment(current, headerAlignment);
+    const SizeT headerOffset = AlignAddressAdjustment(current, headerAlignment);
     const SizeT requiredSize = headerOffset + sizeof(AllocationHeader) + size;
 
     if (m_current + requiredSize > m_capacity)
@@ -98,16 +92,17 @@ namespace hc::memory
     if (ptr == nullptr)
       return;
 
-    Byte* const base = static_cast<Byte*>(m_memory);
-    Byte* const userPtr = static_cast<Byte*>(ptr);
+    UIntPtr const base = reinterpret_cast<UIntPtr>(m_memory);
+    UIntPtr const userPtr = reinterpret_cast<UIntPtr>(ptr);
 
     if (userPtr < base + sizeof(AllocationHeader) || userPtr > base + m_current)
       throw RuntimeErrorException("Pointer does not belong to LinearStorage.");
 
     auto* const header = reinterpret_cast<const AllocationHeader*>(userPtr - sizeof(AllocationHeader));
-    const Byte* const headerPtr = reinterpret_cast<const Byte*>(header);
+    const UIntPtr headerPtr = reinterpret_cast<UIntPtr>(header);
     const SizeT headerOffset = static_cast<SizeT>(headerPtr - base);
-    const SizeT expectedHeaderOffset = header->previousCurrent + AlignForwardAdjustment(base + header->previousCurrent, alignof(AllocationHeader));
+    const SizeT expectedHeaderOffset = header->previousCurrent
+      + AlignAddressAdjustment(base + header->previousCurrent, alignof(AllocationHeader));
 
     if (headerOffset != expectedHeaderOffset || headerOffset + sizeof(AllocationHeader) + header->size != m_current)
       throw RuntimeErrorException("LinearStorage can only free the most recent allocation.");
