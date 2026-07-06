@@ -72,7 +72,7 @@ namespace hc::memory
     const SizeT headerOffset = AlignAddressAdjustment(current, headerAlignment);
     const SizeT requiredSize = headerOffset + sizeof(AllocationHeader) + size;
 
-    if (m_current + requiredSize > m_capacity)
+    if (m_current > m_capacity || requiredSize > m_capacity - m_current)
       throw std::bad_alloc();
 
     auto* const header = reinterpret_cast<AllocationHeader*>(current + headerOffset);
@@ -95,7 +95,7 @@ namespace hc::memory
     UIntPtr const base = reinterpret_cast<UIntPtr>(m_memory);
     UIntPtr const userPtr = reinterpret_cast<UIntPtr>(ptr);
 
-    if (userPtr < base + sizeof(AllocationHeader) || userPtr > base + m_current)
+    if (userPtr < base + sizeof(AllocationHeader) || userPtr >= base + m_current)
       throw RuntimeErrorException("Pointer does not belong to LinearStorage.");
 
     auto* const header = reinterpret_cast<const AllocationHeader*>(userPtr - sizeof(AllocationHeader));

@@ -30,6 +30,12 @@ namespace hc
       if (blockSize < sizeof(void*))
         throw InvalidArgumentException("Block size must be at least the size of a pointer.");
 
+      if (blockSize % alignof(void*) != 0)
+        throw InvalidArgumentException("Block size must be a multiple of the pointer size.");
+
+      if (blockCount > SIZE_MAX / blockSize)
+        throw InvalidArgumentException("Block size and block count are too large, causing overflow.");
+
       m_memory = std::malloc(blockSize * blockCount);
       if (!m_memory)
         throw std::bad_alloc();
@@ -84,6 +90,9 @@ namespace hc
       if (ptr == nullptr)
         return;
 
+      if (!owns(ptr))
+        throw InvalidArgumentException("Pointer does not belong to this PoolStorage.");
+
       *reinterpret_cast<void**>(ptr) = m_freeList;
       m_freeList = ptr;
     }
@@ -93,11 +102,14 @@ namespace hc
       if (!m_initialized)
         throw RuntimeErrorException("PoolStorage is not initialized.");
 
-      const Byte* start = static_cast<const Byte*>(m_memory);
-      const Byte* end = start + m_blockSize * m_blockCount;
-      const Byte* p = static_cast<const Byte*>(ptr);
+      if (ptr == nullptr)
+        return false;
 
-      return p >= start && p < end && (p - start) % m_blockSize == 0;
+      const UIntPtr start = reinterpret_cast<UIntPtr>(m_memory);
+      const UIntPtr end = start + m_blockSize * m_blockCount;
+      const UIntPtr ptrAddress = reinterpret_cast<UIntPtr>(ptr);
+
+      return ptrAddress >= start && ptrAddress < end && (ptrAddress - start) % m_blockSize == 0;
     }
 
     void PoolStorage::reset()

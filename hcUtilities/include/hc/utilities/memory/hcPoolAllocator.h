@@ -47,22 +47,13 @@ namespace hc
         return static_cast<pointer>(m_poolStorage->allocate());
       }
 
-      void deallocate(pointer ptr, size_type count)
+      void deallocate(pointer ptr, size_type count) noexcept
       {
         if (!ptr)
           return;
 
-        if (!m_poolStorage)
-          throw RuntimeErrorException("PoolAllocator is not initialized with a PoolStorage.");
-
-        if (!m_poolStorage->owns(ptr))
-          throw InvalidArgumentException("Pointer does not belong to the PoolStorage.");
-
         if (count == 0)
           return;
-
-        if (count != 1)
-          throw InvalidArgumentException("PoolAllocator can only deallocate one object at a time.");
 
         m_poolStorage->free(ptr);
       }

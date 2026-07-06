@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <list>
 #include "hc/utilities/memory/hcPoolStorage.h"
 #include "hc/utilities/memory/hcPoolAllocator.h"
 

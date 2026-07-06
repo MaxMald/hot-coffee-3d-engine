@@ -43,7 +43,9 @@ namespace hc
       /**
        * @brief Allocates one block from the pool.
        *
-       * @return Pointer to a block, or nullptr if the pool is exhausted.
+       * @return Pointer to a block.
+       *
+       * @throws RuntimeError if the pool is exhausted or not initialized.
        */
       void* allocate();
 
