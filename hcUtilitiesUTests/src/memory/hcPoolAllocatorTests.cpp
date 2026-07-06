@@ -21,7 +21,8 @@ namespace hc
     TEST(PoolAllocatorTests, ListAllocationTest)
     {
       // Calculate the block size needed for a list node containing an Int64 value
-      hc::SizeT blockSize = (2 * sizeof(void*) + sizeof(Int64) + alignof(void*) - 1) & ~(alignof(void*) - 1);
+      hc::SizeT pointerSize = sizeof(void*);
+      hc::SizeT blockSize = (2 * pointerSize + sizeof(Int64) + alignof(Int64) - 1) & ~(alignof(Int64) - 1);
 
       PoolStorage poolStorage;
       poolStorage.initialize(blockSize, 14);
@@ -55,7 +56,8 @@ namespace hc
     TEST(PoolAllocatorTests, ListDeallocationTest)
     {
       // Calculate the block size needed for a list node containing an Int64 value
-      hc::SizeT blockSize = (2 * sizeof(void*) + sizeof(Int64) + alignof(void*) - 1) & ~(alignof(void*) - 1);
+      hc::SizeT pointerSize = sizeof(void*);
+      hc::SizeT blockSize = (2 * pointerSize + sizeof(Int64) + alignof(Int64) - 1) & ~(alignof(Int64) - 1);
 
       PoolStorage poolStorage;
       poolStorage.initialize(blockSize, 14);
