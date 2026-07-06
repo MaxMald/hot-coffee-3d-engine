@@ -55,6 +55,9 @@ namespace hc
         if (count == 0)
           return;
 
+        HC_ASSERT(m_poolStorage && "PoolAllocator is not initialized with a PoolStorage.");
+        HC_ASSERT(count == 1 && "PoolAllocator can only deallocate one object at a time.");
+
         m_poolStorage->free(ptr);
       }
 

@@ -6,17 +6,17 @@ namespace hc
 {
   namespace memory
   {
-    class HC_UTILITY_EXPORT LinearStorage
+    class HC_UTILITY_EXPORT StackStorage
     {
     public:
-      LinearStorage();
-      ~LinearStorage();
+      StackStorage();
+      ~StackStorage();
 
       void initialize(SizeT capacity);
       bool isInitialized() const noexcept;
       SizeT getCapacity() const noexcept;
       void* allocate(SizeT size);
-      void free(void* ptr);
+      void free(void* ptr) noexcept;
       void reset();
       void destroy() noexcept;
 

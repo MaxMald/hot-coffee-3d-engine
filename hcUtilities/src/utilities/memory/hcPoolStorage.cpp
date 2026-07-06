@@ -82,28 +82,24 @@ namespace hc
       return block;
     }
 
-    void PoolStorage::free(void* ptr)
+    void PoolStorage::free(void* ptr) noexcept
     {
-      if (!m_initialized)
-        throw RuntimeErrorException("PoolStorage is not initialized.");
-
       if (ptr == nullptr)
         return;
 
-      if (!owns(ptr))
-        throw InvalidArgumentException("Pointer does not belong to this PoolStorage.");
+      HC_ASSERT(m_initialized && "PoolStorage is not initialized.");
+      HC_ASSERT(owns(ptr) && "Pointer does not belong to this PoolStorage.");
 
       *reinterpret_cast<void**>(ptr) = m_freeList;
       m_freeList = ptr;
     }
 
-    bool PoolStorage::owns(const void* ptr) const
+    bool PoolStorage::owns(const void* ptr) const noexcept
     {
-      if (!m_initialized)
-        throw RuntimeErrorException("PoolStorage is not initialized.");
-
       if (ptr == nullptr)
         return false;
+
+      HC_ASSERT(m_initialized && "PoolStorage is not initialized.");
 
       const UIntPtr start = reinterpret_cast<UIntPtr>(m_memory);
       const UIntPtr end = start + m_blockSize * m_blockCount;

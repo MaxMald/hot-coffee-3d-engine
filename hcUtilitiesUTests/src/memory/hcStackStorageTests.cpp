@@ -1,11 +1,11 @@
 #include <gtest/gtest.h>
-#include "hc/utilities/memory/hcLinearStorage.h"
+#include "hc/utilities/memory/hcStackStorage.h"
 
 namespace hc::memory
 {
-  TEST(LinearStorageTests, AllocationTest)
+  TEST(StackStorageTests, AllocationTest)
   {
-    LinearStorage storage;
+    StackStorage storage;
     storage.initialize(2048);
     void* ptr =storage.allocate(61);
     void* ptr2 = storage.allocate(61);

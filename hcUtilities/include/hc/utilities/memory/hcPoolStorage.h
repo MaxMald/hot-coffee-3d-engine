@@ -54,12 +54,12 @@ namespace hc
        *
        * @param ptr Pointer previously returned by allocate().
        */
-      void free(void* ptr);
+      void free(void* ptr) noexcept;
 
       /**
        * @brief Returns true if the pointer belongs to this pool.
        */
-      bool owns(const void* ptr) const;
+      bool owns(const void* ptr) const noexcept;
 
       /**
        * @brief Releases all allocated blocks back to the pool.

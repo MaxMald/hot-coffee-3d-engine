@@ -3,15 +3,6 @@
 
 namespace hc::memory
 {
-  TEST(PoolStorageTests, UninitializationTests)
-  {
-    PoolStorage poolStorage;
-
-    EXPECT_THROW(poolStorage.allocate(), RuntimeErrorException);
-    EXPECT_THROW(poolStorage.free(nullptr), RuntimeErrorException);
-    EXPECT_THROW(poolStorage.owns(nullptr), RuntimeErrorException);
-  }
-
   TEST(PoolStorageTests, InvalidInitializationTests)
   {
     PoolStorage poolStorage;

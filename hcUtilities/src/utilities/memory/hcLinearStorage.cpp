@@ -1,4 +1,4 @@
-#include "hc/utilities/memory/hcLinearStorage.h"
+#include "hc/utilities/memory/hcStackStorage.h"
 
 #include <cstddef>
 #include <cstdint>
@@ -18,22 +18,22 @@ namespace
 
 namespace hc::memory
 {
-  LinearStorage::LinearStorage() :
+  StackStorage::StackStorage() :
     m_capacity(0),
     m_current(0),
     m_memory(nullptr),
     m_initialized(false)
   {}
 
-  LinearStorage::~LinearStorage()
+  StackStorage::~StackStorage()
   {
     destroy();
   }
 
-  void LinearStorage::initialize(SizeT capacity)
+  void StackStorage::initialize(SizeT capacity)
   {
     if (m_initialized)
-      throw RuntimeErrorException("LinearStorage is already initialized.");
+      throw RuntimeErrorException("StackStorage is already initialized.");
 
     if (capacity == 0)
       throw InvalidArgumentException("Capacity must be greater than zero.");
@@ -47,20 +47,20 @@ namespace hc::memory
     m_initialized = true;
   }
 
-  bool LinearStorage::isInitialized() const noexcept
+  bool StackStorage::isInitialized() const noexcept
   {
     return m_initialized;
   }
 
-  SizeT LinearStorage::getCapacity() const noexcept
+  SizeT StackStorage::getCapacity() const noexcept
   {
     return m_capacity;
   }
 
-  void* LinearStorage::allocate(SizeT size)
+  void* StackStorage::allocate(SizeT size)
   {
     if (!m_initialized)
-      throw RuntimeErrorException("LinearStorage is not initialized.");
+      throw RuntimeErrorException("StackStorage is not initialized.");
 
     if (size == 0)
       throw InvalidArgumentException("Size must be greater than zero.");
@@ -84,10 +84,9 @@ namespace hc::memory
     return static_cast<void*>(reinterpret_cast<Byte*>(header) + sizeof(AllocationHeader));
   }
 
-  void LinearStorage::free(void* ptr)
+  void StackStorage::free(void* ptr) noexcept
   {
-    if (!m_initialized)
-      throw RuntimeErrorException("LinearStorage is not initialized.");
+    HC_ASSERT(m_initialized && "StackStorage is not initialized.");
 
     if (ptr == nullptr)
       return;
@@ -95,8 +94,8 @@ namespace hc::memory
     UIntPtr const base = reinterpret_cast<UIntPtr>(m_memory);
     UIntPtr const userPtr = reinterpret_cast<UIntPtr>(ptr);
 
-    if (userPtr < base + sizeof(AllocationHeader) || userPtr >= base + m_current)
-      throw RuntimeErrorException("Pointer does not belong to LinearStorage.");
+    HC_ASSERT(userPtr >= base + sizeof(AllocationHeader) && userPtr < base + m_current
+      && "Pointer does not belong to StackStorage.");
 
     auto* const header = reinterpret_cast<const AllocationHeader*>(userPtr - sizeof(AllocationHeader));
     const UIntPtr headerPtr = reinterpret_cast<UIntPtr>(header);
@@ -104,21 +103,21 @@ namespace hc::memory
     const SizeT expectedHeaderOffset = header->previousCurrent
       + AlignAddressAdjustment(base + header->previousCurrent, alignof(AllocationHeader));
 
-    if (headerOffset != expectedHeaderOffset || headerOffset + sizeof(AllocationHeader) + header->size != m_current)
-      throw RuntimeErrorException("LinearStorage can only free the most recent allocation.");
+    HC_ASSERT(headerOffset == expectedHeaderOffset && headerOffset + sizeof(AllocationHeader) + header->size == m_current
+      && "StackStorage can only free the most recent allocation.");
 
     m_current = header->previousCurrent;
   }
 
-  void LinearStorage::reset()
+  void StackStorage::reset()
   {
     if (!m_initialized)
-      throw RuntimeErrorException("LinearStorage is not initialized.");
+      throw RuntimeErrorException("StackStorage is not initialized.");
 
     m_current = 0;
   }
 
-  void LinearStorage::destroy() noexcept
+  void StackStorage::destroy() noexcept
   {
     if (m_memory != nullptr)
     {
