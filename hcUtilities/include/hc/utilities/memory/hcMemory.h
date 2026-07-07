@@ -99,13 +99,13 @@ namespace hc
     }
 
     /**
-     * Calculate the adjustment needed to align the given address to the specified
-     * alignment.
+     * Calculate the adjustment (in bytes) needed to align the given address to the
+     * specified alignment.
      *
      * @param address The address to align.
      * @param alignment The alignment to align to. Must be a power of two.
      *
-     * @return The adjustment needed to align the address.
+     * @return The adjustment needed to align the address in bytes.
      */
     inline SizeT AlignAddressAdjustment(UIntPtr address, SizeT alignment)
     {
