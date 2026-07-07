@@ -21,6 +21,9 @@ set(HC_VERSION_MAJOR 0)
 set(HC_VERSION_MINOR 1)
 set(HC_VERSION_PATCH 0)
 
+# Enable CMake's built-in testing engine (CTest)
+enable_testing()
+
 # Output directories
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -71,6 +74,7 @@ add_subdirectory(hcCore)
 add_subdirectory(hcEditor)
 add_subdirectory(hcGraphicsOpenGL)
 add_subdirectory(hcUtilities)
+add_subdirectory(hcUtilitiesUTests)
 add_subdirectory(hcWindowSfml)
 
 # Editor as startup project
