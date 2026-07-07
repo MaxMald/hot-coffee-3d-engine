@@ -1,17 +1,19 @@
 #include "hc/utilities/memory/hcPoolStorage.h"
 
 #include <cstdlib>
+#include "hc/utilities/memory/hcMemory.h"
 
 namespace hc
 {
   namespace memory
   {
     PoolStorage::PoolStorage() :
-      m_initialized(false),
       m_blockSize(0),
       m_blockCount(0),
+      m_alignment(0),
       m_memory(nullptr),
-      m_freeList(nullptr)
+      m_freeList(nullptr),
+      m_initialized(false)
     {}
 
     PoolStorage::~PoolStorage()
@@ -19,7 +21,7 @@ namespace hc
       destroy();
     }
 
-    void PoolStorage::initialize(SizeT blockSize, SizeT blockCount)
+    void PoolStorage::initialize(SizeT blockSize, SizeT blockCount, SizeT alignment)
     {
       if (m_initialized)
         throw RuntimeErrorException("PoolStorage is already initialized.");
@@ -30,36 +32,45 @@ namespace hc
       if (blockSize < sizeof(void*))
         throw InvalidArgumentException("Block size must be at least the size of a pointer.");
 
-      if (blockSize % alignof(void*) != 0)
-        throw InvalidArgumentException("Block size must be a multiple of the pointer size.");
+      if (!IsAlignmentPowerOfTwo(alignment))
+        throw InvalidArgumentException("Alignment must be a power of two.");
+
+      if (blockSize % alignment != 0)
+        throw InvalidArgumentException("Block size must be a multiple of the alignment.");
 
       if (blockCount > SIZE_MAX / blockSize)
         throw InvalidArgumentException("Block size and block count are too large, causing overflow.");
 
-      m_memory = std::malloc(blockSize * blockCount);
-      if (!m_memory)
-        throw std::bad_alloc();
-
-      m_freeList = m_memory;
-
-      Byte* currentBlock = static_cast<Byte*>(m_memory);
-      for (SizeT i = 0; i < blockCount - 1; ++i)
+      try
       {
-        *reinterpret_cast<void**>(currentBlock) = currentBlock + blockSize;
-        currentBlock += blockSize;
-      }
-      *reinterpret_cast<void**>(currentBlock) = nullptr;
+        m_memory = AlignedAlloc(blockSize * blockCount, alignment);
+        m_freeList = m_memory;
 
-      m_initialized = true;
-      m_blockSize = blockSize;
-      m_blockCount = blockCount;
+        Byte* currentBlock = static_cast<Byte*>(m_memory);
+        for (SizeT i = 0; i < blockCount - 1; ++i)
+        {
+          *reinterpret_cast<void**>(currentBlock) = currentBlock + blockSize;
+          currentBlock += blockSize;
+        }
+        *reinterpret_cast<void**>(currentBlock) = nullptr;
+
+        m_initialized = true;
+        m_blockSize = blockSize;
+        m_blockCount = blockCount;
+        m_alignment = alignment;
+      }
+      catch (...)
+      {
+        destroy();
+        throw;
+      }
     }
 
     void PoolStorage::destroy()
     {
       if (m_memory != nullptr)
       {
-        std::free(m_memory);
+        AlignedFree(m_memory, m_alignment);
         m_memory = nullptr;
       }
 
@@ -67,6 +78,7 @@ namespace hc
       m_initialized = false;
       m_blockSize = 0;
       m_blockCount = 0;
+      m_alignment = 0;
     }
 
     void* PoolStorage::allocate()
@@ -87,8 +99,17 @@ namespace hc
       if (ptr == nullptr)
         return;
 
-      HC_ASSERT(m_initialized && "PoolStorage is not initialized.");
-      HC_ASSERT(owns(ptr) && "Pointer does not belong to this PoolStorage.");
+      if (!m_initialized)
+      {
+        HC_ASSERT(false && "PoolStorage is not initialized.");
+        return;
+      }
+
+      if (!owns(ptr))
+      {
+        HC_ASSERT(false && "Pointer does not belong to this PoolStorage.");
+        return;
+      }
 
       *reinterpret_cast<void**>(ptr) = m_freeList;
       m_freeList = ptr;
@@ -99,7 +120,11 @@ namespace hc
       if (ptr == nullptr)
         return false;
 
-      HC_ASSERT(m_initialized && "PoolStorage is not initialized.");
+      if (!m_initialized)
+      {
+        HC_ASSERT(false && "PoolStorage is not initialized.");
+        return false;
+      }
 
       const UIntPtr start = reinterpret_cast<UIntPtr>(m_memory);
       const UIntPtr end = start + m_blockSize * m_blockCount;

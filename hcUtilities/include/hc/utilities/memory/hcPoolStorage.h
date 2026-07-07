@@ -29,10 +29,12 @@ namespace hc
        *
        * @param blockSize Size of each block in bytes.
        * @param blockCount Number of blocks in the pool.
+       * @param alignment Alignment of each block in bytes (default is max alignment).
        */
       void initialize(
         SizeT blockSize,
-        SizeT blockCount
+        SizeT blockCount,
+        SizeT alignment = alignof(std::max_align_t)
       );
 
       /**
@@ -92,11 +94,12 @@ namespace hc
       bool isInitialized() const;
 
     private:
-      bool m_initialized = false;
       SizeT m_blockSize = 0;
       SizeT m_blockCount = 0;
+      SizeT m_alignment = 0;
       void* m_memory = nullptr;
       void* m_freeList = nullptr;
+      bool m_initialized = false;
     };
   }
 }

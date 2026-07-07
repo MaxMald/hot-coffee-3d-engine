@@ -6,8 +6,51 @@ namespace hc
 {
   namespace memory
   {
+    /**
+     * @brief Allocates a block of memory of the specified size.
+     *
+     * You must free the allocated memory using Free() when it is no longer needed.
+     *
+     * @param size The size of the memory block to allocate in bytes.
+     *
+     * @return A pointer to the allocated memory block.
+     */
     HC_UTILITY_EXPORT void* Alloc(SizeT size);
+
+    /**
+     * @brief Allocates a block of memory of the specified size with the specified
+     * alignment.
+     *
+     * You must free the allocated memory using AlignedFree() when it is no longer needed.
+     *
+     * @param size The size of the memory block to allocate in bytes.
+     * @param alignment The alignment of the memory block. Must be a power of two.
+     *
+     * @return A pointer to the allocated memory block.
+     */
+    HC_UTILITY_EXPORT void* AlignedAlloc(SizeT size, SizeT alignment);
+
+    /**
+     * @brief Frees a previously allocated block of memory.
+     *
+     * You must ensure that the memory was allocated using Alloc() before calling this
+     * function.
+     *
+     * @param ptr A pointer to the memory block to free. If nullptr, no action is taken.
+     */
     HC_UTILITY_EXPORT void Free(void* ptr);
+
+    /**
+     * @brief Frees a previously allocated block of memory that was allocated with
+     * AlignedAlloc.
+     *
+     * You must ensure that the memory was allocated using AlignedAlloc() before calling
+     * this function.
+     *
+     * @param ptr A pointer to the memory block to free. If nullptr, no action is taken.
+     * @param alignment The alignment of the memory block. Must be a power of two.
+     */
+    HC_UTILITY_EXPORT void AlignedFree(void* ptr, SizeT alignment);
 
     template<typename T>
     T* AllocArray(SizeT count)
@@ -26,6 +69,18 @@ namespace hc
 
     template<typename T>
     using UniqueArrayPtr = UniquePtrWithDeleter<T[], ArrayDeleter<T>>;
+
+    /**
+     * Check if the given alignment is a power of two.
+     *
+     * @param alignment The alignment to check.
+     *
+     * @return True if the alignment is a power of two, false otherwise.
+     */
+    inline bool IsAlignmentPowerOfTwo(SizeT alignment)
+    {
+      return (alignment != 0) && ((alignment & (alignment - 1)) == 0);
+    }
 
     /**
      * Shift the given address upwards if/as necessary to make it a multiple of the
