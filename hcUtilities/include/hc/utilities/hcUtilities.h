@@ -33,4 +33,6 @@
 #include "hc/utilities/io/hcBinaryReader.h"
 #include "hc/utilities/io/hcBinaryWriter.h"
 #include "hc/utilities/io/hcISerializable.h"
+#include "hc/utilities/memory/hcPoolStorage.h"
+#include "hc/utilities/memory/hcPoolAllocator.h"
 #include "hc/utilities/hcUUID.h"
