@@ -125,6 +125,38 @@ namespace hc::editor
     m_camera.lookAt(m_target, Vector3f(0.0f, 1.0f, 0.0f));
   }
 
+  projectionType::Type SceneViewportCamera::getCameraProjectionType() const
+  {
+    return m_camera.getProjection();
+  }
+
+  void SceneViewportCamera::setCameraProjectionType(projectionType::Type type)
+  {
+    m_camera.setProjectionType(type);
+  }
+
+  Angle SceneViewportCamera::getCameraFovY() const
+  {
+    if (m_camera.getProjection() != projectionType::Type::Perspective)
+      return Angle::FromDegrees(0.0f);
+
+    const ICameraProjection* projection = m_camera.getCameraProjection();
+    const PerspectiveCameraProjection* perspectiveProjection
+      = reinterpret_cast<const PerspectiveCameraProjection*>(projection);
+    return perspectiveProjection->getFovY();
+  }
+
+  void SceneViewportCamera::setCameraFovY(const Angle& fov)
+  {
+    if (m_camera.getProjection() != projectionType::Type::Perspective)
+      return;
+
+    ICameraProjection* projection = m_camera.getCameraProjection();
+    PerspectiveCameraProjection* perspectiveProjection
+      = reinterpret_cast<PerspectiveCameraProjection*>(projection);
+    perspectiveProjection->setFovY(fov);
+  }
+
   void SceneViewportCamera::orbit(const Vector2f & mouseDelta)
   {
     float yaw = -mouseDelta.x * m_cameraOrbitSensitivity;

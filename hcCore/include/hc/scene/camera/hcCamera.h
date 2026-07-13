@@ -220,6 +220,13 @@ namespace hc
      */
     ICameraProjection* getCameraProjection();
 
+    /**
+     * @brief Gets the active camera projection implementation (const version).
+     * 
+     * @return Pointer to the active ICameraProjection.
+     */
+    const ICameraProjection* getCameraProjection() const;
+
   private:
     UUID m_id;
     Vector3f m_position;
