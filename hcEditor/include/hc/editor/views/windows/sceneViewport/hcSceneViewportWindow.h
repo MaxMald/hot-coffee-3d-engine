@@ -48,6 +48,7 @@ namespace hc::editor
     void setSnapValues(const Vector3f& snapValues);
     sceneViewportRenderTargetType::Type getCurrentRenderTarget() const;
     void setCurrentRenderTarget(sceneViewportRenderTargetType::Type renderTarget);
+    SceneViewportCamera& getViewportCamera();
     void destroy() override;
 
   protected:

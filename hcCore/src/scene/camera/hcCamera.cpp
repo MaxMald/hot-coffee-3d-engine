@@ -226,6 +226,11 @@ namespace hc
     }
   }
 
+  const ICameraProjection* Camera::getCameraProjection() const
+  {
+    return const_cast<Camera*>(this)->getCameraProjection();
+  }
+
   void Camera::recalculateUp()
   {
     Vector3f right = getRight();
