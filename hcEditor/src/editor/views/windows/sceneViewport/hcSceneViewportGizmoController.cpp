@@ -40,6 +40,11 @@ namespace hc::editor
     if (windowSize.x <= 0 || windowSize.y <= 0)
       return;
 
+    if (m_camera.getCameraProjectionType() == projectionType::Type::Orthographic)
+      ImGuizmo::SetOrthographic(true);
+    else
+      ImGuizmo::SetOrthographic(false);
+
     ImGuizmo::SetDrawlist();
     ImGuizmo::SetRect(
       windowPosition.x,

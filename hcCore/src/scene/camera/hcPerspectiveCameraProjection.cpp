@@ -66,7 +66,9 @@ namespace hc
   {
     if (m_fovY != fovY)
     {
-      m_fovY = fovY;
+      float fovYRadians = fovY.toRadians();
+      fovYRadians = Math::Clamp(fovYRadians, 0.01f, Math::Pi - 0.01f);
+      m_fovY = Angle::FromRadians(fovYRadians);
       m_isDirty = true;
     }
   }

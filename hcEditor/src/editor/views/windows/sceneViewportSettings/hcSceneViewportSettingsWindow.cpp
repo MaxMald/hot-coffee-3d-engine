@@ -38,6 +38,34 @@ namespace hc::editor
   )
   {
     /*********************************/
+    /* Camera Settings               */
+
+    SceneViewportCamera& viewportCamera = viewportWindow.getViewportCamera();
+    projectionType::Type currentProjectionType = viewportCamera.getCameraProjectionType();
+
+    ImGui::Text("Camera Projection");
+    ImGui::Separator();
+    if (ImGui::RadioButton("Perspective", currentProjectionType == projectionType::Type::Perspective))
+    {
+      viewportCamera.setCameraProjectionType(projectionType::Type::Perspective);
+      currentProjectionType = projectionType::Type::Perspective;
+    }
+
+    ImGui::SameLine();
+    if (ImGui::RadioButton("Orthographic", currentProjectionType == projectionType::Type::Orthographic))
+    {
+      viewportCamera.setCameraProjectionType(projectionType::Type::Orthographic);
+      currentProjectionType = projectionType::Type::Orthographic;
+    }
+
+    if (currentProjectionType == projectionType::Type::Perspective)
+    {
+      float fov = viewportCamera.getCameraFovY().toDegrees();
+      if (ImGui::DragFloat("Field of View (Degrees)", &fov, 0.1f, 0.01f, 179.99f))
+        viewportCamera.setCameraFovY(Angle::FromDegrees(fov));
+    }
+
+    /*********************************/
     /* Mode and Operation Settings */
 
     ImGuizmo::MODE currentGizmoMode =

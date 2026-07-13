@@ -121,6 +121,11 @@ namespace hc::editor
     m_currentRenderTarget = renderTarget;
   }
 
+  SceneViewportCamera& SceneViewportWindow::getViewportCamera()
+  {
+    return m_camera;
+  }
+
   void SceneViewportWindow::destroy()
   {
     m_selectionService.unsubscribe(this);
