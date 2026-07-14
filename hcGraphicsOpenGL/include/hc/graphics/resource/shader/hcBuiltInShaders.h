@@ -540,5 +540,34 @@ namespace hc
         FragColor = color;
       }
     )";
+
+    inline const String ShadowMapVertex = R"(
+      #version 420 core
+
+      layout(std140, binding = 1) uniform CameraFrameBlock
+      {
+        mat4 projection;
+        mat4 view;
+        vec3 cameraPosition;
+        float cPadding0;
+      };
+
+      layout(location = 0) in vec3 aPosition;
+      uniform mat4 uModel;
+
+      void main()
+      {
+        gl_Position = projection * view * uModel * vec4(aPosition, 1.0);
+      }
+    )";
+
+    inline const String ShadowMapFragment = R"(
+      #version 420 core
+
+      void main()
+      {
+        // Empty fragment shader for shadow mapping; depth is automatically written to the depth buffer
+      }
+    )";
   }
 }

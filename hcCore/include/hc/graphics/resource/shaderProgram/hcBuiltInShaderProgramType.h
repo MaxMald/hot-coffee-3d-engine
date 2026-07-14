@@ -14,6 +14,7 @@ namespace hc
       DeferredLighting,
       Skybox,
       FinalPass,
+      ShadowMap,
       Count
     };
 
