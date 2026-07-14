@@ -33,7 +33,6 @@ namespace hc::editor
     float range = light.getRange();
     if (ImGui::DragFloat("Range", &range, 0.5f, 0.0f))
       light.setRange(range);
-    
   }
 
   ALightComponentDrawer::ALightComponentDrawer(componentType::Type type) :
