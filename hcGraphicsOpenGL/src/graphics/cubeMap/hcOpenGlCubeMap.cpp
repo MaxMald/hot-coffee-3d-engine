@@ -54,54 +54,54 @@ namespace hc
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(right.getFormat(), right.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(right.getFormat(), right.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(right.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(right.getFormat()),
         GL_UNSIGNED_BYTE, right.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(left.getFormat(), left.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(left.getFormat(), left.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(left.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(left.getFormat()),
         GL_UNSIGNED_BYTE, left.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(top.getFormat(), top.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(top.getFormat(), top.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(top.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(top.getFormat()),
         GL_UNSIGNED_BYTE, top.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(bottom.getFormat(), bottom.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(bottom.getFormat(), bottom.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(bottom.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(bottom.getFormat()),
         GL_UNSIGNED_BYTE, bottom.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(front.getFormat(), front.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(front.getFormat(), front.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(front.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(front.getFormat()),
         GL_UNSIGNED_BYTE, front.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(back.getFormat(), back.getColorSpace()),
+        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(back.getFormat(), back.getColorSpace()),
         width, height, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(back.getFormat()),
+        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(back.getFormat()),
         GL_UNSIGNED_BYTE, back.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();

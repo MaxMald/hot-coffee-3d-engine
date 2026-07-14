@@ -21,7 +21,6 @@ namespace hc::editor
 
   void SceneViewportLightGizmoRenderer::prepare()
   {
-    IModelAssetManager& modelAssetManager = m_assetManager.getModelAssetManager();
     IMeshManager& meshManager = m_graphicsManager.getMeshManager();
 
     m_line = MeshShapeFactory::CreateLine(

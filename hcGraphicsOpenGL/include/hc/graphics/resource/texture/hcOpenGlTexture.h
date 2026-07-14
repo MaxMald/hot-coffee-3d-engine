@@ -32,31 +32,31 @@ namespace hc
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat
+      textureFormatType::Type colorFormat
     ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace
     ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type, const Color&)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type, const Color&)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace,
       const Color& initColor
     ) override;
@@ -76,9 +76,9 @@ namespace hc
     UInt32 getHeight() const override;
 
     /**
-     * @copydoc ITexture::getColorFormat
+     * @copydoc ITexture::getTextureFormat
      */
-    colorFormatType::Type getColorFormat() const override;
+    textureFormatType::Type getTextureFormat() const override;
 
     /**
     * @copydoc ITexture::getColorSpace
@@ -147,7 +147,7 @@ namespace hc
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace,
       const void* initData
     );
@@ -157,7 +157,7 @@ namespace hc
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;
-    colorFormatType::Type m_colorFormat;
+    textureFormatType::Type m_textureFormat;
     colorSpaceType::Type m_colorSpace;
     bool m_created;
 

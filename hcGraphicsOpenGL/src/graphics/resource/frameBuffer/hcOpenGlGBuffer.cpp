@@ -51,7 +51,7 @@ namespace hc
 
       m_positionAndDepthTexture.initialize(
         width, height,
-        colorFormatType::RGBA16F, colorSpaceType::Linear
+        textureFormatType::RGBA16F, colorSpaceType::Linear
       );
 
       if (!m_positionAndDepthTexture.isValid())
@@ -59,7 +59,7 @@ namespace hc
 
       m_normalRoughnessTexture.initialize(
         width, height,
-        colorFormatType::RGBA16F, colorSpaceType::Linear
+        textureFormatType::RGBA16F, colorSpaceType::Linear
       );
 
       if (!m_normalRoughnessTexture.isValid())
@@ -67,7 +67,7 @@ namespace hc
 
       m_albedoAlphaTexture.initialize(
         width, height,
-        colorFormatType::RGBA8, colorSpaceType::Linear
+        textureFormatType::RGBA8, colorSpaceType::Linear
       );
 
       if (!m_albedoAlphaTexture.isValid())
@@ -75,7 +75,7 @@ namespace hc
 
       m_materialParametersTexture.initialize(
         width, height,
-        colorFormatType::RGBA8, colorSpaceType::Linear
+        textureFormatType::RGBA8, colorSpaceType::Linear
       );
 
       if (!m_materialParametersTexture.isValid())

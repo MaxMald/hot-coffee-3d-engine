@@ -1,6 +1,6 @@
 #include "hc/graphics/cubeMap/hcCubeMapFactory.h"
 
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptor.h"
 #include "hc/assets/cubeMapDescriptor/hcICubeMapDescriptorAssetManager.h"
@@ -53,7 +53,7 @@ namespace hc
       SizeT numPixels =
         static_cast<SizeT>(descriptor->faceSize)
         * static_cast<SizeT>(descriptor->faceSize);
-      SizeT numChannels = colorFormatType::GetChannelCount(descriptor->format);
+      SizeT numChannels = textureFormatType::GetChannelCount(descriptor->format);
       SizeT dataSize = numPixels * numChannels;
 
       BufferByte defaultData(dataSize);

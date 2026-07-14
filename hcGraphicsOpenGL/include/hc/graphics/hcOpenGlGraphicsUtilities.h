@@ -37,27 +37,22 @@ namespace hc
     polygonFillType::Type GetPolygonFillTypeFromOpenGlPolygonMode(UInt32 glPolygonMode);
 
     /**
-     * @brief Gets the OpenGL internal format from a color format type and color space
+     * @brief Gets the OpenGL internal format from a texture format type and color space
      * type.
      */
-    UInt32 GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(
-      colorFormatType::Type colorFormat,
-      colorSpaceType::Type spaceColor
+    UInt32 GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(
+      textureFormatType::Type textureFormat,
+      colorSpaceType::Type colorSpace
     );
 
     /**
-     * @brief Converts a color format type to the corresponding OpenGL format.
+     * @brief Converts a texture format type to the corresponding OpenGL format.
      */
-    UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat);
+    UInt32 GetOpenGlFormatFromTextureFormatType(textureFormatType::Type textureFormat);
     
     /**
-     * @brief Gets the OpenGL data type from a color format type.
+     * @brief Gets the OpenGL data type from a texture format type.
      */
-    UInt32 GetOpenGLDataTypeFromColorFormatType(colorFormatType::Type colorFormat);
-
-    /**
-     * @brief Gets the number of color channels from an OpenGL format.
-     */
-    UInt8 GetChannelCountFromOpenGlFormat(UInt32 glFormat);
+    UInt32 GetOpenGLDataTypeFromTextureFormatType(textureFormatType::Type textureFormat);
   }
 }

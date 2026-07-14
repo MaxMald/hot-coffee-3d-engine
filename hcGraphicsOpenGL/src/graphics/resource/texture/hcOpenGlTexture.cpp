@@ -9,7 +9,7 @@ namespace hc
     m_textureId(0),
     m_width(0),
     m_height(0),
-    m_colorFormat(colorFormatType::RGBA8),
+    m_textureFormat(textureFormatType::RGBA8),
     m_colorSpace(colorSpaceType::Linear),
     m_created(false)
   {}
@@ -38,7 +38,7 @@ namespace hc
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    colorFormatType::Type colorFormat
+    textureFormatType::Type colorFormat
   )
   {
     initialize(
@@ -53,7 +53,7 @@ namespace hc
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    colorFormatType::Type colorFormat,
+    textureFormatType::Type colorFormat,
     colorSpaceType::Type colorSpace
   )
   {
@@ -69,7 +69,7 @@ namespace hc
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    colorFormatType::Type colorFormat,
+    textureFormatType::Type colorFormat,
     colorSpaceType::Type colorSpace,
     const Color& initColor
   )
@@ -81,7 +81,7 @@ namespace hc
 
     switch (colorFormat)
     {
-    case colorFormatType::RGB8:
+    case textureFormatType::RGB8:
     {
       BufferByte initData(0);
       TextureBufferFactory::CreateRGB8(width, height, initColor, initData);
@@ -94,7 +94,7 @@ namespace hc
       );
     }
     break;
-    case colorFormatType::RGBA8:
+    case textureFormatType::RGBA8:
     {
       BufferByte initData(0);
       TextureBufferFactory::CreateRGBA8(width, height, initColor, initData);
@@ -107,7 +107,7 @@ namespace hc
       );
     }
     break;
-    case colorFormatType::RGB16F:
+    case textureFormatType::RGB16F:
     {
       BufferFloat initData(0);
       TextureBufferFactory::CreateRGB16F(width, height, initColor, initData);
@@ -120,7 +120,7 @@ namespace hc
       );
     }
     break;
-    case colorFormatType::RGBA16F:
+    case textureFormatType::RGBA16F:
     {
       BufferFloat initData(0);
       TextureBufferFactory::CreateRGBA16F(width, height, initColor, initData);
@@ -148,9 +148,9 @@ namespace hc
     return m_height;
   }
 
-  colorFormatType::Type OpenGlTexture::getColorFormat() const
+  textureFormatType::Type OpenGlTexture::getTextureFormat() const
   {
-    return m_colorFormat;
+    return m_textureFormat;
   }
 
   colorSpaceType::Type OpenGlTexture::getColorSpace() const
@@ -177,11 +177,11 @@ namespace hc
       glTexImage2D(
         GL_TEXTURE_2D,
         0,
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(m_colorFormat, m_colorSpace)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(m_textureFormat, m_colorSpace)),
         static_cast<Int32>(width), static_cast<Int32>(height),
         0,
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(m_colorFormat)),
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromColorFormatType(m_colorFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(m_textureFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(m_textureFormat)),
         nullptr
       );
 
@@ -244,7 +244,7 @@ namespace hc
 
     m_width = 0;
     m_height = 0;
-    m_colorFormat = colorFormatType::RGBA8;
+    m_textureFormat = textureFormatType::RGBA8;
     m_colorSpace = colorSpaceType::Linear;
     m_created = false;
   }
@@ -263,7 +263,7 @@ namespace hc
   void OpenGlTexture::initialize(
     UInt32 width,
     UInt32 height,
-    colorFormatType::Type colorFormat,
+    textureFormatType::Type colorFormat,
     colorSpaceType::Type colorSpace,
     const void* initData
   )
@@ -289,11 +289,11 @@ namespace hc
       glTexImage2D(
         GL_TEXTURE_2D,
         0,
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(colorFormat, colorSpace)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(colorFormat, colorSpace)),
         static_cast<Int32>(width), static_cast<Int32>(height),
         0,
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromColorFormatType(colorFormat)),
-        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromColorFormatType(colorFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(colorFormat)),
+        static_cast<GLenum>(openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(colorFormat)),
         initData
       );
 
@@ -314,7 +314,7 @@ namespace hc
     m_width = width;
     m_height = height;
     m_colorSpace = colorSpace;
-    m_colorFormat = colorFormat;
+    m_textureFormat = colorFormat;
     m_created = true;
 
     glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));

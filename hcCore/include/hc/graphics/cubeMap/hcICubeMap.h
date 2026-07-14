@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 
 namespace hc
 {

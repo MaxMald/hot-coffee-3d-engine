@@ -39,7 +39,7 @@ namespace hc
     {
       m_colorTexture.initialize(
         width, height,
-        colorFormatType::RGBA8,
+        textureFormatType::RGBA8,
         colorSpaceType::Linear
       );
 

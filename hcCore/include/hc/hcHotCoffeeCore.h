@@ -2,7 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 #include "hc/utilities/hcColorSpaceType.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
 #include "hc/hcHotCoffeeEngine.h"
@@ -62,6 +62,7 @@
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
 #include "hc/graphics/hcCameraFrameData.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"

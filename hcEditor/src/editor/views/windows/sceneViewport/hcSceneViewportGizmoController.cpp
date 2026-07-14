@@ -22,7 +22,7 @@ namespace hc::editor
   SceneViewportGizmoController::~SceneViewportGizmoController()
   {}
 
-  void SceneViewportGizmoController::update(const Time& elapsedTime)
+  void SceneViewportGizmoController::update(const Time&)
   {
     if (m_inputManager.getKeyboardKeyState(keyboardKey::T).isPressed())
       m_currentOperation = ImGuizmo::OPERATION::TRANSLATE;
@@ -143,8 +143,8 @@ namespace hc::editor
   }
 
   void SceneViewportGizmoController::drawGizmo(
-    const Vector2f& windowPosition,
-    const Vector2f& windowSize
+    const Vector2f&,
+    const Vector2f&
   )
   {
     Matrix4 view = m_camera.getCamera().getViewMatrix();
