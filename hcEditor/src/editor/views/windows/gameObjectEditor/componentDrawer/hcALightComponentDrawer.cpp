@@ -18,6 +18,10 @@ namespace hc::editor
     if (ImGui::Checkbox("Enabled", &enabled))
       light.setEnabled(enabled);
 
+    bool shadowsEnabled = light.isShadowsEnabled();
+    if (ImGui::Checkbox("Shadows Enabled", &shadowsEnabled))
+      light.setShadowsEnabled(shadowsEnabled);
+
     Color color = light.getColor();
     if (imguiUtilities::DrawColorEdit3("Color", color))
       light.setColor(color);

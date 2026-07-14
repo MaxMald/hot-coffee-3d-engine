@@ -107,13 +107,28 @@ namespace hc
      */
     bool isEnabled() const;
 
+    /**
+     * @brief Enables or disables shadow casting for the light.
+     * 
+     * @param isEnabled True to enable shadows, false to disable.
+     */
+    void setShadowsEnabled(bool isEnabled);
+
+    /**
+     * @brief Checks if shadow casting is enabled for the light.
+     * 
+     * @return True if shadow casting is enabled, false otherwise.
+     */
+    bool isShadowsEnabled() const;
+
   protected:
-    bool enabled;
-    lightType::Type m_type;
     Color m_color;
+    Vector3f m_position;
     float m_intensity;
     float m_range;
-    Vector3f m_position;
+    lightType::Type m_type;
+    bool m_enabled;
+    bool m_shadowsEnabled;
 
     ALight(lightType::Type type);
   };
