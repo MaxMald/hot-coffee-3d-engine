@@ -34,16 +34,13 @@ namespace hc::editor
     if (ImGui::Checkbox("Shadows Enabled", &shadowsEnabled))
       light.setShadowsEnabled(shadowsEnabled);
 
-    if (shadowsEnabled)
-    {
-      float shadowBias = light.getShadowBias();
-      if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.0001f, 0.0f, 1.0f))
-        light.setShadowBias(shadowBias);
+    float shadowBias = light.getShadowBias();
+    if (ImGui::DragFloat("Shadow Bias", &shadowBias, 0.0001f, 0.0f, 1.0f))
+      light.setShadowBias(shadowBias);
 
-      float shadowStrength = light.getShadowStrength();
-      if (ImGui::DragFloat("Shadow Strength", &shadowStrength, 0.01f, 0.0f, 1.0f))
-        light.setShadowStrength(shadowStrength);
-    }
+    float shadowStrength = light.getShadowStrength();
+    if (ImGui::DragFloat("Shadow Strength", &shadowStrength, 0.01f, 0.0f, 1.0f))
+      light.setShadowStrength(shadowStrength);
   }
 
   ALightComponentDrawer::ALightComponentDrawer(componentType::Type type) :
