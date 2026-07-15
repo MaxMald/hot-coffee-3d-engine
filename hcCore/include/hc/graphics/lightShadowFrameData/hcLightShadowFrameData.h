@@ -6,8 +6,8 @@ namespace hc
 {
   /**
    * @brief Aggregated light shadow data for a single frame, containing arrays of
-   * directional light shadow data. This struct is intended to be
-   * uploaded to the GPU once per frame as part of a light shadow buffer.
+   * directional light shadow data. This struct is intended to be uploaded to the GPU once
+   * per frame as part of a light shadow buffer.
    */
   struct alignas(16) HC_CORE_EXPORT LightShadowFrameData
   {

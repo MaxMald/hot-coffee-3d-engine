@@ -8,6 +8,7 @@ namespace hc
 {
   static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
   static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
+  static constexpr UInt32 LIGHT_SHADOWS_BINDING_POINT = 3;
 
   FrameRenderer::FrameRenderer() :
     m_forwardRenderPipeline(),
@@ -16,6 +17,7 @@ namespace hc
     m_frameBufferA(),
     m_lightFrameUBO(),
     m_cameraFrameUBO(),
+    m_lightShadowManager(),
     m_drawCommands(),
     m_skybox(nullptr),
     m_currentRenderPipelineType(renderPipelineType::DeferredHybrid),
@@ -46,6 +48,7 @@ namespace hc
       m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
       m_cameraFrameUBO.initialize(CameraFrameData{});
       m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
+      m_lightShadowManager.initialize(LIGHT_SHADOWS_BINDING_POINT);
     }
     catch (const Exception& e)
     {
@@ -189,6 +192,7 @@ namespace hc
     m_deferredHybridRenderPipeline.destroy();
     m_finalRenderPass.destroy();
     m_frameBufferA.destroy();
+    m_lightShadowManager.destroy();
     m_lightFrameUBO.destroy();
     m_cameraFrameUBO.destroy();
     m_skybox = nullptr;

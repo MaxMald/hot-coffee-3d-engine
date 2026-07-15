@@ -6,6 +6,7 @@
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
+#include "hc/graphics/lightShadowManager/hcLightShadowManager.h"
 
 namespace hc
 {
@@ -43,6 +44,7 @@ namespace hc
     OpenGlFrameBuffer m_frameBufferA;
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
+    LightShadowManager m_lightShadowManager;
     Vector<DrawCommand> m_drawCommands;
     OpenGlCubeMap* m_skybox;
     renderPipelineType::Type m_currentRenderPipelineType;
