@@ -101,6 +101,14 @@ namespace hc
     const Vector<UniquePtr<GameObject>>& getRoots() const;
 
     /**
+     * @brief Populates the provided vector with pointers to all GameObjects in the
+     * scene graph, including all root objects and their descendants.
+     *
+     * @param outGameObjects Vector to populate with GameObject pointers.
+     */
+    void getAllGameObjects(Vector<GameObject*>& outGameObjects) const;
+
+    /**
      * @brief Removes and destroys all root GameObjects from the scene graph.
      */
     void clear();

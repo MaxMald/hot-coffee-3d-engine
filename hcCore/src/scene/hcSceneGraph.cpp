@@ -134,6 +134,15 @@ namespace hc
     return m_roots;
   }
 
+  void SceneGraph::getAllGameObjects(Vector<GameObject*>& outGameObjects) const
+  {
+    for (const UniquePtr<GameObject>& root : m_roots)
+    {
+      if (root)
+        root->getAllDescendants(outGameObjects);
+    }
+  }
+
   void SceneGraph::clear()
   {
     m_roots.clear();

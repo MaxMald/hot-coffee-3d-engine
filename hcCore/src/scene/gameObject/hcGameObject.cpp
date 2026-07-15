@@ -231,6 +231,15 @@ namespace hc
     return m_children;
   }
 
+  void GameObject::getAllDescendants(Vector<GameObject*>& outDescendants) const
+  {
+    for (const auto& child : m_children)
+    {
+      outDescendants.push_back(child.get());
+      child->getAllDescendants(outDescendants);
+    }
+  }
+
   Matrix4 GameObject::getWorldMatrix() const
   {
     if (m_parent)

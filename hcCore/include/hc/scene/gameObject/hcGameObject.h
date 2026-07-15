@@ -168,6 +168,14 @@ namespace hc
     const Vector<UniquePtr<GameObject>>& getChildren() const;
 
     /**
+     * @brief Populates the provided vector with pointers to all descendants of
+     * this GameObject, including children, grandchildren, etc.
+     *
+     * @param outDescendants Vector to populate with descendant pointers.
+     */
+    void getAllDescendants(Vector<GameObject*>& outDescendants) const;
+
+    /**
      * @brief Computes the world transformation matrix for this GameObject.
      *
      * @return The world matrix.

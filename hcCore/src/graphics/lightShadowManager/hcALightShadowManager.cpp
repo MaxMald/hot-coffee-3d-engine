@@ -1,26 +1,29 @@
-#include "hc/graphics/lightShadowFrameData/hcLightShadowFrameDataManager.h"
+#include "hc/graphics/lightShadowManager/hcALightShadowManager.h"
+
+#include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/light/hcDirectionalLight.h"
 
 namespace hc
 {
-  LightShadowFrameDataManager::LightShadowFrameDataManager() :
+  ALightShadowManager::ALightShadowManager() :
     m_lightShadowFrameData(),
-    m_countDirectionalLightShadows(0)
+    m_countDirectionalLightShadows(0),
+    m_shadowCasters()
   {}
 
-  LightShadowFrameDataManager::~LightShadowFrameDataManager()
-  {}
+  ALightShadowManager::~ALightShadowManager()
+  {
+    destroy();
+  }
 
-  void LightShadowFrameDataManager::initialize()
-  {}
-
-  void LightShadowFrameDataManager::clearLightShadowFrameData()
+  void ALightShadowManager::clear()
   {
     m_countDirectionalLightShadows = 0;
   }
 
-  Int32 LightShadowFrameDataManager::generateDirectionalLightShadowData(
-    const DirectionalLight& directionalLight
+  Int32 ALightShadowManager::generateDirectionalLightShadowData(
+    const DirectionalLight& directionalLight,
+    const SceneGraph& sceneGraph
   )
   {
     if (hasReachedMaxDirectionalLightShadows())
@@ -29,7 +32,9 @@ namespace hc
     DirectionalLightShadowFrameData& shadowData = m_lightShadowFrameData
       .directionalLightShadowData[m_countDirectionalLightShadows];
 
-    // TODO We should have a better way to calculate the size of the orthographic
+    // TODO
+    //
+    // We should have a better way to calculate the size of the orthographic
     // projection for directional lights, instead of hardcoding the values.
     //
     // For now, we will use a fixed size of 20x20 units for the orthographic projection.
@@ -65,14 +70,30 @@ namespace hc
     shadowData.shadowBias = directionalLight.getShadowBias();
     shadowData.shadowStrength = directionalLight.getShadowStrength();
     shadowData.LightViewProjectionMatrix = projectionMatrix * viewMatrix;
-    // TODO: Assign the appropriate shadow map index here.
-    //shadowData.shadowMapIndex = 0;
+
+    allocateShadowCasters(sceneGraph);
+    shadowData.shadowMapIndex = generateDirectionalLightShadowTexture(
+      shadowData.LightViewProjectionMatrix,
+      m_shadowCasters
+    );
+
+    if (shadowData.shadowMapIndex < 0)
+      return -1;
 
     Int32 newIndex = static_cast<Int32>(m_countDirectionalLightShadows);
     ++m_countDirectionalLightShadows;
     return newIndex;
   }
 
-  void LightShadowFrameDataManager::destroy()
-  {}
+  void ALightShadowManager::allocateShadowCasters(const SceneGraph & sceneGraph)
+  {
+    m_shadowCasters.clear();
+    sceneGraph.getAllGameObjects(m_shadowCasters);
+
+    // TODO
+    //
+    // Filter m_shadowCasters to only include GameObjects that have components capable of
+    // casting shadows. Also consider filtering based on the light's frustum or other
+    // criteria to optimize performance.
+  }
 }
