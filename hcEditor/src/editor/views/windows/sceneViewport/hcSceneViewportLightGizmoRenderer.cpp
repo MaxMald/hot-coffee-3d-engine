@@ -177,7 +177,7 @@ namespace hc::editor
     outerCircleTransform.setScale(Vector3f(coneRadius, 1.0f, coneRadius));
 
     renderContext.transform = cameraWorldMatrix * outerCircleTransform.getMatrix();
-    m_circle->draw(renderContext);
+    m_circle->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
 
     // Inner Circle
     coneHeight = Math::Cos(spotLight.getInnerConeAngle().toRadians());
@@ -190,14 +190,14 @@ namespace hc::editor
     innerCircleTransform.setScale(Vector3f(coneRadius, 1.0f, coneRadius));
 
     renderContext.transform = cameraWorldMatrix * innerCircleTransform.getMatrix();
-    m_circle->draw(renderContext);
+    m_circle->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
 
     // Range Line
     Transform rangeLineTransform;
     rangeLineTransform.setScale(Vector3f(1.0f, 1.0f, spotLight.getRange()));
 
     renderContext.transform = cameraWorldMatrix * rangeLineTransform.getMatrix();
-    m_line->draw(renderContext);
+    m_line->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
   }
 
   void SceneViewportLightGizmoRenderer::drawOmniLightGizmo(
@@ -225,17 +225,17 @@ namespace hc::editor
     sphereTransform.setScale(Vector3f(omniLight.getRange(), omniLight.getRange(), omniLight.getRange()));
 
     renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
-    m_circle->draw(renderContext);
+    m_circle->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
 
     // Ring 2
     sphereTransform.setRotation(0.0f, 0.0f, Math::HalfPi);
     renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
-    m_circle->draw(renderContext);
+    m_circle->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
 
     // Ring 3
     sphereTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
     renderContext.transform = cameraWorldMatrix * sphereTransform.getMatrix();
-    m_circle->draw(renderContext);
+    m_circle->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
   }
 
   void SceneViewportLightGizmoRenderer::drawDirectionalLightGizmo(
@@ -263,13 +263,13 @@ namespace hc::editor
     planeTransform.setRotation(Math::HalfPi, 0.0f, 0.0f);
 
     renderContext.transform = cameraWorldMatrix * planeTransform.getMatrix();
-    m_square->draw(renderContext);
+    m_square->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
 
     // Range Line
     Transform rangeLineTransform;
     rangeLineTransform.setScale(Vector3f(1.0f, 1.0f, directionalLight.getRange()));
     renderContext.transform = cameraWorldMatrix * rangeLineTransform.getMatrix();
-    m_line->draw(renderContext);
+    m_line->draw(renderContext, m_graphicsManager.getDrawCommandQueue());
   }
 
   void SceneViewportLightGizmoRenderer::drawLightIcon(

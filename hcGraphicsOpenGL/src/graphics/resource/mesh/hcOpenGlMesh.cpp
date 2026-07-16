@@ -25,7 +25,10 @@ namespace hc
     return m_id;
   }
 
-  void OpenGlMesh::draw(const RenderContext& renderContext)
+  void OpenGlMesh::draw(
+    const RenderContext& renderContext,
+    Vector<DrawCommand>& drawCommandQueue
+  ) const
   {
     assertIsValid();
 
@@ -34,7 +37,7 @@ namespace hc
 
     const Vector<ModelSubMesh>& subMeshes = m_subMeshes;
     for (const ModelSubMesh& submesh : subMeshes)
-      drawModelSubMesh(renderContext, distanceToCamera, submesh);
+      drawModelSubMesh(renderContext, distanceToCamera, submesh, drawCommandQueue);
   }
 
   void OpenGlMesh::initialize(
@@ -277,8 +280,9 @@ namespace hc
   void OpenGlMesh::drawModelSubMesh(
     const RenderContext& renderContext,
     float distanceToCamera,
-    const ModelSubMesh& submesh
-  )
+    const ModelSubMesh& submesh,
+    Vector<DrawCommand>& drawCommandQueue
+  ) const
   {
     SharedPtr<IMaterial> material;
     if (submesh.materialIndex < m_materials.size())
@@ -307,7 +311,7 @@ namespace hc
       OpenGlDrawData{ m_vao, m_drawMode }
     );
 
-    m_graphicsManager.draw(command);
+    drawCommandQueue.push_back(command);
   }
 
   void OpenGlMesh::updateVertexAndIndexBuffers(

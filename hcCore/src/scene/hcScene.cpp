@@ -135,7 +135,7 @@ namespace hc
     RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
 
     onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext);
+    m_sceneGraph.draw(renderContext, graphicsManager.getDrawCommandQueue());
     graphicsManager.executeDrawCommands();
     onAfterDraw(renderContext);
 

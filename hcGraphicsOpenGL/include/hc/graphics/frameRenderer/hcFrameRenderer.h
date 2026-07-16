@@ -6,7 +6,7 @@
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
-#include "hc/graphics/lightShadowManager/hcLightShadowManager.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
 
 namespace hc
 {
@@ -30,8 +30,14 @@ namespace hc
     IFrameBuffer* getRenderTarget() const;
     void removeRenderTarget();
     void queueDrawCommand(const DrawCommand& drawCommand);
-    void execute();
+    void executeDrawCommands();
+    void clearDrawCommands();
+    Vector<DrawCommand>& getDrawCommandQueue();
+    const Vector<DrawCommand>& getDrawCommandQueue() const;
+    void sortDrawCommands();
+    const Vector<DrawCommand>& getDrawCommands() const;
     OpenGlGBuffer& getGBuffer();
+    ALightShadowManager& getLightShadowManager();
     void clearFrame();
     void destroy();
 
@@ -44,7 +50,7 @@ namespace hc
     OpenGlFrameBuffer m_frameBufferA;
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
-    LightShadowManager m_lightShadowManager;
+    OpenGlLightShadowManager m_lightShadowManager;
     Vector<DrawCommand> m_drawCommands;
     OpenGlCubeMap* m_skybox;
     renderPipelineType::Type m_currentRenderPipelineType;

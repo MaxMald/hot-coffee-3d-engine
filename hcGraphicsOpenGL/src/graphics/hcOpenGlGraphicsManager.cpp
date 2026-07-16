@@ -112,14 +112,29 @@ namespace hc
       m_frameRenderer.removeSkybox();
   }
 
-  void OpenGlGraphicsManager::draw(const DrawCommand& command)
+  void OpenGlGraphicsManager::queueDrawCommand(const DrawCommand& command)
   {
     m_frameRenderer.queueDrawCommand(command);
   }
 
   void OpenGlGraphicsManager::executeDrawCommands()
   {
-    m_frameRenderer.execute();
+    m_frameRenderer.executeDrawCommands();
+  }
+
+  void OpenGlGraphicsManager::clearDrawCommands()
+  {
+    m_frameRenderer.clearDrawCommands();
+  }
+
+  Vector<DrawCommand>& OpenGlGraphicsManager::getDrawCommandQueue()
+  {
+    return m_frameRenderer.getDrawCommandQueue();
+  }
+
+  const Vector<DrawCommand>& OpenGlGraphicsManager::getDrawCommandQueue() const
+  {
+    return m_frameRenderer.getDrawCommandQueue();
   }
 
   void OpenGlGraphicsManager::endFrame(IWindow& window)
@@ -176,6 +191,11 @@ namespace hc
   IMeshManager& OpenGlGraphicsManager::getMeshManager()
   {
     return m_meshManager;
+  }
+
+  ALightShadowManager& OpenGlGraphicsManager::getLightShadowManager()
+  {
+    return m_frameRenderer.getLightShadowManager();
   }
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()

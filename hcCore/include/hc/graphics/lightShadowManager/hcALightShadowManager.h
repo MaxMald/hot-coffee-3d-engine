@@ -22,7 +22,7 @@ namespace hc
   class HC_CORE_EXPORT ALightShadowManager
   {
   public:
-    static constexpr SizeT DIRECTIONAL_SHADOW_MAP_TEXTURE_SIZE = 2048;  ///< Size of the shadow map texture (width and height).
+    static constexpr SizeT DIRECTIONAL_SHADOW_MAP_TEXTURE_SIZE = 2048;
 
     /**
      * @brief Virtual destructor for the ALightShadowManager class. Cleans up any
@@ -66,7 +66,6 @@ namespace hc
   protected:
     LightShadowFrameData m_lightShadowFrameData;
     SizeT m_countDirectionalLightShadows;
-    Vector<GameObject*> m_shadowCasters;
 
     /**
      * @brief Protected constructor for the ALightShadowManager class.
@@ -78,17 +77,19 @@ namespace hc
      * the maximum number of directional light shadows has been reached, this method
      * returns -1.
      *
+     * @param lightPosition The position of the directional light in world space.
      * @param lightViewProjectionMatrix The view-projection matrix of the directional
      * light.
-     * @param shadowCasters A vector of pointers to GameObjects that cast shadows for this
-     * directional light.
+     * @param sceneGraph The scene graph containing the objects that may cast shadows for
+     * this light.
      *
      * @return The index of the newly generated directional light shadow texture, or -1 if
      * the maximum number of shadows has been reached.
      */
     virtual Int32 generateDirectionalLightShadowTexture(
+      Vector3f lightPosition,
       Matrix4 lightViewProjectionMatrix,
-      const Vector<GameObject*>& shadowCasters
+      const SceneGraph& sceneGraph
     ) = 0;
 
     /**
@@ -101,13 +102,5 @@ namespace hc
     {
       return m_countDirectionalLightShadows >= LightShadowFrameData::MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA;
     }
-
-    /**
-     * @brief Allocates shadow casters from the scene graph. This method populates the
-     * internal list of shadow casters based on the provided scene graph.
-     *
-     * @param sceneGraph The scene graph from which to allocate shadow casters.
-     */
-    void allocateShadowCasters(const SceneGraph& sceneGraph);
   };
 }

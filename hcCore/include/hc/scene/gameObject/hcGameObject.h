@@ -72,8 +72,12 @@ namespace hc
      * @brief Renders the GameObject and its drawable children/components.
      *
      * @param renderContext Rendering context for drawing.
+     * @param outDrawCommands Vector to store draw commands.
      */
-    virtual void draw(const RenderContext& renderContext) override;
+    virtual void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& outDrawCommands
+    ) const override;
 
     /**
      * @brief Pre-update step for the GameObject and its children.

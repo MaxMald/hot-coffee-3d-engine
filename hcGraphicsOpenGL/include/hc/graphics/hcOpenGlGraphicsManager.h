@@ -64,14 +64,29 @@ namespace hc
     void setSkybox(ICubeMap* skyboxCubeMap) override;
 
     /**
-     * @copydoc IGraphicsManager::draw
+     * @copydoc IGraphicsManager::queueDrawCommand
      */
-    void draw(const DrawCommand& command) override;
+    void queueDrawCommand(const DrawCommand& command) override;
 
     /**
      * @copydoc IGraphicsManager::executeDrawCommands()
      */
     void executeDrawCommands() override;
+
+    /**
+     * @copydoc IGraphicsManager::clearDrawCommands
+     */
+    void clearDrawCommands() override;
+
+    /**
+     * @copydoc IGraphicsManager::getDrawCommandQueue
+     */
+    Vector<DrawCommand>& getDrawCommandQueue() override;
+
+    /**
+     * @copydoc IGraphicsManager::getDrawCommandQueue
+     */
+    const Vector<DrawCommand>& getDrawCommandQueue() const override;
 
     /**
      * @copydoc IGraphicsManager::endFrame
@@ -122,6 +137,11 @@ namespace hc
      * @copydoc IGraphicsManager::getMeshManager
      */
     IMeshManager& getMeshManager() override;
+
+    /**
+     * @copydoc IGraphicsManager::getLightShadowManager
+     */
+    ALightShadowManager& getLightShadowManager() override;
 
     /**
      * @copydoc IGraphicsManager::getGBuffer

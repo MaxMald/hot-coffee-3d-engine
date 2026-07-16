@@ -150,7 +150,7 @@ namespace hc
     m_drawCommands.push_back(drawCommand);
   }
 
-  void FrameRenderer::execute()
+  void FrameRenderer::executeDrawCommands()
   {
     assertIsInitialized();
 
@@ -172,9 +172,39 @@ namespace hc
     m_drawCommands.clear();
   }
 
+  void FrameRenderer::clearDrawCommands()
+  {
+    m_drawCommands.clear();
+  }
+
+  Vector<DrawCommand>& FrameRenderer::getDrawCommandQueue()
+  {
+    return m_drawCommands;
+  }
+
+  const Vector<DrawCommand>& FrameRenderer::getDrawCommandQueue() const
+  {
+    return m_drawCommands;
+  }
+
+  void FrameRenderer::sortDrawCommands()
+  {
+    DrawCommandUtilities::SortDrawCommands(m_drawCommands);
+  }
+
+  const Vector<DrawCommand>& FrameRenderer::getDrawCommands() const
+  {
+    return m_drawCommands;
+  }
+
   OpenGlGBuffer& FrameRenderer::getGBuffer()
   {
     return m_deferredHybridRenderPipeline.getGBuffer();
+  }
+
+  ALightShadowManager& FrameRenderer::getLightShadowManager()
+  {
+    return m_lightShadowManager;
   }
 
   void FrameRenderer::clearFrame()

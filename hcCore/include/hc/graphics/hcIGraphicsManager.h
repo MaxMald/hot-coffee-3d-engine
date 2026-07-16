@@ -21,6 +21,7 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   class ICubeMap;
+  class ALightShadowManager;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
@@ -101,16 +102,35 @@ namespace hc
     virtual void setSkybox(ICubeMap* skyboxCubeMap) = 0;
 
     /**
-     * @brief Issues a draw command to render graphics for the current frame.
+     * @brief Queues a draw command to render graphics for the current frame.
      *
      * @param command The draw command containing rendering instructions.
      */
-    virtual void draw(const DrawCommand& command) = 0;
+    virtual void queueDrawCommand(const DrawCommand& command) = 0;
 
     /**
-     * @brief Executes all issued draw commands for the current frame.
+     * @brief Executes all queued draw commands for the current frame.
      */
     virtual void executeDrawCommands() = 0;
+
+    /**
+     * @brief Clears all queued draw commands for the current frame.
+     */
+    virtual void clearDrawCommands() = 0;
+
+    /**
+     * @brief Gets a reference to the draw command queue for the current frame.
+     *
+     * @return Reference to the vector of draw commands.
+     */
+    virtual Vector<DrawCommand>& getDrawCommandQueue() = 0;
+
+    /**
+     * @brief Gets a const reference to the draw command queue for the current frame.
+     *
+     * @return Const reference to the vector of draw commands.
+     */
+    virtual const Vector<DrawCommand>& getDrawCommandQueue() const = 0;
 
     /**
      * @brief Ends the current rendering frame and presents it to the given
@@ -182,6 +202,13 @@ namespace hc
      * @return Reference to the IMeshManager instance.
      */
     virtual IMeshManager& getMeshManager() = 0;
+
+    /**
+     * @brief Returns the light shadow manager.
+     *
+     * @return Reference to the ALightShadowManager instance.
+     */
+    virtual ALightShadowManager& getLightShadowManager() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

@@ -7,14 +7,11 @@ namespace hc
 {
   ALightShadowManager::ALightShadowManager() :
     m_lightShadowFrameData(),
-    m_countDirectionalLightShadows(0),
-    m_shadowCasters()
+    m_countDirectionalLightShadows(0)
   {}
 
   ALightShadowManager::~ALightShadowManager()
-  {
-    destroy();
-  }
+  {}
 
   void ALightShadowManager::clear()
   {
@@ -71,11 +68,19 @@ namespace hc
     shadowData.shadowStrength = directionalLight.getShadowStrength();
     shadowData.LightViewProjectionMatrix = projectionMatrix * viewMatrix;
 
-    allocateShadowCasters(sceneGraph);
-    shadowData.shadowMapIndex = generateDirectionalLightShadowTexture(
-      shadowData.LightViewProjectionMatrix,
-      m_shadowCasters
-    );
+    try
+    {
+      shadowData.shadowMapIndex = generateDirectionalLightShadowTexture(
+        lightPosition,
+        shadowData.LightViewProjectionMatrix,
+        sceneGraph
+      );
+    }
+    catch (const Exception& e)
+    {
+      destroy();
+      throw;
+    }
 
     if (shadowData.shadowMapIndex < 0)
       return -1;
@@ -83,17 +88,5 @@ namespace hc
     Int32 newIndex = static_cast<Int32>(m_countDirectionalLightShadows);
     ++m_countDirectionalLightShadows;
     return newIndex;
-  }
-
-  void ALightShadowManager::allocateShadowCasters(const SceneGraph & sceneGraph)
-  {
-    m_shadowCasters.clear();
-    sceneGraph.getAllGameObjects(m_shadowCasters);
-
-    // TODO
-    //
-    // Filter m_shadowCasters to only include GameObjects that have components capable of
-    // casting shadows. Also consider filtering based on the light's frustum or other
-    // criteria to optimize performance.
   }
 }

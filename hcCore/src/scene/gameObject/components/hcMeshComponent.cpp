@@ -80,12 +80,15 @@ namespace hc
     }
   }
 
-  void MeshComponent::draw(const RenderContext& renderContext)
+  void MeshComponent::draw(
+    const RenderContext& renderContext,
+    Vector<DrawCommand>& drawCommands
+  ) const
   {
     if (!m_mesh)
       return;
 
-    m_mesh->draw(renderContext);
+    m_mesh->draw(renderContext, drawCommands);
   }
 
   void MeshComponent::setMesh(SharedPtr<IMesh> mesh)
