@@ -142,6 +142,10 @@ namespace hc
       {
         vec4 directionAndIntensity;
         vec4 color;
+        int  shadowFrameDataIndex;
+        int  padding0;
+        int  padding1;
+        int  padding2;
       };
 
       layout(std140, binding = 2) uniform LightBlock
@@ -371,6 +375,10 @@ namespace hc
       {
         vec4 directionAndIntensity;
         vec4 color;
+        int  shadowFrameDataIndex;
+        int  padding0;
+        int  padding1;
+        int  padding2;
       };
 
       layout(std140, binding = 2) uniform LightBlock
