@@ -126,6 +126,10 @@ namespace hc
         float innerConeCos;
         float intensity;
         float outerConeCos;
+        int shadowFrameDataIndex;
+        int padding0;
+        int padding1;
+        int padding2;
       };
 
       struct OmniLightData
@@ -359,6 +363,10 @@ namespace hc
         float innerConeCos;
         float intensity;
         float outerConeCos;
+        int shadowFrameDataIndex;
+        int padding0;
+        int padding1;
+        int padding2;
       };
 
       struct OmniLightData
