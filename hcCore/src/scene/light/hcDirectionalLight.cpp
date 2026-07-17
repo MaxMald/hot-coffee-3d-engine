@@ -5,6 +5,8 @@ namespace hc
   DirectionalLight::DirectionalLight() :
     ALight(lightType::Type::Directional),
     m_direction(0.0f, -1.0f, 0.0f),
+    m_shadowViewTarget(0.0f, 0.0f, 0.0f),
+    m_shadowViewDistance(50.0f),
     m_shadowProjectionSize(10.0f),
     m_shadowProjectionNearPlane(0.1f),
     m_shadowProjectionFarPlane(100.0f)
@@ -40,6 +42,26 @@ namespace hc
   const Vector3f& DirectionalLight::getDirection() const
   {
     return m_direction;
+  }
+
+  void DirectionalLight::setShadowViewTarget(const Vector3f& target)
+  {
+    m_shadowViewTarget = target;
+  }
+
+  const Vector3f& DirectionalLight::getShadowViewTarget() const
+  {
+    return m_shadowViewTarget;
+  }
+
+  void DirectionalLight::setShadowViewDistance(float distance)
+  {
+    m_shadowViewDistance = Math::Max(distance, 0.1f);
+  }
+
+  float DirectionalLight::getShadowViewDistance() const
+  {
+      return m_shadowViewDistance;
   }
 
   void DirectionalLight::setShadowProjectionSize(float size)

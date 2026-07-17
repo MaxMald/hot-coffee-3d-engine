@@ -30,6 +30,9 @@ namespace hc::editor
     if (ImGui::DragFloat("Range", &range, 0.5f, 0.0f))
       light.setRange(range);
 
+    ImGui::Text("Shadow Settings");
+    ImGui::Separator();
+
     bool shadowsEnabled = light.isShadowsEnabled();
     if (ImGui::Checkbox("Shadows Enabled", &shadowsEnabled))
       light.setShadowsEnabled(shadowsEnabled);
