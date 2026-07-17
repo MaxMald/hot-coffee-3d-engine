@@ -457,10 +457,24 @@ namespace hc
         if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0)
             return 0.0;
 
-        float closestDepth = texture(uShadowMaps, vec3(projCoords.xy, shadowMapIndex)).r;
-        float currentDepth = projCoords.z;
+        // PCF for soft shadows
+        // Sampling 9 neighboring texels in the shadow map
 
-        float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+        float shadow = 0.0f;
+        vec2 texelSize = 1.0 / textureSize(uShadowMaps, 0).xy;
+        for (int x = -1; x <= 1; ++x)
+        {
+            for (int y = -1; y <= 1; ++y)
+            {
+                float pcfClosestDepth = texture(uShadowMaps, vec3(projCoords.xy + vec2(x, y) * texelSize, shadowMapIndex)).r;
+                float currentDepth = projCoords.z;
+                shadow += currentDepth - bias > pcfClosestDepth ? 1.0 : 0.0;
+            }
+        }
+
+        // Average the shadow factor over the 9 samples
+        shadow /= 9.0;
+
         return shadow;
       }
 
