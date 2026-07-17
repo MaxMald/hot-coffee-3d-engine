@@ -476,7 +476,8 @@ namespace hc
         vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
         vec3 halfDir = normalize(lightDir + viewDir);
 
-        float diff = max(dot(normal, lightDir), 0.0);
+        float dotNormalLight = dot(normal, lightDir);
+        float diff = max(dotNormalLight, 0.0);
         float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
         float spec = specBase * specularStrength;
 
@@ -484,10 +485,12 @@ namespace hc
         if (light.shadowFrameDataIndex >= 0 && light.shadowFrameDataIndex < MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA)
         {
           DirectionalLightShadowFrameData shadowData = directionalLightShadowData[light.shadowFrameDataIndex];
+
+          float bias = max(shadowData.shadowBias * (1.0 - dotNormalLight), 0.002);
           float shadow = calculateDirectionalShadow(
             shadowData.lightViewProjectionMatrix,
             worldPos,
-            shadowData.shadowBias,
+            bias,
             shadowData.shadowMapIndex
           );
 

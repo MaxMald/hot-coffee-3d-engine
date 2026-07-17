@@ -109,13 +109,6 @@ namespace hc
     bool depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
     glEnable(GL_DEPTH_TEST);
 
-    GLboolean cullFaceEnabled = glIsEnabled(GL_CULL_FACE);
-    GLint cullFaceMode;
-    glGetIntegerv(GL_CULL_FACE_MODE, &cullFaceMode);
-
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT); // Cull front faces to avoid self-shadowing (Peter Panning)
-
     for (const DrawCommand& cmd : m_shadowDrawCommands)
     {
       const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(cmd.apiDrawData);
@@ -133,11 +126,6 @@ namespace hc
 
     if (!depthTestEnabled)
       glDisable(GL_DEPTH_TEST);
-
-    if (!cullFaceEnabled)
-      glDisable(GL_CULL_FACE);
-
-    glCullFace(static_cast<GLenum>(cullFaceMode));
 
     glBindVertexArray(0);
     m_directionalShadowFrameBuffer.unbind();

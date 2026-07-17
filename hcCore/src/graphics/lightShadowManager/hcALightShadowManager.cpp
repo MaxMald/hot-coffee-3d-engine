@@ -56,11 +56,10 @@ namespace hc
     }
 
     Vector3f lightPosition = directionalLight.getPosition();
-    Vector3f shadowCenter = Vector3f(0.0f, 0.0f, 0.0f);
     Matrix4 viewMatrix = Matrix4::LookAt(
-      shadowCenter - lightDirection * 10.0f,
-      shadowCenter,
-      Vector3f(0.0f, 1.0f, 0.0f)
+      lightPosition,
+      lightPosition + lightDirection,
+      up
     );
 
     shadowData.shadowBias = directionalLight.getShadowBias();
