@@ -57,13 +57,13 @@ namespace hc
 
     // TODO
     //
-    // Shadow center and shadow distance of a directional light should be calculated based on the scene's
+    // Shadow center and distance of a directional light should be calculated based on the scene's
     // bounding box or the area of interest (like the center's of the camera's frustum),
     // not just the origin.
 
     Vector3f shadowCenter = Vector3f(0.0f, 0.0f, 0.0f); // Currently, the center of the world
-    float shadowDistance = 50.0f;
-    Vector3f lightPosition = shadowCenter - lightDirection * shadowDistance;
+    float distance = 50.0f;
+    Vector3f lightPosition = shadowCenter - lightDirection * distance;
 
     Matrix4 viewMatrix = Matrix4::LookAt(
       lightPosition,
