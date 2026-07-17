@@ -16,6 +16,7 @@ namespace hc
   void ALightShadowManager::clear()
   {
     m_countDirectionalLightShadows = 0;
+    onClear();
   }
 
   Int32 ALightShadowManager::generateDirectionalLightShadowData(
@@ -29,17 +30,14 @@ namespace hc
     DirectionalLightShadowFrameData& shadowData = m_lightShadowFrameData
       .directionalLightShadowData[m_countDirectionalLightShadows];
 
-    // TODO
-    //
-    // We should have a better way to calculate the size of the orthographic
-    // projection for directional lights, instead of hardcoding the values.
-    //
-    // For now, we will use a fixed size of 20x20 units for the orthographic projection.
+    float projectionSize = directionalLight.getShadowProjectionSize() * 0.5f;
+    float nearPlane = directionalLight.getShadowProjectionNearPlane();
+    float farPlane = directionalLight.getShadowProjectionFarPlane();
 
     Matrix4 projectionMatrix = Matrix4::Orthographic(
-      -10.0f, 10.0f,
-      -10.0f, 10.0f,
-      0.1f, 100.0f
+      -projectionSize, projectionSize,
+      -projectionSize, projectionSize,
+      nearPlane, farPlane
     );
 
     Vector3f lightDirection = directionalLight.getDirection();
@@ -58,10 +56,11 @@ namespace hc
     }
 
     Vector3f lightPosition = directionalLight.getPosition();
+    Vector3f shadowCenter = Vector3f(0.0f, 0.0f, 0.0f);
     Matrix4 viewMatrix = Matrix4::LookAt(
-      lightPosition,
-      lightPosition + lightDirection,
-      up
+      shadowCenter - lightDirection * 10.0f,
+      shadowCenter,
+      Vector3f(0.0f, 1.0f, 0.0f)
     );
 
     shadowData.shadowBias = directionalLight.getShadowBias();
@@ -84,6 +83,12 @@ namespace hc
 
     if (shadowData.shadowMapIndex < 0)
       return -1;
+
+    // TODO
+    //
+    // Transpose should be defined by the type of graphics API we are using, not here.
+
+    shadowData.LightViewProjectionMatrix.transpose();
 
     Int32 newIndex = static_cast<Int32>(m_countDirectionalLightShadows);
     ++m_countDirectionalLightShadows;

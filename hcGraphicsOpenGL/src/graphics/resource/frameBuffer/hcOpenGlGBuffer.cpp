@@ -346,13 +346,18 @@ namespace hc
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
   }
 
-  void OpenGlGBuffer::bindGTexturesForReading()
+  void OpenGlGBuffer::bindGTexturesForReading(
+    UInt8 positionAndDepthTextureUnit,
+    UInt8 normalAndRoughnessTextureUnit,
+    UInt8 albedoAndAlphaTextureUnit,
+    UInt8 materialParametersTextureUnit
+  )
   {
     assertIsValid();
-    m_positionAndDepthTexture.bind(0);
-    m_normalRoughnessTexture.bind(1);
-    m_albedoAlphaTexture.bind(2);
-    m_materialParametersTexture.bind(3);
+    m_positionAndDepthTexture.bind(positionAndDepthTextureUnit);
+    m_normalRoughnessTexture.bind(normalAndRoughnessTextureUnit);
+    m_albedoAlphaTexture.bind(albedoAndAlphaTextureUnit);
+    m_materialParametersTexture.bind(materialParametersTextureUnit);
   }
 
   const ITexture& OpenGlGBuffer::getPositionAndDepth() const

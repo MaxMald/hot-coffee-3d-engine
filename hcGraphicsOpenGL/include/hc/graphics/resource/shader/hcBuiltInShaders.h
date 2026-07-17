@@ -392,10 +392,28 @@ namespace hc
         int lPadding0;
       };
 
+      struct DirectionalLightShadowFrameData
+      {
+        mat4 lightViewProjectionMatrix;
+        float shadowBias;
+        float shadowStrength;
+        int shadowMapIndex;
+        int padding0;
+      };
+
+      #define MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA 4
+
+      layout(std140, binding = 3) uniform LightShadowBlock
+      {
+        DirectionalLightShadowFrameData directionalLightShadowData[MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA];
+      };
+
+
       layout(binding = 0) uniform sampler2D uPositionAndDepth;
       layout(binding = 1) uniform sampler2D uNormalRoughness;
       layout(binding = 2) uniform sampler2D uAlbedoAlpha;
       layout(binding = 3) uniform sampler2D uMaterialParameters;
+      layout(binding = 4) uniform sampler2DArray uShadowMaps;
 
       in vec2 vTexCoord;
 
@@ -422,7 +440,38 @@ namespace hc
         return (diff + spec) * light.color.rgb * light.intensity * attenuation;
       }
 
-      vec3 calculateDirectionalLight(DirectionalLightData light, vec3 normal, vec3 viewDir, float specularStrength, float shininess)
+      float calculateDirectionalShadow(
+        mat4 lightSpaceMatrix,
+        vec3 fragPos,
+        float bias,
+        int shadowMapIndex
+      )
+      {
+        vec4 fragPosLightSpace = lightSpaceMatrix * vec4(fragPos, 1.0);
+        vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+        projCoords = projCoords * 0.5 + 0.5;
+
+        if (projCoords.z > 1.0)
+            return 0.0;
+
+        if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0)
+            return 0.0;
+
+        float closestDepth = texture(uShadowMaps, vec3(projCoords.xy, shadowMapIndex)).r;
+        float currentDepth = projCoords.z;
+
+        float shadow = currentDepth - bias > closestDepth ? 1.0 : 0.0;
+        return shadow;
+      }
+
+      vec3 calculateDirectionalLight(
+        DirectionalLightData light,
+        vec3 normal,
+        vec3 viewDir,
+        vec3 worldPos,
+        float specularStrength,
+        float shininess
+      )
       {
         vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
         vec3 halfDir = normalize(lightDir + viewDir);
@@ -431,7 +480,21 @@ namespace hc
         float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
         float spec = specBase * specularStrength;
 
-        return (diff + spec) * light.color.rgb * light.directionAndIntensity.w;
+        float shadowFactor = 1.0;
+        if (light.shadowFrameDataIndex >= 0 && light.shadowFrameDataIndex < MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA)
+        {
+          DirectionalLightShadowFrameData shadowData = directionalLightShadowData[light.shadowFrameDataIndex];
+          float shadow = calculateDirectionalShadow(
+            shadowData.lightViewProjectionMatrix,
+            worldPos,
+            shadowData.shadowBias,
+            shadowData.shadowMapIndex
+          );
+
+          shadowFactor = 1.0 - shadow * shadowData.shadowStrength;
+        }
+
+        return shadowFactor * (diff + spec) * light.color.rgb * light.directionAndIntensity.w;
       }
 
       vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float specularStrength, float shininess)
@@ -487,7 +550,7 @@ namespace hc
         for (int i = 0; i < numOmniLights; ++i)
           totalLighting += calculateOmniLight(omniLights[i], normal, viewDir, worldPos, specularStrength, shininess);
         for (int i = 0; i < numDirectionalLights; ++i)
-          totalLighting += calculateDirectionalLight(directionalLights[i], normal, viewDir, specularStrength, shininess);
+          totalLighting += calculateDirectionalLight(directionalLights[i], normal, viewDir, worldPos, specularStrength, shininess);
         for (int i = 0; i < numSpotLights; ++i)
           totalLighting += calculateSpotLight(spotLights[i], normal, viewDir, worldPos, specularStrength, shininess);
 
@@ -552,20 +615,14 @@ namespace hc
     inline const String ShadowMapVertex = R"(
       #version 420 core
 
-      layout(std140, binding = 1) uniform CameraFrameBlock
-      {
-        mat4 projection;
-        mat4 view;
-        vec3 cameraPosition;
-        float cPadding0;
-      };
-
       layout(location = 0) in vec3 aPosition;
+
+      uniform mat4 uLightViewProjection;
       uniform mat4 uModel;
 
       void main()
       {
-        gl_Position = projection * view * uModel * vec4(aPosition, 1.0);
+        gl_Position = uLightViewProjection * uModel * vec4(aPosition, 1.0);
       }
     )";
 

@@ -10,12 +10,13 @@
 
 namespace hc
 {
+  class OpenGlLightShadowManager;
   struct FrameRenderContext;
 
   class DeferredHybridRenderPipeline
   {
   public:
-    DeferredHybridRenderPipeline();
+    DeferredHybridRenderPipeline(OpenGlLightShadowManager& lightShadowManager);
     ~DeferredHybridRenderPipeline();
 
     void initialize(

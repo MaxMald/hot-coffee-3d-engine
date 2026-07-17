@@ -2,11 +2,13 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
 
 namespace hc
 {
-  DeferredLightingRenderPass::DeferredLightingRenderPass() :
+  DeferredLightingRenderPass::DeferredLightingRenderPass(OpenGlLightShadowManager& lightShadowManager) :
     m_gBuffer(nullptr),
+    m_lightShadowManager(lightShadowManager),
     m_deferredLightingShaderProgram(nullptr)
   {}
 
@@ -45,7 +47,9 @@ namespace hc
     }
 
     m_deferredLightingShaderProgram->bind();
-    m_gBuffer->bindGTexturesForReading();
+    m_gBuffer->bindGTexturesForReading(0, 1, 2, 3);
+    m_lightShadowManager.uploadShadowDataToGPU();
+    m_lightShadowManager.bindShadowTexturesForReading(4);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
 

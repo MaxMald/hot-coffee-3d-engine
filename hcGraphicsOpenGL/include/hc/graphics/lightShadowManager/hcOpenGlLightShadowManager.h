@@ -3,6 +3,8 @@
 #include <hc/graphics/lightShadowManager/hcALightShadowManager.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
+#include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgram.h"
+#include "hc/graphics/resource/frameBuffer/hcOpenGlShadowFrameBuffer.h"
 
 namespace hc
 {
@@ -18,6 +20,11 @@ namespace hc
     void uploadShadowDataToGPU() override;
 
     /**
+     * @copydoc ALightShadowManager::bindShadowTexturesForReading()
+     */
+    void bindShadowTexturesForReading(UInt8 directionalTextureArrayUnit) override;
+
+    /**
      * @copydoc ALightShadowManager::destroy()
      */
     void destroy() override;
@@ -27,12 +34,22 @@ namespace hc
      * uniform buffer object (UBO) for light shadow frame data.
      *
      * @param bindingPoint The binding point index to which the UBO will be bound.
+     * @param shaderProgramManager Reference to the shader program manager.
+     * @param directionalShadowMapSize The size of the shadow map texture to be created
+     * for directional lights.
      */
-    void initialize(UInt32 bindingPoint);
+    void initialize(
+      UInt32 bindingPoint,
+      IShaderProgramManager& shaderProgramManager,
+      UInt32 directionalShadowMapSize = 1024
+    );
 
   private:
     LightShadowFrameUBO m_lightShadowUBO;
     Vector<DrawCommand> m_shadowDrawCommands;
+    SharedPtr<IShaderProgram> m_shadowMapShaderProgram;
+    OpenGlShadowFrameBuffer m_directionalShadowFrameBuffer;
+    UInt32 m_currentDirectionalShadowMapLayer;
 
     /**
      * @copydoc ALightShadowManager::generateDirectionalLightShadowTexture()
@@ -42,5 +59,10 @@ namespace hc
       Matrix4 lightViewProjectionMatrix,
       const SceneGraph& sceneGraph
     ) override;
+
+    /**
+     * @copydoc ALightShadowManager::onClear()
+     */
+    void onClear() override;
   };
 }

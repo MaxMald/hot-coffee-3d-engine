@@ -6,18 +6,18 @@
 
 namespace hc
 {
-  static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
-  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
-  static constexpr UInt32 LIGHT_SHADOWS_BINDING_POINT = 3;
+  static constexpr UInt32 CAMERA_FRAME_UBO_BINDING_POINT = 1;
+  static constexpr UInt32 LIGHTS_UBO_BINDING_POINT = 2;
+  static constexpr UInt32 LIGHT_SHADOWS_UBO_BINDING_POINT = 3;
 
   FrameRenderer::FrameRenderer() :
+    m_lightShadowManager(),
     m_forwardRenderPipeline(),
-    m_deferredHybridRenderPipeline(),
+    m_deferredHybridRenderPipeline(m_lightShadowManager),
     m_finalRenderPass(),
     m_frameBufferA(),
     m_lightFrameUBO(),
     m_cameraFrameUBO(),
-    m_lightShadowManager(),
     m_drawCommands(),
     m_skybox(nullptr),
     m_currentRenderPipelineType(renderPipelineType::DeferredHybrid),
@@ -40,15 +40,15 @@ namespace hc
 
     try
     {
+      m_lightShadowManager.initialize(LIGHT_SHADOWS_UBO_BINDING_POINT, shaderProgramManager);
       m_forwardRenderPipeline.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
       m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
       m_frameBufferA.initialize(viewportRect.width, viewportRect.height);
       m_lightFrameUBO.initialize(LightFrameData{});
-      m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
+      m_lightFrameUBO.bindBase(LIGHTS_UBO_BINDING_POINT);
       m_cameraFrameUBO.initialize(CameraFrameData{});
-      m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
-      m_lightShadowManager.initialize(LIGHT_SHADOWS_BINDING_POINT);
+      m_cameraFrameUBO.bindBase(CAMERA_FRAME_UBO_BINDING_POINT);
     }
     catch (const Exception& e)
     {

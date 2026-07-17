@@ -10,6 +10,7 @@ namespace hc
   class DirectionalLightComponent;
   class OmniLightComponent;
   class SpotLightComponent;
+  class ALightShadowManager;
 
   /**
    * @brief Gathers light data from a scene graph.
@@ -30,21 +31,28 @@ namespace hc
      * @param sceneGraph The scene graph to gather light data from.
      * @param lightFrameData Reference to a LightFrameData structure to populate with the
      * gathered data.
+     * @param lightShadowManager Reference to an ALightShadowManager for managing light
+     * shadow data.
      */
     static void Gather(
       const SceneGraph& sceneGraph,
-      LightFrameData& lightFrameData
+      LightFrameData& lightFrameData,
+      ALightShadowManager& lightShadowManager
     );
 
   private:
     static bool GatherFromGameObject(
       const UniquePtr<GameObject>& gameObject,
-      LightFrameData& lightFrameData
+      LightFrameData& lightFrameData,
+      const SceneGraph& sceneGraph,
+      ALightShadowManager& lightShadowManager
     );
 
     static void GatherFromDirectionalLightComponent(
       DirectionalLightComponent* directionalLightComponent,
-      LightFrameData& lightFrameData
+      LightFrameData& lightFrameData,
+      const SceneGraph& sceneGraph,
+      ALightShadowManager& lightShadowManager
     );
 
     static void GatherFromOmniLightComponent(

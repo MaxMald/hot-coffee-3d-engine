@@ -14,7 +14,6 @@ namespace hc::editor
       reinterpret_cast<DirectionalLightComponent*>(component);
 
     DirectionalLight& directionalLight = directionalLightComponent->getDirectionalLight();
-
     Vector3 direction = directionalLight.getDirection();
     ImGui::InputFloat3(
       "Direction",
@@ -22,5 +21,20 @@ namespace hc::editor
       "%.3f",
       ImGuiInputTextFlags_ReadOnly
     );
+
+    ImGui::Text("Shadow Projection");
+    ImGui::Separator();
+
+    float projectionSize = directionalLight.getShadowProjectionSize();
+    if (ImGui::InputFloat("Size", &projectionSize, 0.1f, 0.1f, "%.3f"))
+      directionalLight.setShadowProjectionSize(projectionSize);
+
+    float nearPlane = directionalLight.getShadowProjectionNearPlane();
+    if (ImGui::InputFloat("Near Plane", &nearPlane, 0.1f, 0.1f, "%.3f"))
+      directionalLight.setShadowProjectionNearPlane(nearPlane);
+
+    float farPlane = directionalLight.getShadowProjectionFarPlane();
+    if (ImGui::InputFloat("Far Plane", &farPlane, 0.1f, 0.1f, "%.3f"))
+      directionalLight.setShadowProjectionFarPlane(farPlane);
   }
 }

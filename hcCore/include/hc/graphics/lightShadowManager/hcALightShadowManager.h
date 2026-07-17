@@ -18,6 +18,9 @@ namespace hc
    *   resources.
    * - `generateDirectionalLightShadowTexture()`: Generates a new directional light shadow
    *   texture and returns its index.
+   * - `bindShadowTexturesForReading()`: Binds the shadow textures for reading in the shader programs.
+   * - `onClear()`: Called when the light shadow manager is cleared. Concrete implementations
+   *   should reset any internal state.
    */
   class HC_CORE_EXPORT ALightShadowManager
   {
@@ -35,6 +38,16 @@ namespace hc
      * once per frame after all shadow data has been generated and before rendering.
      */
     virtual void uploadShadowDataToGPU() = 0;
+
+    /**
+     * @brief Binds the shadow textures for reading in the shader programs. This method
+     * should be called before rendering to ensure that the correct shadow textures are
+     * available for sampling.
+     *
+     * @param directionalTextureArrayUnit The texture unit to which the directional light
+     * shadow array is bound.
+     */
+    virtual void bindShadowTexturesForReading(UInt8 directionalTextureArrayUnit) = 0;
 
     /**
      * @brief Destroys the light shadow manager and releases any allocated resources.
@@ -67,6 +80,7 @@ namespace hc
     LightShadowFrameData m_lightShadowFrameData;
     SizeT m_countDirectionalLightShadows;
 
+
     /**
      * @brief Protected constructor for the ALightShadowManager class.
      */
@@ -91,6 +105,12 @@ namespace hc
       Matrix4 lightViewProjectionMatrix,
       const SceneGraph& sceneGraph
     ) = 0;
+
+    /**
+     * @brief Called when the light shadow manager is cleared. Concrete implementations
+     * should reset any internal state.
+     */
+    virtual void onClear() = 0;
 
     /**
      * @brief Checks if the maximum number of directional light shadows has been reached.

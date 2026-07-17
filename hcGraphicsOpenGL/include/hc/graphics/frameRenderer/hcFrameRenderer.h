@@ -44,13 +44,13 @@ namespace hc
     void onViewportChanged(const Rect<UInt32>& viewportRect);
 
   private:
+    OpenGlLightShadowManager m_lightShadowManager;
     ForwardRenderPipeline m_forwardRenderPipeline;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
     FinalRenderPass m_finalRenderPass;
     OpenGlFrameBuffer m_frameBufferA;
     LightFrameUBO m_lightFrameUBO;
     CameraFrameUBO m_cameraFrameUBO;
-    OpenGlLightShadowManager m_lightShadowManager;
     Vector<DrawCommand> m_drawCommands;
     OpenGlCubeMap* m_skybox;
     renderPipelineType::Type m_currentRenderPipelineType;

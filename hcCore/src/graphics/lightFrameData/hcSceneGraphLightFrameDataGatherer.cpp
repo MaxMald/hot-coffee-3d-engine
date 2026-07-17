@@ -5,12 +5,14 @@
 #include "hc/scene/gameObject/components/hcDirectionalLightComponent.h"
 #include "hc/scene/gameObject/components/hcOmniLightComponent.h"
 #include "hc/scene/gameObject/components/hcSpotLightComponent.h"
+#include "hc/graphics/lightShadowManager/hcALightShadowManager.h"
 
 namespace hc
 {
   void SceneGraphLightFrameDataGatherer::Gather(
     const SceneGraph& sceneGraph,
-    LightFrameData& lightFrameData
+    LightFrameData& lightFrameData,
+    ALightShadowManager& lightShadowManager
   )
   {
     // TODO
@@ -33,21 +35,30 @@ namespace hc
     const Vector<UniquePtr<GameObject>>& roots = sceneGraph.getRoots();
     for (const UniquePtr<GameObject>& root : roots)
     {
-      if (!GatherFromGameObject(root, lightFrameData))
+      if (!GatherFromGameObject(root, lightFrameData, sceneGraph, lightShadowManager))
         break;
     }
   }
 
   bool SceneGraphLightFrameDataGatherer::GatherFromGameObject(
     const UniquePtr<GameObject>& gameObject,
-    LightFrameData& lightFrameData
+    LightFrameData& lightFrameData,
+    const SceneGraph& sceneGraph,
+    ALightShadowManager& lightShadowManager
   )
   {
     DirectionalLightComponent* directionalLightComponent =
       gameObject->getComponent<DirectionalLightComponent>();
 
     if (directionalLightComponent)
-      GatherFromDirectionalLightComponent(directionalLightComponent, lightFrameData);
+    {
+      GatherFromDirectionalLightComponent(
+        directionalLightComponent,
+        lightFrameData,
+        sceneGraph,
+        lightShadowManager
+      );
+    }
 
     OmniLightComponent* omniLightComponent = gameObject->getComponent<OmniLightComponent>();
     if (omniLightComponent)
@@ -70,7 +81,7 @@ namespace hc
 
     for (const UniquePtr<GameObject>& child : gameObject->getChildren())
     {
-      if (!GatherFromGameObject(child, lightFrameData))
+      if (!GatherFromGameObject(child, lightFrameData, sceneGraph, lightShadowManager))
         return false;
     }
 
@@ -79,7 +90,9 @@ namespace hc
 
   void SceneGraphLightFrameDataGatherer::GatherFromDirectionalLightComponent(
     DirectionalLightComponent* directionalLightComponent,
-    LightFrameData& lightFrameData
+    LightFrameData& lightFrameData,
+    const SceneGraph& sceneGraph,
+    ALightShadowManager& lightShadowManager
   )
   {
     if (!directionalLightComponent->getLight().isEnabled())
@@ -99,6 +112,15 @@ namespace hc
     Int32 directionalLightIndex = lightFrameData.numDirectionalLights++;
     lightFrameData.directionalLights[directionalLightIndex] =
       directionalLightComponent->getDirectionalLight().toFrameData();
+
+    if (directionalLightComponent->getDirectionalLight().isShadowsEnabled())
+    {
+      lightFrameData.directionalLights[directionalLightIndex].shadowFrameDataIndex =
+        lightShadowManager.generateDirectionalLightShadowData(
+          directionalLightComponent->getDirectionalLight(),
+          sceneGraph
+        );
+    }
   }
 
   void SceneGraphLightFrameDataGatherer::GatherFromOmniLightComponent(

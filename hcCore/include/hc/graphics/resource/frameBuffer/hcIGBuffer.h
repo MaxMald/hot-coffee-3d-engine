@@ -26,8 +26,18 @@ namespace hc
 
     /**
      * Binds the geometry buffer textures attachments for sampling.
+     *
+     * @param positionAndDepthTextureUnit The texture unit for the position and depth texture.
+     * @param normalAndRoughnessTextureUnit The texture unit for the normal and roughness texture.
+     * @param albedoAndAlphaTextureUnit The texture unit for the albedo and alpha texture.
+     * @param materialParametersTextureUnit The texture unit for the material parameters texture.
      */
-    virtual void bindGTexturesForReading() = 0;
+    virtual void bindGTexturesForReading(
+      UInt8 positionAndDepthTextureUnit,
+      UInt8 normalAndRoughnessTextureUnit,
+      UInt8 albedoAndAlphaTextureUnit,
+      UInt8 materialParametersTextureUnit
+    ) = 0;
 
     /**
      * Gets the world-space position texture attachment, and the pixel depth (non-linear).
