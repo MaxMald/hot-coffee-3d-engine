@@ -400,6 +400,9 @@ namespace hc
         int lPadding0;
       };
 
+      #define MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA 4
+      #define MAX_SPOT_LIGHTS_SHADOW_DATA 8
+
       struct DirectionalLightShadowFrameData
       {
         mat4 lightViewProjectionMatrix;
@@ -409,11 +412,23 @@ namespace hc
         int padding0;
       };
 
-      #define MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA 4
+      struct SpotLightShadowFrameData
+      {
+        mat4 lightViewProjectionMatrix;
+        float shadowBias;
+        float shadowStrength;
+        float projectionNearPlane;
+        float projectionFarPlane;
+        int shadowMapIndex;
+        int padding0;
+        int padding1;
+        int padding2;
+      };
 
       layout(std140, binding = 3) uniform LightShadowBlock
       {
         DirectionalLightShadowFrameData directionalLightShadowData[MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA];
+        SpotLightShadowFrameData spotLightShadowData[MAX_SPOT_LIGHTS_SHADOW_DATA];
       };
 
 
