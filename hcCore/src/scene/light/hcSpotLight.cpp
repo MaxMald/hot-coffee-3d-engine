@@ -8,7 +8,9 @@ namespace hc
     ALight(lightType::Type::Spot),
     m_direction(0.0f, -1.0f, 0.0f),
     m_innerConeAngle(Angle::FromDegrees(15.0f)),
-    m_outerConeAngle(Angle::FromDegrees(30.0f))
+    m_outerConeAngle(Angle::FromDegrees(30.0f)),
+    m_shadowProjectionNearPlane(0.1f),
+    m_shadowProjectionFarPlane(100.0f)
   {
   }
 
@@ -20,6 +22,10 @@ namespace hc
     writer.writeVector3f(m_direction);
     writer.writeAngle(m_innerConeAngle);
     writer.writeAngle(m_outerConeAngle);
+
+    // TODO
+    //
+    // serialize shadow settings
   }
 
   void SpotLight::deserialize(BinaryReader& reader)
@@ -28,6 +34,10 @@ namespace hc
     m_direction = reader.readVector3f();
     m_innerConeAngle = reader.readAngle();
     m_outerConeAngle = reader.readAngle();
+
+    // TODO
+    //
+    // deserialize shadow settings
   }
 
   void SpotLight::setDirection(const Vector3f& direction)
@@ -66,6 +76,26 @@ namespace hc
   Angle SpotLight::getOuterConeAngle() const
   {
     return m_outerConeAngle;
+  }
+
+  void SpotLight::setShadowProjectionNearPlane(float nearPlane)
+  {
+    m_shadowProjectionNearPlane = Math::Max(0.0f, nearPlane);
+  }
+
+  float SpotLight::getShadowProjectionNearPlane() const
+  {
+    return m_shadowProjectionNearPlane;
+  }
+
+  void SpotLight::setShadowProjectionFarPlane(float farPlane)
+  {
+    m_shadowProjectionFarPlane = Math::Max(0.0f, farPlane);
+  }
+
+  float SpotLight::getShadowProjectionFarPlane() const
+  {
+    return m_shadowProjectionFarPlane;
   }
 
   SpotLightFrameData SpotLight::toFrameData() const
