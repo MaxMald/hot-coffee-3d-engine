@@ -66,7 +66,14 @@ namespace hc
 
     SpotLightComponent* spotLightComponent = gameObject->getComponent<SpotLightComponent>();
     if (spotLightComponent)
-      GatherFromSpotLightComponent(spotLightComponent, lightFrameData);
+    {
+      GatherFromSpotLightComponent(
+        spotLightComponent,
+        lightFrameData,
+        sceneGraph,
+        lightShadowManager
+      );
+    }
 
     if (lightFrameData.numDirectionalLights >= LightFrameData::MAX_DIRECTIONAL_LIGHTS &&
       lightFrameData.numOmniLights >= LightFrameData::MAX_OMNI_LIGHTS &&
@@ -149,7 +156,9 @@ namespace hc
 
   void SceneGraphLightFrameDataGatherer::GatherFromSpotLightComponent(
     SpotLightComponent* spotLightComponent,
-    LightFrameData& lightFrameData
+    LightFrameData& lightFrameData,
+    const SceneGraph& sceneGraph,
+    ALightShadowManager& lightShadowManager
   )
   {
     if (!spotLightComponent->getLight().isEnabled())
@@ -169,5 +178,14 @@ namespace hc
     Int32 spotLightIndex = lightFrameData.numSpotLights++;
     lightFrameData.spotLights[spotLightIndex] =
       spotLightComponent->getSpotLight().toFrameData();
+
+    if (spotLightComponent->getSpotLight().isShadowsEnabled())
+    {
+      lightFrameData.spotLights[spotLightIndex].shadowFrameDataIndex =
+        lightShadowManager.generateSpotLightShadowData(
+          spotLightComponent->getSpotLight(),
+          sceneGraph
+        );
+    }
   }
 }

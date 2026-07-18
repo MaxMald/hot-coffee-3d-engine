@@ -113,7 +113,7 @@ namespace hc
     float outerConeAngle = spotLight.getOuterConeAngle().toRadians();
 
     Matrix4 projectionMatrix = Matrix4::Perspective(
-      outerConeAngle,
+      outerConeAngle * 2.0f,
       1.0f,
       nearPlane,
       farPlane

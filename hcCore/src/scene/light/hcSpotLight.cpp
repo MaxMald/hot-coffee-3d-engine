@@ -2,7 +2,7 @@
 
 namespace hc
 {
-  static const float MAX_CONE_ANGLE_RADIANS = Math::Pi;
+  static const float MAX_CONE_ANGLE_RADIANS = Math::HalfPi;
 
   SpotLight::SpotLight() :
     ALight(lightType::Type::Spot),

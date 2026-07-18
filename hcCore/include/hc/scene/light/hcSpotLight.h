@@ -47,28 +47,36 @@ namespace hc
     const Vector3f& getDirection() const;
 
     /**
-     * @brief Sets the inner cone angle of the spot light.
+     * @brief Sets the inner cone angle of the spot light. This is the angle between the
+     * light's direction and the edge of the light cone where the light intensity starts
+     * to fall off.
      *
      * @param angle The new inner cone angle.
      */
     void setInnerConeAngle(Angle angle);
 
     /**
-     * @brief Gets the inner cone angle of the spot light.
+     * @brief Gets the inner cone angle of the spot light. This is the angle between the
+     * light's direction and the edge of the light cone where the light intensity starts
+     * to fall off.
      *
      * @return The current inner cone angle.
      */
     Angle getInnerConeAngle() const;
 
     /**
-     * @brief Sets the outer cone angle of the spot light.
+     * @brief Sets the outer cone angle of the spot light. This is the angle between the
+     * light's direction and the edge of the light cone where the light intensity falls to
+     * zero.
      *
      * @param angle The new outer cone angle.
      */
     void setOuterConeAngle(Angle angle);
     
     /**
-     * @brief Gets the outer cone angle of the spot light.
+     * @brief Gets the outer cone angle of the spot light. This is the angle between the
+     * light's direction and the edge of the light cone where the light intensity falls to
+     * zero.
      *
      * @return The current outer cone angle.
      */

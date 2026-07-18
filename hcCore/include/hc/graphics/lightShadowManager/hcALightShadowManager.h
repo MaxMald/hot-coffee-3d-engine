@@ -49,8 +49,13 @@ namespace hc
      *
      * @param directionalTextureArrayUnit The texture unit to which the directional light
      * shadow array is bound.
+     * @param spotTextureArrayUnit The texture unit to which the spot light shadow array
+     * is bound.
      */
-    virtual void bindShadowTexturesForReading(UInt8 directionalTextureArrayUnit) = 0;
+    virtual void bindShadowTexturesForReading(
+      UInt8 directionalTextureArrayUnit,
+      UInt8 spotTextureArrayUnit
+    ) = 0;
 
     /**
      * @brief Destroys the light shadow manager and releases any allocated resources.

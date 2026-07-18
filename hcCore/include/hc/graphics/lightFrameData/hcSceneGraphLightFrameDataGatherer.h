@@ -62,7 +62,9 @@ namespace hc
 
     static void GatherFromSpotLightComponent(
       SpotLightComponent* spotLightComponent,
-      LightFrameData& lightFrameData
+      LightFrameData& lightFrameData,
+      const SceneGraph& sceneGraph,
+      ALightShadowManager& lightShadowManager
     );
   };
 }
