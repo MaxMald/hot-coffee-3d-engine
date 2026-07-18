@@ -6,6 +6,7 @@
 namespace hc
 {
   class DirectionalLight;
+  class SpotLight;
   class GameObject;
   class SceneGraph;
 
@@ -18,6 +19,8 @@ namespace hc
    *   resources.
    * - `generateDirectionalLightShadowTexture()`: Generates a new directional light shadow
    *   texture and returns its index.
+   * - `generateSpotLightShadowTexture()`: Generates a new spot light shadow texture and
+   *   returns its index.
    * - `bindShadowTexturesForReading()`: Binds the shadow textures for reading in the shader programs.
    * - `onClear()`: Called when the light shadow manager is cleared. Concrete implementations
    *   should reset any internal state.
@@ -76,10 +79,27 @@ namespace hc
       const SceneGraph& sceneGraph
     );
 
+    /**
+     * @brief Generates data for a new spot light shadow and saves it in the light shadow
+     * frame data. Returns the index of the newly generated shadow data, or -1 if the
+     * maximum number of shadows has been reached.
+     *
+     * @param spotLight The spot light for which to generate shadow data.
+     * @param sceneGraph The scene graph containing the objects that may cast shadows for
+     * this light.
+     *
+     * @return The index of the newly generated spot light shadow data, or -1 if the
+     * maximum number of shadows has been reached.
+     */
+    Int32 generateSpotLightShadowData(
+      const SpotLight& spotLight,
+      const SceneGraph& sceneGraph
+    );
+
   protected:
     LightShadowFrameData m_lightShadowFrameData;
     SizeT m_countDirectionalLightShadows;
-
+    SizeT m_countSpotLightShadows;
 
     /**
      * @brief Protected constructor for the ALightShadowManager class.
@@ -107,20 +127,27 @@ namespace hc
     ) = 0;
 
     /**
+     * @brief Generates a new spot light shadow texture and returns its index. If the
+     * maximum number of spot light shadows has been reached, this method returns -1.
+     *
+     * @param lightPosition The position of the spot light in world space.
+     * @param lightViewProjectionMatrix The view-projection matrix of the spot light.
+     * @param sceneGraph The scene graph containing the objects that may cast shadows for
+     * this light.
+     *
+     * @return The index of the newly generated spot light shadow texture, or -1 if the
+     * maximum number of shadows has been reached.
+     */
+    virtual Int32 generateSpotLightShadowTexture(
+      Vector3f lightPosition,
+      Matrix4 lightViewProjectionMatrix,
+      const SceneGraph& sceneGraph
+    ) = 0;
+
+    /**
      * @brief Called when the light shadow manager is cleared. Concrete implementations
      * should reset any internal state.
      */
     virtual void onClear() = 0;
-
-    /**
-     * @brief Checks if the maximum number of directional light shadows has been reached.
-     *
-     * @return True if the maximum number of directional light shadows has been reached,
-     * false otherwise.
-     */
-    inline bool hasReachedMaxDirectionalLightShadows() const
-    {
-      return m_countDirectionalLightShadows >= LightShadowFrameData::MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA;
-    }
   };
 }

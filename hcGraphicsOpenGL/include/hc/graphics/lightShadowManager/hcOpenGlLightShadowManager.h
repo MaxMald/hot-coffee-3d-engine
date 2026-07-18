@@ -50,11 +50,21 @@ namespace hc
     SharedPtr<IShaderProgram> m_shadowMapShaderProgram;
     OpenGlShadowFrameBuffer m_directionalShadowFrameBuffer;
     UInt32 m_currentDirectionalShadowMapLayer;
+    UInt32 m_currentSpotShadowMapLayer;
 
     /**
      * @copydoc ALightShadowManager::generateDirectionalLightShadowTexture()
      */
     Int32 generateDirectionalLightShadowTexture(
+      Vector3f lightPosition,
+      Matrix4 lightViewProjectionMatrix,
+      const SceneGraph& sceneGraph
+    ) override;
+
+    /**
+     * @copydoc ALightShadowManager::generateSpotLightShadowTexture()
+     */
+    Int32 generateSpotLightShadowTexture(
       Vector3f lightPosition,
       Matrix4 lightViewProjectionMatrix,
       const SceneGraph& sceneGraph

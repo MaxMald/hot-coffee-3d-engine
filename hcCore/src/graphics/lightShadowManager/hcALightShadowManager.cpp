@@ -2,12 +2,14 @@
 
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/light/hcDirectionalLight.h"
+#include "hc/scene/light/hcSpotLight.h"
 
 namespace hc
 {
   ALightShadowManager::ALightShadowManager() :
     m_lightShadowFrameData(),
-    m_countDirectionalLightShadows(0)
+    m_countDirectionalLightShadows(0),
+    m_countSpotLightShadows(0)
   {}
 
   ALightShadowManager::~ALightShadowManager()
@@ -16,6 +18,7 @@ namespace hc
   void ALightShadowManager::clear()
   {
     m_countDirectionalLightShadows = 0;
+    m_countSpotLightShadows = 0;
     onClear();
   }
 
@@ -24,7 +27,7 @@ namespace hc
     const SceneGraph& sceneGraph
   )
   {
-    if (hasReachedMaxDirectionalLightShadows())
+    if (m_countDirectionalLightShadows >= LightShadowFrameData::MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA)
       return -1;
 
     DirectionalLightShadowFrameData& shadowData = m_lightShadowFrameData
@@ -41,19 +44,7 @@ namespace hc
     );
 
     Vector3f lightDirection = directionalLight.getDirection();
-
-    Vector3f up;
-    if (Math::IsNearlyEqual(Math::Abs(lightDirection.y), 1.0f))
-    {
-      Vector3f right = Vector3f(1.0f, 0.0f, 0.0f);
-      up = right.cross(lightDirection).normalized();
-    }
-    else
-    {
-      Vector3f worldUp = Vector3f(0.0f, 1.0f, 0.0f);
-      Vector3f right = worldUp.cross(lightDirection).normalized();
-      up = lightDirection.cross(right).normalized();
-    }
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(lightDirection);
 
     // TODO
     //
@@ -105,4 +96,70 @@ namespace hc
     ++m_countDirectionalLightShadows;
     return newIndex;
   }
+
+  Int32 ALightShadowManager::generateSpotLightShadowData(
+    const SpotLight& spotLight,
+    const SceneGraph& sceneGraph
+  )
+  {
+    if (m_countSpotLightShadows >= LightShadowFrameData::MAX_SPOT_LIGHTS_SHADOW_DATA)
+      return -1;
+
+    SpotLightShadowFrameData& shadowData = m_lightShadowFrameData
+      .spotLightShadowData[m_countSpotLightShadows];
+
+    float nearPlane = spotLight.getShadowProjectionNearPlane();
+    float farPlane = spotLight.getShadowProjectionFarPlane();
+    float outerConeAngle = spotLight.getOuterConeAngle().toRadians();
+
+    Matrix4 projectionMatrix = Matrix4::Perspective(
+      outerConeAngle,
+      1.0f,
+      nearPlane,
+      farPlane
+    );
+
+    Vector3f lightDirection = spotLight.getDirection();
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(lightDirection);
+
+    Vector3f lightPosition = spotLight.getPosition();
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      lightPosition,
+      lightPosition + lightDirection,
+      up
+    );
+
+    shadowData.shadowBias = spotLight.getShadowBias();
+    shadowData.shadowStrength = spotLight.getShadowStrength();
+    shadowData.lightViewProjectionMatrix = projectionMatrix * viewMatrix;
+    shadowData.projectionFarPlane = farPlane;
+    shadowData.projectionNearPlane = nearPlane;
+
+    try
+    {
+      shadowData.shadowMapIndex = generateSpotLightShadowTexture(
+        lightPosition,
+        shadowData.lightViewProjectionMatrix,
+        sceneGraph
+      );
+    }
+    catch (const Exception& e)
+    {
+      destroy();
+      throw;
+    }
+
+    if (shadowData.shadowMapIndex < 0)
+      return -1;
+
+    // TODO
+    //
+    // Transpose should be defined by the type of graphics API we are using, not here.
+
+    shadowData.lightViewProjectionMatrix.transpose();
+
+    Int32 newIndex = static_cast<Int32>(m_countSpotLightShadows);
+    ++m_countSpotLightShadows;
+    return newIndex;
+  };
 }

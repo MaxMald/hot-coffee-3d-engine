@@ -8,7 +8,8 @@ namespace hc
     m_shadowDrawCommands(),
     m_shadowMapShaderProgram(nullptr),
     m_directionalShadowFrameBuffer(),
-    m_currentDirectionalShadowMapLayer(0)
+    m_currentDirectionalShadowMapLayer(0),
+    m_currentSpotShadowMapLayer(0)
   {}
 
   OpenGlLightShadowManager::~OpenGlLightShadowManager()
@@ -36,6 +37,7 @@ namespace hc
     m_lightShadowUBO.destroy();
     m_directionalShadowFrameBuffer.destroy();
     m_currentDirectionalShadowMapLayer = 0;
+    m_currentSpotShadowMapLayer = 0;
   }
 
   void OpenGlLightShadowManager::initialize(
@@ -139,8 +141,24 @@ namespace hc
     return shadowMapLayerIndex;
   }
 
+  Int32 OpenGlLightShadowManager::generateSpotLightShadowTexture(
+    Vector3f lightPosition,
+    Matrix4 lightViewProjectionMatrix,
+    const SceneGraph& sceneGraph
+  )
+  {
+    // TODO
+    //
+    // Implement spot light shadow texture generation similar to directional light, but
+    // using a different framebuffer and texture array for spot lights.
+    //
+    // For now, we return -1 to indicate that this feature is not yet implemented.
+    return -1;
+  }
+
   void OpenGlLightShadowManager::onClear()
   {
     m_currentDirectionalShadowMapLayer = 0;
+    m_currentSpotShadowMapLayer = 0;
   }
 }
