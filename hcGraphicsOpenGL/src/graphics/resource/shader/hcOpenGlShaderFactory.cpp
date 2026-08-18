@@ -1,9 +1,45 @@
 #include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
-#include "hc/graphics/resource/shader/hcBuiltInShaders.h"
 #include "hc/graphics/resource/shader/hcOpenGlShader.h"
+
+#include <fstream>
+#include <sstream>
+#include <filesystem>
 
 namespace hc
 {
+  /**
+   * @brief Loads shader source code from a file located in the "shaders/opengl"
+   * directory.
+   *
+   * @param relPath The relative path to the shader file within the "shaders/opengl"
+   * directory.
+   *
+   * @returns The shader source code as a string.
+   *
+   * @throws RuntimeErrorException If the shader file cannot be opened.
+   */
+  static String LoadShaderSourceFromFile(const String& relPath)
+  {
+    std::filesystem::path path = std::filesystem::current_path() / "shaders/opengl" / relPath.c_str();
+    std::ifstream file(path, std::ios::in | std::ios::binary);
+    if (!file)
+      throw new RuntimeErrorException(
+        String::Format("Failed to open shader file: %s", path.string().c_str())
+      );
+
+    std::ostringstream contents;
+    contents << file.rdbuf();
+    file.close();
+
+    return contents.str();
+  }
+
+  static String GetShaderFileNameFromBuiltInShaderType(builtInShaderType::Type type)
+  {
+    String strType = builtInShaderType::ToString(type);
+    return String::Format("%s.glsl", strType.c_str());
+  }
+
   SharedPtr<IShader> OpenGlShaderFactory::createShaderFromStringContent(
     shaderStageType::Type type,
     const String& content
@@ -23,39 +59,12 @@ namespace hc
 
   SharedPtr<IShader> OpenGlShaderFactory::createBuiltInShaderType(builtInShaderType::Type type)
   {
-    switch (type)
-    {
-    case builtInShaderType::UnlitVertex:
-      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::UnlitVertex);
-    case builtInShaderType::UnlitFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::UnlitFragment);
-    case builtInShaderType::LitVertex:
-      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::LitVertex);
-    case builtInShaderType::BlinnPhongForwardFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::BlinnPhongForwardFragment);
-    case builtInShaderType::BlinnPhongDeferredFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::BlinnPhongDeferredFragment);
-    case builtInShaderType::FullScreenTriangleVertex:
-      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::FullScreenTriangleVertex);
-    case builtInShaderType::DeferredLightingFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::DeferredLightingFragment);
-    case builtInShaderType::SkyboxVertex:
-      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::SkyboxVertex);
-    case builtInShaderType::SkyboxFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::SkyboxFragment);
-    case builtInShaderType::FinalPassFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::FinalPassFragment);
-    case builtInShaderType::ShadowMapVertex:
-      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::ShadowMapVertex);
-    case builtInShaderType::ShadowMapFragment:
-      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::ShadowMapFragment);
-    default:
-      throw RuntimeErrorException(
-        String::Format(
-          "Built-in shader type '%u' is not implemented in OpenGlShaderFactory.",
-          static_cast<UInt32>(type)
-        )
-      );
-    }
+    shaderStageType::Type stageType = builtInShaderType::GetShaderStageType(type);
+    return createShaderFromStringContent(
+      stageType,
+      LoadShaderSourceFromFile(
+        GetShaderFileNameFromBuiltInShaderType(type)
+      )
+    );
   }
 }

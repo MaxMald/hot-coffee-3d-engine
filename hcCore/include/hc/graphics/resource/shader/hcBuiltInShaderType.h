@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/graphics/resource/shader/hcShaderStageType.h"
 
 namespace hc
 {
@@ -25,5 +26,6 @@ namespace hc
 
     HC_CORE_EXPORT String ToString(Type type);
     HC_CORE_EXPORT Type FromString(const String& str);
+    HC_CORE_EXPORT shaderStageType::Type GetShaderStageType(Type type);
   }
 }
