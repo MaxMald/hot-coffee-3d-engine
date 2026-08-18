@@ -72,5 +72,12 @@ if(WIN32)
   )
 endif()
 
+# copy the whole shaders/opengl folder next to the built target
+add_custom_command(TARGET hcGraphicsOpenGL POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/shaders/opengl"
+    "$<TARGET_FILE_DIR:hcGraphicsOpenGL>/shaders/opengl"
+)
+
 # Install
 install(TARGETS hcGraphicsOpenGL DESTINATION lib)
