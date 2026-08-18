@@ -1,3 +1,6 @@
+#includes
+include(GNUInstallDirs)
+
 # Prerequisites
 find_package(OpenGL REQUIRED)
 
@@ -81,3 +84,6 @@ add_custom_command(TARGET hcGraphicsOpenGL POST_BUILD
 
 # Install
 install(TARGETS hcGraphicsOpenGL DESTINATION lib)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/shaders/opengl"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/shaders/opengl"
+        FILE_PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
