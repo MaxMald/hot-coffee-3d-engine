@@ -15,6 +15,7 @@
 #include "hc/utilities/hcMatrix3.h"
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcMath.h"
+#include "hc/utilities/hcLinearAlgebra.h"
 #include "hc/utilities/hcTransform.h"
 #include "hc/utilities/hcRect.h"
 #include "hc/utilities/hcString.h"

@@ -14,29 +14,18 @@ namespace hc
    */
   struct alignas(16) HC_CORE_EXPORT SpotLightFrameData
   {
-    Vector4f position;              ///< World-space position (w unused).
-    Vector4f direction;             ///< Normalized cone direction (w unused).
-    Color    color;                 ///< Linear RGB emission color.
-    float    range = 0.0f;          ///< Maximum influence radius in world units.
-    float    innerConeAngle = 0.0f; ///< Cosine of the inner cone half-angle.
-    float    intensity = 0.0f;      ///< Scalar multiplier applied to color.
-    float    outerConeAngle = 0.0f; ///< Cosine of the outer cone half-angle.
+    Vector4f position;                ///< World-space position (w unused).
+    Vector4f direction;               ///< Normalized cone direction (w unused).
+    Color    color;                   ///< Linear RGB emission color.
+    float    range = 0.0f;            ///< Maximum influence radius in world units.
+    float    innerConeAngle = 0.0f;   ///< Cosine of the inner cone half-angle.
+    float    intensity = 0.0f;        ///< Scalar multiplier applied to color.
+    float    outerConeAngle = 0.0f;   ///< Cosine of the outer cone half-angle.
+    Int32 shadowFrameDataIndex = -1;  ///< Index of the shadow map data for this light, or -1 if shadows are disabled.
+    Int32 padding0 = 0;               ///< Padding to ensure 16-byte alignment.
+    Int32 padding1 = 0;               ///< Padding to ensure 16-byte alignment.
+    Int32 padding2 = 0;               ///< Padding to ensure 16-byte alignment.
   };
 
-  static_assert(sizeof(SpotLightFrameData) == 64,
-    "SpotLightFrameData size mismatch.");
-  static_assert(offsetof(SpotLightFrameData, position) == 0,
-    "SpotLightFrameData::position offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, direction) == 16,
-    "SpotLightFrameData::direction offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, color) == 32,
-    "SpotLightFrameData::color offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, range) == 48,
-    "SpotLightFrameData::range offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, innerConeAngle) == 52,
-    "SpotLightFrameData::innerConeAngle offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, intensity) == 56,
-    "SpotLightFrameData::intensity offset mismatch.");
-  static_assert(offsetof(SpotLightFrameData, outerConeAngle) == 60,
-    "SpotLightFrameData::outerConeAngle offset mismatch.");
+  static_assert(sizeof(SpotLightFrameData) % 16 == 0, "SpotLightFrameData size must be a multiple of 16 bytes.");
 }

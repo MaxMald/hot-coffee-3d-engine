@@ -6,6 +6,7 @@
 #include "hc/graphics/renderPipeline/hcForwardRenderPipeline.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/ubos/hcUniformBufferObject.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
 
 namespace hc
 {
@@ -29,14 +30,21 @@ namespace hc
     IFrameBuffer* getRenderTarget() const;
     void removeRenderTarget();
     void queueDrawCommand(const DrawCommand& drawCommand);
-    void execute();
+    void executeDrawCommands();
+    void clearDrawCommands();
+    Vector<DrawCommand>& getDrawCommandQueue();
+    const Vector<DrawCommand>& getDrawCommandQueue() const;
+    void sortDrawCommands();
+    const Vector<DrawCommand>& getDrawCommands() const;
     OpenGlGBuffer& getGBuffer();
+    ALightShadowManager& getLightShadowManager();
     void clearFrame();
     void destroy();
 
     void onViewportChanged(const Rect<UInt32>& viewportRect);
 
   private:
+    OpenGlLightShadowManager m_lightShadowManager;
     ForwardRenderPipeline m_forwardRenderPipeline;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
     FinalRenderPass m_finalRenderPass;

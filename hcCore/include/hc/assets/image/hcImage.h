@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 #include "hc/utilities/hcColorSpaceType.h"
 #include "hc/assets/hcAsset.h"
 
@@ -16,7 +16,7 @@ namespace hc
       const Path& path,
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type format,
+      textureFormatType::Type format,
       colorSpaceType::Type colorSpace,
       BufferByte&& buffer
     );
@@ -38,11 +38,11 @@ namespace hc
     UInt32 getHeight() const;
 
     /**
-     * @brief Gets the color format of the image.
+     * @brief Gets the texture format of the image.
      *
-     * @return Image color format.
+     * @return Image texture format.
      */
-    colorFormatType::Type getFormat() const;
+    textureFormatType::Type getFormat() const;
 
     /**
      * @brief Gets the color space of the image.
@@ -75,7 +75,7 @@ namespace hc
   private:
     UInt32 m_width;
     UInt32 m_height;
-    colorFormatType::Type m_format;
+    textureFormatType::Type m_format;
     colorSpaceType::Type m_colorSpace;
     BufferByte m_data;
   };

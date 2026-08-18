@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 #include "hc/utilities/hcColorSpaceType.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
@@ -31,12 +31,12 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param format The color format of the texture.
+     * @param format The texture format of the texture.
      */
     virtual void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type format
+      textureFormatType::Type format
     ) = 0;
 
     /**
@@ -45,13 +45,13 @@ namespace hc
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param format The color format of the texture.
+     * @param format The texture format of the texture.
      * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
      */
     virtual void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type format,
+      textureFormatType::Type format,
       colorSpaceType::Type colorSpace
     ) = 0;
 
@@ -69,7 +69,7 @@ namespace hc
     virtual void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type format,
+      textureFormatType::Type format,
       colorSpaceType::Type colorSpace,
       const Color& initColor
     ) = 0;
@@ -89,11 +89,11 @@ namespace hc
     virtual UInt32 getHeight() const = 0;
 
     /**
-     * @brief Gets the color format of the texture (e.g., RGBA8, RGB8).
+     * @brief Gets the texture format of the texture (e.g., RGBA8, RGB8).
      *
-     * @return The color format type of the texture.
+     * @return The texture format type of the texture.
      */
-    virtual colorFormatType::Type getColorFormat() const = 0;
+    virtual textureFormatType::Type getTextureFormat() const = 0;
 
     /**
      * @brief Gets the color space of the texture (e.g., sRGB, Linear).

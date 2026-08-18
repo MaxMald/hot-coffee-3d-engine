@@ -18,6 +18,8 @@ namespace hc
       SkyboxVertex,
       SkyboxFragment,
       FinalPassFragment,
+      ShadowMapVertex,
+      ShadowMapFragment,
       Count
     };
 

@@ -45,6 +45,10 @@ namespace hc
       return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::SkyboxFragment);
     case builtInShaderType::FinalPassFragment:
       return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::FinalPassFragment);
+    case builtInShaderType::ShadowMapVertex:
+      return createShaderFromStringContent(shaderStageType::Vertex, builtInShaders::ShadowMapVertex);
+    case builtInShaderType::ShadowMapFragment:
+      return createShaderFromStringContent(shaderStageType::Fragment, builtInShaders::ShadowMapFragment);
     default:
       throw RuntimeErrorException(
         String::Format(

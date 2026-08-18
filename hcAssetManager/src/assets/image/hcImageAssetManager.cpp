@@ -46,7 +46,7 @@ namespace hc
         path,
         static_cast<UInt32>(width),
         static_cast<UInt32>(height),
-        colorFormatType::RGBA8,
+        textureFormatType::RGBA8,
         colorSpaceType::SRGB,
         std::move(buffer)
       );

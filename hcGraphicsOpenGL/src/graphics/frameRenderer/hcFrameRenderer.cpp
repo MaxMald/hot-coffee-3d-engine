@@ -6,12 +6,14 @@
 
 namespace hc
 {
-  static constexpr UInt32 CAMERA_FRAME_BINDING_POINT = 1;
-  static constexpr UInt32 LIGHTS_BINDING_POINT = 2;
+  static constexpr UInt32 CAMERA_FRAME_UBO_BINDING_POINT = 1;
+  static constexpr UInt32 LIGHTS_UBO_BINDING_POINT = 2;
+  static constexpr UInt32 LIGHT_SHADOWS_UBO_BINDING_POINT = 3;
 
   FrameRenderer::FrameRenderer() :
+    m_lightShadowManager(),
     m_forwardRenderPipeline(),
-    m_deferredHybridRenderPipeline(),
+    m_deferredHybridRenderPipeline(m_lightShadowManager),
     m_finalRenderPass(),
     m_frameBufferA(),
     m_lightFrameUBO(),
@@ -38,14 +40,15 @@ namespace hc
 
     try
     {
+      m_lightShadowManager.initialize(LIGHT_SHADOWS_UBO_BINDING_POINT, shaderProgramManager);
       m_forwardRenderPipeline.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
       m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
       m_frameBufferA.initialize(viewportRect.width, viewportRect.height);
       m_lightFrameUBO.initialize(LightFrameData{});
-      m_lightFrameUBO.bindBase(LIGHTS_BINDING_POINT);
+      m_lightFrameUBO.bindBase(LIGHTS_UBO_BINDING_POINT);
       m_cameraFrameUBO.initialize(CameraFrameData{});
-      m_cameraFrameUBO.bindBase(CAMERA_FRAME_BINDING_POINT);
+      m_cameraFrameUBO.bindBase(CAMERA_FRAME_UBO_BINDING_POINT);
     }
     catch (const Exception& e)
     {
@@ -147,7 +150,7 @@ namespace hc
     m_drawCommands.push_back(drawCommand);
   }
 
-  void FrameRenderer::execute()
+  void FrameRenderer::executeDrawCommands()
   {
     assertIsInitialized();
 
@@ -169,9 +172,39 @@ namespace hc
     m_drawCommands.clear();
   }
 
+  void FrameRenderer::clearDrawCommands()
+  {
+    m_drawCommands.clear();
+  }
+
+  Vector<DrawCommand>& FrameRenderer::getDrawCommandQueue()
+  {
+    return m_drawCommands;
+  }
+
+  const Vector<DrawCommand>& FrameRenderer::getDrawCommandQueue() const
+  {
+    return m_drawCommands;
+  }
+
+  void FrameRenderer::sortDrawCommands()
+  {
+    DrawCommandUtilities::SortDrawCommands(m_drawCommands);
+  }
+
+  const Vector<DrawCommand>& FrameRenderer::getDrawCommands() const
+  {
+    return m_drawCommands;
+  }
+
   OpenGlGBuffer& FrameRenderer::getGBuffer()
   {
     return m_deferredHybridRenderPipeline.getGBuffer();
+  }
+
+  ALightShadowManager& FrameRenderer::getLightShadowManager()
+  {
+    return m_lightShadowManager;
   }
 
   void FrameRenderer::clearFrame()
@@ -189,6 +222,7 @@ namespace hc
     m_deferredHybridRenderPipeline.destroy();
     m_finalRenderPass.destroy();
     m_frameBufferA.destroy();
+    m_lightShadowManager.destroy();
     m_lightFrameUBO.destroy();
     m_cameraFrameUBO.destroy();
     m_skybox = nullptr;

@@ -79,7 +79,10 @@ namespace hc
     }
   }
 
-  void GameObject::draw(const RenderContext& renderContext)
+  void GameObject::draw(
+    const RenderContext& renderContext,
+    Vector<DrawCommand>& outDrawCommands
+  ) const
   {
     RenderContext localRenderContext = renderContext;
     localRenderContext.transform *= getMatrix();
@@ -92,11 +95,11 @@ namespace hc
     for (IDrawable* drawableComponent : m_drawableComponents)
     {
       if (drawableComponent)
-        drawableComponent->draw(localRenderContext);
+        drawableComponent->draw(localRenderContext, outDrawCommands);
     }
 
     for (auto& child : m_children)
-      child->draw(localRenderContext);
+      child->draw(localRenderContext, outDrawCommands);
   }
 
   void GameObject::preUpdate(const Time& elapsedTime)
@@ -229,6 +232,15 @@ namespace hc
   const Vector<UniquePtr<GameObject>>& GameObject::getChildren() const
   {
     return m_children;
+  }
+
+  void GameObject::getAllDescendants(Vector<GameObject*>& outDescendants) const
+  {
+    for (const auto& child : m_children)
+    {
+      outDescendants.push_back(child.get());
+      child->getAllDescendants(outDescendants);
+    }
   }
 
   Matrix4 GameObject::getWorldMatrix() const

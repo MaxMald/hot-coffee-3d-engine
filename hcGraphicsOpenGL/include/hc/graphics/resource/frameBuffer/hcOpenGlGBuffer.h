@@ -25,8 +25,12 @@ namespace hc
     void destroy() override;
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
     void destroySelf() override;
-
-    void bindGTexturesForReading() override;
+    void bindGTexturesForReading(
+      UInt8 positionAndDepthTextureUnit,
+      UInt8 normalAndRoughnessTextureUnit,
+      UInt8 albedoAndAlphaTextureUnit,
+      UInt8 materialParametersTextureUnit
+    ) override;
     const ITexture& getPositionAndDepth() const override;
     const ITexture& getNormalRoughness() const override;
     const ITexture& getAlbedoAlpha() const override;

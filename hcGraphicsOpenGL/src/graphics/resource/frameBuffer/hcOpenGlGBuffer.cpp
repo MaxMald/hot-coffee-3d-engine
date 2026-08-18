@@ -51,7 +51,7 @@ namespace hc
 
       m_positionAndDepthTexture.initialize(
         width, height,
-        colorFormatType::RGBA16F, colorSpaceType::Linear
+        textureFormatType::RGBA16F, colorSpaceType::Linear
       );
 
       if (!m_positionAndDepthTexture.isValid())
@@ -59,7 +59,7 @@ namespace hc
 
       m_normalRoughnessTexture.initialize(
         width, height,
-        colorFormatType::RGBA16F, colorSpaceType::Linear
+        textureFormatType::RGBA16F, colorSpaceType::Linear
       );
 
       if (!m_normalRoughnessTexture.isValid())
@@ -67,7 +67,7 @@ namespace hc
 
       m_albedoAlphaTexture.initialize(
         width, height,
-        colorFormatType::RGBA8, colorSpaceType::Linear
+        textureFormatType::RGBA8, colorSpaceType::Linear
       );
 
       if (!m_albedoAlphaTexture.isValid())
@@ -75,7 +75,7 @@ namespace hc
 
       m_materialParametersTexture.initialize(
         width, height,
-        colorFormatType::RGBA8, colorSpaceType::Linear
+        textureFormatType::RGBA8, colorSpaceType::Linear
       );
 
       if (!m_materialParametersTexture.isValid())
@@ -346,13 +346,18 @@ namespace hc
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
   }
 
-  void OpenGlGBuffer::bindGTexturesForReading()
+  void OpenGlGBuffer::bindGTexturesForReading(
+    UInt8 positionAndDepthTextureUnit,
+    UInt8 normalAndRoughnessTextureUnit,
+    UInt8 albedoAndAlphaTextureUnit,
+    UInt8 materialParametersTextureUnit
+  )
   {
     assertIsValid();
-    m_positionAndDepthTexture.bind(0);
-    m_normalRoughnessTexture.bind(1);
-    m_albedoAlphaTexture.bind(2);
-    m_materialParametersTexture.bind(3);
+    m_positionAndDepthTexture.bind(positionAndDepthTextureUnit);
+    m_normalRoughnessTexture.bind(normalAndRoughnessTextureUnit);
+    m_albedoAlphaTexture.bind(albedoAndAlphaTextureUnit);
+    m_materialParametersTexture.bind(materialParametersTextureUnit);
   }
 
   const ITexture& OpenGlGBuffer::getPositionAndDepth() const

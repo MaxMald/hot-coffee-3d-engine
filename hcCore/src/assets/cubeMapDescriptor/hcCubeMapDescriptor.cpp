@@ -4,14 +4,14 @@ namespace hc
 {
   CubeMapDescriptor::CubeMapDescriptor() :
     Asset(""),
-    faceSize(0), format(colorFormatType::RGBA8),
+    faceSize(0), format(textureFormatType::RGBA8),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
 
   CubeMapDescriptor::CubeMapDescriptor(const Path& path) :
     Asset(path),
-    faceSize(0), format(colorFormatType::RGBA8),
+    faceSize(0), format(textureFormatType::RGBA8),
     rightImagePath(), leftImagePath(), topImagePath(),
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
@@ -32,7 +32,7 @@ namespace hc
   {
     clear();
     faceSize = reader.readUInt32();
-    format = static_cast<colorFormatType::Type>(reader.readUInt8());
+    format = static_cast<textureFormatType::Type>(reader.readUInt8());
     rightImagePath = reader.readString();
     leftImagePath = reader.readString();
     topImagePath = reader.readString();
@@ -45,7 +45,7 @@ namespace hc
   {
     m_path.clear();
     faceSize = 0;
-    format = colorFormatType::RGBA8;
+    format = textureFormatType::RGBA8;
     rightImagePath.clear();
     leftImagePath.clear();
     topImagePath.clear();

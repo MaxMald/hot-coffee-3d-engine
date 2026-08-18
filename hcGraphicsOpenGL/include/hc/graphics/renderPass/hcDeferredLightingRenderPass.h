@@ -5,11 +5,12 @@
 namespace hc
 {
   class OpenGlGBuffer;
+  class OpenGlLightShadowManager;
 
   class DeferredLightingRenderPass
   {
   public:
-    DeferredLightingRenderPass();
+    DeferredLightingRenderPass(OpenGlLightShadowManager& lightShadowManager);
     ~DeferredLightingRenderPass();
 
     void initialize(
@@ -21,6 +22,7 @@ namespace hc
 
   private:
     OpenGlGBuffer* m_gBuffer;
+    OpenGlLightShadowManager& m_lightShadowManager;
     SharedPtr<IShaderProgram> m_deferredLightingShaderProgram;
   };
 }

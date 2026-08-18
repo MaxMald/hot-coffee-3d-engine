@@ -1,5 +1,6 @@
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
+#include "hc/graphics/hcDrawCommand.h"
 
 namespace hc
 {
@@ -41,12 +42,15 @@ namespace hc
     }
   }
 
-  void SceneGraph::draw(const RenderContext& renderContext)
+  void SceneGraph::draw(
+    const RenderContext& renderContext,
+    Vector<DrawCommand>& outDrawCommands
+  ) const
   {
     for (const UniquePtr<GameObject>& root : m_roots)
     {
       if (root)
-        root->draw(renderContext);
+        root->draw(renderContext, outDrawCommands);
     }
   }
 
@@ -132,6 +136,15 @@ namespace hc
   const Vector<UniquePtr<GameObject>>& SceneGraph::getRoots() const
   {
     return m_roots;
+  }
+
+  void SceneGraph::getAllGameObjects(Vector<GameObject*>& outGameObjects) const
+  {
+    for (const UniquePtr<GameObject>& root : m_roots)
+    {
+      if (root)
+        root->getAllDescendants(outGameObjects);
+    }
   }
 
   void SceneGraph::clear()

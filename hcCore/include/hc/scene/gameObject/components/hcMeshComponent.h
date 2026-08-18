@@ -28,17 +28,23 @@ namespace hc
 
     ~MeshComponent() override;
 
+    /**
+     * @copydoc ISerializable::serialize
+     */
     void serialize(BinaryWriter& writer) const override;
 
+    /**
+     * @copydoc ISerializable::deserialize
+     */
     void deserialize(BinaryReader& reader) override;
 
     /**
-     * Draws the mesh using the provided render context.
-     * 
-     * @param renderContext The rendering context containing camera and
-     *                      scene information.
+     * @copydoc IDrawable::draw
      */
-    void draw(const RenderContext& renderContext) override;
+    void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& drawCommands
+    ) const override;
 
     /**
      * Sets the mesh to be rendered by this component.

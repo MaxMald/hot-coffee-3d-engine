@@ -8,6 +8,7 @@ namespace hc
 {
   class IGameObjectFactory;
   class Scene;
+  struct DrawCommand;
 
   /**
    * @brief Organizes and manages root-level GameObjects in the scene.
@@ -51,11 +52,16 @@ namespace hc
     void deserialize(BinaryReader& reader) override;
 
     /**
-     * @brief Renders all root GameObjects and their hierarchies.
+     * @brief Renders all root GameObjects and their hierarchies, populating the
+     * provided vector with draw commands.
      *
      * @param renderContext The rendering context to use.
+     * @param outDrawCommands Vector to populate with draw commands.
      */
-    void draw(const RenderContext& renderContext);
+    void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& outDrawCommands
+    ) const;
 
     /**
      * @brief Updates all root GameObjects and their hierarchies.
@@ -99,6 +105,14 @@ namespace hc
      * @return Const reference to the vector of root GameObjects.
      */
     const Vector<UniquePtr<GameObject>>& getRoots() const;
+
+    /**
+     * @brief Populates the provided vector with pointers to all GameObjects in the
+     * scene graph, including all root objects and their descendants.
+     *
+     * @param outGameObjects Vector to populate with GameObject pointers.
+     */
+    void getAllGameObjects(Vector<GameObject*>& outGameObjects) const;
 
     /**
      * @brief Removes and destroys all root GameObjects from the scene graph.

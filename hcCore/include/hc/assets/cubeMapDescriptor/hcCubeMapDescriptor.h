@@ -1,14 +1,14 @@
 #pragma once
 
 #include "hc/assets/hcAsset.h"
-#include "hc/utilities/hcColorFormatType.h"
+#include "hc/utilities/hcTextureFormatType.h"
 
 namespace hc
 {
   struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public ISerializable
   {
     UInt32 faceSize;
-    colorFormatType::Type format;
+    textureFormatType::Type format;
     String rightImagePath;
     String leftImagePath;
     String topImagePath;

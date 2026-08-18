@@ -130,6 +130,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::FinalPassFragment)
       );
     }
+    else if (type == builtInShaderProgramType::ShadowMap)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::ShadowMapVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::ShadowMapFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

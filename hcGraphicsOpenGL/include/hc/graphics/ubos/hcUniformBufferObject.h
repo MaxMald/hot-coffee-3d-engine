@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/graphics/lightShadowFrameData/hcLightShadowFrameData.h>
 #include <GL/glew.h>
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
@@ -164,5 +165,6 @@ namespace hc
   }
 
   using LightFrameUBO = UniformBufferObject<LightFrameData>;
+  using LightShadowFrameUBO = UniformBufferObject<LightShadowFrameData>;
   using CameraFrameUBO = UniformBufferObject<CameraFrameData>;
 }

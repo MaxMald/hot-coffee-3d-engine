@@ -3,6 +3,7 @@
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
 #include "hc/graphics/hcCameraFrameData.h"
+#include "hc/graphics/lightShadowManager/hcALightShadowManager.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
@@ -121,7 +122,11 @@ namespace hc
     m_lightFrameData.numDirectionalLights = 0;
     m_lightFrameData.numOmniLights = 0;
     m_lightFrameData.numSpotLights = 0;
-    SceneGraphLightFrameDataGatherer::Gather(m_sceneGraph, m_lightFrameData);
+    SceneGraphLightFrameDataGatherer::Gather(
+      m_sceneGraph,
+      m_lightFrameData,
+      graphicsManager.getLightShadowManager()
+    );
 
     graphicsManager.uploadLightFrameData(m_lightFrameData);
 
@@ -135,11 +140,12 @@ namespace hc
     RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
 
     onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext);
+    m_sceneGraph.draw(renderContext, graphicsManager.getDrawCommandQueue());
     graphicsManager.executeDrawCommands();
     onAfterDraw(renderContext);
 
     graphicsManager.setSkybox(nullptr);
+    graphicsManager.getLightShadowManager().clear();
   }
 
   void Scene::clear()

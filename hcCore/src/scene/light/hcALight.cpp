@@ -4,22 +4,24 @@ namespace hc
 {
   void ALight::serialize(BinaryWriter& writer) const
   {
-    writer.writeBool(enabled);
+    writer.writeBool(m_enabled);
     writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
     writer.writeFloat(m_intensity);
     writer.writeFloat(m_range);
     writer.writeVector3f(m_position);
+    // TODO serialize shadowEnabled, shadowBias, shadowStrength
   }
 
   void ALight::deserialize(BinaryReader& reader)
   {
-    enabled = reader.readBool();
+    m_enabled = reader.readBool();
     m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_range = reader.readFloat();
     m_position = reader.readVector3f();
+    // TODO deserialize shadowEnabled, shadowBias, shadowStrength
   }
 
   lightType::Type ALight::getType() const
@@ -74,20 +76,53 @@ namespace hc
 
   void ALight::setEnabled(bool isEnabled)
   {
-    enabled = isEnabled;
+    m_enabled = isEnabled;
   }
 
   bool ALight::isEnabled() const
   {
-    return enabled;
+    return m_enabled;
+  }
+
+  void ALight::setShadowsEnabled(bool isEnabled)
+  {
+    m_shadowsEnabled = isEnabled;
+  }
+
+  bool ALight::isShadowsEnabled() const
+  {
+    return m_shadowsEnabled;
+  }
+
+  void ALight::setShadowBias(float bias)
+  {
+    m_shadowBias = Math::Max(0.0f, bias);
+  }
+
+  float ALight::getShadowBias() const
+  {
+    return m_shadowBias;
+  }
+
+  void ALight::setShadowStrength(float strength)
+  {
+    m_shadowStrength = Math::Clamp(strength, 0.0f, 1.0f);
+  }
+
+  float ALight::getShadowStrength() const
+  {
+    return m_shadowStrength;
   }
 
   ALight::ALight(lightType::Type type) :
-    enabled(true),
-    m_type(type),
     m_color{ 1.0f, 1.0f, 1.0f },
+    m_position{ 0.0f, 0.0f, 0.0f },
     m_intensity(1.0f),
     m_range(1.0f),
-    m_position{ 0.0f, 0.0f, 0.0f }
+    m_shadowBias(0.005f),
+    m_shadowStrength(1.0f),
+    m_type(type),
+    m_enabled(true),
+    m_shadowsEnabled(false)
   {}
 }

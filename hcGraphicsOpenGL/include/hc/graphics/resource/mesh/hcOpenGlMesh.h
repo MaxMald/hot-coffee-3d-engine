@@ -32,8 +32,12 @@ namespace hc
      * @brief Draws the mesh using the provided render context.
      *
      * @param renderContext The rendering context for the draw call.
+     * @param drawCommandQueue The queue of draw commands to populate.
      */
-    void draw(const RenderContext& renderContext) override;
+    void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& drawCommandQueue
+    ) const override;
 
     /**
      * @copydoc IMesh::initialize(const Model&, const Vector<SharedPtr<IMaterial>>&)
@@ -170,8 +174,9 @@ namespace hc
     void drawModelSubMesh(
       const RenderContext& renderContext,
       float distanceToCamera,
-      const ModelSubMesh& submesh
-    );
+      const ModelSubMesh& submesh,
+      Vector<DrawCommand>& drawCommandQueue
+    ) const;
     void updateVertexAndIndexBuffers(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices

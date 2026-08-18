@@ -6,7 +6,7 @@ namespace hc
     const Path& path,
     UInt32 width,
     UInt32 height,
-    colorFormatType::Type format,
+    textureFormatType::Type format,
     colorSpaceType::Type colorSpace,
     BufferByte&& buffer
   ) :
@@ -33,7 +33,7 @@ namespace hc
     return m_height;
   }
 
-  colorFormatType::Type Image::getFormat() const
+  textureFormatType::Type Image::getFormat() const
   {
     return m_format;
   }

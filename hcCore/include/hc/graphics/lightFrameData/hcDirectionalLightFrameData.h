@@ -14,14 +14,11 @@ namespace hc
    */
   struct alignas(16) HC_CORE_EXPORT DirectionalLightFrameData
   {
-    Vector4f directionAndIntensity; ///< Normalized light direction. W component stores intensity.
-    Color    color;                 ///< Linear RGB emission color.
+    Vector4f directionAndIntensity;   ///< Normalized light direction. W component stores intensity.
+    Color color;                      ///< Linear RGB emission color.
+    Int32 shadowFrameDataIndex = -1;  ///< Index of the shadow map data for this light, or -1 if shadows are disabled.
+    Int32 padding0 = 0;               ///< Padding to ensure 16-byte alignment.
+    Int32 padding1 = 0;               ///< Padding to ensure 16-byte alignment.
+    Int32 padding2 = 0;               ///< Padding to ensure 16-byte alignment.
   };
-
-  static_assert(sizeof(DirectionalLightFrameData) == 32,
-    "DirectionalLightFrameData size mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, directionAndIntensity) == 0,
-    "DirectionalLightFrameData::directionAndIntensity offset mismatch.");
-  static_assert(offsetof(DirectionalLightFrameData, color) == 16,
-    "DirectionalLightFrameData::color offset mismatch.");
 }

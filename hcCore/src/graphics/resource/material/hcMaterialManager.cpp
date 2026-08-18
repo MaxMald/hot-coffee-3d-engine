@@ -216,7 +216,7 @@ namespace hc
     m_whiteTexture = m_textureManager.createTexture();
     m_whiteTexture->initialize(
       1, 1,
-      colorFormatType::RGBA8,
+      textureFormatType::RGBA8,
       colorSpaceType::Linear,
       Color::White()
     ); // 1x1 white texture
@@ -226,7 +226,7 @@ namespace hc
     m_defaultNormalTexture = m_textureManager.createTexture();
     m_defaultNormalTexture->initialize(
       1, 1,
-      colorFormatType::RGBA8,
+      textureFormatType::RGBA8,
       colorSpaceType::Linear,
       Color(0.5f, 0.5f, 1.0f, 1.0f)
     ); // 1x1 normal texture (0.5, 0.5, 1.0)

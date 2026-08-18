@@ -72,8 +72,12 @@ namespace hc
      * @brief Renders the GameObject and its drawable children/components.
      *
      * @param renderContext Rendering context for drawing.
+     * @param outDrawCommands Vector to store draw commands.
      */
-    virtual void draw(const RenderContext& renderContext) override;
+    virtual void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& outDrawCommands
+    ) const override;
 
     /**
      * @brief Pre-update step for the GameObject and its children.
@@ -166,6 +170,14 @@ namespace hc
      * @return Vector of unique pointers to children.
      */
     const Vector<UniquePtr<GameObject>>& getChildren() const;
+
+    /**
+     * @brief Populates the provided vector with pointers to all descendants of
+     * this GameObject, including children, grandchildren, etc.
+     *
+     * @param outDescendants Vector to populate with descendant pointers.
+     */
+    void getAllDescendants(Vector<GameObject*>& outDescendants) const;
 
     /**
      * @brief Computes the world transformation matrix for this GameObject.

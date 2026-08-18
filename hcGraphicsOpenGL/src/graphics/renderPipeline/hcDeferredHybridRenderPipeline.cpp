@@ -3,12 +3,15 @@
 #include <GL/glew.h>
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
 
 namespace hc
 {
-  DeferredHybridRenderPipeline::DeferredHybridRenderPipeline() :
+  DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
+    OpenGlLightShadowManager& lightShadowManager
+  ) :
     m_deferredGeometryRenderPass(),
-    m_deferredLightingRenderPass(),
+    m_deferredLightingRenderPass(lightShadowManager),
     m_forwardOpaqueRenderPass(),
     m_forwardTransparentRenderPass(),
     m_skyboxRenderPass(),
