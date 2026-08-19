@@ -1,3 +1,6 @@
+#includes
+include(GNUInstallDirs)
+
 # Prerequisites
 find_package(OpenGL REQUIRED)
 
@@ -72,5 +75,15 @@ if(WIN32)
   )
 endif()
 
+# copy the whole shaders/opengl folder next to the built target
+add_custom_command(TARGET hcGraphicsOpenGL POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/shaders/opengl"
+    "$<TARGET_FILE_DIR:hcGraphicsOpenGL>/shaders/opengl"
+)
+
 # Install
 install(TARGETS hcGraphicsOpenGL DESTINATION lib)
+install(DIRECTORY "${CMAKE_SOURCE_DIR}/shaders/opengl"
+        DESTINATION "${CMAKE_INSTALL_DATAROOTDIR}/shaders/opengl"
+        FILE_PERMISSIONS OWNER_READ GROUP_READ WORLD_READ)
