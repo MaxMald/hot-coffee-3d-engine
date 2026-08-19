@@ -56,6 +56,7 @@ namespace hc::editor
   {
     auto unlitDesc = MakeUnique<UnlitMaterialDescriptor>(
       path,
+      "UnlitMaterial",
       m_color,
       m_mainImagePath
     );

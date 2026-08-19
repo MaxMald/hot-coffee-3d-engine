@@ -1,6 +1,8 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
+
 #include "imgui.h"
+#include "hc/editor/imgui/hcImguiUtilities.h"
 
 namespace hc::editor
 {
@@ -63,22 +65,28 @@ namespace hc::editor
         if (!material)
           continue;
 
-        String label = String::Format("Material Slot %d", i);
-        if (ImGui::TreeNode(label.c_str()))
+        ImGui::PushID(i);
+        String name = material->getName();
+        if (ImGui::TreeNode(name.c_str()))
         {
-          drawMaterialInformation(material);
+          drawMaterialInformation(material, i);
           ImGui::TreePop();
         }
+        ImGui::PopID();
       }
       ImGui::TreePop();
     }
   }
 
-  void MeshComponentDrawer::drawMaterialInformation(const SharedPtr<IMaterial>& material)
+  void MeshComponentDrawer::drawMaterialInformation(
+    const SharedPtr<IMaterial>& material,
+    Int32 materialSlotIndex
+  )
   {
     if (!material)
       return;
 
+    ImGui::Text("Material Slot: %d", materialSlotIndex);
     ImGui::Text("Asset Id: %llu", material->getId().value());
     ImGui::Text("Material ID: %u", material->getMaterialId());
     ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
@@ -113,12 +121,30 @@ namespace hc::editor
       SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
         std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
 
-      if (blinnPhongMaterial)
-      {
-        float shininess = blinnPhongMaterial->getShininess();
-        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
-          blinnPhongMaterial->setShininess(shininess);
-      }
+      if (!blinnPhongMaterial)
+        return;
+
+      float shininess = blinnPhongMaterial->getShininess();
+      if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
+        blinnPhongMaterial->setShininess(shininess);
+
+      imguiUtilities::DrawTexture(
+        blinnPhongMaterial->getAlbedoTexture().get(),
+        64.0f,
+        64.0f
+      );
+      ImGui::SameLine();
+      imguiUtilities::DrawTexture(
+        blinnPhongMaterial->getNormalTexture().get(),
+        64.0f,
+        64.0f
+      );
+      ImGui::SameLine();
+      imguiUtilities::DrawTexture(
+        blinnPhongMaterial->getSpecularTexture().get(),
+        64.0f,
+        64.0f
+      );
     }
   }
 

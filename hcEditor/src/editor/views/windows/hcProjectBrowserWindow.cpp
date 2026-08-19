@@ -6,7 +6,6 @@
 #include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
 #include "hc/editor/views/directoryNavigator/hcFileReference.h"
 #include "hc/editor/utilities/hcAssetCreator.h"
-#include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "imgui.h"
 
 namespace 
@@ -17,12 +16,10 @@ namespace
 namespace hc::editor
 {
   ProjectBrowserWindow::ProjectBrowserWindow(
-    ProjectManager& projectManager,
-    MaterialDescriptorEditorWindow& matDescEditorWindow
+    ProjectManager& projectManager
   ) :
     AWindowView("Project Browser", true),
-    m_projectManager(projectManager),
-    m_matDescEditorWindow(matDescEditorWindow)
+    m_projectManager(projectManager)
   {
     m_projectManager.subscribeListener(this);
   }
@@ -156,11 +153,7 @@ namespace hc::editor
     const FileReference& fileReference
   )
   {
-    String extension = fileReference.getExtension();
-    if (extension == assetFileExtensions::MATERIAL_DESCRIPTOR)
-    {
-      m_matDescEditorWindow.open(fileReference.getFullPath());
-    }
+    // TODO : Add support for other asset types in the future
   }
 
   Path ProjectBrowserWindow::combineDirectoryWithFileName(

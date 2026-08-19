@@ -8,6 +8,7 @@ namespace hc::editor
     {
       UnlitMaterialDescriptor materialDesc(
         assetPath,
+        "UnlitMaterial",
         Color(1.0f, 1.0f, 1.0f, 1.0f),
         ""
       );

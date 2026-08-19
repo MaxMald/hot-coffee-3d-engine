@@ -34,9 +34,11 @@ namespace hc
 
   AMaterialDescriptor::AMaterialDescriptor(
     const Path& path,
+    const String& name,
     materialRenderMode::Type renderMode
   ) :
     Asset(path),
+    m_name(name),
     m_renderMode(renderMode),
     m_alphaCutoutThreshold(0.5f),
     m_doubleSided(false)

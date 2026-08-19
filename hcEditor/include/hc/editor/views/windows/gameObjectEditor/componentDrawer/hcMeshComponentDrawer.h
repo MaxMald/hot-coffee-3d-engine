@@ -25,7 +25,7 @@ namespace hc::editor
     void onDrawComponent(MeshComponent* component) override;
     void drawLoadMeshButton(MeshComponent* component);
     void drawMaterialsInformation(const Vector<SharedPtr<IMaterial>>& materials);
-    void drawMaterialInformation(const SharedPtr<IMaterial>& material);
+    void drawMaterialInformation(const SharedPtr<IMaterial>& material, Int32 materialSlotIndex);
     void onMeshFileSelected(MeshComponent* component, const Path& selectedPath);
   };
 }

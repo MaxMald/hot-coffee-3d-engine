@@ -26,6 +26,20 @@ namespace hc
     virtual UInt16 getMaterialId() const = 0;
 
     /**
+     * @brief Gets the name of the material.
+     *
+     * @return The name of the material.
+     */
+    virtual String getName() const = 0;
+
+    /**
+     * @brief Sets the name of the material.
+     *
+     * @param name The name to set for the material.
+     */
+    virtual void setName(const String& name) = 0;
+
+    /**
      * @brief Gets the shader type associated with this material.
      * 
      * @return The shader type.

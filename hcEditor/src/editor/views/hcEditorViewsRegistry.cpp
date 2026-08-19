@@ -23,7 +23,6 @@
 #include "hc/editor/views/windows/hcProjectBrowserWindow.h"
 #include "hc/editor/views/windows/gameObjectEditor/hcGameObjectEditorWindow.h"
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
-#include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/hcAssetManagerWindow.h"
 #include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
 #include "hc/editor/views/windows/hcMeshManagerWindow.h"
@@ -84,15 +83,8 @@ namespace hc::editor
       UniquePtr<ProjectFileDialogView> projectFileSelector =
         MakeUnique<ProjectFileDialogView>(editorServiceManager.getService<ProjectManager>());
 
-      UniquePtr<MaterialDescriptorEditorWindow> matDescEditorWindow =
-        MakeUnique<MaterialDescriptorEditorWindow>(
-          hotCoffeeEngine.getAssetManager(),
-          *projectFileSelector
-        );
-
       viewsManager.registerView(MakeUnique<ProjectBrowserWindow>(
-        editorServiceManager.getService<ProjectManager>(),
-        *matDescEditorWindow
+        editorServiceManager.getService<ProjectManager>()
       ));
 
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
@@ -127,7 +119,6 @@ namespace hc::editor
       // views have been registered.
 
       viewsManager.registerView(std::move(assetManagerWindow));
-      viewsManager.registerView(std::move(matDescEditorWindow));
       viewsManager.registerView(std::move(projectFileSelector));
       viewsManager.registerView(std::move(sceneViewportWindow));
 

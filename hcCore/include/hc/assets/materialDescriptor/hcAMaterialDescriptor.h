@@ -39,6 +39,13 @@ namespace hc
     virtual void getImagesPaths(Vector<Path>& paths) const = 0;
 
     /**
+     * Gets the name of the material descriptor.
+     *
+     * @return The name of the material descriptor.
+     */
+    const String& getName() const { return m_name; }
+
+    /**
      * Gets the render mode of the material, which determines how it should be
      * rendered (e.g., opaque, transparent).
      *
@@ -92,15 +99,18 @@ namespace hc
     materialRenderMode::Type m_renderMode;
     float m_alphaCutoutThreshold;
     bool m_doubleSided;
+    String m_name;
 
     /**
      * Constructs a material descriptor with the given asset path.
      *
      * @param path The file path to the material descriptor asset
+     * @param name The name of the material descriptor
      * @param renderMode The material render mode (default is Opaque)
      */
     AMaterialDescriptor(
       const Path& path,
+      const String& name = "",
       materialRenderMode::Type renderMode = materialRenderMode::Type::Opaque
     );
   };

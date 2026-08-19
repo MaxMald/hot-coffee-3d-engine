@@ -23,6 +23,16 @@ namespace hc
     UInt16 getMaterialId() const override final;
 
     /**
+     * @copydoc IMaterial::getName
+     */
+    String getName() const override final;
+
+    /**
+     * @copydoc IMaterial::setName
+     */
+    void setName(const String& name) override final;
+
+    /**
      * @copydoc IMaterial::getRenderMode
      */
     materialRenderMode::Type getRenderMode() const override final;
@@ -40,7 +50,7 @@ namespace hc
     /**
      * @copydoc IMaterial::setAlphaCutoutThreshold
      */
-    void setAlphaCutoutThreshold(float threshold) override final; 
+    void setAlphaCutoutThreshold(float threshold) override final;
 
     /**
      * @copydoc IMaterial::isDoubleSided
@@ -55,12 +65,14 @@ namespace hc
   protected:
     Id m_id;
     UInt16 m_materialId;
+    String m_name;
     materialRenderMode::Type m_renderMode;
     float m_alphaCutoutThreshold;
     bool m_doubleSided;
 
     AMaterial(
       UInt16 materialId,
+      const String& name,
       materialRenderMode::Type renderMode,
       float alphaCutoutThreshold,
       bool doubleSided

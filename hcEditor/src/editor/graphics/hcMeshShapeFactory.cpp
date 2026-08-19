@@ -38,6 +38,7 @@ namespace hc::editor
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
       Path(""),
+      "UnlitMaterial",
       color,
       Path()
     );
@@ -95,6 +96,7 @@ namespace hc::editor
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
       Path(""),
+      "UnlitMaterial",
       color,
       Path()
     );
@@ -168,6 +170,7 @@ namespace hc::editor
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
       Path(""),
+      "UnlitMaterial",
       color,
       Path()
     );
@@ -289,6 +292,7 @@ namespace hc::editor
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
       Path(""),
+      "UnlitMaterial",
       color,
       Path()
     );
