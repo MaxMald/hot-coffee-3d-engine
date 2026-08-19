@@ -121,7 +121,7 @@ vec3 calculateDirectionalLight(
   float kS = incidenceSpec * 0.2 * specularStrength;
   
   float lightIntensity = light.directionAndIntensity.w;
-  return saturate((kD * diffuseColor * light.color.rgb) + kS) * lightIntensity;
+  return ((kD * diffuseColor.rgb * light.color.rgb) + kS) * lightIntensity;
 }
 
 vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
@@ -166,9 +166,10 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
 
   vec3 viewDir = normalize(cameraPosition - vWorldPos);
-  vec3 totalLighting = vec3(0.05);
+  
 
   float specStrength = texture(uSpecularMap, vTexCoord).r;
+  vec3 totalLighting = vec3(0.05);
 
   for (int i = 0; i < numOmniLights; ++i)
   {

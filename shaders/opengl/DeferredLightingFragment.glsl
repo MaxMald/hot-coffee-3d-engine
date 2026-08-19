@@ -350,7 +350,7 @@ void main()
   
   vec3 viewDir = normalize(cameraPosition - worldPos);
 
-  vec4 totalLighting = vec4(0.0, 0.0, 0.0, 1.0);
+  vec4 totalLighting = vec4(albedo, 1.0) * 0.1; // Ambient light contribution
   for (int i = 0; i < numOmniLights; ++i)
   {
     totalLighting += calculateOmniLight(
