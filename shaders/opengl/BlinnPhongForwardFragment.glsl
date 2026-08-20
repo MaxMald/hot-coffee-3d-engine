@@ -73,6 +73,11 @@ uniform sampler2D uSpecularMap;
 uniform float uAlphaCutoff;
 uniform float uShininess;
 
+float saturate(float value)
+{
+  return clamp(value, 0.0, 1.0);
+}
+
 float calculateAttenuation(float distance, float range)
 {
   // Quadratic attenuation that clamps to 0 at the light's range
@@ -95,17 +100,28 @@ vec3 calculateOmniLight(OmniLightData light, vec3 normal, vec3 viewDir, vec3 wor
   return (diff + spec) * light.color.rgb * light.intensity * attenuation;
 }
 
-vec3 calculateDirectionalLight(DirectionalLightData light, vec3 normal, vec3 viewDir, float shininess)
+vec3 calculateDirectionalLight(
+  DirectionalLightData light, 
+  vec4 diffuseColor,
+  vec3 normal, 
+  vec3 viewDir, 
+  float shininess,
+  float specularStrength
+)
 {
-  vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
+  vec3 lightDir = normalize(-light.directionAndIntensity.xyz);  
+
+  // Lambert diffuse incidence
+  float incidenceDiff = saturate(dot(normal, lightDir));
+  float kD = incidenceDiff * 0.8;
+
+  // Blinn-Phong specular
   vec3 halfDir = normalize(lightDir + viewDir);
-
-  float diff = max(dot(normal, lightDir), 0.0);
-  float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
-  float specStrength = texture(uSpecularMap, vTexCoord).r;
-  float spec = specBase * specStrength;
-
-  return (diff + spec) * light.color.rgb * light.directionAndIntensity.w;
+  float incidenceSpec = pow(saturate(dot(normal, halfDir)), shininess);
+  float kS = incidenceSpec * 0.2 * specularStrength;
+  
+  float lightIntensity = light.directionAndIntensity.w;
+  return ((kD * diffuseColor.rgb * light.color.rgb) + kS) * lightIntensity;
 }
 
 vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
@@ -150,16 +166,45 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
 
   vec3 viewDir = normalize(cameraPosition - vWorldPos);
+  
+
+  float specStrength = texture(uSpecularMap, vTexCoord).r;
   vec3 totalLighting = vec3(0.05);
 
   for (int i = 0; i < numOmniLights; ++i)
-    totalLighting += calculateOmniLight(omniLights[i], normalWS, viewDir, vWorldPos, uShininess);
+  {
+    totalLighting += calculateOmniLight(
+      omniLights[i], 
+      normalWS, 
+      viewDir, 
+      vWorldPos, 
+      uShininess
+    );
+  }
+    
 
   for (int i = 0; i < numDirectionalLights; ++i)
-    totalLighting += calculateDirectionalLight(directionalLights[i], normalWS, viewDir, uShininess);
+  {
+    totalLighting += calculateDirectionalLight(
+      directionalLights[i],
+      baseColor,
+      normalWS, 
+      viewDir, 
+      uShininess,
+      specStrength
+    );
+  }
 
   for (int i = 0; i < numSpotLights; ++i)
-    totalLighting += calculateSpotLight(spotLights[i], normalWS, viewDir, vWorldPos, uShininess);
+  {
+    totalLighting += calculateSpotLight(
+      spotLights[i], 
+      normalWS, 
+      viewDir, 
+      vWorldPos, 
+      uShininess
+    );
+  }
 
   FragColor = vec4(baseColor.rgb * totalLighting, baseColor.a);
 }

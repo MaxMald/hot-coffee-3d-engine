@@ -45,13 +45,24 @@ namespace hc
      */
     static shadingType::Type GetShadingTypeFromMaterial(const aiMaterial* material);
 
+    /**
+     * Gets the name of the material from an Assimp material.
+     *
+     * @param material The Assimp material to analyze
+     * 
+     * @return The name of the material
+     */
+    static String GetMaterialNameFromMaterial(const aiMaterial* material);
+
     static SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
+      const String& name,
       const aiMaterial* material
     );
 
     static SharedPtr<AMaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
       const Path& fileDirectory,
+      const String& name,
       const aiMaterial* material
     );
 

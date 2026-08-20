@@ -16,6 +16,7 @@ namespace hc
      * Constructs a Blinn-Phong material descriptor.
      *
      * @param path The file path to the material descriptor asset
+     * @param name The name of the material descriptor
      * @param color The base color of the material
      * @param shininess The shininess of the material, controlling the specular highlight
      * size. Clamped between 1.0 and 256.0.
@@ -25,6 +26,7 @@ namespace hc
      */
     BlinnPhongMaterialDescriptor(
       const Path& path,
+      const String& name,
       const Color& color,
       float shininess,
       const Path& albedoImagePath,

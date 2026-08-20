@@ -16,18 +16,19 @@ namespace hc
   )
   {
     shadingType::Type type = GetShadingTypeFromMaterial(material);
+    String name = GetMaterialNameFromMaterial(material);
     SharedPtr<AMaterialDescriptor> matDescriptor;
 
     switch (type)
     {
     case shadingType::Unlit:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, material);
+      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
       break;
     case shadingType::BlinnPhong:
-      matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, material);
+      matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
       break;
     default:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, material);
+      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
       break;
     }
 
@@ -57,13 +58,23 @@ namespace hc
     }
   }
 
+  String AssimpMaterialDescriptorParser::GetMaterialNameFromMaterial(const aiMaterial* material)
+  {
+    aiString name;
+    if (material->Get(AI_MATKEY_NAME, name) == aiReturn_SUCCESS)
+      return String(name.C_Str());
+    return String();
+  }
+
   SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseUnlitMaterialDescriptor(
     const Path& fileDirectory,
+    const String& name,
     const aiMaterial* material
   )
   {
     return MakeShared<UnlitMaterialDescriptor>(
       "",
+      name,
       GetVertexColorDiffuseFromMaterial(material),
       GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE)
     );
@@ -71,11 +82,13 @@ namespace hc
 
   SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
     const Path& fileDirectory,
+    const String& name,
     const aiMaterial* material
   )
   { 
     return MakeShared<BlinnPhongMaterialDescriptor>(
       "",
+      name,
       GetVertexColorDiffuseFromMaterial(material),
       GetShininessFromMaterial(material),
       GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),

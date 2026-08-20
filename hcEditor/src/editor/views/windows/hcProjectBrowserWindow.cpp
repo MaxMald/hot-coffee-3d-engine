@@ -5,24 +5,15 @@
 #include "hc/editor/views/hcEditorViewsManager.h"
 #include "hc/editor/views/directoryNavigator/hcDirectoryReference.h"
 #include "hc/editor/views/directoryNavigator/hcFileReference.h"
-#include "hc/editor/utilities/hcAssetCreator.h"
-#include "hc/editor/views/windows/materialDescriptorEditorWindow/hcMaterialDescriptorEditorWindow.h"
 #include "imgui.h"
-
-namespace 
-{
-  constexpr const hc::Char* ASSET_TYPES[] = { "Material" };
-}
 
 namespace hc::editor
 {
   ProjectBrowserWindow::ProjectBrowserWindow(
-    ProjectManager& projectManager,
-    MaterialDescriptorEditorWindow& matDescEditorWindow
+    ProjectManager& projectManager
   ) :
     AWindowView("Project Browser", true),
-    m_projectManager(projectManager),
-    m_matDescEditorWindow(matDescEditorWindow)
+    m_projectManager(projectManager)
   {
     m_projectManager.subscribeListener(this);
   }
@@ -54,8 +45,6 @@ namespace hc::editor
 
   void ProjectBrowserWindow::onDraw()
   {
-    drawAssetCreatorInterface();
-    ImGui::Separator();
     drawDirectoryNavigator();
   }
 
@@ -99,67 +88,8 @@ namespace hc::editor
     {
       if (ImGui::Selectable(file->getNameWithExtension().c_str()))
       {
-        tryOpenEditorForFile(*file);
+        // TODO: Should open a viewer or editor for the selected file based on its type.
       }
-    }
-  }
-
-  void ProjectBrowserWindow::drawAssetCreatorInterface()
-  {
-    static Char fileName[256] = "";
-    static Int32 selectedAssetType = 0;
-
-    if (ImGui::CollapsingHeader("Asset Creator", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-      ImGui::SetNextItemWidth(150.0f);
-      ImGui::InputText("File Name", fileName, IM_ARRAYSIZE(fileName));
-      ImGui::SameLine();
-      ImGui::SetNextItemWidth(120.0f);
-      ImGui::Combo("Asset Type", &selectedAssetType, ASSET_TYPES, IM_ARRAYSIZE(ASSET_TYPES));
-      ImGui::SameLine();
-
-      if (ImGui::Button("Create Asset"))
-      {
-        DirectoryReference* currentDir = m_directoryNavigator.getCurrentDirectory();
-        if (!currentDir)
-          return;
-
-        if (strlen(fileName) <= 0)
-          return;
-
-        String assetType = ASSET_TYPES[selectedAssetType];
-        if (assetType == "Material")
-        {
-          assetCreator::createMaterialDescriptor(
-            combineDirectoryWithFileName(
-              currentDir->getFullPath(),
-              String(fileName),
-              assetFileExtensions::MATERIAL_DESCRIPTOR
-            )
-          );
-        }
-        else
-        {
-          LogService::Error(
-            String::Format(
-              "Couldn't create asset. Unsupported asset type '%s' requested.",
-              assetType.c_str()
-            )
-          );
-        }
-        refresh();
-      }
-    } // Collapsing Header
-  }
-
-  void ProjectBrowserWindow::tryOpenEditorForFile(
-    const FileReference& fileReference
-  )
-  {
-    String extension = fileReference.getExtension();
-    if (extension == assetFileExtensions::MATERIAL_DESCRIPTOR)
-    {
-      m_matDescEditorWindow.open(fileReference.getFullPath());
     }
   }
 

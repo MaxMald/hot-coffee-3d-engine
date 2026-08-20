@@ -4,13 +4,14 @@ namespace hc
 {
   BlinnPhongMaterialDescriptor::BlinnPhongMaterialDescriptor(
     const Path& path,
+    const String& name,
     const Color& color,
     float shininess,
     const Path& albedoImagePath,
     const Path& normalImagePath,
     const Path& specularImagePath
   ) :
-    AMaterialDescriptor(path),
+    AMaterialDescriptor(path, name),
     m_color(color),
     m_shininess(Math::Clamp(shininess, 1.0f, 256.0f)),
     m_albedoImagePath(albedoImagePath),

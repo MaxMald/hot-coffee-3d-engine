@@ -24,11 +24,13 @@ namespace hc
      * Constructs an unlit material descriptor.
      *
      * @param path The file path to the material descriptor asset
+     * @param name The name of the material descriptor
      * @param color The base color of the material
      * @param mainImagePath The file path to the main texture image
      */
     UnlitMaterialDescriptor(
       const Path& path,
+      const String& name,
       const Color& color,
       const Path& mainImagePath
     );

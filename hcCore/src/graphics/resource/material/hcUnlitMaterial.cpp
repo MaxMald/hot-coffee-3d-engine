@@ -8,7 +8,7 @@
 namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
-    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
     m_color(0.5f, 0.5f, 0.5f, 1.0f)
   {}
 
@@ -83,6 +83,7 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
+    m_name = descriptor.getName();
     m_renderMode = descriptor.getRenderMode();
     m_doubleSided = descriptor.isDoubleSided();
     setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());

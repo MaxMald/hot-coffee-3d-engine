@@ -8,6 +8,7 @@ namespace hc
   {
     m_defaultMaterialDescriptor = MakeShared<UnlitMaterialDescriptor>(
       "",
+      "Default Unlit Material",
       Color(0.5f, 0.5f, 0.5f, 1.0f),
       ""
     );
@@ -133,6 +134,7 @@ namespace hc
 
       return MakeShared<UnlitMaterialDescriptor>(
         path,
+        "UnlitMaterial",
         color,
         mainImagePath
       );

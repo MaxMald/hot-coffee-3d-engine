@@ -2,7 +2,6 @@
 
 #include <algorithm>
 
-#include "hc/serialization/hcJsonSerializer.h"
 #include "hc/plugins/hcPluginConnectionHelper.h"
 #include "hc/window/hcIWindowManager.h"
 #include "hc/window/hcIWindow.h"
@@ -109,7 +108,6 @@ namespace hc
     try
     {
       LogService::Prepare();
-      JsonSerializer::Prepare();
 
       connectToPlugins(settings.pluginManagerSettings);
 
@@ -243,7 +241,6 @@ namespace hc
     m_assetManager = nullptr;
     m_windowManager = nullptr;
 
-    JsonSerializer::Shutdown();
     LogService::Shutdown();
 
     m_initialized = false;

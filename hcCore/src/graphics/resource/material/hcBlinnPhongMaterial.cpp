@@ -8,7 +8,7 @@
 namespace hc
 {
   BlinnPhongMaterial::BlinnPhongMaterial(UInt16 materialId) :
-    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_shininess(16.0f),
     m_albedoTexture(nullptr),
@@ -123,6 +123,7 @@ namespace hc
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
     m_color = descriptor.getColor();
+    m_name = descriptor.getName();
     m_shininess = descriptor.getShininess();
     m_alphaCutoutThreshold = descriptor.getAlphaCutoutThreshold();
     m_doubleSided = descriptor.isDoubleSided();

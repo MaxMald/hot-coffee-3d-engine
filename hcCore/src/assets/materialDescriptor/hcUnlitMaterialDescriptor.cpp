@@ -10,10 +10,11 @@ namespace hc
 
   UnlitMaterialDescriptor::UnlitMaterialDescriptor(
     const Path& path,
+    const String& name,
     const Color& color,
     const Path& mainImagePath
   ) :
-    AMaterialDescriptor(path),
+    AMaterialDescriptor(path, name),
     m_color(color),
     m_mainImagePath(mainImagePath)
   {}
