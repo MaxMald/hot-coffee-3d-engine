@@ -28,8 +28,6 @@ namespace hc::editor
 
     void onDraw() override;
     void drawDirectoryNavigator();
-    void drawAssetCreatorInterface();
-    void tryOpenEditorForFile(const FileReference& fileReference);
 
     Path combineDirectoryWithFileName(
       const Path& directoryPath,

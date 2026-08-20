@@ -39,7 +39,6 @@
 #include "hc/scene/light/hcSpotLight.h"
 #include "hc/scene/light/hcDirectionalLight.h"
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/serialization/hcJsonSerializer.h"
 #include "hc/serialization/hcFileFormats.h"
 #include "hc/serialization/scene/hcSceneSerializer.h"
 #include "hc/graphics/hcPolygonFillType.h"
