@@ -66,6 +66,12 @@ namespace hc
       const aiMaterial* material
     );
 
+    static SharedPtr<AMaterialDescriptor> ParseHairMaterialDescriptor(
+      const Path& fileDirectory,
+      const String& name,
+      const aiMaterial* material
+    );
+
     static Color GetVertexColorDiffuseFromMaterial(const aiMaterial* material);
     static Path GetTexturePathFromMaterial(
       const Path& fileDirectory,

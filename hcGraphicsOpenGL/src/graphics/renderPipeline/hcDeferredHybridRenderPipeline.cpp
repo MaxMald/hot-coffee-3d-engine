@@ -14,11 +14,14 @@ namespace hc
     m_deferredLightingRenderPass(lightShadowManager),
     m_forwardOpaqueRenderPass(),
     m_forwardTransparentRenderPass(),
+    m_hairForwardSpecularRenderPass(lightShadowManager),
     m_skyboxRenderPass(),
     m_gBuffer(),
     m_deferredOpaqueCommands(),
     m_forwardOpaqueCommands(),
     m_forwardTransparentCommands(),
+    m_hairForwardSpecularCommands(),
+    m_lightShadowManager(lightShadowManager),
     m_initialized(false)
   {}
 
@@ -32,6 +35,7 @@ namespace hc
     m_deferredOpaqueCommands.clear();
     m_forwardOpaqueCommands.clear();
     m_forwardTransparentCommands.clear();
+    m_hairForwardSpecularCommands.clear();
     m_deferredGeometryRenderPass.destroy();
     m_deferredLightingRenderPass.destroy();
     m_skyboxRenderPass.destroy();
@@ -90,18 +94,22 @@ namespace hc
     m_deferredOpaqueCommands.clear();
     m_forwardOpaqueCommands.clear();
     m_forwardTransparentCommands.clear();
+    m_hairForwardSpecularCommands.clear();
 
     SplitDrawCommandsByRenderPass(
       drawCommands,
       m_deferredOpaqueCommands,
       m_forwardOpaqueCommands,
-      m_forwardTransparentCommands
+      m_forwardTransparentCommands,
+      m_hairForwardSpecularCommands
     );
 
+    m_lightShadowManager.uploadShadowDataToGPU();
     m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
     m_deferredLightingRenderPass.execute(frameRenderContext.customFrameBuffer);
     copyDepthBufferToCurrentRenderTarget(frameRenderContext.customFrameBuffer);
     m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, frameRenderContext.customFrameBuffer);
+    m_hairForwardSpecularRenderPass.execute(m_hairForwardSpecularCommands, frameRenderContext.customFrameBuffer);
 
     if (frameRenderContext.skyboxCubeMap)
       m_skyboxRenderPass.execute(frameRenderContext.skyboxCubeMap, frameRenderContext.customFrameBuffer);
@@ -118,7 +126,8 @@ namespace hc
     const Vector<DrawCommand>& drawCommands,
     Vector<DrawCommand>& deferredOpaqueCommands,
     Vector<DrawCommand>& forwardOpaqueCommands,
-    Vector<DrawCommand>& forwardTransparentCommands
+    Vector<DrawCommand>& forwardTransparentCommands,
+    Vector<DrawCommand>& hairForwardSpecularCommands
   )
   {
     for (SizeT i = 0; i < drawCommands.size(); ++i)
@@ -127,6 +136,14 @@ namespace hc
 
       if (!cmd.material)
         continue;
+
+      if (cmd.material->getShaderType() == shadingType::Hair)
+      {
+        deferredOpaqueCommands.push_back(cmd);
+        hairForwardSpecularCommands.push_back(cmd);
+        forwardTransparentCommands.push_back(cmd);
+        continue;
+      }
 
       if (cmd.material->getRenderMode() == materialRenderMode::Type::Transparent)
       {

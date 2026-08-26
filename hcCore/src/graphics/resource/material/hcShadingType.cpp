@@ -12,8 +12,10 @@ namespace hc
         return "Unlit";
       case BlinnPhong:
         return "BlinnPhong";
+      case Hair:
+        return "Hair";
       default:
-        return "Unknown";
+        throw RuntimeErrorException("Unknown shading type.");
       }
     }
 
@@ -23,8 +25,10 @@ namespace hc
         return Unlit;
       else if (str == "BlinnPhong")
         return BlinnPhong;
+      else if (str == "Hair")
+        return Hair;
       else
-        return Unknown;
+        throw RuntimeErrorException("Unknown shading type string: " + str);
     }
   }
 }

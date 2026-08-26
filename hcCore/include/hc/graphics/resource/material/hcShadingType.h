@@ -10,6 +10,7 @@ namespace hc
     {
       Unlit = 0,
       BlinnPhong = 1,
+      Hair = 2,
       Unknown = 255
     };
 

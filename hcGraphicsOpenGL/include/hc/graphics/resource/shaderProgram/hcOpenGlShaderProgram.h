@@ -57,6 +57,11 @@ namespace hc
     /**
      * @copydoc IShaderProgram::setUniform
      */
+    void setUniform(const String& name, const Vector4f& v4f) override;
+
+    /**
+     * @copydoc IShaderProgram::setUniform
+     */
     void setUniform(const String& name, const Color& color) override;
 
     /**

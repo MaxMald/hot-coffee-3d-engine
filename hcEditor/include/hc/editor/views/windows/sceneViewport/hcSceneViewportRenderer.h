@@ -57,24 +57,15 @@ namespace hc::editor
 
     /**
      * @brief Renders the scene from the specified camera.
-     * 
+     *
      * @param scene The scene to render.
      * @param camera The camera to render from.
+     * @param activeGameObject The currently active game object, used for gizmo rendering.
      */
-    void renderScene(Scene& scene, Camera& camera);
-
-    /**
-     * @brief Renders the light gizmos for the scene.
-     * 
-     * @param scene The scene containing the lights.
-     * @param camera The camera to render from.
-     * @param activeGameObject The currently active game object.
-     */
-    void renderLightGizmos(
-      const Scene& scene,
-      const Camera& camera,
-      const GameObject* activeGameObject
-    );
+    void renderScene(
+      Scene& scene,
+      Camera& camera,
+      const GameObject* activeGameObject);
 
     /**
      * @brief Gets the texture containing the rendered scene.

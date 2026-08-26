@@ -21,6 +21,9 @@ namespace hc
       FinalPassFragment,
       ShadowMapVertex,
       ShadowMapFragment,
+      HairDeferredGeometryFragment,
+      HairForwardSpecularFragment,
+      HairForwardTransparentFragment,
       Count
     };
 

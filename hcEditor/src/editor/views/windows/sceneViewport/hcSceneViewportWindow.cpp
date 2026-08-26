@@ -147,7 +147,6 @@ namespace hc::editor
 
     updateFramebufferSize();
     renderSceneToTexture();
-    renderGizmosToTexture();
 
     ImVec2 viewportPos = ImGui::GetCursorScreenPos();
 
@@ -174,6 +173,10 @@ namespace hc::editor
       else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferMaterialParameters)
       {
         drawRenderTarget(gBuffer.getMaterialParameters());
+      }
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferSpecularColorAndShininess)
+      {
+        drawRenderTarget(gBuffer.getSpecularColorAndShininess());
       }
     }
 
@@ -223,24 +226,6 @@ namespace hc::editor
     }
 
     m_renderer.renderScene(
-      *contentScene,
-      m_camera.getCamera()
-    );
-  }
-
-  void SceneViewportWindow::renderGizmosToTexture()
-  {
-    Scene* contentScene = m_engine
-      .getSceneManager()
-      .getScene(EditorSceneNames::CONTENT_SCENE);
-
-    if (!contentScene)
-    {
-      LogService::Error("SceneViewportWindow: Content scene not found. Cannot render to texture.");
-      return;
-    }
-
-    m_renderer.renderLightGizmos(
       *contentScene,
       m_camera.getCamera(),
       m_gizmoController.getActiveGameObject()

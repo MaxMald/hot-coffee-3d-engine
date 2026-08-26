@@ -89,23 +89,25 @@ layout(std140, binding = 3) uniform LightShadowBlock
   SpotLightShadowFrameData spotLightShadowData[MAX_SPOT_LIGHTS_SHADOW_DATA];
 };
 
-layout(binding = 0) uniform sampler2D uPositionAndDepth;
-layout(binding = 1) uniform sampler2D uNormalRoughness;
-layout(binding = 2) uniform sampler2D uAlbedoAlpha;
-layout(binding = 3) uniform sampler2D uMaterialParameters;
-layout(binding = 4) uniform sampler2D uSpecularColorAndShininess;
-layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
-layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
-
 in vec2 vTexCoord;
+in vec3 vWorldPos;
+in vec3 vNormal;
+in vec3 vTangent;
+in vec4 vColor;
 
 out vec4 FragColor;
 
-// utils
+uniform vec4 uColor;
+uniform float uAlphaCutoff;
 
-float saturate(float value)
+layout(binding = 0) uniform sampler2D uAlbedo;
+layout(binding = 1) uniform sampler2D uNormalMap;
+layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
+layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
+
+float saturate(float x)
 {
-  return clamp(value, 0.0, 1.0);
+  return clamp(x, 0.0, 1.0);
 }
 
 float calculateAttenuation(float distance, float range)
@@ -121,15 +123,13 @@ float linearizeDepth(float depth, float nearPlane, float farPlane)
   return (2.0 * nearPlane * farPlane) / (farPlane + nearPlane - z * (farPlane - nearPlane));
 }
 
-// Lighting methods
-
 vec4 calculateOmniLight(
   OmniLightData light, 
   vec4 diffuseColor,
   vec3 normal, 
   vec3 viewDir, 
   vec3 worldPos, 
-  vec3 specularColor,
+  float specularStrength, 
   float shininess
 )
 {
@@ -140,13 +140,13 @@ vec4 calculateOmniLight(
   float kD = incidenceDiffuse * 0.8;
 
   float incidenceSpecular = pow(saturate(dot(normal, halfDir)), shininess);
-  float kS = incidenceSpecular  * 0.2;
+  float kS = incidenceSpecular * specularStrength * 0.2;
 
   float distance = length(light.position.xyz - worldPos);
   float attenuation = calculateAttenuation(distance, light.range);
   float attenuatedIntensity = light.intensity * attenuation;
 
-  return vec4((kD * diffuseColor.rgb * light.color.rgb + (kS * specularColor)) * attenuatedIntensity, 1.0);
+  return vec4((kD * diffuseColor.rgb * light.color.rgb + kS) * attenuatedIntensity, 1.0);
 }
 
 float calculateDirectionalShadow(
@@ -193,7 +193,7 @@ vec4 calculateDirectionalLight(
   vec3 normal,
   vec3 viewDir,
   vec3 worldPos,
-  vec3 specularColor,
+  float specularStrength,
   float shininess
 )
 {
@@ -204,7 +204,7 @@ vec4 calculateDirectionalLight(
   float kD = incidenceDiffuse * 0.8;
 
   float incidenceSpecular = pow(saturate(dot(normal, halfDir)), shininess);
-  float kS = incidenceSpecular * 0.2;
+  float kS = incidenceSpecular * specularStrength * 0.2;
 
   float shadowFactor = 1.0;
   if (light.shadowFrameDataIndex >= 0 && light.shadowFrameDataIndex < MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA)
@@ -224,7 +224,7 @@ vec4 calculateDirectionalLight(
   }
 
   float lightIntensity = light.directionAndIntensity.w;
-  return vec4(((diffuseColor.rgb * kD * light.color.rgb) + (kS * specularColor)) * lightIntensity * shadowFactor, 1.0);
+  return vec4(((diffuseColor.rgb * kD * light.color.rgb) + kS) * lightIntensity * shadowFactor, 1.0);
 }
 
 float calculateSpotLightShadow(
@@ -276,7 +276,7 @@ vec4 calculateSpotLight(
   vec3 normal,
   vec3 viewDir,
   vec3 worldPos,
-  vec3 specularColor,
+  float specularStrength,
   float shininess
 )
 {
@@ -287,7 +287,7 @@ vec4 calculateSpotLight(
   float kD = incidenceDiffuse * 0.8;
 
   float incidenceSpecular = pow(saturate(dot(normal, halfDir)), shininess);
-  float kS = incidenceSpecular * 0.2;
+  float kS = incidenceSpecular * specularStrength * 0.2;
 
   float distance = length(light.position.xyz - worldPos);
   float attenuation = calculateAttenuation(distance, light.range);
@@ -317,7 +317,7 @@ vec4 calculateSpotLight(
       shadowFactor = 1.0 - shadow * shadowData.shadowStrength;
     }
 
-    return vec4((kD * diffuseColor.rgb * light.color.rgb + (kS * specularColor)) * attenuatedIntensity * spillLightIntensity * shadowFactor, 1.0);
+    return vec4((kD * diffuseColor.rgb * light.color.rgb + kS) * attenuatedIntensity * spillLightIntensity * shadowFactor, 1.0);
   }
   else
   {
@@ -326,42 +326,37 @@ vec4 calculateSpotLight(
 }
 
 void main()
-{
-  vec4 positionAndDepth = texture(uPositionAndDepth, vTexCoord);
-  vec3 worldPos = positionAndDepth.xyz;
-  float depth = positionAndDepth.w;
-
-  if (depth < 0.0)
-    discard; // No geometry at this pixel
-
-  vec4 normalRoughness = texture(uNormalRoughness, vTexCoord);
-  vec3 normal = normalRoughness.xyz;
-  float roughness = normalRoughness.w;
-
-  vec4 specularColorAndShininess = texture(uSpecularColorAndShininess, vTexCoord);
-  vec3 specularColor = specularColorAndShininess.rgb;
-  float shininess = specularColorAndShininess.a * 256.0; // Convert shininess back from [0,1] range
-
-  vec4 albedoAlpha = texture(uAlbedoAlpha, vTexCoord);
-  vec3 albedo = albedoAlpha.rgb;
-  float alpha = albedoAlpha.a;
-  if (alpha < 0.01)
-    discard; // Transparent pixel
+{ 
   
-  vec3 viewDir = normalize(cameraPosition - worldPos);
+  float alphaBase = textureLod(uAlbedo, vTexCoord, 0.0).a;
+  if (alphaBase >= uAlphaCutoff)
+    discard;
   
+  vec4 albedoTex = texture(uAlbedo, vTexCoord);
 
+  vec3 N = normalize(vNormal);
+  vec3 T = normalize(vTangent - dot(vTangent, N) * N);
+  vec3 B = normalize(cross(N, T));
+  mat3 TBN = mat3(T, B, N);
+
+  vec3 normalTS = texture(uNormalMap, vTexCoord).xyz * 2.0 - 1.0;
+  vec3 normalWS = normalize(TBN * normalTS);
+  vec3 viewDir = normalize(cameraPosition - vWorldPos);
+
+  vec3 albedo = albedoTex.rgb * vColor.rgb * uColor.rgb;
+
+  // TODO: Ambient should be a property of the material or the scene, not hardcoded here.
   vec4 totalLighting = vec4(albedo, 1.0) * 0.1; // Ambient light contribution
   for (int i = 0; i < numOmniLights; ++i)
   {
     totalLighting += calculateOmniLight(
       omniLights[i],
       vec4(albedo, 1.0),
-      normal, 
+      normalWS, 
       viewDir, 
-      worldPos, 
-      specularColor,
-      shininess
+      vWorldPos, 
+      0.0, 
+      1.0
     );
   }
     
@@ -370,11 +365,11 @@ void main()
     totalLighting += calculateDirectionalLight(
       directionalLights[i], 
       vec4(albedo, 1.0),
-      normal, 
+      normalWS, 
       viewDir, 
-      worldPos, 
-      specularColor,
-      shininess
+      vWorldPos, 
+      0.0, 
+      1.0
     );
   }
     
@@ -383,13 +378,13 @@ void main()
     totalLighting += calculateSpotLight(
       spotLights[i], 
       vec4(albedo, 1.0),
-      normal, 
+      normalWS, 
       viewDir, 
-      worldPos, 
-      specularColor, 
-      shininess
+      vWorldPos, 
+      0.0, 
+      1.0
     );
   } 
 
-  FragColor = vec4(totalLighting.rgb, alpha);
+  FragColor = vec4(totalLighting.rgb, albedoTex.a);
 }

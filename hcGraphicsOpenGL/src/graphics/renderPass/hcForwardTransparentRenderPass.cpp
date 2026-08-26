@@ -22,6 +22,10 @@ namespace hc
       currentRenderTarget->bind();
     }
 
+    GLboolean depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
+    if (!depthTestEnabled)
+      glEnable(GL_DEPTH_TEST);
+
     GLboolean blendEnabled = glIsEnabled(GL_BLEND);
     GLboolean depthMaskEnabled;
     glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskEnabled);
@@ -47,8 +51,8 @@ namespace hc
         const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
         glBindVertexArray(drawData.vao);
-        command.material->bind(renderPassType::Type::Forward);
-        command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
+        command.material->bind(renderPassType::Type::ForwardTransparent);
+        command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::ForwardTransparent);
 
         glDrawElements(
           static_cast<GLenum>(drawData.drawMode),
@@ -74,6 +78,9 @@ namespace hc
 
     glDepthMask(depthMaskEnabled);
 
+    if (!depthTestEnabled)
+      glDisable(GL_DEPTH_TEST);
+
     if (currentRenderTarget)
       currentRenderTarget->unbind();
   }
@@ -91,8 +98,8 @@ namespace hc
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
     glBindVertexArray(drawData.vao);
-    command.material->bind(renderPassType::Type::Forward);
-    command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
+    command.material->bind(renderPassType::Type::ForwardTransparent);
+    command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::ForwardTransparent);
 
     // Pass 1: Render back faces first
     glCullFace(GL_FRONT);

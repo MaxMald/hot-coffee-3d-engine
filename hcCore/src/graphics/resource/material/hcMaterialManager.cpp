@@ -6,10 +6,12 @@
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 #include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
+#include "hc/graphics/resource/material/hcHairMaterial.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 #include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
 #include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcHairMaterialDescriptor.h"
 #include <limits>
 
 namespace hc
@@ -103,6 +105,23 @@ namespace hc
 
       return createBlinnPhongMaterial(*blinnPhongDescriptor);
     }
+    else if (shaderType == shadingType::Hair)
+    {
+      const HairMaterialDescriptor* hairDescriptor =
+        dynamic_cast<const HairMaterialDescriptor*>(descriptor.get());
+
+      if (!hairDescriptor)
+      {
+        LogService::Error(
+          String::Format(
+            "Failed to cast MaterialDescriptor to HairMaterialDescriptor for shader type 'Hair'."
+          )
+        );
+        return nullptr;
+      }
+
+      return createHairMaterial(*hairDescriptor);
+    }
 
     throw RuntimeErrorException(
       String::Format(
@@ -163,6 +182,48 @@ namespace hc
       specularTexture,
       m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongForward),
       m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongDeferredGeometry)
+    );
+
+    m_materials.push_back(material);
+    return material;
+  }
+
+  SharedPtr<HairMaterial> MaterialManager::createHairMaterial(
+    const HairMaterialDescriptor& descriptor
+  )
+  {
+    SharedPtr<ITexture> albedoTexture = getTextureFromPath(
+      descriptor.getAlbedoImagePath()
+    );
+
+    if (!albedoTexture)
+      albedoTexture = m_whiteTexture;
+
+    SharedPtr<ITexture> normalTexture = getTextureFromPath(
+      descriptor.getNormalImagePath(),
+      colorSpaceType::Linear
+    );
+
+    if (!normalTexture)
+      normalTexture = m_defaultNormalTexture;
+
+    SharedPtr<ITexture> specularTexture = getTextureFromPath(
+      descriptor.getSpecularImagePath(),
+      colorSpaceType::Linear
+    );
+
+    if (!specularTexture)
+      specularTexture = m_whiteTexture;
+
+    SharedPtr<HairMaterial> material = MakeShared<HairMaterial>(generateMaterialId());
+    material->initialize(
+      descriptor,
+      albedoTexture,
+      normalTexture,
+      specularTexture,
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::HairDeferredGeometry),
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::HairForwardSpecular),
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::HairForwardTransparent)
     );
 
     m_materials.push_back(material);
