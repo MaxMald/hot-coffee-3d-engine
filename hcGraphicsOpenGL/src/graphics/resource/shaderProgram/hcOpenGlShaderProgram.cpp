@@ -120,6 +120,15 @@ namespace hc
     openGlGraphicsUtilities::AssertOpenGlHasNoError();
   }
 
+  void OpenGlShaderProgram::setUniform(const String& name, const Vector4f& v4f)
+  {
+    assertIsValid();
+
+    GLint location = getUniformLocation(name);
+    glUniform4f(location, v4f.x, v4f.y, v4f.z, v4f.w);
+    openGlGraphicsUtilities::AssertOpenGlHasNoError();
+  }
+
   void OpenGlShaderProgram::setUniform(const String& name, const Color& color)
   {
     assertIsValid();

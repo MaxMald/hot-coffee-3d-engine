@@ -21,22 +21,29 @@ namespace hc
     static inline constexpr float CLEAR_COLOR_NORMAL_AND_ROUGHNESS[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
     static inline constexpr float CLEAR_COLOR_ALBEDO_AND_ALPHA[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
     static inline constexpr float CLEAR_COLOR_MATERIAL_PARAMETERS[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+    static inline constexpr float CLEAR_COLOR_SPECULAR_COLOR_AND_SHININESS[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
 
     virtual ~IGBuffer();
 
     /**
      * Binds the geometry buffer textures attachments for sampling.
      *
-     * @param positionAndDepthTextureUnit The texture unit for the position and depth texture.
-     * @param normalAndRoughnessTextureUnit The texture unit for the normal and roughness texture.
+     * @param positionAndDepthTextureUnit The texture unit for the position and depth
+     * texture.
+     * @param normalAndRoughnessTextureUnit The texture unit for the normal and roughness
+     * texture.
      * @param albedoAndAlphaTextureUnit The texture unit for the albedo and alpha texture.
-     * @param materialParametersTextureUnit The texture unit for the material parameters texture.
+     * @param materialParametersTextureUnit The texture unit for the material parameters
+     * texture.
+     * @param specularColorAndShininessTextureUnit The texture unit for the specular color
+     * and shininess texture.
      */
     virtual void bindGTexturesForReading(
       UInt8 positionAndDepthTextureUnit,
       UInt8 normalAndRoughnessTextureUnit,
       UInt8 albedoAndAlphaTextureUnit,
-      UInt8 materialParametersTextureUnit
+      UInt8 materialParametersTextureUnit,
+      UInt8 specularColorAndShininessTextureUnit
     ) = 0;
 
     /**
@@ -63,7 +70,7 @@ namespace hc
     /**
      * Gets the material parameter texture attachment.
      *
-     * - x component: specular strength
+     * - x component: free
      * - y component: free
      * - z component: free
      * - w component: free
@@ -71,6 +78,13 @@ namespace hc
      * @return Const reference to the material parameters texture.
      */
     virtual const ITexture& getMaterialParameters() const = 0;
+
+    /**
+     * Gets the specular color and shininess texture attachment.
+     *
+     * @return Const reference to the specular color and shininess texture.
+     */
+    virtual const ITexture& getSpecularColorAndShininess() const = 0;
 
   protected:
     IGBuffer();

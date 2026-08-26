@@ -9,8 +9,10 @@ namespace hc
     enum Type : UInt8
     {
       Forward = 0,
+      ForwardTransparent,
       DeferredGeometry,
       DeferredLighting,
+      HairForwardSpecular,
       Count
     };
 

@@ -146,6 +146,42 @@ namespace hc::editor
         64.0f
       );
     }
+    if (material->getShaderType() == shadingType::Hair)
+    {
+      SharedPtr<HairMaterial> hairMaterial =
+        std::dynamic_pointer_cast<HairMaterial>(material);
+
+      if (!hairMaterial)
+        return;
+
+      Color specularPrimaryColor = hairMaterial->getSpecularPrimaryColor();
+      if (imguiUtilities::DrawColorEdit3("Primary Specular Color", specularPrimaryColor))
+        hairMaterial->setSpecularPrimaryColor(specularPrimaryColor);
+
+      Color specularSecondaryColor = hairMaterial->getSpecularSecondaryColor();
+      if (imguiUtilities::DrawColorEdit3("Secondary Specular Color", specularSecondaryColor))
+        hairMaterial->setSpecularSecondaryColor(specularSecondaryColor);
+
+      float specularPrimaryShift = hairMaterial->getSpecularPrimaryShift();
+      if (ImGui::SliderFloat("Specular Primary Shift", &specularPrimaryShift, -4.0f, 4.0f))
+        hairMaterial->setSpecularPrimaryShift(specularPrimaryShift);
+
+      float specularSecondaryShift = hairMaterial->getSpecularSecondaryShift();
+      if (ImGui::SliderFloat("Specular Secondary Shift", &specularSecondaryShift, -4.0f, 4.0f))
+        hairMaterial->setSpecularSecondaryShift(specularSecondaryShift);
+
+      float shininess = hairMaterial->getShininess();
+      if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
+        hairMaterial->setShininess(shininess);
+
+      float specularStrength = hairMaterial->getSpecularStrength();
+      if (ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f))
+        hairMaterial->setSpecularStrength(specularStrength);
+
+      float specularWidth = hairMaterial->getSpecularWidth();
+      if (ImGui::SliderFloat("Specular Width", &specularWidth, 0.0f, 1.0f))
+        hairMaterial->setSpecularWidth(specularWidth);
+    }
   }
 
   void MeshComponentDrawer::onMeshFileSelected(

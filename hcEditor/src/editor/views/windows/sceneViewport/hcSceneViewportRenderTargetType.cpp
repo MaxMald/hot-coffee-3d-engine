@@ -18,6 +18,8 @@ namespace hc::editor
         "GBuffer Albedo + Alpha";
       case GBufferMaterialParameters: return
         "GBuffer Material Parameters";
+      case  GBufferSpecularColorAndShininess: return
+        "GBuffer Specular Color + Shininess";
       default:
         throw RuntimeErrorException(
           String::Format("Not Implemented render target type: %d", static_cast<Int32>(type))
@@ -29,14 +31,16 @@ namespace hc::editor
     {
       if (str == "Final Color")
         return FinalColor;
-      if (str == "GBuffer Position + Depth")
+      else if (str == "GBuffer Position + Depth")
         return GBufferPositionAndDepth;
-      if (str == "GBuffer Normal + Roughness")
+      else if (str == "GBuffer Normal + Roughness")
         return GBufferNormalRoughness;
-      if (str == "GBuffer Albedo + Alpha")
+      else if (str == "GBuffer Albedo + Alpha")
         return GBufferAlbedoAlpha;
-      if (str == "GBuffer Material Parameters")
+      else if (str == "GBuffer Material Parameters")
         return GBufferMaterialParameters;
+      else if (str == "GBuffer Specular Color + Shininess")
+        return GBufferSpecularColorAndShininess;
       throw InvalidArgumentException(
         String::Format("Unknown render target type string: %s", str.c_str())
       );

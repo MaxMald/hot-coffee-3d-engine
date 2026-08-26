@@ -164,9 +164,7 @@ void main()
 
   vec3 normalTS = texture(uNormalMap, vTexCoord).xyz * 2.0 - 1.0;
   vec3 normalWS = normalize(TBN * normalTS);
-
-  vec3 viewDir = normalize(cameraPosition - vWorldPos);
-  
+  vec3 viewDir = normalize(cameraPosition - vWorldPos);  
 
   float specStrength = texture(uSpecularMap, vTexCoord).r;
   vec3 totalLighting = vec3(0.05);

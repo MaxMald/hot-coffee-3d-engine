@@ -59,6 +59,13 @@ namespace hc
     ) override;
 
     /**
+     * @copydoc IMaterialManager::createHairMaterial
+     */
+    SharedPtr<HairMaterial> createHairMaterial(
+      const HairMaterialDescriptor& descriptor
+    ) override;
+
+    /**
      * @copydoc IMaterialManager::getMaterials
      */
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;

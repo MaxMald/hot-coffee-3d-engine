@@ -5,10 +5,13 @@
 
 namespace hc
 {
+  static constexpr const char* SUFFIX_SHADING_TYPE_HAIR = "_stHair";
+  static constexpr const char* SUFFIX_SHADING_TYPE_UNLIT = "_stUL";
+  static constexpr const char* SUFFIX_SHADING_TYPE_BLINN_PHONG = "_stBP";
+
   static constexpr const char* SUFFIX_TRANSPARENT = "_Transparent";
   static constexpr const char* SUFFIX_ALPHA_CUTOUT = "_AlphaCutout";
   static constexpr const char* SUFFIX_DOUBLE_SIDED = "_DoubleSided";
-
 
   SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::Parse(
     const Path& fileDirectory,
@@ -27,6 +30,9 @@ namespace hc
     case shadingType::BlinnPhong:
       matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
       break;
+    case shadingType::Hair:
+      matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
+      break;
     default:
       matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
       break;
@@ -40,6 +46,18 @@ namespace hc
   {
     if (!material)
       return shadingType::Unknown;
+
+    // Check for explicit shading type suffix in the material name
+
+    String matName = GetMaterialNameFromMaterial(material);
+    if (matName.find(SUFFIX_SHADING_TYPE_HAIR) != String::npos)
+      return shadingType::Hair;
+    else if (matName.find(SUFFIX_SHADING_TYPE_UNLIT) != String::npos)
+      return shadingType::Unlit;
+    else if (matName.find(SUFFIX_SHADING_TYPE_BLINN_PHONG) != String::npos)
+      return shadingType::BlinnPhong;
+
+    // Fallback to checking the shading model property
 
     int shadingModel = 0;
     if (material->Get(AI_MATKEY_SHADING_MODEL, shadingModel) != aiReturn_SUCCESS)
@@ -87,6 +105,23 @@ namespace hc
   )
   { 
     return MakeShared<BlinnPhongMaterialDescriptor>(
+      "",
+      name,
+      GetVertexColorDiffuseFromMaterial(material),
+      GetShininessFromMaterial(material),
+      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
+      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
+      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
+    );
+  }
+
+  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
+    const Path& fileDirectory,
+    const String& name,
+    const aiMaterial* material
+  )
+  {
+    return MakeShared<HairMaterialDescriptor>(
       "",
       name,
       GetVertexColorDiffuseFromMaterial(material),

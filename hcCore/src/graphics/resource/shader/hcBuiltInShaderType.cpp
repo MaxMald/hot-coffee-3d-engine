@@ -20,6 +20,9 @@ namespace hc
       case Type::FinalPassFragment: return "FinalPassFragment";
       case Type::ShadowMapVertex: return "ShadowMapVertex";
       case Type::ShadowMapFragment: return "ShadowMapFragment";
+      case Type::HairDeferredGeometryFragment: return "HairDeferredGeometryFragment";
+      case Type::HairForwardSpecularFragment: return "HairForwardSpecularFragment";
+      case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
 
       default:
         throw InvalidArgumentException(
@@ -31,17 +34,20 @@ namespace hc
     Type FromString(const String& str)
     {
       if (str == "UnlitVertex") return Type::UnlitVertex;
-      if (str == "UnlitFragment") return Type::UnlitFragment;
-      if (str == "LitVertex") return Type::LitVertex;
-      if (str == "BlinnPhongForwardFragment") return Type::BlinnPhongForwardFragment;
-      if (str == "BlinnPhongDeferredFragment") return Type::BlinnPhongDeferredFragment;
-      if (str == "FullScreenTriangleVertex") return Type::FullScreenTriangleVertex;
-      if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
-      if (str == "SkyboxVertex") return Type::SkyboxVertex;
-      if (str == "SkyboxFragment") return Type::SkyboxFragment;
-      if (str == "FinalPassFragment") return Type::FinalPassFragment;
-      if (str == "ShadowMapVertex") return Type::ShadowMapVertex;
-      if (str == "ShadowMapFragment") return Type::ShadowMapFragment;
+      else if (str == "UnlitFragment") return Type::UnlitFragment;
+      else if (str == "LitVertex") return Type::LitVertex;
+      else if (str == "BlinnPhongForwardFragment") return Type::BlinnPhongForwardFragment;
+      else if (str == "BlinnPhongDeferredFragment") return Type::BlinnPhongDeferredFragment;
+      else if (str == "FullScreenTriangleVertex") return Type::FullScreenTriangleVertex;
+      else if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
+      else if (str == "SkyboxVertex") return Type::SkyboxVertex;
+      else if (str == "SkyboxFragment") return Type::SkyboxFragment;
+      else if (str == "FinalPassFragment") return Type::FinalPassFragment;
+      else if (str == "ShadowMapVertex") return Type::ShadowMapVertex;
+      else if (str == "ShadowMapFragment") return Type::ShadowMapFragment;
+      else if (str == "HairDeferredGeometryFragment") return Type::HairDeferredGeometryFragment;
+      else if (str == "HairForwardSpecularFragment") return Type::HairForwardSpecularFragment;
+      else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
 
       throw InvalidArgumentException(
         String::Format("builtInShaderType::FromString : Invalid built-in shader type string: %s", str.c_str())
@@ -66,6 +72,9 @@ namespace hc
       case Type::SkyboxFragment:
       case Type::FinalPassFragment:
       case Type::ShadowMapFragment:
+      case Type::HairDeferredGeometryFragment:
+      case Type::HairForwardSpecularFragment:
+      case Type::HairForwardTransparentFragment:
         return shaderStageType::Fragment;
 
       default:

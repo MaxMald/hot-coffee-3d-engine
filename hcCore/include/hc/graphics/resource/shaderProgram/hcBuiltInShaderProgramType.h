@@ -15,6 +15,9 @@ namespace hc
       Skybox,
       FinalPass,
       ShadowMap,
+      HairDeferredGeometry,
+      HairForwardSpecular,
+      HairForwardTransparent,
       Count
     };
 

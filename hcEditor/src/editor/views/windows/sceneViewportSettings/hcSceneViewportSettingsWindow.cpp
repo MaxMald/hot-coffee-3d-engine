@@ -11,7 +11,8 @@ namespace hc::editor
     "GBuffer Position + Depth",
     "GBuffer Normal + Roughness",
     "GBuffer Albedo + Alpha",
-    "GBuffer Material Parameters"
+    "GBuffer Material Parameters",
+    "GBuffer Specular Color + Shininess"
   };
 
   SceneViewportSettingsWindow::SceneViewportSettingsWindow(

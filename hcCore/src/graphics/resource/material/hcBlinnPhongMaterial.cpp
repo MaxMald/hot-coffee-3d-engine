@@ -43,7 +43,8 @@ namespace hc
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
 
-    if (renderPassType::Type::Forward == renderPass)
+    if (renderPassType::Type::Forward == renderPass
+        || renderPassType::Type::ForwardTransparent == renderPass)
       bindForwardPass();
     else if (renderPassType::Type::DeferredGeometry == renderPass)
       bindDeferredGeometryPass();
@@ -61,7 +62,8 @@ namespace hc
     renderPassType::Type renderPass
   )
   {
-    if (renderPassType::Type::Forward == renderPass)
+    if (renderPassType::Type::Forward == renderPass
+      || renderPassType::Type::ForwardTransparent == renderPass)
     {
       coreAssertions::AssertShaderProgramIsValid(
         m_forwardShaderProgram,

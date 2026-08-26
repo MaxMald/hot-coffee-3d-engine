@@ -62,6 +62,14 @@ namespace hc
     virtual void setUniform(const String& name, const Vector3f& v3f) = 0;
 
     /**
+     * @brief Sets a 4D vector uniform variable.
+     *
+     * @note Should only be called after the shader program is successfully linked and
+     * bound.
+     */
+    virtual void setUniform(const String& name, const Vector4f& v4f) = 0;
+
+    /**
      * @brief Sets a color uniform variable.
      *
      * @note Should only be called after the shader program is successfully linked and

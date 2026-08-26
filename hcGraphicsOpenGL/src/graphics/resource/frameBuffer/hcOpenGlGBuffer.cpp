@@ -5,11 +5,12 @@
 
 namespace hc
 {
-  inline static constexpr GLenum GBufferColorAttachments[4] = {
+  inline static constexpr GLenum GBufferColorAttachments[5] = {
     GL_COLOR_ATTACHMENT0,
     GL_COLOR_ATTACHMENT1,
     GL_COLOR_ATTACHMENT2,
-    GL_COLOR_ATTACHMENT3
+    GL_COLOR_ATTACHMENT3,
+    GL_COLOR_ATTACHMENT4
   };
 
   OpenGlGBuffer::OpenGlGBuffer() :
@@ -21,7 +22,8 @@ namespace hc
     m_positionAndDepthTexture(),
     m_normalRoughnessTexture(),
     m_albedoAlphaTexture(),
-    m_materialParametersTexture()
+    m_materialParametersTexture(),
+    m_specularColorAndShininessTexture()
   {}
 
   OpenGlGBuffer::~OpenGlGBuffer()
@@ -81,6 +83,14 @@ namespace hc
       if (!m_materialParametersTexture.isValid())
         throw RuntimeErrorException("Failed to create material parameters texture for GBuffer.");
 
+      m_specularColorAndShininessTexture.initialize(
+        width, height,
+        textureFormatType::RGBA8, colorSpaceType::Linear
+      );
+
+      if (!m_specularColorAndShininessTexture.isValid())
+        throw RuntimeErrorException("Failed to create specular color and shininess texture for GBuffer.");
+
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
         m_positionAndDepthTexture.getTextureId(), 0
@@ -101,7 +111,12 @@ namespace hc
         m_materialParametersTexture.getTextureId(), 0
       );
 
-      glDrawBuffers(4, GBufferColorAttachments);
+      glFramebufferTexture2D(
+        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D,
+        m_specularColorAndShininessTexture.getTextureId(), 0
+      );
+
+      glDrawBuffers(5, GBufferColorAttachments);
 
       glGenRenderbuffers(1, &m_depthStencilBufferId);
       glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
@@ -166,6 +181,7 @@ namespace hc
     m_normalRoughnessTexture.unbind(1);
     m_albedoAlphaTexture.unbind(2);
     m_materialParametersTexture.unbind(3);
+    m_specularColorAndShininessTexture.unbind(4);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
@@ -192,6 +208,7 @@ namespace hc
       m_normalRoughnessTexture.resize(width, height);
       m_albedoAlphaTexture.resize(width, height);
       m_materialParametersTexture.resize(width, height);
+      m_specularColorAndShininessTexture.resize(width, height);
 
       glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
       glRenderbufferStorage(
@@ -255,6 +272,7 @@ namespace hc
       glClearBufferfv(GL_COLOR, 1, IGBuffer::CLEAR_COLOR_NORMAL_AND_ROUGHNESS);
       glClearBufferfv(GL_COLOR, 2, IGBuffer::CLEAR_COLOR_ALBEDO_AND_ALPHA);
       glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_MATERIAL_PARAMETERS);
+      glClearBufferfv(GL_COLOR, 4, IGBuffer::CLEAR_COLOR_SPECULAR_COLOR_AND_SHININESS);
       glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
     catch (...)
@@ -306,6 +324,7 @@ namespace hc
     m_normalRoughnessTexture.destroy();
     m_albedoAlphaTexture.destroy();
     m_materialParametersTexture.destroy();
+    m_specularColorAndShininessTexture.destroy();
 
     m_width = 0;
     m_height = 0;
@@ -350,7 +369,8 @@ namespace hc
     UInt8 positionAndDepthTextureUnit,
     UInt8 normalAndRoughnessTextureUnit,
     UInt8 albedoAndAlphaTextureUnit,
-    UInt8 materialParametersTextureUnit
+    UInt8 materialParametersTextureUnit,
+    UInt8 specularColorAndShininessTextureUnit
   )
   {
     assertIsValid();
@@ -358,6 +378,7 @@ namespace hc
     m_normalRoughnessTexture.bind(normalAndRoughnessTextureUnit);
     m_albedoAlphaTexture.bind(albedoAndAlphaTextureUnit);
     m_materialParametersTexture.bind(materialParametersTextureUnit);
+    m_specularColorAndShininessTexture.bind(specularColorAndShininessTextureUnit);
   }
 
   const ITexture& OpenGlGBuffer::getPositionAndDepth() const
@@ -378,6 +399,11 @@ namespace hc
   const ITexture& OpenGlGBuffer::getMaterialParameters() const
   {
     return m_materialParametersTexture;
+  }
+
+  const ITexture& OpenGlGBuffer::getSpecularColorAndShininess() const
+  {
+    return m_specularColorAndShininessTexture;
   }
 
   void OpenGlGBuffer::assertIsValid() const
