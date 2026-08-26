@@ -114,6 +114,26 @@ layout(binding = 3) uniform sampler2D uSpecularMap;
 layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
 layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
 
+/**
+ * @brief Performs alpha testing on a color against a specified alpha cutoff
+ * value. If the alpha component of the color is less than this value, the
+ * function returns true (indicating that the fragment should be discarded).
+ *
+ * If the alpha cutoff is less than or equal to zero, the function will always
+ * return false, meaning that no fragments will be discarded based on alpha
+ * testing.
+ * 
+ * @param color The color to test, which includes an alpha component.
+ * @param alphaCutoff The alpha cutoff value to compare against.
+ * 
+ * @return true if the alpha component of the color is less than the alpha
+ * cutoff value.
+ */
+bool isAlphaLessThanCutoff(vec4 color, float alphaCutoff)
+{
+  return alphaCutoff > 0.0 && color.a < alphaCutoff;
+}
+
 float saturate(float x)
 {
   return clamp(x, 0.0, 1.0);
@@ -145,53 +165,10 @@ float hairStrand(vec3 T, vec3 V, vec3 L, float specularStrength, float shininess
   vec3 H = normalize(V + L);
 
   float HdotT = dot(T, H);
-  float sinTH = sqrt(1 - HdotT * HdotT);
-  float dirAtten = smoothstep(-specularWidth, 0, HdotT);
+  float sinTH = sqrt(max(1 - HdotT * HdotT, 0.0));
+  float dirAtten = smoothstep(-max(specularWidth, 1e-4), 0, HdotT);
 
   return dirAtten * saturate(pow(sinTH, shininess)) * specularStrength;
-}
-
-float calculateSpotLightShadow(
-  mat4 lightSpaceMatrix,
-  vec3 fragPos,
-  float bias,
-  int shadowMapIndex,
-  float projectionNearPlane,
-  float projectionFarPlane
-)
-{
-  vec4 fragPosLightSpace = lightSpaceMatrix * vec4(fragPos, 1.0);
-  vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-  projCoords = projCoords * 0.5 + 0.5;
-
-  if (projCoords.z > 1.0)
-      return 0.0;
-
-  if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0)
-      return 0.0;
-
-  // PCF for soft shadows
-  // Sampling 9 neighboring texels in the shadow map
-
-  float shadow = 0.0;
-  vec2 texelSize = 1.0 / textureSize(uSpotShadowMaps, 0).xy;
-  for (int x = -1; x <= 1; ++x)
-  {
-    for (int y = -1; y <= 1; ++y)
-    {
-        float closestDepth = texture(uSpotShadowMaps, vec3(projCoords.xy + vec2(x, y) * texelSize, shadowMapIndex)).r;
-        float currentDepth = projCoords.z;
-
-        closestDepth = linearizeDepth(closestDepth, projectionNearPlane, projectionFarPlane);
-        currentDepth = linearizeDepth(currentDepth, projectionNearPlane, projectionFarPlane);
-
-        shadow += currentDepth - bias > closestDepth ? 1.0 : 0.0;
-    }
-  }
-
-  // Average the shadow factor over the 9 samples
-  shadow /= 9.0;
-  return shadow;
 }
 
 vec4 getSpecular(
@@ -260,7 +237,11 @@ float calculateDirectionalShadow(
   {
     for (int y = -1; y <= 1; ++y)
     {
-      float pcfClosestDepth = texture(uDirectionalShadowMaps, vec3(projCoords.xy + vec2(x, y) * texelSize, shadowFrameDataIndex)).r;
+      float pcfClosestDepth = texture(
+        uDirectionalShadowMaps, 
+        vec3(projCoords.xy + vec2(x, y) * texelSize, shadowData.shadowMapIndex)
+      ).r;
+
       float currentDepth = projCoords.z;
       shadow += currentDepth - bias > pcfClosestDepth ? 1.0 : 0.0;
     }
@@ -304,7 +285,10 @@ float calculateSpotLightShadow(
   {
     for (int y = -1; y <= 1; ++y)
     {
-        float closestDepth = texture(uSpotShadowMaps, vec3(projCoords.xy + vec2(x, y) * texelSize, shadowFrameDataIndex)).r;
+        float closestDepth = texture(
+          uSpotShadowMaps, 
+          vec3(projCoords.xy + vec2(x, y) * texelSize, shadowData.shadowMapIndex)
+        ).r;
         float currentDepth = projCoords.z;
 
         closestDepth = linearizeDepth(closestDepth, shadowData.projectionNearPlane, shadowData.projectionFarPlane);
@@ -404,8 +388,8 @@ vec4 computeSpecular(
 void main()
 {
   vec4 albedoTex = texture(uAlbedo, vTexCoord);
-  if (uAlphaCutoff > 0.0 && albedoTex.a < uAlphaCutoff)
-    discard; // Specular highlights only for solid areas
+  if (isAlphaLessThanCutoff(albedoTex, uAlphaCutoff))
+    discard; // Semi-transparent hair strands are discarded
 
   vec3 N = normalize(vNormal);
   vec3 T = normalize(vTangent - dot(vTangent, N) * N);

@@ -105,6 +105,26 @@ layout(binding = 1) uniform sampler2D uNormalMap;
 layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
 layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
 
+/**
+ * @brief Performs alpha testing on a color against a specified alpha cutoff
+ * value. If the alpha component of the color is less than this value, the
+ * function returns true (indicating that the fragment should be discarded).
+ *
+ * If the alpha cutoff is less than or equal to zero, the function will always
+ * return false, meaning that no fragments will be discarded based on alpha
+ * testing.
+ * 
+ * @param color The color to test, which includes an alpha component.
+ * @param alphaCutoff The alpha cutoff value to compare against.
+ * 
+ * @return true if the alpha component of the color is less than the alpha
+ * cutoff value.
+ */
+bool isAlphaLessThanCutoff(vec4 color, float alphaCutoff)
+{
+  return alphaCutoff > 0.0 && color.a < alphaCutoff;
+}
+
 float saturate(float x)
 {
   return clamp(x, 0.0, 1.0);
@@ -328,11 +348,9 @@ vec4 calculateSpotLight(
 void main()
 { 
   
-  float alphaBase = textureLod(uAlbedo, vTexCoord, 0.0).a;
-  if (alphaBase >= uAlphaCutoff)
-    discard;
-  
   vec4 albedoTex = texture(uAlbedo, vTexCoord);
+  if (!isAlphaLessThanCutoff(albedoTex, uAlphaCutoff))
+    discard; // Opaque hair strands are discarded
 
   vec3 N = normalize(vNormal);
   vec3 T = normalize(vTangent - dot(vTangent, N) * N);
