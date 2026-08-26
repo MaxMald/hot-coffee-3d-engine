@@ -11,6 +11,11 @@ FetchContent_Declare(
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+set_target_properties(gmock PROPERTIES FOLDER "Dependencies")
+set_target_properties(gmock_main PROPERTIES FOLDER "Dependencies")
+set_target_properties(gtest PROPERTIES FOLDER "Dependencies")
+set_target_properties(gtest_main PROPERTIES FOLDER "Dependencies")
+
 # Utilities Unit Tests Application
 file(GLOB_RECURSE UTILITIES_UTESTS_HEADERS "include/*.h")
 file(GLOB_RECURSE UTILITIES_UTESTS_SOURCES "src/*.cpp")
