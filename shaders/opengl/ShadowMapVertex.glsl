@@ -1,12 +1,9 @@
 #version 420 core
 
-layout(location = 0) in vec3 aPosition;
+#include "commons/object.glsl"
+#include "commons/lightViewProjection.glsl"
 
-layout (std140, binding = 0) uniform MatrixBlock
-{
-  mat4 uLightViewProjection;
-  mat4 uModel;
-};
+layout(location = 0) in vec3 aPosition;
 
 void main()
 {

@@ -1,11 +1,13 @@
 #version 420 core
+
+#include "commons/materialUnlit.glsl"
+
 in vec2 vTexCoord;
 in vec4 vColor;
+
 out vec4 FragColor;
 
-uniform vec4 uColor;
 uniform sampler2D uTexture;
-uniform float uAlphaCutoff;
 
 void main()
 {

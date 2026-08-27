@@ -1,62 +1,8 @@
 #version 420 core
 
-layout(std140, binding = 1) uniform CameraFrameBlock
-{
-  mat4 projection;
-  mat4 view;
-  vec3 cameraPosition;
-  float cPadding0;
-};
-
-#define MAX_OMNI_LIGHTS 16
-#define MAX_SPOT_LIGHTS 8
-#define MAX_DIRECTIONAL_LIGHTS 4
-
-struct SpotLightData
-{
-  vec4 position;
-  vec4 direction;
-  vec4 color;
-  float range;
-  float innerConeCos;
-  float intensity;
-  float outerConeCos;
-  int shadowFrameDataIndex;
-  int padding0;
-  int padding1;
-  int padding2;
-};
-
-struct OmniLightData
-{
-  vec4 position;
-  vec4 color;
-  float range;
-  float intensity;
-  float padding0;
-  float padding1;
-};
-
-struct DirectionalLightData
-{
-  vec4 directionAndIntensity;
-  vec4 color;
-  int  shadowFrameDataIndex;
-  int  padding0;
-  int  padding1;
-  int  padding2;
-};
-
-layout(std140, binding = 2) uniform LightBlock
-{
-  DirectionalLightData directionalLights[MAX_DIRECTIONAL_LIGHTS];
-  OmniLightData omniLights[MAX_OMNI_LIGHTS];
-  SpotLightData spotLights[MAX_SPOT_LIGHTS];
-  int numDirectionalLights;
-  int numOmniLights;
-  int numSpotLights;
-  int lPadding0;
-};
+#include "commons/camera.glsl"
+#include "commons/lighting.glsl"
+#include "commons/materialBlinnPhong.glsl"
 
 in vec2 vTexCoord;
 in vec3 vWorldPos;
@@ -66,96 +12,15 @@ in vec4 vColor;
 
 out vec4 FragColor;
 
-uniform vec4 uColor;
-uniform sampler2D uAlbedo;
-uniform sampler2D uNormalMap;
-uniform sampler2D uSpecularMap;
-uniform float uAlphaCutoff;
-uniform float uShininess;
-
-float saturate(float value)
-{
-  return clamp(value, 0.0, 1.0);
-}
-
-float calculateAttenuation(float distance, float range)
-{
-  // Quadratic attenuation that clamps to 0 at the light's range
-  float attenuation = clamp(1.0 - distance / range, 0.001, 1.0);
-  return attenuation * attenuation; // quadratic falloff
-}
-
-vec3 calculateOmniLight(OmniLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
-{
-  vec3 lightDir = normalize(light.position.xyz - worldPos);
-  vec3 halfDir = normalize(lightDir + viewDir);
-
-  float diff = max(dot(normal, lightDir), 0.0);
-  float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
-  float specStrength = texture(uSpecularMap, vTexCoord).r;
-  float spec = specBase * specStrength;
-  float distance = length(light.position.xyz - worldPos);
-  float attenuation = calculateAttenuation(distance, light.range);
-
-  return (diff + spec) * light.color.rgb * light.intensity * attenuation;
-}
-
-vec3 calculateDirectionalLight(
-  DirectionalLightData light, 
-  vec4 diffuseColor,
-  vec3 normal, 
-  vec3 viewDir, 
-  float shininess,
-  float specularStrength
-)
-{
-  vec3 lightDir = normalize(-light.directionAndIntensity.xyz);  
-
-  // Lambert diffuse incidence
-  float incidenceDiff = saturate(dot(normal, lightDir));
-  float kD = incidenceDiff * 0.8;
-
-  // Blinn-Phong specular
-  vec3 halfDir = normalize(lightDir + viewDir);
-  float incidenceSpec = pow(saturate(dot(normal, halfDir)), shininess);
-  float kS = incidenceSpec * 0.2 * specularStrength;
-  
-  float lightIntensity = light.directionAndIntensity.w;
-  return ((kD * diffuseColor.rgb * light.color.rgb) + kS) * lightIntensity;
-}
-
-vec3 calculateSpotLight(SpotLightData light, vec3 normal, vec3 viewDir, vec3 worldPos, float shininess)
-{
-  vec3 lightDir = normalize(light.position.xyz - worldPos);
-  vec3 halfDir = normalize(lightDir + viewDir);
-
-  float diff = max(dot(normal, lightDir), 0.0);
-  float specBase = pow(max(dot(normal, halfDir), 0.0), shininess);
-  float specStrength = texture(uSpecularMap, vTexCoord).r;
-  float spec = specBase * specStrength;
-  float distance = length(light.position.xyz - worldPos);
-  float attenuation = calculateAttenuation(distance, light.range);
-
-  float theta = dot(-light.direction.xyz, lightDir);
-  if (theta > light.outerConeCos)
-  {
-    float epsilon = clamp(light.innerConeCos - light.outerConeCos, 0.001, 1.0);
-    float intensity = clamp((theta - light.outerConeCos) / epsilon, 0.0, 1.0);
-    return (diff + spec) * light.color.rgb * light.intensity * attenuation * intensity;
-  }
-  else
-  {
-    return vec3(0.0);
-  }
-}
+layout(binding = 0) uniform sampler2D uAlbedo;
+layout(binding = 1) uniform sampler2D uNormalMap;
+layout(binding = 2) uniform sampler2D uSpecularMap;
 
 void main()
 {
   vec4 albedoTex = texture(uAlbedo, vTexCoord);
   if (uAlphaCutoff > 0.0 && albedoTex.a < uAlphaCutoff)
     discard;
-
-  vec4 baseColor = uColor * vColor * albedoTex;
 
   vec3 N = normalize(vNormal);
   vec3 T = normalize(vTangent - dot(vTangent, N) * N);
@@ -166,43 +31,20 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
   vec3 viewDir = normalize(cameraPosition - vWorldPos);  
 
-  float specStrength = texture(uSpecularMap, vTexCoord).r;
-  vec3 totalLighting = vec3(0.05);
+  vec4 specularSample = texture(uSpecularMap, vTexCoord);
+  vec3 specularColor = specularSample.rgb;
+  float shininess = uShininess * specularSample.a;
 
-  for (int i = 0; i < numOmniLights; ++i)
-  {
-    totalLighting += calculateOmniLight(
-      omniLights[i], 
-      normalWS, 
-      viewDir, 
-      vWorldPos, 
-      uShininess
-    );
-  }
+  vec4 baseColor = uColor * vColor * albedoTex * 0.1; // Ambient light contribution
     
+  vec4 lightedColor = calculateAllLightContribution(
+    baseColor,
+    normalWS,
+    viewDir,
+    vWorldPos,
+    specularColor,
+    shininess
+  );
 
-  for (int i = 0; i < numDirectionalLights; ++i)
-  {
-    totalLighting += calculateDirectionalLight(
-      directionalLights[i],
-      baseColor,
-      normalWS, 
-      viewDir, 
-      uShininess,
-      specStrength
-    );
-  }
-
-  for (int i = 0; i < numSpotLights; ++i)
-  {
-    totalLighting += calculateSpotLight(
-      spotLights[i], 
-      normalWS, 
-      viewDir, 
-      vWorldPos, 
-      uShininess
-    );
-  }
-
-  FragColor = vec4(baseColor.rgb * totalLighting, baseColor.a);
+  FragColor = vec4(lightedColor.rgb, albedoTex.a);
 }

@@ -1,5 +1,7 @@
 #version 420 core
 
+#include "commons/materialBlinnPhong.glsl"
+
 in vec2 vTexCoord;
 in vec3 vWorldPos;
 in vec3 vNormal;
@@ -12,12 +14,9 @@ layout(location = 2) out vec4 OutAlbedoAlpha;
 layout(location = 3) out vec4 OutMaterialParameters;
 layout(location = 4) out vec4 OutSpecularColorAndShininess;
 
-uniform vec4 uColor;
-uniform sampler2D uAlbedo;
-uniform sampler2D uNormalMap;
-uniform sampler2D uSpecularMap;
-uniform float uAlphaCutoff;
-uniform float uShininess;
+layout(binding = 0) uniform sampler2D uAlbedo;
+layout(binding = 1) uniform sampler2D uNormalMap;
+layout(binding = 2) uniform sampler2D uSpecularMap;
 
 void main()
 {

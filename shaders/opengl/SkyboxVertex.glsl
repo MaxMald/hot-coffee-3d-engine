@@ -1,16 +1,10 @@
 #version 420 core
 
-layout(std140, binding = 1) uniform CameraFrameBlock
-{
-  mat4 projection;
-  mat4 view;
-  vec3 cameraPosition;
-  float cPadding0;
-};
-
-layout(location = 0) in vec3 aPosition;
+#include "commons/camera.glsl"
 
 out vec3 vDirection;
+
+layout(location = 0) in vec3 aPosition;
 
 void main()
 {
