@@ -45,6 +45,20 @@ namespace hc
      */
     bool isValid() const override;
 
+
+    /**
+     * @brief Initializes the shader with the specified stage type and SPIR-V code.
+     *
+     * @param stageType The type of shader stage (e.g., vertex, fragment).
+     * @param spirvCode The SPIR-V bytecode of the shader.
+     * @param entryPoint The entry point function name in the SPIR-V code.
+     */
+    void initializeFromSpirv(
+      shaderStageType::Type stageType,
+      const Vector<UInt32>& spirvCode,
+      const String& entryPoint
+    );
+
     /**
      * @brief Returns the OpenGL shader object ID.
      *

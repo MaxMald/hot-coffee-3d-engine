@@ -26,8 +26,9 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Tools.git
   GIT_TAG v2024.1
 )
-set(SKIP_SPIRV_TOOLS_TESTS ON CACHE BOOL "" FORCE)
+set(SPIRV_SKIP_TESTS ON CACHE BOOL "" FORCE)
 set(SPIRV_SKIP_EXECUTABLES ON CACHE BOOL "" FORCE)
+set(SPIRV_WERROR OFF CACHE BOOL "" FORCE)
 
 # Fetch glslang (required by shaderc)
 FetchContent_Declare(
@@ -44,8 +45,11 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/google/shaderc.git
   GIT_TAG v2024.1
 )
+
 set(SHADERC_SKIP_TESTS ON CACHE BOOL "" FORCE)
 set(SHADERC_SKIP_EXAMPLES ON CACHE BOOL "" FORCE)
+set(-DSHADERC_ENABLE_HLSL OFF CACHE BOOL "" FORCE)
+set(SHADERC_ENABLE_SHARED_CRT ON CACHE BOOL "" FORCE)
 
 # Make SPIRV-Headers available FIRST (downloads headers)
 FetchContent_MakeAvailable(SPIRV-Headers)
@@ -125,7 +129,7 @@ target_include_directories(hcGraphicsOpenGL
 
 # Linking
 target_link_libraries(hcGraphicsOpenGL PUBLIC hcCore hcUtilities)
-# target_link_libraries(hcGraphicsOpenGL PRIVATE shaderc)
+target_link_libraries(hcGraphicsOpenGL PRIVATE shaderc)
 
 if(WIN32)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL)

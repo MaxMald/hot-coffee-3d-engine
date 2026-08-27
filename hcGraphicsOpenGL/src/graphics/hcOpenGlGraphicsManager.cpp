@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
-#include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
@@ -21,9 +20,7 @@ namespace hc
       MakeUnique<OpenGlTextureFactory>(),
       m_assetManager
     ),
-    m_shaderManager(
-      MakeUnique<OpenGlShaderFactory>()
-    ),
+    m_shaderManager(),
     m_shaderProgramManager(
       MakeUnique<OpenGlShaderProgramFactory>(),
       m_shaderManager
@@ -65,7 +62,8 @@ namespace hc
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    
+
+    m_shaderManager.initialize();
     m_materialManager.initialize();
     m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
     m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
@@ -245,7 +243,7 @@ namespace hc
     m_materialManager.clear();
     m_textureManager.clear();
     m_shaderProgramManager.clear();
-    m_shaderManager.clear();
     m_meshManager.clear();
+    m_shaderManager.destroy();
   }
 }

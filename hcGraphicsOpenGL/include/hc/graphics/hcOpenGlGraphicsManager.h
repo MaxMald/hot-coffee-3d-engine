@@ -1,12 +1,13 @@
 #pragma once
 
-#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <hc/graphics/resource/texture/hcTextureManager.h>
 #include <hc/graphics/resource/mesh/hcMeshManager.h>
 #include <hc/graphics/resource/material/hcMaterialManager.h>
-#include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
+#include <hc/graphics/resource/shader/hcOpenGlShaderManager.h>
+
+#include "hc/hcGraphicsOpenGlPrerequisites.h"
 
 namespace hc
 {
@@ -175,7 +176,7 @@ namespace hc
     IAssetManager& m_assetManager;
     IWindow& m_window;
     TextureManager m_textureManager;
-    ShaderManager m_shaderManager;
+    OpenGlShaderManager m_shaderManager;
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;

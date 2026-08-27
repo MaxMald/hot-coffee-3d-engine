@@ -2,8 +2,11 @@
 
 layout(location = 0) in vec3 aPosition;
 
-uniform mat4 uLightViewProjection;
-uniform mat4 uModel;
+layout (std140, binding = 0) uniform MatrixBlock
+{
+  mat4 uLightViewProjection;
+  mat4 uModel;
+};
 
 void main()
 {
