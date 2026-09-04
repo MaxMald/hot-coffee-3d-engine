@@ -61,6 +61,7 @@ namespace hc
       source.size(),
       shaderKind,
       sourceName.c_str(),
+      entryPoint.c_str(),
       m_compileOptions
     );
 

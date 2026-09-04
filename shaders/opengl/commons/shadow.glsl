@@ -105,9 +105,9 @@ vec4 calculateDirectionalShadowContribution(
   // Sampling 9 neighboring texels in the shadow map
 
   float bias = calculateBias(normal, lightDir, shadowData.shadowBias);
-  float shadow = 0.0f;
+  float shadow = 0.0;
   int shadowMapIndex = shadowData.shadowMapIndex;
-  vec2 texelSize = 1.0 / textureSize(uDirectionalShadowMaps, 0).xy;
+  vec2 texelSize = 1.0 / vec2(textureSize(uDirectionalShadowMaps, 0).xy);
 
   for (int x = -1; x <= 1; ++x)
   {
@@ -173,7 +173,7 @@ vec4 calculateSpotLightShadowContribution(
   float projectionFarPlane = shadowData.projectionFarPlane;
   float shadow = 0.0;
   int shadowMapIndex = shadowData.shadowMapIndex;
-  vec2 texelSize = 1.0 / textureSize(uSpotShadowMaps, 0).xy;
+  vec2 texelSize = 1.0 / vec2(textureSize(uSpotShadowMaps, 0).xy);
 
   for (int x = -1; x <= 1; ++x)
   {

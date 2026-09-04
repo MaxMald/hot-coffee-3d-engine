@@ -1,4 +1,4 @@
-layout(std140, binding = 5) uniform MaterialUnlitBLock
+layout(std140, binding = 5) uniform MaterialUnlitBlock
 {
   vec4 uColor;
   float uAlphaCutoff;

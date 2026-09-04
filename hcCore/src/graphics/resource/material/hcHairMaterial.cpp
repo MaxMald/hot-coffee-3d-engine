@@ -78,7 +78,12 @@ namespace hc
     materialData.color = m_color.vec4;
     materialData.primarySpecularColor = m_specularPrimaryColor.vec4;
     materialData.secondarySpecularColor = m_specularSecondaryColor.vec4;
-    materialData.alphaCutoff = m_alphaCutoutThreshold;
+
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      materialData.alphaCutoff = m_alphaCutoutThreshold;
+    else
+      materialData.alphaCutoff = 0.0f;
+
     materialData.shininess = m_shininess;
     materialData.primarySpecularShift = m_specularPrimaryShift;
     materialData.secondarySpecularShift = m_specularSecondaryShift;

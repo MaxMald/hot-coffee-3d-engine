@@ -34,7 +34,7 @@ namespace hc
   {
     std::ifstream file(path, std::ios::in | std::ios::binary);
     if (!file)
-      throw new RuntimeErrorException(
+      throw RuntimeErrorException(
         String::Format("Failed to open shader file: %s", path.string().c_str())
       );
 

@@ -125,6 +125,8 @@ namespace hc
         nullptr,
         nullptr
       );
+
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)
     {
