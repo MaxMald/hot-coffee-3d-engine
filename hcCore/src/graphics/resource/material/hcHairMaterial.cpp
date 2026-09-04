@@ -42,9 +42,9 @@ namespace hc
     m_forwardTransparentShaderProgram.reset();
   }
 
-  shadingType::Type HairMaterial::getShaderType() const
+  materialType::Type HairMaterial::getMaterialType() const
   {
-    return shadingType::Type::Hair;
+    return materialType::Type::Hair;
   }
 
   void HairMaterial::bind(

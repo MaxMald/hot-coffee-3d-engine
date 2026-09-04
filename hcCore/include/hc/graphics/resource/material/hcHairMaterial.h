@@ -26,9 +26,9 @@ namespace hc
     void destroy() override;
 
     /**
-     * @copydoc IMaterial::getShaderType
+     * @copydoc IMaterial::getMaterialType
      */
-    shadingType::Type getShaderType() const override;
+    materialType::Type getMaterialType() const override;
 
     /**
      * @copydoc IMaterial::bind

@@ -38,11 +38,11 @@ namespace hc
     virtual ~UnlitMaterialDescriptor() = default;
 
     /**
-     * Gets the shading type used by this material.
+     * Gets the material type used by this material.
      *
-     * @return The unlit shading type identifier
+     * @return The unlit material type identifier
      */
-    shadingType::Type getShaderType() const override;
+    materialType::Type getType() const override;
 
     /**
      * Gets the file paths of all images referenced by this material.

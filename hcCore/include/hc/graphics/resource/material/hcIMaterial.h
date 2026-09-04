@@ -39,11 +39,11 @@ namespace hc
     virtual void setName(const String& name) = 0;
 
     /**
-     * @brief Gets the shader type associated with this material.
+     * @brief Gets the material type.
      * 
-     * @return The shader type.
+     * @return The material type.
      */
-    virtual shadingType::Type getShaderType() const = 0;
+    virtual materialType::Type getMaterialType() const = 0;
 
     /**
      * @brief Gets the render mode of the material, which determines how it should be

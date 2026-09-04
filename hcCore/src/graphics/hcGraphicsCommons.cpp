@@ -86,7 +86,7 @@ namespace hc
     }
   }
 
-  namespace drawType
+  namespace topologyType
   {
     String ToString(Type type)
     {
@@ -312,7 +312,7 @@ namespace hc
     }
   }
 
-  namespace shadingType
+  namespace materialType
   {
     String toString(Type type)
     {

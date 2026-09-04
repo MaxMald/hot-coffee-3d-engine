@@ -32,9 +32,9 @@ namespace hc
     m_deferredGeometryShaderProgram.reset();
   }
 
-  shadingType::Type BlinnPhongMaterial::getShaderType() const
+  materialType::Type BlinnPhongMaterial::getMaterialType() const
   {
-    return shadingType::Type::BlinnPhong;
+    return materialType::Type::BlinnPhong;
   }
 
   void BlinnPhongMaterial::bind(

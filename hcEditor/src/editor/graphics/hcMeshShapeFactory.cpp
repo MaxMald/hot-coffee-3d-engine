@@ -56,7 +56,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::LineLoop);
+    mesh->setTopologyType(topologyType::LineLoop);
 
     return mesh;
   }
@@ -114,7 +114,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::Lines);
+    mesh->setTopologyType(topologyType::Lines);
 
     return mesh;
   }
@@ -187,7 +187,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::LineLoop);
+    mesh->setTopologyType(topologyType::LineLoop);
 
     return mesh;
   }
@@ -310,7 +310,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::Lines);
+    mesh->setTopologyType(topologyType::Lines);
 
     return mesh;
   }

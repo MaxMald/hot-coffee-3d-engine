@@ -19,9 +19,9 @@ namespace hc
     m_mainImagePath(mainImagePath)
   {}
 
-  shadingType::Type UnlitMaterialDescriptor::getShaderType() const
+  materialType::Type UnlitMaterialDescriptor::getType() const
   {
-    return shadingType::Unlit;
+    return materialType::Unlit;
   }
 
   void UnlitMaterialDescriptor::getImagesPaths(Vector<Path>& paths) const

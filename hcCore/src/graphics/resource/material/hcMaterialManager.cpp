@@ -69,9 +69,9 @@ namespace hc
       return nullptr;
     }
 
-    const shadingType::Type shaderType = descriptor->getShaderType();
+    const materialType::Type materialType = descriptor->getType();
 
-    if (shaderType == shadingType::Unlit)
+    if (materialType == materialType::Unlit)
     {
       const UnlitMaterialDescriptor* unlitDescriptor =
         dynamic_cast<const UnlitMaterialDescriptor*>(descriptor.get());
@@ -80,7 +80,7 @@ namespace hc
       {
         LogService::Error(
           String::Format(
-            "Failed to cast MaterialDescriptor to UnlitMaterialDescriptor for shader type 'Unlit'."
+            "Failed to cast MaterialDescriptor to UnlitMaterialDescriptor for material type 'Unlit'."
           )
         );
         return nullptr;
@@ -88,7 +88,7 @@ namespace hc
 
       return createUnlitMaterial(*unlitDescriptor);
     }
-    else if (shaderType == shadingType::BlinnPhong)
+    else if (materialType == materialType::BlinnPhong)
     {
       const BlinnPhongMaterialDescriptor* blinnPhongDescriptor =
         dynamic_cast<const BlinnPhongMaterialDescriptor*>(descriptor.get());
@@ -97,7 +97,7 @@ namespace hc
       {
         LogService::Error(
           String::Format(
-            "Failed to cast MaterialDescriptor to BlinnPhongMaterialDescriptor for shader type 'Blinn-Phong'."
+            "Failed to cast MaterialDescriptor to BlinnPhongMaterialDescriptor for material type 'Blinn-Phong'."
           )
         );
         return nullptr;
@@ -105,7 +105,7 @@ namespace hc
 
       return createBlinnPhongMaterial(*blinnPhongDescriptor);
     }
-    else if (shaderType == shadingType::Hair)
+    else if (materialType == materialType::Hair)
     {
       const HairMaterialDescriptor* hairDescriptor =
         dynamic_cast<const HairMaterialDescriptor*>(descriptor.get());
@@ -114,7 +114,7 @@ namespace hc
       {
         LogService::Error(
           String::Format(
-            "Failed to cast MaterialDescriptor to HairMaterialDescriptor for shader type 'Hair'."
+            "Failed to cast MaterialDescriptor to HairMaterialDescriptor for material type 'Hair'."
           )
         );
         return nullptr;
@@ -125,8 +125,8 @@ namespace hc
 
     throw RuntimeErrorException(
       String::Format(
-        "Not implemented shader type '%u' in MaterialDescriptor; cannot create material.",
-        static_cast<UInt32>(shaderType)
+        "Not implemented material type '%u' in MaterialDescriptor; cannot create material.",
+        static_cast<UInt32>(materialType)
       )
     );
   }

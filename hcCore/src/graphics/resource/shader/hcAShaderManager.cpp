@@ -72,8 +72,6 @@ namespace hc
             shaderKey.c_str()
           )
         );
-
-        return nullptr;
       }
 
       m_customShaders.insert({ shaderKey, shader });

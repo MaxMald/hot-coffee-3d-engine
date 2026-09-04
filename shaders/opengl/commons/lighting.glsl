@@ -255,9 +255,10 @@ vec4 calculateAllLightContribution(
   float shininess
 )
 {
+  vec4 finalColor = vec4(0.0, 0.0, 0.0, 1.0);
   for (int i = 0; i < numOmniLights; ++i)
   {
-    diffuseColor += calculateOmniLightContribution(
+    finalColor += calculateOmniLightContribution(
       i,
       diffuseColor,
       normal, 
@@ -270,7 +271,7 @@ vec4 calculateAllLightContribution(
 
   for (int i = 0; i < numDirectionalLights; ++i)
   {
-    diffuseColor += calculateDirectionalLightContribution(
+    finalColor += calculateDirectionalLightContribution(
       i, 
       diffuseColor,
       normal, 
@@ -283,7 +284,7 @@ vec4 calculateAllLightContribution(
 
   for (int i = 0; i < numSpotLights; ++i)
   {
-    diffuseColor += calculateSpotLightContribution(
+    finalColor += calculateSpotLightContribution(
       i, 
       diffuseColor,
       normal, 
@@ -294,5 +295,5 @@ vec4 calculateAllLightContribution(
     );
   }
 
-  return diffuseColor;
+  return finalColor;
 }

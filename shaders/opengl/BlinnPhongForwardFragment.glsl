@@ -35,9 +35,10 @@ void main()
   vec3 specularColor = specularSample.rgb * specularSample.a;
   float shininess = uShininess;
 
-  vec4 baseColor = uColor * vColor * albedoTex * 0.1; // Ambient light contribution    
+  vec4 albedoColor = uColor * vColor * albedoTex;
+  vec4 ambientColor = albedoColor * 0.1; // Ambient light contribution;
   vec4 lightedColor = calculateAllLightContribution(
-    baseColor,
+    albedoColor,
     normalWS,
     viewDir,
     vWorldPos,
@@ -45,5 +46,5 @@ void main()
     shininess
   );
 
-  FragColor = vec4(lightedColor.rgb, albedoTex.a);
+  FragColor = vec4((ambientColor + lightedColor).rgb, albedoTex.a);
 }

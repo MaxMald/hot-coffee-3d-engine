@@ -11,9 +11,9 @@ namespace hc::editor
   {
   }
 
-  shadingType::Type NotImplementedMaterialDrawer::getShadingType() const
+  materialType::Type NotImplementedMaterialDrawer::getMaterialType() const
   {
-    return shadingType::Unknown;
+    return materialType::Unknown;
   }
 
   void NotImplementedMaterialDrawer::drawMaterial(IMaterial* material)
@@ -21,7 +21,7 @@ namespace hc::editor
     if (!material)
       return;
 
-    String shadingTypeStr = shadingType::toString(material->getShaderType());
+    String shadingTypeStr = materialType::toString(material->getMaterialType());
     ImGui::Text("No drawer implemented for this material type %s.", shadingTypeStr.c_str());
   }
 }

@@ -215,14 +215,14 @@ namespace hc
     return m_materials;
   }
 
-  drawType::Type OpenGlMesh::getDrawType() const
+  topologyType::Type OpenGlMesh::getTopologyType() const
   {
-    return openGlGraphicsUtilities::GetDrawTypeFromOpenGlMode(m_drawMode);
+    return openGlGraphicsUtilities::GetTopologyTypeFromOpenGlMode(m_drawMode);
   }
 
-  void OpenGlMesh::setDrawType(drawType::Type drawType)
+  void OpenGlMesh::setTopologyType(topologyType::Type drawType)
   {
-    m_drawMode = openGlGraphicsUtilities::GetOpenGlDrawModeFromDrawType(drawType);
+    m_drawMode = openGlGraphicsUtilities::GetOpenGlDrawModeFromTopologyType(drawType);
   }
 
   bool OpenGlMesh::isValid() const

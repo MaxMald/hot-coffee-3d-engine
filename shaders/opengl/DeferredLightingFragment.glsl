@@ -31,17 +31,16 @@ void main()
   float shininess = specularColorAndShininess.a * 256.0; // Convert shininess back from [0,1] range
   float specularStrength = texture(uMaterialParameters, vTexCoord).x;
 
-  vec4 albedoAlpha = texture(uAlbedoAlpha, vTexCoord);
-  vec3 albedo = albedoAlpha.rgb;
-  float alpha = albedoAlpha.a;
+  vec4 albedoSample = texture(uAlbedoAlpha, vTexCoord);
+  float alpha = albedoSample.a;
   if (alpha < 0.01)
     discard; // Transparent pixel
   
   vec3 viewDir = normalize(cameraPosition - worldPos);
   
-  vec4 baseColor = vec4(albedo, 1.0) * 0.1; // Ambient light contribution
+  vec4 ambientColor = albedoSample * 0.1; // Ambient light contribution
   vec4 lightedColor = calculateAllLightContribution(
-    baseColor,
+    albedoSample,
     normal,
     viewDir,
     worldPos,
@@ -49,5 +48,5 @@ void main()
     shininess
   );
 
-  FragColor = vec4(lightedColor.rgb, alpha);
+  FragColor = vec4((ambientColor + lightedColor).rgb, alpha);
 }

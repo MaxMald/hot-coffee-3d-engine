@@ -18,19 +18,19 @@ namespace hc
     const aiMaterial* material
   )
   {
-    shadingType::Type type = GetShadingTypeFromMaterial(material);
+    materialType::Type type = GetMaterialTypeFromMaterial(material);
     String name = GetMaterialNameFromMaterial(material);
     SharedPtr<AMaterialDescriptor> matDescriptor;
 
     switch (type)
     {
-    case shadingType::Unlit:
+    case materialType::Unlit:
       matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
       break;
-    case shadingType::BlinnPhong:
+    case materialType::BlinnPhong:
       matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
       break;
-    case shadingType::Hair:
+    case materialType::Hair:
       matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
       break;
     default:
@@ -42,37 +42,37 @@ namespace hc
     return matDescriptor;
   }
 
-  shadingType::Type AssimpMaterialDescriptorParser::GetShadingTypeFromMaterial(const aiMaterial* material)
+  materialType::Type AssimpMaterialDescriptorParser::GetMaterialTypeFromMaterial(const aiMaterial* material)
   {
     if (!material)
-      return shadingType::Unknown;
+      return materialType::Unknown;
 
     // Check for explicit shading type suffix in the material name
 
     String matName = GetMaterialNameFromMaterial(material);
     if (matName.find(SUFFIX_SHADING_TYPE_HAIR) != String::npos)
-      return shadingType::Hair;
+      return materialType::Hair;
     else if (matName.find(SUFFIX_SHADING_TYPE_UNLIT) != String::npos)
-      return shadingType::Unlit;
+      return materialType::Unlit;
     else if (matName.find(SUFFIX_SHADING_TYPE_BLINN_PHONG) != String::npos)
-      return shadingType::BlinnPhong;
+      return materialType::BlinnPhong;
 
     // Fallback to checking the shading model property
 
     int shadingModel = 0;
     if (material->Get(AI_MATKEY_SHADING_MODEL, shadingModel) != aiReturn_SUCCESS)
-      return shadingType::Unknown;
+      return materialType::Unknown;
 
     switch (shadingModel)
     {
     case aiShadingMode_Phong:
-      return shadingType::BlinnPhong;
+      return materialType::BlinnPhong;
     case aiShadingMode_Blinn:
-      return shadingType::BlinnPhong;
+      return materialType::BlinnPhong;
     case aiShadingMode_NoShading:
-      return shadingType::Unlit;
+      return materialType::Unlit;
     default:
-      return shadingType::Unknown;
+      return materialType::Unknown;
     }
   }
 

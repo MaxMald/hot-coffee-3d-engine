@@ -111,12 +111,12 @@ namespace hc
     /**
      * @copydoc IMesh::getDrawType
      */
-    drawType::Type getDrawType() const override;
+    topologyType::Type getTopologyType() const override;
 
     /**
      * @copydoc IMesh::setDrawType
      */
-    void setDrawType(drawType::Type drawType) override;
+    void setTopologyType(topologyType::Type topologyType) override;
 
     /**
      * @copydoc IGraphicResource::isValid

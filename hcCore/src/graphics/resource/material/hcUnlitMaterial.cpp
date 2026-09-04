@@ -26,9 +26,9 @@ namespace hc
     m_mainTexture.reset();
   }
 
-  shadingType::Type UnlitMaterial::getShaderType() const
+  materialType::Type UnlitMaterial::getMaterialType() const
   {
-    return shadingType::Unlit;
+    return materialType::Unlit;
   }
 
   void UnlitMaterial::bind(

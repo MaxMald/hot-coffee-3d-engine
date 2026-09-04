@@ -17,11 +17,11 @@ namespace hc::editor
     virtual ~IMaterialDrawer() = default;
 
     /**
-     * @brief Returns the shading type handled by this drawer.
+     * @brief Returns the material type handled by this drawer.
      * 
-     * @return The shading type as defined in shadingType::Type.
+     * @return The material type as defined in materialType::Type.
      */
-    virtual shadingType::Type getShadingType() const = 0;
+    virtual materialType::Type getMaterialType() const = 0;
 
     /**
      * @brief Draws the material properties in the editor UI.

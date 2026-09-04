@@ -139,7 +139,7 @@ namespace hc
       if (!cmd.material)
         continue;
 
-      if (cmd.material->getShaderType() == shadingType::Hair)
+      if (cmd.material->getMaterialType() == materialType::Hair)
       {
         deferredOpaqueCommands.push_back(cmd);
         hairForwardSpecularCommands.push_back(cmd);
@@ -153,7 +153,7 @@ namespace hc
         continue;
       }
 
-      if (cmd.material->getShaderType() == shadingType::Unlit)
+      if (cmd.material->getMaterialType() == materialType::Unlit)
       {
         forwardOpaqueCommands.push_back(cmd);
         continue;

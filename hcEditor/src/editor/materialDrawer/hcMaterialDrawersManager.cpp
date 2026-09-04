@@ -13,8 +13,8 @@ namespace hc::editor
     if (!material)
       return;
 
-    shadingType::Type shadingType = material->getShaderType();
-    auto it = m_drawers.find(shadingType);
+    materialType::Type materialType = material->getMaterialType();
+    auto it = m_drawers.find(materialType);
     if (it != m_drawers.end())
     {
       it->second->drawMaterial(material);
@@ -30,7 +30,7 @@ namespace hc::editor
     if (!materialDrawer)
       return;
 
-    const auto shadingType = materialDrawer->getShadingType();
+    const auto shadingType = materialDrawer->getMaterialType();
     m_drawers[shadingType] = std::move(materialDrawer);
   }
 

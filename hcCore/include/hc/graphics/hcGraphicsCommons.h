@@ -54,10 +54,10 @@ namespace hc
     HC_CORE_EXPORT Type FromString(const String& str);
   }
 
-  namespace drawType
+  namespace topologyType
   {
     /**
-     * @brief Enumeration for different primitive types. These types determine how
+     * @brief Enumeration for different topology types. These types determine how
      * primitives are rendered in the graphics pipeline.
      */
     enum Type : UInt8
@@ -164,11 +164,11 @@ namespace hc
     HC_CORE_EXPORT Type FromString(const String& str);
   };
 
-  namespace shadingType
+  namespace materialType
   {
     /**
-     * @brief Enumeration for different shading types. These types represent the
-     * shading models used in the graphics pipeline.
+     * @brief Enumeration for different material types. These types represent the
+     * material models used in the graphics pipeline.
      */
     enum Type : UInt8
     {
