@@ -40,6 +40,12 @@ namespace hc
   {
     UniquePtr<ShaderIncluder> includer = MakeUnique<ShaderIncluder>();
     m_compileOptions.SetIncluder(std::move(includer));
+    m_compileOptions.SetTargetEnvironment(
+      shaderc_target_env_opengl,
+      shaderc_env_version_opengl_4_5
+    );
+    m_compileOptions.SetSourceLanguage(shaderc_source_language_glsl);
+    m_compileOptions.SetOptimizationLevel(shaderc_optimization_level_performance);
   }
 
   SharedPtr<IShader> ShaderCompiler::compileShaderFromString(

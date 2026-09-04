@@ -2,9 +2,9 @@
 
 #include "commons/camera.glsl"
 
-out vec3 vDirection;
-
 layout(location = 0) in vec3 aPosition;
+
+layout(location = 0) out vec3 vDirection;
 
 void main()
 {

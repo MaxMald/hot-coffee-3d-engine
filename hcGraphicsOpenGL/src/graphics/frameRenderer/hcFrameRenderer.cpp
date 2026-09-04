@@ -1,5 +1,6 @@
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
 
+#include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
 #include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
@@ -10,14 +11,11 @@ namespace hc
   static constexpr UInt32 LIGHTS_UBO_BINDING_POINT = 2;
   static constexpr UInt32 LIGHT_SHADOWS_UBO_BINDING_POINT = 3;
 
-  FrameRenderer::FrameRenderer() :
-    m_lightShadowManager(),
-    m_forwardRenderPipeline(),
-    m_deferredHybridRenderPipeline(m_lightShadowManager),
+  FrameRenderer::FrameRenderer(IDataBlockManager& dataBlockManager) :
+    m_lightShadowMapManager(dataBlockManager),
+    m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager),
     m_finalRenderPass(),
     m_frameBufferA(),
-    m_lightFrameUBO(),
-    m_cameraFrameUBO(),
     m_drawCommands(),
     m_skybox(nullptr),
     m_currentRenderPipelineType(renderPipelineType::DeferredHybrid),
@@ -40,15 +38,10 @@ namespace hc
 
     try
     {
-      m_lightShadowManager.initialize(LIGHT_SHADOWS_UBO_BINDING_POINT, shaderProgramManager);
-      m_forwardRenderPipeline.initialize(shaderProgramManager);
+      m_lightShadowMapManager.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
       m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
       m_frameBufferA.initialize(viewportRect.width, viewportRect.height);
-      m_lightFrameUBO.initialize(LightFrameData{});
-      m_lightFrameUBO.bindBase(LIGHTS_UBO_BINDING_POINT);
-      m_cameraFrameUBO.initialize(CameraFrameData{});
-      m_cameraFrameUBO.bindBase(CAMERA_FRAME_UBO_BINDING_POINT);
     }
     catch (const Exception& e)
     {
@@ -67,19 +60,6 @@ namespace hc
   renderPipelineType::Type FrameRenderer::getCurrentRenderPipelineType() const
   {
     return m_currentRenderPipelineType;
-  }
-
-  void FrameRenderer::uploadCameraFrameData(const CameraFrameData& cameraFrameData)
-  {
-    CameraFrameData transposedCameraData = cameraFrameData;
-    transposedCameraData.projectionMatrix.transpose();
-    transposedCameraData.viewMatrix.transpose();
-    m_cameraFrameUBO.upload(transposedCameraData);
-  }
-
-  void FrameRenderer::uploadLightFrameData(const LightFrameData & lightFrameData)
-  {
-    m_lightFrameUBO.upload(lightFrameData);
   }
 
   void FrameRenderer::setSkybox(OpenGlCubeMap* skybox)
@@ -162,8 +142,6 @@ namespace hc
 
     if (m_currentRenderPipelineType == renderPipelineType::DeferredHybrid)
       m_deferredHybridRenderPipeline.execute(m_drawCommands, frameRenderContext);
-    else if (m_currentRenderPipelineType == renderPipelineType::Forward)
-      m_forwardRenderPipeline.execute(m_drawCommands, frameRenderContext);
     else
       throw RuntimeErrorException("Frame Renderer: Not implemented render pipeline type.");
 
@@ -202,9 +180,9 @@ namespace hc
     return m_deferredHybridRenderPipeline.getGBuffer();
   }
 
-  ALightShadowManager& FrameRenderer::getLightShadowManager()
+  ILightShadowMapManager& FrameRenderer::getLightShadowMapManager()
   {
-    return m_lightShadowManager;
+    return m_lightShadowMapManager;
   }
 
   void FrameRenderer::clearFrame()
@@ -218,13 +196,10 @@ namespace hc
 
   void FrameRenderer::destroy()
   {
-    m_forwardRenderPipeline.destroy();
     m_deferredHybridRenderPipeline.destroy();
     m_finalRenderPass.destroy();
     m_frameBufferA.destroy();
-    m_lightShadowManager.destroy();
-    m_lightFrameUBO.destroy();
-    m_cameraFrameUBO.destroy();
+    m_lightShadowMapManager.destroy();
     m_skybox = nullptr;
     m_initialized = false;
   }

@@ -1,8 +1,7 @@
 #pragma once
 
 #include "hc/assets/hcAsset.h"
-#include "hc/graphics/resource/material/hcShadingType.h"
-#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 
 namespace hc
 {

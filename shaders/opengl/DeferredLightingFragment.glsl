@@ -8,12 +8,10 @@ layout(binding = 1) uniform sampler2D uNormalRoughness;
 layout(binding = 2) uniform sampler2D uAlbedoAlpha;
 layout(binding = 3) uniform sampler2D uMaterialParameters;
 layout(binding = 4) uniform sampler2D uSpecularColorAndShininess;
-layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
-layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
 
-in vec2 vTexCoord;
+layout(location = 0) in vec2 vTexCoord;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 void main()
 {
@@ -31,6 +29,7 @@ void main()
   vec4 specularColorAndShininess = texture(uSpecularColorAndShininess, vTexCoord);
   vec3 specularColor = specularColorAndShininess.rgb;
   float shininess = specularColorAndShininess.a * 256.0; // Convert shininess back from [0,1] range
+  float specularStrength = texture(uMaterialParameters, vTexCoord).x;
 
   vec4 albedoAlpha = texture(uAlbedoAlpha, vTexCoord);
   vec3 albedo = albedoAlpha.rgb;

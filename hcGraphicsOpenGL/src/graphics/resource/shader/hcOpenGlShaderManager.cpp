@@ -91,16 +91,31 @@ namespace hc
     builtInShaderType::Type type
   )
   {
-    shaderStageType::Type stageType = builtInShaderType::GetShaderStageType(type);
-    Path shaderFilePath = ResolveShaderFilePath(
-      GetShaderFileNameFromBuiltInShaderType(type)
-    );
+    try
+    {
+      shaderStageType::Type stageType = builtInShaderType::GetShaderStageType(type);
+      Path shaderFilePath = ResolveShaderFilePath(
+        GetShaderFileNameFromBuiltInShaderType(type)
+      );
 
-    return compileSpirvAndCreateShaderFromFile(
-      shaderFilePath,
-      stageType,
-      "main"
-    );
+      SharedPtr<IShader> shader = compileSpirvAndCreateShaderFromFile(
+        shaderFilePath,
+        stageType,
+        "main"
+      );
+
+      return shader;
+    }
+    catch (const Exception & e)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Failed to create built-in shader of type %s: %s",
+          builtInShaderType::ToString(type).c_str(),
+          e.what()
+        )
+      );
+    }
   }
 
   void OpenGlShaderManager::onClear()
@@ -119,13 +134,26 @@ namespace hc
     const String& entryPoint
   )
   {
-    String source = LoadShaderSourceFromFile(filePath);
-
-    return m_shaderCompiler.compileShaderFromString(
-      source,
-      stageType,
-      filePath.string(),
-      entryPoint
-    );
+    try
+    {
+      String source = LoadShaderSourceFromFile(filePath);
+      SharedPtr<IShader> shader = m_shaderCompiler.compileShaderFromString(
+        source,
+        stageType,
+        filePath.string(),
+        entryPoint
+      );
+      return shader;
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Failed to compile shader to SPIR-V from file %s: %s",
+          filePath.string().c_str(),
+          e.what()
+        )
+      );
+    }
   }
 }

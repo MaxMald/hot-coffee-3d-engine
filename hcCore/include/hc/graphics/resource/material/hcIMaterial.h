@@ -1,14 +1,13 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/graphics/resource/material/hcShadingType.h"
-#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
-#include "hc/graphics/hcRenderPassType.h"
 
 namespace hc
 {
   class AMaterialDescriptor;
+  class IDataBlockManager;
 
   /**
    * @brief Interface for material objects in the engine.
@@ -99,18 +98,11 @@ namespace hc
      * @brief Binds the material for rendering.
      *
      * @param renderPass The render pass type.
+     * @param dataBlockManager The data block manager used to manage shader data blocks.
      */
-    virtual void bind(renderPassType::Type renderPass) = 0;
-
-    /**
-     * @brief Updates the model matrix uniform in the shader.
-     * 
-     * @param modelMatrix The model matrix to set.
-     * @param renderPass The render pass type.
-     */
-    virtual void updateModelMatrix(
-      const Matrix4& modelMatrix,
-      renderPassType::Type renderPass
+    virtual void bind(
+      renderPassType::Type renderPass,
+      IDataBlockManager& dataBlockManager
     ) = 0;
 
     /**

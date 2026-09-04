@@ -36,14 +36,9 @@ namespace hc
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(renderPassType::Type renderPass) override;
-
-    /**
-     * @copydoc IMaterial::updateModelMatrix
-     */
-    void updateModelMatrix(
-      const Matrix4& modelMatrix,
-      renderPassType::Type renderPass
+    void bind(
+      renderPassType::Type renderPass,
+      IDataBlockManager& dataBlockManager
     ) override;
 
     /**

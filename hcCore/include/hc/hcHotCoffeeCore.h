@@ -42,7 +42,7 @@
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/serialization/hcFileFormats.h"
 #include "hc/serialization/scene/hcSceneSerializer.h"
-#include "hc/graphics/hcPolygonFillType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
 #include "hc/graphics/cubeMap/hcICubeMap.h"
@@ -64,7 +64,6 @@
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
-#include "hc/graphics/hcCameraFrameData.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 

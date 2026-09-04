@@ -4,7 +4,8 @@
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/graphics/lightFrameData/hcLightFrameData.h"
+#include "hc/scene/light/hcLightManager.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
@@ -244,7 +245,7 @@ namespace hc
   private:
     SceneGraph m_sceneGraph;
     CameraManager m_cameraManager;
-    LightFrameData m_lightFrameData;
+    LightManager m_lightManager;
     IGameObjectFactory* m_gameObjectFactory;
     Skybox m_skybox;
 

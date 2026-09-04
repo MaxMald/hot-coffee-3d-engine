@@ -1,5 +1,3 @@
-#version 420 core
-
 #define MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA 4
 #define MAX_SPOT_LIGHTS_SHADOW_DATA 8
 
@@ -25,11 +23,14 @@ struct SpotLightShadowFrameData
   int padding2;
 };
 
-layout(std140, binding = 3) uniform LightShadowBlock
+layout(std140, binding = 2) uniform LightShadowBlock
 {
   DirectionalLightShadowFrameData directionalLightShadowData[MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA];
   SpotLightShadowFrameData spotLightShadowData[MAX_SPOT_LIGHTS_SHADOW_DATA];
 };
+
+layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
+layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
 
 /**
 * @brief Calculates the bias for shadow mapping based on the angle between the

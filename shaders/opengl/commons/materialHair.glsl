@@ -1,5 +1,3 @@
-#version 420 core
-
 layout(std140, binding = 7) uniform MaterialHairBlock
 {
   vec4 uColor;

@@ -4,19 +4,17 @@
 #include "commons/lighting.glsl"
 #include "commons/materialHair.glsl"
 
-in vec2 vTexCoord;
-in vec3 vWorldPos;
-in vec3 vNormal;
-in vec3 vTangent;
-in vec4 vColor;
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 1) in vec3 vWorldPos;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vTangent;
+layout(location = 4) in vec4 vColor;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
-layout(binding = 1) uniform sampler2D uAlbedo;
-layout(binding = 2) uniform sampler2D uNormalMap;
-layout(binding = 3) uniform sampler2D uSpecularMap;
-layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
-layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
+layout(binding = 0) uniform sampler2D uAlbedo;
+layout(binding = 1) uniform sampler2D uNormalMap;
+layout(binding = 2) uniform sampler2D uSpecularMap;
 
 // Anisotropic Rendering: Kajiya Kay Hair Rendering
 // Reference: https://zhuanlan.zhihu.com/p/363829203
@@ -203,8 +201,8 @@ void main()
   vec3 tangentWS = normalize(T - dot(T, normalWS) * normalWS);
 
   vec4 specularSample = texture(uSpecularMap, vTexCoord);
-  vec3 specularColor = specularSample.rgb;
-  float shininess = uShininess * specularSample.a;
+  vec3 specularColor = specularSample.rgb * specularSample.a;
+  float shininess = uShininess;
 
   vec4 specular = computeSpecular(
     vec4(specularColor, 1.0),

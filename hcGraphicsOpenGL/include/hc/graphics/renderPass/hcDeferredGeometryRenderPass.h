@@ -5,11 +5,12 @@
 namespace hc
 {
   class OpenGlGBuffer;
+  class IDataBlockManager;
 
   class DeferredGeometryRenderPass
   {
   public:
-    DeferredGeometryRenderPass();
+    DeferredGeometryRenderPass(IDataBlockManager& dataBlockManager);
     ~DeferredGeometryRenderPass();
 
     void initialize(OpenGlGBuffer* gBuffer);
@@ -18,6 +19,7 @@ namespace hc
 
   private:
     OpenGlGBuffer* m_gBuffer;
+    IDataBlockManager& m_dataBlockManager;
 
     void executeTwoSidedDrawCommand(const DrawCommand& command);
   };

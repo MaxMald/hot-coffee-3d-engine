@@ -1,9 +1,9 @@
 #include "hc/scene/hcScene.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcIGraphicsManager.h"
-#include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
-#include "hc/graphics/hcCameraFrameData.h"
-#include "hc/graphics/lightShadowManager/hcALightShadowManager.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
+#include "hc/graphics/lightShadowManager/hcILightShadowMapManager.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
@@ -13,7 +13,7 @@ namespace hc
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
-    m_lightFrameData(),
+    m_lightManager(),
     m_gameObjectFactory(nullptr),
     m_skybox()
   {
@@ -114,38 +114,52 @@ namespace hc
       );
     }
 
-    camera->update();
-    graphicsManager.uploadCameraFrameData(CameraFrameData::Create(*camera));
+    IDataBlockManager& dataBlockManager = graphicsManager.getDataBlockManager();
+    bool shouldTransposeMatrices = dataBlockManager.shouldTransposeMatrices();
 
-    // Gather light frame data and upload it to the graphics manager
+    try
+    {
+      // Upload camera data
+      camera->update();
+      dataBlockStructure::Camera cameraDataBlock
+        = camera->getCameraDataBlockStructure(shouldTransposeMatrices);
 
-    m_lightFrameData.numDirectionalLights = 0;
-    m_lightFrameData.numOmniLights = 0;
-    m_lightFrameData.numSpotLights = 0;
-    SceneGraphLightFrameDataGatherer::Gather(
-      m_sceneGraph,
-      m_lightFrameData,
-      graphicsManager.getLightShadowManager()
-    );
+      dataBlockManager.upload(dataBlockType::Camera, &cameraDataBlock);
+      dataBlockManager.bind(dataBlockType::Camera);
 
-    graphicsManager.uploadLightFrameData(m_lightFrameData);
+      // Upload light data and shadow data for rendering
+      m_lightManager.prepareLightDataForRendering(
+        m_sceneGraph,
+        graphicsManager.getLightShadowMapManager(),
+        dataBlockManager
+      );
 
-    // Skybox
-    if (m_skybox.isValid())
-      graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
-    else
+      // Skybox
+      if (m_skybox.isValid())
+        graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
+      else
+        graphicsManager.setSkybox(nullptr);
+
+      // Draw the scene graph with the provided render context
+      RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
+
+      onBeforeDraw(renderContext);
+      m_sceneGraph.draw(renderContext, graphicsManager.getDrawCommandQueue());
+      graphicsManager.executeDrawCommands();
+      onAfterDraw(renderContext);
+    }
+    catch (const Exception& e)
+    {
       graphicsManager.setSkybox(nullptr);
+      graphicsManager.getLightShadowMapManager().clear();
 
-    // Draw the scene graph with the provided render context
-    RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
-
-    onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext, graphicsManager.getDrawCommandQueue());
-    graphicsManager.executeDrawCommands();
-    onAfterDraw(renderContext);
+      throw RuntimeErrorException(
+        String::Format("Scene::draw: Exception occurred during drawing: %s", e.what())
+      );
+    }
 
     graphicsManager.setSkybox(nullptr);
-    graphicsManager.getLightShadowManager().clear();
+    graphicsManager.getLightShadowMapManager().clear();
   }
 
   void Scene::clear()

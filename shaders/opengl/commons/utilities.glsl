@@ -1,5 +1,3 @@
-#version 420 core
-
 /**
 * @brief Clamps a value between 0.0 and 1.0.
 *
@@ -15,11 +13,10 @@ float saturate(float value)
 /**
  * @brief Performs alpha testing on a color against a specified alpha cutoff
  * value. If the alpha component of the color is less than this value, the
- * function returns true (indicating that the fragment should be discarded).
+ * function returns true.
  *
  * If the alpha cutoff is less than or equal to zero, the function will always
- * return false, meaning that no fragments will be discarded based on alpha
- * testing.
+ * return false.
  * 
  * @param color The color to test, which includes an alpha component.
  * @param alphaCutoff The alpha cutoff value to compare against.

@@ -66,7 +66,7 @@ namespace hc
 
       if (!shader)
       {
-        LogService::Error(
+        throw RuntimeErrorException(
           String::Format(
             "Failed to create shader from string with key: %s",
             shaderKey.c_str()
@@ -81,15 +81,13 @@ namespace hc
     }
     catch (const RuntimeErrorException& e)
     {
-      LogService::Error(
+      throw RuntimeErrorException(
         String::Format(
           "Failed to create shader from string with key: %s. Error: %s",
           shaderKey.c_str(),
           e.what()
         )
       );
-
-      return nullptr;
     }
   }
 

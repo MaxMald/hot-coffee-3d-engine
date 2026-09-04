@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/scene/light/hcALight.h"
-#include "hc/graphics/lightFrameData/hcSpotLightFrameData.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
@@ -111,11 +111,25 @@ namespace hc
     float getShadowProjectionFarPlane() const;
 
     /**
-     * @brief Converts the spot light to frame data for rendering.
+     * @brief Converts the spot light's properties to a GPU-aligned data structure for use
+     * in shaders.
      *
-     * @return The frame data representation of the spot light.
+     * @return A SpotLight data structure containing the spot light's properties.
      */
-    SpotLightFrameData toFrameData() const;
+    dataBlockStructure::SpotLight getDataBlockStructure() const;
+
+    /**
+     * @brief Converts the spot light's shadow properties to a GPU-aligned data structure
+     * for use in shaders.
+     *
+     * @param transposeMatrices Whether to transpose the matrices in the data structure.
+     * 
+     * @return A SpotLightShadow data structure containing the spot light's shadow
+     * properties.
+     */
+    dataBlockStructure::SpotLightShadow getShadowDataBlockStructure(
+      bool transposeMatrices
+    ) const;
 
   private:
     Vector3f m_direction;

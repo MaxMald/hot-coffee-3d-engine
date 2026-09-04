@@ -36,7 +36,8 @@ namespace hc
       m_materialManager
     ),
     m_viewportRect(0, 0, 1, 1),
-    m_frameRenderer(),
+    m_dataBlockManager(),
+    m_frameRenderer(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -63,11 +64,22 @@ namespace hc
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
-    m_shaderManager.initialize();
-    m_materialManager.initialize();
-    m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
-    m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
-    setViewport(viewportRect);
+    try
+    {
+      m_dataBlockManager.initialize();
+      m_shaderManager.initialize();
+      m_materialManager.initialize();
+      m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
+      m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
+      setViewport(viewportRect);
+    }
+    catch (const Exception& e)
+    {
+      destroy();
+      throw RuntimeErrorException(
+        "Failed to initialize OpenGL graphics manager: " + String(e.what())
+      );
+    }
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -78,18 +90,6 @@ namespace hc
   void OpenGlGraphicsManager::beginFrame()
   {
     m_frameRenderer.clearFrame();
-  }
-
-  void OpenGlGraphicsManager::uploadCameraFrameData(
-    const CameraFrameData& cameraFrameData
-  )
-  {
-    m_frameRenderer.uploadCameraFrameData(cameraFrameData);
-  }
-
-  void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
-  {
-    m_frameRenderer.uploadLightFrameData(lightFrameData);
   }
 
   void OpenGlGraphicsManager::setRenderTarget(IFrameBuffer* frameBuffer)
@@ -191,9 +191,14 @@ namespace hc
     return m_meshManager;
   }
 
-  ALightShadowManager& OpenGlGraphicsManager::getLightShadowManager()
+  ILightShadowMapManager& OpenGlGraphicsManager::getLightShadowMapManager()
   {
-    return m_frameRenderer.getLightShadowManager();
+    return m_frameRenderer.getLightShadowMapManager();
+  }
+
+  IDataBlockManager& OpenGlGraphicsManager::getDataBlockManager()
+  {
+    return m_dataBlockManager;
   }
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
@@ -245,5 +250,6 @@ namespace hc
     m_shaderProgramManager.clear();
     m_meshManager.clear();
     m_shaderManager.destroy();
+    m_dataBlockManager.destroy();
   }
 }

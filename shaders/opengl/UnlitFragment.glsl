@@ -2,10 +2,10 @@
 
 #include "commons/materialUnlit.glsl"
 
-in vec2 vTexCoord;
-in vec4 vColor;
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 1) in vec4 vColor;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 uniform sampler2D uTexture;
 

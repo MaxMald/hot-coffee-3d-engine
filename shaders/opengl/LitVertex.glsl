@@ -9,11 +9,11 @@ layout(location = 2) in vec3 aTangent;
 layout(location = 3) in vec2 aTexCoord;
 layout(location = 4) in vec4 aColor;
 
-out vec2 vTexCoord;
-out vec3 vWorldPos;
-out vec3 vNormal;
-out vec3 vTangent;
-out vec4 vColor;
+layout(location = 0) out vec2 vTexCoord;
+layout(location = 1) out vec3 vWorldPos;
+layout(location = 2) out vec3 vNormal;
+layout(location = 3) out vec3 vTangent;
+layout(location = 4) out vec4 vColor;
 
 void main()
 {

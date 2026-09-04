@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/scene/light/hcALight.h"
-#include "hc/graphics/lightFrameData/hcDirectionalLightFrameData.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
@@ -116,7 +116,24 @@ namespace hc
      */
     float getShadowProjectionFarPlane() const;
 
-    DirectionalLightFrameData toFrameData() const;
+    /**
+     * @brief Gets the GPU-aligned data structure representing this directional light.
+     *
+     * @return A dataBlockStructure::DirectionalLight containing the light's data.
+     */
+    dataBlockStructure::DirectionalLight getDataBlockStructure() const;
+
+    /**
+     * @brief Gets the GPU-aligned data structure representing this directional light's
+     * shadow.
+     *
+     * @param transposeMatrices Whether to transpose matrices for GPU upload.
+     *
+     * @return A dataBlockStructure::DirectionalLightShadow containing the shadow's data.
+     */
+    dataBlockStructure::DirectionalLightShadow getShadowDataBlockStructure(
+      bool transposeMatrices
+    ) const;
 
   private:
     Vector3f m_direction;

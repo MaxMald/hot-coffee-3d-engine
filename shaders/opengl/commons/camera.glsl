@@ -1,5 +1,3 @@
-#version 420 core
-
 layout(std140, binding = 0) uniform CameraBlock
 {
   mat4 projection;

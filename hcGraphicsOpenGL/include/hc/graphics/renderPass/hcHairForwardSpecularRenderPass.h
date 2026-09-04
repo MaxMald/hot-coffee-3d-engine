@@ -5,12 +5,16 @@
 namespace hc
 {
   class OpenGlGBuffer;
-  class OpenGlLightShadowManager;
+  class OpenGlLightShadowMapManager;
+  class IDataBlockManager;
 
   class HairForwardSpecularRenderPass
   {
   public:
-    HairForwardSpecularRenderPass(OpenGlLightShadowManager& lightShadowManager);
+    HairForwardSpecularRenderPass(
+      OpenGlLightShadowMapManager& lightShadowMapManager,
+      IDataBlockManager& dataBlockManager
+    );
     ~HairForwardSpecularRenderPass();
 
     void execute(
@@ -19,7 +23,8 @@ namespace hc
     );
 
   private:
-    OpenGlLightShadowManager& m_lightShadowManager;
+    OpenGlLightShadowMapManager& m_lightShadowMapManager;
+    IDataBlockManager& m_dataBlockManager;
 
     void executeTwoSidedDrawCommand(const DrawCommand& command);
   };

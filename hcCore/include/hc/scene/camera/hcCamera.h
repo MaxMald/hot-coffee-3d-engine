@@ -7,6 +7,11 @@
 
 namespace hc
 {
+  namespace dataBlockStructure
+  {
+    struct Camera;
+  }
+
   /**
    * @brief Represents a camera in the engine.
    */
@@ -226,6 +231,15 @@ namespace hc
      * @return Pointer to the active ICameraProjection.
      */
     const ICameraProjection* getCameraProjection() const;
+
+    /**
+     * @brief Gets the camera data block structure for GPU upload.
+     *
+     * @param transposedMatrices Whether to transpose matrices for GPU upload.
+     *
+     * @return The Camera data block structure.
+     */
+    dataBlockStructure::Camera getCameraDataBlockStructure(bool transposedMatrices) const;
 
   private:
     UUID m_id;

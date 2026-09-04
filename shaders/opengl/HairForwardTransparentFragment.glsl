@@ -4,18 +4,16 @@
 #include "commons/lighting.glsl"
 #include "commons/materialHair.glsl"
 
-in vec2 vTexCoord;
-in vec3 vWorldPos;
-in vec3 vNormal;
-in vec3 vTangent;
-in vec4 vColor;
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 1) in vec3 vWorldPos;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vTangent;
+layout(location = 4) in vec4 vColor;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 layout(binding = 0) uniform sampler2D uAlbedo;
 layout(binding = 1) uniform sampler2D uNormalMap;
-layout(binding = 5) uniform sampler2DArray uDirectionalShadowMaps;
-layout(binding = 6) uniform sampler2DArray uSpotShadowMaps;
 
 void main()
 { 

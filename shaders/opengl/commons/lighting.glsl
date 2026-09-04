@@ -1,7 +1,5 @@
-#version 420 core
-
-#include "commons/utilities.glsl"
-#include "commons/shadow.glsl"
+#include "utilities.glsl"
+#include "shadow.glsl"
 
 #define MAX_OMNI_LIGHTS 16
 #define MAX_SPOT_LIGHTS 8
@@ -42,7 +40,7 @@ struct DirectionalLightData
   int  padding2;
 };
 
-layout(std140, binding = 2) uniform LightBlock
+layout(std140, binding = 1) uniform LightBlock
 {
   DirectionalLightData directionalLights[MAX_DIRECTIONAL_LIGHTS];
   OmniLightData omniLights[MAX_OMNI_LIGHTS];
@@ -176,7 +174,7 @@ vec4 calculateSpotLightContribution(
   float epsilon = clamp(light.innerConeCos - light.outerConeCos, 0.001, 1.0);
   float spillLightIntensity = clamp((theta - light.outerConeCos) / epsilon, 0.0, 1.0);
 
-  vec4 lightedColor = vec4(((kD * diffuseColor.rgb * light.color.rgb) + (kS * specularColor)) * attenuatedIntensity * spillLightIntensity * shadowFactor, 1.0);
+  vec4 lightedColor = vec4(((kD * diffuseColor.rgb * light.color.rgb) + (kS * specularColor)) * attenuatedIntensity * spillLightIntensity, 1.0);
 
   lightedColor = calculateSpotLightShadowContribution(
     light.shadowFrameDataIndex, 

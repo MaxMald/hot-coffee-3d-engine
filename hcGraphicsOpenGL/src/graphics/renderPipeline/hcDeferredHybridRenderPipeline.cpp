@@ -1,27 +1,30 @@
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 
 #include <GL/glew.h>
+#include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
+
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
-#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
 
 namespace hc
 {
   DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
-    OpenGlLightShadowManager& lightShadowManager
+    IDataBlockManager& dataBlockManager,
+    OpenGlLightShadowMapManager& lightShadowMapManager
   ) :
-    m_deferredGeometryRenderPass(),
-    m_deferredLightingRenderPass(lightShadowManager),
-    m_forwardOpaqueRenderPass(),
-    m_forwardTransparentRenderPass(),
-    m_hairForwardSpecularRenderPass(lightShadowManager),
+    m_deferredGeometryRenderPass(dataBlockManager),
+    m_deferredLightingRenderPass(lightShadowMapManager),
+    m_forwardOpaqueRenderPass(dataBlockManager),
+    m_forwardTransparentRenderPass(dataBlockManager),
+    m_hairForwardSpecularRenderPass(lightShadowMapManager, dataBlockManager),
     m_skyboxRenderPass(),
     m_gBuffer(),
     m_deferredOpaqueCommands(),
     m_forwardOpaqueCommands(),
     m_forwardTransparentCommands(),
     m_hairForwardSpecularCommands(),
-    m_lightShadowManager(lightShadowManager),
+    m_lightShadowMapManager(lightShadowMapManager),
     m_initialized(false)
   {}
 
@@ -104,7 +107,6 @@ namespace hc
       m_hairForwardSpecularCommands
     );
 
-    m_lightShadowManager.uploadShadowDataToGPU();
     m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
     m_deferredLightingRenderPass.execute(frameRenderContext.customFrameBuffer);
     copyDepthBufferToCurrentRenderTarget(frameRenderContext.customFrameBuffer);

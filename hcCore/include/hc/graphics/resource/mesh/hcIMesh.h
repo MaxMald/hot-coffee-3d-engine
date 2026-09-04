@@ -1,8 +1,8 @@
 #pragma once
 
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/graphics/hcDrawType.h"
 
 namespace hc
 {
