@@ -1,5 +1,6 @@
 #includes
 include(GNUInstallDirs)
+include(FetchContent)
 
 # Prerequisites
 find_package(OpenGL REQUIRED)
@@ -7,6 +8,77 @@ find_package(OpenGL REQUIRED)
 if(UNIX)
   find_package(GLEW REQUIRED)
 endif()
+
+# Predict SPIRV-Tools source location (FetchContent default pattern)
+set(_SPIRV_TOOLS_SRC "${CMAKE_BINARY_DIR}/_deps/SPIRV-Tools-src")
+
+# Declare SPIRV-Headers to download into spirv-tools/external/spirv-headers
+FetchContent_Declare(
+  SPIRV-Headers
+  GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Headers.git
+  GIT_TAG vulkan-sdk-1.3.280
+  SOURCE_DIR "${_SPIRV_TOOLS_SRC}/external/spirv-headers"
+)
+
+# Declare SPIRV-Tools
+FetchContent_Declare(
+  SPIRV-Tools
+  GIT_REPOSITORY https://github.com/KhronosGroup/SPIRV-Tools.git
+  GIT_TAG v2024.1
+)
+set(SPIRV_SKIP_TESTS ON CACHE BOOL "" FORCE)
+set(SPIRV_SKIP_EXECUTABLES ON CACHE BOOL "" FORCE)
+set(SPIRV_WERROR OFF CACHE BOOL "" FORCE)
+
+# Fetch glslang (required by shaderc)
+FetchContent_Declare(
+  glslang
+  GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git
+  GIT_TAG 14.1.0
+)
+set(SKIP_GLSLANG_TESTS ON CACHE BOOL "" FORCE)
+set(ENABLE_HLSL ON CACHE BOOL "" FORCE)
+
+# Fetch shaderc
+FetchContent_Declare(
+  shaderc
+  GIT_REPOSITORY https://github.com/google/shaderc.git
+  GIT_TAG v2024.1
+)
+
+set(SHADERC_SKIP_TESTS ON CACHE BOOL "" FORCE)
+set(SHADERC_SKIP_EXAMPLES ON CACHE BOOL "" FORCE)
+set(SHADERC_ENABLE_HLSL OFF CACHE BOOL "" FORCE)
+set(SHADERC_ENABLE_SHARED_CRT ON CACHE BOOL "" FORCE)
+
+# Make SPIRV-Headers available FIRST (downloads headers)
+FetchContent_MakeAvailable(SPIRV-Headers)
+
+# Then make everything else available (SPIRV-Headers will be in place)
+FetchContent_MakeAvailable(SPIRV-Tools glslang shaderc)
+
+# Group dependencies into a folder
+set_target_properties(glslang PROPERTIES FOLDER "Dependencies")
+set_target_properties(glslc_exe PROPERTIES FOLDER "Dependencies")
+set_target_properties(glslc PROPERTIES FOLDER "Dependencies")
+set_target_properties(extinst_tables PROPERTIES FOLDER "Dependencies")
+set_target_properties(enum_string_mapping PROPERTIES FOLDER "Dependencies")
+set_target_properties(core_tables PROPERTIES FOLDER "Dependencies")
+set_target_properties(check-copyright PROPERTIES FOLDER "Dependencies")
+set_target_properties(build-version PROPERTIES FOLDER "Dependencies")
+set_target_properties(add-copyright PROPERTIES FOLDER "Dependencies")
+
+set_target_properties(shaderc PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc_combined PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc_combined-pkg-config PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc_shared PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc_static-pkg-config PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc_util PROPERTIES FOLDER "Dependencies")
+set_target_properties(shaderc-pkg-config PROPERTIES FOLDER "Dependencies")
+set_target_properties(spirv-tools-pkg-config PROPERTIES FOLDER "Dependencies")
+set_target_properties(spirv-tools-shared-pkg-config PROPERTIES FOLDER "Dependencies")
+set_target_properties(testdata PROPERTIES FOLDER "Dependencies")
+
 
 # Graphics OpenGl library
 file(GLOB_RECURSE GRAPHICS_OPENGL_HEADERS "include/*.h")
@@ -57,6 +129,7 @@ target_include_directories(hcGraphicsOpenGL
 
 # Linking
 target_link_libraries(hcGraphicsOpenGL PUBLIC hcCore hcUtilities)
+target_link_libraries(hcGraphicsOpenGL PRIVATE shaderc)
 
 if(WIN32)
   target_link_libraries(hcGraphicsOpenGL PRIVATE OpenGL::GL)

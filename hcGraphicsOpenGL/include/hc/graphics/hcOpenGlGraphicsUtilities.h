@@ -17,14 +17,14 @@ namespace hc
     void CheckAndLogPossibleError();
 
     /**
-     * @brief Converts a draw type to the corresponding OpenGL draw mode.
+     * @brief Converts a topology type to the corresponding OpenGL draw mode.
      */
-    UInt32 GetOpenGlDrawModeFromDrawType(drawType::Type drawType);
+    UInt32 GetOpenGlDrawModeFromTopologyType(topologyType::Type topologyType);
 
     /**
-     * @brief Converts an OpenGL draw mode to the corresponding draw type.
+     * @brief Converts an OpenGL draw mode to the corresponding topology type.
      */
-    drawType::Type GetDrawTypeFromOpenGlMode(UInt32 glMode);
+    topologyType::Type GetTopologyTypeFromOpenGlMode(UInt32 glMode);
 
     /**
      * @brief Converts a polygon fill type to the corresponding OpenGL polygon mode.

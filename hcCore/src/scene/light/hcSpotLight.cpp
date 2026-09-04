@@ -98,16 +98,47 @@ namespace hc
     return m_shadowProjectionFarPlane;
   }
 
-  SpotLightFrameData SpotLight::toFrameData() const
+  dataBlockStructure::SpotLight SpotLight::getDataBlockStructure() const
   {
-    SpotLightFrameData frameData{};
-    frameData.position = Vector4f(m_position, 1.0f);
-    frameData.direction = Vector4f(m_direction.normalized(), 0.0f);
-    frameData.color = m_color;
-    frameData.range = m_range;
-    frameData.innerConeAngle = Math::Cos(m_innerConeAngle.toRadians());
-    frameData.intensity = m_intensity;
-    frameData.outerConeAngle = Math::Cos(m_outerConeAngle.toRadians());
-    return frameData;
+    dataBlockStructure::SpotLight lightData;
+    lightData.position = Vector4f(m_position, 1.0f);
+    lightData.direction = Vector4f(m_direction.normalized(), 0.0f);
+    lightData.color = m_color;
+    lightData.range = m_range;
+    lightData.innerConeAngle = Math::Cos(m_innerConeAngle.toRadians());
+    lightData.intensity = m_intensity;
+    lightData.outerConeAngle = Math::Cos(m_outerConeAngle.toRadians());
+    return lightData;
+  }
+
+  dataBlockStructure::SpotLightShadow SpotLight::getShadowDataBlockStructure(
+    bool transposeMatrices
+  ) const
+  {
+    Matrix4 projectionMatrix = Matrix4::Perspective(
+      m_outerConeAngle.toRadians() * 2.0f,
+      1.0f,
+      m_shadowProjectionNearPlane,
+      m_shadowProjectionFarPlane
+    );
+
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(m_direction);
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      m_position,
+      m_position + m_direction,
+      up
+    );
+
+    dataBlockStructure::SpotLightShadow shadowData;
+    shadowData.shadowBias = m_shadowBias;
+    shadowData.shadowStrength = m_shadowStrength;
+    shadowData.projectionFarPlane = m_shadowProjectionFarPlane;
+    shadowData.projectionNearPlane = m_shadowProjectionNearPlane;
+    shadowData.lightViewProjectionMatrix = projectionMatrix * viewMatrix;
+
+    if (transposeMatrices)
+      shadowData.lightViewProjectionMatrix.transpose();
+
+    return shadowData;
   }
 }

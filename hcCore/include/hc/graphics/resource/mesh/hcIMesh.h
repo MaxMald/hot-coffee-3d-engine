@@ -1,8 +1,8 @@
 #pragma once
 
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/graphics/hcDrawType.h"
 
 namespace hc
 {
@@ -108,18 +108,18 @@ namespace hc
     virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
 
     /**
-     * @brief Returns the draw type of this mesh.
+     * @brief Returns the topology type of this mesh.
      *
-     * @return The draw type used for rendering this mesh.
+     * @return The topology type used for rendering this mesh.
      */
-    virtual drawType::Type getDrawType() const = 0;
+    virtual topologyType::Type getTopologyType() const = 0;
 
     /**
-     * @brief Sets the draw type for this mesh.
+     * @brief Sets the topology type for this mesh.
      *
-     * @param drawType The draw type to use for rendering this mesh.
+     * @param topologyType The topology type to use for rendering this mesh.
      */
-    virtual void setDrawType(drawType::Type drawType) = 0;
+    virtual void setTopologyType(topologyType::Type topologyType) = 0;
 
     /**
      * @brief Validates the mesh's state and configuration.

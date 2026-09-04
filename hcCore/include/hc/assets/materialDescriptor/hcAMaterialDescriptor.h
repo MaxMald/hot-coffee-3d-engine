@@ -1,8 +1,7 @@
 #pragma once
 
 #include "hc/assets/hcAsset.h"
-#include "hc/graphics/resource/material/hcShadingType.h"
-#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 
 namespace hc
 {
@@ -20,11 +19,11 @@ namespace hc
     virtual ~AMaterialDescriptor() = default;
 
     /**
-     * Gets the shading type used by this material.
+     * Gets the material type used by this material.
      *
-     * @return The shading type identifier
+     * @return The material type identifier
      */
-    virtual shadingType::Type getShaderType() const = 0;
+    virtual materialType::Type getType() const = 0;
 
     /**
      * Gets the file paths of all images used by this material descriptor.

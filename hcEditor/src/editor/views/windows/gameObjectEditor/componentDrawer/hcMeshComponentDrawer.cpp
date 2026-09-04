@@ -89,7 +89,7 @@ namespace hc::editor
     ImGui::Text("Material Slot: %d", materialSlotIndex);
     ImGui::Text("Asset Id: %llu", material->getId().value());
     ImGui::Text("Material ID: %u", material->getMaterialId());
-    ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
+    ImGui::Text("Material Type: %s", materialType::toString(material->getMaterialType()).c_str());
 
     materialRenderMode::Type currentRenderMode =  material->getRenderMode();
     const char* renderModeOptions[] = { "Background", "Opaque", "AlphaCutout", "Transparent" };
@@ -116,7 +116,7 @@ namespace hc::editor
     // that can handle different shader types and their unique properties without
     // hardcoding checks for specific shader types.
 
-    if (material->getShaderType() == shadingType::BlinnPhong)
+    if (material->getMaterialType() == materialType::BlinnPhong)
     {
       SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
         std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
@@ -146,7 +146,7 @@ namespace hc::editor
         64.0f
       );
     }
-    if (material->getShaderType() == shadingType::Hair)
+    if (material->getMaterialType() == materialType::Hair)
     {
       SharedPtr<HairMaterial> hairMaterial =
         std::dynamic_pointer_cast<HairMaterial>(material);

@@ -36,9 +36,9 @@ namespace hc
     virtual ~HairMaterialDescriptor() = default;
 
     /**
-     * @copydoc AMaterialDescriptor::getShaderType
+     * @copydoc AMaterialDescriptor::getType
      */
-    shadingType::Type getShaderType() const override;
+    materialType::Type getType() const override;
 
     /**
      * @copydoc AMaterialDescriptor::getImagesPaths

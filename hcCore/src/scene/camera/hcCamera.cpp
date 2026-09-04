@@ -1,4 +1,5 @@
 #include "hc/scene/camera/hcCamera.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
@@ -229,6 +230,24 @@ namespace hc
   const ICameraProjection* Camera::getCameraProjection() const
   {
     return const_cast<Camera*>(this)->getCameraProjection();
+  }
+
+  dataBlockStructure::Camera Camera::getCameraDataBlockStructure(
+    bool transposedMatrices
+  ) const
+  {
+    dataBlockStructure::Camera cameraDataBlock;
+    cameraDataBlock.projectionMatrix = getCachedProjectionMatrix();
+    cameraDataBlock.viewMatrix = getViewMatrix();
+    cameraDataBlock.cameraWorldPosition = m_position;
+
+    if (transposedMatrices)
+    {
+      cameraDataBlock.projectionMatrix.transpose();
+      cameraDataBlock.viewMatrix.transpose();
+    }
+
+    return cameraDataBlock;
   }
 
   void Camera::recalculateUp()

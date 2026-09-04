@@ -41,41 +41,41 @@ namespace hc
       }
     }
 
-    UInt32 GetOpenGlDrawModeFromDrawType(drawType::Type drawType)
+    UInt32 GetOpenGlDrawModeFromTopologyType(topologyType::Type topology)
     {
-      switch (drawType)
+      switch (topology)
       {
-      case drawType::Triangles:
+      case topologyType::Triangles:
         return GL_TRIANGLES;
-      case drawType::Lines:
+      case topologyType::Lines:
         return GL_LINES;
-      case drawType::LineStrip:
+      case topologyType::LineStrip:
         return GL_LINE_STRIP;
-      case drawType::LineLoop:
+      case topologyType::LineLoop:
         return GL_LINE_LOOP;
-      case drawType::Points:
+      case topologyType::Points:
         return GL_POINTS;
       default:
         throw RuntimeErrorException(
-          String::Format("Unsupported draw type: %d", static_cast<int>(drawType))
+          String::Format("Unsupported topology type: %d", static_cast<int>(topology))
         );
       }
     }
 
-    drawType::Type GetDrawTypeFromOpenGlMode(UInt32 glMode)
+    topologyType::Type GetTopologyTypeFromOpenGlMode(UInt32 glMode)
     {
       switch (glMode)
       {
       case GL_TRIANGLES:
-        return drawType::Triangles;
+        return topologyType::Triangles;
       case GL_LINES:
-        return drawType::Lines;
+        return topologyType::Lines;
       case GL_LINE_STRIP:
-        return drawType::LineStrip;
+        return topologyType::LineStrip;
       case GL_LINE_LOOP:
-        return drawType::LineLoop;
+        return topologyType::LineLoop;
       case GL_POINTS:
-        return drawType::Points;
+        return topologyType::Points;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported OpenGL mode: %u", glMode)

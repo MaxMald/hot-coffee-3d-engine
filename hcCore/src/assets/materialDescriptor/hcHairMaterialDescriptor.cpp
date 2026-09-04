@@ -20,9 +20,9 @@ namespace hc
   {
   }
 
-  shadingType::Type HairMaterialDescriptor::getShaderType() const
+  materialType::Type HairMaterialDescriptor::getType() const
   {
-    return shadingType::Hair;
+    return materialType::Hair;
   }
 
   void HairMaterialDescriptor::getImagesPaths(Vector<Path>& paths) const

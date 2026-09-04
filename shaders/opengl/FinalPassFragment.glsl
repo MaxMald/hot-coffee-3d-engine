@@ -1,9 +1,10 @@
 #version 420 core
 
-layout(binding = 0) uniform sampler2D uScene;
+layout(location = 0) in vec2 vTexCoord;
 
-in vec2 vTexCoord;
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
+
+layout(binding = 0) uniform sampler2D uScene;
 
 void main()
 {

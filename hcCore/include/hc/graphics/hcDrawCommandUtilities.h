@@ -53,7 +53,7 @@ namespace hc
         if (!cmd.material)
           continue;
 
-        if (cmd.material->getShaderType() == shadingType::Unlit)
+        if (cmd.material->getMaterialType() == materialType::Unlit)
         {
           // Unlit materials are rendered in the forward rendering pass to ensure
           // correct rendering without lighting calculations.

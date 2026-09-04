@@ -3,6 +3,8 @@
 #include "hc/utilities/hcCoreAssertions.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
 #include "hc/assets/materialDescriptor/hcHairMaterialDescriptor.h"
 
 namespace hc
@@ -40,12 +42,15 @@ namespace hc
     m_forwardTransparentShaderProgram.reset();
   }
 
-  shadingType::Type HairMaterial::getShaderType() const
+  materialType::Type HairMaterial::getMaterialType() const
   {
-    return shadingType::Type::Hair;
+    return materialType::Type::Hair;
   }
 
-  void HairMaterial::bind(renderPassType::Type renderPass)
+  void HairMaterial::bind(
+    renderPassType::Type renderPass,
+    IDataBlockManager& dataBlockManager
+  )
   {
     assertIsValid();
 
@@ -53,6 +58,7 @@ namespace hc
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
 
+    // Bind the appropriate shader program based on the render pass type
     if (renderPassType::Type::DeferredGeometry == renderPass)
       bindDeferredGeometryPass();
     else if (renderPassType::Type::HairForwardSpecular == renderPass)
@@ -66,44 +72,25 @@ namespace hc
           static_cast<Int32>(renderPass)
         )
       );
-  }
 
-  void HairMaterial::updateModelMatrix(
-    const Matrix4& modelMatrix,
-    renderPassType::Type renderPass
-  )
-  {
-    if (renderPassType::Type::HairForwardSpecular == renderPass)
-    {
-      coreAssertions::AssertShaderProgramIsValid(
-        m_forwardSpecularShaderProgram,
-        "Hair forward specular shader program"
-      );
-      m_forwardSpecularShaderProgram->setUniform("uModel", modelMatrix);
-    }
-    else if (renderPassType::Type::DeferredGeometry == renderPass)
-    {
-      coreAssertions::AssertShaderProgramIsValid(
-        m_deferredGeometryShaderProgram,
-        "Hair deferred geometry shader program"
-      );
-      m_deferredGeometryShaderProgram->setUniform("uModel", modelMatrix);
-    }
-    else if (renderPassType::Type::ForwardTransparent == renderPass)
-    {
-      coreAssertions::AssertShaderProgramIsValid(
-        m_forwardTransparentShaderProgram,
-        "Hair forward transparent shader program"
-      );
-      m_forwardTransparentShaderProgram->setUniform("uModel", modelMatrix);
-    }
+    // Upload and bind material properties
+    dataBlockStructure::MaterialHair materialData;
+    materialData.color = m_color.vec4;
+    materialData.primarySpecularColor = m_specularPrimaryColor.vec4;
+    materialData.secondarySpecularColor = m_specularSecondaryColor.vec4;
+
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      materialData.alphaCutoff = m_alphaCutoutThreshold;
     else
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported render pass type for Hair material: %d",
-          static_cast<Int32>(renderPass)
-        )
-      );
+      materialData.alphaCutoff = 0.0f;
+
+    materialData.shininess = m_shininess;
+    materialData.primarySpecularShift = m_specularPrimaryShift;
+    materialData.secondarySpecularShift = m_specularSecondaryShift;
+    materialData.specularWidth = m_specularWidth;
+    materialData.specularStrength = m_specularStrength;
+    dataBlockManager.upload(dataBlockType::Type::MaterialHair, &materialData);
+    dataBlockManager.bind(dataBlockType::Type::MaterialHair);
   }
 
   void HairMaterial::unbind()
@@ -279,18 +266,9 @@ namespace hc
     );
 
     m_deferredGeometryShaderProgram->bind();
-    m_deferredGeometryShaderProgram->setUniform("uColor", m_color);
-    m_deferredGeometryShaderProgram->setUniform("uShininess", m_shininess);
-
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
-    else
-      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
     m_albedoTexture->bind(0);
-    m_deferredGeometryShaderProgram->setUniformTexture("uAlbedo", 0);
     m_normalTexture->bind(1);
-    m_deferredGeometryShaderProgram->setUniformTexture("uNormalMap", 1);
   }
 
   void HairMaterial::bindForwardSpecularPass()
@@ -301,25 +279,10 @@ namespace hc
     );
 
     m_forwardSpecularShaderProgram->bind();
-    m_forwardSpecularShaderProgram->setUniform("uShininess", m_shininess);
-    m_forwardSpecularShaderProgram->setUniform("uPrimaryColor", m_specularPrimaryColor);
-    m_forwardSpecularShaderProgram->setUniform("uSecondaryColor", m_specularSecondaryColor);
-    m_forwardSpecularShaderProgram->setUniform("uPrimaryShift", m_specularPrimaryShift);
-    m_forwardSpecularShaderProgram->setUniform("uSecondaryShift", m_specularSecondaryShift);
-    m_forwardSpecularShaderProgram->setUniform("uSpecularWidth", m_specularWidth);
-    m_forwardSpecularShaderProgram->setUniform("uSpecularStrength", m_specularStrength);
-
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_forwardSpecularShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
-    else
-      m_forwardSpecularShaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
     m_albedoTexture->bind(0);
-    m_forwardSpecularShaderProgram->setUniformTexture("uAlbedo", 0);
     m_normalTexture->bind(1);
-    m_forwardSpecularShaderProgram->setUniformTexture("uNormalMap", 1);
     m_specularTexture->bind(2);
-    m_forwardSpecularShaderProgram->setUniformTexture("uSpecularMap", 2);
   }
 
   void HairMaterial::bindForwardTransparentPass()
@@ -330,15 +293,8 @@ namespace hc
     );
 
     m_forwardTransparentShaderProgram->bind();
-    m_forwardTransparentShaderProgram->setUniform("uColor", m_color);
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_forwardTransparentShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
-    else
-      m_forwardTransparentShaderProgram->setUniform("uAlphaCutoff", 0.0f);
 
     m_albedoTexture->bind(0);
-    m_forwardTransparentShaderProgram->setUniformTexture("uAlbedo", 0);
     m_normalTexture->bind(1);
-    m_forwardTransparentShaderProgram->setUniformTexture("uNormalMap", 1);
   }
 }

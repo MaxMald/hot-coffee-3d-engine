@@ -94,11 +94,54 @@ namespace hc
     return m_shadowProjectionFarPlane;
   }
 
-  DirectionalLightFrameData DirectionalLight::toFrameData() const
+  dataBlockStructure::DirectionalLight DirectionalLight::getDataBlockStructure() const
   {
-    DirectionalLightFrameData frameData;
-    frameData.directionAndIntensity = Vector4f(m_direction.normalized(), m_intensity);
-    frameData.color = m_color;
-    return frameData;
+    dataBlockStructure::DirectionalLight lightData;
+    lightData.directionAndIntensity = Vector4f(m_direction.normalized(), m_intensity);
+    lightData.color = m_color;
+    return lightData;
+  }
+
+  dataBlockStructure::DirectionalLightShadow DirectionalLight::getShadowDataBlockStructure(
+    bool transposeMatrices
+  ) const
+  {
+    dataBlockStructure::DirectionalLightShadow shadowData;
+    shadowData.shadowBias = m_shadowBias;
+    shadowData.shadowStrength = m_shadowStrength;
+
+    float projectionSize = m_shadowProjectionSize * 0.5f;
+    Matrix4 projectionMatrix = Matrix4::Orthographic(
+      -projectionSize, projectionSize,
+      -projectionSize, projectionSize,
+      m_shadowProjectionNearPlane, m_shadowProjectionFarPlane
+    );
+
+    // TODO
+    //
+    // Shadow target position and distance of a directional light should be calculated
+    // based on the scene's bounding box or the area of interest (like the center's of the
+    // camera's frustum), not just the origin.
+    //
+    // For now, we let the user specify the shadow target and distance in the
+    // DirectionalLight class.
+
+    Vector3f lightPosition = m_shadowViewTarget - m_direction * m_shadowViewDistance;
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(m_direction);
+
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      lightPosition,
+      m_shadowViewTarget,
+      up
+    );
+
+    shadowData.LightViewProjectionMatrix = projectionMatrix * viewMatrix;
+
+    if (transposeMatrices)
+    {
+      shadowData.LightViewProjectionMatrix.transpose();
+    }
+
+    return shadowData;
   }
 }

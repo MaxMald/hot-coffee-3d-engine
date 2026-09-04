@@ -2,12 +2,9 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/window/hcIWindow.h"
-#include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/graphics/hcGraphicsBackendType.h"
-#include "hc/graphics/hcPolygonFillType.h"
-#include "hc/graphics/hcRenderPipelineType.h"
 
 namespace hc
 {
@@ -18,10 +15,11 @@ namespace hc
   class IMaterialManager;
   class IShaderManager;
   class IShaderProgramManager;
+  class IDataBlockManager;
   class IMeshManager;
   class IGBuffer;
   class ICubeMap;
-  class ALightShadowManager;
+  class ILightShadowMapManager;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
@@ -59,20 +57,6 @@ namespace hc
      * @brief Begins a new rendering frame.
      */
     virtual void beginFrame() = 0;
-
-    /**
-     * @brief Uploads the camera frame data for the current frame to the GPU.
-     *
-     * @param cameraFrameData The camera frame data for the current frame.
-     */
-    virtual void uploadCameraFrameData(const CameraFrameData& cameraFrameData) = 0;
-
-    /**
-     * @brief Uploads the aggregated light data for the current frame to the GPU.
-     *
-     * @param lightFrameData The aggregated light data for the current frame.
-     */
-    virtual void uploadLightFrameData(const LightFrameData& lightFrameData) = 0;
 
     /**
      * @brief Sets the render target for all subsequent draw calls.
@@ -204,11 +188,18 @@ namespace hc
     virtual IMeshManager& getMeshManager() = 0;
 
     /**
-     * @brief Returns the light shadow manager.
+     * @brief Returns the light shadow map manager.
      *
-     * @return Reference to the ALightShadowManager instance.
+     * @return Reference to the ILightShadowMapManager instance.
      */
-    virtual ALightShadowManager& getLightShadowManager() = 0;
+    virtual ILightShadowMapManager& getLightShadowMapManager() = 0;
+
+    /**
+     * @brief Returns the data block manager.
+     *
+     * @return Reference to the IDataBlockManager instance.
+     */
+    virtual IDataBlockManager& getDataBlockManager() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

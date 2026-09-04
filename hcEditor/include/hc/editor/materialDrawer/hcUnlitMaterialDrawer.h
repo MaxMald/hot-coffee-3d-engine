@@ -14,11 +14,11 @@ namespace hc::editor
     virtual ~UnlitMaterialDrawer() = default;
 
     /**
-     * @brief Returns the shading type handled by this drawer.
+     * @brief Returns the material type handled by this drawer.
      * 
-     * @return The shading type as defined in shadingType::Type.
+     * @return The material type as defined in materialType::Type.
      */
-    shadingType::Type getShadingType() const override;
+    materialType::Type getMaterialType() const override;
 
   private:
 

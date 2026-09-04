@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/graphics/hcPolygonFillType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 
 namespace hc
 {

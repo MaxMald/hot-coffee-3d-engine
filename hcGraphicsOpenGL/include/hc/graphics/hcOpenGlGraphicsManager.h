@@ -1,12 +1,14 @@
 #pragma once
 
-#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include <hc/graphics/resource/texture/hcTextureManager.h>
 #include <hc/graphics/resource/mesh/hcMeshManager.h>
 #include <hc/graphics/resource/material/hcMaterialManager.h>
-#include <hc/graphics/resource/shader/hcShaderManager.h>
 #include <hc/graphics/resource/shaderProgram/hcShaderProgramManager.h>
+
+#include "hc/hcGraphicsOpenGlPrerequisites.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
+#include "hc/graphics/resource/shader/hcOpenGlShaderManager.h"
+#include "hc/graphics/resource/dataBlock/hcOpenGlDataBlockManager.h"
 
 namespace hc
 {
@@ -37,16 +39,6 @@ namespace hc
      * @copydoc IGraphicsManager::beginFrame
      */
     void beginFrame() override;
-
-    /**
-     * @copydoc IGraphicsManager::uploadCameraFrameData
-     */
-    void uploadCameraFrameData(const CameraFrameData& cameraFrameData) override;
-
-    /**
-     * @copydoc IGraphicsManager::uploadLightFrameData
-     */
-    void uploadLightFrameData(const LightFrameData& lightFrameData) override;
 
     /**
      * @copydoc IGraphicsManager::setRenderTarget
@@ -139,9 +131,14 @@ namespace hc
     IMeshManager& getMeshManager() override;
 
     /**
-     * @copydoc IGraphicsManager::getLightShadowManager
+     * @copydoc IGraphicsManager::getLightShadowMapManager
      */
-    ALightShadowManager& getLightShadowManager() override;
+    ILightShadowMapManager& getLightShadowMapManager() override;
+
+    /**
+     * @copydoc IGraphicsManager::getDataBlockManager
+     */
+    IDataBlockManager& getDataBlockManager() override;
 
     /**
      * @copydoc IGraphicsManager::getGBuffer
@@ -175,11 +172,12 @@ namespace hc
     IAssetManager& m_assetManager;
     IWindow& m_window;
     TextureManager m_textureManager;
-    ShaderManager m_shaderManager;
+    OpenGlShaderManager m_shaderManager;
     ShaderProgramManager m_shaderProgramManager;
     MaterialManager m_materialManager;
     MeshManager m_meshManager;
     Rect<UInt32> m_viewportRect;
+    OpenGlDataBlockManager m_dataBlockManager;
     FrameRenderer m_frameRenderer;
     polygonFillType::Type m_polygonFillType;
 

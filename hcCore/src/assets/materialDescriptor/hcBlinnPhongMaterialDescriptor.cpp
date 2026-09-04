@@ -19,9 +19,9 @@ namespace hc
     m_specularImagePath(specularImagePath)
   {}
 
-  shadingType::Type BlinnPhongMaterialDescriptor::getShaderType() const
+  materialType::Type BlinnPhongMaterialDescriptor::getType() const
   {
-    return shadingType::BlinnPhong;
+    return materialType::BlinnPhong;
   }
 
   void BlinnPhongMaterialDescriptor::getImagesPaths(Vector<Path>& paths) const

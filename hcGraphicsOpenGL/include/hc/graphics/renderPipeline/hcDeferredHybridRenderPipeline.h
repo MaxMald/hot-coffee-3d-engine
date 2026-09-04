@@ -11,13 +11,17 @@
 
 namespace hc
 {
-  class OpenGlLightShadowManager;
+  class IDataBlockManager;
+  class OpenGlLightShadowMapManager;
   struct FrameRenderContext;
 
   class DeferredHybridRenderPipeline
   {
   public:
-    DeferredHybridRenderPipeline(OpenGlLightShadowManager& lightShadowManager);
+    DeferredHybridRenderPipeline(
+      IDataBlockManager& dataBlockManager,
+      OpenGlLightShadowMapManager& lightShadowMapManager
+    );
     ~DeferredHybridRenderPipeline();
 
     void initialize(
@@ -45,7 +49,7 @@ namespace hc
     Vector<DrawCommand> m_forwardOpaqueCommands;
     Vector<DrawCommand> m_forwardTransparentCommands;
     Vector<DrawCommand> m_hairForwardSpecularCommands;
-    OpenGlLightShadowManager& m_lightShadowManager;
+    OpenGlLightShadowMapManager& m_lightShadowMapManager;
     bool m_initialized;
 
     static void SplitDrawCommandsByRenderPass(

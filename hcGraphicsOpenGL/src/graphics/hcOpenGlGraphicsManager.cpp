@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/resource/texture/hcOpenGlTextureFactory.h"
-#include "hc/graphics/resource/shader/hcOpenGlShaderFactory.h"
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
@@ -21,9 +20,7 @@ namespace hc
       MakeUnique<OpenGlTextureFactory>(),
       m_assetManager
     ),
-    m_shaderManager(
-      MakeUnique<OpenGlShaderFactory>()
-    ),
+    m_shaderManager(),
     m_shaderProgramManager(
       MakeUnique<OpenGlShaderProgramFactory>(),
       m_shaderManager
@@ -39,7 +36,8 @@ namespace hc
       m_materialManager
     ),
     m_viewportRect(0, 0, 1, 1),
-    m_frameRenderer(),
+    m_dataBlockManager(),
+    m_frameRenderer(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -65,11 +63,23 @@ namespace hc
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    
-    m_materialManager.initialize();
-    m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
-    m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
-    setViewport(viewportRect);
+
+    try
+    {
+      m_dataBlockManager.initialize();
+      m_shaderManager.initialize();
+      m_materialManager.initialize();
+      m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
+      m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
+      setViewport(viewportRect);
+    }
+    catch (const Exception& e)
+    {
+      destroy();
+      throw RuntimeErrorException(
+        "Failed to initialize OpenGL graphics manager: " + String(e.what())
+      );
+    }
   }
 
   graphicsBackendType::Type OpenGlGraphicsManager::getGraphicsBackendType() const
@@ -80,18 +90,6 @@ namespace hc
   void OpenGlGraphicsManager::beginFrame()
   {
     m_frameRenderer.clearFrame();
-  }
-
-  void OpenGlGraphicsManager::uploadCameraFrameData(
-    const CameraFrameData& cameraFrameData
-  )
-  {
-    m_frameRenderer.uploadCameraFrameData(cameraFrameData);
-  }
-
-  void OpenGlGraphicsManager::uploadLightFrameData(const LightFrameData& lightFrameData)
-  {
-    m_frameRenderer.uploadLightFrameData(lightFrameData);
   }
 
   void OpenGlGraphicsManager::setRenderTarget(IFrameBuffer* frameBuffer)
@@ -193,9 +191,14 @@ namespace hc
     return m_meshManager;
   }
 
-  ALightShadowManager& OpenGlGraphicsManager::getLightShadowManager()
+  ILightShadowMapManager& OpenGlGraphicsManager::getLightShadowMapManager()
   {
-    return m_frameRenderer.getLightShadowManager();
+    return m_frameRenderer.getLightShadowMapManager();
+  }
+
+  IDataBlockManager& OpenGlGraphicsManager::getDataBlockManager()
+  {
+    return m_dataBlockManager;
   }
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
@@ -245,7 +248,8 @@ namespace hc
     m_materialManager.clear();
     m_textureManager.clear();
     m_shaderProgramManager.clear();
-    m_shaderManager.clear();
     m_meshManager.clear();
+    m_shaderManager.destroy();
+    m_dataBlockManager.destroy();
   }
 }

@@ -16,7 +16,7 @@ namespace hc
     /**
      * @brief Virtual destructor for safe polymorphic destruction.
      */
-    virtual ~IGraphicResource() = default;
+    virtual ~IGraphicResource();
 
     /**
      * @brief Returns the unique identifier of the graphic resource.
@@ -24,6 +24,13 @@ namespace hc
      * @return Reference to the resource's Id.
      */
     virtual const Id& getId() const = 0;
+
+    /**
+     * @brief Checks if the graphic resource is valid and properly initialized.
+     *
+     * @return True if the resource is valid; otherwise, false.
+     */
+    virtual bool isValid() const = 0;
 
     /**
      * @brief Destroys the graphic resource and releases associated resources.
@@ -34,6 +41,6 @@ namespace hc
      /**
       * @brief Protected default constructor to prevent direct instantiation.
       */
-     IGraphicResource() = default;
+     IGraphicResource();
   };
 }

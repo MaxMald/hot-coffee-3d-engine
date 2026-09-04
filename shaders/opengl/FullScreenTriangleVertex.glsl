@@ -1,6 +1,6 @@
 #version 420 core
 
-out vec2 vTexCoord;
+layout(location = 0) out vec2 vTexCoord;
 
 void main()
 {

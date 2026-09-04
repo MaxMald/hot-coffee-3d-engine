@@ -1,8 +1,8 @@
 #version 420 core
 
-in vec3 vDirection;
+layout(location = 0) in vec3 vDirection;
 
-out vec4 FragColor;
+layout(location = 0) out vec4 FragColor;
 
 layout(binding = 0) uniform samplerCube uSkybox;
 

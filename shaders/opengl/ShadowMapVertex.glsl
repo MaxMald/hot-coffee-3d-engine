@@ -1,9 +1,9 @@
 #version 420 core
 
-layout(location = 0) in vec3 aPosition;
+#include "commons/object.glsl"
+#include "commons/lightViewProjection.glsl"
 
-uniform mat4 uLightViewProjection;
-uniform mat4 uModel;
+layout(location = 0) in vec3 aPosition;
 
 void main()
 {

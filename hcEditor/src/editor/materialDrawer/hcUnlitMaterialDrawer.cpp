@@ -4,9 +4,9 @@
 
 namespace hc::editor
 {
-  shadingType::Type UnlitMaterialDrawer::getShadingType() const
+  materialType::Type UnlitMaterialDrawer::getMaterialType() const
   {
-    return shadingType::Unlit;
+    return materialType::Unlit;
   }
 
   void UnlitMaterialDrawer::onDraw(UnlitMaterial* material)
@@ -14,7 +14,7 @@ namespace hc::editor
     if (!material)
       return;
     
-    String shadingTypeStr = shadingType::toString(material->getShaderType());
+    String shadingTypeStr = materialType::toString(material->getMaterialType());
     ImGui::Text("Shading Type: %s", shadingTypeStr.c_str());
     imguiUtilities::DrawColor("Color", material->getColor());
 

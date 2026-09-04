@@ -41,9 +41,9 @@ namespace hc
      *
      * @param material The Assimp material to analyze
      * 
-     * @return The corresponding engine shading type
+     * @return The corresponding engine material type
      */
-    static shadingType::Type GetShadingTypeFromMaterial(const aiMaterial* material);
+    static materialType::Type GetMaterialTypeFromMaterial(const aiMaterial* material);
 
     /**
      * Gets the name of the material from an Assimp material.

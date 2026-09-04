@@ -1,10 +1,12 @@
 #version 420 core
 
-in vec2 vTexCoord;
-in vec3 vWorldPos;
-in vec3 vNormal;
-in vec3 vTangent;
-in vec4 vColor;
+#include "commons/materialHair.glsl"
+
+layout(location = 0) in vec2 vTexCoord;
+layout(location = 1) in vec3 vWorldPos;
+layout(location = 2) in vec3 vNormal;
+layout(location = 3) in vec3 vTangent;
+layout(location = 4) in vec4 vColor;
 
 layout(location = 0) out vec4 OutPositionAndDepth;
 layout(location = 1) out vec4 OutNormalRoughness;
@@ -12,12 +14,8 @@ layout(location = 2) out vec4 OutAlbedoAlpha;
 layout(location = 3) out vec4 OutMaterialParameters;
 layout(location = 4) out vec4 OutSpecularColorAndShininess;
 
-uniform vec4 uColor;
-uniform float uAlphaCutoff;
-uniform float uShininess;
-
-uniform sampler2D uAlbedo;
-uniform sampler2D uNormalMap;
+layout(binding = 0) uniform sampler2D uAlbedo;
+layout(binding = 1) uniform sampler2D uNormalMap;
 
 void main()
 {

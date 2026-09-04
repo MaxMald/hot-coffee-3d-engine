@@ -1,14 +1,17 @@
 #include "hc/graphics/renderPass/hcHairForwardSpecularRenderPass.h"
-#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowManager.h"
+#include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
 
 #include <GL/glew.h>
+#include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
 
 namespace hc
 {
   HairForwardSpecularRenderPass::HairForwardSpecularRenderPass(
-    OpenGlLightShadowManager& lightShadowManager
-  )
-    : m_lightShadowManager(lightShadowManager)
+    OpenGlLightShadowMapManager& lightShadowMapManager,
+    IDataBlockManager& dataBlockManager
+  ) :
+    m_lightShadowMapManager(lightShadowMapManager),
+    m_dataBlockManager(dataBlockManager)
   {}
 
   HairForwardSpecularRenderPass::~HairForwardSpecularRenderPass()
@@ -60,12 +63,18 @@ namespace hc
         const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
         glBindVertexArray(drawData.vao);
-        command.material->bind(renderPassType::Type::HairForwardSpecular);
-        command.material->updateModelMatrix(
-          command.modelMatrix,
-          renderPassType::Type::HairForwardSpecular
+        command.material->bind(
+          renderPassType::Type::HairForwardSpecular,
+          m_dataBlockManager
         );
-        m_lightShadowManager.bindShadowTexturesForReading(5, 6);
+
+        // Update the model matrix uniform in the material
+        dataBlockStructure::ObjectData objectData;
+        objectData.modelMatrix = command.modelMatrix.transposed();
+        m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+        m_dataBlockManager.bind(dataBlockType::Object);
+
+        m_lightShadowMapManager.bindShadowTexturesForReading();
 
         glDrawElements(
           static_cast<GLenum>(drawData.drawMode),
@@ -112,12 +121,18 @@ namespace hc
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
     glBindVertexArray(drawData.vao);
-    command.material->bind(renderPassType::Type::HairForwardSpecular);
-    command.material->updateModelMatrix(
-      command.modelMatrix,
-      renderPassType::Type::HairForwardSpecular
+    command.material->bind(
+      renderPassType::Type::HairForwardSpecular,
+      m_dataBlockManager
     );
-    m_lightShadowManager.bindShadowTexturesForReading(5, 6);
+
+    // Update the model matrix uniform in the material
+    dataBlockStructure::ObjectData objectData;
+    objectData.modelMatrix = command.modelMatrix.transposed();
+    m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+    m_dataBlockManager.bind(dataBlockType::Object);
+
+    m_lightShadowMapManager.bindShadowTexturesForReading();
 
     glDrawElements(
       static_cast<GLenum>(drawData.drawMode),

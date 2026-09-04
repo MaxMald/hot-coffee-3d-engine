@@ -1,12 +1,17 @@
 #include "hc/graphics/renderPass/hcDeferredGeometryRenderPass.h"
 
 #include <GL/glew.h>
+#include <hc/graphics/resource/dataBlock/hcDataBlockStructures.h>
+#include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
 #include "hc/graphics/resource/frameBuffer/hcOpenGlGBuffer.h"
 
 namespace hc
 {
-  DeferredGeometryRenderPass::DeferredGeometryRenderPass()
-    : m_gBuffer(nullptr)
+  DeferredGeometryRenderPass::DeferredGeometryRenderPass(
+  IDataBlockManager& dataBlockManager
+  ) :
+    m_gBuffer(nullptr),
+    m_dataBlockManager(dataBlockManager)
   {}
 
   DeferredGeometryRenderPass::~DeferredGeometryRenderPass()
@@ -37,11 +42,16 @@ namespace hc
         const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
         glBindVertexArray(drawData.vao);
-        command.material->bind(renderPassType::Type::DeferredGeometry);
-        command.material->updateModelMatrix(
-          command.modelMatrix,
-          renderPassType::Type::DeferredGeometry
+        command.material->bind(
+          renderPassType::Type::DeferredGeometry,
+          m_dataBlockManager
         );
+
+        // Update the model matrix uniform in the material
+        dataBlockStructure::ObjectData objectData;
+        objectData.modelMatrix = command.modelMatrix.transposed();
+        m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+        m_dataBlockManager.bind(dataBlockType::Object);
 
         glDrawElements(
           static_cast<GLenum>(drawData.drawMode),
@@ -74,11 +84,16 @@ namespace hc
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
     glBindVertexArray(drawData.vao);
-    command.material->bind(renderPassType::Type::DeferredGeometry);
-    command.material->updateModelMatrix(
-      command.modelMatrix,
-      renderPassType::Type::DeferredGeometry
+    command.material->bind(
+      renderPassType::Type::DeferredGeometry,
+      m_dataBlockManager
     );
+
+    // Update the model matrix uniform in the material
+    dataBlockStructure::ObjectData objectData;
+    objectData.modelMatrix = command.modelMatrix.transposed();
+    m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+    m_dataBlockManager.bind(dataBlockType::Object);
 
     glDrawElements(
       static_cast<GLenum>(drawData.drawMode),

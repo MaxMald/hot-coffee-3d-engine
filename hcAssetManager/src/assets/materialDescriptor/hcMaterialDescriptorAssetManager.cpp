@@ -28,12 +28,12 @@ namespace hc
         return nullptr;
 
       String shaderTypeStr = json["shaderType"].getString();
-      shadingType::Type shaderType = shadingType::fromString(shaderTypeStr);
+      materialType::Type shaderType = materialType::fromString(shaderTypeStr);
 
       SharedPtr<AMaterialDescriptor> loadedMaterialDescriptor;
       switch (shaderType)
       {
-      case shadingType::Unlit:
+      case materialType::Unlit:
         loadedMaterialDescriptor = deserializeUnlitMaterialDescriptor(path, json);
         break;
 

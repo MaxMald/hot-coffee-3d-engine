@@ -37,7 +37,7 @@ namespace hc::editor
     void clear();
 
   private:
-    UnorderedMap<shadingType::Type, UniquePtr<IMaterialDrawer>> m_drawers;
+    UnorderedMap<materialType::Type, UniquePtr<IMaterialDrawer>> m_drawers;
     NotImplementedMaterialDrawer m_notImplementedDrawer;
   };
 }
