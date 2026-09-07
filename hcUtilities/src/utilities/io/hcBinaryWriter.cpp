@@ -276,6 +276,11 @@ namespace hc::io
     }
   }
 
+  void  BinaryWriter::startWritingObject(UInt32 version)
+  {
+    startWritingObject("", version);
+  }
+
   void BinaryWriter::finishWritingObject()
   {
     if (m_currentObject == nullptr)

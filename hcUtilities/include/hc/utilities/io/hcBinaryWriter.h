@@ -215,6 +215,13 @@ namespace hc
        * @param version The version of the object (default is 0).
        */
       void startWritingObject(const String& name, UInt32 version = 0);
+
+      /**
+       * @brief Starts writing an object with the specified version.
+       *
+       * @param version The version of the object.
+       */
+      void startWritingObject(UInt32 version);
       
       /**
        * @brief Ends writing the current object.
