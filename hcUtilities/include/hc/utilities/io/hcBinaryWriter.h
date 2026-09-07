@@ -214,12 +214,12 @@ namespace hc
        * @param name The name of the object.
        * @param version The version of the object (default is 0).
        */
-      void startWrittingObject(const String& name, UInt32 version = 0);
+      void startWritingObject(const String& name, UInt32 version = 0);
       
       /**
        * @brief Ends writing the current object.
        */
-      void finishWrittingObject();
+      void finishWritingObject();
 
       /**
        * @brief Checks if the stream is currently writing an object.

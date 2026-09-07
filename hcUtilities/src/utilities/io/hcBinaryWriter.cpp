@@ -263,7 +263,7 @@ namespace hc::io
     writeFloat(value.a);
   }
 
-  void BinaryWriter::startWrittingObject(const String& name, UInt32 version)
+  void BinaryWriter::startWritingObject(const String& name, UInt32 version)
   {
     if (m_currentObject != nullptr)
     {
@@ -276,7 +276,7 @@ namespace hc::io
     }
   }
 
-  void BinaryWriter::finishWrittingObject()
+  void BinaryWriter::finishWritingObject()
   {
     if (m_currentObject == nullptr)
       throw RuntimeErrorException("No object is currently being written.");
