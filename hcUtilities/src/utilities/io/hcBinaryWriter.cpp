@@ -184,7 +184,7 @@ namespace hc::io
 
     if (m_currentObject != nullptr)
     {
-      m_currentObject->append(const_cast<Byte*>(data), size);
+      m_currentObject->append(reinterpret_cast<const Byte*>(data), size);
       return;
     }
 
