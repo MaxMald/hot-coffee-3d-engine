@@ -16,6 +16,31 @@ namespace hc::io
     String name = "";   ///< The name of the object.
     UInt32 version = 0; ///< The version of the object.
     SizeT size = 0;     ///< The size of the object in bytes.
+
+    /**
+     * @brief Checks if the header matches a given version.
+     *
+     * @param version The version to compare against.
+     * 
+     * @return True if the versions match, false otherwise.
+     */
+    bool match(UInt32 version) const
+    {
+      return this->version == version;
+    }
+
+    /**
+     * @brief Checks if the header matches a given name and version.
+     *
+     * @param name The name to compare against.
+     * @param version The version to compare against.
+     * 
+     * @return True if both the name and version match, false otherwise.
+     */
+    bool match(const String& name, UInt32 version) const
+    {
+      return this->name == name && this->version == version;
+    }
   };
 
   /**
