@@ -24,14 +24,14 @@ namespace hc
     destroy();
   }
 
-  void Scene::serialize(BinaryWriter& writer) const
+  void Scene::serialize(io::BinaryWriter& writer) const
   {
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     onSerialize(writer);
   }
 
-  void Scene::deserialize(BinaryReader& reader)
+  void Scene::deserialize(io::BinaryReader& reader)
   {
     clear();
     m_cameraManager.deserialize(reader);
@@ -228,14 +228,14 @@ namespace hc
     // the scene is destroyed.
   }
 
-  void Scene::onSerialize(BinaryWriter&) const
+  void Scene::onSerialize(io::BinaryWriter&) const
   {
     // This method can be overridden by derived classes to write custom data during
     // serialization. The base implementation serializes the scene graph and
     // default camera.
   }
 
-  void Scene::onDeserialize(BinaryReader&)
+  void Scene::onDeserialize(io::BinaryReader&)
   {
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and

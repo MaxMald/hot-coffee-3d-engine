@@ -9,7 +9,7 @@ namespace hc
    */
   class HC_CORE_EXPORT PerspectiveCameraProjection :
     public ICameraProjection,
-    public ISerializable
+    public io::ISerializable
   {
   public:
     PerspectiveCameraProjection();
@@ -44,12 +44,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Sets the vertical field of view angle (in radians or degrees,

@@ -4,10 +4,6 @@
 #include "hc/utilities/hcString.h"
 #include "hc/utilities/io/hcISerializable.h"
 
-using hc::io::ISerializable;
-using hc::io::BinaryReader;
-using hc::io::BinaryWriter;
-
 namespace hc
 {
   /**
@@ -16,7 +12,7 @@ namespace hc
    * UUID provides a platform-independent wrapper around UUID generation and
    * manipulation.
    */
-  class HC_UTILITY_EXPORT UUID : public ISerializable
+  class HC_UTILITY_EXPORT UUID : public io::ISerializable
   {
   public:
     /**
@@ -139,7 +135,7 @@ namespace hc
      *
      * @param writer The binary writer to write to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the UUID from a binary stream.
@@ -148,7 +144,7 @@ namespace hc
      *
      * @param reader The binary reader to read from.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Converts the UUID to its string representation.

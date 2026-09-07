@@ -24,12 +24,12 @@ namespace hc
     /**
      * @copydoc ALight::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ALight::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Sets the light direction.

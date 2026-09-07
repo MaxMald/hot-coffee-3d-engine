@@ -8,7 +8,7 @@ namespace hc
   /**
    * @brief Represents a light source in the engine.
    */
-  class HC_CORE_EXPORT ALight : public ISerializable
+  class HC_CORE_EXPORT ALight : public io::ISerializable
   {
   public:
     virtual ~ALight() = default;
@@ -16,12 +16,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    virtual void serialize(BinaryWriter& writer) const override;
+    virtual void serialize(io::BinaryWriter& writer) const override;
     
     /**
      * @copydoc ISerializable::deserialize
      */
-    virtual void deserialize(BinaryReader& reader) override;
+    virtual void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Gets the type of the light.

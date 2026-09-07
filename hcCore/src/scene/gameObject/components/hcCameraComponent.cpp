@@ -20,7 +20,7 @@ namespace hc
     cameraManager.destroyCamera(m_camera->getUUID());
   }
 
-  void CameraComponent::serialize(BinaryWriter& writer) const
+  void CameraComponent::serialize(io::BinaryWriter& writer) const
   {
     ABaseComponent::serialize(writer);
 
@@ -31,7 +31,7 @@ namespace hc
       m_camera->getUUID().serialize(writer);
   }
 
-  void CameraComponent::deserialize(BinaryReader& reader)
+  void CameraComponent::deserialize(io::BinaryReader& reader)
   {
     ABaseComponent::deserialize(reader);
 

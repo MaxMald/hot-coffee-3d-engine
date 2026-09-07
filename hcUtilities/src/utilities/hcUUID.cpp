@@ -122,7 +122,7 @@ namespace hc
     return !(m_impl->uuid < other.m_impl->uuid);
   }
 
-  void UUID::serialize(BinaryWriter& writer) const
+  void UUID::serialize(io::BinaryWriter& writer) const
   {
     auto bytes = m_impl->uuid.as_bytes();
     if (bytes.size() != UUID_BYTE_SIZE)
@@ -134,7 +134,7 @@ namespace hc
       writer.writeUInt8(static_cast<UInt8>(bytes[i]));
   }
 
-  void UUID::deserialize(BinaryReader& reader)
+  void UUID::deserialize(io::BinaryReader& reader)
   {
     std::array<uuids::uuid::value_type, UUID_BYTE_SIZE> bytes{};
     for (size_t i = 0; i < UUID_BYTE_SIZE; ++i)

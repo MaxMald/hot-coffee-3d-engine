@@ -4,16 +4,12 @@
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/io/hcISerializable.h"
 
-using hc::io::ISerializable;
-using hc::io::BinaryReader;
-using hc::io::BinaryWriter;
-
 namespace hc
 {
   /**
    * @brief Represents a 3D transformation (position, rotation, scale).
    */
-  class HC_UTILITY_EXPORT Transform : public ISerializable
+  class HC_UTILITY_EXPORT Transform : public io::ISerializable
   {
   public:
     Transform();
@@ -24,14 +20,14 @@ namespace hc
      *
      * @param writer The BinaryWriter to use for serialization.
      */
-    virtual void serialize(BinaryWriter& writer) const override;
+    virtual void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the transform's position, rotation, and scale.
      *
      * @param reader The BinaryReader to use for deserialization.
      */
-    virtual void deserialize(BinaryReader& reader) override;
+    virtual void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Sets the scale factors.

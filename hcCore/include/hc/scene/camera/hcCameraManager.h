@@ -11,7 +11,7 @@ namespace hc
    */
   class HC_CORE_EXPORT CameraManager :
     public NonCopyable,
-    public ISerializable
+    public io::ISerializable
   {
   public:
     CameraManager();
@@ -25,7 +25,7 @@ namespace hc
      * 
      * @param writer The BinaryWriter to use for serialization.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
     
     /**
      * @brief Deserializes the CameraManager and all managed cameras from binary format.
@@ -35,7 +35,7 @@ namespace hc
      * 
      * @param reader The BinaryReader to use for deserialization.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Creates a new Camera.

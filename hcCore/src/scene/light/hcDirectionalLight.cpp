@@ -14,7 +14,7 @@ namespace hc
 
   DirectionalLight::~DirectionalLight() = default;
 
-  void DirectionalLight::serialize(BinaryWriter& writer) const
+  void DirectionalLight::serialize(io::BinaryWriter& writer) const
   {
     ALight::serialize(writer);
     writer.writeVector3f(m_direction);
@@ -24,7 +24,7 @@ namespace hc
     // We should serialize the shadow projection parameters as well.
   }
 
-  void DirectionalLight::deserialize(BinaryReader& reader)
+  void DirectionalLight::deserialize(io::BinaryReader& reader)
   {
     ALight::deserialize(reader);
     m_direction = reader.readVector3f();

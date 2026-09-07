@@ -22,7 +22,7 @@ namespace hc
    * updating. The class is intended to be subclassed for custom scene logic by
    * overriding the protected virtual hooks.
    */
-  class HC_CORE_EXPORT Scene : public NonCopyable, public ISerializable
+  class HC_CORE_EXPORT Scene : public NonCopyable, public io::ISerializable
   {
   public:
     /**
@@ -40,7 +40,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the scene's light manager, camera manager, and scene
@@ -51,7 +51,7 @@ namespace hc
      *
      * @param reader The BinaryReader to deserialize from.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -229,7 +229,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize custom data to.
      */
-    virtual void onSerialize(BinaryWriter& writer) const;
+    virtual void onSerialize(io::BinaryWriter& writer) const;
 
     /**
      * @brief Called during deserialization to read custom scene data.
@@ -240,7 +240,7 @@ namespace hc
      *
      * @param reader The BinaryReader to deserialize custom data from.
      */
-    virtual void onDeserialize(BinaryReader& reader);
+    virtual void onDeserialize(io::BinaryReader& reader);
 
   private:
     SceneGraph m_sceneGraph;

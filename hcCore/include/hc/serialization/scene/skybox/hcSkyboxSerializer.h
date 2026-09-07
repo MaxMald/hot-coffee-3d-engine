@@ -15,12 +15,12 @@ namespace hc
     public:
       static void Serialize(
         const Skybox& skybox,
-        BinaryWriter& writer,
+        io::BinaryWriter& writer,
         const IAssetManager& assetManager
       );
       static void Deserialize(
         Skybox& skybox,
-        BinaryReader& reader,
+        io::BinaryReader& reader,
         IAssetManager& assetManager,
         IGraphicsManager& graphicsManager
       );

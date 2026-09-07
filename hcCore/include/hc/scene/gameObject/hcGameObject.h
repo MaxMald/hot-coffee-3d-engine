@@ -55,7 +55,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the GameObject and all its children and components
@@ -66,7 +66,7 @@ namespace hc
      * @throws RuntimeErrorException if a component type is not registered or
      * deserialization is not implemented for a component type.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Renders the GameObject and its drawable children/components.

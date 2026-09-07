@@ -2,7 +2,7 @@
 
 namespace hc
 {
-  void ALight::serialize(BinaryWriter& writer) const
+  void ALight::serialize(io::BinaryWriter& writer) const
   {
     writer.writeBool(m_enabled);
     writer.writeUInt8(static_cast<UInt8>(m_type));
@@ -13,7 +13,7 @@ namespace hc
     // TODO serialize shadowEnabled, shadowBias, shadowStrength
   }
 
-  void ALight::deserialize(BinaryReader& reader)
+  void ALight::deserialize(io::BinaryReader& reader)
   {
     m_enabled = reader.readBool();
     m_type = static_cast<lightType::Type>(reader.readUInt8());

@@ -12,7 +12,7 @@ namespace hc::serialization
 {
   void SkyboxSerializer::Serialize(
     const Skybox& skybox,
-    BinaryWriter& writer,
+    io::BinaryWriter& writer,
     const IAssetManager& assetManager
   )
   {
@@ -39,7 +39,7 @@ namespace hc::serialization
 
   void SkyboxSerializer::Deserialize(
     Skybox& skybox,
-    BinaryReader& reader,
+    io::BinaryReader& reader,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager
   )

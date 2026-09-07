@@ -13,14 +13,14 @@ namespace hc
 
   Transform::~Transform() = default;
 
-  void Transform::serialize(BinaryWriter& writer) const
+  void Transform::serialize(io::BinaryWriter& writer) const
   {
     writer.writeVector3f(m_position);
     writer.writeVector3f(m_rotation);
     writer.writeVector3f(m_scale);
   }
 
-  void Transform::deserialize(BinaryReader& reader)
+  void Transform::deserialize(io::BinaryReader& reader)
   {
     m_position = reader.readVector3f();
     m_rotation = reader.readVector3f();

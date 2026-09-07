@@ -45,7 +45,7 @@ namespace hc
     m_isDirty = false;
   }
 
-  void PerspectiveCameraProjection::serialize(BinaryWriter& writer) const
+  void PerspectiveCameraProjection::serialize(io::BinaryWriter& writer) const
   {
     writer.writeAngle(m_fovY);
     writer.writeFloat(m_aspectRatio);
@@ -53,7 +53,7 @@ namespace hc
     writer.writeFloat(m_far);
   }
 
-  void PerspectiveCameraProjection::deserialize(BinaryReader& reader)
+  void PerspectiveCameraProjection::deserialize(io::BinaryReader& reader)
   {
     m_fovY = reader.readAngle();
     m_aspectRatio = reader.readFloat();

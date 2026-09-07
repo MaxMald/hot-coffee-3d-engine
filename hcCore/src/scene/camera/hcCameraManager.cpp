@@ -14,7 +14,7 @@ namespace hc
   {
   }
 
-  void CameraManager::serialize(BinaryWriter& writer) const
+  void CameraManager::serialize(io::BinaryWriter& writer) const
   {
     m_default->serialize(writer);
     
@@ -29,7 +29,7 @@ namespace hc
       m_default->getUUID().serialize(writer);
   }
 
-  void CameraManager::deserialize(BinaryReader& reader)
+  void CameraManager::deserialize(io::BinaryReader& reader)
   {
     m_default->deserialize(reader);
 

@@ -15,7 +15,7 @@ namespace hc
   /**
    * @brief Represents a camera in the engine.
    */
-  class HC_CORE_EXPORT Camera : public ISerializable
+  class HC_CORE_EXPORT Camera : public io::ISerializable
   {
   public:
     Camera();
@@ -24,12 +24,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Gets the unique identifier of the camera.

@@ -1,5 +1,7 @@
 #include "hc/utilities/io/hcObjectSerialization.h"
 
+#include <algorithm>
+
 namespace hc::io
 {
   ObjectData::ObjectData()

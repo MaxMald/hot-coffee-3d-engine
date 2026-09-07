@@ -17,7 +17,7 @@ namespace hc
   {
   }
 
-  void Camera::serialize(BinaryWriter& writer) const
+  void Camera::serialize(io::BinaryWriter& writer) const
   {
     m_id.serialize(writer);
     writer.writeVector3f(m_position);
@@ -28,7 +28,7 @@ namespace hc
     m_perspectiveProjection.serialize(writer);
   }
 
-  void Camera::deserialize(BinaryReader& reader)
+  void Camera::deserialize(io::BinaryReader& reader)
   {
     m_id.deserialize(reader);
     m_position = reader.readVector3f();

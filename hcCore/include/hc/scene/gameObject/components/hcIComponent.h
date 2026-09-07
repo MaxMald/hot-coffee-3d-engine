@@ -10,7 +10,7 @@ namespace hc
   /**
    * @brief Interface for components that can be attached to game objects.
    */
-  class HC_CORE_EXPORT IComponent : public NonCopyable, public ISerializable
+  class HC_CORE_EXPORT IComponent : public NonCopyable, public io::ISerializable
   {
   public:
     virtual ~IComponent() = default;

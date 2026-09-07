@@ -126,7 +126,7 @@ namespace hc
     m_isDirty = false;
   }
 
-  void OrthographicCameraProjection::serialize(BinaryWriter& writer) const
+  void OrthographicCameraProjection::serialize(io::BinaryWriter& writer) const
   {
     writer.writeFloat(m_left);
     writer.writeFloat(m_right);
@@ -136,7 +136,7 @@ namespace hc
     writer.writeFloat(m_far);
   }
 
-  void OrthographicCameraProjection::deserialize(BinaryReader& reader)
+  void OrthographicCameraProjection::deserialize(io::BinaryReader& reader)
   {
     m_left = reader.readFloat();
     m_right = reader.readFloat();
