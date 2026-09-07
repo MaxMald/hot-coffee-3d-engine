@@ -14,14 +14,14 @@ namespace hc
   {
   }
 
-  void SceneGraph::serialize(BinaryWriter& writer) const
+  void SceneGraph::serialize(io::BinaryWriter& writer) const
   {
     writer.writeSizeT(m_roots.size());
     for (const UniquePtr<GameObject>& root : m_roots)
       root->serialize(writer);
   }
 
-  void SceneGraph::deserialize(BinaryReader& reader)
+  void SceneGraph::deserialize(io::BinaryReader& reader)
   {
     if (m_gameObjectFactory == nullptr)
     {

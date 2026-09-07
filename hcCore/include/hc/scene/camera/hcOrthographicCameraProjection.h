@@ -9,7 +9,7 @@ namespace hc
    */
   class HC_CORE_EXPORT OrthographicCameraProjection : 
     public ICameraProjection,
-    public ISerializable
+    public io::ISerializable
   {
   public:
     OrthographicCameraProjection();
@@ -45,12 +45,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Gets the left boundary of the view volume.

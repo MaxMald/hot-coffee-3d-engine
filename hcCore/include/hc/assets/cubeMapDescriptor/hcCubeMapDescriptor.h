@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public ISerializable
+  struct HC_CORE_EXPORT CubeMapDescriptor : public Asset, public io::ISerializable
   {
     UInt32 faceSize;
     textureFormatType::Type format;
@@ -20,8 +20,8 @@ namespace hc
     CubeMapDescriptor(const Path& path);
     ~CubeMapDescriptor() override = default;
 
-    void serialize(BinaryWriter& writer) const override;
-    void deserialize(BinaryReader& reader) override;
+    void serialize(io::BinaryWriter& writer) const override;
+    void deserialize(io::BinaryReader& reader) override;
 
     void clear();
   };

@@ -19,7 +19,7 @@ namespace hc
       if (!file.is_open())
         throw IOException("Failed to open file for reading.");
 
-      BinaryReader reader(file);
+      io::BinaryReader reader(file);
 
       SharedPtr<CubeMapDescriptor> cubeMapDescriptor = MakeShared<CubeMapDescriptor>();
       cubeMapDescriptor->deserialize(reader);

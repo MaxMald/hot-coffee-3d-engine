@@ -19,7 +19,7 @@ namespace hc::editor::serialization
         return nullptr;
       }
 
-      BinaryReader reader(fileStream);
+      io::BinaryReader reader(fileStream);
       project->deserialize(reader);
       return project;
     }
@@ -44,7 +44,7 @@ namespace hc::editor::serialization
         return false;
       }        
 
-      BinaryWriter writer(fileStream);
+      io::BinaryWriter writer(fileStream);
       project.serialize(writer);
       return true;
     }

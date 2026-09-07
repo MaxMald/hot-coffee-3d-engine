@@ -24,12 +24,12 @@ namespace hc
     return m_type;
   }
 
-  void ABaseComponent::serialize(BinaryWriter& writer) const
+  void ABaseComponent::serialize(io::BinaryWriter& writer) const
   {
     writer.writeUInt16(getType());
   }
 
-  void ABaseComponent::deserialize(BinaryReader& reader)
+  void ABaseComponent::deserialize(io::BinaryReader& reader)
   {
     componentType::Type type = static_cast<componentType::Type>(reader.readUInt16());
     if (type != getType())

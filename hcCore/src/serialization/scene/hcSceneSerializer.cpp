@@ -28,7 +28,7 @@ namespace hc
           return false;
         }
 
-        BinaryWriter writer(outputFile);
+        io::BinaryWriter writer(outputFile);
 
         SerializeHeader(writer);
         scene.serialize(writer);
@@ -66,7 +66,7 @@ namespace hc
           return false;
         }
 
-        BinaryReader reader(inputFile);
+        io::BinaryReader reader(inputFile);
 
         VerifyHeader(reader);
         scene.deserialize(reader);
@@ -108,14 +108,14 @@ namespace hc
       }
     }
 
-    void SceneSerializer::SerializeHeader(BinaryWriter& writer)
+    void SceneSerializer::SerializeHeader(io::BinaryWriter& writer)
     {
       writer.writeUInt32(fileFormat::Scene::MAGIC_NUMBER);
       writer.writeUInt32(fileFormat::Scene::VERSION);
       writer.writeUInt32(EngineVersion::ToInt());
     }
 
-    void SceneSerializer::VerifyHeader(BinaryReader& reader)
+    void SceneSerializer::VerifyHeader(io::BinaryReader& reader)
     {
       UInt32 magicNumber = reader.readUInt32();
       if (magicNumber != fileFormat::Scene::MAGIC_NUMBER)

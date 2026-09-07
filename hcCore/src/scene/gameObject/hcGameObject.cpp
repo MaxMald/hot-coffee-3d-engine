@@ -26,7 +26,7 @@ namespace hc
     destroy();
   }
 
-  void GameObject::serialize(BinaryWriter& writer) const
+  void GameObject::serialize(io::BinaryWriter& writer) const
   {
     Transform::serialize(writer);
     writer.writeString(m_name);
@@ -43,7 +43,7 @@ namespace hc
     }
   }
 
-  void GameObject::deserialize(BinaryReader& reader)
+  void GameObject::deserialize(io::BinaryReader& reader)
   {
     Transform::deserialize(reader);
     m_name = reader.readString();

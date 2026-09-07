@@ -16,7 +16,7 @@ namespace hc
 
   SpotLight::~SpotLight() = default;
 
-  void SpotLight::serialize(BinaryWriter& writer) const
+  void SpotLight::serialize(io::BinaryWriter& writer) const
   {
     ALight::serialize(writer);
     writer.writeVector3f(m_direction);
@@ -28,7 +28,7 @@ namespace hc
     // serialize shadow settings
   }
 
-  void SpotLight::deserialize(BinaryReader& reader)
+  void SpotLight::deserialize(io::BinaryReader& reader)
   {
     ALight::deserialize(reader);
     m_direction = reader.readVector3f();

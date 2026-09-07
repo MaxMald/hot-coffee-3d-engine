@@ -40,12 +40,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    virtual void serialize(BinaryWriter& writer) const override;
+    virtual void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    virtual void deserialize(BinaryReader& reader) override;
+    virtual void deserialize(io::BinaryReader& reader) override;
 
   protected:
     GameObject* m_gameObject;

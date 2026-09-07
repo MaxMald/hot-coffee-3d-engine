@@ -10,13 +10,13 @@ namespace hc
   SpotLightComponent::~SpotLightComponent()
   {}
 
-  void SpotLightComponent::serialize(BinaryWriter& writer) const
+  void SpotLightComponent::serialize(io::BinaryWriter& writer) const
   {
     ABaseComponent::serialize(writer);
     m_spotLight.serialize(writer);
   }
 
-  void SpotLightComponent::deserialize(BinaryReader& reader)
+  void SpotLightComponent::deserialize(io::BinaryReader& reader)
   {
     ABaseComponent::deserialize(reader);
     m_spotLight.deserialize(reader);

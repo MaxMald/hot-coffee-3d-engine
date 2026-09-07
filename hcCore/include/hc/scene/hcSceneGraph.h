@@ -23,7 +23,7 @@ namespace hc
    */
   class HC_CORE_EXPORT SceneGraph :
     public NonCopyable,
-    public ISerializable,
+    public io::ISerializable,
     public IDrawable
   {
   public:
@@ -42,14 +42,14 @@ namespace hc
      *
      * @param writer The BinaryWriter to use for serialization.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the SceneGraph and all root GameObjects from binary format.
      *
      * @param reader The BinaryReader to use for deserialization.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Renders all root GameObjects and their hierarchies, populating the

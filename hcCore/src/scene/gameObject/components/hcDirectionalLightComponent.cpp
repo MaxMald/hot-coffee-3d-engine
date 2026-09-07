@@ -10,13 +10,13 @@ namespace hc
   DirectionalLightComponent::~DirectionalLightComponent()
   {}
 
-  void DirectionalLightComponent::serialize(BinaryWriter& writer) const
+  void DirectionalLightComponent::serialize(io::BinaryWriter& writer) const
   {
     ABaseComponent::serialize(writer);
     m_directionalLight.serialize(writer);
   }
 
-  void DirectionalLightComponent::deserialize(BinaryReader& reader)
+  void DirectionalLightComponent::deserialize(io::BinaryReader& reader)
   {
     ABaseComponent::deserialize(reader);
     m_directionalLight.deserialize(reader);

@@ -12,9 +12,9 @@ namespace hc
 
     virtual ~SpotLightComponent() override;
 
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     void preUpdate(float deltaTime) override;
 

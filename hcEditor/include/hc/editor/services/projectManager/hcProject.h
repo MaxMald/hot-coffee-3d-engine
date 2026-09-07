@@ -9,7 +9,7 @@ namespace hc::editor
   /**
    * @brief Represents an editor project, providing load and save functionality.
    */
-  class Project : public ISerializable
+  class Project : public io::ISerializable
   {
   public:
 
@@ -36,14 +36,14 @@ namespace hc::editor
      *
      * @param writer The binary writer to serialize to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the project data from a binary reader.
      *
      * @param reader The binary reader to deserialize from.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Gets the absolute path to the project file.

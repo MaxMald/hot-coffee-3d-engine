@@ -225,7 +225,7 @@ namespace hc::editor
       if (!file.is_open())
         throw IOException("Failed to open file for writing: " + path.generic_string());
 
-      BinaryWriter writer(file);
+      io::BinaryWriter writer(file);
       descriptorToSave.serialize(writer);
     }
     catch (const Exception& e)
@@ -249,7 +249,7 @@ namespace hc::editor
         throw IOException("Failed to open file for reading: " + path.generic_string());
 
 
-      BinaryReader reader(file);
+      io::BinaryReader reader(file);
       CubeMapDescriptor descriptorFromFile;
       descriptorFromFile.deserialize(reader);
 

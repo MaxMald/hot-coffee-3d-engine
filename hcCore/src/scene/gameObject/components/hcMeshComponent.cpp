@@ -22,7 +22,7 @@ namespace hc
   {
   }
 
-  void MeshComponent::serialize(BinaryWriter& writer) const
+  void MeshComponent::serialize(io::BinaryWriter& writer) const
   {
     ABaseComponent::serialize(writer);
 
@@ -49,7 +49,7 @@ namespace hc
     writer.writeString(modelPathStr);
   }
 
-  void MeshComponent::deserialize(BinaryReader& reader)
+  void MeshComponent::deserialize(io::BinaryReader& reader)
   {
     ABaseComponent::deserialize(reader);
 

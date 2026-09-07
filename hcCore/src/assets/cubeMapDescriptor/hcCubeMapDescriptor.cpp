@@ -16,7 +16,7 @@ namespace hc
     bottomImagePath(), backImagePath(), frontImagePath()
   {}
 
-  void CubeMapDescriptor::serialize(BinaryWriter & writer) const
+  void CubeMapDescriptor::serialize(io::BinaryWriter & writer) const
   {
     writer.writeUInt32(faceSize);
     writer.writeUInt8(static_cast<UInt8>(format));
@@ -28,7 +28,7 @@ namespace hc
     writer.writeString(frontImagePath);
   }
 
-  void CubeMapDescriptor::deserialize(BinaryReader & reader)
+  void CubeMapDescriptor::deserialize(io::BinaryReader & reader)
   {
     clear();
     faceSize = reader.readUInt32();

@@ -98,7 +98,7 @@ namespace hc
        *
        * @param writer The BinaryWriter to write the header to.
        */
-      static void SerializeHeader(BinaryWriter& writer);
+      static void SerializeHeader(io::BinaryWriter& writer);
 
       /**
        * @brief Verifies the .hcscene file header.
@@ -112,7 +112,7 @@ namespace hc
        * @throws RuntimeErrorException if the magic number is invalid or if
        * the file format version is unsupported.
        */
-      static void VerifyHeader(BinaryReader& reader);
+      static void VerifyHeader(io::BinaryReader& reader);
     };
   }
 }
