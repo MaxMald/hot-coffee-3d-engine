@@ -2,24 +2,18 @@
 
 namespace hc
 {
-  bool PrimitiveModelPathUtilities::IsPrimitiveModelPath(const Path& path)
-  {
-    String pathStr = path.string();
-    return pathStr.find(PrimitivesBasePath) == 0;
-  }
+  static constexpr const char* PRIMITIVE_FOLDER_PATH = "hcPrimitives";
 
   primitiveModelType::Type PrimitiveModelPathUtilities::GetPrimitiveModelTypeFromPath(
     const Path& path
   )
   {
-    if (!IsPrimitiveModelPath(path))
-    {
+    if (path.getType() != pathType::Internal)
       throw RuntimeErrorException(
-        String::Format("Path is not a primitive model path: %s", path.string().c_str())
+        String::Format("Path is not a primitive model path: %s", path.toString().c_str())
       );
-    }
 
-    String fileName = path.stem().string();
+    String fileName = path.stem().toString();
     return primitiveModelType::fromString(fileName);
   }
 
@@ -28,6 +22,12 @@ namespace hc
   )
   {
     String fileName = primitiveModelType::toString(primitiveType);
-    return Path(PrimitivesBasePath) / (fileName + ".hcmodel");
+    String pathStr= String::Format("%s/%s%s",
+      PRIMITIVE_FOLDER_PATH,
+      fileName,
+      hc::serialization::fileFormat::ModelDescriptor::FILE_EXTENSION
+    );
+
+    return Path(pathStr, pathType::Internal);
   }
 }

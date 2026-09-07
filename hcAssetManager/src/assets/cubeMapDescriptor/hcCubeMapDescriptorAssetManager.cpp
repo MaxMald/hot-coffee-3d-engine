@@ -21,38 +21,25 @@ namespace hc
 
       io::BinaryReader reader(file);
 
-      SharedPtr<CubeMapDescriptor> cubeMapDescriptor = MakeShared<CubeMapDescriptor>();
-      cubeMapDescriptor->deserialize(reader);
-      cubeMapDescriptor->setPath(path);
+      SharedPtr<CubeMapDescriptor> descriptor = MakeShared<CubeMapDescriptor>();
+      descriptor->deserialize(reader);
+      descriptor->setPath(path);
 
-      Path basePath = path.parent_path();
+      Path basePath = path.parentPath();
+      descriptor->rightImagePath = descriptor->rightImagePath.toAbsolute(basePath);
+      descriptor->leftImagePath = descriptor->leftImagePath.toAbsolute(basePath);
+      descriptor->topImagePath = descriptor->topImagePath.toAbsolute(basePath);
+      descriptor->bottomImagePath = descriptor->bottomImagePath.toAbsolute(basePath);
+      descriptor->backImagePath = descriptor->backImagePath.toAbsolute(basePath);
+      descriptor->frontImagePath = descriptor->frontImagePath.toAbsolute(basePath);
 
-      cubeMapDescriptor->rightImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->rightImagePath, basePath
-      ).generic_string();
-      cubeMapDescriptor->leftImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->leftImagePath, basePath
-      ).generic_string();
-      cubeMapDescriptor->topImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->topImagePath, basePath
-      ).generic_string();
-      cubeMapDescriptor->bottomImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->bottomImagePath, basePath
-      ).generic_string();
-      cubeMapDescriptor->backImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->backImagePath, basePath
-      ).generic_string();
-      cubeMapDescriptor->frontImagePath = AssetPath::ToAbsolute(
-        cubeMapDescriptor->frontImagePath, basePath
-      ).generic_string();
-
-      m_loadedCubeMapDescriptors[path] = cubeMapDescriptor;
-      return cubeMapDescriptor;
+      m_loadedCubeMapDescriptors[path] = descriptor;
+      return descriptor;
     }
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to load CubeMapDescriptor from path: " + path.string() + ". Exception: " + e.what()
+        "Failed to load CubeMapDescriptor from path: " + path.toString() + ". Exception: " + e.what()
       );
       return nullptr;
     }

@@ -23,16 +23,6 @@ namespace hc
     ~SpotLight() override;
 
     /**
-     * @copydoc ALight::serialize
-     */
-    void serialize(io::BinaryWriter& writer) const override;
-
-    /**
-     * @copydoc ALight::deserialize
-     */
-    void deserialize(io::BinaryReader& reader) override;
-
-    /**
      * @brief Sets the direction of the spot light.
      * 
      * @param direction The new direction vector.
@@ -130,6 +120,13 @@ namespace hc
     dataBlockStructure::SpotLightShadow getShadowDataBlockStructure(
       bool transposeMatrices
     ) const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
 
   private:
     Vector3f m_direction;

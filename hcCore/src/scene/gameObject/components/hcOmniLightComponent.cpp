@@ -3,24 +3,14 @@
 
 namespace hc
 {
+  static constexpr UInt16 OMNI_LIGHT_COMPONENT_VERSION = 1;
+
   OmniLightComponent::OmniLightComponent() :
     ALightComponent(componentType::OmniLight)
   {}
 
   OmniLightComponent::~OmniLightComponent()
   {}
-
-  void OmniLightComponent::serialize(io::BinaryWriter& writer) const
-  {
-    ABaseComponent::serialize(writer);
-    m_omniLight.serialize(writer);
-  }
-
-  void OmniLightComponent::deserialize(io::BinaryReader& reader)
-  {
-    ABaseComponent::deserialize(reader);
-    m_omniLight.deserialize(reader);
-  }
 
   void OmniLightComponent::preUpdate(float)
   {
@@ -58,5 +48,20 @@ namespace hc
   const OmniLight& OmniLightComponent::getOmniLight() const
   {
     return m_omniLight;
+  }
+
+  void OmniLightComponent::onSerialize(io::BinaryWriter& writer) const
+  {
+    m_omniLight.serialize(writer);
+  }
+
+  void OmniLightComponent::onDeserialize(io::BinaryReader& reader)
+  {
+    m_omniLight.deserialize(reader);
+  }
+
+  UInt16 OmniLightComponent::getDerivedVersion() const
+  {
+    return OMNI_LIGHT_COMPONENT_VERSION;
   }
 }

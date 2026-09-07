@@ -2,6 +2,8 @@
 
 namespace hc
 {
+  static constexpr UInt16 DIRECTIONAL_LIGHT_VERSION = 1;
+
   DirectionalLight::DirectionalLight() :
     ALight(lightType::Type::Directional),
     m_direction(0.0f, -1.0f, 0.0f),
@@ -13,26 +15,6 @@ namespace hc
   {}
 
   DirectionalLight::~DirectionalLight() = default;
-
-  void DirectionalLight::serialize(io::BinaryWriter& writer) const
-  {
-    ALight::serialize(writer);
-    writer.writeVector3f(m_direction);
-
-    // TODO
-    //
-    // We should serialize the shadow projection parameters as well.
-  }
-
-  void DirectionalLight::deserialize(io::BinaryReader& reader)
-  {
-    ALight::deserialize(reader);
-    m_direction = reader.readVector3f();
-
-    // TODO
-    //
-    // We should deserialize the shadow projection parameters as well.
-  }
 
   void DirectionalLight::setDirection(const Vector3f& direction)
   {
@@ -143,5 +125,30 @@ namespace hc
     }
 
     return shadowData;
+  }
+
+  void DirectionalLight::onSerialize(io::BinaryWriter& writer) const
+  {
+    writer.writeVector3f(m_direction);
+    writer.writeVector3f(m_shadowViewTarget);
+    writer.writeFloat(m_shadowViewDistance);
+    writer.writeFloat(m_shadowProjectionSize);
+    writer.writeFloat(m_shadowProjectionNearPlane);
+    writer.writeFloat(m_shadowProjectionFarPlane);
+  }
+
+  void DirectionalLight::onDeserialize(io::BinaryReader& reader)
+  {
+    m_direction = reader.readVector3f();
+    m_shadowViewTarget = reader.readVector3f();
+    m_shadowViewDistance = reader.readFloat();
+    m_shadowProjectionSize = reader.readFloat();
+    m_shadowProjectionNearPlane = reader.readFloat();
+    m_shadowProjectionFarPlane = reader.readFloat();
+  }
+
+  UInt16 DirectionalLight::getDerivedVersion() const
+  {
+    return DIRECTIONAL_LIGHT_VERSION;
   }
 }

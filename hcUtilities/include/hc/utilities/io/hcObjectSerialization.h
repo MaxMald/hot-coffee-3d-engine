@@ -24,9 +24,9 @@ namespace hc::io
      * 
      * @return True if the versions match, false otherwise.
      */
-    bool match(UInt32 version) const
+    bool match(UInt32 _version) const
     {
-      return this->version == version;
+      return this->version == _version;
     }
 
     /**
@@ -37,9 +37,9 @@ namespace hc::io
      * 
      * @return True if both the name and version match, false otherwise.
      */
-    bool match(const String& name, UInt32 version) const
+    bool match(const String& _name, UInt32 _version) const
     {
-      return this->name == name && this->version == version;
+      return this->name == _name && this->version == _version;
     }
   };
 

@@ -206,8 +206,9 @@ namespace hc::io
 
   void BinaryWriter::writePath(const Path& value)
   {
-    String pathString = value.generic_string();
+    String pathString = value.toGenericString();
     writeString(pathString);
+    writeUInt8(static_cast<UInt8>(value.getType()));
   }
 
   void BinaryWriter::writeString(const String& value)

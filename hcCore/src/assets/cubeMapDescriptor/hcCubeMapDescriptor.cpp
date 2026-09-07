@@ -2,6 +2,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 CUBEMAP_DESCRIPTOR_VERSION = 1;
+
   CubeMapDescriptor::CubeMapDescriptor() :
     Asset(""),
     faceSize(0), format(textureFormatType::RGBA8),
@@ -18,27 +20,38 @@ namespace hc
 
   void CubeMapDescriptor::serialize(io::BinaryWriter & writer) const
   {
+    writer.startWritingObject(CUBEMAP_DESCRIPTOR_VERSION);
     writer.writeUInt32(faceSize);
     writer.writeUInt8(static_cast<UInt8>(format));
-    writer.writeString(rightImagePath);
-    writer.writeString(leftImagePath);
-    writer.writeString(topImagePath);
-    writer.writeString(bottomImagePath);
-    writer.writeString(backImagePath);
-    writer.writeString(frontImagePath);
+    writer.writePath(rightImagePath);
+    writer.writePath(leftImagePath);
+    writer.writePath(topImagePath);
+    writer.writePath(bottomImagePath);
+    writer.writePath(backImagePath);
+    writer.writePath(frontImagePath);
+    writer.finishWritingObject();
   }
 
   void CubeMapDescriptor::deserialize(io::BinaryReader & reader)
   {
     clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.match(CUBEMAP_DESCRIPTOR_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     faceSize = reader.readUInt32();
     format = static_cast<textureFormatType::Type>(reader.readUInt8());
-    rightImagePath = reader.readString();
-    leftImagePath = reader.readString();
-    topImagePath = reader.readString();
-    bottomImagePath = reader.readString();
-    backImagePath = reader.readString();
-    frontImagePath = reader.readString();
+    rightImagePath = reader.readPath();
+    leftImagePath = reader.readPath();
+    topImagePath = reader.readPath();
+    bottomImagePath = reader.readPath();
+    backImagePath = reader.readPath();
+    frontImagePath = reader.readPath();
+    reader.finishReadingObject();
   }
 
   void CubeMapDescriptor::clear()

@@ -24,7 +24,7 @@ namespace hc
     if (!descriptor)
       throw RuntimeErrorException(
         String::Format(
-          "Failed to load CubeMapDescriptor from path '%s'", cubeMapDescriptorSourcePath.string().c_str()
+          "Failed to load CubeMapDescriptor from path '%s'", cubeMapDescriptorSourcePath.toString().c_str()
         )
       );
 
@@ -77,7 +77,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load right image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->rightImagePath.c_str()
         )
       );
@@ -89,7 +89,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load left image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->leftImagePath.c_str()
         )
       );
@@ -101,7 +101,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load top image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->topImagePath.c_str()
         )
       );
@@ -113,7 +113,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load bottom image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->bottomImagePath.c_str()
         )
       );
@@ -125,7 +125,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load back image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->backImagePath.c_str()
         )
       );
@@ -137,7 +137,7 @@ namespace hc
       LogService::Warning(
         String::Format(
           "Failed to load front image for CubeMapDescriptor '%s'. Image Path: '%s'. Using default white image.",
-          cubeMapDescriptorSourcePath.string().c_str(),
+          cubeMapDescriptorSourcePath.toString().c_str(),
           descriptor->frontImagePath.c_str()
         )
       );

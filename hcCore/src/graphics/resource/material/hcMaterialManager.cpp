@@ -48,7 +48,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Failed to load MaterialDescriptor from path '%s'.",
-          materialDescriptorPath.string().c_str()
+          materialDescriptorPath.toString().c_str()
         )
       );
       return nullptr;
@@ -306,7 +306,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Failed to load texture from path '%s'.",
-          texturePath.string().c_str()
+          texturePath.toString().c_str()
         )
       );
 
@@ -318,7 +318,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Texture from path '%s' is invalid.",
-          texturePath.string().c_str()
+          texturePath.toString().c_str()
         )
       );
 
@@ -346,7 +346,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Failed to load texture from path '%s'.",
-          texturePath.string().c_str()
+          texturePath.toString().c_str()
         )
       );
 
@@ -358,7 +358,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Texture from path '%s' is invalid.",
-          texturePath.string().c_str()
+          texturePath.toString().c_str()
         )
       );
 

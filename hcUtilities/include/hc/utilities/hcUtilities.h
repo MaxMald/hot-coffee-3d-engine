@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcAModule.h"
 #include "hc/utilities/hcAngle.h"
 #include "hc/utilities/hcColor.h"

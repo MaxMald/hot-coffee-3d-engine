@@ -6,7 +6,6 @@
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/image/hcIImageAssetManager.h"
-#include "hc/assets/hcAssetPath.h"
 
 namespace hc::serialization
 {
@@ -26,13 +25,10 @@ namespace hc::serialization
     const ICubeMap& cubeMap = skybox.getCubeMap();
 
     Path descriptorSourcePath = cubeMap.getCubeMapDescriptorSourcePath();
-    String pathToSerialize = descriptorSourcePath.generic_string();
+    Path pathToSerialize = descriptorSourcePath;
 
     if (assetManager.hasRootPath())
-    {
-      const Path& rootPath = assetManager.getRootPath();
-      pathToSerialize = AssetPath::ToRelative(descriptorSourcePath, rootPath);
-    }
+      pathToSerialize = descriptorSourcePath.toRelative(assetManager.getRootPath());
 
     writer.writeString(pathToSerialize);
   }
@@ -50,15 +46,14 @@ namespace hc::serialization
       return;
     }
 
-    String sourcePathStr = reader.readString();
-    if (sourcePathStr.empty())
+    Path sourcePath = reader.readPath();
+    if (sourcePath.empty())
     {
       skybox.destroy();
       return;
     }
 
-    Path sourcePath(sourcePathStr.c_str());
-    if (AssetPath::IsRelative(sourcePath))
+    if (sourcePath.isRelative())
     {
       if (!assetManager.hasRootPath())
       {
@@ -69,7 +64,7 @@ namespace hc::serialization
       }
 
       const Path& rootPath = assetManager.getRootPath();
-      sourcePath = AssetPath::ToAbsolute(sourcePathStr, rootPath);
+      sourcePath = sourcePath.toAbsolute(rootPath);
     }
 
     try

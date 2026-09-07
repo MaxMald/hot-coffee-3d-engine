@@ -250,6 +250,12 @@ namespace hc
      */
     void getComponents(Vector<IComponent*>& outComponents) const;
 
+    /**
+     * @brief Removes all children and components from this GameObject, releasing
+     * ownership and resources.
+     */
+    void clear();
+
   private:
     String m_name;
     GameObject* m_parent = nullptr;

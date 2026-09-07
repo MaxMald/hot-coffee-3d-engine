@@ -78,7 +78,13 @@ namespace hc
 
   void JsonObjectBuilder::setPath(const String& name, const Path& value)
   {
-    String formattedValue = String::Format("\"%s\": \"%s\"", name.c_str(), value.generic_string().c_str());
+    String formattedValue = String::Format(
+      "\"%s\": { \"path\": %s, \"type\": %u }",
+      name.c_str(),
+      value.toGenericString().c_str(),
+      static_cast<UInt32>(value.getType())
+    );
+
     m_properties.push_back(
       MakeUnique<JsonFormattedValue>(formattedValue)
     );

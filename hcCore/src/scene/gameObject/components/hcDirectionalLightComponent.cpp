@@ -3,24 +3,14 @@
 
 namespace hc
 {
+  static constexpr UInt16 DIRECTIONAL_LIGHT_COMPONENT_VERSION = 1;
+
   DirectionalLightComponent::DirectionalLightComponent() :
     ALightComponent(componentType::DirectionalLight)
   {}
 
   DirectionalLightComponent::~DirectionalLightComponent()
   {}
-
-  void DirectionalLightComponent::serialize(io::BinaryWriter& writer) const
-  {
-    ABaseComponent::serialize(writer);
-    m_directionalLight.serialize(writer);
-  }
-
-  void DirectionalLightComponent::deserialize(io::BinaryReader& reader)
-  {
-    ABaseComponent::deserialize(reader);
-    m_directionalLight.deserialize(reader);
-  }
 
   void DirectionalLightComponent::preUpdate(float)
   {
@@ -61,5 +51,20 @@ namespace hc
   const DirectionalLight& DirectionalLightComponent::getDirectionalLight() const
   {
     return m_directionalLight;
+  }
+
+  void DirectionalLightComponent::onSerialize(io::BinaryWriter& writer) const
+  {
+    m_directionalLight.serialize(writer);
+  }
+
+  void DirectionalLightComponent::onDeserialize(io::BinaryReader& reader)
+  {
+    m_directionalLight.deserialize(reader);
+  }
+
+  UInt16 DirectionalLightComponent::getDerivedVersion() const
+  {
+    return DIRECTIONAL_LIGHT_COMPONENT_VERSION;
   }
 }

@@ -9,12 +9,12 @@ namespace hc
   {
     UInt32 faceSize;
     textureFormatType::Type format;
-    String rightImagePath;
-    String leftImagePath;
-    String topImagePath;
-    String bottomImagePath;
-    String backImagePath;
-    String frontImagePath;
+    Path rightImagePath;
+    Path leftImagePath;
+    Path topImagePath;
+    Path bottomImagePath;
+    Path backImagePath;
+    Path frontImagePath;
 
     CubeMapDescriptor();
     CubeMapDescriptor(const Path& path);

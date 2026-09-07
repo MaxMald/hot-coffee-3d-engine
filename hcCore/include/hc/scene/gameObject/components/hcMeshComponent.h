@@ -29,16 +29,6 @@ namespace hc
     ~MeshComponent() override;
 
     /**
-     * @copydoc ISerializable::serialize
-     */
-    void serialize(io::BinaryWriter& writer) const override;
-
-    /**
-     * @copydoc ISerializable::deserialize
-     */
-    void deserialize(io::BinaryReader& reader) override;
-
-    /**
      * @copydoc IDrawable::draw
      */
     void draw(
@@ -60,6 +50,13 @@ namespace hc
      *         is attached.
      */
     SharedPtr<IMesh> getMesh() const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
 
   private:
     SharedPtr<IMesh> m_mesh;

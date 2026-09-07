@@ -12,10 +12,6 @@ namespace hc
 
     virtual ~DirectionalLightComponent() override;
 
-    void serialize(io::BinaryWriter& writer) const override;
-
-    void deserialize(io::BinaryReader& reader) override;
-
     void preUpdate(float deltaTime) override;
 
     void update(float deltaTime) override;
@@ -31,6 +27,13 @@ namespace hc
     DirectionalLight& getDirectionalLight();
 
     const DirectionalLight& getDirectionalLight() const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
 
   private:
     DirectionalLight m_directionalLight;

@@ -10,6 +10,8 @@
 
 namespace hc
 {
+  static constexpr UInt16 SCENE_VERSION = 1;
+
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
@@ -26,17 +28,30 @@ namespace hc
 
   void Scene::serialize(io::BinaryWriter& writer) const
   {
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(composedVersion);
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     onSerialize(writer);
+    writer.finishWritingObject();
   }
 
   void Scene::deserialize(io::BinaryReader& reader)
   {
     clear();
+    io::ObjectHeader header = reader.startReadingObject();
+
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    if (!header.match(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     m_cameraManager.deserialize(reader);
     m_sceneGraph.deserialize(reader);
     onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   UniquePtr<GameObject> Scene::createGameObject(const String& name)
@@ -240,6 +255,13 @@ namespace hc
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and
     // default camera.
+  }
+
+  UInt16 Scene::getDerivedVersion() const
+  {
+    // This method can be overridden by derived classes to return a unique version
+    // number for serialization/deserialization. The base implementation returns 0.
+    return 0;
   }
 
   void Scene::initialize(IGameObjectFactory* gameObjectFactory)

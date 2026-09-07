@@ -3,6 +3,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 CAMERA_MANAGER_VERSION = 1;
+
   CameraManager::CameraManager() :
     m_cameras(),
     m_default(new Camera()),
@@ -16,8 +18,10 @@ namespace hc
 
   void CameraManager::serialize(io::BinaryWriter& writer) const
   {
+    writer.startWritingObject(CAMERA_MANAGER_VERSION);
+
     m_default->serialize(writer);
-    
+
     writer.writeUInt32(static_cast<uint32_t>(m_cameras.size()));
     for (const auto& pair : m_cameras)
       pair.second->serialize(writer);
@@ -27,13 +31,24 @@ namespace hc
       m_activeCamera->getUUID().serialize(writer);
     else
       m_default->getUUID().serialize(writer);
+
+    writer.finishWritingObject();
   }
 
   void CameraManager::deserialize(io::BinaryReader& reader)
   {
+    m_cameras.clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.match(CAMERA_MANAGER_VERSION))
+    {
+      setActiveCamera(m_default->getUUID());
+      reader.finishReadingObject();
+      return;
+    }
+
     m_default->deserialize(reader);
 
-    m_cameras.clear();
     uint32_t cameraCount = reader.readUInt32();
     for (uint32_t i = 0; i < cameraCount; ++i)
     {
@@ -47,6 +62,8 @@ namespace hc
     UUID activeCameraId;
     activeCameraId.deserialize(reader);
     setActiveCamera(activeCameraId);
+
+    reader.finishReadingObject();
   }
 
   Camera* CameraManager::createCamera()

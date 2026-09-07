@@ -2,6 +2,8 @@
 
 namespace hc
 {
+  static constexpr UInt16 ABASE_COMPONENT_VERSION = 1;
+
   ABaseComponent::ABaseComponent(componentType::Type type) :
     m_gameObject(nullptr),
     m_type(type)
@@ -26,11 +28,24 @@ namespace hc
 
   void ABaseComponent::serialize(io::BinaryWriter& writer) const
   {
+    UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+
+    writer.startWritingObject(composedVersion);
     writer.writeUInt16(getType());
+    onSerialize(writer);
+    writer.finishWritingObject();
   }
 
   void ABaseComponent::deserialize(io::BinaryReader& reader)
   {
+    UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.match(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     componentType::Type type = static_cast<componentType::Type>(reader.readUInt16());
     if (type != getType())
     {
@@ -38,6 +53,9 @@ namespace hc
         "Component type mismatch during deserialization."
       );
     }
+
+    onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   void ABaseComponent::onGameObjectSet()

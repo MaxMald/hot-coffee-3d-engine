@@ -42,7 +42,7 @@ namespace hc
           String::Format(
             "Unsupported shader type '%s' in material descriptor at path: %s",
             shaderTypeStr.c_str(),
-            path.string().c_str()
+            path.toGenericString().c_str()
           )
         );
       }
@@ -52,7 +52,7 @@ namespace hc
         LogService::Error(
           String::Format(
             "Failed to load material descriptor at path: %s",
-            path.string().c_str()
+            path.toGenericString().c_str()
           )
         );
 
@@ -67,7 +67,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Exception occurred while loading material descriptor at path '%s': %s",
-          path.string().c_str(),
+          path.toGenericString().c_str(),
           e.what()
         )
       );
@@ -87,7 +87,7 @@ namespace hc
     throw RuntimeErrorException(
       String::Format(
         "Material descriptor not loaded at path: %s",
-        path.string().c_str()
+        path.toGenericString().c_str()
       )
     );
   }

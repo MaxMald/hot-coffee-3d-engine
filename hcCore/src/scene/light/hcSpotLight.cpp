@@ -2,6 +2,7 @@
 
 namespace hc
 {
+  static const UInt16 SPOT_LIGHT_VERSION = 1;
   static const float MAX_CONE_ANGLE_RADIANS = Math::HalfPi;
 
   SpotLight::SpotLight() :
@@ -15,30 +16,6 @@ namespace hc
   }
 
   SpotLight::~SpotLight() = default;
-
-  void SpotLight::serialize(io::BinaryWriter& writer) const
-  {
-    ALight::serialize(writer);
-    writer.writeVector3f(m_direction);
-    writer.writeAngle(m_innerConeAngle);
-    writer.writeAngle(m_outerConeAngle);
-
-    // TODO
-    //
-    // serialize shadow settings
-  }
-
-  void SpotLight::deserialize(io::BinaryReader& reader)
-  {
-    ALight::deserialize(reader);
-    m_direction = reader.readVector3f();
-    m_innerConeAngle = reader.readAngle();
-    m_outerConeAngle = reader.readAngle();
-
-    // TODO
-    //
-    // deserialize shadow settings
-  }
 
   void SpotLight::setDirection(const Vector3f& direction)
   {
@@ -140,5 +117,28 @@ namespace hc
       shadowData.lightViewProjectionMatrix.transpose();
 
     return shadowData;
+  }
+
+  void SpotLight::onSerialize(io::BinaryWriter& writer) const
+  {
+    writer.writeVector3f(m_direction);
+    writer.writeAngle(m_innerConeAngle);
+    writer.writeAngle(m_outerConeAngle);
+    writer.writeFloat(m_shadowProjectionNearPlane);
+    writer.writeFloat(m_shadowProjectionFarPlane);
+  }
+
+  void SpotLight::onDeserialize(io::BinaryReader& reader)
+  {
+    m_direction = reader.readVector3f();
+    m_innerConeAngle = reader.readAngle();
+    m_outerConeAngle = reader.readAngle();
+    m_shadowProjectionNearPlane = reader.readFloat();
+    m_shadowProjectionFarPlane = reader.readFloat();
+  }
+
+  UInt16 SpotLight::getDerivedVersion() const
+  {
+    return SPOT_LIGHT_VERSION;
   }
 }

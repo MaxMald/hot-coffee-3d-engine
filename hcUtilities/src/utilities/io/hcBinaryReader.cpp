@@ -270,7 +270,8 @@ namespace hc::io
   Path BinaryReader::readPath()
   {
     String pathString = readString();
-    return Path(pathString.c_str());
+    UInt8 pathTypeValue = readUInt8();
+    return Path(pathString.c_str(), static_cast<pathType::Type>(pathTypeValue));
   }
 
   String BinaryReader::readString()

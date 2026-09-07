@@ -30,6 +30,14 @@ namespace hc::serialization
     {
       static constexpr const char* FILE_EXTENSION = ".hccubemapd";
     };
+
+    /**
+     * @brief Model file format (.hcModel).
+     */
+    struct HC_CORE_EXPORT ModelDescriptor
+    {
+      static constexpr const char* FILE_EXTENSION = ".hcModel";
+    };
     
     /**
      * @brief Prefab file format (.hcprefab).

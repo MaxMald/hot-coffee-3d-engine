@@ -242,6 +242,17 @@ namespace hc
      */
     virtual void onDeserialize(io::BinaryReader& reader);
 
+    /**
+     * @brief Gets the version number for the derived scene class.
+     *
+     * Override to return a unique version number for derived scene classes.
+     * This version number is used during serialization and deserialization to
+     * ensure compatibility.
+     *
+     * @return The version number of the derived scene class.
+     */
+    virtual UInt16 getDerivedVersion() const;
+
   private:
     SceneGraph m_sceneGraph;
     CameraManager m_cameraManager;

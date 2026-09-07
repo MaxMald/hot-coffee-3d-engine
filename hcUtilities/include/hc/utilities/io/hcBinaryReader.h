@@ -3,6 +3,7 @@
 #include <istream>
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/hcVector4.h"
 #include "hc/utilities/hcMatrix4.h"
