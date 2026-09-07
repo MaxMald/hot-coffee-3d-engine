@@ -4,6 +4,10 @@
 #include "hc/utilities/hcString.h"
 #include "hc/utilities/io/hcISerializable.h"
 
+using hc::io::ISerializable;
+using hc::io::BinaryReader;
+using hc::io::BinaryWriter;
+
 namespace hc
 {
   /**

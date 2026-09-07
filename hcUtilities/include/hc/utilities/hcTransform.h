@@ -4,6 +4,10 @@
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/io/hcISerializable.h"
 
+using hc::io::ISerializable;
+using hc::io::BinaryReader;
+using hc::io::BinaryWriter;
+
 namespace hc
 {
   /**

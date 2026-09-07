@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <memory>
 #include <vector>
+#include <stack>
 #include <queue>
 #include <functional>
 #include <filesystem>
@@ -51,6 +52,9 @@ namespace hc
 
   template<typename T>
   using Vector = std::vector<T>;
+
+  template<typename T>
+  using Stack = std::stack<T>;
 
   template<typename T>
   using SharedPtr = std::shared_ptr<T>;
