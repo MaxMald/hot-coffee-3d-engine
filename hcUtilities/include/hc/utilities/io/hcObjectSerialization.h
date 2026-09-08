@@ -13,9 +13,9 @@ namespace hc::io
    */
   struct alignas(8) ObjectHeader
   {
-    SizeT size = 0;     ///< The size of the object in bytes.
-    UInt32 type = 0;    ///< The type identifier of the object.
-    UInt32 version = 0; ///< The version of the object.
+    UInt64 size = static_cast<UInt64>(0);    ///< The size of the object in bytes.
+    UInt32 type = static_cast<UInt32>(0);    ///< The type identifier of the object.
+    UInt32 version = static_cast<UInt32>(0); ///< The version of the object.
 
     /**
      * @brief Checks if the header matches a given version.

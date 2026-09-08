@@ -266,6 +266,9 @@ namespace hc::io
     if (size == 0)
       return;
 
+    if (buffer == nullptr)
+      throw RuntimeErrorException("BinaryReader: Cannot read bytes into the given buffer. Buffer pointer is null.");
+
     if (m_currentObject != nullptr)
       m_currentObject->readAndConsume(buffer, size);
     else
@@ -366,7 +369,7 @@ namespace hc::io
   {
     ObjectHeader header = readObjectHeader();
     UniquePtr<ObjectData> newObject = MakeUnique<ObjectData>(header);
-    readBytes(newObject->getData(), header.size);
+    readBytes(newObject->getData(), static_cast<SizeT>(header.size));
 
     if (m_currentObject != nullptr)
     {

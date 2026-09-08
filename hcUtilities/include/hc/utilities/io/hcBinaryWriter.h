@@ -20,6 +20,12 @@ namespace hc
      *
      * BinaryWriter provides methods for serializing various data types to a
      * binary output stream.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
      */
     class HC_UTILITY_EXPORT BinaryWriter
     {

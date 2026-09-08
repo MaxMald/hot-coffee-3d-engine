@@ -16,15 +16,25 @@ namespace hc
   namespace io
   {
     /**
-   * @brief Reads primitive types and engine data structures from a binary
-   *        stream.
-   *
-   * BinaryReader provides methods for deserializing various data types from
-   * a binary input stream.
-   *
-   * @note Peek methods require the underlying stream to be seekable. They
-   *       will fail with non-seekable streams (e.g., network streams, pipes).
-   */
+     * @brief Reads primitive types and engine data structures from a binary
+     *        stream.
+     *
+     * BinaryReader provides methods for deserializing various data types from
+     * a binary input stream.
+     *
+     * @note Peek methods require the underlying stream to be seekable. They
+     *       will fail with non-seekable streams (e.g., network streams, pipes).
+     *
+     * @note Serialization format uses fixed-width types (UInt64, UInt32, etc.)
+     *       rather than platform-dependent types (SizeT). This ensures
+     *       cross-platform compatibility within the same endianness.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
+     */
     class HC_UTILITY_EXPORT BinaryReader
     {
     public:
