@@ -29,7 +29,7 @@ namespace hc
   )
   {
     IncludeData* includeData = new IncludeData();
-    includeData->sourceName = sourcePath.string();
+    includeData->sourceName = sourcePath.toGenericString();
     includeData->content = content;
 
     shaderc_include_result* result = new shaderc_include_result();
@@ -84,7 +84,7 @@ namespace hc
       return CreateErrorResult(
         String::Format(
           "Failed to open the requested source file: %s",
-          requestedSourcePath.string().c_str()
+          requestedSourcePath.toGenericString().c_str()
         )
       );
     }

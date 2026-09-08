@@ -22,7 +22,7 @@ namespace hc
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
-      path.string().c_str(),
+      path.toString().c_str(),
       aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs
     );
 
@@ -76,7 +76,7 @@ namespace hc
     {
       materialDescriptors.push_back(
         AssimpMaterialDescriptorParser::Parse(
-          path.parent_path(),
+          path.parentPath(),
           scene->mMaterials[i]
         )
       );
@@ -101,7 +101,7 @@ namespace hc
       return it->second;
 
     throw RuntimeErrorException(
-      "Model asset not found: " + path.string()
+      "Model asset not found: " + path.toString()
     );
   }
 

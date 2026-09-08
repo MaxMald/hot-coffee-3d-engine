@@ -6,35 +6,51 @@
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/image/hcIImageAssetManager.h"
-#include "hc/assets/hcAssetPath.h"
 
 namespace hc::serialization
 {
+  static constexpr UInt32 SKYBOX_SERIALIZATION_VERSION = 1;
+
   void SkyboxSerializer::Serialize(
     const Skybox& skybox,
     io::BinaryWriter& writer,
     const IAssetManager& assetManager
   )
   {
+    writer.startWritingObject(static_cast<UInt32>(0), SKYBOX_SERIALIZATION_VERSION);
+
     if (!skybox.hasCubeMap())
     {
       writer.writeBool(false);
+      writer.finishWritingObject();
       return;
     }
 
-    writer.writeBool(true);
+    
     const ICubeMap& cubeMap = skybox.getCubeMap();
-
-    Path descriptorSourcePath = cubeMap.getCubeMapDescriptorSourcePath();
-    String pathToSerialize = descriptorSourcePath.generic_string();
-
-    if (assetManager.hasRootPath())
+    SharedPtr<CubeMapDescriptor> cubeMapDescriptor = cubeMap.getCubeMapDescriptor();
+    if (cubeMapDescriptor == nullptr)
     {
-      const Path& rootPath = assetManager.getRootPath();
-      pathToSerialize = AssetPath::ToRelative(descriptorSourcePath, rootPath);
+      writer.writeBool(false);
+      writer.finishWritingObject();
+      return;
     }
 
-    writer.writeString(pathToSerialize);
+    Path descriptorSourcePath = cubeMapDescriptor->getPath();
+    if (descriptorSourcePath.empty())
+    {
+      writer.writeBool(false);
+      writer.finishWritingObject();
+      return;
+    }
+
+    Path pathToSerialize = descriptorSourcePath;
+    if (assetManager.hasRootPath())
+      pathToSerialize = descriptorSourcePath.toRelative(assetManager.getRootPath());
+
+    writer.writeBool(true);
+    writer.writePath(pathToSerialize);
+    writer.finishWritingObject();
   }
 
   void SkyboxSerializer::Deserialize(
@@ -44,32 +60,38 @@ namespace hc::serialization
     IGraphicsManager& graphicsManager
   )
   {
+    skybox.destroy();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(SKYBOX_SERIALIZATION_VERSION))
+    { 
+      reader.finishReadingObject();
+      return;
+    }
+
     if (!reader.readBool())
     {
-      skybox.destroy();
+      reader.finishReadingObject();
       return;
     }
 
-    String sourcePathStr = reader.readString();
-    if (sourcePathStr.empty())
-    {
-      skybox.destroy();
-      return;
-    }
+    Path sourcePath = reader.readPath();
+    reader.finishReadingObject();
 
-    Path sourcePath(sourcePathStr.c_str());
-    if (AssetPath::IsRelative(sourcePath))
+    if (sourcePath.empty())
+      return;
+
+    if (sourcePath.isRelative())
     {
       if (!assetManager.hasRootPath())
       {
-        skybox.destroy();
         throw RuntimeErrorException(
-          "Cannot resolve relative asset path without a root path set in the asset manager."
+          "Failed to deserialize skybox: source path is relative but asset manager has no root path set. Source path: " + sourcePath.toString()
         );
       }
 
       const Path& rootPath = assetManager.getRootPath();
-      sourcePath = AssetPath::ToAbsolute(sourcePathStr, rootPath);
+      sourcePath = sourcePath.toAbsolute(rootPath);
     }
 
     try
@@ -78,13 +100,15 @@ namespace hc::serialization
         sourcePath, assetManager, graphicsManager
       );
 
-      skybox.destroy();
       skybox.initialize(cubeMap);
     }
-    catch (const Exception&)
+    catch (const Exception& ex)
     {
       skybox.destroy();
-      throw;
+      throw RuntimeErrorException(
+        "Failed to create cube map from descriptor at path: " + sourcePath.toString() +
+        ". Error: " + String(ex.what())
+      );
     }
   }
 }

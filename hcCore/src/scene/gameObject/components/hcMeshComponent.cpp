@@ -2,11 +2,12 @@
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/resource/mesh/hcIMeshManager.h"
 #include "hc/assets/hcIAssetManager.h"
-#include "hc/assets/hcAssetPath.h"
 #include "hc/assets/model/hcModel.h"
 
 namespace hc
 {
+  static constexpr UInt16 MESH_COMPONENT_VERSION = 1;
+
   MeshComponent::MeshComponent(
     IMeshManager& meshManager,
     IAssetManager& assetManager
@@ -20,64 +21,6 @@ namespace hc
 
   MeshComponent::~MeshComponent()
   {
-  }
-
-  void MeshComponent::serialize(io::BinaryWriter& writer) const
-  {
-    ABaseComponent::serialize(writer);
-
-    // TODO
-    //
-    // Currently we only serialize the mesh by its source path, which means we can only
-    // reconstruct the mesh during deserialization if it was originally created from a
-    // model file. This is a limitation that should be addressed in the future by implementing a more
-    // robust serialization mechanism that can handle meshes created procedurally or from
-    // other sources.
-
-    bool hasMesh = (m_mesh != nullptr && !m_mesh->getSourcePath().empty());
-    writer.writeBool(hasMesh);
-
-    if (!hasMesh)
-      return;
-
-    Path modelPath = m_mesh->getSourcePath();
-    String modelPathStr = modelPath.generic_string();
-
-    if (m_assetManager.hasRootPath())
-      modelPathStr = AssetPath::ToRelative(modelPath, m_assetManager.getRootPath());
-
-    writer.writeString(modelPathStr);
-  }
-
-  void MeshComponent::deserialize(io::BinaryReader& reader)
-  {
-    ABaseComponent::deserialize(reader);
-
-    bool hasMesh = reader.readBool();
-    if (!hasMesh)
-    {
-      m_mesh = nullptr;
-      return;
-    }
-
-    String modelPathStr = reader.readString();
-
-    if (AssetPath::IsRelative(modelPathStr))
-    {
-      if (!m_assetManager.hasRootPath())
-      {
-        throw RuntimeErrorException(
-          "Cannot load mesh during deserialization: asset manager does not have a root path set for relative paths"
-        );
-      }
-
-      Path modelPath = AssetPath::ToAbsolute(modelPathStr, m_assetManager.getRootPath());
-      m_mesh = m_meshManager.createMeshFromPath(modelPath);
-    }
-    else
-    {
-      m_mesh = m_meshManager.createMeshFromPath(modelPathStr.c_str());
-    }
   }
 
   void MeshComponent::draw(
@@ -99,5 +42,64 @@ namespace hc
   SharedPtr<IMesh> MeshComponent::getMesh() const
   {
     return m_mesh;
+  }
+
+  void MeshComponent::onSerialize(io::BinaryWriter& writer) const
+  {
+    // TODO
+    //
+    // Currently we only serialize the mesh by its source path, which means we can only
+    // reconstruct the mesh during deserialization if it was originally created from a
+    // model file. This is a limitation that should be addressed in the future by implementing a more
+    // robust serialization mechanism that can handle meshes created procedurally or from
+    // other sources.
+
+    bool hasMesh = (m_mesh != nullptr && !m_mesh->getSourcePath().empty());
+    writer.writeBool(hasMesh);
+
+    if (!hasMesh)
+      return;
+
+    Path modelPath = m_mesh->getSourcePath();
+    Path pathToSerialize = modelPath;
+
+    if (m_assetManager.hasRootPath())
+      pathToSerialize = modelPath.toRelative(m_assetManager.getRootPath());
+
+    writer.writePath(pathToSerialize);
+  }
+
+  void MeshComponent::onDeserialize(io::BinaryReader& reader)
+  {
+    bool hasMesh = reader.readBool();
+    if (!hasMesh)
+    {
+      m_mesh = nullptr;
+      return;
+    }
+
+    Path modelPath = reader.readPath();
+
+    if (modelPath.isRelative())
+    {
+      if (!m_assetManager.hasRootPath())
+      {
+        throw RuntimeErrorException(
+          "Cannot load mesh during deserialization: asset manager does not have a root path set for relative paths"
+        );
+      }
+
+      Path absoluteModelPath = modelPath.toAbsolute(m_assetManager.getRootPath());
+      m_mesh = m_meshManager.createMeshFromPath(absoluteModelPath);
+    }
+    else
+    {
+      m_mesh = m_meshManager.createMeshFromPath(modelPath);
+    }
+  }
+
+  UInt16 MeshComponent::getDerivedVersion() const
+  {
+    return MESH_COMPONENT_VERSION;
   }
 }

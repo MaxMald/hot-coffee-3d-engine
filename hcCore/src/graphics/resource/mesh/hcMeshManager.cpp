@@ -36,7 +36,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "MeshManager::createMeshFromPath: Failed to load model from path '%s'.",
-          path.string().c_str()
+          path.toString().c_str()
         )
       );
       return nullptr;

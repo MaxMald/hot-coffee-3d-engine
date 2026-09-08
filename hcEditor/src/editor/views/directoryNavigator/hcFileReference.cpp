@@ -18,7 +18,7 @@ namespace hc::editor
   {
     clear();
 
-    std::filesystem::path fsPath(filePath);
+    std::filesystem::path fsPath = filePath.getPath();
     if (!std::filesystem::exists(fsPath) || !std::filesystem::is_regular_file(fsPath))
     {
       return false;

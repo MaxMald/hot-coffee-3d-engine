@@ -40,12 +40,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    virtual void serialize(io::BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    virtual void deserialize(io::BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
   protected:
     GameObject* m_gameObject;
@@ -57,6 +57,30 @@ namespace hc
      * @param type The component type identifier.
      */
     ABaseComponent(componentType::Type type);
+
+    /**
+     * Hook for derived classes to implement their specific serialization logic.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    virtual void onSerialize(io::BinaryWriter& writer) const = 0;
+
+    /**
+     * Hook for derived classes to implement their specific deserialization logic.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    virtual void onDeserialize(io::BinaryReader& reader) = 0;
+
+    /**
+     * Returns the version number for the derived component class.
+     *
+     * Derived classes should override this to provide a unique version
+     * number for serialization compatibility checks.
+     *
+     * @return The version number of the derived component class.
+     */
+    virtual UInt16 getDerivedVersion() const = 0;
 
     /**
      * Called when the game object is set.

@@ -260,6 +260,13 @@ namespace hc
         builtInShaderProgramType::ShadowMap
       );
     }
+    catch (const Exception& ex)
+    {
+      destroy();
+      throw RuntimeErrorException(
+        "Failed to initialize OpenGlLightShadowMapManager: " + String(ex.what())
+      );
+    }
     catch (...)
     {
       destroy();

@@ -7,7 +7,7 @@ namespace hc
   /**
    * @brief Implements an orthographic projection for a camera.
    */
-  class HC_CORE_EXPORT OrthographicCameraProjection : 
+  class HC_CORE_EXPORT OrthographicCameraProjection :
     public ICameraProjection,
     public io::ISerializable
   {

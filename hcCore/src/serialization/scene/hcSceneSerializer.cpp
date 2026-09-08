@@ -23,7 +23,7 @@ namespace hc
         if (!outputFile)
         {
           LogService::Error(
-            "Failed to open file for writing: " + filePath.string()
+            "Failed to open file for writing: " + filePath.toString()
           );
           return false;
         }
@@ -40,7 +40,7 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene serialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return false;
       }
@@ -61,7 +61,7 @@ namespace hc
         if (!inputFile)
         {
           LogService::Error(
-            "Failed to open file for reading: " + filePath.string()
+            "Failed to open file for reading: " + filePath.toString()
           );
           return false;
         }
@@ -78,7 +78,7 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene deserialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return false;
       }
@@ -102,7 +102,7 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene deserialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return nullptr;
       }

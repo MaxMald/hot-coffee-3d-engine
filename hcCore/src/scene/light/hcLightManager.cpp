@@ -235,7 +235,7 @@ namespace hc
       }
 
       lightShadowData.shadowMapIndex = shadowMapIndex;
-      directionalLightItem.lightData.shadowFrameDataIndex = outDirectionalLightShadows.size();
+      directionalLightItem.lightData.shadowFrameDataIndex = static_cast<Int32>(outDirectionalLightShadows.size());
       outDirectionalLightShadows.push_back(lightShadowData);
     }
 
@@ -265,7 +265,7 @@ namespace hc
       }
 
       lightShadowData.shadowMapIndex = shadowMapIndex;
-      spotLightItem.lightData.shadowFrameDataIndex = outSpotLightShadows.size();
+      spotLightItem.lightData.shadowFrameDataIndex = static_cast<Int32>(outSpotLightShadows.size());
       outSpotLightShadows.push_back(lightShadowData);
     }
   }

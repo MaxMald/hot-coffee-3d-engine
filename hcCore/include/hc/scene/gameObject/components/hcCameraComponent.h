@@ -20,10 +20,6 @@ namespace hc
 
     ~CameraComponent() override;
 
-    void serialize(io::BinaryWriter& writer) const override;
-
-    void deserialize(io::BinaryReader& reader) override;
-
     /**
      * @brief Gets the camera's position in world space.
      *
@@ -77,6 +73,13 @@ namespace hc
      * @brief Sets this camera as the active camera in the scene.
      */
     void setAsActiveCamera();
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
 
   private:
     SceneManager& m_sceneManager;

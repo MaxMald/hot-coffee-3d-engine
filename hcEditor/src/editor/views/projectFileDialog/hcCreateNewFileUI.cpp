@@ -149,7 +149,7 @@ namespace hc::editor
       std::ofstream fileStream(newFilePath);
       if (!fileStream.is_open())
       {
-        m_popupErrorMessage = "Failed to create file at: " + newFilePath.string();
+        m_popupErrorMessage = "Failed to create file at: " + newFilePath.toString();
         ImGui::OpenPopup(CREATE_FILE_ERROR_POPUP_KEY);
         return;
       }

@@ -12,10 +12,6 @@ namespace hc
 
     virtual ~OmniLightComponent() override;
 
-    void serialize(io::BinaryWriter& writer) const override;
-
-    void deserialize(io::BinaryReader& reader) override;
-
     void preUpdate(float deltaTime) override;
 
     void update(float deltaTime) override;
@@ -31,6 +27,13 @@ namespace hc
     OmniLight& getOmniLight();
 
     const OmniLight& getOmniLight() const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
 
   private:
     OmniLight m_omniLight;

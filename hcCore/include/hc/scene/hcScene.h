@@ -9,6 +9,19 @@
 
 namespace hc
 {
+  /**
+   * @brief Represents the settings for a 3D scene
+   */
+  struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
+  {
+    Color ambientColor = Color::White();
+    float ambientIntensity = 0.1f;
+
+    void serialize(io::BinaryWriter& writer) const override;
+    void deserialize(io::BinaryReader& reader) override;
+    void clear();
+  };
+
   class IGameObjectFactory;
   class SceneManager;
   class IGraphicsManager;
@@ -242,10 +255,22 @@ namespace hc
      */
     virtual void onDeserialize(io::BinaryReader& reader);
 
+    /**
+     * @brief Gets the version number for the derived scene class.
+     *
+     * Override to return a unique version number for derived scene classes.
+     * This version number is used during serialization and deserialization to
+     * ensure compatibility.
+     *
+     * @return The version number of the derived scene class.
+     */
+    virtual UInt16 getDerivedVersion() const;
+
   private:
     SceneGraph m_sceneGraph;
     CameraManager m_cameraManager;
     LightManager m_lightManager;
+    SceneSettings m_settings;
     IGameObjectFactory* m_gameObjectFactory;
     Skybox m_skybox;
 

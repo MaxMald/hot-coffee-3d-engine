@@ -2,26 +2,47 @@
 
 namespace hc
 {
+  static constexpr UInt16 ALIGHT_VERSION = 1;
+
   void ALight::serialize(io::BinaryWriter& writer) const
   {
+    UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(static_cast<UInt32>(m_type), composedVersion);
     writer.writeBool(m_enabled);
-    writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
     writer.writeFloat(m_intensity);
     writer.writeFloat(m_range);
     writer.writeVector3f(m_position);
-    // TODO serialize shadowEnabled, shadowBias, shadowStrength
+    writer.writeBool(m_shadowsEnabled);
+    writer.writeFloat(m_shadowBias);
+    writer.writeFloat(m_shadowStrength);
+
+    onSerialize(writer);
+    writer.finishWritingObject();
   }
 
   void ALight::deserialize(io::BinaryReader& reader)
   {
+    io::ObjectHeader header = reader.startReadingObject();
+    UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    if (!header.matchVersion(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    m_type = static_cast<lightType::Type>(header.type);
     m_enabled = reader.readBool();
-    m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_range = reader.readFloat();
     m_position = reader.readVector3f();
-    // TODO deserialize shadowEnabled, shadowBias, shadowStrength
+    m_shadowsEnabled = reader.readBool();
+    m_shadowBias = reader.readFloat();
+    m_shadowStrength = reader.readFloat();
+
+    onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   lightType::Type ALight::getType() const

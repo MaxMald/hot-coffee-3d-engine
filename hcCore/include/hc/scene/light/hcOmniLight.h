@@ -22,5 +22,12 @@ namespace hc
      * @return A dataBlockStructure::OmniLight containing the light's data.
      */
     dataBlockStructure::OmniLight getDataBlockStructure() const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
   };
 }

@@ -3,6 +3,7 @@
 #include <istream>
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/hcVector4.h"
 #include "hc/utilities/hcMatrix4.h"
@@ -15,15 +16,25 @@ namespace hc
   namespace io
   {
     /**
-   * @brief Reads primitive types and engine data structures from a binary
-   *        stream.
-   *
-   * BinaryReader provides methods for deserializing various data types from
-   * a binary input stream.
-   *
-   * @note Peek methods require the underlying stream to be seekable. They
-   *       will fail with non-seekable streams (e.g., network streams, pipes).
-   */
+     * @brief Reads primitive types and engine data structures from a binary
+     *        stream.
+     *
+     * BinaryReader provides methods for deserializing various data types from
+     * a binary input stream.
+     *
+     * @note Peek methods require the underlying stream to be seekable. They
+     *       will fail with non-seekable streams (e.g., network streams, pipes).
+     *
+     * @note Serialization format uses fixed-width types (UInt64, UInt32, etc.)
+     *       rather than platform-dependent types (SizeT). This ensures
+     *       cross-platform compatibility within the same endianness.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
+     */
     class HC_UTILITY_EXPORT BinaryReader
     {
     public:
@@ -181,6 +192,14 @@ namespace hc
       void readBytes(Vector<Byte>& buffer, SizeT size);
 
       /**
+       * @brief Reads a specified number of bytes into a buffer.
+       *
+       * @param buffer The pointer to the buffer to store the read bytes.
+       * @param size The number of bytes to read.
+       */
+      void readBytes(Byte* buffer, SizeT size);
+
+      /**
        * @brief Reads a size_t value.
        *
        * @return The size value read from the stream.
@@ -240,6 +259,16 @@ namespace hc
        * @return The color read from the stream.
        */
       Color readColor();
+
+      /**
+       * @brief Peeks at the next object header without advancing the stream position.
+       *
+       * This method reads the object header from the stream but does not consume it,
+       * allowing for inspection of the next object without affecting the stream state.
+       *
+       * @return The ObjectHeader of the next object in the stream.
+       */
+      ObjectHeader peekObjectHeader() const;
 
       /**
        * @brief Starts reading an object from the stream.

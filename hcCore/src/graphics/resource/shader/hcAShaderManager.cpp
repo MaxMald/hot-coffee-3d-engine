@@ -15,7 +15,7 @@ namespace hc
     shaderStageType::Type type
   )
   {
-    String shaderKey = shaderPath.string();
+    String shaderKey = shaderPath.toString();
     if (m_customShaders.find(shaderKey) != m_customShaders.end())
       return m_customShaders[shaderKey];
 
@@ -28,7 +28,7 @@ namespace hc
       LogService::Error(
         String::Format(
           "Failed to load shader from file: %s",
-          shaderPath.string().c_str()
+          shaderPath.toString().c_str()
         )
       );
       return nullptr;

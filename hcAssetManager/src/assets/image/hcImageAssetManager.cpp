@@ -25,7 +25,7 @@ namespace hc
     try
     {
       data = stbi_load(
-        path.string().c_str(),
+        path.toString().c_str(),
         reinterpret_cast<int*>(&width),
         reinterpret_cast<int*>(&height),
         reinterpret_cast<int*>(&channels),
@@ -68,7 +68,7 @@ namespace hc
     if (isLoaded(path))
       return m_loadedImages.at(path);
 
-    throw RuntimeErrorException("Image asset not loaded: " + path.string());
+    throw RuntimeErrorException("Image asset not loaded: " + path.toString());
   }
 
   bool ImageAssetManager::isLoaded(const Path& path) const

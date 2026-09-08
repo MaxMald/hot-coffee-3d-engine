@@ -65,9 +65,8 @@ namespace hc::editor
         "Project file path must be set before setting the last opened scene path."
       );
 
-    m_relativePathToLastOpenedScene = AssetPath::ToRelative(
-      absolutePath,
-      m_projectFilePath.parent_path()
+    m_relativePathToLastOpenedScene = absolutePath.toRelative(
+      m_projectFilePath.parentPath()
     );
   }
 

@@ -8,7 +8,6 @@
 #include <stack>
 #include <queue>
 #include <functional>
-#include <filesystem>
 #include <typeindex>
 #include <type_traits>
 #include <cmath>
@@ -39,7 +38,6 @@ namespace hc
   using Bool = bool;
   using SizeT = std::size_t;
   using TypeIndex = std::type_index;
-  using Path = std::filesystem::path;
 
   template<typename K, typename V>
   using UnorderedMap = std::unordered_map<K, V>;

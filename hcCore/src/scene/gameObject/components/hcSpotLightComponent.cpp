@@ -3,24 +3,14 @@
 
 namespace hc
 {
+  static constexpr UInt16 SPOT_LIGHT_COMPONENT_VERSION = 1;
+
   SpotLightComponent::SpotLightComponent() :
     ALightComponent(componentType::SpotLight)
   {}
 
   SpotLightComponent::~SpotLightComponent()
   {}
-
-  void SpotLightComponent::serialize(io::BinaryWriter& writer) const
-  {
-    ABaseComponent::serialize(writer);
-    m_spotLight.serialize(writer);
-  }
-
-  void SpotLightComponent::deserialize(io::BinaryReader& reader)
-  {
-    ABaseComponent::deserialize(reader);
-    m_spotLight.deserialize(reader);
-  }
 
   void SpotLightComponent::preUpdate(float)
   {
@@ -62,5 +52,20 @@ namespace hc
   const SpotLight& SpotLightComponent::getSpotLight() const
   {
     return m_spotLight;
+  }
+
+  void SpotLightComponent::onSerialize(io::BinaryWriter& writer) const
+  {
+    m_spotLight.serialize(writer);
+  }
+
+  void SpotLightComponent::onDeserialize(io::BinaryReader& reader)
+  {
+    m_spotLight.deserialize(reader);
+  }
+
+  UInt16 SpotLightComponent::getDerivedVersion() const
+  {
+    return SPOT_LIGHT_COMPONENT_VERSION;
   }
 }

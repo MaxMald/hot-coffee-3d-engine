@@ -2,10 +2,12 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/utilities/hcTextureFormatType.h"
+#include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptor.h"
 
 namespace hc
 {
   class Image;
+  class IAssetManager;
 
   class HC_CORE_EXPORT ICubeMap : public NonCopyable
   {
@@ -13,28 +15,17 @@ namespace hc
     virtual ~ICubeMap();
 
     virtual void initialize(
-      const UInt32 width,
-      const UInt32 height,
-      const Image& right,
-      const Image& left,
-      const Image& top,
-      const Image& bottom,
-      const Image& back,
-      const Image& front,
-      const Path& cubeMapDescriptorSourcePath = Path()
+      SharedPtr<CubeMapDescriptor> cubeMapDescriptor,
+      IAssetManager& assetManager
     ) = 0;
 
     virtual bool isValid() const = 0;
+
     virtual UInt32 getFaceWidth() const = 0;
+
     virtual UInt32 getFaceHeight() const = 0;
 
-    /**
-     * Get the file path of the cube map descriptor source used to create this skybox.
-     * This path is used for serialization and deserialization purposes.
-     *
-     * @return The file path of the cube map descriptor source.
-     */
-    virtual const Path& getCubeMapDescriptorSourcePath() const = 0;
+    virtual SharedPtr<CubeMapDescriptor> getCubeMapDescriptor() const = 0;
 
     virtual void destroy() = 0;
 

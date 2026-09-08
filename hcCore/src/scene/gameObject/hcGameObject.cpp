@@ -6,6 +6,8 @@
 
 namespace hc
 {
+  constexpr UInt32 GAME_OBJECT_VERSION = 1;
+
   GameObject::GameObject(
     const String& name,
     IGameObjectFactory& gameObjectFactory,
@@ -28,6 +30,7 @@ namespace hc
 
   void GameObject::serialize(io::BinaryWriter& writer) const
   {
+    writer.startWritingObject(static_cast<UInt32>(0), GAME_OBJECT_VERSION);
     Transform::serialize(writer);
     writer.writeString(m_name);
 
@@ -41,10 +44,20 @@ namespace hc
       const IComponent* component = pair.second.get();
       component->serialize(writer);
     }
+    writer.finishWritingObject();
   }
 
   void GameObject::deserialize(io::BinaryReader& reader)
   {
+    clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(GAME_OBJECT_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     Transform::deserialize(reader);
     m_name = reader.readString();
 
@@ -59,9 +72,8 @@ namespace hc
     SizeT componentCount = reader.readSizeT();
     for (SizeT i = 0; i < componentCount; ++i)
     {
-      componentType::Type componentType = static_cast<componentType::Type>(
-        reader.peekUInt16()
-        );
+      io::ObjectHeader componentHeader = reader.peekObjectHeader();
+      componentType::Type componentType = static_cast<componentType::Type>(componentHeader.type);
 
       UniquePtr<IComponent> component = m_componentFactoriesManager
         .createComponent(componentType);
@@ -77,6 +89,8 @@ namespace hc
       component->deserialize(reader);
       addComponent(std::move(component));
     }
+
+    reader.finishReadingObject();
   }
 
   void GameObject::draw(
@@ -284,6 +298,17 @@ namespace hc
       outComponents.push_back(pair.second.get());
   }
 
+  void GameObject::clear()
+  {
+    m_components.clear();
+    m_drawableComponents.clear();
+    m_updatableComponents.clear();
+
+    for (auto& child : m_children)
+      child->m_parent = nullptr;
+    m_children.clear();
+  }
+
   void GameObject::addComponent(UniquePtr<IComponent> component)
   {
     if (!component)
@@ -305,14 +330,9 @@ namespace hc
 
   void GameObject::destroy()
   {
-    m_components.clear();
+    clear();
 
     if (m_parent)
       m_parent->removeChild(this);
-
-    for (auto& child : m_children)
-      child->m_parent = nullptr;
-
-    m_children.clear();
   }
 }

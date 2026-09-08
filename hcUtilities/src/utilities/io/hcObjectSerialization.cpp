@@ -8,12 +8,12 @@ namespace hc::io
     : m_header(), m_data()
   {}
 
-  ObjectData::ObjectData(const String& name, UInt32 version)
+  ObjectData::ObjectData(UInt32 type, UInt32 version)
     : m_header(), m_data()
   {
-    m_header.name = name;
+    m_header.type = type;
     m_header.version = version;
-    m_header.size = 0;
+    m_header.size = static_cast<UInt64>(0);
   }
 
   ObjectData::ObjectData(const ObjectHeader& header)
@@ -28,7 +28,7 @@ namespace hc::io
 
     const Byte* byteData = static_cast<const Byte*>(data);
     m_data.insert(m_data.end(), byteData, byteData + dataSize);
-    m_header.size = m_data.size();
+    m_header.size = static_cast<UInt64>(m_data.size());
   }
 
   void ObjectData::peek(Byte* data, SizeT dataSize)
@@ -52,6 +52,6 @@ namespace hc::io
 
     std::copy(m_data.begin(), m_data.begin() + dataSize, buffer);
     m_data.erase(m_data.begin(), m_data.begin() + dataSize);
-    m_header.size = m_data.size();
+    m_header.size = static_cast<UInt64>(m_data.size());
   }
 }

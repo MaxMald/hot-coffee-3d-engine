@@ -10,10 +10,44 @@
 
 namespace hc
 {
+  static constexpr UInt16 SCENE_VERSION = 1;
+  static constexpr UInt32 SCENE_SETTINGS_VERSION = 1;
+
+  void SceneSettings::serialize(io::BinaryWriter& writer) const
+  {
+    writer.startWritingObject(static_cast<UInt32>(0), SCENE_SETTINGS_VERSION);
+    writer.writeColor(ambientColor);
+    writer.writeFloat(ambientIntensity);
+    writer.finishWritingObject();
+  }
+
+  void SceneSettings::deserialize(io::BinaryReader& reader)
+  {
+    clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(SCENE_SETTINGS_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    ambientColor = reader.readColor();
+    ambientIntensity = reader.readFloat();
+    reader.finishReadingObject();
+  }
+
+  void SceneSettings::clear()
+  {
+    ambientColor = Color::White();
+    ambientIntensity = 0.1f;
+  }
+
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
     m_lightManager(),
+    m_settings(),
     m_gameObjectFactory(nullptr),
     m_skybox()
   {
@@ -26,17 +60,32 @@ namespace hc
 
   void Scene::serialize(io::BinaryWriter& writer) const
   {
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(static_cast<UInt32>(0), composedVersion);
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
+    m_settings.serialize(writer);
     onSerialize(writer);
+    writer.finishWritingObject();
   }
 
   void Scene::deserialize(io::BinaryReader& reader)
   {
     clear();
+    io::ObjectHeader header = reader.startReadingObject();
+
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    if (!header.matchVersion(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     m_cameraManager.deserialize(reader);
     m_sceneGraph.deserialize(reader);
+    m_settings.deserialize(reader);
     onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   UniquePtr<GameObject> Scene::createGameObject(const String& name)
@@ -240,6 +289,13 @@ namespace hc
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and
     // default camera.
+  }
+
+  UInt16 Scene::getDerivedVersion() const
+  {
+    // This method can be overridden by derived classes to return a unique version
+    // number for serialization/deserialization. The base implementation returns 0.
+    return 0;
   }
 
   void Scene::initialize(IGameObjectFactory* gameObjectFactory)

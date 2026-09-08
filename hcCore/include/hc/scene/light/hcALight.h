@@ -161,5 +161,32 @@ namespace hc
     bool m_shadowsEnabled;
 
     ALight(lightType::Type type);
+
+    /**
+     * @brief Serializes the derived light properties to binary format.
+     *
+     * This method should be implemented by derived classes to serialize their
+     * specific properties. It is called by the base class's serialize method.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    virtual void onSerialize(io::BinaryWriter& writer) const = 0;
+
+    /**
+     * @brief Deserializes the derived light properties from binary format.
+     *
+     * This method should be implemented by derived classes to deserialize their
+     * specific properties. It is called by the base class's deserialize method.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    virtual void onDeserialize(io::BinaryReader& reader) = 0;
+
+    /**
+     * @brief Gets the derived version of the light for serialization purposes.
+     *
+     * @return The derived version as a UInt16.
+     */
+    virtual UInt16 getDerivedVersion() const = 0;
   };
 }

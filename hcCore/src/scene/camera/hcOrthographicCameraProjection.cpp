@@ -2,6 +2,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 ORTHOGRAPHIC_CAMERA_PROJECTION_VERSION = 1;
+
   OrthographicCameraProjection::OrthographicCameraProjection() :
     m_left(-1.0f),
     m_right(1.0f),
@@ -128,16 +130,25 @@ namespace hc
 
   void OrthographicCameraProjection::serialize(io::BinaryWriter& writer) const
   {
+    writer.startWritingObject(static_cast<UInt32>(0), ORTHOGRAPHIC_CAMERA_PROJECTION_VERSION);
     writer.writeFloat(m_left);
     writer.writeFloat(m_right);
     writer.writeFloat(m_top);
     writer.writeFloat(m_bottom);
     writer.writeFloat(m_near);
     writer.writeFloat(m_far);
+    writer.finishWritingObject();
   }
 
   void OrthographicCameraProjection::deserialize(io::BinaryReader& reader)
   {
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(ORTHOGRAPHIC_CAMERA_PROJECTION_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     m_left = reader.readFloat();
     m_right = reader.readFloat();
     m_top = reader.readFloat();
@@ -145,5 +156,6 @@ namespace hc
     m_near = reader.readFloat();
     m_far = reader.readFloat();
     m_isDirty = true;
+    reader.finishReadingObject();
   }
 }

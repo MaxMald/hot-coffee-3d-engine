@@ -50,7 +50,7 @@ namespace hc::editor
       updateLastOpenedSceneInProject();
 
       LogService::Message(
-        "Scene opened successfully: " + scenePath.string()
+        "Scene opened successfully: " + scenePath.toString()
       );
 
       for (auto* listener : m_listeners)
@@ -74,7 +74,7 @@ namespace hc::editor
       updateLastOpenedSceneInProject();
 
       LogService::Message(
-        "Scene saved successfully: " + scenePath.string()
+        "Scene saved successfully: " + scenePath.toString()
       );
 
       return true;
@@ -149,10 +149,8 @@ namespace hc::editor
     if (relativeScenePath.empty())
       return;
 
-    const Path lastOpenedScenePath = AssetPath::ToAbsolute(
-      relativeScenePath,
-      m_projectManager.getCurrentProjectDirectory()
-    );
+    Path lastOpenedScenePath(relativeScenePath);
+    lastOpenedScenePath = lastOpenedScenePath.toAbsolute(m_projectManager.getCurrentProjectDirectory());
 
     openScene(lastOpenedScenePath);
   }

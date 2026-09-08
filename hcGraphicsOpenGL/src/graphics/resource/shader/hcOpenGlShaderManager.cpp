@@ -18,7 +18,7 @@ namespace hc
    */
   static Path ResolveShaderFilePath(const Path& relPath)
   {
-    return std::filesystem::current_path() / "shaders/opengl" / relPath;
+    return Path(std::filesystem::current_path()) / "shaders/opengl" / relPath;
   }
 
   /**
@@ -35,7 +35,7 @@ namespace hc
     std::ifstream file(path, std::ios::in | std::ios::binary);
     if (!file)
       throw RuntimeErrorException(
-        String::Format("Failed to open shader file: %s", path.string().c_str())
+        String::Format("Failed to open shader file: %s", path.toString().c_str())
       );
 
     std::ostringstream contents;
@@ -140,7 +140,7 @@ namespace hc
       SharedPtr<IShader> shader = m_shaderCompiler.compileShaderFromString(
         source,
         stageType,
-        filePath.string(),
+        filePath.toString(),
         entryPoint
       );
       return shader;
@@ -150,7 +150,7 @@ namespace hc
       throw RuntimeErrorException(
         String::Format(
           "Failed to compile shader to SPIR-V from file %s: %s",
-          filePath.string().c_str(),
+          filePath.toString().c_str(),
           e.what()
         )
       );

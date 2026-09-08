@@ -115,7 +115,7 @@ namespace hc
         &m_shaderId,
         GL_SHADER_BINARY_FORMAT_SPIR_V,
         spirvCode.data(),
-        spirvCode.size() * sizeof(UInt32)
+        static_cast<GLsizei>(spirvCode.size() * sizeof(UInt32))
       );
 
       glSpecializeShader(

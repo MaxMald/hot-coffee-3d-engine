@@ -59,7 +59,7 @@ namespace hc::editor
 
       for (const auto& assetPtr : m_loadedAssets)
       {
-        String pathStr = assetPtr->getPath().string();
+        String pathStr = assetPtr->getPath().toString();
         if (ImGui::TreeNode(pathStr.c_str()))
         {
           ImGui::Text("Path: %s", pathStr.c_str());

@@ -3,6 +3,8 @@
 
 namespace hc
 {
+  static constexpr UInt32 PERSPECTIVE_CAMERA_PROJECTION_VERSION = 1;
+
   PerspectiveCameraProjection::PerspectiveCameraProjection()
     : m_fovY(Angle::FromDegrees(60.0f)),
     m_aspectRatio(1.77778f),
@@ -47,19 +49,29 @@ namespace hc
 
   void PerspectiveCameraProjection::serialize(io::BinaryWriter& writer) const
   {
+    writer.startWritingObject(static_cast<UInt32>(0), PERSPECTIVE_CAMERA_PROJECTION_VERSION);
     writer.writeAngle(m_fovY);
     writer.writeFloat(m_aspectRatio);
     writer.writeFloat(m_near);
     writer.writeFloat(m_far);
+    writer.finishWritingObject();
   }
 
   void PerspectiveCameraProjection::deserialize(io::BinaryReader& reader)
   {
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(PERSPECTIVE_CAMERA_PROJECTION_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     m_fovY = reader.readAngle();
     m_aspectRatio = reader.readFloat();
     m_near = reader.readFloat();
     m_far = reader.readFloat();
     m_isDirty = true;
+    reader.finishReadingObject();
   }
 
   void PerspectiveCameraProjection::setFovY(Angle fovY)

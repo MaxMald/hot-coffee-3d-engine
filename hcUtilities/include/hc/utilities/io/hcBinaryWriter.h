@@ -3,6 +3,7 @@
 #include "hc/utilities/io/hcObjectSerialization.h"
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/hcVector4.h"
 #include "hc/utilities/hcMatrix4.h"
@@ -19,6 +20,12 @@ namespace hc
      *
      * BinaryWriter provides methods for serializing various data types to a
      * binary output stream.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
      */
     class HC_UTILITY_EXPORT BinaryWriter
     {
@@ -209,12 +216,12 @@ namespace hc
       void writeColor(const Color& value);
 
       /**
-       * @brief Starts writing an object with the specified name and version.
+       * @brief Starts writing an object with the specified type and version.
        *
-       * @param name The name of the object.
-       * @param version The version of the object (default is 0).
+       * @param type The type of the object.
+       * @param version The version of the object.
        */
-      void startWritingObject(const String& name, UInt32 version = 0);
+      void startWritingObject(UInt32 type, UInt32 version);
       
       /**
        * @brief Ends writing the current object.
@@ -247,13 +254,6 @@ namespace hc
        * @param objectData The ObjectData instance to write.
        */
       void writeObject(const ObjectData& objectData);
-
-      /**
-       * @brief Writes an ObjectHeader to the stream.
-       *
-       * @param header The ObjectHeader to write.
-       */
-      void writeObjectHeader(const ObjectHeader& header);
     };
   }
 }

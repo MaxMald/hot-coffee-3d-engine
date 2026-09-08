@@ -5,6 +5,8 @@
 
 namespace hc
 {
+  static constexpr UInt16 CAMERA_COMPONENT_VERSION = 1;
+
   CameraComponent::CameraComponent(SceneManager& sceneManager) :
     ABaseComponent(componentType::Type::Camera),
     m_sceneManager(sceneManager),
@@ -18,41 +20,6 @@ namespace hc
   {
     CameraManager& cameraManager = getCameraManager();
     cameraManager.destroyCamera(m_camera->getUUID());
-  }
-
-  void CameraComponent::serialize(io::BinaryWriter& writer) const
-  {
-    ABaseComponent::serialize(writer);
-
-    bool hasCamera = (m_camera != nullptr);
-    writer.writeBool(hasCamera);
-
-    if (hasCamera)
-      m_camera->getUUID().serialize(writer);
-  }
-
-  void CameraComponent::deserialize(io::BinaryReader& reader)
-  {
-    ABaseComponent::deserialize(reader);
-
-    bool hasCamera = reader.readBool();
-    if (hasCamera)
-    {
-      UUID cameraId;
-      cameraId.deserialize(reader);
-      CameraManager& cameraManager = getCameraManager();
-      m_camera = cameraManager.getCamera(cameraId);
-
-      if (!m_camera)
-        throw RuntimeErrorException(
-          "Failed to deserialize CameraComponent: Camera with ID " +
-          cameraId.toString() + " not found."
-        );
-    }
-    else
-    {
-      m_camera = nullptr;
-    }
   }
 
   const Vector3f& CameraComponent::getPosition() const
@@ -101,6 +68,42 @@ namespace hc
   {
     assertCameraExists();
     return m_camera->getCameraProjection();
+  }
+
+  void CameraComponent::onSerialize(io::BinaryWriter& writer) const
+  {
+    bool hasCamera = (m_camera != nullptr);
+    writer.writeBool(hasCamera);
+
+    if (hasCamera)
+      m_camera->getUUID().serialize(writer);
+  }
+
+  void CameraComponent::onDeserialize(io::BinaryReader& reader)
+  {
+    bool hasCamera = reader.readBool();
+    if (hasCamera)
+    {
+      UUID cameraId;
+      cameraId.deserialize(reader);
+      CameraManager& cameraManager = getCameraManager();
+      m_camera = cameraManager.getCamera(cameraId);
+
+      if (!m_camera)
+        throw RuntimeErrorException(
+          "Failed to deserialize CameraComponent: Camera with ID " +
+          cameraId.toString() + " not found."
+        );
+    }
+    else
+    {
+      m_camera = nullptr;
+    }
+  }
+
+  UInt16 CameraComponent::getDerivedVersion() const
+  {
+    return CAMERA_COMPONENT_VERSION;
   }
 
   CameraManager& CameraComponent::getCameraManager()

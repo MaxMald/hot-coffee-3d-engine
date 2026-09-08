@@ -14,7 +14,7 @@ namespace hc::editor::serialization
       if (!fileStream.is_open())
       {
         LogService::Error(
-          "Failed to open project file for reading: " + filePath.string()
+          "Failed to open project file for reading: " + filePath.toString()
         );
         return nullptr;
       }
@@ -26,7 +26,7 @@ namespace hc::editor::serialization
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to deserialize project file: " + filePath.string() + " Error: " + e.what()
+        "Failed to deserialize project file: " + filePath.toString() + " Error: " + e.what()
       );
       return nullptr;
     }
@@ -39,7 +39,7 @@ namespace hc::editor::serialization
       if (!fileStream.is_open())
       {
         LogService::Error(
-          "Failed to open project file for writing: " + filePath.string()
+          "Failed to open project file for writing: " + filePath.toString()
         );
         return false;
       }        
@@ -51,7 +51,7 @@ namespace hc::editor::serialization
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to serialize project file: " + filePath.string() + " Error: " + e.what()
+        "Failed to serialize project file: " + filePath.toString() + " Error: " + e.what()
       );
       return false;
     }
