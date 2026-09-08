@@ -36,7 +36,7 @@ namespace hc::editor
   {
     const Vector<SharedPtr<IMaterial>>& materials = mesh->getMaterials();
 
-    String path = mesh->getSourcePath().empty() ? "N/A" : mesh->getSourcePath().generic_string();
+    String path = mesh->getSourcePath().empty() ? "N/A" : mesh->getSourcePath().toGenericString();
     ImGui::Text("Source Path: %s", path.c_str());
     ImGui::Separator();
     if (ImGui::TreeNode("Materials"))

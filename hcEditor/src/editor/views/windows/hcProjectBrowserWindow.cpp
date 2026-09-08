@@ -34,7 +34,7 @@ namespace hc::editor
       return;
 
     Path projectPath = m_projectManager.getCurrentProjectPath();
-    Path projectDir = projectPath.parent_path();
+    Path projectDir = projectPath.parentPath();
     m_directoryNavigator.initialize(projectDir);
   }
 
@@ -58,7 +58,7 @@ namespace hc::editor
       return;
     }
     
-    ImGui::Text("Current Directory: %s", currentDir->getFullPath().string().c_str());
+    ImGui::Text("Current Directory: %s", currentDir->getFullPath().toGenericString().c_str());
     if (ImGui::Button("Back"))
     {
       m_directoryNavigator.navigateToParentDirectory();

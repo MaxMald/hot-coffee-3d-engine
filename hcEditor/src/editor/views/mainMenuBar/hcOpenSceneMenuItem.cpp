@@ -41,7 +41,7 @@ namespace hc::editor
 
           if (!m_editorSceneManager.openScene(selectedPath))
           {
-            LogService::Error("Failed to open scene from path: " + selectedPath.string());
+            LogService::Error("Failed to open scene from path: " + selectedPath.toString());
           }
         }
       );
