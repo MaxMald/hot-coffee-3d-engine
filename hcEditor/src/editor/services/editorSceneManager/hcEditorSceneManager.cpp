@@ -149,7 +149,7 @@ namespace hc::editor
     if (relativeScenePath.empty())
       return;
 
-    Path lastOpenedScenePath(relativeScenePath, pathType::Relative);
+    Path lastOpenedScenePath(relativeScenePath);
     lastOpenedScenePath = lastOpenedScenePath.toAbsolute(m_projectManager.getCurrentProjectDirectory());
 
     openScene(lastOpenedScenePath);

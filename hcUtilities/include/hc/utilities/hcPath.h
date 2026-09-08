@@ -11,40 +11,16 @@ namespace hc
   {
     enum Type : UInt8
     {
-      // Full filesystem paths from the root
-      Absolute = 0,
-
-      // Paths relative to a specific root directory
-      Relative = 1,
-
-      // Paths to resources embedded in files or packages
-      Embedded = 2,
+      // Does not have a specific type, or the type is not known
+      Undefined = 0,
 
       // Internal engine resources
-      Internal = 3,
-
-      // Just the filename component (with or without extension)
-      Filename = 4,
-
-      // File extension only
-      Extension = 5
+      Internal = 1
     };
   }
 
   /**
-   * @brief Manages file system paths with support for absolute, relative, embedded, and
-   * internal path types.
-   *
-   * The Path class wraps std::filesystem::path and adds semantic path type information.
-   * It supports the following path types:
-   * - **Absolute**: Full filesystem paths from the root
-   * - **Relative**: Paths relative to a specific root directory
-   * - **Embedded**: Paths to resources embedded in files or packages
-   * - **Internal**: Internal engine resources
-   * - **Filename**: Just the filename component (with or without extension)
-   * - **Extension**: File extension only
-   *
-   * Path is hashable and can be used as a key in unordered containers.
+   * @brief Manages file system paths.
    *
    * @note Equality comparison is based only on the path string value, not the path type.
    * @note Hash computation is based only on the path string value, not the path type.
@@ -53,30 +29,30 @@ namespace hc
   {
   public:
     /**
-     * @brief Creates an empty absolute path.
+     * @brief Creates an empty undefined path.
      */
     Path();
 
     /**
      * @brief Creates a Path from a std::filesystem::path with the specified type.
      * @param path The filesystem path
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    Path(const std::filesystem::path& path, pathType::Type type = pathType::Absolute);
+    Path(const std::filesystem::path& path, pathType::Type type = pathType::Undefined);
 
     /**
      * @brief Creates a Path from a String with the specified type.
      * @param path The path as a String
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    Path(const String& path, pathType::Type type = pathType::Absolute);
+    Path(const String& path, pathType::Type type = pathType::Undefined);
 
     /**
      * @brief Creates a Path from a C-string with the specified type.
      * @param path The path as a C-string
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    Path(const char* path, pathType::Type type = pathType::Absolute);
+    Path(const char* path, pathType::Type type = pathType::Undefined);
 
     /**
      * @brief Converts the Path to a std::filesystem::path.
@@ -90,17 +66,15 @@ namespace hc
 
     /**
      * @brief Appends a path component to this path (non-modifying).
-     * @param other The path to append (must not be absolute)
+     * @param other The path to append.
      * @return A new Path with the appended component
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path operator/ (const Path& other) const;
 
     /**
      * @brief Appends a path component to this path (in-place).
-     * @param other The path to append (must not be absolute)
+     * @param other The path to append.
      * @return Reference to this Path
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path& operator/= (const Path& other);
 
@@ -108,7 +82,6 @@ namespace hc
      * @brief Appends a String path component to this path (non-modifying).
      * @param other The path component as a String
      * @return A new Path with the appended component
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path operator/ (const String& other) const;
 
@@ -116,7 +89,6 @@ namespace hc
      * @brief Appends a String path component to this path (in-place).
      * @param other The path component as a String
      * @return Reference to this Path
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path& operator/= (const String& other);
 
@@ -124,7 +96,6 @@ namespace hc
      * @brief Appends a C-string path component to this path (non-modifying).
      * @param other The path component as a C-string
      * @return A new Path with the appended component
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path operator/ (const Char* other) const;
 
@@ -132,7 +103,6 @@ namespace hc
      * @brief Appends a C-string path component to this path (in-place).
      * @param other The path component as a C-string
      * @return Reference to this Path
-     * @throws InvalidArgumentException if other is an absolute path
      */
     Path& operator/= (const Char* other);
 
@@ -187,33 +157,33 @@ namespace hc
     const std::filesystem::path& getPath() const;
 
     /**
-     * @brief Sets the path from a String and type (overload 1).
+     * @brief Sets the path from a String and type.
      * @param path The path as a String
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    inline void set(const String& path, pathType::Type type = pathType::Absolute)
+    inline void set(const String& path, pathType::Type type = pathType::Undefined)
     {
       m_path = std::filesystem::path(path.c_str());
       m_type = type;
     }
 
     /**
-     * @brief Sets the path from a C-string and type (overload 2).
+     * @brief Sets the path from a C-string and type.
      * @param path The path as a C-string
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    inline void set(const char* path, pathType::Type type = pathType::Absolute)
+    inline void set(const char* path, pathType::Type type = pathType::Undefined)
     {
       m_path = std::filesystem::path(path);
       m_type = type;
     }
 
     /**
-     * @brief Sets the path from std::filesystem::path and type (overload 3).
+     * @brief Sets the path from std::filesystem::path and type.
      * @param path The filesystem path
-     * @param type The path type (default: Absolute)
+     * @param type The path type (default: Undefined)
      */
-    inline void set(const std::filesystem::path& path, pathType::Type type = pathType::Absolute)
+    inline void set(const std::filesystem::path& path, pathType::Type type = pathType::Undefined)
     {
       m_path = path;
       m_type = type;
@@ -228,7 +198,9 @@ namespace hc
     Path toRelative(const Path& rootPath) const;
 
     /**
-     * @brief Converts this relative path to an absolute path using a root directory.
+     * @brief Converts this relative path to an absolute path using a root directory. This
+     * operation ensures that the resulting absolute path does not escape the root
+     * directory.
      * @param rootPath The root directory to resolve relative paths against
      * @return A new Path with absolute type
      * @throws InvalidArgumentException if this path is not relative or escapes the root
@@ -236,21 +208,12 @@ namespace hc
     Path toAbsolute(const Path& rootPath) const;
 
     /**
-     * @brief Creates a copy of this path with Embedded type.
-     * @return A new Path with the same filesystem path but Embedded type
-     */
-    inline Path toEmbedded() const noexcept
-    {
-      return Path(m_path, pathType::Embedded);
-    }
-
-    /**
      * @brief Checks if this path is relative.
      * @return true if the path type is Relative, false otherwise
      */
     inline bool isRelative() const noexcept
     {
-      return m_type == pathType::Relative;
+      return m_path.is_relative();
     }
 
     /**
@@ -259,16 +222,7 @@ namespace hc
      */
     inline bool isAbsolute() const noexcept
     {
-      return m_type == pathType::Absolute;
-    }
-
-    /**
-     * @brief Checks if this path is embedded.
-     * @return true if the path type is Embedded, false otherwise
-     */
-    inline bool isEmbedded() const noexcept
-    {
-      return m_type == pathType::Embedded;
+      return m_path.is_absolute();
     }
 
     inline const std::filesystem::path::value_type* c_str() const noexcept
@@ -291,7 +245,7 @@ namespace hc
     inline void clear() noexcept
     {
       m_path.clear();
-      m_type = pathType::Absolute;
+      m_type = pathType::Undefined;
     }
 
     /**
@@ -309,7 +263,7 @@ namespace hc
      */
     inline Path extension() const
     {
-      return Path(m_path.extension(), pathType::Extension);
+      return Path(m_path.extension());
     }
 
     /**
@@ -318,7 +272,7 @@ namespace hc
      */
     inline Path stem() const
     {
-      return Path(m_path.stem(), pathType::Filename);
+      return Path(m_path.stem());
     }
 
     /**
@@ -327,7 +281,7 @@ namespace hc
      */
     inline Path filename() const
     {
-      return Path(m_path.filename(), pathType::Filename);
+      return Path(m_path.filename());
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace hc
 {
-  Path::Path() : m_path(), m_type(pathType::Absolute) {}
+  Path::Path() : m_path(), m_type(pathType::Undefined) {}
   Path::Path(const std::filesystem::path& path, pathType::Type type) : m_path(path), m_type(type) {}
   Path::Path(const String& path, pathType::Type type) : m_path(path.c_str()), m_type(type) {}
   Path::Path(const char* path, pathType::Type type) : m_path(path), m_type(type) {}
@@ -19,19 +19,11 @@ namespace hc
 
   Path Path::operator/ (const Path& other) const
   {
-    if (other.isAbsolute())
-      throw InvalidArgumentException(
-        "Cannot concatenate a path with an absolute path. Other path should be relative or embedded: Other path:" + other.toGenericString()
-      );
     return Path(m_path / other.m_path, m_type);
   }
 
   Path& Path::operator/= (const Path& other)
   {
-    if (other.isAbsolute())
-      throw InvalidArgumentException(
-        "Cannot concatenate a path with an absolute path. Other path should be relative or embedded: Other path:" + other.toGenericString()
-      );
     m_path /= other.m_path;
     return *this;
   }
@@ -111,7 +103,7 @@ namespace hc
       rootPath.getPath()
     );
 
-    return Path(resultPath, pathType::Relative);
+    return Path(resultPath);
   }
 
   Path Path::toAbsolute(const Path& rootPath) const
@@ -136,7 +128,7 @@ namespace hc
       );
     }
 
-    Path resultPath(rootPath.getPath() / m_path, pathType::Absolute);
+    Path resultPath(rootPath.getPath() / m_path);
     if (!resultPath.isUnderRoot(rootPath))
     {
       throw InvalidArgumentException(
