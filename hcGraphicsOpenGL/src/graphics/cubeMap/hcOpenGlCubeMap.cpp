@@ -35,27 +35,27 @@ namespace hc
 
     Path rightImagePath = cubeMapDescriptor->rightImagePath;
     if (rightImagePath.isRelative())
-      rightImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      rightImagePath = rightImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     Path leftImagePath = cubeMapDescriptor->leftImagePath;
     if (leftImagePath.isRelative())
-      leftImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      leftImagePath = leftImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     Path topImagePath = cubeMapDescriptor->topImagePath;
     if (topImagePath.isRelative())
-      topImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      topImagePath = topImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     Path bottomImagePath = cubeMapDescriptor->bottomImagePath;
     if (bottomImagePath.isRelative())
-      bottomImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      bottomImagePath = bottomImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     Path backImagePath = cubeMapDescriptor->backImagePath;
     if (backImagePath.isRelative())
-      backImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      backImagePath = backImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     Path frontImagePath = cubeMapDescriptor->frontImagePath;
     if (frontImagePath.isRelative())
-      frontImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
+      frontImagePath = frontImagePath.toAbsolute(cubeMapDescriptor->getPath().parentPath());
 
     SharedPtr<Image> rightImage = imageMng.load(rightImagePath);
     SharedPtr<Image> leftImage = imageMng.load(leftImagePath);

@@ -264,22 +264,17 @@ namespace hc::io
     writeFloat(value.a);
   }
 
-  void BinaryWriter::startWritingObject(const String& name, UInt32 version)
+  void BinaryWriter::startWritingObject(UInt32 type, UInt32 version)
   {
     if (m_currentObject != nullptr)
     {
       m_objectStack.push(std::move(m_currentObject));
-      m_currentObject = MakeUnique<ObjectData>(name, version);
+      m_currentObject = MakeUnique<ObjectData>(type, version);
     }
     else
     {
-      m_currentObject = MakeUnique<ObjectData>(name, version);
+      m_currentObject = MakeUnique<ObjectData>(type, version);
     }
-  }
-
-  void  BinaryWriter::startWritingObject(UInt32 version)
-  {
-    startWritingObject("", version);
   }
 
   void BinaryWriter::finishWritingObject()
@@ -313,19 +308,12 @@ namespace hc::io
   void BinaryWriter::writeObject(const ObjectData& objectData)
   {
     const ObjectHeader& header = objectData.getHeader();
-    writeObjectHeader(header);
+    writeBytes(reinterpret_cast<const Byte*>(&header), sizeof(ObjectHeader));
 
     const Vector<Byte>& data = objectData.getData();
     if (data.empty())
       return;
 
     writeBytes(data.data(), data.size());
-  }
-
-  void BinaryWriter::writeObjectHeader(const ObjectHeader& header)
-  {
-    writeString(header.name);
-    writeUInt32(header.version);
-    writeSizeT(header.size);
   }
 }

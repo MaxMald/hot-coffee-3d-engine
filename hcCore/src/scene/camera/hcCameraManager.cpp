@@ -18,7 +18,7 @@ namespace hc
 
   void CameraManager::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(CAMERA_MANAGER_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), CAMERA_MANAGER_VERSION);
 
     m_default->serialize(writer);
 
@@ -40,7 +40,7 @@ namespace hc
     m_cameras.clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(CAMERA_MANAGER_VERSION))
+    if (!header.matchVersion(CAMERA_MANAGER_VERSION))
     {
       setActiveCamera(m_default->getUUID());
       reader.finishReadingObject();

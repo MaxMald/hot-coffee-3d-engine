@@ -57,7 +57,7 @@ namespace hc
     /**
      * @brief Converts the Path to a std::filesystem::path.
      */
-    operator std::filesystem::path();
+    operator std::filesystem::path() const;
 
     /**
      * @brief Converts the Path to a String representation.
@@ -240,7 +240,7 @@ namespace hc
     }
 
     /**
-     * @brief Clears the path and resets type to Absolute.
+     * @brief Clears the path and resets type to Undefined.
      */
     inline void clear() noexcept
     {

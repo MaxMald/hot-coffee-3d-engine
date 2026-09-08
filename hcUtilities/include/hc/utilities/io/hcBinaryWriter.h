@@ -210,19 +210,12 @@ namespace hc
       void writeColor(const Color& value);
 
       /**
-       * @brief Starts writing an object with the specified name and version.
+       * @brief Starts writing an object with the specified type and version.
        *
-       * @param name The name of the object.
-       * @param version The version of the object (default is 0).
-       */
-      void startWritingObject(const String& name, UInt32 version = 0);
-
-      /**
-       * @brief Starts writing an object with the specified version.
-       *
+       * @param type The type of the object.
        * @param version The version of the object.
        */
-      void startWritingObject(UInt32 version);
+      void startWritingObject(UInt32 type, UInt32 version);
       
       /**
        * @brief Ends writing the current object.
@@ -255,13 +248,6 @@ namespace hc
        * @param objectData The ObjectData instance to write.
        */
       void writeObject(const ObjectData& objectData);
-
-      /**
-       * @brief Writes an ObjectHeader to the stream.
-       *
-       * @param header The ObjectHeader to write.
-       */
-      void writeObjectHeader(const ObjectHeader& header);
     };
   }
 }

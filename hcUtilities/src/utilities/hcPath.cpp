@@ -7,7 +7,7 @@ namespace hc
   Path::Path(const String& path, pathType::Type type) : m_path(path.c_str()), m_type(type) {}
   Path::Path(const char* path, pathType::Type type) : m_path(path), m_type(type) {}
 
-  Path::operator std::filesystem::path()
+  Path::operator std::filesystem::path() const
   {
     return m_path;
   }

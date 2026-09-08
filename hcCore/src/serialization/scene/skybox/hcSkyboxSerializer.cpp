@@ -17,7 +17,7 @@ namespace hc::serialization
     const IAssetManager& assetManager
   )
   {
-    writer.startWritingObject(SKYBOX_SERIALIZATION_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), SKYBOX_SERIALIZATION_VERSION);
 
     if (!skybox.hasCubeMap())
     {
@@ -49,7 +49,7 @@ namespace hc::serialization
       pathToSerialize = descriptorSourcePath.toRelative(assetManager.getRootPath());
 
     writer.writeBool(true);
-    writer.writeString(pathToSerialize);
+    writer.writePath(pathToSerialize);
     writer.finishWritingObject();
   }
 
@@ -63,7 +63,7 @@ namespace hc::serialization
     skybox.destroy();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(SKYBOX_SERIALIZATION_VERSION))
+    if (!header.matchVersion(SKYBOX_SERIALIZATION_VERSION))
     { 
       reader.finishReadingObject();
       return;
@@ -79,10 +79,7 @@ namespace hc::serialization
     reader.finishReadingObject();
 
     if (sourcePath.empty())
-    {
-      reader.finishReadingObject();
       return;
-    }
 
     if (sourcePath.isRelative())
     {
@@ -110,7 +107,7 @@ namespace hc::serialization
       skybox.destroy();
       throw RuntimeErrorException(
         "Failed to create cube map from descriptor at path: " + sourcePath.toString() +
-        "Error: " + ex.what()
+        ". Error: " + String(ex.what())
       );
     }
   }

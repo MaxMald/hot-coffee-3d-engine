@@ -182,6 +182,14 @@ namespace hc
       void readBytes(Vector<Byte>& buffer, SizeT size);
 
       /**
+       * @brief Reads a specified number of bytes into a buffer.
+       *
+       * @param buffer The pointer to the buffer to store the read bytes.
+       * @param size The number of bytes to read.
+       */
+      void readBytes(Byte* buffer, SizeT size);
+
+      /**
        * @brief Reads a size_t value.
        *
        * @return The size value read from the stream.
@@ -241,6 +249,16 @@ namespace hc
        * @return The color read from the stream.
        */
       Color readColor();
+
+      /**
+       * @brief Peeks at the next object header without advancing the stream position.
+       *
+       * This method reads the object header from the stream but does not consume it,
+       * allowing for inspection of the next object without affecting the stream state.
+       *
+       * @return The ObjectHeader of the next object in the stream.
+       */
+      ObjectHeader peekObjectHeader() const;
 
       /**
        * @brief Starts reading an object from the stream.

@@ -30,7 +30,7 @@ namespace hc
 
   void GameObject::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(GAME_OBJECT_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), GAME_OBJECT_VERSION);
     Transform::serialize(writer);
     writer.writeString(m_name);
 
@@ -52,7 +52,7 @@ namespace hc
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(GAME_OBJECT_VERSION))
+    if (!header.matchVersion(GAME_OBJECT_VERSION))
     {
       reader.finishReadingObject();
       return;
@@ -72,9 +72,8 @@ namespace hc
     SizeT componentCount = reader.readSizeT();
     for (SizeT i = 0; i < componentCount; ++i)
     {
-      componentType::Type componentType = static_cast<componentType::Type>(
-        reader.peekUInt16()
-        );
+      io::ObjectHeader componentHeader = reader.peekObjectHeader();
+      componentType::Type componentType = static_cast<componentType::Type>(componentHeader.type);
 
       UniquePtr<IComponent> component = m_componentFactoriesManager
         .createComponent(componentType);

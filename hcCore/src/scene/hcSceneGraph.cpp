@@ -18,7 +18,7 @@ namespace hc
 
   void SceneGraph::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(SCENE_GRAPH_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), SCENE_GRAPH_VERSION);
     writer.writeSizeT(m_roots.size());
     for (const UniquePtr<GameObject>& root : m_roots)
       root->serialize(writer);
@@ -37,7 +37,7 @@ namespace hc
     m_roots.clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(SCENE_GRAPH_VERSION))
+    if (!header.matchVersion(SCENE_GRAPH_VERSION))
     {
       reader.finishReadingObject();
       return;

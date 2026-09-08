@@ -49,7 +49,7 @@ namespace hc
 
   void PerspectiveCameraProjection::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(PERSPECTIVE_CAMERA_PROJECTION_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), PERSPECTIVE_CAMERA_PROJECTION_VERSION);
     writer.writeAngle(m_fovY);
     writer.writeFloat(m_aspectRatio);
     writer.writeFloat(m_near);
@@ -60,7 +60,7 @@ namespace hc
   void PerspectiveCameraProjection::deserialize(io::BinaryReader& reader)
   {
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(PERSPECTIVE_CAMERA_PROJECTION_VERSION))
+    if (!header.matchVersion(PERSPECTIVE_CAMERA_PROJECTION_VERSION))
     {
       reader.finishReadingObject();
       return;

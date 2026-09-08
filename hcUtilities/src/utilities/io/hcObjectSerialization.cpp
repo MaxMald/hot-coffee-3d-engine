@@ -8,10 +8,10 @@ namespace hc::io
     : m_header(), m_data()
   {}
 
-  ObjectData::ObjectData(const String& name, UInt32 version)
+  ObjectData::ObjectData(UInt32 type, UInt32 version)
     : m_header(), m_data()
   {
-    m_header.name = name;
+    m_header.type = type;
     m_header.version = version;
     m_header.size = 0;
   }

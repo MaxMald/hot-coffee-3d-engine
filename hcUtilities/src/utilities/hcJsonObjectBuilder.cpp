@@ -79,7 +79,7 @@ namespace hc
   void JsonObjectBuilder::setPath(const String& name, const Path& value)
   {
     String formattedValue = String::Format(
-      "\"%s\": { \"path\": %s, \"type\": %u }",
+      "\"%s\": { \"path\": \"%s\", \"type\": %u }",
       name.c_str(),
       value.toGenericString().c_str(),
       static_cast<UInt32>(value.getType())

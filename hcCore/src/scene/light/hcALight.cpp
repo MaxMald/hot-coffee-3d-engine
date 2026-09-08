@@ -7,9 +7,8 @@ namespace hc
   void ALight::serialize(io::BinaryWriter& writer) const
   {
     UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
-    writer.startWritingObject(composedVersion);
+    writer.startWritingObject(static_cast<UInt32>(m_type), composedVersion);
     writer.writeBool(m_enabled);
-    writer.writeUInt8(static_cast<UInt8>(m_type));
     writer.writeColor(m_color);
     writer.writeFloat(m_intensity);
     writer.writeFloat(m_range);
@@ -26,14 +25,14 @@ namespace hc
   {
     io::ObjectHeader header = reader.startReadingObject();
     UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
-    if (!header.match(composedVersion))
+    if (!header.matchVersion(composedVersion))
     {
       reader.finishReadingObject();
       return;
     }
 
+    m_type = static_cast<lightType::Type>(header.type);
     m_enabled = reader.readBool();
-    m_type = static_cast<lightType::Type>(reader.readUInt8());
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_range = reader.readFloat();

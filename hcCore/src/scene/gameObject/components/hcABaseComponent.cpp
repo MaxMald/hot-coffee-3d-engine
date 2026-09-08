@@ -30,8 +30,7 @@ namespace hc
   {
     UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
 
-    writer.startWritingObject(composedVersion);
-    writer.writeUInt16(getType());
+    writer.startWritingObject(static_cast<UInt32>(getType()), composedVersion);
     onSerialize(writer);
     writer.finishWritingObject();
   }
@@ -40,17 +39,21 @@ namespace hc
   {
     UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(composedVersion))
+    if (!header.matchVersion(composedVersion))
     {
       reader.finishReadingObject();
       return;
     }
 
-    componentType::Type type = static_cast<componentType::Type>(reader.readUInt16());
-    if (type != getType())
+    if (!header.matchType(static_cast<UInt32>(getType())))
     {
+      reader.finishReadingObject();
       throw RuntimeErrorException(
-        "Component type mismatch during deserialization."
+        String::Format(
+          "Component type mismatch during deserialization. Expected type: %u, but got: %u",
+          static_cast<UInt32>(getType()),
+          header.type
+        )
       );
     }
 

@@ -261,6 +261,17 @@ namespace hc::io
       m_stream.read(reinterpret_cast<char*>(buffer.data()), size);
   }
 
+  void BinaryReader::readBytes(Byte* buffer, SizeT size)
+  {
+    if (size == 0)
+      return;
+
+    if (m_currentObject != nullptr)
+      m_currentObject->readAndConsume(buffer, size);
+    else
+      m_stream.read(reinterpret_cast<char*>(buffer), size);
+  }
+
   SizeT BinaryReader::readSizeT()
   {
     UInt64 fixedValue = readUInt64();
@@ -336,6 +347,21 @@ namespace hc::io
     return value;
   }
 
+  ObjectHeader BinaryReader::peekObjectHeader() const
+  {
+    ObjectHeader header;
+    if (m_currentObject != nullptr)
+    {
+      m_currentObject->peek(reinterpret_cast<Byte*>(&header), sizeof(ObjectHeader));
+      return header;
+    }
+
+    std::streampos originalPos = m_stream.tellg();
+    m_stream.read(reinterpret_cast<char*>(&header), sizeof(ObjectHeader));
+    m_stream.seekg(originalPos);
+    return header;
+  }
+
   const ObjectHeader& BinaryReader::startReadingObject()
   {
     ObjectHeader header = readObjectHeader();
@@ -385,9 +411,7 @@ namespace hc::io
   ObjectHeader BinaryReader::readObjectHeader()
   {
     ObjectHeader header;
-    header.name = readString();
-    header.version = readUInt32();
-    header.size = readSizeT();
+    readBytes(reinterpret_cast<Byte*>(&header), sizeof(ObjectHeader));
     return header;
   }
 }

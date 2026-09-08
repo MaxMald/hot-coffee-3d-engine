@@ -20,7 +20,7 @@ namespace hc
 
   void CubeMapDescriptor::serialize(io::BinaryWriter & writer) const
   {
-    writer.startWritingObject(CUBEMAP_DESCRIPTOR_VERSION);
+    writer.startWritingObject(static_cast<UInt32>(0), CUBEMAP_DESCRIPTOR_VERSION);
     writer.writeUInt32(faceSize);
     writer.writeUInt8(static_cast<UInt8>(format));
     writer.writePath(rightImagePath);
@@ -37,7 +37,7 @@ namespace hc
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.match(CUBEMAP_DESCRIPTOR_VERSION))
+    if (!header.matchVersion(CUBEMAP_DESCRIPTOR_VERSION))
     {
       reader.finishReadingObject();
       return;
