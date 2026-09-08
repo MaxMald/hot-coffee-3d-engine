@@ -52,6 +52,11 @@ namespace hc
     void getImagesPaths(Vector<Path>& paths) const override;
 
     /**
+     * @copydoc AMaterialDescriptor::clear
+     */
+    virtual void clear() override;
+
+    /**
      * Gets the base color property of the unlit material.
      *
      * @return The material's color value
@@ -64,6 +69,22 @@ namespace hc
      * @return The path to the main texture asset
      */
     const Path& getMainImagePath() const;
+
+  protected:
+    /**
+     * @copydoc AMaterialDescriptor::onSerialization
+     */
+    virtual void onSerialization(io::BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc AMaterialDescriptor::onDeserialization
+     */
+    virtual void onDeserialization(io::BinaryReader& reader) override;
+
+    /**
+     * @copydoc AMaterialDescriptor::getDerivedVersion
+     */
+    virtual UInt16 getDerivedVersion() const override;
 
   private:
     Color m_color;

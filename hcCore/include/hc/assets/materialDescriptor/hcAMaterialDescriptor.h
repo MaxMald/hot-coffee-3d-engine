@@ -13,7 +13,7 @@ namespace hc
    * provide specific material types with their shading models and
    * texture references.
    */
-  class HC_CORE_EXPORT AMaterialDescriptor : public Asset
+  class HC_CORE_EXPORT AMaterialDescriptor : public Asset, public io::ISerializable
   {
   public:
     virtual ~AMaterialDescriptor() = default;
@@ -36,6 +36,37 @@ namespace hc
      * @param paths Output parameter to receive the list of image paths.
      */
     virtual void getImagesPaths(Vector<Path>& paths) const = 0;
+
+    /**
+     * Serializes the material descriptor to a binary format.
+     *
+     * This method writes the state of the material descriptor to the provided
+     * BinaryWriter. Derived classes should implement their specific serialization
+     * logic in the onSerialization method.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    virtual void serialize(io::BinaryWriter& writer) const override;
+
+    /**
+     * Deserializes the material descriptor from a binary format.
+     *
+     * This method reads the state of the material descriptor from the provided
+     * BinaryReader. Derived classes should implement their specific deserialization
+     * logic in the onDeserialization method.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    virtual void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * Clears the material descriptor's state, resetting it to default values.
+     *
+     * This method can be used to reset the material descriptor before reusing it
+     * or when it is no longer needed. Derived classes should override this method
+     * to clear their specific state as well.
+     */
+    virtual void clear();
 
     /**
      * Gets the name of the material descriptor.
@@ -112,5 +143,29 @@ namespace hc
       const String& name = "",
       materialRenderMode::Type renderMode = materialRenderMode::Type::Opaque
     );
+
+    /**
+     * Hook for derived classes to implement their specific serialization logic.
+     *
+     * @param writer The BinaryWriter to use for serialization.
+     */
+    virtual void onSerialization(io::BinaryWriter& writer) const = 0;
+
+    /**
+     * Hook for derived classes to implement their specific deserialization logic.
+     *
+     * @param reader The BinaryReader to use for deserialization.
+     */
+    virtual void onDeserialization(io::BinaryReader& reader) = 0;
+
+    /**
+     * Gets the version number of the derived class for serialization purposes.
+     *
+     * This allows for versioning of serialized data, enabling backward compatibility
+     * and proper handling of different versions of material descriptors.
+     *
+     * @return The version number of the derived class.
+     */
+    virtual UInt16 getDerivedVersion() const = 0;
   };
 }

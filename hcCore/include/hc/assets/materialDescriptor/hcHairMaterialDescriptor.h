@@ -46,6 +46,11 @@ namespace hc
     void getImagesPaths(Vector<Path>& paths) const override;
 
     /**
+     * @copydoc AMaterialDescriptor::clear
+     */
+    virtual void clear() override;
+
+    /**
      * @brief Gets the base color of the material.
      *
      * @return The base color of the material
@@ -79,6 +84,22 @@ namespace hc
      * @return The path to the specular texture asset
      */
     const Path& getSpecularImagePath() const;
+
+  protected:
+    /**
+     * @copydoc AMaterialDescriptor::onSerialization
+     */
+    virtual void onSerialization(io::BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc AMaterialDescriptor::onDeserialization
+     */
+    virtual void onDeserialization(io::BinaryReader& reader) override;
+    
+    /**
+     * @copydoc AMaterialDescriptor::getDerivedVersion
+     */
+    virtual UInt16 getDerivedVersion() const override;
 
   private:
     Color m_color;

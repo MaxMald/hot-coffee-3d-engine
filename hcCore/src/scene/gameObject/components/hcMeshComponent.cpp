@@ -79,7 +79,6 @@ namespace hc
     }
 
     Path modelPath = reader.readPath();
-
     if (modelPath.isRelative())
     {
       if (!m_assetManager.hasRootPath())

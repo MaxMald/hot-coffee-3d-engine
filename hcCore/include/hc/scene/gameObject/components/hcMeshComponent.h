@@ -16,7 +16,7 @@ namespace hc
    * making it renderable in the scene. It implements both the component
    * interface and the drawable interface for rendering integration.
    */
-  class HC_CORE_EXPORT MeshComponent : 
+  class HC_CORE_EXPORT MeshComponent :
     public ABaseComponent,
     public IDrawable
   {

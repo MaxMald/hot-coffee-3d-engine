@@ -2,6 +2,8 @@
 
 namespace hc
 {
+  static constexpr UInt16 UNLIT_MATERIAL_DESCRIPTOR_VERSION = 1;
+
   UnlitMaterialDescriptor::UnlitMaterialDescriptor() :
     AMaterialDescriptor(""),
     m_color(0.5f, 0.5f, 0.5f, 1.0f),
@@ -30,6 +32,13 @@ namespace hc
       paths.push_back(m_mainImagePath);
   }
 
+  void UnlitMaterialDescriptor::clear()
+  {
+    AMaterialDescriptor::clear();
+    m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    m_mainImagePath.clear();
+  }
+
   const Color& UnlitMaterialDescriptor::getColor() const
   {
     return m_color;
@@ -38,5 +47,22 @@ namespace hc
   const Path& UnlitMaterialDescriptor::getMainImagePath() const
   {
     return m_mainImagePath;
+  }
+
+  void UnlitMaterialDescriptor::onSerialization(io::BinaryWriter& writer) const
+  {
+    writer.writeColor(m_color);
+    writer.writePath(m_mainImagePath);
+  }
+
+  void UnlitMaterialDescriptor::onDeserialization(io::BinaryReader& reader)
+  {
+    m_color = reader.readColor();
+    m_mainImagePath = reader.readPath();
+  }
+
+  UInt16 UnlitMaterialDescriptor::getDerivedVersion() const
+  {
+    return UNLIT_MATERIAL_DESCRIPTOR_VERSION;
   }
 }
