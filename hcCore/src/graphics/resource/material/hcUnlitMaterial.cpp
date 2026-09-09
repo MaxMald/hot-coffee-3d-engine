@@ -79,7 +79,7 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
-    const assets::materialDescriptor::UnlitData* unlitData = descriptor.getUnlitData();
+    const assets::materialDescriptor::UnlitData* unlitData = descriptor.getIfUnlitData();
     if (!unlitData)
       throw InvalidArgumentException(
         "UnlitMaterial::initialize: Provided descriptor does not contain UnlitData."

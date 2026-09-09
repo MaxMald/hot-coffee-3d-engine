@@ -102,7 +102,7 @@ namespace hc
     SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     desc->name = name;
 
-    assets::materialDescriptor::UnlitData* unlitData = desc->getUnlitData();
+    assets::materialDescriptor::UnlitData* unlitData = desc->getIfUnlitData();
     if (!unlitData)
       throw RuntimeErrorException("Failed to get UnlitData from material descriptor.");
 
@@ -121,7 +121,7 @@ namespace hc
     SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::BlinnPhong, "");
     desc->name = name;
 
-    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getBlinnPhongData();
+    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getIfBlinnPhongData();
     if (!blinnPhongData)
       throw RuntimeErrorException("Failed to get BlinnPhongData from material descriptor.");
 
@@ -142,7 +142,7 @@ namespace hc
     SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Hair, "");
     desc->name = name;
 
-    assets::materialDescriptor::HairData* hairData = desc->getHairData();
+    assets::materialDescriptor::HairData* hairData = desc->getIfHairData();
     if (!hairData)
       throw RuntimeErrorException("Failed to get HairData from material descriptor.");
 

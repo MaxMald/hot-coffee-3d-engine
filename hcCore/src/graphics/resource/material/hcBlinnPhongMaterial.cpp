@@ -128,7 +128,7 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    const assets::materialDescriptor::BlinnPhongData* blinnPhongData = descriptor.getBlinnPhongData();
+    const assets::materialDescriptor::BlinnPhongData* blinnPhongData = descriptor.getIfBlinnPhongData();
     if (!blinnPhongData)
       throw InvalidArgumentException(
         "BlinnPhongMaterial::initialize: Provided descriptor does not contain BlinnPhongData."

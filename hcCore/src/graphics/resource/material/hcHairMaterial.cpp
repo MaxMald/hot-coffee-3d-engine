@@ -125,7 +125,7 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    const assets::materialDescriptor::HairData* hairData = descriptor.getHairData();
+    const assets::materialDescriptor::HairData* hairData = descriptor.getIfHairData();
     if (!hairData)
       throw InvalidArgumentException(
         "HairMaterial::initialize: Provided descriptor does not contain HairData."

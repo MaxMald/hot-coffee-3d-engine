@@ -40,7 +40,7 @@ namespace hc::editor
     materialDescriptor->name = "CircleMaterial";
     materialDescriptor->doubleSided = true;
 
-    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getUnlitData();
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
     if (matData)
       matData->color = color;
 
@@ -98,7 +98,7 @@ namespace hc::editor
     materialDescriptor->name = "LineMaterial";
     materialDescriptor->doubleSided = true;
 
-    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getUnlitData();
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
     if (matData)
       matData->color = color;
 
@@ -172,7 +172,7 @@ namespace hc::editor
     materialDescriptor->name = "RectangleMaterial";
     materialDescriptor->doubleSided = true;
 
-    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getUnlitData();
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
     if (matData)
       matData->color = color;
 
@@ -295,7 +295,7 @@ namespace hc::editor
     materialDescriptor->name = "BoxMaterial";
     materialDescriptor->doubleSided = true;
 
-    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getUnlitData();
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
     if (matData)
       matData->color = color;
 

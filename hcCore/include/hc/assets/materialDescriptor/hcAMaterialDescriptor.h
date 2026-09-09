@@ -57,12 +57,7 @@ namespace hc
   >;
 
   /**
-   * Abstract base class for material descriptors.
-   *
-   * Defines the interface for material descriptors that describe
-   * material properties and associated resources. Implementations
-   * provide specific material types with their shading models and
-   * texture references.
+   * @brief This class describes materials properties and settings for rendering.
    */
   class HC_CORE_EXPORT MaterialDescriptor : public Asset, public io::ISerializable
   {
@@ -81,20 +76,12 @@ namespace hc
     /**
      * Serializes the material descriptor to a binary format.
      *
-     * This method writes the state of the material descriptor to the provided
-     * BinaryWriter. Derived classes should implement their specific serialization
-     * logic in the onSerialization method.
-     *
      * @param writer The BinaryWriter to use for serialization.
      */
     virtual void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * Deserializes the material descriptor from a binary format.
-     *
-     * This method reads the state of the material descriptor from the provided
-     * BinaryReader. Derived classes should implement their specific deserialization
-     * logic in the onDeserialization method.
      *
      * @param reader The BinaryReader to use for deserialization.
      */
@@ -150,7 +137,7 @@ namespace hc
      * @return A pointer to the UnlitData if the material type is Unlit; otherwise,
      * nullptr.
      */
-    inline const assets::materialDescriptor::UnlitData* getUnlitData() const
+    inline const assets::materialDescriptor::UnlitData* getIfUnlitData() const
     {
       return std::get_if<assets::materialDescriptor::UnlitData>(&variantData);
     }
@@ -161,7 +148,7 @@ namespace hc
      * @return A pointer to the UnlitData if the material type is Unlit; otherwise,
      * nullptr.
      */
-    inline assets::materialDescriptor::UnlitData* getUnlitData()
+    inline assets::materialDescriptor::UnlitData* getIfUnlitData()
     {
       return std::get_if<assets::materialDescriptor::UnlitData>(&variantData);
     }
@@ -172,7 +159,7 @@ namespace hc
      * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
      * otherwise, nullptr.
      */
-    inline const assets::materialDescriptor::BlinnPhongData* getBlinnPhongData() const
+    inline const assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData() const
     {
       return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
     }
@@ -183,7 +170,7 @@ namespace hc
      * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
      * otherwise, nullptr.
      */
-    inline assets::materialDescriptor::BlinnPhongData* getBlinnPhongData()
+    inline assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData()
     {
       return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
     }
@@ -193,7 +180,7 @@ namespace hc
      *
      * @return A pointer to the HairData if the material type is Hair; otherwise, nullptr.
      */
-    inline const assets::materialDescriptor::HairData* getHairData() const
+    inline const assets::materialDescriptor::HairData* getIfHairData() const
     {
       return std::get_if<assets::materialDescriptor::HairData>(&variantData);
     }
@@ -203,7 +190,7 @@ namespace hc
      *
      * @return A pointer to the HairData if the material type is Hair; otherwise, nullptr.
      */
-    inline assets::materialDescriptor::HairData* getHairData()
+    inline assets::materialDescriptor::HairData* getIfHairData()
     {
       return std::get_if<assets::materialDescriptor::HairData>(&variantData);
     }

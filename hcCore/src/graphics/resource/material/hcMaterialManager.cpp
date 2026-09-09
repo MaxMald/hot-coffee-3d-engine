@@ -92,7 +92,7 @@ namespace hc
     if (!descriptor)
       throw InvalidArgumentException("MaterialManager::createUnlitMaterial: null descriptor.");
 
-    const assets::materialDescriptor::UnlitData* matData = descriptor->getUnlitData();
+    const assets::materialDescriptor::UnlitData* matData = descriptor->getIfUnlitData();
     if (!matData)
       throw InvalidArgumentException("MaterialManager::createUnlitMaterial: descriptor does not contain UnlitData.");
 
@@ -118,7 +118,7 @@ namespace hc
     if (!descriptor)
       throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: null descriptor.");
 
-    const assets::materialDescriptor::BlinnPhongData* matData = descriptor->getBlinnPhongData();
+    const assets::materialDescriptor::BlinnPhongData* matData = descriptor->getIfBlinnPhongData();
     if (!matData)
       throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: descriptor does not contain BlinnPhongData.");
 
@@ -163,7 +163,7 @@ namespace hc
     if (!descriptor)
       throw InvalidArgumentException("MaterialManager::createHairMaterial: null descriptor.");
 
-    const assets::materialDescriptor::HairData* matData = descriptor->getHairData();
+    const assets::materialDescriptor::HairData* matData = descriptor->getIfHairData();
     if (!matData)
       throw InvalidArgumentException("MaterialManager::createHairMaterial: descriptor does not contain HairData.");
 
