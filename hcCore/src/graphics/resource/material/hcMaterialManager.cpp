@@ -122,12 +122,12 @@ namespace hc
     if (!matData)
       throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: descriptor does not contain BlinnPhongData.");
 
-    SharedPtr<ITexture> albedoTexture = getTextureFromPath(matData->diffuseTexture);
+    SharedPtr<ITexture> albedoTexture = getTextureFromPath(matData->diffuseImagePath);
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
     SharedPtr<ITexture> normalTexture = getTextureFromPath(
-      matData->normalTexture,
+      matData->normalImagePath,
       colorSpaceType::Linear
     );
 
@@ -135,7 +135,7 @@ namespace hc
       normalTexture = m_defaultNormalTexture;
 
     SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      matData->specularTexture,
+      matData->specularImagePath,
       colorSpaceType::Linear
     );
 

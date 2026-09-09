@@ -45,9 +45,9 @@ namespace hc
     void BlinnPhongData::serialize(io::BinaryWriter& writer) const
     {
       writer.startWritingObject(materialType::Type::BlinnPhong, BLINN_PHONG_DATA_VERSION);
-      writer.writePath(diffuseTexture);
-      writer.writePath(normalTexture);
-      writer.writePath(specularTexture);
+      writer.writePath(diffuseImagePath);
+      writer.writePath(normalImagePath);
+      writer.writePath(specularImagePath);
       writer.writeColor(color);
       writer.writeFloat(shininess);
       writer.finishWritingObject();
@@ -64,9 +64,9 @@ namespace hc
         return;
       }
 
-      diffuseTexture = reader.readPath();
-      normalTexture = reader.readPath();
-      specularTexture = reader.readPath();
+      diffuseImagePath = reader.readPath();
+      normalImagePath = reader.readPath();
+      specularImagePath = reader.readPath();
       color = reader.readColor();
       shininess = reader.readFloat();
       reader.finishReadingObject();
@@ -74,9 +74,9 @@ namespace hc
 
     void BlinnPhongData::clear()
     {
-      diffuseTexture.clear();
-      normalTexture.clear();
-      specularTexture.clear();
+      diffuseImagePath.clear();
+      normalImagePath.clear();
+      specularImagePath.clear();
       color = Color::White();
       shininess = 32.0f;
     }

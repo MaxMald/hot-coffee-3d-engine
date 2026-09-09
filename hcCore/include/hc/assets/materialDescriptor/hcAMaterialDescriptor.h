@@ -19,9 +19,9 @@ namespace hc
 
     struct BlinnPhongData : public hc::io::ISerializable
     {
-      Path diffuseTexture;          ///< The path to the diffuse texture
-      Path normalTexture;           ///< The path to the normal texture
-      Path specularTexture;         ///< The path to the specular texture
+      Path diffuseImagePath;        ///< The path to the diffuse texture
+      Path normalImagePath;         ///< The path to the normal texture
+      Path specularImagePath;       ///< The path to the specular texture
       Color color = Color::White(); ///< The diffuse color of the Blinn-Phong material
       float shininess = 32.0f;      ///< The shininess factor for specular highlights
 

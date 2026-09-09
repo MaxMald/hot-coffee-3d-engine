@@ -127,9 +127,9 @@ namespace hc
 
     blinnPhongData->color = GetVertexColorDiffuseFromMaterial(material);
     blinnPhongData->shininess = GetShininessFromMaterial(material);
-    blinnPhongData->diffuseTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    blinnPhongData->normalTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
-    blinnPhongData->specularTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+    blinnPhongData->diffuseImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    blinnPhongData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    blinnPhongData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
     return desc;
   }
 
