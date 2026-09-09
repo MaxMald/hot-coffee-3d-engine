@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/mesh/hcMeshManager.h"
 #include "hc/assets/model/hcModel.h"
 #include "hc/assets/hcIAssetManager.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/mesh/hcIMeshFactory.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"

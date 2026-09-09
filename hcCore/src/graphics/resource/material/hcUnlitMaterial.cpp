@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"

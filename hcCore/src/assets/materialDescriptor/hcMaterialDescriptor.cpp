@@ -1,4 +1,4 @@
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 
 namespace hc
 {

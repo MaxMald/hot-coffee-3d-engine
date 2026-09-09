@@ -8,7 +8,7 @@
 #include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
 #include "hc/graphics/resource/material/hcHairMaterial.h"
 #include "hc/assets/hcIAssetManager.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include <limits>
 
 namespace hc
