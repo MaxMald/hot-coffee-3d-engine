@@ -22,24 +22,33 @@ namespace hc
     String name = GetMaterialNameFromMaterial(material);
     SharedPtr<AMaterialDescriptor> matDescriptor;
 
-    switch (type)
+    try
     {
-    case materialType::Unlit:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
-      break;
-    case materialType::BlinnPhong:
-      matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
-      break;
-    case materialType::Hair:
-      matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
-      break;
-    default:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
-      break;
-    }
+      switch (type)
+      {
+      case materialType::Unlit:
+        matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
+        break;
+      case materialType::BlinnPhong:
+        matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
+        break;
+      case materialType::Hair:
+        matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
+        break;
+      default:
+        matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
+        break;
+      }
 
-    ParseCommonMaterialPropertiesFromMaterial(material, matDescriptor);
-    return matDescriptor;
+      ParseCommonMaterialPropertiesFromMaterial(material, matDescriptor);
+      return matDescriptor;
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException(
+        "Failed to parse material descriptor for material '"
+        + name + "': " + e.what());
+    }
   }
 
   materialType::Type AssimpMaterialDescriptorParser::GetMaterialTypeFromMaterial(const aiMaterial* material)
@@ -90,11 +99,16 @@ namespace hc
     const aiMaterial* material
   )
   {
-    SharedPtr<UnlitMaterialDescriptor> desc = MakeShared<UnlitMaterialDescriptor>("");
+    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
     desc->name = name;
-    desc->color = GetVertexColorDiffuseFromMaterial(material);
-    desc->mainImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
 
+    assets::materialDescriptor::UnlitData* unlitData = desc->getUnlitData();
+    if (!unlitData)
+      throw RuntimeErrorException("Failed to get UnlitData from material descriptor.");
+
+    
+    unlitData->color = GetVertexColorDiffuseFromMaterial(material);
+    unlitData->texture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
     return desc;
   }
 
@@ -104,13 +118,18 @@ namespace hc
     const aiMaterial* material
   )
   {
-    SharedPtr<BlinnPhongMaterialDescriptor> desc = MakeShared<BlinnPhongMaterialDescriptor>("");
+    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::BlinnPhong, "");
     desc->name = name;
-    desc->color = GetVertexColorDiffuseFromMaterial(material);
-    desc->shininess = GetShininessFromMaterial(material);
-    desc->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    desc->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
-    desc->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+
+    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getBlinnPhongData();
+    if (!blinnPhongData)
+      throw RuntimeErrorException("Failed to get BlinnPhongData from material descriptor.");
+
+    blinnPhongData->color = GetVertexColorDiffuseFromMaterial(material);
+    blinnPhongData->shininess = GetShininessFromMaterial(material);
+    blinnPhongData->diffuseTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    blinnPhongData->normalTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    blinnPhongData->specularTexture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
     return desc;
   }
 
@@ -120,13 +139,18 @@ namespace hc
     const aiMaterial* material
   )
   {
-    SharedPtr<HairMaterialDescriptor> desc = MakeShared<HairMaterialDescriptor>("");
+    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::Hair, "");
     desc->name = name;
-    desc->color = GetVertexColorDiffuseFromMaterial(material);
-    desc->shininess = GetShininessFromMaterial(material);
-    desc->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    desc->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
-    desc->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+
+    assets::materialDescriptor::HairData* hairData = desc->getHairData();
+    if (!hairData)
+      throw RuntimeErrorException("Failed to get HairData from material descriptor.");
+
+    hairData->color = GetVertexColorDiffuseFromMaterial(material);
+    hairData->shininess = GetShininessFromMaterial(material);
+    hairData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    hairData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    hairData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
     return desc;
   }
 

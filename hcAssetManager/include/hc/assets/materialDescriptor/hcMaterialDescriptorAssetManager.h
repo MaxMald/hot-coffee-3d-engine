@@ -81,18 +81,5 @@ namespace hc
   private:
     UnorderedMap<Path, SharedPtr<AMaterialDescriptor>> m_loadedMaterialDescriptors;
     SharedPtr<AMaterialDescriptor> m_defaultMaterialDescriptor;
-
-    /**
-     * Deserializes an unlit material descriptor from JSON data.
-     *
-     * @param path The file path of the material descriptor
-     * @param json The JSON data containing material properties
-     * 
-     * @return A shared pointer to the deserialized descriptor
-     */
-    SharedPtr<UnlitMaterialDescriptor> deserializeUnlitMaterialDescriptor(
-      const Path& path,
-      const Json& json
-    ) const;
   };
 }

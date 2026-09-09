@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 #include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
-#include "hc/assets/materialDescriptor/hcHairMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
@@ -109,7 +109,7 @@ namespace hc
   }
 
   void HairMaterial::initialize(
-    const HairMaterialDescriptor& descriptor,
+    const AMaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,
@@ -125,13 +125,24 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    m_color = descriptor.color;
+    const assets::materialDescriptor::HairData* hairData = descriptor.getHairData();
+    if (!hairData)
+      throw InvalidArgumentException(
+        "HairMaterial::initialize: Provided descriptor does not contain HairData."
+      );
+
     m_name = descriptor.name;
-    m_shininess = descriptor.shininess;
-    m_alphaCutoutThreshold = descriptor.alphaCutoutThreshold;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
     m_doubleSided = descriptor.doubleSided;
     m_renderMode = descriptor.renderMode;
-
+    setShininess(hairData->shininess);
+    m_color = hairData->color;
+    setSpecularStrength(hairData->specularStrength);
+    m_specularPrimaryColor = hairData->specularPrimaryColor;
+    m_specularSecondaryColor = hairData->specularSecondaryColor;
+    setSpecularPrimaryShift(hairData->specularPrimaryShift);
+    setSpecularSecondaryShift(hairData->specularSecondaryShift);
+    setSpecularWidth(hairData->specularWidth);
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
     m_specularTexture = specularTexture;

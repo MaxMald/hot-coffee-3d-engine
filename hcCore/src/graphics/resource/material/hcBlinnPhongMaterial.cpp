@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 #include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
-#include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
@@ -106,7 +106,7 @@ namespace hc
   }
 
   void BlinnPhongMaterial::initialize(
-    const BlinnPhongMaterialDescriptor& descriptor,
+    const AMaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,
@@ -128,13 +128,18 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    m_color = descriptor.color;
+    const assets::materialDescriptor::BlinnPhongData* blinnPhongData = descriptor.getBlinnPhongData();
+    if (!blinnPhongData)
+      throw InvalidArgumentException(
+        "BlinnPhongMaterial::initialize: Provided descriptor does not contain BlinnPhongData."
+      );
+
     m_name = descriptor.name;
-    m_shininess = descriptor.shininess;
-    m_alphaCutoutThreshold = descriptor.alphaCutoutThreshold;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
     m_doubleSided = descriptor.doubleSided;
     m_renderMode = descriptor.renderMode;
-
+    m_color = blinnPhongData->color;
+    setShininess(blinnPhongData->shininess);
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
     m_specularTexture = specularTexture;

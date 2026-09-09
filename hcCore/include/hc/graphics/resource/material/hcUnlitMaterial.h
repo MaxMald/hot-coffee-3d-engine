@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class UnlitMaterialDescriptor;
+  class AMaterialDescriptor;
   class ITexture;
   class IShaderProgram;
 
@@ -60,7 +60,7 @@ namespace hc
      * @param mainTexture Shared pointer to the main texture (can be nullptr).
      */
     void initialize(
-      const UnlitMaterialDescriptor& descriptor,
+      const AMaterialDescriptor& descriptor,
       const SharedPtr<IShaderProgram>& shaderProgram,
       const SharedPtr<ITexture>& mainTexture
     );

@@ -4,9 +4,9 @@
 
 namespace hc
 {
-  class HairMaterialDescriptor;
   class ITexture;
   class IShaderProgram;
+  class AMaterialDescriptor;
 
   class HC_CORE_EXPORT HairMaterial : public AMaterial
   {
@@ -68,7 +68,7 @@ namespace hc
      * forward transparent rendering this material.
      */
     void initialize(
-      const HairMaterialDescriptor& descriptor,
+      const AMaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& specularTexture,

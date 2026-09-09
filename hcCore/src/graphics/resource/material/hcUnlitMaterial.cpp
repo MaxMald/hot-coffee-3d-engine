@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
@@ -71,7 +71,7 @@ namespace hc
   }
 
   void UnlitMaterial::initialize(
-    const UnlitMaterialDescriptor& descriptor,
+    const AMaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
     const SharedPtr<ITexture>& mainTexture
   )
@@ -79,11 +79,17 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
+    const assets::materialDescriptor::UnlitData* unlitData = descriptor.getUnlitData();
+    if (!unlitData)
+      throw InvalidArgumentException(
+        "UnlitMaterial::initialize: Provided descriptor does not contain UnlitData."
+      );
+
     m_name = descriptor.name;
-    m_renderMode = descriptor.renderMode;
-    m_doubleSided = descriptor.doubleSided;
     setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
-    m_color = descriptor.color;
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
+    m_color = unlitData->color;
     m_shaderProgram = shaderProgram;
     m_mainTexture = mainTexture;
   }
