@@ -79,11 +79,11 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
-    m_name = descriptor.getName();
-    m_renderMode = descriptor.getRenderMode();
-    m_doubleSided = descriptor.isDoubleSided();
-    setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());
-    m_color = descriptor.getColor();
+    m_name = descriptor.name;
+    m_renderMode = descriptor.renderMode;
+    m_doubleSided = descriptor.doubleSided;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
+    m_color = descriptor.color;
     m_shaderProgram = shaderProgram;
     m_mainTexture = mainTexture;
   }

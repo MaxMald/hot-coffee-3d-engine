@@ -90,12 +90,12 @@ namespace hc
     const aiMaterial* material
   )
   {
-    return MakeShared<UnlitMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE)
-    );
+    SharedPtr<UnlitMaterialDescriptor> desc = MakeShared<UnlitMaterialDescriptor>("");
+    desc->name = name;
+    desc->color = GetVertexColorDiffuseFromMaterial(material);
+    desc->mainImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+
+    return desc;
   }
 
   SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
@@ -103,16 +103,15 @@ namespace hc
     const String& name,
     const aiMaterial* material
   )
-  { 
-    return MakeShared<BlinnPhongMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetShininessFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
-    );
+  {
+    SharedPtr<BlinnPhongMaterialDescriptor> desc = MakeShared<BlinnPhongMaterialDescriptor>("");
+    desc->name = name;
+    desc->color = GetVertexColorDiffuseFromMaterial(material);
+    desc->shininess = GetShininessFromMaterial(material);
+    desc->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    desc->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    desc->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+    return desc;
   }
 
   SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
@@ -121,15 +120,14 @@ namespace hc
     const aiMaterial* material
   )
   {
-    return MakeShared<HairMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetShininessFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
-    );
+    SharedPtr<HairMaterialDescriptor> desc = MakeShared<HairMaterialDescriptor>("");
+    desc->name = name;
+    desc->color = GetVertexColorDiffuseFromMaterial(material);
+    desc->shininess = GetShininessFromMaterial(material);
+    desc->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    desc->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    desc->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+    return desc;
   }
 
   Color AssimpMaterialDescriptorParser::GetVertexColorDiffuseFromMaterial(
@@ -179,13 +177,13 @@ namespace hc
     SharedPtr<AMaterialDescriptor>& materialDescriptor
   )
   {
-    materialDescriptor->setDoubleSided(GetDoubleSidedFromMaterial(material));
+    materialDescriptor->doubleSided = GetDoubleSidedFromMaterial(material);
 
     materialRenderMode::Type renderMode = GetRenderModeFromMaterial(material);
-    materialDescriptor->setRenderMode(renderMode);
+    materialDescriptor->renderMode = renderMode;
 
     if (renderMode == materialRenderMode::Type::AlphaCutout)
-      materialDescriptor->setAlphaCutoutThreshold(GetAlphaCutoutThresholdFromMaterial(material));
+      materialDescriptor->alphaCutoutThreshold = GetAlphaCutoutThresholdFromMaterial(material);
   }
 
   bool AssimpMaterialDescriptorParser::GetDoubleSidedFromMaterial(

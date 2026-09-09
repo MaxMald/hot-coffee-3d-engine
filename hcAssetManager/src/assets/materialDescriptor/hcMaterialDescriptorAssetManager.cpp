@@ -6,12 +6,11 @@ namespace hc
     m_loadedMaterialDescriptors(),
     m_defaultMaterialDescriptor(nullptr)
   {
-    m_defaultMaterialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      "",
-      "Default Unlit Material",
-      Color(0.5f, 0.5f, 0.5f, 1.0f),
-      ""
-    );
+    SharedPtr<UnlitMaterialDescriptor> unlitDesc = MakeShared<UnlitMaterialDescriptor>("");
+    unlitDesc->name = "Default Unlit Material";
+    unlitDesc->renderMode = materialRenderMode::Type::Opaque;
+    unlitDesc->color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    m_defaultMaterialDescriptor = unlitDesc;
   }
 
   SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::load(
@@ -132,12 +131,11 @@ namespace hc
       String mainImagePathStr = json["mainImagePath"].getString();
       Path mainImagePath(mainImagePathStr.c_str());
 
-      return MakeShared<UnlitMaterialDescriptor>(
-        path,
-        "UnlitMaterial",
-        color,
-        mainImagePath
-      );
+      // TODO: This should be replaced with binary serialization, which is already
+      // implemented in UnlitMaterialDescriptor. Will be left as is just because it is not
+      // being used for now.
+
+      return MakeShared<UnlitMaterialDescriptor>(path);
     }
     catch (const Exception& e)
     {

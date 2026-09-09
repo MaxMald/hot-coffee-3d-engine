@@ -135,7 +135,7 @@ namespace hc
     const UnlitMaterialDescriptor& descriptor
   )
   {
-    SharedPtr<ITexture> mainTexture = getTextureFromPath(descriptor.getMainImagePath());
+    SharedPtr<ITexture> mainTexture = getTextureFromPath(descriptor.mainImagePath);
     if (!mainTexture)
       mainTexture = m_whiteTexture;
 
@@ -154,12 +154,12 @@ namespace hc
     const BlinnPhongMaterialDescriptor& descriptor
   )
   {
-    SharedPtr<ITexture> albedoTexture = getTextureFromPath(descriptor.getAlbedoImagePath());
+    SharedPtr<ITexture> albedoTexture = getTextureFromPath(descriptor.albedoImagePath);
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
     SharedPtr<ITexture> normalTexture = getTextureFromPath(
-      descriptor.getNormalImagePath(),
+      descriptor.normalImagePath,
       colorSpaceType::Linear
     );
 
@@ -167,7 +167,7 @@ namespace hc
       normalTexture = m_defaultNormalTexture;
 
     SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      descriptor.getSpecularImagePath(),
+      descriptor.specularImagePath,
       colorSpaceType::Linear
     );
 
@@ -193,14 +193,14 @@ namespace hc
   )
   {
     SharedPtr<ITexture> albedoTexture = getTextureFromPath(
-      descriptor.getAlbedoImagePath()
+      descriptor.albedoImagePath
     );
 
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
     SharedPtr<ITexture> normalTexture = getTextureFromPath(
-      descriptor.getNormalImagePath(),
+      descriptor.normalImagePath,
       colorSpaceType::Linear
     );
 
@@ -208,7 +208,7 @@ namespace hc
       normalTexture = m_defaultNormalTexture;
 
     SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      descriptor.getSpecularImagePath(),
+      descriptor.specularImagePath,
       colorSpaceType::Linear
     );
 

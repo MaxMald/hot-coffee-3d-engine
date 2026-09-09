@@ -6,19 +6,14 @@ namespace hc
 
   UnlitMaterialDescriptor::UnlitMaterialDescriptor() :
     AMaterialDescriptor(""),
-    m_color(0.5f, 0.5f, 0.5f, 1.0f),
-    m_mainImagePath("")
+    color(0.5f, 0.5f, 0.5f, 1.0f),
+    mainImagePath("")
   {}
 
-  UnlitMaterialDescriptor::UnlitMaterialDescriptor(
-    const Path& path,
-    const String& name,
-    const Color& color,
-    const Path& mainImagePath
-  ) :
-    AMaterialDescriptor(path, name),
-    m_color(color),
-    m_mainImagePath(mainImagePath)
+  UnlitMaterialDescriptor::UnlitMaterialDescriptor(const Path& path) :
+    AMaterialDescriptor(path),
+    color(0.5f, 0.5f, 0.5f, 1.0f),
+    mainImagePath("")
   {}
 
   materialType::Type UnlitMaterialDescriptor::getType() const
@@ -28,37 +23,27 @@ namespace hc
 
   void UnlitMaterialDescriptor::getImagesPaths(Vector<Path>& paths) const
   {
-    if (!m_mainImagePath.empty())
-      paths.push_back(m_mainImagePath);
+    if (!mainImagePath.empty())
+      paths.push_back(mainImagePath);
   }
 
   void UnlitMaterialDescriptor::clear()
   {
     AMaterialDescriptor::clear();
-    m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
-    m_mainImagePath.clear();
-  }
-
-  const Color& UnlitMaterialDescriptor::getColor() const
-  {
-    return m_color;
-  }
-
-  const Path& UnlitMaterialDescriptor::getMainImagePath() const
-  {
-    return m_mainImagePath;
+    color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    mainImagePath.clear();
   }
 
   void UnlitMaterialDescriptor::onSerialization(io::BinaryWriter& writer) const
   {
-    writer.writeColor(m_color);
-    writer.writePath(m_mainImagePath);
+    writer.writeColor(color);
+    writer.writePath(mainImagePath);
   }
 
   void UnlitMaterialDescriptor::onDeserialization(io::BinaryReader& reader)
   {
-    m_color = reader.readColor();
-    m_mainImagePath = reader.readPath();
+    color = reader.readColor();
+    mainImagePath = reader.readPath();
   }
 
   UInt16 UnlitMaterialDescriptor::getDerivedVersion() const

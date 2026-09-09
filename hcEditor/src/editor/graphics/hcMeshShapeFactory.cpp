@@ -37,12 +37,11 @@ namespace hc::editor
     subMeshes[0].materialIndex = 0;
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      "UnlitMaterial",
-      color,
-      Path()
+      Path("")
     );
-    materialDescriptor->setDoubleSided(true);
+    materialDescriptor->name = "CircleMaterial";
+    materialDescriptor->color = color;
+    materialDescriptor->doubleSided = true;
 
     Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
@@ -95,12 +94,11 @@ namespace hc::editor
     subMeshes[0].materialIndex = 0;
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      "UnlitMaterial",
-      color,
-      Path()
+      Path("")
     );
-    materialDescriptor->setDoubleSided(true);
+    materialDescriptor->name = "LineMaterial";
+    materialDescriptor->color = color;
+    materialDescriptor->doubleSided = true;
 
     Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
@@ -169,11 +167,10 @@ namespace hc::editor
     subMeshes[0].materialIndex = 0;
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      "UnlitMaterial",
-      color,
-      Path()
+      Path("")
     );
+    materialDescriptor->name = "UnlitMaterial";
+    materialDescriptor->color = color;
 
     Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
@@ -291,12 +288,11 @@ namespace hc::editor
     subMeshes[0].materialIndex = 0;
 
     SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      "UnlitMaterial",
-      color,
-      Path()
+      Path("")
     );
-    materialDescriptor->setDoubleSided(true);
+    materialDescriptor->name = "UnlitMaterial";
+    materialDescriptor->color = color;
+    materialDescriptor->doubleSided = true;
 
     Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;

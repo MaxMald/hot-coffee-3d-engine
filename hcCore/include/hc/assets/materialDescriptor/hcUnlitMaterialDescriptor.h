@@ -15,26 +15,11 @@ namespace hc
     public AMaterialDescriptor
   {
   public:
-    /**
-     * Constructs a default unlit material descriptor with default properties.
-     */
+    Color color;        ///< The base color of the material
+    Path mainImagePath; ///< The file path to the main texture image
+
     UnlitMaterialDescriptor();
-
-    /**
-     * Constructs an unlit material descriptor.
-     *
-     * @param path The file path to the material descriptor asset
-     * @param name The name of the material descriptor
-     * @param color The base color of the material
-     * @param mainImagePath The file path to the main texture image
-     */
-    UnlitMaterialDescriptor(
-      const Path& path,
-      const String& name,
-      const Color& color,
-      const Path& mainImagePath
-    );
-
+    UnlitMaterialDescriptor(const Path& path);
     virtual ~UnlitMaterialDescriptor() = default;
 
     /**
@@ -56,20 +41,6 @@ namespace hc
      */
     virtual void clear() override;
 
-    /**
-     * Gets the base color property of the unlit material.
-     *
-     * @return The material's color value
-     */
-    const Color& getColor() const;
-
-    /**
-     * Gets the file path for the main texture image.
-     *
-     * @return The path to the main texture asset
-     */
-    const Path& getMainImagePath() const;
-
   protected:
     /**
      * @copydoc AMaterialDescriptor::onSerialization
@@ -85,9 +56,5 @@ namespace hc
      * @copydoc AMaterialDescriptor::getDerivedVersion
      */
     virtual UInt16 getDerivedVersion() const override;
-
-  private:
-    Color m_color;
-    Path m_mainImagePath;
   };
 }

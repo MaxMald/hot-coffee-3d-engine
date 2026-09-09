@@ -128,12 +128,12 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    m_color = descriptor.getColor();
-    m_name = descriptor.getName();
-    m_shininess = descriptor.getShininess();
-    m_alphaCutoutThreshold = descriptor.getAlphaCutoutThreshold();
-    m_doubleSided = descriptor.isDoubleSided();
-    m_renderMode = descriptor.getRenderMode();
+    m_color = descriptor.color;
+    m_name = descriptor.name;
+    m_shininess = descriptor.shininess;
+    m_alphaCutoutThreshold = descriptor.alphaCutoutThreshold;
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
 
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
