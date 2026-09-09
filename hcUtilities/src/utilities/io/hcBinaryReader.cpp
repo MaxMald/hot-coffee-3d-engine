@@ -1,6 +1,9 @@
 #include "hc/utilities/io/hcBinaryReader.h"
 #include <fstream>
 
+#define UUID_SYSTEM_GENERATOR
+#include <stduuid/uuid.h>
+
 namespace hc::io
 {
   BinaryReader::BinaryReader() :
@@ -282,7 +285,7 @@ namespace hc::io
 
   Byte BinaryReader::readByte()
   {
-    Byte value = 0;
+    Byte value = static_cast<Byte>(0);
 
     if (m_currentObject != nullptr)
       m_currentObject->readAndConsume(&value, sizeof(Byte));
@@ -322,6 +325,24 @@ namespace hc::io
   {
     UInt64 fixedValue = readUInt64();
     return static_cast<SizeT>(fixedValue);
+  }
+
+  UUID BinaryReader::readUUID()
+  {
+    SizeT byteSize = readSizeT();
+    if (byteSize != UUID::UUID_BYTE_SIZE)
+      throw RuntimeErrorException(
+        String::Format("BinaryReader: Invalid UUID size read from stream. Expected %zu bytes, but got %zu bytes.",
+          UUID::UUID_BYTE_SIZE,
+          byteSize
+        )
+      );
+
+    Array<UInt8, UUID::UUID_BYTE_SIZE> bytes{};
+    for (SizeT i = 0; i < UUID::UUID_BYTE_SIZE; ++i)
+      bytes[i] = readUInt8();
+
+    return UUID(bytes);
   }
 
   Path BinaryReader::readPath()

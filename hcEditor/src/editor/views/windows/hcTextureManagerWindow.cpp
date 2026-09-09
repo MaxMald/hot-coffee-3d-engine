@@ -29,7 +29,7 @@ namespace hc::editor
       if (!texture)
         continue;
 
-      String label = String::Format("Texture ID: %s", texture->getId().toString().c_str());
+      String label = String::Format("Texture UUID: %s", texture->getUUID().toString().c_str());
       if (ImGui::TreeNode(label.c_str()))
       {
         if (ImGui::TreeNode("Preview"))

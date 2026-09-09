@@ -10,6 +10,7 @@
 #include "hc/utilities/hcColor.h"
 #include "hc/utilities/hcAngle.h"
 #include "hc/utilities/io/hcObjectSerialization.h"
+#include "hc/utilities/hcUUID.h"
 
 namespace hc
 {
@@ -216,6 +217,15 @@ namespace hc
        * @return The size value read from the stream.
        */
       SizeT readSizeT();
+
+      /**
+       * @brief Reads a UUID from the stream.
+       *
+       * Reads a 16-byte UUID and constructs a UUID object.
+       *
+       * @return The UUID read from the stream.
+       */
+      UUID readUUID();
 
       /**
        * @brief Reads a filesystem path from the stream.

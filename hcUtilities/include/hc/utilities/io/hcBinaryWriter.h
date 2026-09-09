@@ -9,6 +9,7 @@
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcColor.h"
 #include "hc/utilities/hcAngle.h"
+#include "hc/utilities/hcUUID.h"
 
 namespace hc
 {
@@ -168,6 +169,15 @@ namespace hc
        * @param value The size value to write.
        */
       void writeSizeT(SizeT value);
+
+      /**
+       * @brief Writes a UUID to the stream.
+       *
+       * Writes the UUID as a length-prefixed byte array (16 bytes).
+       *
+       * @param value The UUID to write.
+       */
+      void writeUUID(const UUID& value);
 
       /**
        * @brief Writes a filesystem path in cross-platform format.

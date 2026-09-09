@@ -21,7 +21,7 @@ namespace hc::editor
     {
       for (const SharedPtr<IMesh>& mesh : meshes)
       {
-        String label = String::Format("Mesh ID: %s", mesh->getId().toString().c_str());
+        String label = String::Format("Mesh UUID: %s", mesh->getUUID().toString().c_str());
         if (ImGui::TreeNode(label.c_str()))
         {
           drawMeshInfo(mesh);
@@ -53,7 +53,7 @@ namespace hc::editor
     ImGui::BeginTable("Materials", 2, ImGuiTableFlags_Borders);
 
     ImGui::TableSetupColumn("Index", ImGuiTableColumnFlags_WidthFixed, 100.0f);
-    ImGui::TableSetupColumn("Material ID", ImGuiTableColumnFlags_WidthFixed, 100.0f);
+    ImGui::TableSetupColumn("Material UUID", ImGuiTableColumnFlags_WidthFixed, 100.0f);
     ImGui::TableHeadersRow();
 
     for (int row = 0; row < materials.size(); ++row)
@@ -65,7 +65,7 @@ namespace hc::editor
       ImGui::Text("%d", row);
 
       ImGui::TableSetColumnIndex(1);
-      ImGui::Text("%s", material->getId().toString().c_str());
+      ImGui::Text("%s", material->getUUID().toString().c_str());
     }
     ImGui::EndTable();
   }

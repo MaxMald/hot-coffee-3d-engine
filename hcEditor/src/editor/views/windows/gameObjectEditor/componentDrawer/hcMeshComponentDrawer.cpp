@@ -36,7 +36,7 @@ namespace hc::editor
     }
     else
     {
-      ImGui::Text("Mesh ID: %s", mesh->getId().toString().c_str());
+      ImGui::Text("Mesh UUID: %s", mesh->getUUID().toString().c_str());
     }
 
     drawMaterialsInformation(mesh->getMaterials());
@@ -87,7 +87,7 @@ namespace hc::editor
       return;
 
     ImGui::Text("Material Slot: %d", materialSlotIndex);
-    ImGui::Text("Asset Id: %llu", material->getId().value());
+    ImGui::Text("Asset UUID: %s", material->getUUID().toString().c_str());
     ImGui::Text("Material ID: %u", material->getMaterialId());
     ImGui::Text("Material Type: %s", materialType::toString(material->getMaterialType()).c_str());
 

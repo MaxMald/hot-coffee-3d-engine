@@ -6,7 +6,6 @@
 namespace hc
 {
   OpenGlMesh::OpenGlMesh(IGraphicsManager& graphicsManager) :
-    m_id(Id::Create()),
     m_valid(false),
     m_materials(),
     m_subMeshes(),
@@ -18,11 +17,6 @@ namespace hc
   OpenGlMesh::~OpenGlMesh()
   {
     destroy();
-  }
-
-  const Id& OpenGlMesh::getId() const 
-  {
-    return m_id;
   }
 
   void OpenGlMesh::draw(
@@ -59,7 +53,7 @@ namespace hc
       throw;
     }
 
-    m_sourcePath = model.getPath();
+    m_sourcePath = model.path;
     m_subMeshes = model.getSubMeshes();
     m_materials = materials;
     m_valid = true;
@@ -128,7 +122,7 @@ namespace hc
     assertIsValid();
     updateVertexAndIndexBuffers(model.getVertices(), model.getIndices());
     m_subMeshes = model.getSubMeshes();
-    m_sourcePath = model.getPath();
+    m_sourcePath = model.path;
   }
 
   void OpenGlMesh::update(const Buffer<Vertex>& vertices, const BufferUInt32& indices)

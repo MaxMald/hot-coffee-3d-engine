@@ -21,7 +21,7 @@ namespace hc::editor
     SharedPtr<ITexture> mainTexture = material->getMainTexture();
     if (mainTexture)
     {
-      ImGui::Text("Main Texture ID: %s", mainTexture->getId().toString().c_str());
+      ImGui::Text("Main Texture UUID: %s", mainTexture->getUUID().toString().c_str());
     }
     else
     {

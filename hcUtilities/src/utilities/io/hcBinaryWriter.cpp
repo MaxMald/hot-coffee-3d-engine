@@ -1,5 +1,9 @@
 #include "hc/utilities/io/hcBinaryWriter.h"
+
 #include <fstream>
+#define UUID_SYSTEM_GENERATOR
+#include <stduuid/uuid.h>
+
 #include "hc/utilities/io/hcObjectSerialization.h"
 
 namespace hc::io
@@ -245,6 +249,19 @@ namespace hc::io
     }
 
     writeUInt64(fixedValue);
+  }
+
+  void BinaryWriter::writeUUID(const UUID& value)
+  {
+    auto bytes = value.asBytes();
+    if (bytes.size() != UUID::UUID_BYTE_SIZE)
+      throw RuntimeErrorException(
+        "Invalid UUID byte size: " + std::to_string(bytes.size())
+      );
+
+    writeSizeT(UUID::UUID_BYTE_SIZE);
+    for (size_t i = 0; i < UUID::UUID_BYTE_SIZE; ++i)
+      writeUInt8(static_cast<UInt8>(bytes[i]));
   }
 
   void BinaryWriter::writePath(const Path& value)

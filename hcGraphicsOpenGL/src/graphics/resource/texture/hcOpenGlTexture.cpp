@@ -5,7 +5,6 @@
 namespace hc
 {
   OpenGlTexture::OpenGlTexture() :
-    m_id(Id::Create()),
     m_textureId(0),
     m_width(0),
     m_height(0),
@@ -17,11 +16,6 @@ namespace hc
   OpenGlTexture::~OpenGlTexture()
   {
     destroy();
-  }
-
-  const Id& OpenGlTexture::getId() const
-  {
-    return m_id;
   }
 
   void OpenGlTexture::initialize(const Image& image)

@@ -66,6 +66,15 @@ namespace hc
      */
     const Vector<SharedPtr<AMaterialDescriptor>>& getMaterials() const;
 
+    /**
+     * Retrieves a material descriptor by its name.
+     *
+     * @param materialName The name of the material to retrieve
+     * 
+     * @return A shared pointer to the material descriptor, or nullptr if not found
+     */
+    SharedPtr<AMaterialDescriptor> getMaterial(const String& materialName) const;
+
   private:
     Buffer<Vertex> m_vertices;
     BufferUInt32 m_indices;

@@ -55,16 +55,16 @@ namespace hc
       return nullptr;
     }
 
-    if (hasCachedResource(model->getId()))
-      return getCachedResource(model->getId());
+    if (hasCachedResource(model->getUUID()))
+      return getCachedResource(model->getUUID());
 
     SharedPtr<IMesh> mesh = m_meshFactory->createMesh();
     if (!mesh)
     {
       LogService::Error(
         String::Format(
-          "MeshManager::createMeshFromModel: Failed to create mesh from model with Id '%s'.",
-          model->getId().toString().c_str()
+          "MeshManager::createMeshFromModel: Failed to create mesh from model with UUID '%s'.",
+          model->getUUID().toString().c_str()
         )
       );
       return nullptr;
@@ -77,15 +77,15 @@ namespace hc
     {
       LogService::Error(
         String::Format(
-          "MeshManager::createMeshFromModel: Failed to initialize mesh from model with Id '%s'.",
-          model->getId().toString().c_str()
+          "MeshManager::createMeshFromModel: Failed to initialize mesh from model with UUID '%s'.",
+          model->getUUID().toString().c_str()
         )
       );
       return nullptr;
     }
 
     m_meshes.push_back(mesh);
-    cacheResource(model->getId(), mesh);
+    cacheResource(model->getUUID(), mesh);
 
     return mesh;
   }
@@ -116,8 +116,8 @@ namespace hc
       {
         throw RuntimeErrorException(
           String::Format(
-            "MeshManager::createMaterialsFromModel: Failed to create material from descriptor with Id '%s'.",
-            materialDesc->getId().toString().c_str()
+            "MeshManager::createMaterialsFromModel: Failed to create material from descriptor with UUID '%s'.",
+            materialDesc->getUUID().toString().c_str()
           )
         );
 

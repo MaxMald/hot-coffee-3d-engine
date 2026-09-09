@@ -20,7 +20,7 @@ namespace hc
 
       SharedPtr<CubeMapDescriptor> descriptor = MakeShared<CubeMapDescriptor>();
       descriptor->deserialize(reader);
-      descriptor->setPath(path);
+      descriptor->path = path;
 
       Path basePath = path.parentPath();
       descriptor->rightImagePath = descriptor->rightImagePath.toAbsolute(basePath);

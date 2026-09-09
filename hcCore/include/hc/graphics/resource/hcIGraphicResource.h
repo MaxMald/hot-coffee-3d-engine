@@ -19,13 +19,6 @@ namespace hc
     virtual ~IGraphicResource();
 
     /**
-     * @brief Returns the unique identifier of the graphic resource.
-     * 
-     * @return Reference to the resource's Id.
-     */
-    virtual const Id& getId() const = 0;
-
-    /**
      * @brief Checks if the graphic resource is valid and properly initialized.
      *
      * @return True if the resource is valid; otherwise, false.
@@ -37,7 +30,16 @@ namespace hc
      */
     virtual void destroy() = 0;
 
+    /**
+     * @brief Returns the unique identifier of the graphic resource.
+     *
+     * @return Reference to the resource's UUID.
+     */
+    const UUID& getUUID() const;
+
    protected:
+     UUID m_uuid;  ///< Unique identifier for the graphic resource.
+
      /**
       * @brief Protected default constructor to prevent direct instantiation.
       */

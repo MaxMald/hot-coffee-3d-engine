@@ -36,7 +36,7 @@ namespace hc::editor
         return;
 
       String materialIdStr = String::Format(
-        "Material ID: %s", material->getId().toString().c_str()
+        "Material UUID: %s", material->getUUID().toString().c_str()
       );
 
       if (ImGui::TreeNode(materialIdStr.c_str()))

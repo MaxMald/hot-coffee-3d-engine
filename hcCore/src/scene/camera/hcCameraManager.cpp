@@ -28,9 +28,9 @@ namespace hc
 
     // Serialize active camera ID
     if (m_activeCamera)
-      m_activeCamera->getUUID().serialize(writer);
+      writer.writeUUID(m_activeCamera->getUUID());
     else
-      m_default->getUUID().serialize(writer);
+      writer.writeUUID(m_default->getUUID());
 
     writer.finishWritingObject();
   }
@@ -59,8 +59,7 @@ namespace hc
     }
 
     // Deserialize active camera ID
-    UUID activeCameraId;
-    activeCameraId.deserialize(reader);
+    UUID activeCameraId = reader.readUUID();
     setActiveCamera(activeCameraId);
 
     reader.finishReadingObject();

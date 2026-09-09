@@ -2,24 +2,19 @@
 
 namespace hc
 {
+  Asset::Asset() :
+    path(""),
+    m_uuid(UUID::Generate())
+  {}
+
   Asset::Asset(const Path& path) :
-    m_path(path),
-    m_id(Id::Create())
+    path(path),
+    m_uuid(UUID::Generate())
   {
   }
 
-  const Path& Asset::getPath() const
+  const UUID& Asset::getUUID() const
   {
-    return m_path;
-  }
-
-  void Asset::setPath(const Path& path)
-  {
-    m_path = path;
-  }
-
-  Id Asset::getId() const
-  {
-    return m_id;
+    return m_uuid;
   }
 }

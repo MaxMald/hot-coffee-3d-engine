@@ -19,31 +19,24 @@ namespace hc
   class HC_CORE_EXPORT Asset
   {
   public:
+    Path path;
+
     virtual ~Asset() = default;
-
-    /**
-     * Gets the file or resource path of the asset.
-     *
-     * @return The asset's path
-     */
-    const Path& getPath() const;
-
-    /**
-     * Sets the file or resource path of the asset.
-     *
-     * @param path The new path to set for the asset
-     */
-    void setPath(const Path& path);
 
     /**
      * Gets the unique identifier of the asset.
      *
      * @return The asset's identifier
      */
-    Id getId() const;
+    const UUID& getUUID() const;
 
   protected:
-    Path m_path;
+    UUID m_uuid;
+
+    /**
+     * Default constructor for an asset.
+     */
+    Asset();
 
     /**
      * Constructs an asset with the given path.
@@ -51,8 +44,5 @@ namespace hc
      * @param path The file path to the asset resource
      */
     Asset(const Path& path);
-
-  private:
-    Id m_id;
   };
 }

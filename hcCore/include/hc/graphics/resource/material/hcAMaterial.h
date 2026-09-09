@@ -13,11 +13,6 @@ namespace hc
     ~AMaterial() override;
 
     /**
-     * @copydoc IMaterial::getId
-     */
-    const Id& getId() const override final;
-
-    /**
      * @copydoc IMaterial::getMaterialId
      */
     UInt16 getMaterialId() const override final;
@@ -63,7 +58,6 @@ namespace hc
     void setDoubleSided(bool doubleSided) override final;
 
   protected:
-    Id m_id;
     UInt16 m_materialId;
     String m_name;
     materialRenderMode::Type m_renderMode;

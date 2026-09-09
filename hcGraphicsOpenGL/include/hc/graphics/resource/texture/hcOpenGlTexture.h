@@ -20,13 +20,6 @@ namespace hc
     ~OpenGlTexture() override;
 
     /**
-     * @brief Returns the unique identifier of the texture.
-     *
-     * @return Reference to the texture Id.
-     */
-    const Id& getId() const override;
-
-    /**
      * @copydoc ITexture::initialize(const Image&)
      */
     void initialize(const Image& image) override;
@@ -153,7 +146,6 @@ namespace hc
     );
 
   private:
-    Id m_id;
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;

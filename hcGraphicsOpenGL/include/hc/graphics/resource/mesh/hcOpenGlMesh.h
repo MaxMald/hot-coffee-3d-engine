@@ -22,13 +22,6 @@ namespace hc
     ~OpenGlMesh() override;
 
     /**
-     * @brief Returns the unique identifier of the mesh.
-     *
-     * @return Reference to the mesh Id.
-     */
-    const Id& getId() const override;
-
-    /**
      * @brief Draws the mesh using the provided render context.
      *
      * @param renderContext The rendering context for the draw call.
@@ -158,7 +151,6 @@ namespace hc
     UInt32 getDrawMode() const;
 
   private:
-    Id m_id;
     bool m_valid;
     Path m_sourcePath;
     Vector<SharedPtr<IMaterial>> m_materials;

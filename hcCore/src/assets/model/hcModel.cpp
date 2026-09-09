@@ -1,4 +1,5 @@
 #include "hc/assets/model/hcModel.h"
+#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
 
 namespace hc
 {
@@ -35,5 +36,15 @@ namespace hc
   const Vector<SharedPtr<AMaterialDescriptor>>& Model::getMaterials() const
   {
     return m_materials;
+  }
+
+  SharedPtr<AMaterialDescriptor> Model::getMaterial(const String& materialName) const
+  {
+    for (const auto& material : m_materials)
+    {
+      if (material && material->name == materialName)
+        return material;
+    }
+    return nullptr;
   }
 }

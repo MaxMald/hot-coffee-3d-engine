@@ -12,9 +12,16 @@ namespace hc
    * UUID provides a platform-independent wrapper around UUID generation and
    * manipulation.
    */
-  class HC_UTILITY_EXPORT UUID : public io::ISerializable
+  class HC_UTILITY_EXPORT UUID
   {
   public:
+    /**
+     * @brief The size of a UUID. Defines the number of values in the UUID array.
+     *
+     * This values is used for serialization and deserialization of UUIDs.
+     */
+    static constexpr SizeT UUID_BYTE_SIZE = 16;
+
     /**
      * @brief Generates a new random UUID using the system generator.
      * 
@@ -26,6 +33,13 @@ namespace hc
      * @brief Constructs a default UUID with all zeros.
      */
     UUID();
+
+    /**
+     * @brief Constructs a UUID from an array of bytes.
+     *
+     * @param bytes An array of 16 bytes representing the UUID.
+     */
+    UUID(const Array<UInt8, UUID_BYTE_SIZE>& bytes);
 
     /**
      * @brief Constructs a UUID from a string representation.
@@ -129,24 +143,6 @@ namespace hc
     bool operator>=(const UUID& other) const;
 
     /**
-     * @brief Serializes the UUID to a binary stream.
-     *
-     * Writes the UUID as 16 bytes in binary format.
-     *
-     * @param writer The binary writer to write to.
-     */
-    void serialize(io::BinaryWriter& writer) const override;
-
-    /**
-     * @brief Deserializes the UUID from a binary stream.
-     *
-     * Reads 16 bytes in binary format to reconstruct the UUID.
-     *
-     * @param reader The binary reader to read from.
-     */
-    void deserialize(io::BinaryReader& reader) override;
-
-    /**
      * @brief Converts the UUID to its string representation.
      *
      * @return A string in the format
@@ -160,6 +156,13 @@ namespace hc
      * @return A hash value suitable for use in hash-based containers.
      */
     SizeT hash() const;
+
+    /**
+     * @brief Serializes the UUID to a binary writer.
+     *
+     * @param writer The binary writer to serialize to.
+     */
+    std::span<std::byte const> asBytes() const;
 
   private:
     struct Impl;

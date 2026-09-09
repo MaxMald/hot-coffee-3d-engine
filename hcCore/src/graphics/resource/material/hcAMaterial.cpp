@@ -5,11 +5,6 @@ namespace hc
   AMaterial::~AMaterial()
   {}
 
-  const Id& AMaterial::getId() const
-  {
-    return m_id;
-  }
-
   UInt16 AMaterial::getMaterialId() const
   {
     return m_materialId;
@@ -62,7 +57,6 @@ namespace hc
     float alphaCutoutThreshold,
     bool doubleSided
   ) :
-    m_id(Id::Create()),
     m_materialId(materialId),
     m_name(name),
     m_renderMode(renderMode),
