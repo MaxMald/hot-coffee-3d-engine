@@ -8,7 +8,7 @@ namespace hc
     const Buffer<Vertex>& vertices,
     const BufferUInt32& indices,
     const Vector<ModelSubMesh>& subMeshes,
-    const Vector<SharedPtr<AMaterialDescriptor>>& materials
+    const Vector<SharedPtr<MaterialDescriptor>>& materials
   ) :
     Asset(path),
     m_vertices(vertices),
@@ -33,12 +33,12 @@ namespace hc
     return m_subMeshes;
   }
 
-  const Vector<SharedPtr<AMaterialDescriptor>>& Model::getMaterials() const
+  const Vector<SharedPtr<MaterialDescriptor>>& Model::getMaterials() const
   {
     return m_materials;
   }
 
-  SharedPtr<AMaterialDescriptor> Model::getMaterial(const String& materialName) const
+  SharedPtr<MaterialDescriptor> Model::getMaterial(const String& materialName) const
   {
     for (const auto& material : m_materials)
     {

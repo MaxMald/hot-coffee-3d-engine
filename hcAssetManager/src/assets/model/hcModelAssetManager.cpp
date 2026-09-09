@@ -71,7 +71,7 @@ namespace hc
       subMeshes.push_back(subMesh);
     }
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors;
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors;
     for (UInt32 i = 0; i < scene->mNumMaterials; ++i)
     {
       materialDescriptors.push_back(

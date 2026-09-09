@@ -5,7 +5,7 @@
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
   class ITexture;
   class IMaterial;
   class UnlitMaterial;
@@ -41,7 +41,7 @@ namespace hc
      * @return Shared pointer to the created material.
      */
     virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
     /**
@@ -53,7 +53,7 @@ namespace hc
      * @return Shared pointer to the created unlit material.
      */
     virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
     
     /**
@@ -65,7 +65,7 @@ namespace hc
      * @return Shared pointer to the created Blinn-Phong material.
      */
     virtual SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
     /**
@@ -77,7 +77,7 @@ namespace hc
      * @return Shared pointer to the created Hair material.
      */
     virtual SharedPtr<HairMaterial> createHairMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
     /**

@@ -5,7 +5,7 @@
 namespace hc::editor
 {
   class MaterialDescriptorAssetManagerDrawer :
-    public AAssetManagerDrawer<AMaterialDescriptor>
+    public AAssetManagerDrawer<MaterialDescriptor>
   {
   public:
     MaterialDescriptorAssetManagerDrawer(
@@ -14,6 +14,6 @@ namespace hc::editor
     virtual ~MaterialDescriptorAssetManagerDrawer() = default;
 
   protected:
-    void drawAssetDetails(const SharedPtr<AMaterialDescriptor>& asset) override;
+    void drawAssetDetails(const SharedPtr<MaterialDescriptor>& asset) override;
   };
 }

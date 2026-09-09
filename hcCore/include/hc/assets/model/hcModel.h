@@ -7,7 +7,7 @@
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
 
   /**
    * Represents a 3D model asset.
@@ -32,7 +32,7 @@ namespace hc
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<AMaterialDescriptor>>& materials
+      const Vector<SharedPtr<MaterialDescriptor>>& materials
     );
 
     /** Virtual destructor */
@@ -64,7 +64,7 @@ namespace hc
      *
      * @return A constant reference to the material descriptor collection
      */
-    const Vector<SharedPtr<AMaterialDescriptor>>& getMaterials() const;
+    const Vector<SharedPtr<MaterialDescriptor>>& getMaterials() const;
 
     /**
      * Retrieves a material descriptor by its name.
@@ -73,12 +73,12 @@ namespace hc
      * 
      * @return A shared pointer to the material descriptor, or nullptr if not found
      */
-    SharedPtr<AMaterialDescriptor> getMaterial(const String& materialName) const;
+    SharedPtr<MaterialDescriptor> getMaterial(const String& materialName) const;
 
   private:
     Buffer<Vertex> m_vertices;
     BufferUInt32 m_indices;
     Vector<ModelSubMesh> m_subMeshes;
-    Vector<SharedPtr<AMaterialDescriptor>> m_materials;
+    Vector<SharedPtr<MaterialDescriptor>> m_materials;
   };
 }

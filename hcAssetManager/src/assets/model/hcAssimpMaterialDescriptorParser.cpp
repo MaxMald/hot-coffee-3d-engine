@@ -13,14 +13,14 @@ namespace hc
   static constexpr const char* SUFFIX_ALPHA_CUTOUT = "_AlphaCutout";
   static constexpr const char* SUFFIX_DOUBLE_SIDED = "_DoubleSided";
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::Parse(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::Parse(
     const Path& fileDirectory,
     const aiMaterial* material
   )
   {
     materialType::Type type = GetMaterialTypeFromMaterial(material);
     String name = GetMaterialNameFromMaterial(material);
-    SharedPtr<AMaterialDescriptor> matDescriptor;
+    SharedPtr<MaterialDescriptor> matDescriptor;
 
     try
     {
@@ -93,13 +93,13 @@ namespace hc
     return String();
   }
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseUnlitMaterialDescriptor(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseUnlitMaterialDescriptor(
     const Path& fileDirectory,
     const String& name,
     const aiMaterial* material
   )
   {
-    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     desc->name = name;
 
     assets::materialDescriptor::UnlitData* unlitData = desc->getUnlitData();
@@ -112,13 +112,13 @@ namespace hc
     return desc;
   }
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
     const Path& fileDirectory,
     const String& name,
     const aiMaterial* material
   )
   {
-    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::BlinnPhong, "");
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::BlinnPhong, "");
     desc->name = name;
 
     assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getBlinnPhongData();
@@ -133,13 +133,13 @@ namespace hc
     return desc;
   }
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
     const Path& fileDirectory,
     const String& name,
     const aiMaterial* material
   )
   {
-    SharedPtr<AMaterialDescriptor> desc = MakeShared<AMaterialDescriptor>(materialType::Hair, "");
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Hair, "");
     desc->name = name;
 
     assets::materialDescriptor::HairData* hairData = desc->getHairData();
@@ -198,7 +198,7 @@ namespace hc
 
   void AssimpMaterialDescriptorParser::ParseCommonMaterialPropertiesFromMaterial(
     const aiMaterial* material,
-    SharedPtr<AMaterialDescriptor>& materialDescriptor
+    SharedPtr<MaterialDescriptor>& materialDescriptor
   )
   {
     materialDescriptor->doubleSided = GetDoubleSidedFromMaterial(material);

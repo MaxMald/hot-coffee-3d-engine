@@ -4,10 +4,10 @@ namespace hc
 {
   MaterialDescriptorAssetManager::MaterialDescriptorAssetManager() :
     m_loadedMaterialDescriptors(),
-    m_defaultMaterialDescriptor(MakeShared<AMaterialDescriptor>(""))
+    m_defaultMaterialDescriptor(MakeShared<MaterialDescriptor>(""))
   {}
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::load(
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::load(
     const Path& path
   )
   {
@@ -15,7 +15,7 @@ namespace hc
     return nullptr;
   }
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::get(
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::get(
     const Path& path
   ) const
   {
@@ -42,7 +42,7 @@ namespace hc
   }
 
   void MaterialDescriptorAssetManager::getAllLoadedAssets(
-    Vector<SharedPtr<AMaterialDescriptor>>& outAssets
+    Vector<SharedPtr<MaterialDescriptor>>& outAssets
   ) const
   {
     outAssets.clear();
@@ -55,7 +55,7 @@ namespace hc
     return m_loadedMaterialDescriptors.size();
   }
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::getDefault() const
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::getDefault() const
   {
     return m_defaultMaterialDescriptor;
   }

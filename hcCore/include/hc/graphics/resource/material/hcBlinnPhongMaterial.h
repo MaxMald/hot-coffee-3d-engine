@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
   class ITexture;
   class IShaderProgram;
 
@@ -67,7 +67,7 @@ namespace hc
      * @param deferredGeometryShaderProgram Shared pointer to the shader program used for deferred geometry rendering this material.
      */
     void initialize(
-      const AMaterialDescriptor& descriptor,
+      const MaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& specularTexture,

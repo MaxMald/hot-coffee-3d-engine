@@ -106,8 +106,8 @@ namespace hc
   )
   {
     Vector<SharedPtr<IMaterial>> materials;
-    const Vector<SharedPtr<AMaterialDescriptor>>& materialDescs = model->getMaterials();
-    for (const SharedPtr<AMaterialDescriptor>& materialDesc : materialDescs)
+    const Vector<SharedPtr<MaterialDescriptor>>& materialDescs = model->getMaterials();
+    for (const SharedPtr<MaterialDescriptor>& materialDesc : materialDescs)
     {
       SharedPtr<IMaterial> createdMaterial = m_materialManager
         .createMaterialFromDescriptor(materialDesc);

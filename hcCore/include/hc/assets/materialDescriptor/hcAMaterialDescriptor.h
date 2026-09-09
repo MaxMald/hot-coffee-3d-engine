@@ -64,7 +64,7 @@ namespace hc
    * provide specific material types with their shading models and
    * texture references.
    */
-  class HC_CORE_EXPORT AMaterialDescriptor : public Asset, public io::ISerializable
+  class HC_CORE_EXPORT MaterialDescriptor : public Asset, public io::ISerializable
   {
   public:
     MaterialDescriptorVariant variantData;  ///< Variant data holding specific material properties based on the material type 
@@ -73,10 +73,10 @@ namespace hc
     bool doubleSided;                       ///< Indicates whether the material is double-sided (renders both front and back faces)
     materialRenderMode::Type renderMode;    ///< The render mode of the material (e.g., Opaque, Transparent)
 
-    AMaterialDescriptor();
-    AMaterialDescriptor(const Path& path);
-    AMaterialDescriptor(materialType::Type _type, const Path& _path = "");
-    virtual ~AMaterialDescriptor() = default;
+    MaterialDescriptor();
+    MaterialDescriptor(const Path& path);
+    MaterialDescriptor(materialType::Type _type, const Path& _path = "");
+    virtual ~MaterialDescriptor() = default;
 
     /**
      * Serializes the material descriptor to a binary format.

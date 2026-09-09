@@ -6,7 +6,7 @@
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
   class IDataBlockManager;
 
   /**

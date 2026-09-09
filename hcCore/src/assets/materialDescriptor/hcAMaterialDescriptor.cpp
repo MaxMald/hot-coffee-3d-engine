@@ -147,7 +147,7 @@ namespace hc
 
   static constexpr UInt32 MATERIAL_DESCRIPTOR_VERSION = 1;
 
-  AMaterialDescriptor::AMaterialDescriptor() :
+  MaterialDescriptor::MaterialDescriptor() :
     Asset(),
     variantData(assets::materialDescriptor::UnlitData()),
     name(""),
@@ -157,7 +157,7 @@ namespace hc
     type(materialType::Type::Unlit)
   {}
 
-  AMaterialDescriptor::AMaterialDescriptor(const Path& path) :
+  MaterialDescriptor::MaterialDescriptor(const Path& path) :
     Asset(path),
     variantData(assets::materialDescriptor::UnlitData()),
     name(""),
@@ -167,7 +167,7 @@ namespace hc
     type(materialType::Type::Unlit)
   {}
 
-  AMaterialDescriptor::AMaterialDescriptor(
+  MaterialDescriptor::MaterialDescriptor(
     materialType::Type _type,
     const Path & _path
   ) :
@@ -182,7 +182,7 @@ namespace hc
     setType(_type);
   }
 
-  void AMaterialDescriptor::setType(materialType::Type newType)
+  void MaterialDescriptor::setType(materialType::Type newType)
   {
     type = newType;
     switch (type)
@@ -201,7 +201,7 @@ namespace hc
     }
   }
 
-  void AMaterialDescriptor::serialize(io::BinaryWriter& writer) const
+  void MaterialDescriptor::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(type), MATERIAL_DESCRIPTOR_VERSION);
     writer.writeUUID(m_uuid);
@@ -218,7 +218,7 @@ namespace hc
     writer.finishWritingObject();
   }
 
-  void AMaterialDescriptor::deserialize(io::BinaryReader& reader)
+  void MaterialDescriptor::deserialize(io::BinaryReader& reader)
   {
     clear();
 
@@ -268,7 +268,7 @@ namespace hc
     reader.finishReadingObject();
   }
 
-  void AMaterialDescriptor::clear()
+  void MaterialDescriptor::clear()
   {
     name.clear();
     renderMode = materialRenderMode::Type::Opaque;

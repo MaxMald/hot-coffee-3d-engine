@@ -41,28 +41,28 @@ namespace hc
      * @copydoc IMaterialManager::createMaterialFromDescriptor
      */
     SharedPtr<IMaterial> createMaterialFromDescriptor(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
     /**
      * @copydoc IMaterialManager::createUnlitMaterial
      */
     SharedPtr<UnlitMaterial> createUnlitMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
     /**
      * @copydoc IMaterialManager::createBlinnPhongMaterial
      */
     SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
     /**
      * @copydoc IMaterialManager::createHairMaterial
      */
     SharedPtr<HairMaterial> createHairMaterial(
-      const SharedPtr<AMaterialDescriptor>& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
     /**

@@ -36,7 +36,7 @@ namespace hc::editor
     subMeshes[0].indexCount = segments;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<AMaterialDescriptor> materialDescriptor = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     materialDescriptor->name = "CircleMaterial";
     materialDescriptor->doubleSided = true;
 
@@ -44,7 +44,7 @@ namespace hc::editor
     if (matData)
       matData->color = color;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -94,7 +94,7 @@ namespace hc::editor
     subMeshes[0].indexCount = 2;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<AMaterialDescriptor> materialDescriptor = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     materialDescriptor->name = "LineMaterial";
     materialDescriptor->doubleSided = true;
 
@@ -102,7 +102,7 @@ namespace hc::editor
     if (matData)
       matData->color = color;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -168,7 +168,7 @@ namespace hc::editor
     subMeshes[0].indexCount = 4;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<AMaterialDescriptor> materialDescriptor = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     materialDescriptor->name = "RectangleMaterial";
     materialDescriptor->doubleSided = true;
 
@@ -176,7 +176,7 @@ namespace hc::editor
     if (matData)
       matData->color = color;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -291,7 +291,7 @@ namespace hc::editor
     subMeshes[0].indexCount = 24;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<AMaterialDescriptor> materialDescriptor = MakeShared<AMaterialDescriptor>(materialType::Unlit, "");
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
     materialDescriptor->name = "BoxMaterial";
     materialDescriptor->doubleSided = true;
 
@@ -299,7 +299,7 @@ namespace hc::editor
     if (matData)
       matData->color = color;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(

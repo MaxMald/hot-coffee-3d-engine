@@ -71,7 +71,7 @@ namespace hc
   }
 
   void UnlitMaterial::initialize(
-    const AMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
     const SharedPtr<ITexture>& mainTexture
   )

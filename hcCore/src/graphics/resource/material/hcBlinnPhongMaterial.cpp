@@ -106,7 +106,7 @@ namespace hc
   }
 
   void BlinnPhongMaterial::initialize(
-    const AMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,

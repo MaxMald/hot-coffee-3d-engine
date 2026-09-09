@@ -36,7 +36,7 @@ namespace hc
     const Path& materialDescriptorPath
   )
   {
-    SharedPtr<AMaterialDescriptor> mat = m_assetManager
+    SharedPtr<MaterialDescriptor> mat = m_assetManager
       .getMaterialDescriptorAssetManager()
       .load(materialDescriptorPath);
 
@@ -55,7 +55,7 @@ namespace hc
   }
 
   SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
-    const SharedPtr<AMaterialDescriptor>& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)
@@ -86,7 +86,7 @@ namespace hc
   }
 
   SharedPtr<UnlitMaterial> MaterialManager::createUnlitMaterial(
-    const SharedPtr<AMaterialDescriptor>& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)
@@ -112,7 +112,7 @@ namespace hc
   }
 
   SharedPtr<BlinnPhongMaterial> MaterialManager::createBlinnPhongMaterial(
-    const SharedPtr<AMaterialDescriptor>& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)
@@ -157,7 +157,7 @@ namespace hc
   }
 
   SharedPtr<HairMaterial> MaterialManager::createHairMaterial(
-    const SharedPtr<AMaterialDescriptor>& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)

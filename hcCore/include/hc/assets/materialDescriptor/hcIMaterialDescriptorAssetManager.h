@@ -13,7 +13,7 @@ namespace hc
    * and resources used by materials in the graphics engine.
    */
   class HC_CORE_EXPORT IMaterialDescriptorAssetManager :
-    public ATypedAssetManager<AMaterialDescriptor>
+    public ATypedAssetManager<MaterialDescriptor>
   {
   public:
     virtual ~IMaterialDescriptorAssetManager() = default;
@@ -23,7 +23,7 @@ namespace hc
      *
      * @return A shared pointer to the default material descriptor asset
      */
-    virtual SharedPtr<AMaterialDescriptor> getDefault() const = 0;
+    virtual SharedPtr<MaterialDescriptor> getDefault() const = 0;
 
   protected:
     IMaterialDescriptorAssetManager() = default;
