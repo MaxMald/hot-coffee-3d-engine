@@ -57,7 +57,15 @@ namespace hc
   >;
 
   /**
-   * @brief This class describes materials properties and settings for rendering.
+   * @brief Material descriptor that encapsulates material properties and rendering
+   * settings.
+   *
+   * MaterialDescriptor provides a flexible, type-safe way to define materials using a
+   * variant-based composition pattern. It supports multiple material types each with
+   * their own specific properties.
+   *
+   * The specific material data can be accessed type-safely using getIf<T>() or
+   * type-specific accessors (e.g., getIfUnlitData()).
    */
   class HC_CORE_EXPORT MaterialDescriptor : public Asset, public io::ISerializable
   {
@@ -78,14 +86,14 @@ namespace hc
      *
      * @param writer The BinaryWriter to use for serialization.
      */
-    virtual void serialize(io::BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * Deserializes the material descriptor from a binary format.
      *
      * @param reader The BinaryReader to use for deserialization.
      */
-    virtual void deserialize(io::BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * Gets the material type used by this material descriptor.
