@@ -1,7 +1,5 @@
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptorAssetManager.h"
 
-#include <fstream>
-
 namespace hc
 {
   CubeMapDescriptorAssetManager::CubeMapDescriptorAssetManager() :
@@ -15,11 +13,10 @@ namespace hc
 
     try
     {
-      std::ifstream file(path, std::ios::binary);
-      if (!file.is_open())
-        throw IOException("Failed to open file for reading.");
-
-      io::BinaryReader reader(file);
+      String error;
+      io::BinaryReader reader;
+      if (!reader.prepare(path, error))
+        throw IOException("Failed to prepare binary reader: " + error);
 
       SharedPtr<CubeMapDescriptor> descriptor = MakeShared<CubeMapDescriptor>();
       descriptor->deserialize(reader);

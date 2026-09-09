@@ -38,13 +38,24 @@ namespace hc
     class HC_UTILITY_EXPORT BinaryReader
     {
     public:
+      explicit BinaryReader();
+      virtual ~BinaryReader();
+
       /**
-       * @brief Constructs a BinaryReader with the specified input stream.
+       * @brief Prepares the binary reader by opening a binary file for reading.
        *
-       * @param stream Reference to the input stream to read from.
+       * @param filePath The path to the binary file to open.
+       * @param outError A string to receive an error message if preparation fails.
+       *
+       * @return True if the file was opened successfully, false otherwise.
        */
-      explicit BinaryReader(std::istream& stream);
-      virtual ~BinaryReader() = default;
+      bool prepare(const Path& filePath, String& outError);
+
+      /**
+       * @brief Safely shuts down the binary reader, closing any open streams and
+       * releasing resources.
+       */
+      void shutdown();
 
       /**
        * @brief Reads a boolean value.
@@ -311,7 +322,7 @@ namespace hc
       bool isReadingObject() const;
 
     protected:
-      std::istream& m_stream;
+      UniquePtr<std::istream> m_stream;
       UniquePtr<ObjectData> m_currentObject;
       Stack<UniquePtr<ObjectData>> m_objectStack;
 

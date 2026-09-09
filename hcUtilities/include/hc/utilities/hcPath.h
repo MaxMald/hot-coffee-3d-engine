@@ -328,6 +328,15 @@ namespace hc
       return String(m_path.string());
     }
 
+    /**
+     * @brief Checks if the path exists in the file system.
+     * @return true if the path exists, false otherwise
+     */
+    inline bool exists() const
+    {
+      return std::filesystem::exists(m_path);
+    }
+
   private:
     std::filesystem::path m_path;
     pathType::Type m_type;

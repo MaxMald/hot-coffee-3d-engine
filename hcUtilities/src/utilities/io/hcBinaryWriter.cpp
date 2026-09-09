@@ -1,13 +1,56 @@
 #include "hc/utilities/io/hcBinaryWriter.h"
+#include <fstream>
 #include "hc/utilities/io/hcObjectSerialization.h"
 
 namespace hc::io
 {
-  BinaryWriter::BinaryWriter(std::ostream& stream) :
-    m_stream(stream),
+  BinaryWriter::BinaryWriter() :
+    m_stream(nullptr),
     m_currentObject(nullptr),
     m_objectStack()
+  {}
+
+  BinaryWriter::~BinaryWriter()
   {
+    shutdown();
+  }
+
+  bool BinaryWriter::prepare(const Path& filePath, String& outError)
+  {
+    try
+    {
+      shutdown();
+
+      UniquePtr<std::ofstream> fileStream = MakeUnique<std::ofstream>(filePath, std::ios::binary);
+      if (!fileStream->is_open())
+        throw RuntimeErrorException(
+          String::Format("BinaryWriter: Failed to open file for writing: %s", filePath.toString().c_str())
+        );
+
+      m_stream = std::move(fileStream);
+      return true;
+    }
+    catch (const Exception& e)
+    {
+      shutdown();
+      outError = e.what();
+      return false;
+    }
+  }
+
+  void BinaryWriter::shutdown()
+  {
+    if (m_stream != nullptr)
+    {
+      m_stream->flush();
+      m_stream.reset();
+    }
+
+    m_currentObject.reset();
+    while (!m_objectStack.empty())
+    {
+      m_objectStack.pop();
+    }
   }
 
   void BinaryWriter::writeBool(bool value)
@@ -20,7 +63,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&byteValue), sizeof(UInt8));
+    m_stream->write(reinterpret_cast<const char*>(&byteValue), sizeof(UInt8));
   }
 
   void BinaryWriter::writeInt8(Int8 value)
@@ -31,7 +74,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Int8));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int8));
   }
 
   void BinaryWriter::writeInt16(Int16 value)
@@ -42,7 +85,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Int16));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int16));
   }
 
   void BinaryWriter::writeInt32(Int32 value)
@@ -53,7 +96,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Int32));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int32));
   }
 
   void BinaryWriter::writeInt64(Int64 value)
@@ -64,7 +107,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Int64));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int64));
   }
 
   void BinaryWriter::writeUInt8(UInt8 value)
@@ -75,7 +118,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(UInt8));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt8));
   }
 
   void BinaryWriter::writeUInt16(UInt16 value)
@@ -86,7 +129,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(UInt16));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt16));
   }
 
   void BinaryWriter::writeUInt32(UInt32 value)
@@ -97,7 +140,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(UInt32));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt32));
   }
 
   void BinaryWriter::writeUInt64(UInt64 value)
@@ -108,7 +151,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(UInt64));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt64));
   }
 
   void BinaryWriter::writeChar(Char value)
@@ -119,7 +162,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Char));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char));
   }
 
   void BinaryWriter::writeChar16(Char16 value)
@@ -130,7 +173,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Char16));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char16));
   }
 
   void BinaryWriter::writeChar32(Char32 value)
@@ -141,7 +184,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Char32));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char32));
   }
 
   void BinaryWriter::writeUChar(UChar value)
@@ -152,7 +195,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(UChar));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UChar));
   }
 
   void BinaryWriter::writeFloat(float value)
@@ -163,7 +206,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(float));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(float));
   }
 
   void BinaryWriter::writeByte(Byte value)
@@ -174,7 +217,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(&value), sizeof(Byte));
+    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Byte));
   }
 
   void BinaryWriter::writeBytes(const Byte* data, SizeT size)
@@ -188,7 +231,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(reinterpret_cast<const char*>(data), size);
+    m_stream->write(reinterpret_cast<const char*>(data), size);
   }
 
   void BinaryWriter::writeSizeT(SizeT value)
@@ -225,7 +268,7 @@ namespace hc::io
       return;
     }
 
-    m_stream.write(value.c_str(), length);
+    m_stream->write(value.c_str(), length);
   }
 
   void BinaryWriter::writeVector3f(const Vector3f& value)
@@ -302,7 +345,7 @@ namespace hc::io
 
   bool BinaryWriter::isValid() const
   {
-    return m_stream.good();
+    return m_stream->good();
   }
 
   void BinaryWriter::writeObject(const ObjectData& objectData)

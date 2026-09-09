@@ -1,6 +1,5 @@
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 
-#include <fstream>
 #include <imgui.h>
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
@@ -221,11 +220,11 @@ namespace hc::editor
       descriptorToSave.backImagePath = m_backImagePath.toRelative(baseDir);
       descriptorToSave.frontImagePath = m_frontImagePath.toRelative(baseDir);
 
-      std::ofstream file(path, std::ios::out | std::ios::binary);
-      if (!file.is_open())
-        throw IOException("Failed to open file for writing: " + path.toGenericString());
+      String error;
+      io::BinaryWriter writer;
+      if (!writer.prepare(path, error))
+        throw IOException("Failed to prepare binary writer: " + error);
 
-      io::BinaryWriter writer(file);
       descriptorToSave.serialize(writer);
     }
     catch (const Exception& e)
@@ -244,12 +243,11 @@ namespace hc::editor
     {
       clear();
 
-      std::ifstream file(path, std::ios::in | std::ios::binary);
-      if (!file.is_open())
-        throw IOException("Failed to open file for reading: " + path.toGenericString());
+      String error;
+      io::BinaryReader reader;
+      if (!reader.prepare(path, error))
+        throw IOException("Failed to prepare binary reader: " + error);
 
-
-      io::BinaryReader reader(file);
       CubeMapDescriptor descriptorFromFile;
       descriptorFromFile.deserialize(reader);
 
