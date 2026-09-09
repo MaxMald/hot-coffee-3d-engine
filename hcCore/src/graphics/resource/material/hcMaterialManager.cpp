@@ -96,7 +96,7 @@ namespace hc
     if (!matData)
       throw InvalidArgumentException("MaterialManager::createUnlitMaterial: descriptor does not contain UnlitData.");
 
-    SharedPtr<ITexture> mainTexture = getTextureFromPath(matData->texture);
+    SharedPtr<ITexture> mainTexture = getTextureFromPath(matData->textureImagePath);
     if (!mainTexture)
       mainTexture = m_whiteTexture;
 

@@ -11,7 +11,7 @@ namespace hc
     void UnlitData::serialize(io::BinaryWriter& writer) const
     {
       writer.startWritingObject(materialType::Type::Unlit, UNLIT_DATA_VERSION);
-      writer.writePath(texture);
+      writer.writePath(textureImagePath);
       writer.writeColor(color);
       writer.finishWritingObject();
     }
@@ -27,14 +27,14 @@ namespace hc
         return;
       }
 
-      texture = reader.readPath();
+      textureImagePath = reader.readPath();
       color = reader.readColor();
       reader.finishReadingObject();
     }
 
     void UnlitData::clear()
     {
-      texture.clear();
+      textureImagePath.clear();
       color = Color::White();
     }
 

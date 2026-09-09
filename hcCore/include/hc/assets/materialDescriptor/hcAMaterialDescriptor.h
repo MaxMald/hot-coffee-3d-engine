@@ -9,7 +9,7 @@ namespace hc
   {
     struct UnlitData : public hc::io::ISerializable
     {
-      Path texture;                 ///< The path to the texture used by the unlit material
+      Path textureImagePath;        ///< The path to the texture used by the unlit material
       Color color = Color::White(); ///< The base color of the unlit material
 
       void serialize(io::BinaryWriter& writer) const override;

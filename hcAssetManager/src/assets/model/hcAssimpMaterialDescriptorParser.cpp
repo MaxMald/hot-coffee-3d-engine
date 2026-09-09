@@ -108,7 +108,7 @@ namespace hc
 
     
     unlitData->color = GetVertexColorDiffuseFromMaterial(material);
-    unlitData->texture = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    unlitData->textureImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
     return desc;
   }
 
