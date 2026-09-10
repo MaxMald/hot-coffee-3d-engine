@@ -69,7 +69,7 @@ namespace hc::assets::metadata
     {
       throw RuntimeErrorException(
         String::Format(
-          "ModelMetadataManager::loadMetadata: Metadata file does not exist for model: %s",
+          "ModelMetadataManager::LoadMetadata: Metadata file does not exist for model: %s",
           modelPath.toGenericString().c_str()
         )
       );
@@ -92,7 +92,7 @@ namespace hc::assets::metadata
     {
       throw RuntimeErrorException(
         String::Format(
-          "ModelMetadataManager::loadMetadata: Failed to load metadata for model: %s. Error: %s",
+          "ModelMetadataManager::LoadMetadata: Failed to load metadata for model: %s. Error: %s",
           modelPath.toGenericString().c_str(),
           ex.what()
         )
@@ -107,7 +107,7 @@ namespace hc::assets::metadata
     {
       throw RuntimeErrorException(
         String::Format(
-          "ModelMetadataManager::saveMetadata: Metadata file is not creatable for model: %s",
+          "ModelMetadataManager::SaveMetadata: Metadata file is not creatable for model: %s",
           modelPath.toGenericString().c_str()
         )
       );
@@ -131,7 +131,7 @@ namespace hc::assets::metadata
     {
       throw RuntimeErrorException(
         String::Format(
-          "ModelMetadataManager::saveMetadata: Failed to save metadata for model: %s. Error: %s",
+          "ModelMetadataManager::SaveMetadata: Failed to save metadata for model: %s. Error: %s",
           modelPath.toGenericString().c_str(),
           ex.what()
         )
@@ -158,7 +158,7 @@ namespace hc::assets::metadata
       {
         LogService::Warning(
           String::Format(
-            "ModelMetadataManager::loadMetadata: Material '%s' not found in model '%s'. Skipping.",
+            "ModelMetadataManager::LoadMetadata: Material '%s' not found in model '%s'. Skipping.",
             metaMat->name.c_str(),
             model.path.toGenericString().c_str()
           )
@@ -170,7 +170,7 @@ namespace hc::assets::metadata
       {
         LogService::Warning(
           String::Format(
-            "ModelMetadataManager::loadMetadata: Material type mismatch for '%s' in model '%s'. Skipping.",
+            "ModelMetadataManager::LoadMetadata: Material type mismatch for '%s' in model '%s'. Skipping.",
             metaMat->name.c_str(),
             model.path.toGenericString().c_str()
           )
