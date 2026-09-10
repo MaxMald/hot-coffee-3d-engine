@@ -35,10 +35,6 @@ namespace hc::editor
   void MeshManagerWindow::drawMeshInfo(const SharedPtr<IMesh>& mesh)
   {
     const Vector<SharedPtr<IMaterial>>& materials = mesh->getMaterials();
-
-    String path = mesh->getSourcePath().empty() ? "N/A" : mesh->getSourcePath().toGenericString();
-    ImGui::Text("Source Path: %s", path.c_str());
-    ImGui::Separator();
     if (ImGui::TreeNode("Materials"))
     {
       drawMaterialsInfo(materials);

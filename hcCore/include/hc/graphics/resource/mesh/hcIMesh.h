@@ -128,27 +128,6 @@ namespace hc
      */
     virtual bool isValid() const = 0;
 
-    /**
-     * @brief Returns the file path of the source model asset used to create this mesh.
-     *
-     * @note This path might be empty if the mesh was created procedurally or does not
-     * have an associated source model file.
-     *
-     * @return The file path of the source model asset if available, otherwise an empty
-     * path.
-     */
-    virtual Path getSourcePath() const = 0;
-
-    /**
-     * @brief Sets the file path of the source model asset used to create this mesh.
-     *
-     * This method allows updating the source path, which can be useful for tracking
-     * the origin of the mesh data or for debugging purposes.
-     *
-     * @param path The file path to set as the source of this mesh.
-     */
-    virtual void setSourcePath(const Path& path) = 0;
-
   protected:
     IMesh() = default;
   };

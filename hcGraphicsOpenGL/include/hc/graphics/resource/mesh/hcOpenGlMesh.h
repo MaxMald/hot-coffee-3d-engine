@@ -117,16 +117,6 @@ namespace hc
     bool isValid() const override;
 
     /**
-     * @copydoc IGraphicResource::getSourcePath
-     */
-    Path getSourcePath() const override;
-
-    /**
-     * @copydoc IGraphicResource::setSourcePath
-     */
-    void setSourcePath(const Path& path) override;
-
-    /**
      * @brief Binds the mesh's VAO for rendering.
      */
     void bind();
@@ -152,7 +142,6 @@ namespace hc
 
   private:
     bool m_valid;
-    Path m_sourcePath;
     Vector<SharedPtr<IMaterial>> m_materials;
     Vector<ModelSubMesh> m_subMeshes;
     UInt32 m_vao;

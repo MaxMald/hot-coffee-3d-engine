@@ -47,7 +47,7 @@ namespace hc
 
   void MeshComponent::onSerialize(io::BinaryWriter& writer) const
   {
-    bool hasMesh = (m_mesh != nullptr && !m_mesh->getSourcePath().empty());
+    bool hasMesh = (m_mesh != nullptr && !m_sourcePath.empty());
     writer.writeBool(hasMesh);
 
     if (!hasMesh)

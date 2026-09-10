@@ -53,7 +53,6 @@ namespace hc
       throw;
     }
 
-    m_sourcePath = model.path;
     m_subMeshes = model.getSubMeshes();
     m_materials = materials;
     m_valid = true;
@@ -122,7 +121,6 @@ namespace hc
     assertIsValid();
     updateVertexAndIndexBuffers(model.getVertices(), model.getIndices());
     m_subMeshes = model.getSubMeshes();
-    m_sourcePath = model.path;
   }
 
   void OpenGlMesh::update(const Buffer<Vertex>& vertices, const BufferUInt32& indices)
@@ -198,7 +196,6 @@ namespace hc
       m_vao = 0;
     }
 
-    m_sourcePath.clear();
     m_subMeshes.clear();
     m_materials.clear();
     m_valid = false;
@@ -222,16 +219,6 @@ namespace hc
   bool OpenGlMesh::isValid() const
   {
     return m_valid;
-  }
-
-  Path OpenGlMesh::getSourcePath() const
-  {
-    return m_sourcePath;
-  }
-
-  void OpenGlMesh::setSourcePath(const Path& path)
-  {
-    m_sourcePath = path;
   }
 
   void OpenGlMesh::bind()
