@@ -3,6 +3,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "hc/assets/model/hcAssimpMaterialDescriptorParser.h"
+#include "hc/assets/metadata/hcModelMetadataManager.h"
 
 namespace hc
 {
@@ -89,6 +90,9 @@ namespace hc
       subMeshes,
       materialDescriptors
     );
+
+    if (assets::metadata::ModelMetadataManager::HasMetadata(path))
+      assets::metadata::ModelMetadataManager::LoadMetadata(path, *model);
 
     m_loadedModels[path] = model;
     return model;
