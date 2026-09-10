@@ -337,6 +337,30 @@ namespace hc
       return std::filesystem::exists(m_path);
     }
 
+    /**
+     * @brief Checks if the path is a directory in the file system.
+     * @return true if the path is a directory, false otherwise
+     */
+    inline bool isDirectory() const
+    {
+      return std::filesystem::is_directory(m_path);
+    }
+
+    /**
+     * @brief Checks if the path is creatable in the file system. Useful when determining
+     * if a new file can be created at this path.
+     *
+     * @return true if the path is creatable, false otherwise
+     */
+    inline bool isCreatable() const
+    {
+      std::filesystem::path parent = m_path.parent_path();
+      if (parent.empty())
+        return false;
+
+      return std::filesystem::exists(parent) && std::filesystem::is_directory(parent);
+    }
+
   private:
     std::filesystem::path m_path;
     pathType::Type m_type;
