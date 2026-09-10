@@ -1,25 +1,24 @@
 #include "hc/editor/views/windows/hcMaterialManagerWindow.h"
+
 #include "imgui.h"
+
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 
 namespace hc::editor
 {
   MaterialManagerWindow::MaterialManagerWindow(
     IMaterialManager& materialManager,
-    UniquePtr<MaterialDrawersManager> materialDrawersManager
+    MaterialDrawersManager& materialDrawersManager
   ) : AWindowView("Material Manager"),
     m_materialManager(materialManager),
-    m_materialDrawersManager(std::move(materialDrawersManager))
-  {
-  }
+    m_materialDrawersManager(materialDrawersManager)
+  {}
 
   MaterialManagerWindow::~MaterialManagerWindow()
-  {
-  }
+  {}
 
   void MaterialManagerWindow::destroy()
-  {
-    m_materialDrawersManager->clear();
-  }
+  {}
 
   void MaterialManagerWindow::onDraw()
   {
@@ -41,7 +40,7 @@ namespace hc::editor
 
       if (ImGui::TreeNode(materialIdStr.c_str()))
       {
-        m_materialDrawersManager->drawMaterial(material.get());
+        m_materialDrawersManager.drawMaterial(material.get());
         ImGui::TreePop();
       }
       ImGui::Separator();

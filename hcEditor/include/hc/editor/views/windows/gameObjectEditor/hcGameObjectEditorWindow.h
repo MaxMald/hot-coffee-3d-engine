@@ -9,6 +9,7 @@ namespace hc::editor
 {
   class ProjectFileDialogView;
   class GameObjectSelectionService;
+  class MaterialDrawersManager;
 
   class GameObjectEditorWindow : public AWindowView
   {
@@ -16,7 +17,8 @@ namespace hc::editor
     GameObjectEditorWindow(
       HotCoffeeEngine& hotCoffeeEngine,
       ProjectFileDialogView& projectFileSelector,
-      GameObjectSelectionService& gameObjectSelectionService
+      GameObjectSelectionService& gameObjectSelectionService,
+      MaterialDrawersManager& materialDrawersManager
     );
     virtual ~GameObjectEditorWindow();
 

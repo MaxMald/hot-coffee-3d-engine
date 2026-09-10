@@ -1,20 +1,22 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
-#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
-
-#include "imgui.h"
+#include <imgui.h>
 #include "hc/editor/imgui/hcImguiUtilities.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 
 namespace hc::editor
 {
   MeshComponentDrawer::MeshComponentDrawer(
     IMeshManager& meshManager,
     IAssetManager& assetManager,
-    ProjectFileDialogView& projectFileSelector
+    ProjectFileDialogView& projectFileSelector,
+    MaterialDrawersManager& materialDrawerManager
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
     m_meshManager(meshManager),
     m_assetManager(assetManager),
-    m_projectFileSelector(projectFileSelector)
+    m_projectFileSelector(projectFileSelector),
+    m_materialDrawerManager(materialDrawerManager)
   {}
 
   MeshComponentDrawer::~MeshComponentDrawer()
@@ -55,7 +57,9 @@ namespace hc::editor
     }
   }
 
-  void MeshComponentDrawer::drawMaterialsInformation(const Vector<SharedPtr<IMaterial>>& materials)
+  void MeshComponentDrawer::drawMaterialsInformation(
+    const Vector<SharedPtr<IMaterial>>& materials
+  )
   {
     if (ImGui::TreeNode("Materials Information"))
     {
@@ -69,118 +73,12 @@ namespace hc::editor
         String name = material->getName();
         if (ImGui::TreeNode(name.c_str()))
         {
-          drawMaterialInformation(material, i);
+          m_materialDrawerManager.drawMeshMaterial(material.get(), i);
           ImGui::TreePop();
         }
         ImGui::PopID();
       }
       ImGui::TreePop();
-    }
-  }
-
-  void MeshComponentDrawer::drawMaterialInformation(
-    const SharedPtr<IMaterial>& material,
-    Int32 materialSlotIndex
-  )
-  {
-    if (!material)
-      return;
-
-    ImGui::Text("Material Slot: %d", materialSlotIndex);
-    ImGui::Text("Asset UUID: %s", material->getUUID().toString().c_str());
-    ImGui::Text("Material ID: %u", material->getMaterialId());
-    ImGui::Text("Material Type: %s", materialType::toString(material->getMaterialType()).c_str());
-
-    materialRenderMode::Type currentRenderMode =  material->getRenderMode();
-    const char* renderModeOptions[] = { "Background", "Opaque", "AlphaCutout", "Transparent" };
-    int currentItem = static_cast<int>(currentRenderMode);
-
-    if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 4))
-      material->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
-
-    bool isTwoSided = material->isDoubleSided();
-    if (ImGui::Checkbox("Two-Sided", &isTwoSided))
-      material->setDoubleSided(isTwoSided);
-
-    if (material->getRenderMode() == materialRenderMode::Type::AlphaCutout)
-    {
-      float alphaCutoff = material->getAlphaCutoutThreshold();
-      if (ImGui::SliderFloat("Alpha Cutoff", &alphaCutoff, 0.0f, 1.0f))
-        material->setAlphaCutoutThreshold(alphaCutoff);
-    }
-
-    // TODO
-    // 
-    // This is a temporary solution to expose shader-specific properties in the editor.
-    // Improve this by implementing a more flexible system for material property editing
-    // that can handle different shader types and their unique properties without
-    // hardcoding checks for specific shader types.
-
-    if (material->getMaterialType() == materialType::BlinnPhong)
-    {
-      SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
-        std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
-
-      if (!blinnPhongMaterial)
-        return;
-
-      float shininess = blinnPhongMaterial->getShininess();
-      if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
-        blinnPhongMaterial->setShininess(shininess);
-
-      imguiUtilities::DrawTexture(
-        blinnPhongMaterial->getAlbedoTexture().get(),
-        64.0f,
-        64.0f
-      );
-      ImGui::SameLine();
-      imguiUtilities::DrawTexture(
-        blinnPhongMaterial->getNormalTexture().get(),
-        64.0f,
-        64.0f
-      );
-      ImGui::SameLine();
-      imguiUtilities::DrawTexture(
-        blinnPhongMaterial->getSpecularTexture().get(),
-        64.0f,
-        64.0f
-      );
-    }
-    if (material->getMaterialType() == materialType::Hair)
-    {
-      SharedPtr<HairMaterial> hairMaterial =
-        std::dynamic_pointer_cast<HairMaterial>(material);
-
-      if (!hairMaterial)
-        return;
-
-      Color specularPrimaryColor = hairMaterial->getSpecularPrimaryColor();
-      if (imguiUtilities::DrawColorEdit3("Primary Specular Color", specularPrimaryColor))
-        hairMaterial->setSpecularPrimaryColor(specularPrimaryColor);
-
-      Color specularSecondaryColor = hairMaterial->getSpecularSecondaryColor();
-      if (imguiUtilities::DrawColorEdit3("Secondary Specular Color", specularSecondaryColor))
-        hairMaterial->setSpecularSecondaryColor(specularSecondaryColor);
-
-      float specularPrimaryShift = hairMaterial->getSpecularPrimaryShift();
-      if (ImGui::SliderFloat("Specular Primary Shift", &specularPrimaryShift, -4.0f, 4.0f))
-        hairMaterial->setSpecularPrimaryShift(specularPrimaryShift);
-
-      float specularSecondaryShift = hairMaterial->getSpecularSecondaryShift();
-      if (ImGui::SliderFloat("Specular Secondary Shift", &specularSecondaryShift, -4.0f, 4.0f))
-        hairMaterial->setSpecularSecondaryShift(specularSecondaryShift);
-
-      float shininess = hairMaterial->getShininess();
-      if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
-        hairMaterial->setShininess(shininess);
-
-      float specularStrength = hairMaterial->getSpecularStrength();
-      if (ImGui::SliderFloat("Specular Strength", &specularStrength, 0.0f, 1.0f))
-        hairMaterial->setSpecularStrength(specularStrength);
-
-      float specularWidth = hairMaterial->getSpecularWidth();
-      if (ImGui::SliderFloat("Specular Width", &specularWidth, 0.0f, 1.0f))
-        hairMaterial->setSpecularWidth(specularWidth);
     }
   }
 

@@ -6,6 +6,7 @@ namespace hc::editor
 {
   class ComponentDrawersManager;
   class ProjectFileDialogView;
+  class MaterialDrawersManager;
 
   namespace componentDrawersRegistry
   {
@@ -15,7 +16,8 @@ namespace hc::editor
     void registryDefaultComponentDrawers(
       HotCoffeeEngine& hotCoffeeEngine,
       ComponentDrawersManager& componentDrawersManager,
-      ProjectFileDialogView& projectFileSelector
+      ProjectFileDialogView& projectFileSelector,
+      MaterialDrawersManager& materialDrawersManager
     );
   }
 }

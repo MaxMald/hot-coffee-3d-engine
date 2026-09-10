@@ -1,13 +1,13 @@
 #include "hc/editor/views/hcEditorViewsRegistry.h"
 
 #include "hc/editor/editorLogHistory/hcEditorLogHistory.h"
-#include "hc/editor/materialDrawer/hcMaterialDrawersManagerFactory.h"
 
 // Services
 #include "hc/editor/services/hcEditorServiceManager.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 
 // Views
 #include "hc/editor/views/hcEditorViewsManager.h"
@@ -90,12 +90,13 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
         hotCoffeeEngine,
         *projectFileSelector,
-        editorServiceManager.getService<GameObjectSelectionService>()
+        editorServiceManager.getService<GameObjectSelectionService>(),
+        editorServiceManager.getService<MaterialDrawersManager>()
       ));
 
       viewsManager.registerView(MakeUnique<MaterialManagerWindow>(
         hotCoffeeEngine.getGraphicsManager().getMaterialManager(),
-        materialDrawerManagerFactory::create()
+        editorServiceManager.getService<MaterialDrawersManager>()
       ));
       viewsManager.registerView(MakeUnique<GraphicsWindow>(
         hotCoffeeEngine.getGraphicsManager()

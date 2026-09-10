@@ -3,6 +3,7 @@
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 
 namespace hc::editor
 {
@@ -27,6 +28,9 @@ namespace hc::editor
           engine.getGraphicsManager(),
           serviceManager.getService<ProjectManager>()
         )
+      );
+      serviceManager.registerService<MaterialDrawersManager>(
+        MakeUnique<MaterialDrawersManager>()
       );
     }
   }

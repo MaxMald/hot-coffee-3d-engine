@@ -13,7 +13,8 @@ namespace hc::editor
   GameObjectEditorWindow::GameObjectEditorWindow(
     HotCoffeeEngine& hotCoffeeEngine,
     ProjectFileDialogView& projectFileSelector,
-    GameObjectSelectionService& gameObjectSelectionService
+    GameObjectSelectionService& gameObjectSelectionService,
+    MaterialDrawersManager& materialDrawersManager
   ) :
     AWindowView("Game Object Editor", true),
     m_componentDrawersManager(),
@@ -22,7 +23,8 @@ namespace hc::editor
     componentDrawersRegistry::registryDefaultComponentDrawers(
       hotCoffeeEngine,
       m_componentDrawersManager,
-      projectFileSelector
+      projectFileSelector,
+      materialDrawersManager
     );
   }
 

@@ -12,14 +12,16 @@ namespace hc::editor
     void registryDefaultComponentDrawers(
       HotCoffeeEngine& hotCoffeeEngine,
       ComponentDrawersManager& componentDrawersManager,
-      ProjectFileDialogView& projectFileSelector
+      ProjectFileDialogView& projectFileSelector,
+      MaterialDrawersManager& materialDrawersManager
     )
     {
       componentDrawersManager.registerComponentView(
         MakeUnique<MeshComponentDrawer>(
           hotCoffeeEngine.getGraphicsManager().getMeshManager(),
           hotCoffeeEngine.getAssetManager(),
-          projectFileSelector
+          projectFileSelector,
+          materialDrawersManager
         )
       );
       componentDrawersManager.registerComponentView(
