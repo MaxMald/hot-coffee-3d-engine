@@ -7,23 +7,8 @@
 
 namespace hc
 {
-  namespace pathType
-  {
-    enum Type : UInt8
-    {
-      // Does not have a specific type, or the type is not known
-      Undefined = 0,
-
-      // Internal engine resources
-      Internal = 1
-    };
-  }
-
   /**
    * @brief Manages file system paths.
-   *
-   * @note Equality comparison is based only on the path string value, not the path type.
-   * @note Hash computation is based only on the path string value, not the path type.
    */
   class HC_UTILITY_EXPORT Path
   {
@@ -34,25 +19,23 @@ namespace hc
     Path();
 
     /**
-     * @brief Creates a Path from a std::filesystem::path with the specified type.
+     * @brief Creates a Path from a std::filesystem::path.
      * @param path The filesystem path
-     * @param type The path type (default: Undefined)
      */
-    Path(const std::filesystem::path& path, pathType::Type type = pathType::Undefined);
+    Path(const std::filesystem::path& path);
 
     /**
-     * @brief Creates a Path from a String with the specified type.
+     * @brief Creates a Path from a String.
      * @param path The path as a String
      * @param type The path type (default: Undefined)
      */
-    Path(const String& path, pathType::Type type = pathType::Undefined);
+    Path(const String& path);
 
     /**
      * @brief Creates a Path from a C-string with the specified type.
      * @param path The path as a C-string
-     * @param type The path type (default: Undefined)
      */
-    Path(const char* path, pathType::Type type = pathType::Undefined);
+    Path(const char* path);
 
     /**
      * @brief Converts the Path to a std::filesystem::path.
@@ -161,32 +144,27 @@ namespace hc
      * @param path The path as a String
      * @param type The path type (default: Undefined)
      */
-    inline void set(const String& path, pathType::Type type = pathType::Undefined)
+    inline void set(const String& path)
     {
       m_path = std::filesystem::path(path.c_str());
-      m_type = type;
     }
 
     /**
-     * @brief Sets the path from a C-string and type.
+     * @brief Sets the path from a C-string.
      * @param path The path as a C-string
-     * @param type The path type (default: Undefined)
      */
-    inline void set(const char* path, pathType::Type type = pathType::Undefined)
+    inline void set(const char* path)
     {
       m_path = std::filesystem::path(path);
-      m_type = type;
     }
 
     /**
-     * @brief Sets the path from std::filesystem::path and type.
+     * @brief Sets the path from std::filesystem::path.
      * @param path The filesystem path
-     * @param type The path type (default: Undefined)
      */
-    inline void set(const std::filesystem::path& path, pathType::Type type = pathType::Undefined)
+    inline void set(const std::filesystem::path& path)
     {
       m_path = path;
-      m_type = type;
     }
 
     /**
@@ -245,7 +223,6 @@ namespace hc
     inline void clear() noexcept
     {
       m_path.clear();
-      m_type = pathType::Undefined;
     }
 
     /**
@@ -290,16 +267,7 @@ namespace hc
      */
     inline Path parentPath() const
     {
-      return Path(m_path.parent_path(), m_type);
-    }
-
-    /**
-     * @brief Gets the path type of this Path.
-     * @return The pathType::Type value
-     */
-    inline pathType::Type getType() const noexcept
-    {
-      return m_type;
+      return Path(m_path.parent_path());
     }
 
     /**
@@ -363,7 +331,6 @@ namespace hc
 
   private:
     std::filesystem::path m_path;
-    pathType::Type m_type;
   };
 
   /**
@@ -393,9 +360,6 @@ namespace std
    * Computes a hash based only on the path string value, not the path type.
    * This allows Path objects to be used as keys in unordered containers like
    * std::unordered_map and std::unordered_set.
-   *
-   * @note The hash is invariant to path type; two paths with the same string
-   *       but different types will produce the same hash value.
    */
   template <>
   struct hash<hc::Path>

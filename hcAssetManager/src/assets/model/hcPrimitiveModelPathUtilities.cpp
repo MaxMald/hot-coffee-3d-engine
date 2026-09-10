@@ -6,9 +6,6 @@ namespace hc
 
   bool PrimitiveModelPathUtilities::IsPrimitiveModelPath(const Path& path)
   {
-    if (path.getType() != pathType::Internal)
-      return false;
-
     const String prefix = String::Format("%s/", PRIMITIVE_FOLDER_PATH);
     const String pathStr = path.toGenericString();
     return pathStr.rfind(prefix, 0) == 0;
@@ -38,6 +35,6 @@ namespace hc
       hc::serialization::fileFormat::ModelDescriptor::FILE_EXTENSION
     );
 
-    return Path(pathStr, pathType::Internal);
+    return Path(pathStr);
   }
 }
