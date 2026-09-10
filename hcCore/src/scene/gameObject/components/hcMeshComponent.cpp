@@ -13,15 +13,14 @@ namespace hc
     IAssetManager& assetManager
   ) :
     ABaseComponent(componentType::Mesh),
+    m_sourcePath(),
     m_mesh(nullptr),
     m_meshManager(meshManager),
     m_assetManager(assetManager)
-  {
-  }
+  {}
 
   MeshComponent::~MeshComponent()
-  {
-  }
+  {}
 
   void MeshComponent::draw(
     const RenderContext& renderContext,
@@ -34,67 +33,51 @@ namespace hc
     m_mesh->draw(renderContext, drawCommands);
   }
 
-  void MeshComponent::setMesh(SharedPtr<IMesh> mesh)
+  void MeshComponent::setMesh(SharedPtr<IMesh> mesh, const Path& sourcePath)
   {
     m_mesh = mesh;
+    m_sourcePath = sourcePath;
   }
 
-  SharedPtr<IMesh> MeshComponent::getMesh() const
+  void MeshComponent::clear()
   {
-    return m_mesh;
+    m_mesh.reset();
+    m_sourcePath.clear();
   }
 
   void MeshComponent::onSerialize(io::BinaryWriter& writer) const
   {
-    // TODO
-    //
-    // Currently we only serialize the mesh by its source path, which means we can only
-    // reconstruct the mesh during deserialization if it was originally created from a
-    // model file. This is a limitation that should be addressed in the future by implementing a more
-    // robust serialization mechanism that can handle meshes created procedurally or from
-    // other sources.
-
     bool hasMesh = (m_mesh != nullptr && !m_mesh->getSourcePath().empty());
     writer.writeBool(hasMesh);
 
     if (!hasMesh)
       return;
 
-    Path modelPath = m_mesh->getSourcePath();
-    Path pathToSerialize = modelPath;
-
-    if (m_assetManager.hasRootPath())
-      pathToSerialize = modelPath.toRelative(m_assetManager.getRootPath());
-
-    writer.writePath(pathToSerialize);
+    writer.writePath(m_sourcePath);
   }
 
   void MeshComponent::onDeserialize(io::BinaryReader& reader)
   {
+    clear();
+
     bool hasMesh = reader.readBool();
     if (!hasMesh)
+      return;
+
+    m_sourcePath = reader.readPath();
+    if (m_sourcePath.isAbsolute())
     {
-      m_mesh = nullptr;
+      m_mesh = m_meshManager.createMeshFromPath(m_sourcePath);
       return;
     }
+      
+    if (!m_assetManager.hasRootPath())
+      throw RuntimeErrorException(
+        "Cannot load mesh during deserialization: asset manager does not have a root path set for relative paths"
+      );
 
-    Path modelPath = reader.readPath();
-    if (modelPath.isRelative())
-    {
-      if (!m_assetManager.hasRootPath())
-      {
-        throw RuntimeErrorException(
-          "Cannot load mesh during deserialization: asset manager does not have a root path set for relative paths"
-        );
-      }
-
-      Path absoluteModelPath = modelPath.toAbsolute(m_assetManager.getRootPath());
-      m_mesh = m_meshManager.createMeshFromPath(absoluteModelPath);
-    }
-    else
-    {
-      m_mesh = m_meshManager.createMeshFromPath(modelPath);
-    }
+    Path absoluteModelPath = m_sourcePath.toAbsolute(m_assetManager.getRootPath());
+    m_mesh = m_meshManager.createMeshFromPath(absoluteModelPath);
   }
 
   UInt16 MeshComponent::getDerivedVersion() const

@@ -8,17 +8,17 @@ namespace hc::editor
 {
   MeshComponentDrawer::MeshComponentDrawer(
     IMeshManager& meshManager,
+    IAssetManager& assetManager,
     ProjectFileDialogView& projectFileSelector
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
     m_meshManager(meshManager),
+    m_assetManager(assetManager),
     m_projectFileSelector(projectFileSelector)
-  {
-  }
+  {}
 
   MeshComponentDrawer::~MeshComponentDrawer()
-  {
-  }
+  {}
 
   void MeshComponentDrawer::onDrawComponent(MeshComponent* component)
   {
@@ -189,7 +189,15 @@ namespace hc::editor
     const Path& selectedPath
   )
   {
+    if (selectedPath.empty() || !component)
+      return;
+
     SharedPtr<IMesh> mesh =  m_meshManager.createMeshFromPath(selectedPath);
-    component->setMesh(mesh);
+
+    Path sourcePath = selectedPath;
+    if (selectedPath.isAbsolute() && m_assetManager.hasRootPath())
+      sourcePath = selectedPath.toRelative(m_assetManager.getRootPath());
+
+    component->setMesh(mesh, sourcePath);
   }
 }

@@ -14,12 +14,14 @@ namespace hc::editor
   public:
     MeshComponentDrawer(
       IMeshManager& meshManager,
+      IAssetManager& assetManager,
       ProjectFileDialogView& projectFileSelector
     );
     virtual ~MeshComponentDrawer();
 
   protected:
     IMeshManager& m_meshManager;
+    IAssetManager& m_assetManager;
     ProjectFileDialogView& m_projectFileSelector;
 
     void onDrawComponent(MeshComponent* component) override;

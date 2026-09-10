@@ -34,7 +34,7 @@ namespace hc
     String fileName = primitiveModelType::toString(primitiveType);
     String pathStr= String::Format("%s/%s%s",
       PRIMITIVE_FOLDER_PATH,
-      fileName,
+      fileName.c_str(),
       hc::serialization::fileFormat::ModelDescriptor::FILE_EXTENSION
     );
 

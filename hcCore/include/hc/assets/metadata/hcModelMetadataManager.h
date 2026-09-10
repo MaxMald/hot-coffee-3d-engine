@@ -22,7 +22,7 @@ namespace hc::assets::metadata
   /**
    * @brief Manages the loading and saving of model metadata.
    */
-  static class HC_CORE_EXPORT ModelMetadataManager
+  class HC_CORE_EXPORT ModelMetadataManager
   {
   public:
     static bool HasMetadata(const Path& modelPath);

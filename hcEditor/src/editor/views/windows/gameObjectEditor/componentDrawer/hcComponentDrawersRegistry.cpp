@@ -18,6 +18,7 @@ namespace hc::editor
       componentDrawersManager.registerComponentView(
         MakeUnique<MeshComponentDrawer>(
           hotCoffeeEngine.getGraphicsManager().getMeshManager(),
+          hotCoffeeEngine.getAssetManager(),
           projectFileSelector
         )
       );
