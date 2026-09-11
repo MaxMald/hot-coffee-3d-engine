@@ -11,6 +11,7 @@ namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
     AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(0.5f, 0.5f, 0.5f, 1.0f)
   {
   }
@@ -21,6 +22,7 @@ namespace hc
 
   void UnlitMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     m_shaderProgram.reset();
     m_mainTexture.reset();
@@ -85,6 +87,7 @@ namespace hc
         "UnlitMaterial::initialize: Provided descriptor does not contain UnlitData."
       );
 
+    m_sourcePath = descriptor.path;
     m_name = descriptor.name;
     setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
     m_doubleSided = descriptor.doubleSided;

@@ -117,6 +117,15 @@ namespace hc
      */
     virtual bool isValid() const = 0;
 
+    /**
+     * @brief Gets the source path of the material, which indicates where the material was
+     * loaded from or defined. This could be empty if the material was created
+     * programmatically.
+     *
+     * @return Reference to the source path of the material.
+     */
+    virtual inline const Path& getSourcePath() const = 0;
+
   protected:
     IMaterial() = default;
   };

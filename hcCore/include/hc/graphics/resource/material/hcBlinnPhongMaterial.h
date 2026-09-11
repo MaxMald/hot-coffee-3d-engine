@@ -52,6 +52,14 @@ namespace hc
     bool isValid() const override;
 
     /**
+     * @copydoc IMaterial::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @brief Initializes the Blinn-Phong material with the provided descriptor and
      * associated resources.
      *
@@ -148,6 +156,7 @@ namespace hc
     void setSpecularTexture(const SharedPtr<ITexture>& specularTexture);
 
   private:
+    Path m_sourcePath;
     Color m_color;
     float m_shininess;
     SharedPtr<ITexture> m_albedoTexture;

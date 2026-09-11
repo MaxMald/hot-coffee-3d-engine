@@ -11,6 +11,7 @@ namespace hc
 {
   HairMaterial::HairMaterial(UInt16 materialId) :
     AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_specularPrimaryColor(1.0f, 1.0f, 1.0f, 1.0f),
     m_specularSecondaryColor(1.0f, 1.0f, 1.0f, 1.0f),
@@ -34,6 +35,7 @@ namespace hc
 
   void HairMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_albedoTexture.reset();
     m_normalTexture.reset();
     m_specularTexture.reset();
@@ -131,6 +133,7 @@ namespace hc
         "HairMaterial::initialize: Provided descriptor does not contain HairData."
       );
 
+    m_sourcePath = descriptor.path;
     m_name = descriptor.name;
     setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
     m_doubleSided = descriptor.doubleSided;

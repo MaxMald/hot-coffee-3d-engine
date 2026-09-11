@@ -11,6 +11,7 @@ namespace hc
 {
   BlinnPhongMaterial::BlinnPhongMaterial(UInt16 materialId) :
     AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_shininess(16.0f),
     m_albedoTexture(nullptr),
@@ -25,6 +26,7 @@ namespace hc
 
   void BlinnPhongMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_albedoTexture.reset();
     m_normalTexture.reset();
     m_specularTexture.reset();
@@ -134,6 +136,7 @@ namespace hc
         "BlinnPhongMaterial::initialize: Provided descriptor does not contain BlinnPhongData."
       );
 
+    m_sourcePath = descriptor.path;
     m_name = descriptor.name;
     setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
     m_doubleSided = descriptor.doubleSided;

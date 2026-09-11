@@ -52,6 +52,14 @@ namespace hc
     bool isValid() const override;
 
     /**
+     * @copydoc IMaterial::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @brief Initializes the unlit material with a descriptor and main texture.
      *
      * @param descriptor Reference to the unlit material descriptor.
@@ -94,6 +102,7 @@ namespace hc
     void setMainTexture(const SharedPtr<ITexture>& mainTexture);
 
   private:
+    Path m_sourcePath;
     Color m_color;
     SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;

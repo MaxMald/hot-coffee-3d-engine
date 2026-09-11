@@ -5,6 +5,7 @@
 namespace hc
 {
   OpenGlTexture::OpenGlTexture() :
+    m_sourcePath(),
     m_textureId(0),
     m_width(0),
     m_height(0),
@@ -25,7 +26,8 @@ namespace hc
       image.getHeight(),
       image.getFormat(),
       image.getColorSpace(),
-      image.getBuffer().data()
+      image.getBuffer().data(),
+      image.path
     );
   }
 
@@ -40,7 +42,8 @@ namespace hc
       height,
       colorFormat,
       colorSpaceType::Linear,
-      nullptr
+      nullptr,
+      ""
     );
   }
 
@@ -56,7 +59,8 @@ namespace hc
       height,
       colorFormat,
       colorSpace,
-      nullptr
+      nullptr,
+      ""
     );
   }
 
@@ -84,7 +88,8 @@ namespace hc
         height,
         colorFormat,
         colorSpace,
-        initData.data()
+        initData.data(),
+        ""
       );
     }
     break;
@@ -97,7 +102,8 @@ namespace hc
         height,
         colorFormat,
         colorSpace,
-        initData.data()
+        initData.data(),
+        ""
       );
     }
     break;
@@ -110,7 +116,8 @@ namespace hc
         height,
         colorFormat,
         colorSpace,
-        initData.data()
+        initData.data(),
+        ""
       );
     }
     break;
@@ -123,7 +130,8 @@ namespace hc
         height,
         colorFormat,
         colorSpace,
-        initData.data()
+        initData.data(),
+        ""
       );
     }
     break;
@@ -259,7 +267,8 @@ namespace hc
     UInt32 height,
     textureFormatType::Type colorFormat,
     colorSpaceType::Type colorSpace,
-    const void* initData
+    const void* initData,
+    const Path& sourcePath
   )
   {
     if (m_created)
@@ -309,6 +318,7 @@ namespace hc
     m_height = height;
     m_colorSpace = colorSpace;
     m_textureFormat = colorFormat;
+    m_sourcePath = sourcePath;
     m_created = true;
 
     glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
