@@ -8,8 +8,10 @@
 namespace hc
 {
   ModelAssetManager::ModelAssetManager(
+    assets::metadata::ModelMetadataManager& modelMetaManager,
     IMaterialDescriptorAssetManager& materialDescriptorAssetManager
   ) :
+    m_modelMetaManager(modelMetaManager),
     m_loadedModels(),
     m_primitiveModels(),
     m_primitiveModelsFactory(materialDescriptorAssetManager)
@@ -91,8 +93,8 @@ namespace hc
       materialDescriptors
     );
 
-    if (assets::metadata::ModelMetadataManager::HasMetadata(path))
-      assets::metadata::ModelMetadataManager::LoadMetadata(path, *model);
+    if (m_modelMetaManager.has(path))
+      m_modelMetaManager.apply(path, *model);
 
     m_loadedModels[path] = model;
     return model;

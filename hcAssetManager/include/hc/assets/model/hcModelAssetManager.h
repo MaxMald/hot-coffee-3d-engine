@@ -1,5 +1,6 @@
 #pragma once
 
+#include <hc/assets/metadata/hcModelMetadataManager.h>
 #include "hc/hcAssetManagerPrerequisites.h"
 #include "hc/assets/model/hcPrimitiveModelsFactory.h"
 
@@ -22,10 +23,13 @@ namespace hc
     /**
      * Constructs a model asset manager.
      *
-     * @param materialDescriptorAssetManager Reference to the material
-     * descriptor manager for loading model materials
+     * @param modelMetaManager Reference to the model metadata manager for handling
+     * model metadata during loading
+     * @param materialDescriptorAssetManager Reference to the material descriptor manager
+     * for loading model materials
      */
     ModelAssetManager(
+      assets::metadata::ModelMetadataManager& modelMetaManager,
       IMaterialDescriptorAssetManager& materialDescriptorAssetManager
     );
 
@@ -93,6 +97,7 @@ namespace hc
     SharedPtr<Model> getPrimitive(primitiveModelType::Type primitiveType) override;
 
   private:
+    assets::metadata::ModelMetadataManager& m_modelMetaManager;
     UnorderedMap<Path, SharedPtr<Model>> m_loadedModels;
     UnorderedMap<primitiveModelType::Type, SharedPtr<Model>> m_primitiveModels;
     PrimitiveModelsFactory m_primitiveModelsFactory;

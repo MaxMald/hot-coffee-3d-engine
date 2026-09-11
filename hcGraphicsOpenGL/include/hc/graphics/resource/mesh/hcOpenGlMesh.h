@@ -41,22 +41,24 @@ namespace hc
     ) override;
 
     /**
-     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<SharedPtr<IMaterial>>&)
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<SharedPtr<IMaterial>>&, const Path&)
      */
     void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) override;
 
     /**
-     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<ModelSubMesh>&, const Vector<SharedPtr<IMaterial>>&)
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<ModelSubMesh>&, const Vector<SharedPtr<IMaterial>>&, const Path&)
      */
     void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) override;
 
     /**
@@ -99,7 +101,7 @@ namespace hc
      *
      * @return Vector of shared pointers to materials.
      */
-    const Vector<SharedPtr<IMaterial>> getMaterials() override;
+    const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
      * @copydoc IMesh::getDrawType
@@ -110,6 +112,14 @@ namespace hc
      * @copydoc IMesh::setDrawType
      */
     void setTopologyType(topologyType::Type topologyType) override;
+
+    /**
+     * @copydoc IGraphicResource::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
 
     /**
      * @copydoc IGraphicResource::isValid
@@ -141,14 +151,15 @@ namespace hc
     UInt32 getDrawMode() const;
 
   private:
-    bool m_valid;
+    IGraphicsManager& m_graphicsManager;
+    Path m_sourcePath;
     Vector<SharedPtr<IMaterial>> m_materials;
     Vector<ModelSubMesh> m_subMeshes;
     UInt32 m_vao;
     UInt32 m_vbo;
     UInt32 m_ebo;
     UInt32 m_drawMode;
-    IGraphicsManager& m_graphicsManager;
+    bool m_valid;
 
     void assertIsValid() const;
     void createBuffers();

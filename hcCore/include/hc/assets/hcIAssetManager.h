@@ -8,6 +8,11 @@
 
 namespace hc
 {
+  namespace assets::metadata
+  {
+    class ModelMetadataManager;
+  }
+
   /**
    * Central interface for managing all asset types in the engine.
    *
@@ -46,6 +51,13 @@ namespace hc
      * @return Reference to the cube map descriptor asset manager
      */
     virtual ICubeMapDescriptorAssetManager& getCubeMapDescriptorAssetManager() = 0;
+
+    /**
+     * Retrieves the model metadata manager.
+     *
+     * @return Reference to the model metadata manager
+     */
+    virtual inline assets::metadata::ModelMetadataManager& getModelMetadataManager() = 0;
 
     /**
      * Clears all asset groups from the manager.

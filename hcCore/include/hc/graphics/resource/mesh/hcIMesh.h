@@ -36,11 +36,13 @@ namespace hc
      * @param vertices The vertex buffer to use for this mesh.
      * @param indices The index buffer to use for this mesh.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -51,12 +53,14 @@ namespace hc
      * @param indices The index buffer to use for this mesh.
      * @param subMeshes The collection of submeshes to define the mesh's geometry.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -105,7 +109,7 @@ namespace hc
      * 
      * @return A vector of shared pointers to the materials.
      */
-    virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
+    virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
      * @brief Returns the topology type of this mesh.
@@ -127,6 +131,13 @@ namespace hc
      * @return True if the mesh is in a valid state and can be rendered, false otherwise.
      */
     virtual bool isValid() const = 0;
+
+    /**
+     * @brief Returns the source path of the mesh, if it was loaded from a file.
+     *
+     * @return Reference to the source path of the mesh.
+     */
+    virtual inline const Path& getSourcePath() const = 0;
 
   protected:
     IMesh() = default;
