@@ -72,11 +72,14 @@ namespace hc
     SizeT size() const override;
 
     /**
-     * Retrieves the default material descriptor.
-     *
-     * @return A shared pointer to the default material descriptor
+     * @copydoc IMaterialDescriptorAssetManager::getDefault
      */
     SharedPtr<MaterialDescriptor> getDefault() const override;
+
+    /**
+     * @copydoc IMaterialDescriptorAssetManager::save
+     */
+    void save(const Path& path, const MaterialDescriptor& descriptor) override;
 
   private:
     UnorderedMap<Path, SharedPtr<MaterialDescriptor>> m_loadedMaterialDescriptors;

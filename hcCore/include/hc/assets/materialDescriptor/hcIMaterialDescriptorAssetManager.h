@@ -25,6 +25,14 @@ namespace hc
      */
     virtual SharedPtr<MaterialDescriptor> getDefault() const = 0;
 
+    /**
+     * Saves a material descriptor to the specified path.
+     *
+     * @param path The file path where the descriptor should be saved
+     * @param descriptor The material descriptor to save
+     */
+    virtual void save(const Path& path, const MaterialDescriptor& descriptor) = 0;
+
   protected:
     IMaterialDescriptorAssetManager() = default;
   };
