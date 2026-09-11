@@ -39,14 +39,14 @@ namespace hc::editor
       m_notImplementedDrawer.drawMaterial(material);
   }
 
-  void MaterialDrawersManager::drawMeshMaterial(IMaterial* material, Int32 slotIndex)
+  void MaterialDrawersManager::drawMeshMaterial(IMaterial* material, SizeT slotIndex)
   {
     if (!material)
       return;
 
     ImGui::Text("Material: %s", material->getName().c_str());
     ImGui::Separator();
-    ImGui::Text("Material Slot: %d", slotIndex);
+    ImGui::Text("Material Slot: %d", static_cast<Int32>(slotIndex));
     ImGui::Text("Material UUID: %s", material->getUUID().toString().c_str());
     ImGui::Text("Material ID: %u", material->getMaterialId());
     ImGui::Text("Material Type: %s", materialType::toString(material->getMaterialType()).c_str());

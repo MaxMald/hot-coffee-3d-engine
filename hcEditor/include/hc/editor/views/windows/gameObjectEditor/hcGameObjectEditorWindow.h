@@ -7,6 +7,7 @@
 
 namespace hc::editor
 {
+  class EditorServiceManager;
   class ProjectFileDialogView;
   class GameObjectSelectionService;
   class MaterialDrawersManager;
@@ -17,8 +18,7 @@ namespace hc::editor
     GameObjectEditorWindow(
       HotCoffeeEngine& hotCoffeeEngine,
       ProjectFileDialogView& projectFileSelector,
-      GameObjectSelectionService& gameObjectSelectionService,
-      MaterialDrawersManager& materialDrawersManager
+      EditorServiceManager& editorServiceManager
     );
     virtual ~GameObjectEditorWindow();
 

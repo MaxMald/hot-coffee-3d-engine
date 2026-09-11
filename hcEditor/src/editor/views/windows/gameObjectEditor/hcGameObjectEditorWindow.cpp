@@ -1,6 +1,7 @@
 #include "hc/editor/views/windows/gameObjectEditor/hcGameObjectEditorWindow.h"
 
 #include "hc/editor/views/hcEditorViewsManager.h"
+#include "hc/editor/services/hcEditorServiceManager.h"
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
@@ -13,18 +14,17 @@ namespace hc::editor
   GameObjectEditorWindow::GameObjectEditorWindow(
     HotCoffeeEngine& hotCoffeeEngine,
     ProjectFileDialogView& projectFileSelector,
-    GameObjectSelectionService& gameObjectSelectionService,
-    MaterialDrawersManager& materialDrawersManager
+    EditorServiceManager& editorServiceManager
   ) :
     AWindowView("Game Object Editor", true),
     m_componentDrawersManager(),
-    m_gameObjectSelectionService(gameObjectSelectionService)
+    m_gameObjectSelectionService(editorServiceManager.getService<GameObjectSelectionService>())
   {
     componentDrawersRegistry::registryDefaultComponentDrawers(
       hotCoffeeEngine,
       m_componentDrawersManager,
       projectFileSelector,
-      materialDrawersManager
+      editorServiceManager
     );
   }
 

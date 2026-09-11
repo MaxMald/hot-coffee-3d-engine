@@ -4,6 +4,9 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcOmniLightComponentDrawer.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcDirectionalLightComponentDrawer.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcSpotLightComponentDrawer.h"
+#include "hc/editor/services/hcEditorServiceManager.h"
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 
 namespace hc::editor
 {
@@ -13,7 +16,7 @@ namespace hc::editor
       HotCoffeeEngine& hotCoffeeEngine,
       ComponentDrawersManager& componentDrawersManager,
       ProjectFileDialogView& projectFileSelector,
-      MaterialDrawersManager& materialDrawersManager
+      EditorServiceManager& editorServiceManager
     )
     {
       componentDrawersManager.registerComponentView(
@@ -21,7 +24,8 @@ namespace hc::editor
           hotCoffeeEngine.getGraphicsManager().getMeshManager(),
           hotCoffeeEngine.getAssetManager(),
           projectFileSelector,
-          materialDrawersManager
+          editorServiceManager.getService<MaterialDrawersManager>(),
+          editorServiceManager.getService<EditorMetadataManager>()
         )
       );
       componentDrawersManager.registerComponentView(

@@ -90,8 +90,7 @@ namespace hc::editor
       viewsManager.registerView(MakeUnique<GameObjectEditorWindow>(
         hotCoffeeEngine,
         *projectFileSelector,
-        editorServiceManager.getService<GameObjectSelectionService>(),
-        editorServiceManager.getService<MaterialDrawersManager>()
+        editorServiceManager
       ));
 
       viewsManager.registerView(MakeUnique<MaterialManagerWindow>(

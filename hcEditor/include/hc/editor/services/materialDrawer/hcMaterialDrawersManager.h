@@ -43,7 +43,7 @@ namespace hc::editor
      * @param material Pointer to the material to be drawn.
      * @param slotIndex The index of the material slot being drawn.
      */
-    void drawMeshMaterial(IMaterial* material, Int32 slotIndex);
+    void drawMeshMaterial(IMaterial* material, SizeT slotIndex);
 
     /**
      * @brief Registers a new material drawer for a specific shading type.

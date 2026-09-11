@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/services/hcIEditorService.h"
+#include "hc/editor/services/metadataManager/hcEditorModelMetadataManager.h"
 
 namespace hc::editor
 {
@@ -13,14 +14,13 @@ namespace hc::editor
     void prepare() override;
     void destroy() override;
 
-    void saveModelMetadata(MeshComponent& meshComponent);
+    inline EditorModelMetadataManager& getModelMetadataManager()
+    {
+      return m_modelMetadataManager;
+    }
 
   private:
     IAssetManager& m_assetManager;
-
-    SharedPtr<MaterialDescriptor> createMaterialDescriptor(const SharedPtr<IMaterial>& material);
-    void copyUnlitDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
-    void copyBlinnPhongDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
-    void copyHairDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
+    EditorModelMetadataManager m_modelMetadataManager;
   };
 }

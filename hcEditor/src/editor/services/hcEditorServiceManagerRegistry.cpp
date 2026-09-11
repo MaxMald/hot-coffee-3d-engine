@@ -4,6 +4,7 @@
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
 #include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 
 namespace hc::editor
 {
@@ -31,6 +32,9 @@ namespace hc::editor
       );
       serviceManager.registerService<MaterialDrawersManager>(
         MakeUnique<MaterialDrawersManager>()
+      );
+      serviceManager.registerService<EditorMetadataManager>(
+        MakeUnique<EditorMetadataManager>(engine.getAssetManager())
       );
     }
   }
