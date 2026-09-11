@@ -64,6 +64,9 @@ namespace hc::assets::metadata
      * @param materialIndex The index of the material in the model's material list that
      * this override applies to.
      * @param descriptor The material descriptor for the override.
+     *
+     * @note This method does not check for existing overrides with the same name or in the
+     * same material index.
      */
     void addEmbeddedMaterialOverride(
       const String& name,
@@ -79,6 +82,9 @@ namespace hc::assets::metadata
      * this override applies to.
      * @param sourcePath The path to the source of the material. Could be absolute or
      * relative to the asset manager's root.
+     *
+     * @note This method does not check for existing overrides with the same name or in the
+     * same material index.
      */
     void addExternalMaterialOverride(
       const String& name,
@@ -87,7 +93,7 @@ namespace hc::assets::metadata
     );
 
     /**
-     * @brief Removes a material override from the metadata by name.
+     * @brief Removes any material override from the metadata by name.
      *
      * @param name The name of the material to override to remove.
      */
@@ -156,6 +162,9 @@ namespace hc::assets::metadata
      * @param materialIndex The index of the material in the model's material list that
      * this override applies to.
      * @param descriptor The material descriptor for the override.
+     *
+     * @note This method does not check for existing overrides with the same name or in the
+     * same material index.
      */
     void saveEmbeddedMaterialOverride(
       const Path& modelPath,
@@ -173,6 +182,9 @@ namespace hc::assets::metadata
      * this override applies to.
      * @param sourcePath The path to the source of the material. Could be absolute or
      * relative to the asset manager's root.
+     *
+     * @note This method does not check for existing overrides with the same name or in the
+     * same material index.
      */
     void saveExternalMaterialOverride(
       const Path& modelPath,

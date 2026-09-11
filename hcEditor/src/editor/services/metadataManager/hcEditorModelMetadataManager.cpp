@@ -102,6 +102,11 @@ namespace hc::editor
     if (!modelMetaManager.has(pathToModel))
       create(pathToModel);
 
+    modelMetaManager.removeMaterialOverride(
+      pathToModel,
+      materialName
+    );
+
     Path matSourcePath = material->getSourcePath();
     if (matSourcePath.empty()) // Embedded Material
     {
