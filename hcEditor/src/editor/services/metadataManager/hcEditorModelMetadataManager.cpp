@@ -30,7 +30,7 @@ namespace hc::editor
       LogService::Error(
         String::Format(
           "EditorModelMetadataManager::create: Failed to load model '%s'. Error: %s",
-          pathToModel.c_str(),
+          pathToModel.toGenericString().c_str(),
           e.what()
         )
       );
@@ -42,7 +42,7 @@ namespace hc::editor
       LogService::Error(
         String::Format(
           "EditorModelMetadataManager::create: Model '%s' is null after loading.",
-          pathToModel.c_str()
+          pathToModel.toGenericString().c_str()
         )
       );
       return;
@@ -56,7 +56,7 @@ namespace hc::editor
       LogService::Warning(
         String::Format(
           "EditorModelMetadataManager::create: Model metadata will be overwritten for '%s'.",
-          pathToModel.c_str()
+          pathToModel.toGenericString().c_str()
         )
       );
     }
@@ -70,7 +70,7 @@ namespace hc::editor
       LogService::Error(
         String::Format(
           "EditorModelMetadataManager::create: Failed to save model metadata for '%s'. Error: %s",
-          pathToModel.c_str(),
+          pathToModel.toGenericString().c_str(),
           e.what()
         )
       );
@@ -89,7 +89,7 @@ namespace hc::editor
       LogService::Error(
         String::Format(
           "EditorModelMetadataManager::saveMaterialForOverride: Material is null for model '%s', material name '%s'",
-          pathToModel.c_str(),
+          pathToModel.toGenericString().c_str(),
           materialName.c_str()
         )
       );
@@ -116,7 +116,7 @@ namespace hc::editor
         LogService::Error(
           String::Format(
             "EditorModelMetadataManager::saveMaterialForOverride: Failed to create material descriptor for model '%s', material name '%s'",
-            pathToModel.c_str(),
+            pathToModel.toGenericString().c_str(),
             materialName.c_str()
           )
         );
@@ -137,7 +137,7 @@ namespace hc::editor
         LogService::Error(
           String::Format(
             "EditorModelMetadataManager::saveMaterialForOverride: Failed to save material override for model '%s', material name '%s'. Error: %s",
-            pathToModel.c_str(),
+            pathToModel.toGenericString().c_str(),
             materialName.c_str(),
             e.what()
           )
@@ -165,7 +165,7 @@ namespace hc::editor
         LogService::Error(
           String::Format(
             "EditorModelMetadataManager::saveMaterialForOverride: Failed to save external material override for model '%s', material name '%s'. Error: %s",
-            pathToModel.c_str(),
+            pathToModel.toGenericString().c_str(),
             materialName.c_str(),
             e.what()
           )
