@@ -361,7 +361,7 @@ namespace hc::io
 
   bool BinaryWriter::isValid() const
   {
-    return m_stream->good();
+    return m_stream != nullptr && m_stream->good();
   }
 
   void BinaryWriter::writeObject(const ObjectData& objectData)

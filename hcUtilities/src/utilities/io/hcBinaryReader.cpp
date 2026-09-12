@@ -459,7 +459,7 @@ namespace hc::io
 
   bool BinaryReader::isValid() const
   {
-    return m_stream->good();
+    return m_stream != nullptr && m_stream->good();
   }
 
   bool BinaryReader::hasMoreData() const
