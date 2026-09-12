@@ -4,79 +4,63 @@ namespace hc
 {
   MaterialDescriptorAssetManager::MaterialDescriptorAssetManager() :
     m_loadedMaterialDescriptors(),
-    m_defaultMaterialDescriptor(nullptr)
-  {
-    m_defaultMaterialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      "",
-      "Default Unlit Material",
-      Color(0.5f, 0.5f, 0.5f, 1.0f),
-      ""
-    );
-  }
+    m_defaultMaterialDescriptor(MakeShared<MaterialDescriptor>(""))
+  {}
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::load(
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::load(
     const Path& path
   )
   {
+    if (isLoaded(path))
+      return get(path);
+
+    if (!path.exists())
+      return nullptr;
+
+    io::BinaryReader reader;
+
     try
     {
-      if (isLoaded(path))
-        return get(path);
-
-      Json json = Json::loadFromFile(path);
-      if (json.isNull())
-        return nullptr;
-
-      String shaderTypeStr = json["shaderType"].getString();
-      materialType::Type shaderType = materialType::fromString(shaderTypeStr);
-
-      SharedPtr<AMaterialDescriptor> loadedMaterialDescriptor;
-      switch (shaderType)
-      {
-      case materialType::Unlit:
-        loadedMaterialDescriptor = deserializeUnlitMaterialDescriptor(path, json);
-        break;
-
-      default:
-        throw InvalidArgumentException(
+      String error;
+      if (!reader.prepare(path, error))
+        throw RuntimeErrorException(
           String::Format(
-            "Unsupported shader type '%s' in material descriptor at path: %s",
-            shaderTypeStr.c_str(),
-            path.toGenericString().c_str()
+            "MaterialDescriptorAssetManager: Failed to prepare BinaryReader for path: %s. Error: %s",
+            path.toGenericString().c_str(),
+            error.c_str()
           )
         );
-      }
 
-      if (!loadedMaterialDescriptor)
-      {
-        LogService::Error(
+      UInt32 magicNumber = reader.readUInt32();
+      if (magicNumber != serialization::fileFormat::MaterialDescriptor::MAGIC_NUMBER)
+        throw RuntimeErrorException(
           String::Format(
-            "Failed to load material descriptor at path: %s",
+            "MaterialDescriptorAssetManager: File is not a valid material descriptor at path: %s",
             path.toGenericString().c_str()
           )
         );
 
-        return nullptr;
-      }
+      SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>();
+      materialDescriptor->deserialize(reader);
+      reader.shutdown();
 
-      m_loadedMaterialDescriptors[path] = loadedMaterialDescriptor;
-      return loadedMaterialDescriptor;
+      m_loadedMaterialDescriptors[path] = materialDescriptor;
+      return materialDescriptor;
     }
-    catch (const Exception& e)
+    catch (const Exception& ex)
     {
-      LogService::Error(
+      reader.shutdown();
+      throw  RuntimeErrorException(
         String::Format(
-          "Exception occurred while loading material descriptor at path '%s': %s",
+          "MaterialDescriptorAssetManager: Failed to load material descriptor at path: %s. Error: %s",
           path.toGenericString().c_str(),
-          e.what()
+          ex.what()
         )
       );
-
-      return nullptr;
     }
   }
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::get(
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::get(
     const Path& path
   ) const
   {
@@ -103,7 +87,7 @@ namespace hc
   }
 
   void MaterialDescriptorAssetManager::getAllLoadedAssets(
-    Vector<SharedPtr<AMaterialDescriptor>>& outAssets
+    Vector<SharedPtr<MaterialDescriptor>>& outAssets
   ) const
   {
     outAssets.clear();
@@ -116,38 +100,54 @@ namespace hc
     return m_loadedMaterialDescriptors.size();
   }
 
-  SharedPtr<AMaterialDescriptor> MaterialDescriptorAssetManager::getDefault() const
+  SharedPtr<MaterialDescriptor> MaterialDescriptorAssetManager::getDefault() const
   {
     return m_defaultMaterialDescriptor;
   }
 
-  SharedPtr<UnlitMaterialDescriptor> MaterialDescriptorAssetManager::deserializeUnlitMaterialDescriptor(
+  void MaterialDescriptorAssetManager::save(
     const Path& path,
-    const Json& json
-  ) const
+    const MaterialDescriptor& descriptor
+  )
   {
+    if (path.empty())
+      throw  RuntimeErrorException(
+        "MaterialDescriptorAssetManager: Cannot save material descriptor to an empty path."
+      );
+
+    if (!path.isCreatable())
+      throw RuntimeErrorException(
+        String::Format("MaterialDescriptorAssetManager: Cannot create a file at: %s", path.toGenericString().c_str())
+      );
+
+    io::BinaryWriter writer;
+
     try
     {
-      Color color = jsonParsers::parseColor(json["color"]);
-      String mainImagePathStr = json["mainImagePath"].getString();
-      Path mainImagePath(mainImagePathStr.c_str());
+      String error;
+      if (!writer.prepare(path, error))
+        throw IOException(
+          String::Format(
+            "MaterialDescriptorAssetManager: Failed to prepare BinaryWriter for path: %s. Error: %s",
+            path.toGenericString().c_str(),
+            error.c_str()
+          )
+        );
 
-      return MakeShared<UnlitMaterialDescriptor>(
-        path,
-        "UnlitMaterial",
-        color,
-        mainImagePath
-      );
+      writer.writeUInt32(serialization::fileFormat::MaterialDescriptor::MAGIC_NUMBER);
+      descriptor.serialize(writer);
+      writer.shutdown();
     }
-    catch (const Exception& e)
+    catch (const Exception& ex)
     {
-      LogService::Error(
+      writer.shutdown();
+      throw  RuntimeErrorException(
         String::Format(
-          "Failed to deserialize UnlitMaterialDescriptor: %s",
-          e.what()
+          "MaterialDescriptorAssetManager: Failed to save material descriptor at path: %s. Error: %s",
+          path.toGenericString().c_str(),
+          ex.what()
         )
       );
-      return nullptr;
     }
   }
 }

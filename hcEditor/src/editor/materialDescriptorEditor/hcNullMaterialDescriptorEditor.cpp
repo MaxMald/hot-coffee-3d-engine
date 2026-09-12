@@ -8,7 +8,7 @@ namespace hc::editor
   }
 
   void NullMaterialDescriptorEditor::copyValuesFrom(
-    SharedPtr<AMaterialDescriptor>
+    SharedPtr<MaterialDescriptor>
   )
   {
   }

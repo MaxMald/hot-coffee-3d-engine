@@ -21,7 +21,7 @@ namespace hc::editor
      * 
      * @return The material type as defined in materialType::Type.
      */
-    virtual materialType::Type getMaterialType() const = 0;
+    virtual inline materialType::Type getMaterialType() const = 0;
 
     /**
      * @brief Draws the material properties in the editor UI.
@@ -29,6 +29,14 @@ namespace hc::editor
      * @param material Pointer to the material to be drawn.
      */
     virtual void drawMaterial(IMaterial* material) = 0;
+
+    /**
+     * @brief Draws the material properties for a specific material slot in the editor UI.
+     *
+     * @param material Pointer to the material to be drawn.
+     * @param materialSlotIndex The index of the material slot being drawn.
+     */
+    virtual void drawMeshMaterial(IMaterial* material, Int32 materialSlotIndex) = 0;
 
   protected:
     IMaterialDrawer() = default;

@@ -4,9 +4,9 @@
 
 namespace hc
 {
-  class HairMaterialDescriptor;
   class ITexture;
   class IShaderProgram;
+  class MaterialDescriptor;
 
   class HC_CORE_EXPORT HairMaterial : public AMaterial
   {
@@ -49,6 +49,14 @@ namespace hc
     bool isValid() const override;
 
     /**
+     * @copydoc IMaterial::getSourcePath
+     */
+    inline const Path& getSourcePath() const
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @brief Initializes the Blinn-Phong material with the provided descriptor and
      * associated resources.
      *
@@ -68,7 +76,7 @@ namespace hc
      * forward transparent rendering this material.
      */
     void initialize(
-      const HairMaterialDescriptor& descriptor,
+      const MaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& specularTexture,
@@ -174,6 +182,7 @@ namespace hc
     void setSpecularTexture(const SharedPtr<ITexture>& specularTexture);
 
   private:
+    Path m_sourcePath;
     Color m_color;
     Color m_specularPrimaryColor;
     Color m_specularSecondaryColor;

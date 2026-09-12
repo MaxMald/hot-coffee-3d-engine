@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/mesh/hcMeshManager.h"
 #include "hc/assets/model/hcModel.h"
 #include "hc/assets/hcIAssetManager.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/mesh/hcIMeshFactory.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
@@ -55,16 +55,16 @@ namespace hc
       return nullptr;
     }
 
-    if (hasCachedResource(model->getId()))
-      return getCachedResource(model->getId());
+    if (hasCachedResource(model->getUUID()))
+      return getCachedResource(model->getUUID());
 
     SharedPtr<IMesh> mesh = m_meshFactory->createMesh();
     if (!mesh)
     {
       LogService::Error(
         String::Format(
-          "MeshManager::createMeshFromModel: Failed to create mesh from model with Id '%s'.",
-          model->getId().toString().c_str()
+          "MeshManager::createMeshFromModel: Failed to create mesh from model with UUID '%s'.",
+          model->getUUID().toString().c_str()
         )
       );
       return nullptr;
@@ -77,15 +77,15 @@ namespace hc
     {
       LogService::Error(
         String::Format(
-          "MeshManager::createMeshFromModel: Failed to initialize mesh from model with Id '%s'.",
-          model->getId().toString().c_str()
+          "MeshManager::createMeshFromModel: Failed to initialize mesh from model with UUID '%s'.",
+          model->getUUID().toString().c_str()
         )
       );
       return nullptr;
     }
 
     m_meshes.push_back(mesh);
-    cacheResource(model->getId(), mesh);
+    cacheResource(model->getUUID(), mesh);
 
     return mesh;
   }
@@ -106,8 +106,8 @@ namespace hc
   )
   {
     Vector<SharedPtr<IMaterial>> materials;
-    const Vector<SharedPtr<AMaterialDescriptor>>& materialDescs = model->getMaterials();
-    for (const SharedPtr<AMaterialDescriptor>& materialDesc : materialDescs)
+    const Vector<SharedPtr<MaterialDescriptor>>& materialDescs = model->getMaterials();
+    for (const SharedPtr<MaterialDescriptor>& materialDesc : materialDescs)
     {
       SharedPtr<IMaterial> createdMaterial = m_materialManager
         .createMaterialFromDescriptor(materialDesc);
@@ -116,8 +116,8 @@ namespace hc
       {
         throw RuntimeErrorException(
           String::Format(
-            "MeshManager::createMaterialsFromModel: Failed to create material from descriptor with Id '%s'.",
-            materialDesc->getId().toString().c_str()
+            "MeshManager::createMaterialsFromModel: Failed to create material from descriptor with UUID '%s'.",
+            materialDesc->getUUID().toString().c_str()
           )
         );
 

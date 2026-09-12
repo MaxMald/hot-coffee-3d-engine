@@ -22,7 +22,7 @@ namespace hc
   void Camera::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(0), CAMERA_VERSION);
-    m_id.serialize(writer);
+    writer.writeUUID(m_id);
     writer.writeVector3f(m_position);
     writer.writeVector3f(m_direction);
     writer.writeVector3f(m_up);
@@ -41,7 +41,7 @@ namespace hc
       return;
     }
 
-    m_id.deserialize(reader);
+    m_id = reader.readUUID();
     m_position = reader.readVector3f();
     m_direction = reader.readVector3f();
     m_up = reader.readVector3f();

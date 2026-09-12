@@ -7,7 +7,6 @@
 namespace hc
 {
   OpenGlDataBlock::OpenGlDataBlock() :
-    m_id(Id::Create()),
     m_ubo(0),
     m_dataSize(0),
     m_isInitialized(false)
@@ -17,11 +16,6 @@ namespace hc
   OpenGlDataBlock::~OpenGlDataBlock()
   {
     destroy();
-  }
-
-  const Id& OpenGlDataBlock::getId() const
-  {
-    return m_id;
   }
 
   bool OpenGlDataBlock::isValid() const

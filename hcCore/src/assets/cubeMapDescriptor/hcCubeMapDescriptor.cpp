@@ -56,7 +56,7 @@ namespace hc
 
   void CubeMapDescriptor::clear()
   {
-    m_path.clear();
+    path.clear();
     faceSize = 0;
     format = textureFormatType::RGBA8;
     rightImagePath.clear();

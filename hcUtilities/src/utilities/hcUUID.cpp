@@ -8,8 +8,6 @@
 
 namespace hc
 {
-  static constexpr size_t UUID_BYTE_SIZE = 16;
-
   struct UUID::Impl
   {
     uuids::uuid uuid;
@@ -47,6 +45,12 @@ namespace hc
   UUID::UUID() :
     m_impl(new Impl())
   {
+  }
+
+  UUID::UUID(const Array<UInt8, UUID_BYTE_SIZE>& bytes)
+  {
+    uuids::uuid uuid(bytes);
+    m_impl = new Impl(uuid);
   }
 
   UUID::UUID(const String& uuidString) :
@@ -122,28 +126,6 @@ namespace hc
     return !(m_impl->uuid < other.m_impl->uuid);
   }
 
-  void UUID::serialize(io::BinaryWriter& writer) const
-  {
-    auto bytes = m_impl->uuid.as_bytes();
-    if (bytes.size() != UUID_BYTE_SIZE)
-      throw RuntimeErrorException(
-        "Invalid UUID byte size: " + std::to_string(bytes.size())
-      );
-
-    for (size_t i = 0; i < UUID_BYTE_SIZE; ++i)
-      writer.writeUInt8(static_cast<UInt8>(bytes[i]));
-  }
-
-  void UUID::deserialize(io::BinaryReader& reader)
-  {
-    std::array<uuids::uuid::value_type, UUID_BYTE_SIZE> bytes{};
-    for (size_t i = 0; i < UUID_BYTE_SIZE; ++i)
-      bytes[i] = reader.readUInt8();
-
-    uuids::uuid uuid(bytes);
-    m_impl->uuid = uuid;
-  }
-
   String UUID::toString() const
   {
     return String(uuids::to_string(m_impl->uuid));
@@ -152,6 +134,11 @@ namespace hc
   SizeT UUID::hash() const
   {
     return std::hash<uuids::uuid>{}(m_impl->uuid);
+  }
+
+  std::span<std::byte const> UUID::asBytes() const
+  {
+    return m_impl->uuid.as_bytes();
   }
 
   UUID::UUID(Impl* impl) :

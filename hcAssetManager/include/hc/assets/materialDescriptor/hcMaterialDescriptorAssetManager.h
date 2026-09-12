@@ -30,7 +30,7 @@ namespace hc
      * @return A shared pointer to the loaded descriptor, or nullptr on
      * failure
      */
-    SharedPtr<AMaterialDescriptor> load(const Path& path) override;
+    SharedPtr<MaterialDescriptor> load(const Path& path) override;
 
     /**
      * Retrieves a previously loaded material descriptor.
@@ -39,7 +39,7 @@ namespace hc
      * 
      * @return A shared pointer to the descriptor if loaded
      */
-    SharedPtr<AMaterialDescriptor> get(const Path& path) const override;
+    SharedPtr<MaterialDescriptor> get(const Path& path) const override;
 
     /**
      * Checks if a material descriptor is currently loaded.
@@ -62,7 +62,7 @@ namespace hc
      * loaded material descriptors. The vector will be cleared before being
      * populated.
      */
-    void getAllLoadedAssets(Vector<SharedPtr<AMaterialDescriptor>>& outAssets) const override;
+    void getAllLoadedAssets(Vector<SharedPtr<MaterialDescriptor>>& outAssets) const override;
 
     /**
      * Gets the number of material descriptors currently loaded in the manager.
@@ -72,27 +72,17 @@ namespace hc
     SizeT size() const override;
 
     /**
-     * Retrieves the default material descriptor.
-     *
-     * @return A shared pointer to the default material descriptor
+     * @copydoc IMaterialDescriptorAssetManager::getDefault
      */
-    SharedPtr<AMaterialDescriptor> getDefault() const override;
-
-  private:
-    UnorderedMap<Path, SharedPtr<AMaterialDescriptor>> m_loadedMaterialDescriptors;
-    SharedPtr<AMaterialDescriptor> m_defaultMaterialDescriptor;
+    SharedPtr<MaterialDescriptor> getDefault() const override;
 
     /**
-     * Deserializes an unlit material descriptor from JSON data.
-     *
-     * @param path The file path of the material descriptor
-     * @param json The JSON data containing material properties
-     * 
-     * @return A shared pointer to the deserialized descriptor
+     * @copydoc IMaterialDescriptorAssetManager::save
      */
-    SharedPtr<UnlitMaterialDescriptor> deserializeUnlitMaterialDescriptor(
-      const Path& path,
-      const Json& json
-    ) const;
+    void save(const Path& path, const MaterialDescriptor& descriptor) override;
+
+  private:
+    UnorderedMap<Path, SharedPtr<MaterialDescriptor>> m_loadedMaterialDescriptors;
+    SharedPtr<MaterialDescriptor> m_defaultMaterialDescriptor;
   };
 }

@@ -1,7 +1,7 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
@@ -11,6 +11,7 @@ namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
     AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(0.5f, 0.5f, 0.5f, 1.0f)
   {
   }
@@ -21,6 +22,7 @@ namespace hc
 
   void UnlitMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     m_shaderProgram.reset();
     m_mainTexture.reset();
@@ -71,7 +73,7 @@ namespace hc
   }
 
   void UnlitMaterial::initialize(
-    const UnlitMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
     const SharedPtr<ITexture>& mainTexture
   )
@@ -79,11 +81,18 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
-    m_name = descriptor.getName();
-    m_renderMode = descriptor.getRenderMode();
-    m_doubleSided = descriptor.isDoubleSided();
-    setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());
-    m_color = descriptor.getColor();
+    const assets::materialDescriptor::UnlitData* unlitData = descriptor.getIfUnlitData();
+    if (!unlitData)
+      throw InvalidArgumentException(
+        "UnlitMaterial::initialize: Provided descriptor does not contain UnlitData."
+      );
+
+    m_sourcePath = descriptor.path;
+    m_name = descriptor.name;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
+    m_color = unlitData->color;
     m_shaderProgram = shaderProgram;
     m_mainTexture = mainTexture;
   }

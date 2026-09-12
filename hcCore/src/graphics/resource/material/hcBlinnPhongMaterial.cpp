@@ -5,12 +5,13 @@
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 #include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
-#include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 
 namespace hc
 {
   BlinnPhongMaterial::BlinnPhongMaterial(UInt16 materialId) :
     AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_shininess(16.0f),
     m_albedoTexture(nullptr),
@@ -25,6 +26,7 @@ namespace hc
 
   void BlinnPhongMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_albedoTexture.reset();
     m_normalTexture.reset();
     m_specularTexture.reset();
@@ -106,7 +108,7 @@ namespace hc
   }
 
   void BlinnPhongMaterial::initialize(
-    const BlinnPhongMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,
@@ -128,13 +130,19 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    m_color = descriptor.getColor();
-    m_name = descriptor.getName();
-    m_shininess = descriptor.getShininess();
-    m_alphaCutoutThreshold = descriptor.getAlphaCutoutThreshold();
-    m_doubleSided = descriptor.isDoubleSided();
-    m_renderMode = descriptor.getRenderMode();
+    const assets::materialDescriptor::BlinnPhongData* blinnPhongData = descriptor.getIfBlinnPhongData();
+    if (!blinnPhongData)
+      throw InvalidArgumentException(
+        "BlinnPhongMaterial::initialize: Provided descriptor does not contain BlinnPhongData."
+      );
 
+    m_sourcePath = descriptor.path;
+    m_name = descriptor.name;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
+    m_color = blinnPhongData->color;
+    setShininess(blinnPhongData->shininess);
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
     m_specularTexture = specularTexture;

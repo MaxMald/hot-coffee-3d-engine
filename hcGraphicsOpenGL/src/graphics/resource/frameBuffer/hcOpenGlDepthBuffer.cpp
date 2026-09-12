@@ -37,7 +37,8 @@ namespace hc
         width, height,
         textureFormatType::Depth24,
         colorSpaceType::Linear,
-        nullptr
+        nullptr,
+        ""
       );
 
       if (!m_depthTexture.isValid())

@@ -6,23 +6,18 @@
 namespace hc
 {
   OpenGlMesh::OpenGlMesh(IGraphicsManager& graphicsManager) :
-    m_id(Id::Create()),
-    m_valid(false),
+    m_graphicsManager(graphicsManager),
+    m_sourcePath(),
     m_materials(),
     m_subMeshes(),
     m_vao(0), m_vbo(0), m_ebo(0),
     m_drawMode(GL_TRIANGLES),
-    m_graphicsManager(graphicsManager)
+    m_valid(false)
   {}
 
   OpenGlMesh::~OpenGlMesh()
   {
     destroy();
-  }
-
-  const Id& OpenGlMesh::getId() const 
-  {
-    return m_id;
   }
 
   void OpenGlMesh::draw(
@@ -59,7 +54,7 @@ namespace hc
       throw;
     }
 
-    m_sourcePath = model.getPath();
+    m_sourcePath = model.path;
     m_subMeshes = model.getSubMeshes();
     m_materials = materials;
     m_valid = true;
@@ -68,7 +63,8 @@ namespace hc
   void OpenGlMesh::initialize(
     const Buffer<Vertex>& vertices,
     const BufferUInt32& indices,
-    const Vector<SharedPtr<IMaterial>>& materials
+    const Vector<SharedPtr<IMaterial>>& materials,
+    const Path& sourcePath
   )
   {
     if (m_valid)
@@ -92,6 +88,7 @@ namespace hc
     defaultSubMesh.indexCount = static_cast<UInt32>(indices.size());
     defaultSubMesh.materialIndex = 0;
 
+    m_sourcePath = sourcePath;
     m_subMeshes = { defaultSubMesh };
     m_materials = materials;
     m_valid = true;
@@ -101,7 +98,8 @@ namespace hc
     const Buffer<Vertex>&vertices,
     const BufferUInt32 & indices,
     const Vector<ModelSubMesh>&subMeshes,
-    const Vector<SharedPtr<IMaterial>>&materials
+    const Vector<SharedPtr<IMaterial>>&materials,
+    const Path& sourcePath
   )
   {
     if (m_valid)
@@ -118,6 +116,7 @@ namespace hc
       throw;
     }
 
+    m_sourcePath = sourcePath;
     m_subMeshes = subMeshes;
     m_materials = materials;
     m_valid = true;
@@ -128,7 +127,6 @@ namespace hc
     assertIsValid();
     updateVertexAndIndexBuffers(model.getVertices(), model.getIndices());
     m_subMeshes = model.getSubMeshes();
-    m_sourcePath = model.getPath();
   }
 
   void OpenGlMesh::update(const Buffer<Vertex>& vertices, const BufferUInt32& indices)
@@ -210,7 +208,7 @@ namespace hc
     m_valid = false;
   }
 
-  const Vector<SharedPtr<IMaterial>> OpenGlMesh::getMaterials()
+  const Vector<SharedPtr<IMaterial>>& OpenGlMesh::getMaterials() const
   {
     return m_materials;
   }
@@ -228,16 +226,6 @@ namespace hc
   bool OpenGlMesh::isValid() const
   {
     return m_valid;
-  }
-
-  Path OpenGlMesh::getSourcePath() const
-  {
-    return m_sourcePath;
-  }
-
-  void OpenGlMesh::setSourcePath(const Path& path)
-  {
-    m_sourcePath = path;
   }
 
   void OpenGlMesh::bind()

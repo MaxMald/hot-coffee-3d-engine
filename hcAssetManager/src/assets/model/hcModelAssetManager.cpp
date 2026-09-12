@@ -3,12 +3,15 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "hc/assets/model/hcAssimpMaterialDescriptorParser.h"
+#include "hc/assets/metadata/hcModelMetadataManager.h"
 
 namespace hc
 {
   ModelAssetManager::ModelAssetManager(
+    assets::metadata::ModelMetadataManager& modelMetaManager,
     IMaterialDescriptorAssetManager& materialDescriptorAssetManager
   ) :
+    m_modelMetaManager(modelMetaManager),
     m_loadedModels(),
     m_primitiveModels(),
     m_primitiveModelsFactory(materialDescriptorAssetManager)
@@ -71,7 +74,7 @@ namespace hc
       subMeshes.push_back(subMesh);
     }
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors;
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors;
     for (UInt32 i = 0; i < scene->mNumMaterials; ++i)
     {
       materialDescriptors.push_back(
@@ -89,6 +92,9 @@ namespace hc
       subMeshes,
       materialDescriptors
     );
+
+    if (m_modelMetaManager.has(path))
+      m_modelMetaManager.apply(path, *model);
 
     m_loadedModels[path] = model;
     return model;
