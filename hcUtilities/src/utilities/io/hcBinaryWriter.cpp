@@ -16,7 +16,12 @@ namespace hc::io
 
   BinaryWriter::~BinaryWriter()
   {
-    shutdown();
+    if (m_stream != nullptr)
+      m_stream.reset();
+
+    m_currentObject.reset();
+    while (!m_objectStack.empty())
+      m_objectStack.pop();
   }
 
   bool BinaryWriter::prepare(const Path& filePath, String& outError)
@@ -47,14 +52,20 @@ namespace hc::io
     if (m_stream != nullptr)
     {
       m_stream->flush();
+
+      if (m_stream->fail())
+      {
+        String error = "BinaryWriter: Failed to flush the stream.";
+        m_stream.reset();
+        throw RuntimeErrorException(error);
+      }
+
       m_stream.reset();
     }
 
     m_currentObject.reset();
     while (!m_objectStack.empty())
-    {
       m_objectStack.pop();
-    }
   }
 
   void BinaryWriter::writeBool(bool value)
