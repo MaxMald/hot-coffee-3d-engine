@@ -13,10 +13,6 @@ namespace hc
    */
   struct PrimitiveModelPathUtilities
   {
-    /**
-     * Base directory path for primitive model assets.
-     */
-    static constexpr const char* PrimitivesBasePath = "_HC_PRIMITIVES";
 
     /**
      * Checks if a given path corresponds to a primitive model.

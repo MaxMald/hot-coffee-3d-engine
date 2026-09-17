@@ -1,6 +1,5 @@
 #include "hc/serialization/scene/hcSceneSerializer.h"
 
-#include <fstream>
 #include "hc/serialization/hcFileFormats.h"
 #include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 #include "hc/scene/hcScene.h"
@@ -18,17 +17,16 @@ namespace hc
     {
       try
       {
-        // Open the file for binary writing
-        std::ofstream outputFile(filePath, std::ios::binary);
-        if (!outputFile)
+        String error;
+        io::BinaryWriter writer;
+        if (!writer.prepare(filePath, error))
         {
           LogService::Error(
-            "Failed to open file for writing: " + filePath.string()
+            "Exception during scene serialization: " + error +
+            " in file: " + filePath.toString()
           );
           return false;
         }
-
-        BinaryWriter writer(outputFile);
 
         SerializeHeader(writer);
         scene.serialize(writer);
@@ -40,7 +38,7 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene serialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return false;
       }
@@ -57,16 +55,15 @@ namespace hc
       {
         scene.destroy();
 
-        std::ifstream inputFile(filePath, std::ios::binary);
-        if (!inputFile)
+        String error;
+        io::BinaryReader reader;
+        if (!reader.prepare(filePath, error))
         {
           LogService::Error(
-            "Failed to open file for reading: " + filePath.string()
+            "Failed to prepare binary reader for scene file: " + filePath.toString() + " Error: " + error
           );
           return false;
         }
-
-        BinaryReader reader(inputFile);
 
         VerifyHeader(reader);
         scene.deserialize(reader);
@@ -78,7 +75,7 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene deserialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return false;
       }
@@ -102,20 +99,20 @@ namespace hc
       {
         LogService::Error(
           "Exception during scene deserialization: " + String(e.what()) +
-          " in file: " + filePath.string()
+          " in file: " + filePath.toString()
         );
         return nullptr;
       }
     }
 
-    void SceneSerializer::SerializeHeader(BinaryWriter& writer)
+    void SceneSerializer::SerializeHeader(io::BinaryWriter& writer)
     {
       writer.writeUInt32(fileFormat::Scene::MAGIC_NUMBER);
       writer.writeUInt32(fileFormat::Scene::VERSION);
       writer.writeUInt32(EngineVersion::ToInt());
     }
 
-    void SceneSerializer::VerifyHeader(BinaryReader& reader)
+    void SceneSerializer::VerifyHeader(io::BinaryReader& reader)
     {
       UInt32 magicNumber = reader.readUInt32();
       if (magicNumber != fileFormat::Scene::MAGIC_NUMBER)

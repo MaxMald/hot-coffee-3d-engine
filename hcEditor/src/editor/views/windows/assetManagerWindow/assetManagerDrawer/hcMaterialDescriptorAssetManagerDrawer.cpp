@@ -6,15 +6,15 @@ namespace hc::editor
   MaterialDescriptorAssetManagerDrawer::MaterialDescriptorAssetManagerDrawer(
     IMaterialDescriptorAssetManager& assetManager
   ) :
-    AAssetManagerDrawer<AMaterialDescriptor>(assetManager)
+    AAssetManagerDrawer<MaterialDescriptor>(assetManager)
   {
   }
 
   void MaterialDescriptorAssetManagerDrawer::drawAssetDetails(
-    const SharedPtr<AMaterialDescriptor>& asset
+    const SharedPtr<MaterialDescriptor>& asset
   )
   {
-    String shaderTypeStr = shadingType::toString(asset->getShaderType());
-    ImGui::Text("Shader Type: %s", shaderTypeStr.c_str());
+    String materialTypeStr = materialType::toString(asset->getType());
+    ImGui::Text("Material Type: %s", materialTypeStr.c_str());
   }
 }

@@ -2,11 +2,13 @@
 
 namespace hc
 {
+  static constexpr UInt16 ABASE_COMPONENT_VERSION = 1;
+
   ABaseComponent::ABaseComponent(componentType::Type type) :
+    m_uuid(UUID::Generate()),
     m_gameObject(nullptr),
     m_type(type)
-  {
-  }
+  {}
 
   void ABaseComponent::setGameObject(GameObject* gameObject)
   {
@@ -24,20 +26,40 @@ namespace hc
     return m_type;
   }
 
-  void ABaseComponent::serialize(BinaryWriter& writer) const
+  void ABaseComponent::serialize(io::BinaryWriter& writer) const
   {
-    writer.writeUInt16(getType());
+    UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(static_cast<UInt32>(getType()), composedVersion);
+    writer.writeUUID(m_uuid);
+    onSerialize(writer);
+    writer.finishWritingObject();
   }
 
-  void ABaseComponent::deserialize(BinaryReader& reader)
+  void ABaseComponent::deserialize(io::BinaryReader& reader)
   {
-    componentType::Type type = static_cast<componentType::Type>(reader.readUInt16());
-    if (type != getType())
+    UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(composedVersion))
     {
+      reader.finishReadingObject();
+      return;
+    }
+
+    if (!header.matchType(static_cast<UInt32>(getType())))
+    {
+      reader.finishReadingObject();
       throw RuntimeErrorException(
-        "Component type mismatch during deserialization."
+        String::Format(
+          "Component type mismatch during deserialization. Expected type: %u, but got: %u",
+          static_cast<UInt32>(getType()),
+          header.type
+        )
       );
     }
+
+    m_uuid = reader.readUUID();
+    onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   void ABaseComponent::onGameObjectSet()

@@ -3,12 +3,15 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "hc/assets/model/hcAssimpMaterialDescriptorParser.h"
+#include "hc/assets/metadata/hcModelMetadataManager.h"
 
 namespace hc
 {
   ModelAssetManager::ModelAssetManager(
+    assets::metadata::ModelMetadataManager& modelMetaManager,
     IMaterialDescriptorAssetManager& materialDescriptorAssetManager
   ) :
+    m_modelMetaManager(modelMetaManager),
     m_loadedModels(),
     m_primitiveModels(),
     m_primitiveModelsFactory(materialDescriptorAssetManager)
@@ -22,7 +25,7 @@ namespace hc
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(
-      path.string().c_str(),
+      path.toString().c_str(),
       aiProcess_Triangulate | aiProcess_CalcTangentSpace | aiProcess_FlipUVs
     );
 
@@ -71,12 +74,12 @@ namespace hc
       subMeshes.push_back(subMesh);
     }
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors;
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors;
     for (UInt32 i = 0; i < scene->mNumMaterials; ++i)
     {
       materialDescriptors.push_back(
         AssimpMaterialDescriptorParser::Parse(
-          path.parent_path(),
+          path.parentPath(),
           scene->mMaterials[i]
         )
       );
@@ -90,6 +93,9 @@ namespace hc
       materialDescriptors
     );
 
+    if (m_modelMetaManager.has(path))
+      m_modelMetaManager.apply(path, *model);
+
     m_loadedModels[path] = model;
     return model;
   }
@@ -101,7 +107,7 @@ namespace hc
       return it->second;
 
     throw RuntimeErrorException(
-      "Model asset not found: " + path.string()
+      "Model asset not found: " + path.toString()
     );
   }
 

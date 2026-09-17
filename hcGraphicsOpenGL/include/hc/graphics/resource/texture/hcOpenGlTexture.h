@@ -20,43 +20,36 @@ namespace hc
     ~OpenGlTexture() override;
 
     /**
-     * @brief Returns the unique identifier of the texture.
-     *
-     * @return Reference to the texture Id.
-     */
-    const Id& getId() const override;
-
-    /**
      * @copydoc ITexture::initialize(const Image&)
      */
     void initialize(const Image& image) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat
+      textureFormatType::Type colorFormat
     ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace
     ) override;
 
     /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, colorFormatType::Type, colorSpaceType::Type, const Color&)
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type, const Color&)
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace,
       const Color& initColor
     ) override;
@@ -76,9 +69,9 @@ namespace hc
     UInt32 getHeight() const override;
 
     /**
-     * @copydoc ITexture::getColorFormat
+     * @copydoc ITexture::getTextureFormat
      */
-    colorFormatType::Type getColorFormat() const override;
+    textureFormatType::Type getTextureFormat() const override;
 
     /**
     * @copydoc ITexture::getColorSpace
@@ -128,6 +121,14 @@ namespace hc
     void* getNativeHandle() const override;
 
     /**
+     * @copydoc ITexture::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @brief Returns the OpenGL texture ID.
      *
      * @return OpenGL texture identifier.
@@ -143,21 +144,24 @@ namespace hc
      * @param colorFormat The color format of the texture.
      * @param colorSpace The color space of the texture.
      * @param initData Optional pointer to initial pixel data to upload to the texture.
+     * @param sourcePath Optional path to the source file from which the texture was
+     * loaded.
      */
     void initialize(
       UInt32 width,
       UInt32 height,
-      colorFormatType::Type colorFormat,
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type colorSpace,
-      const void* initData
+      const void* initData,
+      const Path& sourcePath
     );
 
   private:
-    Id m_id;
+    Path m_sourcePath;
     GLuint m_textureId;
     UInt32 m_width;
     UInt32 m_height;
-    colorFormatType::Type m_colorFormat;
+    textureFormatType::Type m_textureFormat;
     colorSpaceType::Type m_colorSpace;
     bool m_created;
 

@@ -4,10 +4,24 @@
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/graphics/lightFrameData/hcLightFrameData.h"
+#include "hc/scene/light/hcLightManager.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
+  /**
+   * @brief Represents the settings for a 3D scene
+   */
+  struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
+  {
+    Color ambientColor = Color::White();
+    float ambientIntensity = 0.1f;
+
+    void serialize(io::BinaryWriter& writer) const override;
+    void deserialize(io::BinaryReader& reader) override;
+    void clear();
+  };
+
   class IGameObjectFactory;
   class SceneManager;
   class IGraphicsManager;
@@ -21,7 +35,7 @@ namespace hc
    * updating. The class is intended to be subclassed for custom scene logic by
    * overriding the protected virtual hooks.
    */
-  class HC_CORE_EXPORT Scene : public NonCopyable, public ISerializable
+  class HC_CORE_EXPORT Scene : public NonCopyable, public io::ISerializable
   {
   public:
     /**
@@ -39,7 +53,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the scene's light manager, camera manager, and scene
@@ -50,7 +64,7 @@ namespace hc
      *
      * @param reader The BinaryReader to deserialize from.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -228,7 +242,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize custom data to.
      */
-    virtual void onSerialize(BinaryWriter& writer) const;
+    virtual void onSerialize(io::BinaryWriter& writer) const;
 
     /**
      * @brief Called during deserialization to read custom scene data.
@@ -239,12 +253,24 @@ namespace hc
      *
      * @param reader The BinaryReader to deserialize custom data from.
      */
-    virtual void onDeserialize(BinaryReader& reader);
+    virtual void onDeserialize(io::BinaryReader& reader);
+
+    /**
+     * @brief Gets the version number for the derived scene class.
+     *
+     * Override to return a unique version number for derived scene classes.
+     * This version number is used during serialization and deserialization to
+     * ensure compatibility.
+     *
+     * @return The version number of the derived scene class.
+     */
+    virtual UInt16 getDerivedVersion() const;
 
   private:
     SceneGraph m_sceneGraph;
     CameraManager m_cameraManager;
-    LightFrameData m_lightFrameData;
+    LightManager m_lightManager;
+    SceneSettings m_settings;
     IGameObjectFactory* m_gameObjectFactory;
     Skybox m_skybox;
 

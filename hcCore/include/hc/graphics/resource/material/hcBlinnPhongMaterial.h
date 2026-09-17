@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class BlinnPhongMaterialDescriptor;
+  class MaterialDescriptor;
   class ITexture;
   class IShaderProgram;
 
@@ -29,21 +29,16 @@ namespace hc
     void destroy() override;
 
     /**
-     * @copydoc IMaterial::getShaderType
+     * @copydoc IMaterial::getMaterialType
      */
-    shadingType::Type getShaderType() const override;
+    materialType::Type getMaterialType() const override;
 
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(renderPassType::Type renderPass) override;
-
-    /**
-     * @copydoc IMaterial::updateModelMatrix
-     */
-    void updateModelMatrix(
-      const Matrix4& modelMatrix,
-      renderPassType::Type renderPass
+    void bind(
+      renderPassType::Type renderPass,
+      IDataBlockManager& dataBlockManager
     ) override;
 
     /**
@@ -55,6 +50,14 @@ namespace hc
      * @copydoc IMaterial::isValid
      */
     bool isValid() const override;
+
+    /**
+     * @copydoc IMaterial::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
 
     /**
      * @brief Initializes the Blinn-Phong material with the provided descriptor and
@@ -72,7 +75,7 @@ namespace hc
      * @param deferredGeometryShaderProgram Shared pointer to the shader program used for deferred geometry rendering this material.
      */
     void initialize(
-      const BlinnPhongMaterialDescriptor& descriptor,
+      const MaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& specularTexture,
@@ -153,6 +156,7 @@ namespace hc
     void setSpecularTexture(const SharedPtr<ITexture>& specularTexture);
 
   private:
+    Path m_sourcePath;
     Color m_color;
     float m_shininess;
     SharedPtr<ITexture> m_albedoTexture;
@@ -163,7 +167,5 @@ namespace hc
     SharedPtr<IShaderProgram> m_deferredGeometryShaderProgram;
 
     void assertIsValid() const;
-    void bindForwardPass();
-    void bindDeferredGeometryPass();
   };
 }

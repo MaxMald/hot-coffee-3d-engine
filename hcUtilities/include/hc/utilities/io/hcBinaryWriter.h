@@ -1,211 +1,280 @@
 #pragma once
 #include <ostream>
+#include "hc/utilities/io/hcObjectSerialization.h"
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/hcVector4.h"
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcColor.h"
 #include "hc/utilities/hcAngle.h"
+#include "hc/utilities/hcUUID.h"
 
 namespace hc
 {
-  /**
-   * @brief Writes primitive types and engine data structures to a binary
-   * stream.
-   *
-   * BinaryWriter provides methods for serializing various data types to a
-   * binary output stream.
-   */
-  class HC_UTILITY_EXPORT BinaryWriter
+  namespace io
   {
-  public:
     /**
-     * @brief Constructs a BinaryWriter with the specified output stream.
+     * @brief Writes primitive types and engine data structures to a binary
+     * stream.
      *
-     * @param stream Reference to the output stream to write to.
+     * BinaryWriter provides methods for serializing various data types to a
+     * binary output stream.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
      */
-    explicit BinaryWriter(std::ostream& stream);
-    virtual ~BinaryWriter() = default;
+    class HC_UTILITY_EXPORT BinaryWriter
+    {
+    public:
+      explicit BinaryWriter();
+      virtual ~BinaryWriter();
 
-    /**
-     * @brief Writes a boolean value as a single byte.
-     *
-     * @param value The boolean to write.
-     */
-    void writeBool(bool value);
+      /**
+       * @brief Prepares the binary writer by opening a binary file for writing.
+       *
+       * @param filePath The path to the binary file to open.
+       * @param outError A string to receive an error message if preparation fails.
+       *
+       * @return True if the file was opened successfully, false otherwise.
+       */
+      bool prepare(const Path& filePath, String& outError);
 
-    /**
-     * @brief Writes an 8-bit signed integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeInt8(Int8 value);
+      /**
+       * @brief Safely shuts down the binary writer, closing any open streams and
+       * releasing resources.
+       */
+      void shutdown();
 
-    /**
-     * @brief Writes a 16-bit signed integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeInt16(Int16 value);
+      /**
+       * @brief Writes a boolean value as a single byte.
+       *
+       * @param value The boolean to write.
+       */
+      void writeBool(bool value);
 
-    /**
-     * @brief Writes a 32-bit signed integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeInt32(Int32 value);
+      /**
+       * @brief Writes an 8-bit signed integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeInt8(Int8 value);
 
-    /**
-     * @brief Writes a 64-bit signed integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeInt64(Int64 value);
+      /**
+       * @brief Writes a 16-bit signed integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeInt16(Int16 value);
 
-    /**
-     * @brief Writes an 8-bit unsigned integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeUInt8(UInt8 value);
+      /**
+       * @brief Writes a 32-bit signed integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeInt32(Int32 value);
 
-    /**
-     * @brief Writes a 16-bit unsigned integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeUInt16(UInt16 value);
+      /**
+       * @brief Writes a 64-bit signed integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeInt64(Int64 value);
 
-    /**
-     * @brief Writes a 32-bit unsigned integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeUInt32(UInt32 value);
+      /**
+       * @brief Writes an 8-bit unsigned integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeUInt8(UInt8 value);
 
-    /**
-     * @brief Writes a 64-bit unsigned integer.
-     *
-     * @param value The integer to write.
-     */
-    void writeUInt64(UInt64 value);
+      /**
+       * @brief Writes a 16-bit unsigned integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeUInt16(UInt16 value);
 
-    /**
-     * @brief Writes a character.
-     *
-     * @param value The character to write.
-     */
-    void writeChar(Char value);
+      /**
+       * @brief Writes a 32-bit unsigned integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeUInt32(UInt32 value);
 
-    /**
-     * @brief Writes a 16-bit character.
-     *
-     * @param value The character to write.
-     */
-    void writeChar16(Char16 value);
+      /**
+       * @brief Writes a 64-bit unsigned integer.
+       *
+       * @param value The integer to write.
+       */
+      void writeUInt64(UInt64 value);
 
-    /**
-     * @brief Writes a 32-bit character.
-     *
-     * @param value The character to write.
-     */
-    void writeChar32(Char32 value);
+      /**
+       * @brief Writes a character.
+       *
+       * @param value The character to write.
+       */
+      void writeChar(Char value);
 
-    /**
-     * @brief Writes an unsigned character.
-     *
-     * @param value The character to write.
-     */
-    void writeUChar(UChar value);
+      /**
+       * @brief Writes a 16-bit character.
+       *
+       * @param value The character to write.
+       */
+      void writeChar16(Char16 value);
 
-    /**
-     * @brief Writes a 32-bit floating point value.
-     *
-     * @param value The float to write.
-     */
-    void writeFloat(float value);
+      /**
+       * @brief Writes a 32-bit character.
+       *
+       * @param value The character to write.
+       */
+      void writeChar32(Char32 value);
 
-    /**
-     * @brief Writes a byte.
-     *
-     * @param value The byte to write.
-     */
-    void writeByte(Byte value);
+      /**
+       * @brief Writes an unsigned character.
+       *
+       * @param value The character to write.
+       */
+      void writeUChar(UChar value);
 
-    /**
-     * @brief Writes a size_t value.
-     *
-     * @param value The size value to write.
-     */
-    void writeSizeT(SizeT value);
+      /**
+       * @brief Writes a 32-bit floating point value.
+       *
+       * @param value The float to write.
+       */
+      void writeFloat(float value);
 
-    /**
-     * @brief Writes a filesystem path in cross-platform format.
-     *
-     * Converts the path to a generic string format using forward slashes
-     * to ensure cross-platform compatibility. The path is written as a
-     * length-prefixed string.
-     *
-     * @param value The path to write.
-     */
-    void writePath(const Path& value);
+      /**
+       * @brief Writes a byte.
+       *
+       * @param value The byte to write.
+       */
+      void writeByte(Byte value);
 
-    /**
-     * @brief Writes a string with a length prefix.
-     *
-     * Writes the string length as a UInt32 followed by the string data.
-     * This allows for efficient reading without requiring null
-     * terminators.
-     *
-     * @param value The string to write.
-     */
-    void writeString(const String& value);
+      /**
+       * @brief Writes a sequence of bytes.
+       *
+       * @param data Pointer to the byte data to write.
+       * @param size The number of bytes to write.
+       */
+      void writeBytes(const Byte* data, SizeT size);
 
-    /**
-     * @brief Writes a 3D vector with float components.
-     *
-     * @param value The vector to write.
-     */
-    void writeVector3f(const Vector3f& value);
+      /**
+       * @brief Writes a size_t value.
+       *
+       * @param value The size value to write.
+       */
+      void writeSizeT(SizeT value);
 
-    /**
-     * @brief Writes a 4D vector with float components.
-     *
-     * @param value The vector to write.
-     */
-    void writeVector4f(const Vector4f& value);
+      /**
+       * @brief Writes a UUID to the stream.
+       *
+       * Writes the UUID as a length-prefixed byte array (16 bytes).
+       *
+       * @param value The UUID to write.
+       */
+      void writeUUID(const UUID& value);
 
-    /**
-     * @brief Writes a 4x4 matrix with float components.
-     *
-     * @param value The matrix to write.
-     */
-    void writeMatrix4(const Matrix4& value);
+      /**
+       * @brief Writes a filesystem path in cross-platform format.
+       *
+       * Converts the path to a generic string format using forward slashes
+       * to ensure cross-platform compatibility. The path is written as a
+       * length-prefixed string.
+       *
+       * @param value The path to write.
+       */
+      void writePath(const Path& value);
 
-    /**
-     * @brief Writes an angle value in radians.
-     *
-     * @param value The angle to write.
-     */
-    void writeAngle(const Angle& value);
+      /**
+       * @brief Writes a string with a length prefix.
+       *
+       * Writes the string length as a UInt32 followed by the string data.
+       * This allows for efficient reading without requiring null
+       * terminators.
+       *
+       * @param value The string to write.
+       */
+      void writeString(const String& value);
 
-    /**
-     * @brief Writes a color with four float components (RGBA).
-     *
-     * @param value The color to write.
-     */
-    void writeColor(const Color& value);
+      /**
+       * @brief Writes a 3D vector with float components.
+       *
+       * @param value The vector to write.
+       */
+      void writeVector3f(const Vector3f& value);
 
-    /**
-     * @brief Checks if the stream is in a valid state.
-     *
-     * @return True if the stream is valid and ready for writing, false
-     *         otherwise.
-     */
-    bool isValid() const;
+      /**
+       * @brief Writes a 4D vector with float components.
+       *
+       * @param value The vector to write.
+       */
+      void writeVector4f(const Vector4f& value);
 
-  protected:
-    std::ostream& m_stream;
-  };
+      /**
+       * @brief Writes a 4x4 matrix with float components.
+       *
+       * @param value The matrix to write.
+       */
+      void writeMatrix4(const Matrix4& value);
+
+      /**
+       * @brief Writes an angle value in radians.
+       *
+       * @param value The angle to write.
+       */
+      void writeAngle(const Angle& value);
+
+      /**
+       * @brief Writes a color with four float components (RGBA).
+       *
+       * @param value The color to write.
+       */
+      void writeColor(const Color& value);
+
+      /**
+       * @brief Starts writing an object with the specified type and version.
+       *
+       * @param type The type of the object.
+       * @param version The version of the object.
+       */
+      void startWritingObject(UInt32 type, UInt32 version);
+      
+      /**
+       * @brief Ends writing the current object.
+       */
+      void finishWritingObject();
+
+      /**
+       * @brief Checks if the stream is currently writing an object.
+       *
+       * @return True if currently writing an object, false otherwise.
+       */
+      bool isWritingObject() const;
+
+      /**
+       * @brief Checks if the stream is in a valid state.
+       *
+       * @return True if the stream is valid and ready for writing, false
+       *         otherwise.
+       */
+      bool isValid() const;
+
+    protected:
+      UniquePtr<std::ostream> m_stream;
+      UniquePtr<ObjectData> m_currentObject;
+      Stack<UniquePtr<ObjectData>> m_objectStack;
+
+      /**
+       * @brief Writes an ObjectData instance to the stream.
+       *
+       * @param objectData The ObjectData instance to write.
+       */
+      void writeObject(const ObjectData& objectData);
+    };
+  }
 }

@@ -2,12 +2,9 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/window/hcIWindow.h"
-#include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/hcDrawCommand.h"
-#include "hc/graphics/hcGraphicsBackendType.h"
-#include "hc/graphics/hcPolygonFillType.h"
-#include "hc/graphics/hcRenderPipelineType.h"
 
 namespace hc
 {
@@ -18,9 +15,11 @@ namespace hc
   class IMaterialManager;
   class IShaderManager;
   class IShaderProgramManager;
+  class IDataBlockManager;
   class IMeshManager;
   class IGBuffer;
   class ICubeMap;
+  class ILightShadowMapManager;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
@@ -60,20 +59,6 @@ namespace hc
     virtual void beginFrame() = 0;
 
     /**
-     * @brief Uploads the camera frame data for the current frame to the GPU.
-     *
-     * @param cameraFrameData The camera frame data for the current frame.
-     */
-    virtual void uploadCameraFrameData(const CameraFrameData& cameraFrameData) = 0;
-
-    /**
-     * @brief Uploads the aggregated light data for the current frame to the GPU.
-     *
-     * @param lightFrameData The aggregated light data for the current frame.
-     */
-    virtual void uploadLightFrameData(const LightFrameData& lightFrameData) = 0;
-
-    /**
      * @brief Sets the render target for all subsequent draw calls.
      *
      * The specified framebuffer becomes the active render target until
@@ -101,16 +86,35 @@ namespace hc
     virtual void setSkybox(ICubeMap* skyboxCubeMap) = 0;
 
     /**
-     * @brief Issues a draw command to render graphics for the current frame.
+     * @brief Queues a draw command to render graphics for the current frame.
      *
      * @param command The draw command containing rendering instructions.
      */
-    virtual void draw(const DrawCommand& command) = 0;
+    virtual void queueDrawCommand(const DrawCommand& command) = 0;
 
     /**
-     * @brief Executes all issued draw commands for the current frame.
+     * @brief Executes all queued draw commands for the current frame.
      */
     virtual void executeDrawCommands() = 0;
+
+    /**
+     * @brief Clears all queued draw commands for the current frame.
+     */
+    virtual void clearDrawCommands() = 0;
+
+    /**
+     * @brief Gets a reference to the draw command queue for the current frame.
+     *
+     * @return Reference to the vector of draw commands.
+     */
+    virtual Vector<DrawCommand>& getDrawCommandQueue() = 0;
+
+    /**
+     * @brief Gets a const reference to the draw command queue for the current frame.
+     *
+     * @return Const reference to the vector of draw commands.
+     */
+    virtual const Vector<DrawCommand>& getDrawCommandQueue() const = 0;
 
     /**
      * @brief Ends the current rendering frame and presents it to the given
@@ -182,6 +186,20 @@ namespace hc
      * @return Reference to the IMeshManager instance.
      */
     virtual IMeshManager& getMeshManager() = 0;
+
+    /**
+     * @brief Returns the light shadow map manager.
+     *
+     * @return Reference to the ILightShadowMapManager instance.
+     */
+    virtual ILightShadowMapManager& getLightShadowMapManager() = 0;
+
+    /**
+     * @brief Returns the data block manager.
+     *
+     * @return Reference to the IDataBlockManager instance.
+     */
+    virtual IDataBlockManager& getDataBlockManager() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

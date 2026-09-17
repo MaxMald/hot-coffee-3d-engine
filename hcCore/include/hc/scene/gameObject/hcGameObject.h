@@ -55,7 +55,7 @@ namespace hc
      *
      * @param writer The BinaryWriter to serialize to.
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @brief Deserializes the GameObject and all its children and components
@@ -66,14 +66,18 @@ namespace hc
      * @throws RuntimeErrorException if a component type is not registered or
      * deserialization is not implemented for a component type.
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Renders the GameObject and its drawable children/components.
      *
      * @param renderContext Rendering context for drawing.
+     * @param outDrawCommands Vector to store draw commands.
      */
-    virtual void draw(const RenderContext& renderContext) override;
+    virtual void draw(
+      const RenderContext& renderContext,
+      Vector<DrawCommand>& outDrawCommands
+    ) const override;
 
     /**
      * @brief Pre-update step for the GameObject and its children.
@@ -168,6 +172,14 @@ namespace hc
     const Vector<UniquePtr<GameObject>>& getChildren() const;
 
     /**
+     * @brief Populates the provided vector with pointers to all descendants of
+     * this GameObject, including children, grandchildren, etc.
+     *
+     * @param outDescendants Vector to populate with descendant pointers.
+     */
+    void getAllDescendants(Vector<GameObject*>& outDescendants) const;
+
+    /**
      * @brief Computes the world transformation matrix for this GameObject.
      *
      * @return The world matrix.
@@ -238,7 +250,22 @@ namespace hc
      */
     void getComponents(Vector<IComponent*>& outComponents) const;
 
+    /**
+     * @brief Removes all children and components from this GameObject, releasing
+     * ownership and resources.
+     */
+    void clear();
+
+    /**
+     * @brief Gets the UUID of this GameObject.
+     *
+     * @return The UUID.
+     */
+    inline const UUID& getUUID() const
+    { return m_uuid; }
+
   private:
+    UUID m_uuid;
     String m_name;
     GameObject* m_parent = nullptr;
     IGameObjectFactory& m_gameObjectFactory;

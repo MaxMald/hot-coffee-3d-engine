@@ -1,22 +1,29 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
+#include <imgui.h>
+#include "hc/editor/imgui/hcImguiUtilities.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
-#include "imgui.h"
+#include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 
 namespace hc::editor
 {
   MeshComponentDrawer::MeshComponentDrawer(
     IMeshManager& meshManager,
-    ProjectFileDialogView& projectFileSelector
+    IAssetManager& assetManager,
+    ProjectFileDialogView& projectFileSelector,
+    MaterialDrawersManager& materialDrawerManager,
+    EditorMetadataManager& editorMetadataManager
   ) : 
     ABaseComponentDrawer<MeshComponent>(componentType::Mesh),
     m_meshManager(meshManager),
-    m_projectFileSelector(projectFileSelector)
-  {
-  }
+    m_assetManager(assetManager),
+    m_projectFileSelector(projectFileSelector),
+    m_materialDrawerManager(materialDrawerManager),
+    m_editorMetadataManager(editorMetadataManager)
+  {}
 
   MeshComponentDrawer::~MeshComponentDrawer()
-  {
-  }
+  {}
 
   void MeshComponentDrawer::onDrawComponent(MeshComponent* component)
   {
@@ -34,10 +41,10 @@ namespace hc::editor
     }
     else
     {
-      ImGui::Text("Mesh ID: %s", mesh->getId().toString().c_str());
+      ImGui::Text("Mesh UUID: %s", mesh->getUUID().toString().c_str());
     }
 
-    drawMaterialsInformation(mesh->getMaterials());
+    drawMaterialsInformation(*mesh);
   }
 
   void MeshComponentDrawer::drawLoadMeshButton(MeshComponent* component)
@@ -53,72 +60,34 @@ namespace hc::editor
     }
   }
 
-  void MeshComponentDrawer::drawMaterialsInformation(const Vector<SharedPtr<IMaterial>>& materials)
+  void MeshComponentDrawer::drawMaterialsInformation(
+    const IMesh& mesh
+  )
   {
+    const Vector<SharedPtr<IMaterial>>& materials = mesh.getMaterials();
+
     if (ImGui::TreeNode("Materials Information"))
     {
-      for (Int32 i = 0; i < materials.size(); ++i)
+      for (SizeT i = 0; i < materials.size(); ++i)
       {
         SharedPtr<IMaterial> material = materials[i];
         if (!material)
           continue;
 
-        String label = String::Format("Material Slot %d", i);
-        if (ImGui::TreeNode(label.c_str()))
+        ImGui::PushID(static_cast<Int32>(i));
+        String name = material->getName();
+        if (ImGui::TreeNode(name.c_str()))
         {
-          drawMaterialInformation(material);
+          m_materialDrawerManager.drawMeshMaterial(material.get(), i);
+
+          if (ImGui::Button("Override Material"))
+            onOverrideMaterialClicked(mesh, material, i);
+
           ImGui::TreePop();
         }
+        ImGui::PopID();
       }
       ImGui::TreePop();
-    }
-  }
-
-  void MeshComponentDrawer::drawMaterialInformation(const SharedPtr<IMaterial>& material)
-  {
-    if (!material)
-      return;
-
-    ImGui::Text("Asset Id: %llu", material->getId().value());
-    ImGui::Text("Material ID: %u", material->getMaterialId());
-    ImGui::Text("Shader Type: %s", shadingType::toString(material->getShaderType()).c_str());
-
-    materialRenderMode::Type currentRenderMode =  material->getRenderMode();
-    const char* renderModeOptions[] = { "Background", "Opaque", "AlphaCutout", "Transparent" };
-    int currentItem = static_cast<int>(currentRenderMode);
-
-    if (ImGui::Combo("Render Mode", &currentItem, renderModeOptions, 4))
-      material->setRenderMode(static_cast<materialRenderMode::Type>(currentItem));
-
-    bool isTwoSided = material->isDoubleSided();
-    if (ImGui::Checkbox("Two-Sided", &isTwoSided))
-      material->setDoubleSided(isTwoSided);
-
-    if (material->getRenderMode() == materialRenderMode::Type::AlphaCutout)
-    {
-      float alphaCutoff = material->getAlphaCutoutThreshold();
-      if (ImGui::SliderFloat("Alpha Cutoff", &alphaCutoff, 0.0f, 1.0f))
-        material->setAlphaCutoutThreshold(alphaCutoff);
-    }
-
-    // TODO
-    // 
-    // This is a temporary solution to expose shader-specific properties in the editor.
-    // Improve this by implementing a more flexible system for material property editing
-    // that can handle different shader types and their unique properties without
-    // hardcoding checks for specific shader types.
-
-    if (material->getShaderType() == shadingType::BlinnPhong)
-    {
-      SharedPtr<BlinnPhongMaterial> blinnPhongMaterial =
-        std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
-
-      if (blinnPhongMaterial)
-      {
-        float shininess = blinnPhongMaterial->getShininess();
-        if (ImGui::SliderFloat("Shininess", &shininess, 1.0f, 256.0f))
-          blinnPhongMaterial->setShininess(shininess);
-      }
     }
   }
 
@@ -127,7 +96,51 @@ namespace hc::editor
     const Path& selectedPath
   )
   {
+    if (selectedPath.empty() || !component)
+      return;
+
     SharedPtr<IMesh> mesh =  m_meshManager.createMeshFromPath(selectedPath);
-    component->setMesh(mesh);
+
+    Path sourcePath = selectedPath;
+    if (selectedPath.isAbsolute() && m_assetManager.hasRootPath())
+      sourcePath = selectedPath.toRelative(m_assetManager.getRootPath());
+
+    component->setMesh(mesh, sourcePath);
+  }
+
+  void MeshComponentDrawer::onOverrideMaterialClicked(
+    const IMesh& mesh,
+    const SharedPtr<IMaterial> material,
+    SizeT materialIndex
+  )
+  {
+    Path meshSourcePath = mesh.getSourcePath();
+    if (meshSourcePath.empty())
+    {
+      LogService::Error(
+        String::Format(
+          "MeshComponentDrawer::onSaveMaterialClicked: Mesh does not have a source path. Cannot save material override."
+        )
+      );
+      return;
+    }
+
+    bool success = m_editorMetadataManager.getModelMetadataManager().saveMaterialForOverride(
+      meshSourcePath,
+      material->getName(),
+      materialIndex,
+      material
+    );
+
+    if (success)
+    {
+      LogService::Message(
+        String::Format(
+          "Successfully saved material override for model '%s', material name '%s'",
+          meshSourcePath.toGenericString().c_str(),
+          material->getName().c_str()
+        )
+      );
+    }
   }
 }

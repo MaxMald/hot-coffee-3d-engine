@@ -7,10 +7,15 @@
 
 namespace hc
 {
+  namespace dataBlockStructure
+  {
+    struct Camera;
+  }
+
   /**
    * @brief Represents a camera in the engine.
    */
-  class HC_CORE_EXPORT Camera : public ISerializable
+  class HC_CORE_EXPORT Camera : public io::ISerializable
   {
   public:
     Camera();
@@ -19,12 +24,12 @@ namespace hc
     /**
      * @copydoc ISerializable::serialize
      */
-    void serialize(BinaryWriter& writer) const override;
+    void serialize(io::BinaryWriter& writer) const override;
 
     /**
      * @copydoc ISerializable::deserialize
      */
-    void deserialize(BinaryReader& reader) override;
+    void deserialize(io::BinaryReader& reader) override;
 
     /**
      * @brief Gets the unique identifier of the camera.
@@ -219,6 +224,22 @@ namespace hc
      * @return Pointer to the active ICameraProjection.
      */
     ICameraProjection* getCameraProjection();
+
+    /**
+     * @brief Gets the active camera projection implementation (const version).
+     * 
+     * @return Pointer to the active ICameraProjection.
+     */
+    const ICameraProjection* getCameraProjection() const;
+
+    /**
+     * @brief Gets the camera data block structure for GPU upload.
+     *
+     * @param transposedMatrices Whether to transpose matrices for GPU upload.
+     *
+     * @return The Camera data block structure.
+     */
+    dataBlockStructure::Camera getCameraDataBlockStructure(bool transposedMatrices) const;
 
   private:
     UUID m_id;

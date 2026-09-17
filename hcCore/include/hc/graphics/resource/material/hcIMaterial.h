@@ -1,14 +1,13 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/graphics/resource/material/hcShadingType.h"
-#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
-#include "hc/graphics/hcRenderPassType.h"
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
+  class IDataBlockManager;
 
   /**
    * @brief Interface for material objects in the engine.
@@ -26,11 +25,25 @@ namespace hc
     virtual UInt16 getMaterialId() const = 0;
 
     /**
-     * @brief Gets the shader type associated with this material.
-     * 
-     * @return The shader type.
+     * @brief Gets the name of the material.
+     *
+     * @return The name of the material.
      */
-    virtual shadingType::Type getShaderType() const = 0;
+    virtual String getName() const = 0;
+
+    /**
+     * @brief Sets the name of the material.
+     *
+     * @param name The name to set for the material.
+     */
+    virtual void setName(const String& name) = 0;
+
+    /**
+     * @brief Gets the material type.
+     * 
+     * @return The material type.
+     */
+    virtual materialType::Type getMaterialType() const = 0;
 
     /**
      * @brief Gets the render mode of the material, which determines how it should be
@@ -85,18 +98,11 @@ namespace hc
      * @brief Binds the material for rendering.
      *
      * @param renderPass The render pass type.
+     * @param dataBlockManager The data block manager used to manage shader data blocks.
      */
-    virtual void bind(renderPassType::Type renderPass) = 0;
-
-    /**
-     * @brief Updates the model matrix uniform in the shader.
-     * 
-     * @param modelMatrix The model matrix to set.
-     * @param renderPass The render pass type.
-     */
-    virtual void updateModelMatrix(
-      const Matrix4& modelMatrix,
-      renderPassType::Type renderPass
+    virtual void bind(
+      renderPassType::Type renderPass,
+      IDataBlockManager& dataBlockManager
     ) = 0;
 
     /**
@@ -110,6 +116,15 @@ namespace hc
      * @return True if the material is valid, false otherwise.
      */
     virtual bool isValid() const = 0;
+
+    /**
+     * @brief Gets the source path of the material, which indicates where the material was
+     * loaded from or defined. This could be empty if the material was created
+     * programmatically.
+     *
+     * @return Reference to the source path of the material.
+     */
+    virtual inline const Path& getSourcePath() const = 0;
 
   protected:
     IMaterial() = default;

@@ -1,10 +1,14 @@
 #include "hc/graphics/renderPass/hcForwardTransparentRenderPass.h"
 
 #include <GL/glew.h>
+#include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
 
 namespace hc
 {
-  ForwardTransparentRenderPass::ForwardTransparentRenderPass()
+  ForwardTransparentRenderPass::ForwardTransparentRenderPass(
+    IDataBlockManager& dataBlockManager
+  )
+    : m_dataBlockManager(dataBlockManager)
   {}
 
   ForwardTransparentRenderPass::~ForwardTransparentRenderPass()
@@ -21,6 +25,10 @@ namespace hc
         throw RuntimeErrorException("Invalid framebuffer set as render target.");
       currentRenderTarget->bind();
     }
+
+    GLboolean depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
+    if (!depthTestEnabled)
+      glEnable(GL_DEPTH_TEST);
 
     GLboolean blendEnabled = glIsEnabled(GL_BLEND);
     GLboolean depthMaskEnabled;
@@ -47,8 +55,16 @@ namespace hc
         const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
         glBindVertexArray(drawData.vao);
-        command.material->bind(renderPassType::Type::Forward);
-        command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
+        command.material->bind(
+          renderPassType::Type::ForwardTransparent,
+          m_dataBlockManager
+        );
+
+        // Update the model matrix uniform in the material
+        dataBlockStructure::ObjectData objectData;
+        objectData.modelMatrix = command.modelMatrix.transposed();
+        m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+        m_dataBlockManager.bind(dataBlockType::Object);
 
         glDrawElements(
           static_cast<GLenum>(drawData.drawMode),
@@ -74,6 +90,9 @@ namespace hc
 
     glDepthMask(depthMaskEnabled);
 
+    if (!depthTestEnabled)
+      glDisable(GL_DEPTH_TEST);
+
     if (currentRenderTarget)
       currentRenderTarget->unbind();
   }
@@ -91,8 +110,16 @@ namespace hc
     const OpenGlDrawData& drawData = std::get<OpenGlDrawData>(command.apiDrawData);
 
     glBindVertexArray(drawData.vao);
-    command.material->bind(renderPassType::Type::Forward);
-    command.material->updateModelMatrix(command.modelMatrix, renderPassType::Type::Forward);
+    command.material->bind(
+      renderPassType::Type::ForwardTransparent,
+      m_dataBlockManager
+    );
+
+    // Update the model matrix uniform in the material
+    dataBlockStructure::ObjectData objectData;
+    objectData.modelMatrix = command.modelMatrix.transposed();
+    m_dataBlockManager.upload(dataBlockType::Object, &objectData);
+    m_dataBlockManager.bind(dataBlockType::Object);
 
     // Pass 1: Render back faces first
     glCullFace(GL_FRONT);

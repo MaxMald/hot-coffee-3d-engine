@@ -1,10 +1,11 @@
 #pragma once
 
 #include "hc/editor/views/windows/hcAWindowView.h"
-#include "hc/editor/materialDrawer/hcMaterialDrawersManager.h"
 
 namespace hc::editor
 {
+  class MaterialDrawersManager;
+
   /**
    * @brief Editor window to display the engine's material manager.
    */
@@ -14,14 +15,12 @@ namespace hc::editor
     /**
      * @brief Constructs a MaterialManagerWindow.
      *
-     * @param materialManager Reference to the material manager providing
-     * material data.
-     * @param materialDrawersManager Unique pointer to the manager handling
-     * material drawers.
+     * @param materialManager Reference to the material manager providing material data.
+     * @param materialDrawersManager Reference to the manager handling material drawers.
      */
     MaterialManagerWindow(
       IMaterialManager& materialManager,
-      UniquePtr<MaterialDrawersManager> materialDrawersManager
+      MaterialDrawersManager& materialDrawersManager
     );
 
     virtual ~MaterialManagerWindow();
@@ -30,7 +29,7 @@ namespace hc::editor
 
   private:
     IMaterialManager& m_materialManager;
-    UniquePtr<MaterialDrawersManager> m_materialDrawersManager;
+    MaterialDrawersManager& m_materialDrawersManager;
 
     /**
      * @brief Draws the material manager window contents.

@@ -48,6 +48,7 @@ namespace hc::editor
     void setSnapValues(const Vector3f& snapValues);
     sceneViewportRenderTargetType::Type getCurrentRenderTarget() const;
     void setCurrentRenderTarget(sceneViewportRenderTargetType::Type renderTarget);
+    SceneViewportCamera& getViewportCamera();
     void destroy() override;
 
   protected:
@@ -92,11 +93,6 @@ namespace hc::editor
      * @brief Renders the content scene to the render texture.
      */
     void renderSceneToTexture();
-
-    /**
-     * @brief Renders gizmos (e.g. selection outlines, light icons) to the render texture.
-     */
-    void renderGizmosToTexture();
 
     /**
      * @brief Draws the viewport window with the rendered scene texture.

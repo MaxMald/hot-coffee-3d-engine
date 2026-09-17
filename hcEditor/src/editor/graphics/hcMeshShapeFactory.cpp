@@ -36,14 +36,15 @@ namespace hc::editor
     subMeshes[0].indexCount = segments;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      color,
-      Path()
-    );
-    materialDescriptor->setDoubleSided(true);
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
+    materialDescriptor->name = "CircleMaterial";
+    materialDescriptor->doubleSided = true;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
+    if (matData)
+      matData->color = color;
+
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -55,7 +56,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::LineLoop);
+    mesh->setTopologyType(topologyType::LineLoop);
 
     return mesh;
   }
@@ -93,14 +94,15 @@ namespace hc::editor
     subMeshes[0].indexCount = 2;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      color,
-      Path()
-    );
-    materialDescriptor->setDoubleSided(true);
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
+    materialDescriptor->name = "LineMaterial";
+    materialDescriptor->doubleSided = true;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
+    if (matData)
+      matData->color = color;
+
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -112,7 +114,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::Lines);
+    mesh->setTopologyType(topologyType::Lines);
 
     return mesh;
   }
@@ -166,13 +168,15 @@ namespace hc::editor
     subMeshes[0].indexCount = 4;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      color,
-      Path()
-    );
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
+    materialDescriptor->name = "RectangleMaterial";
+    materialDescriptor->doubleSided = true;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
+    if (matData)
+      matData->color = color;
+
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -184,7 +188,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::LineLoop);
+    mesh->setTopologyType(topologyType::LineLoop);
 
     return mesh;
   }
@@ -287,14 +291,15 @@ namespace hc::editor
     subMeshes[0].indexCount = 24;
     subMeshes[0].materialIndex = 0;
 
-    SharedPtr<UnlitMaterialDescriptor> materialDescriptor = MakeShared<UnlitMaterialDescriptor>(
-      Path(""),
-      color,
-      Path()
-    );
-    materialDescriptor->setDoubleSided(true);
+    SharedPtr<MaterialDescriptor> materialDescriptor = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
+    materialDescriptor->name = "BoxMaterial";
+    materialDescriptor->doubleSided = true;
 
-    Vector<SharedPtr<AMaterialDescriptor>> materialDescriptors(1);
+    assets::materialDescriptor::UnlitData* matData = materialDescriptor->getIfUnlitData();
+    if (matData)
+      matData->color = color;
+
+    Vector<SharedPtr<MaterialDescriptor>> materialDescriptors(1);
     materialDescriptors[0] = materialDescriptor;
 
     SharedPtr<Model> model = MakeShared<Model>(
@@ -306,7 +311,7 @@ namespace hc::editor
     );
 
     SharedPtr<IMesh> mesh = meshManager.createMeshFromModel(model);
-    mesh->setDrawType(drawType::Lines);
+    mesh->setTopologyType(topologyType::Lines);
 
     return mesh;
   }

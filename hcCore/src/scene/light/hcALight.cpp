@@ -2,24 +2,47 @@
 
 namespace hc
 {
-  void ALight::serialize(BinaryWriter& writer) const
+  static constexpr UInt16 ALIGHT_VERSION = 1;
+
+  void ALight::serialize(io::BinaryWriter& writer) const
   {
-    writer.writeBool(enabled);
-    writer.writeUInt8(static_cast<UInt8>(m_type));
+    UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(static_cast<UInt32>(m_type), composedVersion);
+    writer.writeBool(m_enabled);
     writer.writeColor(m_color);
     writer.writeFloat(m_intensity);
     writer.writeFloat(m_range);
     writer.writeVector3f(m_position);
+    writer.writeBool(m_shadowsEnabled);
+    writer.writeFloat(m_shadowBias);
+    writer.writeFloat(m_shadowStrength);
+
+    onSerialize(writer);
+    writer.finishWritingObject();
   }
 
-  void ALight::deserialize(BinaryReader& reader)
+  void ALight::deserialize(io::BinaryReader& reader)
   {
-    enabled = reader.readBool();
-    m_type = static_cast<lightType::Type>(reader.readUInt8());
+    io::ObjectHeader header = reader.startReadingObject();
+    UInt32 composedVersion = (static_cast<UInt32>(ALIGHT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    if (!header.matchVersion(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    m_type = static_cast<lightType::Type>(header.type);
+    m_enabled = reader.readBool();
     m_color = reader.readColor();
     m_intensity = reader.readFloat();
     m_range = reader.readFloat();
     m_position = reader.readVector3f();
+    m_shadowsEnabled = reader.readBool();
+    m_shadowBias = reader.readFloat();
+    m_shadowStrength = reader.readFloat();
+
+    onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   lightType::Type ALight::getType() const
@@ -74,20 +97,53 @@ namespace hc
 
   void ALight::setEnabled(bool isEnabled)
   {
-    enabled = isEnabled;
+    m_enabled = isEnabled;
   }
 
   bool ALight::isEnabled() const
   {
-    return enabled;
+    return m_enabled;
+  }
+
+  void ALight::setShadowsEnabled(bool isEnabled)
+  {
+    m_shadowsEnabled = isEnabled;
+  }
+
+  bool ALight::isShadowsEnabled() const
+  {
+    return m_shadowsEnabled;
+  }
+
+  void ALight::setShadowBias(float bias)
+  {
+    m_shadowBias = Math::Max(0.0f, bias);
+  }
+
+  float ALight::getShadowBias() const
+  {
+    return m_shadowBias;
+  }
+
+  void ALight::setShadowStrength(float strength)
+  {
+    m_shadowStrength = Math::Clamp(strength, 0.0f, 1.0f);
+  }
+
+  float ALight::getShadowStrength() const
+  {
+    return m_shadowStrength;
   }
 
   ALight::ALight(lightType::Type type) :
-    enabled(true),
-    m_type(type),
     m_color{ 1.0f, 1.0f, 1.0f },
+    m_position{ 0.0f, 0.0f, 0.0f },
     m_intensity(1.0f),
     m_range(1.0f),
-    m_position{ 0.0f, 0.0f, 0.0f }
+    m_shadowBias(0.005f),
+    m_shadowStrength(1.0f),
+    m_type(type),
+    m_enabled(true),
+    m_shadowsEnabled(false)
   {}
 }

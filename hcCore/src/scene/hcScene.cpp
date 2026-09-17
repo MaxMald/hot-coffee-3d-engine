@@ -1,18 +1,53 @@
 #include "hc/scene/hcScene.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcIGraphicsManager.h"
-#include "hc/graphics/lightFrameData/hcSceneGraphLightFrameDataGatherer.h"
-#include "hc/graphics/hcCameraFrameData.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
+#include "hc/graphics/lightShadowManager/hcILightShadowMapManager.h"
 #include "hc/scene/camera/hcCamera.h"
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
 
 namespace hc
 {
+  static constexpr UInt16 SCENE_VERSION = 1;
+  static constexpr UInt32 SCENE_SETTINGS_VERSION = 1;
+
+  void SceneSettings::serialize(io::BinaryWriter& writer) const
+  {
+    writer.startWritingObject(static_cast<UInt32>(0), SCENE_SETTINGS_VERSION);
+    writer.writeColor(ambientColor);
+    writer.writeFloat(ambientIntensity);
+    writer.finishWritingObject();
+  }
+
+  void SceneSettings::deserialize(io::BinaryReader& reader)
+  {
+    clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(SCENE_SETTINGS_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    ambientColor = reader.readColor();
+    ambientIntensity = reader.readFloat();
+    reader.finishReadingObject();
+  }
+
+  void SceneSettings::clear()
+  {
+    ambientColor = Color::White();
+    ambientIntensity = 0.1f;
+  }
+
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
-    m_lightFrameData(),
+    m_lightManager(),
+    m_settings(),
     m_gameObjectFactory(nullptr),
     m_skybox()
   {
@@ -23,19 +58,34 @@ namespace hc
     destroy();
   }
 
-  void Scene::serialize(BinaryWriter& writer) const
+  void Scene::serialize(io::BinaryWriter& writer) const
   {
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    writer.startWritingObject(static_cast<UInt32>(0), composedVersion);
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
+    m_settings.serialize(writer);
     onSerialize(writer);
+    writer.finishWritingObject();
   }
 
-  void Scene::deserialize(BinaryReader& reader)
+  void Scene::deserialize(io::BinaryReader& reader)
   {
     clear();
+    io::ObjectHeader header = reader.startReadingObject();
+
+    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
+    if (!header.matchVersion(composedVersion))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
     m_cameraManager.deserialize(reader);
     m_sceneGraph.deserialize(reader);
+    m_settings.deserialize(reader);
     onDeserialize(reader);
+    reader.finishReadingObject();
   }
 
   UniquePtr<GameObject> Scene::createGameObject(const String& name)
@@ -113,33 +163,52 @@ namespace hc
       );
     }
 
-    camera->update();
-    graphicsManager.uploadCameraFrameData(CameraFrameData::Create(*camera));
+    IDataBlockManager& dataBlockManager = graphicsManager.getDataBlockManager();
+    bool shouldTransposeMatrices = dataBlockManager.shouldTransposeMatrices();
 
-    // Gather light frame data and upload it to the graphics manager
+    try
+    {
+      // Upload camera data
+      camera->update();
+      dataBlockStructure::Camera cameraDataBlock
+        = camera->getCameraDataBlockStructure(shouldTransposeMatrices);
 
-    m_lightFrameData.numDirectionalLights = 0;
-    m_lightFrameData.numOmniLights = 0;
-    m_lightFrameData.numSpotLights = 0;
-    SceneGraphLightFrameDataGatherer::Gather(m_sceneGraph, m_lightFrameData);
+      dataBlockManager.upload(dataBlockType::Camera, &cameraDataBlock);
+      dataBlockManager.bind(dataBlockType::Camera);
 
-    graphicsManager.uploadLightFrameData(m_lightFrameData);
+      // Upload light data and shadow data for rendering
+      m_lightManager.prepareLightDataForRendering(
+        m_sceneGraph,
+        graphicsManager.getLightShadowMapManager(),
+        dataBlockManager
+      );
 
-    // Skybox
-    if (m_skybox.isValid())
-      graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
-    else
+      // Skybox
+      if (m_skybox.isValid())
+        graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
+      else
+        graphicsManager.setSkybox(nullptr);
+
+      // Draw the scene graph with the provided render context
+      RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
+
+      onBeforeDraw(renderContext);
+      m_sceneGraph.draw(renderContext, graphicsManager.getDrawCommandQueue());
+      graphicsManager.executeDrawCommands();
+      onAfterDraw(renderContext);
+    }
+    catch (const Exception& e)
+    {
       graphicsManager.setSkybox(nullptr);
+      graphicsManager.getLightShadowMapManager().clear();
 
-    // Draw the scene graph with the provided render context
-    RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
-
-    onBeforeDraw(renderContext);
-    m_sceneGraph.draw(renderContext);
-    graphicsManager.executeDrawCommands();
-    onAfterDraw(renderContext);
+      throw RuntimeErrorException(
+        String::Format("Scene::draw: Exception occurred during drawing: %s", e.what())
+      );
+    }
 
     graphicsManager.setSkybox(nullptr);
+    graphicsManager.getLightShadowMapManager().clear();
   }
 
   void Scene::clear()
@@ -208,18 +277,25 @@ namespace hc
     // the scene is destroyed.
   }
 
-  void Scene::onSerialize(BinaryWriter&) const
+  void Scene::onSerialize(io::BinaryWriter&) const
   {
     // This method can be overridden by derived classes to write custom data during
     // serialization. The base implementation serializes the scene graph and
     // default camera.
   }
 
-  void Scene::onDeserialize(BinaryReader&)
+  void Scene::onDeserialize(io::BinaryReader&)
   {
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and
     // default camera.
+  }
+
+  UInt16 Scene::getDerivedVersion() const
+  {
+    // This method can be overridden by derived classes to return a unique version
+    // number for serialization/deserialization. The base implementation returns 0.
+    return 0;
   }
 
   void Scene::initialize(IGameObjectFactory* gameObjectFactory)

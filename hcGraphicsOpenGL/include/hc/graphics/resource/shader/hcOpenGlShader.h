@@ -14,13 +14,6 @@ namespace hc
     ~OpenGlShader() override;
 
     /**
-     * @brief Returns the unique identifier of the shader resource.
-      *
-      * @return Reference to the shader's Id.
-     */
-    const Id& getId() const override;
-
-    /**
      * @brief Destroys the shader and releases OpenGL resources.
      */
     void destroy() override;
@@ -45,6 +38,20 @@ namespace hc
      */
     bool isValid() const override;
 
+
+    /**
+     * @brief Initializes the shader with the specified stage type and SPIR-V code.
+     *
+     * @param stageType The type of shader stage (e.g., vertex, fragment).
+     * @param spirvCode The SPIR-V bytecode of the shader.
+     * @param entryPoint The entry point function name in the SPIR-V code.
+     */
+    void initializeFromSpirv(
+      shaderStageType::Type stageType,
+      const Vector<UInt32>& spirvCode,
+      const String& entryPoint
+    );
+
     /**
      * @brief Returns the OpenGL shader object ID.
      *
@@ -53,7 +60,6 @@ namespace hc
     UInt32 getShaderId() const;
 
   private:
-    Id m_id;
     shaderStageType::Type m_stageType;
     bool m_valid;
     UInt32 m_shaderId;

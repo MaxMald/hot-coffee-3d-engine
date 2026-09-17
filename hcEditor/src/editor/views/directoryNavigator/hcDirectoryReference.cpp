@@ -21,7 +21,7 @@ namespace hc::editor
   {
     clear();
 
-    std::filesystem::path fsPath(directoryPath);
+    std::filesystem::path fsPath = directoryPath.getPath();
     if (!std::filesystem::exists(fsPath) || !std::filesystem::is_directory(fsPath))
     {
       return false;
@@ -55,14 +55,15 @@ namespace hc::editor
     m_files.clear();
     m_subDirectories.clear();
 
-    std::filesystem::path fsPath(m_fullPath);
+    std::filesystem::path fsPath = m_fullPath.getPath();
 
     for (const auto& entry : std::filesystem::directory_iterator(fsPath))
     {
       if (entry.is_regular_file())
       {
         auto fileRef = MakeUnique<FileReference>();
-        if (fileRef->initialize(entry.path().string(), this))
+        Path hcPath(entry.path());
+        if (fileRef->initialize(hcPath, this))
         {
           m_files.push_back(std::move(fileRef));
         }
@@ -70,7 +71,8 @@ namespace hc::editor
       else if (entry.is_directory())
       {
         auto dirRef = MakeUnique<DirectoryReference>();
-        if (dirRef->initialize(entry.path().string(), this))
+        Path hcPath(entry.path());
+        if (dirRef->initialize(hcPath, this))
         {
           m_subDirectories.push_back(std::move(dirRef));
         }

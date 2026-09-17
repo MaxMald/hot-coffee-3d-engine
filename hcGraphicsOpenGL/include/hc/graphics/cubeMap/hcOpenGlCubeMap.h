@@ -11,21 +11,14 @@ namespace hc
     ~OpenGlCubeMap() override;
 
     void initialize(
-      const UInt32 width,
-      const UInt32 height,
-      const Image& right,
-      const Image& left,
-      const Image& top,
-      const Image& bottom,
-      const Image& back,
-      const Image& front,
-      const Path& cubeMapDescriptorSourcePath = Path()
+      SharedPtr<CubeMapDescriptor> cubeMapDescriptor,
+      IAssetManager& assetManager
     ) override;
 
     bool isValid() const override;
     UInt32 getFaceWidth() const override;
     UInt32 getFaceHeight() const override;
-    const Path& getCubeMapDescriptorSourcePath() const override;
+    SharedPtr<CubeMapDescriptor> getCubeMapDescriptor() const override;
     void destroy() override;
 
     UInt32 getId() const;
@@ -33,9 +26,7 @@ namespace hc
   private:
     UInt32 m_id;
     bool m_valid;
-    UInt32 m_faceWidth;
-    UInt32 m_faceHeight;
-    Path m_cubeMapDescriptorSourcePath;
+    SharedPtr<CubeMapDescriptor> m_descriptor;
 
     static void assertImageSize(
       const Image& image,

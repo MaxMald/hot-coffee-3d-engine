@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcAModule.h"
 #include "hc/utilities/hcAngle.h"
 #include "hc/utilities/hcColor.h"
@@ -15,6 +16,7 @@
 #include "hc/utilities/hcMatrix3.h"
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcMath.h"
+#include "hc/utilities/hcLinearAlgebra.h"
 #include "hc/utilities/hcTransform.h"
 #include "hc/utilities/hcRect.h"
 #include "hc/utilities/hcString.h"
@@ -25,7 +27,6 @@
 #include "hc/utilities/hcILogServiceListener.h"
 #include "hc/utilities/hcNonCopyable.h"
 #include "hc/utilities/hcNonMovable.h"
-#include "hc/utilities/hcId.h"
 #include "hc/utilities/hcServiceManager.h"
 #include "hc/utilities/hcTime.h"
 #include "hc/utilities/hcClock.h"
@@ -33,4 +34,6 @@
 #include "hc/utilities/io/hcBinaryReader.h"
 #include "hc/utilities/io/hcBinaryWriter.h"
 #include "hc/utilities/io/hcISerializable.h"
+#include "hc/utilities/memory/hcPoolStorage.h"
+#include "hc/utilities/memory/hcPoolAllocator.h"
 #include "hc/utilities/hcUUID.h"

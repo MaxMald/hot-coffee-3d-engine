@@ -1,8 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/graphics/resource/shader/hcShaderStageType.h"
-#include "hc/graphics/resource/shader/hcBuiltInShaderType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 
 namespace hc
 {
@@ -18,6 +17,14 @@ namespace hc
   {
   public:
     virtual ~IShaderManager() = default;
+
+    /**
+     * @brief Initializes the shader manager.
+     *
+     * This method should be called before using the shader manager to ensure
+     * that any necessary resources or configurations are set up.
+     */
+    virtual void initialize() = 0;
 
     /**
      * @brief Creates a custom shader from a given file path.
@@ -87,5 +94,13 @@ namespace hc
      * @brief Clears all cached shaders from the manager.
      */
     virtual void clear() = 0;
+
+    /**
+     * @brief Destroys the shader manager and releases any associated resources.
+     *
+     * This method should be called when the shader manager is no longer needed
+     * to ensure proper cleanup of resources.
+     */
+    virtual void destroy() = 0;
   };
 }

@@ -7,7 +7,6 @@
 namespace hc::editor
 {
   class FileReference;
-  class MaterialDescriptorEditorWindow;
   class ProjectManager;
 
   class ProjectBrowserWindow :
@@ -15,10 +14,7 @@ namespace hc::editor
     public IProjectManagerListener
   {
   public:
-    ProjectBrowserWindow(
-      ProjectManager& projectManager,
-      MaterialDescriptorEditorWindow& matDescEditorWindow
-    );
+    ProjectBrowserWindow(ProjectManager& projectManager);
     virtual ~ProjectBrowserWindow();
 
     void destroy() override;
@@ -27,14 +23,11 @@ namespace hc::editor
     void refresh();
 
   protected:
-    MaterialDescriptorEditorWindow& m_matDescEditorWindow;
     ProjectManager& m_projectManager;
     DirectoryNavigator m_directoryNavigator;
 
     void onDraw() override;
     void drawDirectoryNavigator();
-    void drawAssetCreatorInterface();
-    void tryOpenEditorForFile(const FileReference& fileReference);
 
     Path combineDirectoryWithFileName(
       const Path& directoryPath,

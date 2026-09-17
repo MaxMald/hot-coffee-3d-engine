@@ -130,6 +130,38 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::FinalPassFragment)
       );
     }
+    else if (type == builtInShaderProgramType::ShadowMap)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::ShadowMapVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::ShadowMapFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::HairDeferredGeometry)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::HairDeferredGeometryFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::HairForwardSpecular)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::HairForwardSpecularFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::HairForwardTransparent)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::HairForwardTransparentFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

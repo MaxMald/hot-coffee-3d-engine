@@ -78,7 +78,11 @@ namespace hc
 
   void JsonArrayBuilder::setPath(const Path& value)
   {
-    String formattedValue = String::Format("\"%s\"", value.generic_string().c_str());
+    String formattedValue = String::Format(
+      "{ \"path\": \"%s\" }",
+      value.toGenericString().c_str()
+    );
+
     m_properties.push_back(
       MakeUnique<JsonFormattedValue>(formattedValue)
     );

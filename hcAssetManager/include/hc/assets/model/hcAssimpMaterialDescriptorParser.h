@@ -30,7 +30,7 @@ namespace hc
      * 
      * @return A shared pointer to the created material descriptor
      */
-    static SharedPtr<AMaterialDescriptor> Parse(
+    static SharedPtr<MaterialDescriptor> Parse(
       const Path& fileDirectory,
       const aiMaterial* material
     );
@@ -41,17 +41,34 @@ namespace hc
      *
      * @param material The Assimp material to analyze
      * 
-     * @return The corresponding engine shading type
+     * @return The corresponding engine material type
      */
-    static shadingType::Type GetShadingTypeFromMaterial(const aiMaterial* material);
+    static materialType::Type GetMaterialTypeFromMaterial(const aiMaterial* material);
 
-    static SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
+    /**
+     * Gets the name of the material from an Assimp material.
+     *
+     * @param material The Assimp material to analyze
+     * 
+     * @return The name of the material
+     */
+    static String GetMaterialNameFromMaterial(const aiMaterial* material);
+
+    static SharedPtr<MaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
+      const String& name,
       const aiMaterial* material
     );
 
-    static SharedPtr<AMaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
+    static SharedPtr<MaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
       const Path& fileDirectory,
+      const String& name,
+      const aiMaterial* material
+    );
+
+    static SharedPtr<MaterialDescriptor> ParseHairMaterialDescriptor(
+      const Path& fileDirectory,
+      const String& name,
       const aiMaterial* material
     );
 
@@ -68,7 +85,7 @@ namespace hc
     // Common Properties
     static void ParseCommonMaterialPropertiesFromMaterial(
       const aiMaterial* material,
-      SharedPtr<AMaterialDescriptor>& materialDescriptor
+      SharedPtr<MaterialDescriptor>& materialDescriptor
     );
     static bool GetDoubleSidedFromMaterial(const aiMaterial* material);
     static materialRenderMode::Type GetRenderModeFromMaterial(const aiMaterial* material);

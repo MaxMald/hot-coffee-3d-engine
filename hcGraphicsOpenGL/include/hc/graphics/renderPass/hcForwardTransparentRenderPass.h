@@ -4,10 +4,12 @@
 
 namespace hc
 {
+  class IDataBlockManager;
+
   class ForwardTransparentRenderPass
   {
   public:
-    ForwardTransparentRenderPass();
+    ForwardTransparentRenderPass(IDataBlockManager& dataBlockManager);
     ~ForwardTransparentRenderPass();
 
     void execute(
@@ -16,6 +18,8 @@ namespace hc
     );
 
   private:
+    IDataBlockManager& m_dataBlockManager;
+
     void executeTwoSidedDrawCommand(const DrawCommand& command);
   };
 }

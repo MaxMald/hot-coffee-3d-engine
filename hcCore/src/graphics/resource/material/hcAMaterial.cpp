@@ -5,14 +5,19 @@ namespace hc
   AMaterial::~AMaterial()
   {}
 
-  const Id& AMaterial::getId() const
-  {
-    return m_id;
-  }
-
   UInt16 AMaterial::getMaterialId() const
   {
     return m_materialId;
+  }
+
+  String AMaterial::getName() const
+  {
+    return m_name;
+  }
+
+  void AMaterial::setName(const String& name)
+  {
+    m_name = name;
   }
 
   materialRenderMode::Type AMaterial::getRenderMode() const
@@ -47,12 +52,13 @@ namespace hc
 
   AMaterial::AMaterial(
     UInt16 materialId,
+    const String& name,
     materialRenderMode::Type renderMode,
     float alphaCutoutThreshold,
     bool doubleSided
   ) :
-    m_id(Id::Create()),
     m_materialId(materialId),
+    m_name(name),
     m_renderMode(renderMode),
     m_alphaCutoutThreshold(alphaCutoutThreshold),
     m_doubleSided(doubleSided)

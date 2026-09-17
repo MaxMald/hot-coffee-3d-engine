@@ -20,8 +20,6 @@ namespace hc::editor
 
     renderPipelineType::Type currentPipeline = m_graphicsManager.getRenderPipelineType();
 
-    if (ImGui::RadioButton("Forward", currentPipeline == renderPipelineType::Forward))
-      m_graphicsManager.setRenderPipelineType(renderPipelineType::Forward);
     if (ImGui::RadioButton("Deferred Hybrid", currentPipeline == renderPipelineType::DeferredHybrid))
       m_graphicsManager.setRenderPipelineType(renderPipelineType::DeferredHybrid);
   }

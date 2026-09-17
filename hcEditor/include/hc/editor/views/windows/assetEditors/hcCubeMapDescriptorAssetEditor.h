@@ -29,15 +29,15 @@ namespace hc::editor
     Vector<String> m_cubeMapDescriptorExtensions;
     Path m_assetPath;
     UInt32 m_faceSize;
-    colorFormatType::Type m_format;
+    textureFormatType::Type m_format;
     Path m_rightImagePath;
     Path m_leftImagePath;
     Path m_topImagePath;
     Path m_bottomImagePath;
     Path m_backImagePath;
     Path m_frontImagePath;
-    String m_formatStrings[colorFormatType::Count];
-    const char* m_formatItems[colorFormatType::Count];
+    String m_formatStrings[textureFormatType::Count];
+    const char* m_formatItems[textureFormatType::Count];
 
     void onDraw() override;
 

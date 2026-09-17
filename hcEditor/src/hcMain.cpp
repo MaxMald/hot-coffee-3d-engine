@@ -21,9 +21,9 @@ int main()
     editor.destroy();
   }
   catch (const std::exception& e)
-  {
-    editor.destroy();
+  { 
     std::cerr << "Unhandled exception: " << e.what() << std::endl;
+    editor.destroy();
     return -1;
   }
 

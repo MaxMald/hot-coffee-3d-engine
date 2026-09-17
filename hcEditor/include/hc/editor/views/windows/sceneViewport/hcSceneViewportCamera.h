@@ -26,6 +26,10 @@ namespace hc::editor
     void setRollSensitivity(float sensitivity);
     Vector3f getCameraPosition() const;
     void setCameraPosition(const Vector3f& position);
+    projectionType::Type getCameraProjectionType() const;
+    void setCameraProjectionType(projectionType::Type type);
+    Angle getCameraFovY() const;
+    void setCameraFovY(const Angle& fov);
     void orbit(const Vector2f& mouseDelta);
     void dolly(float delta);
     void truck(float delta);

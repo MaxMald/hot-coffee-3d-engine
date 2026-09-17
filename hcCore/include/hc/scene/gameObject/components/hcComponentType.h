@@ -9,11 +9,10 @@ namespace hc
     enum Type : UInt16
     {
       Mesh = 0,
-      //Light = 1,
-      Camera = 2,
-      OmniLight = 3,
-      SpotLight = 4,
-      DirectionalLight = 5,
+      Camera = 1,
+      OmniLight = 2,
+      SpotLight = 3,
+      DirectionalLight = 4,
       Unknown = 65535
     };
 

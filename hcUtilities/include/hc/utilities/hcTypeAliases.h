@@ -5,9 +5,9 @@
 #include <unordered_map>
 #include <memory>
 #include <vector>
+#include <stack>
 #include <queue>
 #include <functional>
-#include <filesystem>
 #include <typeindex>
 #include <type_traits>
 #include <cmath>
@@ -17,6 +17,7 @@
 #include <chrono>
 #include <ratio>
 #include <concepts>
+#include <span>
 
 namespace hc
 {
@@ -28,16 +29,16 @@ namespace hc
   using UInt16 = std::uint16_t;
   using UInt32 = std::uint32_t;
   using UInt64 = std::uint64_t;
+  using UIntPtr = std::uintptr_t;
   using Char = char;
   using Char16 = char16_t;
   using Char32 = char32_t;
   using UChar = unsigned char;
-  using Byte = UInt8;
+  using Byte = std::byte;
 
   using Bool = bool;
   using SizeT = std::size_t;
   using TypeIndex = std::type_index;
-  using Path = std::filesystem::path;
 
   template<typename K, typename V>
   using UnorderedMap = std::unordered_map<K, V>;
@@ -52,10 +53,16 @@ namespace hc
   using Vector = std::vector<T>;
 
   template<typename T>
+  using Stack = std::stack<T>;
+
+  template<typename T>
   using SharedPtr = std::shared_ptr<T>;
 
   template<typename T, std::size_t N>
   using Array = std::array<T, N>;
+
+  template <class T, std::size_t N>
+  using Span = std::span<T, N>;
 
   template<typename T>
   using WeakPtr = std::weak_ptr<T>;

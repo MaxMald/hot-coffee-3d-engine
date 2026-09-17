@@ -1,6 +1,5 @@
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 
-#include <fstream>
 #include <imgui.h>
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
@@ -17,7 +16,7 @@ namespace hc::editor
     m_cubeMapDescriptorExtensions({ hc::serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION }),
     m_assetPath(),
     m_faceSize(0),
-    m_format(colorFormatType::RGBA8),
+    m_format(textureFormatType::RGBA8),
     m_rightImagePath(),
     m_leftImagePath(),
     m_topImagePath(),
@@ -27,9 +26,9 @@ namespace hc::editor
     m_formatStrings(),
     m_formatItems()
   {
-    for (UInt8 i = 0; i < colorFormatType::Count; ++i)
+    for (UInt8 i = 0; i < textureFormatType::Count; ++i)
     {
-      m_formatStrings[i] = colorFormatType::ToString(static_cast<colorFormatType::Type>(i));
+      m_formatStrings[i] = textureFormatType::ToString(static_cast<textureFormatType::Type>(i));
       m_formatItems[i] = m_formatStrings[i].c_str();
     }
 
@@ -65,7 +64,7 @@ namespace hc::editor
       return;
     }
 
-    ImGui::LabelText("Asset Path", "%s", m_assetPath.empty() ? "New Asset" : m_assetPath.generic_string().c_str());
+    ImGui::LabelText("Asset Path", "%s", m_assetPath.empty() ? "New Asset" : m_assetPath.toGenericString().c_str());
 
     // Input fields for face dimensions and channels
     Int32 faceSizeInput = static_cast<Int32>(m_faceSize);
@@ -73,40 +72,40 @@ namespace hc::editor
       m_faceSize = static_cast<UInt32>(faceSizeInput);
 
     Int32 selectedFormat = static_cast<Int32>(m_format);
-    if (ImGui::Combo("Format", &selectedFormat, m_formatItems, colorFormatType::Count))
-      m_format = static_cast<colorFormatType::Type>(selectedFormat);
+    if (ImGui::Combo("Format", &selectedFormat, m_formatItems, textureFormatType::Count))
+      m_format = static_cast<textureFormatType::Type>(selectedFormat);
 
     // Input fields for each cube map face
 
     if (ImGui::Button("Select Right Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_rightImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Right Image", "%s", m_rightImagePath.empty() ? "No file selected" : m_rightImagePath.generic_string().c_str());
+    ImGui::LabelText("Right Image", "%s", m_rightImagePath.empty() ? "No file selected" : m_rightImagePath.toGenericString().c_str());
 
     if (ImGui::Button("Select Left Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_leftImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Left Image", "%s", m_leftImagePath.empty() ? "No file selected" : m_leftImagePath.generic_string().c_str());
+    ImGui::LabelText("Left Image", "%s", m_leftImagePath.empty() ? "No file selected" : m_leftImagePath.toGenericString().c_str());
 
     if (ImGui::Button("Select Top Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_topImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Top Image", "%s", m_topImagePath.empty() ? "No file selected" : m_topImagePath.generic_string().c_str());
+    ImGui::LabelText("Top Image", "%s", m_topImagePath.empty() ? "No file selected" : m_topImagePath.toGenericString().c_str());
 
     if (ImGui::Button("Select Bottom Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_bottomImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Bottom Image", "%s", m_bottomImagePath.empty() ? "No file selected" : m_bottomImagePath.generic_string().c_str());
+    ImGui::LabelText("Bottom Image", "%s", m_bottomImagePath.empty() ? "No file selected" : m_bottomImagePath.toGenericString().c_str());
 
     if (ImGui::Button("Select Back Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_backImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Back Image", "%s", m_backImagePath.empty() ? "No file selected" : m_backImagePath.generic_string().c_str());
+    ImGui::LabelText("Back Image", "%s", m_backImagePath.empty() ? "No file selected" : m_backImagePath.toGenericString().c_str());
 
     if (ImGui::Button("Select Front Image"))
       m_fileDialog.openImageFile([this](const Path& path) { m_frontImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Front Image", "%s", m_frontImagePath.empty() ? "No file selected" : m_frontImagePath.generic_string().c_str());
+    ImGui::LabelText("Front Image", "%s", m_frontImagePath.empty() ? "No file selected" : m_frontImagePath.toGenericString().c_str());
 
     // Action buttons
 
@@ -172,7 +171,7 @@ namespace hc::editor
   {
     m_assetPath.clear();
     m_faceSize = 0;
-    m_format = colorFormatType::RGBA8;
+    m_format = textureFormatType::RGBA8;
     m_rightImagePath.clear();
     m_leftImagePath.clear();
     m_topImagePath.clear();
@@ -213,19 +212,19 @@ namespace hc::editor
       descriptorToSave.faceSize = m_faceSize;
       descriptorToSave.format = m_format;
 
-      Path baseDir = path.parent_path();
-      descriptorToSave.rightImagePath = AssetPath::ToRelative(m_rightImagePath, baseDir);
-      descriptorToSave.leftImagePath = AssetPath::ToRelative(m_leftImagePath, baseDir);
-      descriptorToSave.topImagePath = AssetPath::ToRelative(m_topImagePath, baseDir);
-      descriptorToSave.bottomImagePath = AssetPath::ToRelative(m_bottomImagePath, baseDir);
-      descriptorToSave.backImagePath = AssetPath::ToRelative(m_backImagePath, baseDir);
-      descriptorToSave.frontImagePath = AssetPath::ToRelative(m_frontImagePath, baseDir);
+      Path baseDir = path.parentPath();
+      descriptorToSave.rightImagePath = m_rightImagePath.toRelative(baseDir);
+      descriptorToSave.leftImagePath = m_leftImagePath.toRelative(baseDir);
+      descriptorToSave.topImagePath = m_topImagePath.toRelative(baseDir);
+      descriptorToSave.bottomImagePath = m_bottomImagePath.toRelative(baseDir);
+      descriptorToSave.backImagePath = m_backImagePath.toRelative(baseDir);
+      descriptorToSave.frontImagePath = m_frontImagePath.toRelative(baseDir);
 
-      std::ofstream file(path, std::ios::out | std::ios::binary);
-      if (!file.is_open())
-        throw IOException("Failed to open file for writing: " + path.generic_string());
+      String error;
+      io::BinaryWriter writer;
+      if (!writer.prepare(path, error))
+        throw IOException("Failed to prepare binary writer: " + error);
 
-      BinaryWriter writer(file);
       descriptorToSave.serialize(writer);
     }
     catch (const Exception& e)
@@ -234,7 +233,7 @@ namespace hc::editor
       return false;
     }
 
-    LogService::Message("Successfully saved cube map descriptor: " + path.generic_string());
+    LogService::Message("Successfully saved cube map descriptor: " + path.toGenericString());
     return true;
   }
 
@@ -244,25 +243,24 @@ namespace hc::editor
     {
       clear();
 
-      std::ifstream file(path, std::ios::in | std::ios::binary);
-      if (!file.is_open())
-        throw IOException("Failed to open file for reading: " + path.generic_string());
+      String error;
+      io::BinaryReader reader;
+      if (!reader.prepare(path, error))
+        throw IOException("Failed to prepare binary reader: " + error);
 
-
-      BinaryReader reader(file);
       CubeMapDescriptor descriptorFromFile;
       descriptorFromFile.deserialize(reader);
 
       m_faceSize = descriptorFromFile.faceSize;
       m_format = descriptorFromFile.format;
 
-      Path baseDir = path.parent_path();
-      m_rightImagePath = AssetPath::ToAbsolute(descriptorFromFile.rightImagePath, baseDir);
-      m_leftImagePath = AssetPath::ToAbsolute(descriptorFromFile.leftImagePath, baseDir);
-      m_topImagePath = AssetPath::ToAbsolute(descriptorFromFile.topImagePath, baseDir);
-      m_bottomImagePath = AssetPath::ToAbsolute(descriptorFromFile.bottomImagePath, baseDir);
-      m_backImagePath = AssetPath::ToAbsolute(descriptorFromFile.backImagePath, baseDir);
-      m_frontImagePath = AssetPath::ToAbsolute(descriptorFromFile.frontImagePath, baseDir);
+      Path baseDir = path.parentPath();
+      m_rightImagePath = descriptorFromFile.rightImagePath.toAbsolute(baseDir);
+      m_leftImagePath = descriptorFromFile.leftImagePath.toAbsolute(baseDir);
+      m_topImagePath = descriptorFromFile.topImagePath.toAbsolute(baseDir);
+      m_bottomImagePath = descriptorFromFile.bottomImagePath.toAbsolute(baseDir);
+      m_backImagePath = descriptorFromFile.backImagePath.toAbsolute(baseDir);
+      m_frontImagePath = descriptorFromFile.frontImagePath.toAbsolute(baseDir);
       m_assetPath = path;
     }
     catch (const Exception & e)
@@ -272,7 +270,7 @@ namespace hc::editor
       return false;
     }
 
-    LogService::Message("Successfully loaded cube map descriptor: " + path.generic_string());
+    LogService::Message("Successfully loaded cube map descriptor: " + path.toGenericString());
     return true;
   }
 }

@@ -10,6 +10,9 @@ namespace hc::editor
   {
     ALightComponentDrawer::onDrawComponent(component);
 
+    ImGui::Text("Spot Light Settings");
+    ImGui::Separator();
+
     SpotLightComponent* spotLightComponent =
       reinterpret_cast<SpotLightComponent*>(component);
 
@@ -30,5 +33,16 @@ namespace hc::editor
     float outerConeAngle = spotLight.getOuterConeAngle().toDegrees();
     if (ImGui::DragFloat("Outer Cone Angle", &outerConeAngle, 0.5f))
       spotLight.setOuterConeAngle(Angle::FromDegrees(outerConeAngle));
+
+    ImGui::Text("Spot Light Shadow Settings");
+    ImGui::Separator();
+
+    float projectionNearPlane = spotLight.getShadowProjectionNearPlane();
+    if (ImGui::InputFloat("Projection Near Plane", &projectionNearPlane, 1.0f, 0.1f, "%.3f"))
+      spotLight.setShadowProjectionNearPlane(projectionNearPlane);
+
+    float projectionFarPlane = spotLight.getShadowProjectionFarPlane();
+    if (ImGui::InputFloat("Projection Far Plane", &projectionFarPlane, 1.0f, 0.1f, "%.3f"))
+      spotLight.setShadowProjectionFarPlane(projectionFarPlane);
   }
 }

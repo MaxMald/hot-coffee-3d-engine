@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/graphics/resource/shader/hcShaderStageType.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 
 namespace hc
 {

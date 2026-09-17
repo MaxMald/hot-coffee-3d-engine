@@ -25,12 +25,18 @@ namespace hc
     void destroy() override;
     void copyDepthTo(IFrameBuffer& destinationFrameBuffer) override;
     void destroySelf() override;
-
-    void bindGTexturesForReading() override;
+    void bindGTexturesForReading(
+      UInt8 positionAndDepthTextureUnit,
+      UInt8 normalAndRoughnessTextureUnit,
+      UInt8 albedoAndAlphaTextureUnit,
+      UInt8 materialParametersTextureUnit,
+      UInt8 specularColorAndShininessTextureUnit
+    ) override;
     const ITexture& getPositionAndDepth() const override;
     const ITexture& getNormalRoughness() const override;
     const ITexture& getAlbedoAlpha() const override;
     const ITexture& getMaterialParameters() const override;
+    const ITexture& getSpecularColorAndShininess() const override;
 
   private:
     bool m_valid;
@@ -42,6 +48,7 @@ namespace hc
     OpenGlTexture m_normalRoughnessTexture;
     OpenGlTexture m_albedoAlphaTexture;
     OpenGlTexture m_materialParametersTexture;
+    OpenGlTexture m_specularColorAndShininessTexture;
 
     void assertIsValid() const;
   };

@@ -3,12 +3,15 @@
 #include "hc/utilities/hcCoreAssertions.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
-#include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 
 namespace hc
 {
   BlinnPhongMaterial::BlinnPhongMaterial(UInt16 materialId) :
-    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(1.0f, 1.0f, 1.0f, 1.0f),
     m_shininess(16.0f),
     m_albedoTexture(nullptr),
@@ -23,6 +26,7 @@ namespace hc
 
   void BlinnPhongMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_albedoTexture.reset();
     m_normalTexture.reset();
     m_specularTexture.reset();
@@ -30,62 +34,66 @@ namespace hc
     m_deferredGeometryShaderProgram.reset();
   }
 
-  shadingType::Type BlinnPhongMaterial::getShaderType() const
+  materialType::Type BlinnPhongMaterial::getMaterialType() const
   {
-    return shadingType::Type::BlinnPhong;
+    return materialType::Type::BlinnPhong;
   }
 
-  void BlinnPhongMaterial::bind(renderPassType::Type renderPass)
+  void BlinnPhongMaterial::bind(
+    renderPassType::Type renderPass,
+    IDataBlockManager& dataBlockManager
+  )
   {
     assertIsValid();
 
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(m_specularTexture, "Specular");
+    coreAssertions::AssertShaderProgramIsValid(
+      m_forwardShaderProgram,
+      "Blinn-Phong forward shader program"
+    );
+    coreAssertions::AssertShaderProgramIsValid(
+      m_deferredGeometryShaderProgram,
+      "Blinn-Phong deferred geometry shader program"
+    );
 
-    if (renderPassType::Type::Forward == renderPass)
-      bindForwardPass();
-    else if (renderPassType::Type::DeferredGeometry == renderPass)
-      bindDeferredGeometryPass();
-    else
-      throw InvalidArgumentException(
-        String::Format(
-          "Unsupported render pass type for Blinn-Phong material: %d",
-          static_cast<Int32>(renderPass)
-        )
-      );
-  }
-
-  void BlinnPhongMaterial::updateModelMatrix(
-    const Matrix4& modelMatrix,
-    renderPassType::Type renderPass
-  )
-  {
-    if (renderPassType::Type::Forward == renderPass)
+    // Bind the appropriate shader program based on the render pass type
+    if (renderPassType::Type::Forward == renderPass
+      || renderPassType::Type::ForwardTransparent == renderPass)
     {
-      coreAssertions::AssertShaderProgramIsValid(
-        m_forwardShaderProgram,
-        "Blinn-Phong forward shader program"
-      );
-
-      m_forwardShaderProgram->setUniform("uModel", modelMatrix);
-    }      
+      m_forwardShaderProgram->bind();
+    }
     else if (renderPassType::Type::DeferredGeometry == renderPass)
     {
-      coreAssertions::AssertShaderProgramIsValid(
-        m_deferredGeometryShaderProgram,
-        "Blinn-Phong deferred geometry shader program"
-      );
-
-      m_deferredGeometryShaderProgram->setUniform("uModel", modelMatrix);
+      m_deferredGeometryShaderProgram->bind();
     }
     else
+    {
       throw InvalidArgumentException(
         String::Format(
           "Unsupported render pass type for Blinn-Phong material: %d",
           static_cast<Int32>(renderPass)
         )
       );
+    }
+
+    // Bind textures
+    m_albedoTexture->bind(0);
+    m_normalTexture->bind(1);
+    m_specularTexture->bind(2);
+
+    // Upload and bind material properties
+    dataBlockStructure::MaterialBlinnPhong materialData;
+    materialData.color = m_color;
+    materialData.shininess = m_shininess;
+    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
+      materialData.alphaCutoff = m_alphaCutoutThreshold;
+    else
+      materialData.alphaCutoff = 0.0f;
+
+    dataBlockManager.upload(dataBlockType::Type::MaterialBlinnPhong, &materialData);
+    dataBlockManager.bind(dataBlockType::Type::MaterialBlinnPhong);
   }
 
   void BlinnPhongMaterial::unbind()
@@ -100,7 +108,7 @@ namespace hc
   }
 
   void BlinnPhongMaterial::initialize(
-    const BlinnPhongMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<ITexture>& albedoTexture,
     const SharedPtr<ITexture>& normalTexture,
     const SharedPtr<ITexture>& specularTexture,
@@ -122,12 +130,19 @@ namespace hc
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
     coreAssertions::AssertTextureIsValid(specularTexture, "Specular");
 
-    m_color = descriptor.getColor();
-    m_shininess = descriptor.getShininess();
-    m_alphaCutoutThreshold = descriptor.getAlphaCutoutThreshold();
-    m_doubleSided = descriptor.isDoubleSided();
-    m_renderMode = descriptor.getRenderMode();
+    const assets::materialDescriptor::BlinnPhongData* blinnPhongData = descriptor.getIfBlinnPhongData();
+    if (!blinnPhongData)
+      throw InvalidArgumentException(
+        "BlinnPhongMaterial::initialize: Provided descriptor does not contain BlinnPhongData."
+      );
 
+    m_sourcePath = descriptor.path;
+    m_name = descriptor.name;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
+    m_color = blinnPhongData->color;
+    setShininess(blinnPhongData->shininess);
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
     m_specularTexture = specularTexture;
@@ -191,55 +206,5 @@ namespace hc
       throw RuntimeErrorException(
         "Blinn-Phong material is not valid."
       );
-  }
-
-  void BlinnPhongMaterial::bindForwardPass()
-  {
-    coreAssertions::AssertShaderProgramIsValid(
-      m_forwardShaderProgram,
-      "Blinn-Phong forward shader program"
-    );
-
-    m_forwardShaderProgram->bind();
-
-    m_forwardShaderProgram->setUniform("uColor", m_color);
-    m_forwardShaderProgram->setUniform("uShininess", m_shininess);
-
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_forwardShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
-    else
-      m_forwardShaderProgram->setUniform("uAlphaCutoff", 0.0f);
-
-    m_albedoTexture->bind(0);
-    m_forwardShaderProgram->setUniformTexture("uAlbedo", 0);
-    m_normalTexture->bind(1);
-    m_forwardShaderProgram->setUniformTexture("uNormalMap", 1);
-    m_specularTexture->bind(2);
-    m_forwardShaderProgram->setUniformTexture("uSpecularMap", 2);
-  }
-
-  void BlinnPhongMaterial::bindDeferredGeometryPass()
-  {
-    coreAssertions::AssertShaderProgramIsValid(
-      m_deferredGeometryShaderProgram,
-      "Blinn-Phong deferred geometry shader program"
-    );
-
-    m_deferredGeometryShaderProgram->bind();
-
-    m_deferredGeometryShaderProgram->setUniform("uColor", m_color);
-    m_deferredGeometryShaderProgram->setUniform("uShininess", m_shininess);
-
-    if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
-    else
-      m_deferredGeometryShaderProgram->setUniform("uAlphaCutoff", 0.0f);
-
-    m_albedoTexture->bind(0);
-    m_deferredGeometryShaderProgram->setUniformTexture("uAlbedo", 0);
-    m_normalTexture->bind(1);
-    m_deferredGeometryShaderProgram->setUniformTexture("uNormalMap", 1);
-    m_specularTexture->bind(2);
-    m_deferredGeometryShaderProgram->setUniformTexture("uSpecularMap", 2);
   }
 }

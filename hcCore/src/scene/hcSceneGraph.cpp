@@ -1,8 +1,11 @@
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
+#include "hc/graphics/hcDrawCommand.h"
 
 namespace hc
 {
+  static constexpr UInt32 SCENE_GRAPH_VERSION = 1;
+
   SceneGraph::SceneGraph() :
     m_roots(),
     m_gameObjectFactory(nullptr)
@@ -13,14 +16,16 @@ namespace hc
   {
   }
 
-  void SceneGraph::serialize(BinaryWriter& writer) const
+  void SceneGraph::serialize(io::BinaryWriter& writer) const
   {
+    writer.startWritingObject(static_cast<UInt32>(0), SCENE_GRAPH_VERSION);
     writer.writeSizeT(m_roots.size());
     for (const UniquePtr<GameObject>& root : m_roots)
       root->serialize(writer);
+    writer.finishWritingObject();
   }
 
-  void SceneGraph::deserialize(BinaryReader& reader)
+  void SceneGraph::deserialize(io::BinaryReader& reader)
   {
     if (m_gameObjectFactory == nullptr)
     {
@@ -29,24 +34,37 @@ namespace hc
       );
     }
 
-    SizeT rootCount = reader.readSizeT();
-
     m_roots.clear();
+
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(SCENE_GRAPH_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    SizeT rootCount = reader.readSizeT();
     m_roots.reserve(rootCount);
+
     for (SizeT i = 0; i < rootCount; ++i)
     {
       UniquePtr<GameObject> root = m_gameObjectFactory->create("_toDeserialize");
       root->deserialize(reader);
       addRoot(std::move(root));
     }
+
+    reader.finishReadingObject();
   }
 
-  void SceneGraph::draw(const RenderContext& renderContext)
+  void SceneGraph::draw(
+    const RenderContext& renderContext,
+    Vector<DrawCommand>& outDrawCommands
+  ) const
   {
     for (const UniquePtr<GameObject>& root : m_roots)
     {
       if (root)
-        root->draw(renderContext);
+        root->draw(renderContext, outDrawCommands);
     }
   }
 
@@ -132,6 +150,15 @@ namespace hc
   const Vector<UniquePtr<GameObject>>& SceneGraph::getRoots() const
   {
     return m_roots;
+  }
+
+  void SceneGraph::getAllGameObjects(Vector<GameObject*>& outGameObjects) const
+  {
+    for (const UniquePtr<GameObject>& root : m_roots)
+    {
+      if (root)
+        root->getAllDescendants(outGameObjects);
+    }
   }
 
   void SceneGraph::clear()

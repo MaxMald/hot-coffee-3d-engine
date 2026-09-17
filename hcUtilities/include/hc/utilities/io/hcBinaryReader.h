@@ -3,250 +3,340 @@
 #include <istream>
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 #include "hc/utilities/hcVector3.h"
 #include "hc/utilities/hcVector4.h"
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcColor.h"
 #include "hc/utilities/hcAngle.h"
+#include "hc/utilities/io/hcObjectSerialization.h"
+#include "hc/utilities/hcUUID.h"
 
 namespace hc
 {
-  /**
-   * @brief Reads primitive types and engine data structures from a binary
-   *        stream.
-   *
-   * BinaryReader provides methods for deserializing various data types from
-   * a binary input stream.
-   *
-   * @note Peek methods require the underlying stream to be seekable. They
-   *       will fail with non-seekable streams (e.g., network streams, pipes).
-   */
-  class HC_UTILITY_EXPORT BinaryReader
+  namespace io
   {
-  public:
     /**
-     * @brief Constructs a BinaryReader with the specified input stream.
+     * @brief Reads primitive types and engine data structures from a binary
+     *        stream.
      *
-     * @param stream Reference to the input stream to read from.
+     * BinaryReader provides methods for deserializing various data types from
+     * a binary input stream.
+     *
+     * @note Peek methods require the underlying stream to be seekable. They
+     *       will fail with non-seekable streams (e.g., network streams, pipes).
+     *
+     * @note Serialization format uses fixed-width types (UInt64, UInt32, etc.)
+     *       rather than platform-dependent types (SizeT). This ensures
+     *       cross-platform compatibility within the same endianness.
+     *
+     * @note The current implementation assumes little-endian byte order.
+     *       Files written on little-endian systems may not deserialize
+     *       correctly on big-endian systems without additional endianness
+     *       conversion. Future enhancements should consider endianness
+     *       handling if cross-architecture support is needed.
      */
-    explicit BinaryReader(std::istream& stream);
-    virtual ~BinaryReader() = default;
+    class HC_UTILITY_EXPORT BinaryReader
+    {
+    public:
+      explicit BinaryReader();
+      virtual ~BinaryReader();
 
-    /**
-     * @brief Reads a boolean value.
-     *
-     * @return The boolean value read from the stream.
-     */
-    bool readBool();
+      /**
+       * @brief Prepares the binary reader by opening a binary file for reading.
+       *
+       * @param filePath The path to the binary file to open.
+       * @param outError A string to receive an error message if preparation fails.
+       *
+       * @return True if the file was opened successfully, false otherwise.
+       */
+      bool prepare(const Path& filePath, String& outError);
 
-    /**
-     * @brief Reads an 8-bit signed integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    Int8 readInt8();
+      /**
+       * @brief Safely shuts down the binary reader, closing any open streams and
+       * releasing resources.
+       */
+      void shutdown();
 
-    /**
-     * @brief Peeks at the next 8-bit signed integer without advancing the
-     * stream position.
-     *
-     * @return The integer value peeked from the stream.
-     */
-    Int8 peekInt8();
+      /**
+       * @brief Reads a boolean value.
+       *
+       * @return The boolean value read from the stream.
+       */
+      bool readBool();
 
-    /**
-     * @brief Reads a 16-bit signed integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    Int16 readInt16();
+      /**
+       * @brief Reads an 8-bit signed integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      Int8 readInt8();
 
-    /**
-     * @brief Peeks at the next 16-bit signed integer without advancing the
-     * stream position.
-     *
-     * @return The integer value peeked from the stream.
-     */
-    Int16 peekInt16();
+      /**
+       * @brief Peeks at the next 8-bit signed integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      Int8 peekInt8();
 
-    /**
-     * @brief Reads a 32-bit signed integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    Int32 readInt32();
+      /**
+       * @brief Reads a 16-bit signed integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      Int16 readInt16();
 
-    /**
-     * @brief Reads a 64-bit signed integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    Int64 readInt64();
+      /**
+       * @brief Peeks at the next 16-bit signed integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      Int16 peekInt16();
 
-    /**
-     * @brief Reads an 8-bit unsigned integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    UInt8 readUInt8();
+      /**
+       * @brief Reads a 32-bit signed integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      Int32 readInt32();
 
-    /**
-     * @brief Peeks at the next 8-bit unsigned integer without advancing the
-     * stream position.
-     *
-     * @return The integer value peeked from the stream.
-     */
-    UInt8 peekUInt8();
+      /**
+       * @brief Reads a 64-bit signed integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      Int64 readInt64();
 
-    /**
-     * @brief Reads a 16-bit unsigned integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    UInt16 readUInt16();
+      /**
+       * @brief Reads an 8-bit unsigned integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      UInt8 readUInt8();
 
-    /**
-     * @brief Peeks at the next 16-bit unsigned integer without advancing the
-     * stream position.
-     *
-     * @return The integer value peeked from the stream.
-     */
-    UInt16 peekUInt16();
+      /**
+       * @brief Peeks at the next 8-bit unsigned integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      UInt8 peekUInt8();
 
-    /**
-     * @brief Reads a 32-bit unsigned integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    UInt32 readUInt32();
+      /**
+       * @brief Reads a 16-bit unsigned integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      UInt16 readUInt16();
 
-    /**
-     * @brief Reads a 64-bit unsigned integer.
-     *
-     * @return The integer value read from the stream.
-     */
-    UInt64 readUInt64();
+      /**
+       * @brief Peeks at the next 16-bit unsigned integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      UInt16 peekUInt16();
 
-    /**
-     * @brief Reads a character.
-     *
-     * @return The character value read from the stream.
-     */
-    Char readChar();
+      /**
+       * @brief Reads a 32-bit unsigned integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      UInt32 readUInt32();
 
-    /**
-     * @brief Reads a 16-bit character.
-     *
-     * @return The character value read from the stream.
-     */
-    Char16 readChar16();
+      /**
+       * @brief Reads a 64-bit unsigned integer.
+       *
+       * @return The integer value read from the stream.
+       */
+      UInt64 readUInt64();
 
-    /**
-     * @brief Reads a 32-bit character.
-     *
-     * @return The character value read from the stream.
-     */
-    Char32 readChar32();
+      /**
+       * @brief Reads a character.
+       *
+       * @return The character value read from the stream.
+       */
+      Char readChar();
 
-    /**
-     * @brief Reads an unsigned character.
-     *
-     * @return The character value read from the stream.
-     */
-    UChar readUChar();
+      /**
+       * @brief Reads a 16-bit character.
+       *
+       * @return The character value read from the stream.
+       */
+      Char16 readChar16();
 
-    /**
-     * @brief Reads a 32-bit floating point value.
-     *
-     * @return The float value read from the stream.
-     */
-    float readFloat();
+      /**
+       * @brief Reads a 32-bit character.
+       *
+       * @return The character value read from the stream.
+       */
+      Char32 readChar32();
 
-    /**
-     * @brief Reads a byte.
-     *
-     * @return The byte value read from the stream.
-     */
-    Byte readByte();
+      /**
+       * @brief Reads an unsigned character.
+       *
+       * @return The character value read from the stream.
+       */
+      UChar readUChar();
 
-    /**
-     * @brief Reads a size_t value.
-     *
-     * @return The size value read from the stream.
-     */
-    SizeT readSizeT();
+      /**
+       * @brief Reads a 32-bit floating point value.
+       *
+       * @return The float value read from the stream.
+       */
+      float readFloat();
 
-    /**
-     * @brief Reads a filesystem path from the stream.
-     *
-     * Reads a length-prefixed string and converts it to a Path object.
-     * The path format is cross-platform compatible.
-     *
-     * @return The path read from the stream.
-     */
-    Path readPath();
+      /**
+       * @brief Reads a byte.
+       *
+       * @return The byte value read from the stream.
+       */
+      Byte readByte();
 
-    /**
-     * @brief Reads a length-prefixed string from the stream.
-     *
-     * Reads a UInt32 length value followed by the string data.
-     *
-     * @return The string read from the stream.
-     */
-    String readString();
+      /**
+       * @brief Reads a specified number of bytes into a buffer.
+       *
+       * @param buffer The vector to store the read bytes.
+       * @param size The number of bytes to read.
+       */
+      void readBytes(Vector<Byte>& buffer, SizeT size);
 
-    /**
-     * @brief Reads a 3D vector with float components.
-     *
-     * @return The vector read from the stream.
-     */
-    Vector3f readVector3f();
+      /**
+       * @brief Reads a specified number of bytes into a buffer.
+       *
+       * @param buffer The pointer to the buffer to store the read bytes.
+       * @param size The number of bytes to read.
+       */
+      void readBytes(Byte* buffer, SizeT size);
 
-    /**
-     * @brief Reads a 4D vector with float components.
-     *
-     * @return The vector read from the stream.
-     */
-    Vector4f readVector4f();
+      /**
+       * @brief Reads a size_t value.
+       *
+       * @return The size value read from the stream.
+       */
+      SizeT readSizeT();
 
-    /**
-     * @brief Reads a 4x4 matrix with float components.
-     *
-     * @return The matrix read from the stream.
-     */
-    Matrix4 readMatrix4();
+      /**
+       * @brief Reads a UUID from the stream.
+       *
+       * Reads a 16-byte UUID and constructs a UUID object.
+       *
+       * @return The UUID read from the stream.
+       */
+      UUID readUUID();
 
-    /**
-     * @brief Reads an angle value stored in radians.
-     *
-     * @return The angle read from the stream.
-     */
-    Angle readAngle();
+      /**
+       * @brief Reads a filesystem path from the stream.
+       *
+       * Reads a length-prefixed string and converts it to a Path object.
+       * The path format is cross-platform compatible.
+       *
+       * @return The path read from the stream.
+       */
+      Path readPath();
 
-    /**
-     * @brief Reads a color with four float components (RGBA).
-     *
-     * @return The color read from the stream.
-     */
-    Color readColor();
+      /**
+       * @brief Reads a length-prefixed string from the stream.
+       *
+       * Reads a UInt32 length value followed by the string data.
+       *
+       * @return The string read from the stream.
+       */
+      String readString();
 
-    /**
-     * @brief Checks if the stream is in a valid state.
-     *
-     * @return True if the stream is valid and ready for reading, false
-     *         otherwise.
-     */
-    bool isValid() const;
+      /**
+       * @brief Reads a 3D vector with float components.
+       *
+       * @return The vector read from the stream.
+       */
+      Vector3f readVector3f();
 
-    /**
-     * @brief Checks if there is more data available to read.
-     *
-     * @return True if more data is available, false if end of stream is
-     *         reached.
-     */
-    bool hasMoreData() const;
+      /**
+       * @brief Reads a 4D vector with float components.
+       *
+       * @return The vector read from the stream.
+       */
+      Vector4f readVector4f();
 
-  protected:
-    std::istream& m_stream;
-  };
+      /**
+       * @brief Reads a 4x4 matrix with float components.
+       *
+       * @return The matrix read from the stream.
+       */
+      Matrix4 readMatrix4();
+
+      /**
+       * @brief Reads an angle value stored in radians.
+       *
+       * @return The angle read from the stream.
+       */
+      Angle readAngle();
+
+      /**
+       * @brief Reads a color with four float components (RGBA).
+       *
+       * @return The color read from the stream.
+       */
+      Color readColor();
+
+      /**
+       * @brief Peeks at the next object header without advancing the stream position.
+       *
+       * This method reads the object header from the stream but does not consume it,
+       * allowing for inspection of the next object without affecting the stream state.
+       *
+       * @return The ObjectHeader of the next object in the stream.
+       */
+      ObjectHeader peekObjectHeader() const;
+
+      /**
+       * @brief Starts reading an object from the stream.
+       *
+       * Reads the object header (name, version, size) and prepares for reading
+       * the object's data.
+       *
+       * @return A constant reference to the ObjectHeader of the object being read.
+       */
+      const ObjectHeader& startReadingObject();
+
+      /**
+       * @brief Finishes reading an object from the stream.
+       *
+       * Completes the reading of the object's data and performs any necessary cleanup.
+       */
+      void finishReadingObject();
+
+      /**
+       * @brief Checks if the stream is in a valid state.
+       *
+       * @return True if the stream is valid and ready for reading, false
+       *         otherwise.
+       */
+      bool isValid() const;
+
+      /**
+       * @brief Checks if there is more data available in the stream. If it is reading an
+       * object, it checks if there is more data in the current object.
+       *
+       * @return True if there is more data to read, false otherwise.
+       */
+      bool hasMoreData() const;
+
+      /**
+       * @brief Checks if the reader is currently reading an object.
+       *
+       * @return True if reading an object, false otherwise.
+       */
+      bool isReadingObject() const;
+
+    protected:
+      UniquePtr<std::istream> m_stream;
+      UniquePtr<ObjectData> m_currentObject;
+      Stack<UniquePtr<ObjectData>> m_objectStack;
+
+      ObjectHeader readObjectHeader();
+    };
+  }
 }

@@ -17,20 +17,20 @@ namespace hc
 
     bool HC_CORE_EXPORT IsMaterialDescriptorExtension(const Path& path)
     {
-      return path.has_extension() && path.extension() == MATERIAL_DESCRIPTOR;
+      return path.hasExtension() && path.extension() == MATERIAL_DESCRIPTOR;
     }
 
     bool HC_CORE_EXPORT IsSceneExtension(const Path& path)
     {
-      return path.has_extension() && path.extension() == SCENE;
+      return path.hasExtension() && path.extension() == SCENE;
     }
 
     bool HC_CORE_EXPORT IsImageExtension(const Path& path)
     {
-      if (!path.has_extension())
+      if (!path.hasExtension())
         return false;
 
-      String ext = path.extension().string();
+      String ext = path.extension().toString();
       for (const Char* imgExt : SUPPORTED_IMAGES_EXTENSIONS)
       {
         if (ext == imgExt)

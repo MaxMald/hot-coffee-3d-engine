@@ -1,8 +1,8 @@
 #pragma once
 
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/graphics/hcDrawType.h"
 
 namespace hc
 {
@@ -36,11 +36,13 @@ namespace hc
      * @param vertices The vertex buffer to use for this mesh.
      * @param indices The index buffer to use for this mesh.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -51,12 +53,14 @@ namespace hc
      * @param indices The index buffer to use for this mesh.
      * @param subMeshes The collection of submeshes to define the mesh's geometry.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -105,21 +109,21 @@ namespace hc
      * 
      * @return A vector of shared pointers to the materials.
      */
-    virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
+    virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
-     * @brief Returns the draw type of this mesh.
+     * @brief Returns the topology type of this mesh.
      *
-     * @return The draw type used for rendering this mesh.
+     * @return The topology type used for rendering this mesh.
      */
-    virtual drawType::Type getDrawType() const = 0;
+    virtual topologyType::Type getTopologyType() const = 0;
 
     /**
-     * @brief Sets the draw type for this mesh.
+     * @brief Sets the topology type for this mesh.
      *
-     * @param drawType The draw type to use for rendering this mesh.
+     * @param topologyType The topology type to use for rendering this mesh.
      */
-    virtual void setDrawType(drawType::Type drawType) = 0;
+    virtual void setTopologyType(topologyType::Type topologyType) = 0;
 
     /**
      * @brief Validates the mesh's state and configuration.
@@ -129,25 +133,11 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Returns the file path of the source model asset used to create this mesh.
+     * @brief Returns the source path of the mesh, if it was loaded from a file.
      *
-     * @note This path might be empty if the mesh was created procedurally or does not
-     * have an associated source model file.
-     *
-     * @return The file path of the source model asset if available, otherwise an empty
-     * path.
+     * @return Reference to the source path of the mesh.
      */
-    virtual Path getSourcePath() const = 0;
-
-    /**
-     * @brief Sets the file path of the source model asset used to create this mesh.
-     *
-     * This method allows updating the source path, which can be useful for tracking
-     * the origin of the mesh data or for debugging purposes.
-     *
-     * @param path The file path to set as the source of this mesh.
-     */
-    virtual void setSourcePath(const Path& path) = 0;
+    virtual inline const Path& getSourcePath() const = 0;
 
   protected:
     IMesh() = default;

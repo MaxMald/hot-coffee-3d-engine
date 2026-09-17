@@ -35,11 +35,11 @@ namespace hc::editor
         return false;
 
       m_currentProject->setProjectFilePath(projectPath);
-      m_assetManager.setRootPath(projectPath.parent_path());
+      m_assetManager.setRootPath(projectPath.parentPath());
       m_isProjectOpen = true;
 
       LogService::Message(
-        "Project opened successfully: " + projectPath.string()
+        "Project opened successfully: " + projectPath.toString()
       );
 
       for (auto* listener : m_listeners)
@@ -50,7 +50,7 @@ namespace hc::editor
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to open project file: " + projectPath.string() + " Error: " + e.what()
+        "Failed to open project file: " + projectPath.toString() + " Error: " + e.what()
       );
       return false;
     }
@@ -69,10 +69,10 @@ namespace hc::editor
       if (serialization::ProjectSerializer::Serialize(*m_currentProject, savePath))
       {
         m_currentProject->setProjectFilePath(savePath);
-        m_assetManager.setRootPath(savePath.parent_path());
+        m_assetManager.setRootPath(savePath.parentPath());
 
         LogService::Message(
-          "Project saved successfully: " + savePath.string()
+          "Project saved successfully: " + savePath.toString()
         );
 
         return true;
@@ -80,7 +80,7 @@ namespace hc::editor
       else
       {
         LogService::Error(
-          "Failed to save project file: " + savePath.string()
+          "Failed to save project file: " + savePath.toString()
         );
         return false;
       }
@@ -88,7 +88,7 @@ namespace hc::editor
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to save project file: " + savePath.string() + " Error: " + e.what()
+        "Failed to save project file: " + savePath.toString() + " Error: " + e.what()
       );
       return false;
     }
@@ -121,7 +121,7 @@ namespace hc::editor
   Path ProjectManager::getCurrentProjectDirectory() const
   {
     if (m_currentProject)
-      return m_currentProject->getProjectFilePath().parent_path();
+      return m_currentProject->getProjectFilePath().parentPath();
     return Path();
   }
 

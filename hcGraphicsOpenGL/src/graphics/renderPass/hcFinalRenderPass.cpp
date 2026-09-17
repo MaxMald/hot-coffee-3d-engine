@@ -42,7 +42,6 @@ namespace hc
     }
 
     m_finalPassShaderProgram->bind();
-    m_finalPassShaderProgram->setUniformTexture("uScene", 0);
     sceneTexture.bind(0);
 
     glDrawArrays(GL_TRIANGLES, 0, 3);

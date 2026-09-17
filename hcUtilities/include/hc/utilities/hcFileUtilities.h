@@ -2,6 +2,7 @@
 
 #include "hc/utilities/hcUtilitiesPrerequisites.h"
 #include "hc/utilities/hcString.h"
+#include "hc/utilities/hcPath.h"
 
 namespace hc
 {

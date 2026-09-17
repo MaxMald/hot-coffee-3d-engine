@@ -108,7 +108,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -214,7 +214,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -301,7 +301,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -452,7 +452,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -505,7 +505,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -637,7 +637,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(
@@ -715,7 +715,7 @@ namespace hc
     subMesh.materialIndex = 0;
     subMeshes.push_back(subMesh);
 
-    Vector<SharedPtr<AMaterialDescriptor>> materials;
+    Vector<SharedPtr<MaterialDescriptor>> materials;
     materials.push_back(m_materialDescriptorAssetManager.getDefault());
 
     return MakeShared<Model>(

@@ -2,33 +2,20 @@
 
 namespace hc
 {
-  static const float MAX_CONE_ANGLE_RADIANS = Math::Pi;
+  static const UInt16 SPOT_LIGHT_VERSION = 1;
+  static const float MAX_CONE_ANGLE_RADIANS = Math::HalfPi;
 
   SpotLight::SpotLight() :
     ALight(lightType::Type::Spot),
     m_direction(0.0f, -1.0f, 0.0f),
     m_innerConeAngle(Angle::FromDegrees(15.0f)),
-    m_outerConeAngle(Angle::FromDegrees(30.0f))
+    m_outerConeAngle(Angle::FromDegrees(30.0f)),
+    m_shadowProjectionNearPlane(0.1f),
+    m_shadowProjectionFarPlane(100.0f)
   {
   }
 
   SpotLight::~SpotLight() = default;
-
-  void SpotLight::serialize(BinaryWriter& writer) const
-  {
-    ALight::serialize(writer);
-    writer.writeVector3f(m_direction);
-    writer.writeAngle(m_innerConeAngle);
-    writer.writeAngle(m_outerConeAngle);
-  }
-
-  void SpotLight::deserialize(BinaryReader& reader)
-  {
-    ALight::deserialize(reader);
-    m_direction = reader.readVector3f();
-    m_innerConeAngle = reader.readAngle();
-    m_outerConeAngle = reader.readAngle();
-  }
 
   void SpotLight::setDirection(const Vector3f& direction)
   {
@@ -68,16 +55,90 @@ namespace hc
     return m_outerConeAngle;
   }
 
-  SpotLightFrameData SpotLight::toFrameData() const
+  void SpotLight::setShadowProjectionNearPlane(float nearPlane)
   {
-    SpotLightFrameData frameData{};
-    frameData.position = Vector4f(m_position, 1.0f);
-    frameData.direction = Vector4f(m_direction.normalized(), 0.0f);
-    frameData.color = m_color;
-    frameData.range = m_range;
-    frameData.innerConeAngle = Math::Cos(m_innerConeAngle.toRadians());
-    frameData.intensity = m_intensity;
-    frameData.outerConeAngle = Math::Cos(m_outerConeAngle.toRadians());
-    return frameData;
+    m_shadowProjectionNearPlane = Math::Max(0.0f, nearPlane);
+  }
+
+  float SpotLight::getShadowProjectionNearPlane() const
+  {
+    return m_shadowProjectionNearPlane;
+  }
+
+  void SpotLight::setShadowProjectionFarPlane(float farPlane)
+  {
+    m_shadowProjectionFarPlane = Math::Max(0.0f, farPlane);
+  }
+
+  float SpotLight::getShadowProjectionFarPlane() const
+  {
+    return m_shadowProjectionFarPlane;
+  }
+
+  dataBlockStructure::SpotLight SpotLight::getDataBlockStructure() const
+  {
+    dataBlockStructure::SpotLight lightData;
+    lightData.position = Vector4f(m_position, 1.0f);
+    lightData.direction = Vector4f(m_direction.normalized(), 0.0f);
+    lightData.color = m_color;
+    lightData.range = m_range;
+    lightData.innerConeAngle = Math::Cos(m_innerConeAngle.toRadians());
+    lightData.intensity = m_intensity;
+    lightData.outerConeAngle = Math::Cos(m_outerConeAngle.toRadians());
+    return lightData;
+  }
+
+  dataBlockStructure::SpotLightShadow SpotLight::getShadowDataBlockStructure(
+    bool transposeMatrices
+  ) const
+  {
+    Matrix4 projectionMatrix = Matrix4::Perspective(
+      m_outerConeAngle.toRadians() * 2.0f,
+      1.0f,
+      m_shadowProjectionNearPlane,
+      m_shadowProjectionFarPlane
+    );
+
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(m_direction);
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      m_position,
+      m_position + m_direction,
+      up
+    );
+
+    dataBlockStructure::SpotLightShadow shadowData;
+    shadowData.shadowBias = m_shadowBias;
+    shadowData.shadowStrength = m_shadowStrength;
+    shadowData.projectionFarPlane = m_shadowProjectionFarPlane;
+    shadowData.projectionNearPlane = m_shadowProjectionNearPlane;
+    shadowData.lightViewProjectionMatrix = projectionMatrix * viewMatrix;
+
+    if (transposeMatrices)
+      shadowData.lightViewProjectionMatrix.transpose();
+
+    return shadowData;
+  }
+
+  void SpotLight::onSerialize(io::BinaryWriter& writer) const
+  {
+    writer.writeVector3f(m_direction);
+    writer.writeAngle(m_innerConeAngle);
+    writer.writeAngle(m_outerConeAngle);
+    writer.writeFloat(m_shadowProjectionNearPlane);
+    writer.writeFloat(m_shadowProjectionFarPlane);
+  }
+
+  void SpotLight::onDeserialize(io::BinaryReader& reader)
+  {
+    m_direction = reader.readVector3f();
+    m_innerConeAngle = reader.readAngle();
+    m_outerConeAngle = reader.readAngle();
+    m_shadowProjectionNearPlane = reader.readFloat();
+    m_shadowProjectionFarPlane = reader.readFloat();
+  }
+
+  UInt16 SpotLight::getDerivedVersion() const
+  {
+    return SPOT_LIGHT_VERSION;
   }
 }

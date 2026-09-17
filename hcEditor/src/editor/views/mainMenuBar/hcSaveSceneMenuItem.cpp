@@ -55,7 +55,7 @@ namespace hc::editor
 
         if (!m_editorSceneManager.saveScene(savePath))
         {
-          LogService::Error("Failed to save scene to path: " + savePath.string());
+          LogService::Error("Failed to save scene to path: " + savePath.toString());
           return;
         }
       },

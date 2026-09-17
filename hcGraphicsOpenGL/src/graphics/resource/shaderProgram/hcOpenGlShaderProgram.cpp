@@ -5,7 +5,6 @@
 namespace hc
 {
   OpenGlShaderProgram::OpenGlShaderProgram() :
-    m_id(Id::Create()),
     m_programId(0),
     m_valid(false)
   {
@@ -14,11 +13,6 @@ namespace hc
   OpenGlShaderProgram::~OpenGlShaderProgram()
   {
     destroy();
-  }
-
-  const Id& OpenGlShaderProgram::getId() const
-  {
-    return m_id;
   }
 
   void OpenGlShaderProgram::initialize(const Vector<SharedPtr<IShader>>& shaders)
@@ -117,6 +111,15 @@ namespace hc
 
     GLint location = getUniformLocation(name);
     glUniform3f(location, v3f.x, v3f.y, v3f.z);
+    openGlGraphicsUtilities::AssertOpenGlHasNoError();
+  }
+
+  void OpenGlShaderProgram::setUniform(const String& name, const Vector4f& v4f)
+  {
+    assertIsValid();
+
+    GLint location = getUniformLocation(name);
+    glUniform4f(location, v4f.x, v4f.y, v4f.z, v4f.w);
     openGlGraphicsUtilities::AssertOpenGlHasNoError();
   }
 

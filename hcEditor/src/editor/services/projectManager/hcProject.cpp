@@ -25,7 +25,7 @@ namespace hc::editor
   {
   }
 
-  void Project::serialize(BinaryWriter& writer) const
+  void Project::serialize(io::BinaryWriter& writer) const
   {
     writer.writeUInt32(hc::editor::serialization::fileFormats::Project::MAGIC);
     writer.writeUInt16(m_majorVersion);
@@ -34,7 +34,7 @@ namespace hc::editor
     writer.writeString(m_relativePathToLastOpenedScene);
   }
 
-  void Project::deserialize(BinaryReader& reader)
+  void Project::deserialize(io::BinaryReader& reader)
   {
     m_projectFilePath.clear();
 
@@ -65,9 +65,8 @@ namespace hc::editor
         "Project file path must be set before setting the last opened scene path."
       );
 
-    m_relativePathToLastOpenedScene = AssetPath::ToRelative(
-      absolutePath,
-      m_projectFilePath.parent_path()
+    m_relativePathToLastOpenedScene = absolutePath.toRelative(
+      m_projectFilePath.parentPath()
     );
   }
 

@@ -1,33 +1,42 @@
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
 
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
 
 namespace hc
 {
   UnlitMaterial::UnlitMaterial(UInt16 materialId) :
-    AMaterial(materialId, materialRenderMode::Type::Opaque, 0.0f, false),
+    AMaterial(materialId, "No Name", materialRenderMode::Type::Opaque, 0.0f, false),
+    m_sourcePath(),
     m_color(0.5f, 0.5f, 0.5f, 1.0f)
-  {}
+  {
+  }
 
   UnlitMaterial::~UnlitMaterial()
-  {}
+  {
+  }
 
   void UnlitMaterial::destroy()
   {
+    m_sourcePath.clear();
     m_color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     m_shaderProgram.reset();
     m_mainTexture.reset();
   }
 
-  shadingType::Type UnlitMaterial::getShaderType() const
+  materialType::Type UnlitMaterial::getMaterialType() const
   {
-    return shadingType::Unlit;
+    return materialType::Unlit;
   }
 
-  void UnlitMaterial::bind(renderPassType::Type renderPass)
+  void UnlitMaterial::bind(
+    renderPassType::Type renderPass,
+    IDataBlockManager& dataBlockManager
+  )
   {
     if (renderPass != renderPassType::Type::Forward)
       throw RuntimeErrorException(
@@ -39,29 +48,18 @@ namespace hc
 
     m_shaderProgram->bind();
 
-    m_shaderProgram->setUniform("uColor", getColor());
-
+    // Upload and bind material properties
+    dataBlockStructure::MaterialUnlit materialData;
+    materialData.color = m_color;
     if (m_renderMode == materialRenderMode::Type::AlphaCutout)
-      m_shaderProgram->setUniform("uAlphaCutoff", m_alphaCutoutThreshold);
+      materialData.alphaCutoff = m_alphaCutoutThreshold;
     else
-      m_shaderProgram->setUniform("uAlphaCutoff", 0.0f);
+      materialData.alphaCutoff = 0.0f;
+    dataBlockManager.upload(dataBlockType::Type::MaterialUnlit, &materialData);
+    dataBlockManager.bind(dataBlockType::Type::MaterialUnlit);
 
+    // Upload textures
     m_mainTexture->bind(0);
-    m_shaderProgram->setUniformTexture("uTexture", 0);
-  }
-
-  void UnlitMaterial::updateModelMatrix(
-    const Matrix4& modelMatrix,
-    renderPassType::Type renderPass
-  )
-  {
-    if (renderPass != renderPassType::Type::Forward)
-      throw RuntimeErrorException(
-        "UnlitMaterial::updateModelMatrix - UnlitMaterial only supports Forward render pass."
-      );
-
-    coreAssertions::AssertShaderProgramIsValid(m_shaderProgram, "Unlit shader program");
-    m_shaderProgram->setUniform("uModel", modelMatrix);
   }
 
   void UnlitMaterial::unbind()
@@ -75,7 +73,7 @@ namespace hc
   }
 
   void UnlitMaterial::initialize(
-    const UnlitMaterialDescriptor& descriptor,
+    const MaterialDescriptor& descriptor,
     const SharedPtr<IShaderProgram>& shaderProgram,
     const SharedPtr<ITexture>& mainTexture
   )
@@ -83,10 +81,18 @@ namespace hc
     coreAssertions::AssertShaderProgramIsValid(shaderProgram, "Unlit shader program");
     coreAssertions::AssertTextureIsValid(mainTexture, "Main texture");
 
-    m_renderMode = descriptor.getRenderMode();
-    m_doubleSided = descriptor.isDoubleSided();
-    setAlphaCutoutThreshold(descriptor.getAlphaCutoutThreshold());
-    m_color = descriptor.getColor();
+    const assets::materialDescriptor::UnlitData* unlitData = descriptor.getIfUnlitData();
+    if (!unlitData)
+      throw InvalidArgumentException(
+        "UnlitMaterial::initialize: Provided descriptor does not contain UnlitData."
+      );
+
+    m_sourcePath = descriptor.path;
+    m_name = descriptor.name;
+    setAlphaCutoutThreshold(descriptor.alphaCutoutThreshold);
+    m_doubleSided = descriptor.doubleSided;
+    m_renderMode = descriptor.renderMode;
+    m_color = unlitData->color;
     m_shaderProgram = shaderProgram;
     m_mainTexture = mainTexture;
   }

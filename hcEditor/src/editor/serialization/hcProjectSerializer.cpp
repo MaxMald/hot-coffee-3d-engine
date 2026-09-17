@@ -1,5 +1,4 @@
 #include "hc/editor/serialization/hcProjectSerializer.h"
-#include <fstream>
 #include "hc/editor/services/projectManager/hcProject.h"
 
 namespace hc::editor::serialization
@@ -10,23 +9,23 @@ namespace hc::editor::serialization
     {
       UniquePtr<Project> project = MakeUnique<Project>();
 
-      std::ifstream fileStream(filePath, std::ios::binary);
-      if (!fileStream.is_open())
+      String error;
+      io::BinaryReader reader;
+      if (!reader.prepare(filePath, error))
       {
         LogService::Error(
-          "Failed to open project file for reading: " + filePath.string()
+          "Failed to prepare binary reader for project file: " + filePath.toString() + " Error: " + error
         );
         return nullptr;
       }
 
-      BinaryReader reader(fileStream);
       project->deserialize(reader);
       return project;
     }
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to deserialize project file: " + filePath.string() + " Error: " + e.what()
+        "Failed to deserialize project file: " + filePath.toString() + " Error: " + e.what()
       );
       return nullptr;
     }
@@ -35,23 +34,23 @@ namespace hc::editor::serialization
   {
     try
     {
-      std::ofstream fileStream(filePath, std::ios::binary);
-      if (!fileStream.is_open())
+      String error;
+      io::BinaryWriter writer;
+      if (!writer.prepare(filePath, error))
       {
         LogService::Error(
-          "Failed to open project file for writing: " + filePath.string()
+          "Failed to prepare binary writer for project file: " + filePath.toString() + " Error: " + error
         );
         return false;
-      }        
+      }
 
-      BinaryWriter writer(fileStream);
       project.serialize(writer);
       return true;
     }
     catch (const Exception& e)
     {
       LogService::Error(
-        "Failed to serialize project file: " + filePath.string() + " Error: " + e.what()
+        "Failed to serialize project file: " + filePath.toString() + " Error: " + e.what()
       );
       return false;
     }

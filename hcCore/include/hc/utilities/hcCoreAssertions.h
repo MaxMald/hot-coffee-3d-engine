@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
+#include "hc/graphics/resource/shader/hcIShader.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 
 namespace hc
@@ -9,12 +10,13 @@ namespace hc
   namespace coreAssertions
   {
     /**
-     * @brief Asserts that the given texture is valid and loaded. If the texture is null or
-     * invalid, an InvalidArgumentException is thrown with a message indicating which texture is
-     * invalid.
+     * @brief Asserts that the given texture is valid and loaded. If the texture is null
+     * or invalid, an InvalidArgumentException is thrown with a message indicating which
+     * texture is invalid.
      *
      * @param texture The shared pointer to the texture to validate.
-     * @param textureName The name of the texture (e.g., "Albedo", "Normal", "Specular") used in the error message.
+     * @param textureName The name of the texture (e.g., "Albedo", "Normal", "Specular")
+     * used in the error message.
      */
     inline void AssertTextureIsValid(
       const SharedPtr<ITexture>& texture,
@@ -28,11 +30,13 @@ namespace hc
     }
 
     /**
-     * @brief Asserts that the given shader program is valid and linked. If the shader program is null
-     * or invalid, an InvalidArgumentException is thrown with a message indicating that the shader program is invalid.
+     * @brief Asserts that the given shader program is valid and linked. If the shader
+     * program is null or invalid, an InvalidArgumentException is thrown with a message
+     * indicating that the shader program is invalid.
      *
      * @param shaderProgram The shared pointer to the shader program to validate.
-     * @param shaderProgramName The name of the shader program used in the error message (optional).
+     * @param shaderProgramName The name of the shader program used in the error message
+     * (optional).
      */
     inline void AssertShaderProgramIsValid(
       const SharedPtr<IShaderProgram>& shaderProgram,
@@ -42,6 +46,25 @@ namespace hc
       if (!shaderProgram || !shaderProgram->isValid())
         throw InvalidArgumentException(
           String::Format("%s is invalid.", shaderProgramName.c_str())
+        );
+    }
+    
+    /**
+     * @brief Asserts that the given shader is valid and compiled. If the shader is null
+     * or invalid, an InvalidArgumentException is thrown with a message indicating that
+     * the shader is invalid.
+     *
+     * @param shader The shared pointer to the shader to validate.
+     * @param shaderName The name of the shader used in the error message (optional).
+     */
+    inline void AssertShaderIsValid(
+      const SharedPtr<IShader>& shader,
+      const String& shaderName = "Shader"
+    )
+    {
+      if (!shader || !shader->isValid())
+        throw InvalidArgumentException(
+          String::Format("%s is invalid.", shaderName.c_str())
         );
     }
   }

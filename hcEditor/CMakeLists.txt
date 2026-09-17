@@ -22,6 +22,7 @@ set_target_properties(hcEditor PROPERTIES
   OUTPUT_NAME "hcEditor"
   DEBUG_POSTFIX "-d"
   VS_CHARSET "" # Character set: Not set (default)
+  VS_DEBUGGER_WORKING_DIRECTORY "$<TARGET_FILE_DIR:hcEditor>" # Set Visual Studio debugger working directory to the target output dir for hcEditor
 )
 
 # Compiler options

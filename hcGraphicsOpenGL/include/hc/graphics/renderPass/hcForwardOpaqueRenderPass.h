@@ -5,11 +5,12 @@
 namespace hc
 {
   class OpenGlGBuffer;
+  class IDataBlockManager;
 
   class ForwardOpaqueRenderPass
   {
   public:
-    ForwardOpaqueRenderPass();
+    ForwardOpaqueRenderPass(IDataBlockManager& dataBlockManager);
     ~ForwardOpaqueRenderPass();
 
     void execute(
@@ -18,6 +19,8 @@ namespace hc
     );
 
   private:
+    IDataBlockManager& m_dataBlockManager;
+
     void executeTwoSidedDrawCommand(const DrawCommand& command);
   };
 }

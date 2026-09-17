@@ -10,7 +10,7 @@ namespace hc
   /**
    * @brief Interface for components that can be attached to game objects.
    */
-  class HC_CORE_EXPORT IComponent : public NonCopyable, public ISerializable
+  class HC_CORE_EXPORT IComponent : public NonCopyable, public io::ISerializable
   {
   public:
     virtual ~IComponent() = default;
@@ -35,6 +35,13 @@ namespace hc
      * @return The component type identifier.
      */
     virtual componentType::Type getType() const = 0;
+
+    /**
+     * Gets the UUID of this component.
+     *
+     * @return The UUID.
+     */
+    virtual inline const UUID& getUUID() const = 0;
 
   protected:
     IComponent() = default;

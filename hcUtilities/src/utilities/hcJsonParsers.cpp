@@ -13,5 +13,11 @@ namespace hc
       float a = json["a"].getFloat();
       return Color(r, g, b, a);
     }
+
+    Path parsePath(const Json& json)
+    {
+      String pathStr = json["path"].getString();
+      return Path(pathStr);
+    }
   }
 }

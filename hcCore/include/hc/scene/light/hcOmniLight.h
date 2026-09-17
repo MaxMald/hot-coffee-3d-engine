@@ -1,10 +1,14 @@
 #pragma once
 
 #include "hc/scene/light/hcALight.h"
-#include "hc/graphics/lightFrameData/hcOmniLightFrameData.h"
 
 namespace hc
 {
+  namespace dataBlockStructure
+  {
+    struct OmniLight;
+  }
+
   class HC_CORE_EXPORT OmniLight : public ALight
   {
   public:
@@ -12,6 +16,18 @@ namespace hc
 
     ~OmniLight() override = default;
 
-    OmniLightFrameData toFrameData() const;
+    /**
+     * @brief Gets the GPU-aligned data structure representing this omni light.
+     *
+     * @return A dataBlockStructure::OmniLight containing the light's data.
+     */
+    dataBlockStructure::OmniLight getDataBlockStructure() const;
+
+  protected:
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    UInt16 getDerivedVersion() const override;
   };
 }

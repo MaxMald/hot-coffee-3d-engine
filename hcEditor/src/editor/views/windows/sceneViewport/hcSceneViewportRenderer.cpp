@@ -72,23 +72,21 @@ namespace hc::editor
     return m_height;
   }
 
-  void SceneViewportRenderer::renderScene(Scene& scene, Camera& camera)
+  void SceneViewportRenderer::renderScene(
+    Scene& scene,
+    Camera& camera,
+    const GameObject* activeGameObject
+  )
   {
     assertIsValid();
 
     m_frameBuffer->clear(m_clearColor);
+
+    // Add draw commands for light gizmos to the scene's draw commands
+    m_lightGizmoRenderer.draw(scene, camera, activeGameObject);
+
     // Render the scene to the framebuffer
     scene.draw(m_graphicsManager, &camera);
-  }
-
-  void SceneViewportRenderer::renderLightGizmos(
-    const Scene& scene,
-    const Camera& camera,
-    const GameObject* activeGameObject)
-  {
-    assertIsValid();
-    m_lightGizmoRenderer.draw(scene, camera, activeGameObject);
-    m_graphicsManager.executeDrawCommands();
   }
 
   ITexture& SceneViewportRenderer::getRenderedTexture() const

@@ -1,7 +1,10 @@
 #include "hc/scene/camera/hcCamera.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
+  static constexpr UInt32 CAMERA_VERSION = 1;
+
   Camera::Camera() :
     m_id(UUID::Generate()),
     m_position(0.0f, 0.0f, 0.0f),
@@ -16,26 +19,36 @@ namespace hc
   {
   }
 
-  void Camera::serialize(BinaryWriter& writer) const
+  void Camera::serialize(io::BinaryWriter& writer) const
   {
-    m_id.serialize(writer);
+    writer.startWritingObject(static_cast<UInt32>(0), CAMERA_VERSION);
+    writer.writeUUID(m_id);
     writer.writeVector3f(m_position);
     writer.writeVector3f(m_direction);
     writer.writeVector3f(m_up);
     writer.writeUInt8(m_projectionType);
     m_orthographicProjection.serialize(writer);
     m_perspectiveProjection.serialize(writer);
+    writer.finishWritingObject();
   }
 
-  void Camera::deserialize(BinaryReader& reader)
+  void Camera::deserialize(io::BinaryReader& reader)
   {
-    m_id.deserialize(reader);
+    io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchVersion(CAMERA_VERSION))
+    {
+      reader.finishReadingObject();
+      return;
+    }
+
+    m_id = reader.readUUID();
     m_position = reader.readVector3f();
     m_direction = reader.readVector3f();
     m_up = reader.readVector3f();
     m_projectionType = static_cast<projectionType::Type>(reader.readUInt8());
     m_orthographicProjection.deserialize(reader);
     m_perspectiveProjection.deserialize(reader);
+    reader.finishReadingObject();
   }
 
   const UUID& Camera::getUUID() const
@@ -224,6 +237,29 @@ namespace hc
     {
       return &m_orthographicProjection;
     }
+  }
+
+  const ICameraProjection* Camera::getCameraProjection() const
+  {
+    return const_cast<Camera*>(this)->getCameraProjection();
+  }
+
+  dataBlockStructure::Camera Camera::getCameraDataBlockStructure(
+    bool transposedMatrices
+  ) const
+  {
+    dataBlockStructure::Camera cameraDataBlock;
+    cameraDataBlock.projectionMatrix = getCachedProjectionMatrix();
+    cameraDataBlock.viewMatrix = getViewMatrix();
+    cameraDataBlock.cameraWorldPosition = m_position;
+
+    if (transposedMatrices)
+    {
+      cameraDataBlock.projectionMatrix.transpose();
+      cameraDataBlock.viewMatrix.transpose();
+    }
+
+    return cameraDataBlock;
   }
 
   void Camera::recalculateUp()

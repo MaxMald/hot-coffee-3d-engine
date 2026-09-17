@@ -1,4 +1,5 @@
 #include "hc/utilities/hcFileUtilities.h"
+
 #include <fstream>
 
 namespace hc

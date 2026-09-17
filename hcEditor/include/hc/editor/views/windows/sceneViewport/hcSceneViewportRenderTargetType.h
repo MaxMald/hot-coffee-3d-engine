@@ -13,6 +13,7 @@ namespace hc::editor
       GBufferNormalRoughness,
       GBufferAlbedoAlpha,
       GBufferMaterialParameters,
+      GBufferSpecularColorAndShininess,
       Count
     };
 

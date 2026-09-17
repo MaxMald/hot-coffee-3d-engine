@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  class UnlitMaterialDescriptor;
+  class MaterialDescriptor;
   class ITexture;
   class IShaderProgram;
 
@@ -29,21 +29,16 @@ namespace hc
     void destroy() override;
 
     /**
-     * @copydoc IMaterial::getShaderType
+     * @copydoc IMaterial::getMaterialType
      */
-    shadingType::Type getShaderType() const override;
+    materialType::Type getMaterialType() const override;
 
     /**
      * @copydoc IMaterial::bind
      */
-    void bind(renderPassType::Type renderPass) override;
-
-    /**
-     * @copydoc IMaterial::updateModelMatrix
-     */
-    void updateModelMatrix(
-      const Matrix4& modelMatrix,
-      renderPassType::Type renderPass
+    void bind(
+      renderPassType::Type renderPass,
+      IDataBlockManager& dataBlockManager
     ) override;
 
     /**
@@ -57,6 +52,14 @@ namespace hc
     bool isValid() const override;
 
     /**
+     * @copydoc IMaterial::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @brief Initializes the unlit material with a descriptor and main texture.
      *
      * @param descriptor Reference to the unlit material descriptor.
@@ -65,7 +68,7 @@ namespace hc
      * @param mainTexture Shared pointer to the main texture (can be nullptr).
      */
     void initialize(
-      const UnlitMaterialDescriptor& descriptor,
+      const MaterialDescriptor& descriptor,
       const SharedPtr<IShaderProgram>& shaderProgram,
       const SharedPtr<ITexture>& mainTexture
     );
@@ -99,6 +102,7 @@ namespace hc
     void setMainTexture(const SharedPtr<ITexture>& mainTexture);
 
   private:
+    Path m_sourcePath;
     Color m_color;
     SharedPtr<IShaderProgram> m_shaderProgram;
     SharedPtr<ITexture> m_mainTexture;

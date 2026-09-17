@@ -19,13 +19,13 @@ namespace hc
     Int32 width = 0;
     Int32 height = 0;
     Int32 channels = 0;
-    Byte* data = nullptr;
+    UChar* data = nullptr;
     SharedPtr<Image> image = nullptr;
 
     try
     {
       data = stbi_load(
-        path.string().c_str(),
+        path.toString().c_str(),
         reinterpret_cast<int*>(&width),
         reinterpret_cast<int*>(&height),
         reinterpret_cast<int*>(&channels),
@@ -40,13 +40,13 @@ namespace hc
         * NUM_CHANNELS;
 
       BufferByte buffer(bufferSize);
-      buffer.initialize(data, bufferSize);
+      buffer.initialize(reinterpret_cast<Byte*>(data), bufferSize);
 
       image = MakeShared<Image>(
         path,
         static_cast<UInt32>(width),
         static_cast<UInt32>(height),
-        colorFormatType::RGBA8,
+        textureFormatType::RGBA8,
         colorSpaceType::SRGB,
         std::move(buffer)
       );
@@ -68,7 +68,7 @@ namespace hc
     if (isLoaded(path))
       return m_loadedImages.at(path);
 
-    throw RuntimeErrorException("Image asset not loaded: " + path.string());
+    throw RuntimeErrorException("Image asset not loaded: " + path.toString());
   }
 
   bool ImageAssetManager::isLoaded(const Path& path) const

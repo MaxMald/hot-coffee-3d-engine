@@ -1,9 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/material/hcIMaterial.h"
-#include "hc/graphics/resource/material/hcMaterialRenderMode.h"
-#include "hc/graphics/hcPolygonFillType.h"
 
 namespace hc
 {

@@ -5,8 +5,22 @@
 
 namespace hc
 {
+  static GLenum ToOpenGlShaderStageType(shaderStageType::Type type)
+  {
+    switch (type)
+    {
+    case shaderStageType::Vertex:
+      return GL_VERTEX_SHADER;
+    case shaderStageType::Fragment:
+      return GL_FRAGMENT_SHADER;
+    default:
+      throw RuntimeErrorException(
+        String::Format("Unsupported shader stage type: %d", static_cast<int>(type))
+      );
+    }
+  }
+
   OpenGlShader::OpenGlShader() :
-    m_id(Id::Create()),
     m_stageType(shaderStageType::Vertex),
     m_valid(false),
     m_shaderId(0)
@@ -15,11 +29,6 @@ namespace hc
   OpenGlShader::~OpenGlShader()
   {
     destroy();
-  }
-
-  const Id& OpenGlShader::getId() const
-  {
-    return m_id;
   }
 
   void OpenGlShader::destroy()
@@ -40,19 +49,7 @@ namespace hc
 
     try
     {
-      GLenum glStage;
-      switch (stageType)
-      {
-      case shaderStageType::Vertex:
-        glStage = GL_VERTEX_SHADER;
-        break;
-      case shaderStageType::Fragment:
-        glStage = GL_FRAGMENT_SHADER;
-        break;
-      default:
-        throw RuntimeErrorException("Unsupported shader stage type.");
-        return;
-      }
+      GLenum glStage = ToOpenGlShaderStageType(stageType);
 
       m_shaderId = static_cast<UInt32>(glCreateShader(glStage));
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
@@ -89,6 +86,50 @@ namespace hc
   bool OpenGlShader::isValid() const
   {
     return m_valid;
+  }
+
+  void OpenGlShader::initializeFromSpirv(
+    shaderStageType::Type stageType,
+    const Vector<UInt32>& spirvCode,
+    const String& entryPoint
+  )
+  {
+    if (m_valid)
+      throw RuntimeErrorException("Shader is already initialized.");
+
+    try
+    {
+      GLenum glStage = ToOpenGlShaderStageType(stageType);
+
+      m_shaderId = static_cast<UInt32>(glCreateShader(glStage));
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glShaderBinary(
+        1,
+        &m_shaderId,
+        GL_SHADER_BINARY_FORMAT_SPIR_V,
+        spirvCode.data(),
+        static_cast<GLsizei>(spirvCode.size() * sizeof(UInt32))
+      );
+
+      glSpecializeShader(
+        m_shaderId,
+        entryPoint.c_str(),
+        0,
+        nullptr,
+        nullptr
+      );
+
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      destroy();
+      throw;
+    }
+
+    m_stageType = stageType;
+    m_valid = true;
   }
 
   UInt32 OpenGlShader::getShaderId() const

@@ -70,18 +70,27 @@ namespace hc
     {
       const auto& keyPressedEvent =
         event.getIf<Event::KeyPressed>();
+
+      if (keyPressedEvent->keyCode == keyboardKey::Undefined)
+        return false;
+
       getKeyboardKeyState(keyPressedEvent->keyCode).press();
     }
     else if (event.is<Event::KeyReleased>())
     {
       const auto& keyReleasedEvent =
         event.getIf<Event::KeyReleased>();
+
+      if (keyReleasedEvent->keyCode == keyboardKey::Undefined)
+        return false;
+
       getKeyboardKeyState(keyReleasedEvent->keyCode).release();
     }
     else if (event.is<Event::MouseButtonPressed>())
     {
       const auto& mouseButtonPressedEvent =
         event.getIf<Event::MouseButtonPressed>();
+
       getMouseButtonKeyState(mouseButtonPressedEvent->button).press();
     }
     else if (event.is<Event::MouseButtonReleased>())

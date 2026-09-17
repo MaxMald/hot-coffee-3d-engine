@@ -5,13 +5,12 @@
 
 namespace hc
 {
-  class AMaterialDescriptor;
+  class MaterialDescriptor;
   class ITexture;
   class IMaterial;
   class UnlitMaterial;
-  class UnlitMaterialDescriptor;
   class BlinnPhongMaterial;
-  class BlinnPhongMaterialDescriptor;
+  class HairMaterial;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
   {
@@ -42,7 +41,7 @@ namespace hc
      * @return Shared pointer to the created material.
      */
     virtual SharedPtr<IMaterial> createMaterialFromDescriptor(
-      SharedPtr<AMaterialDescriptor> descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
     /**
@@ -54,7 +53,7 @@ namespace hc
      * @return Shared pointer to the created unlit material.
      */
     virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
-      const UnlitMaterialDescriptor& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
     
     /**
@@ -66,7 +65,19 @@ namespace hc
      * @return Shared pointer to the created Blinn-Phong material.
      */
     virtual SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
-      const BlinnPhongMaterialDescriptor& descriptor
+      const SharedPtr<MaterialDescriptor>& descriptor
+    ) = 0;
+
+    /**
+     * @brief Creates a Hair material.
+     *
+     * @param descriptor Reference to the Hair material descriptor containing the
+     * properties for the Hair material to be created.
+     *
+     * @return Shared pointer to the created Hair material.
+     */
+    virtual SharedPtr<HairMaterial> createHairMaterial(
+      const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
     /**

@@ -41,41 +41,41 @@ namespace hc
       }
     }
 
-    UInt32 GetOpenGlDrawModeFromDrawType(drawType::Type drawType)
+    UInt32 GetOpenGlDrawModeFromTopologyType(topologyType::Type topology)
     {
-      switch (drawType)
+      switch (topology)
       {
-      case drawType::Triangles:
+      case topologyType::Triangles:
         return GL_TRIANGLES;
-      case drawType::Lines:
+      case topologyType::Lines:
         return GL_LINES;
-      case drawType::LineStrip:
+      case topologyType::LineStrip:
         return GL_LINE_STRIP;
-      case drawType::LineLoop:
+      case topologyType::LineLoop:
         return GL_LINE_LOOP;
-      case drawType::Points:
+      case topologyType::Points:
         return GL_POINTS;
       default:
         throw RuntimeErrorException(
-          String::Format("Unsupported draw type: %d", static_cast<int>(drawType))
+          String::Format("Unsupported topology type: %d", static_cast<int>(topology))
         );
       }
     }
 
-    drawType::Type GetDrawTypeFromOpenGlMode(UInt32 glMode)
+    topologyType::Type GetTopologyTypeFromOpenGlMode(UInt32 glMode)
     {
       switch (glMode)
       {
       case GL_TRIANGLES:
-        return drawType::Triangles;
+        return topologyType::Triangles;
       case GL_LINES:
-        return drawType::Lines;
+        return topologyType::Lines;
       case GL_LINE_STRIP:
-        return drawType::LineStrip;
+        return topologyType::LineStrip;
       case GL_LINE_LOOP:
-        return drawType::LineLoop;
+        return topologyType::LineLoop;
       case GL_POINTS:
-        return drawType::Points;
+        return topologyType::Points;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported OpenGL mode: %u", glMode)
@@ -117,21 +117,27 @@ namespace hc
       }
     }
 
-    UInt32 GetOpenGLInternalFormatFromColorFormatAndColorSpaceType(
-      colorFormatType::Type colorFormat,
+    UInt32 GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(
+      textureFormatType::Type colorFormat,
       colorSpaceType::Type spaceColor
     )
     {
       switch (colorFormat)
       {
-      case colorFormatType::RGBA8:
+      case textureFormatType::RGBA8:
         return spaceColor == colorSpaceType::SRGB ? GL_SRGB8_ALPHA8 : GL_RGBA8;
-      case colorFormatType::RGB8:
+      case textureFormatType::RGB8:
         return spaceColor == colorSpaceType::SRGB ? GL_SRGB8 : GL_RGB8;
-      case colorFormatType::RGB16F:
+      case textureFormatType::RGB16F:
         return GL_RGB16F;
-      case colorFormatType::RGBA16F:
+      case textureFormatType::RGBA16F:
         return GL_RGBA16F;
+      case textureFormatType::Depth16:
+        return GL_DEPTH_COMPONENT16;
+      case textureFormatType::Depth24:
+        return GL_DEPTH_COMPONENT24;
+      case textureFormatType::Depth32F:
+        return GL_DEPTH_COMPONENT32F;
       default:
         throw RuntimeErrorException(
           String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
@@ -139,38 +145,47 @@ namespace hc
       }
     }
 
-    UInt32 GetOpenGlFormatFromColorFormatType(colorFormatType::Type colorFormat)
+    UInt32 GetOpenGlFormatFromTextureFormatType(textureFormatType::Type textureFormat)
     {
-      switch (colorFormat)
+      switch (textureFormat)
       {
-      case colorFormatType::RGBA8:
+      case textureFormatType::RGBA8:
         return GL_RGBA;
-      case colorFormatType::RGB8:
+      case textureFormatType::RGB8:
         return GL_RGB;
-      case colorFormatType::RGB16F:
+      case textureFormatType::RGB16F:
         return GL_RGB;
-      case colorFormatType::RGBA16F:
+      case textureFormatType::RGBA16F:
         return GL_RGBA;
+      case textureFormatType::Depth16:
+      case textureFormatType::Depth24:
+      case textureFormatType::Depth32F:
+        return GL_DEPTH_COMPONENT;
       default:
         throw RuntimeErrorException(
-          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+          String::Format("Unsupported texture format type: %d", static_cast<int>(textureFormat))
         );
       }
     }
 
-    UInt32 GetOpenGLDataTypeFromColorFormatType(colorFormatType::Type colorFormat)
+    UInt32 GetOpenGLDataTypeFromTextureFormatType(textureFormatType::Type textureFormat)
     {
-      switch (colorFormat)
+      switch (textureFormat)
       {
-      case colorFormatType::RGBA8:
-      case colorFormatType::RGB8:
+      case textureFormatType::RGBA8:
+      case textureFormatType::RGB8:
         return GL_UNSIGNED_BYTE;
-      case colorFormatType::RGB16F:
-      case colorFormatType::RGBA16F:
+      case textureFormatType::RGB16F:
+      case textureFormatType::RGBA16F:
+      case textureFormatType::Depth16:
+        return GL_UNSIGNED_SHORT;
+      case textureFormatType::Depth24:
+        return GL_UNSIGNED_INT;
+      case textureFormatType::Depth32F:
         return GL_FLOAT;
       default:
         throw RuntimeErrorException(
-          String::Format("Unsupported color format type: %d", static_cast<int>(colorFormat))
+          String::Format("Unsupported texture format type: %d", static_cast<int>(textureFormat))
         );
       }
     }
