@@ -14,6 +14,15 @@ namespace hc
   {
   public:
     /**
+     * @brief Retrieves the current working directory as a Path.
+     * @return A Path representing the current working directory
+     */
+    static inline Path GetCurrentPath()
+    {
+      return Path(std::filesystem::current_path());
+    }
+
+    /**
      * @brief Creates an empty undefined path.
      */
     Path();
