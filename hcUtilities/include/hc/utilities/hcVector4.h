@@ -29,12 +29,14 @@ namespace hc
     // Arithmetic operators
     constexpr Vector4 operator+(const Vector4& rhs) const;
     constexpr Vector4 operator-(const Vector4& rhs) const;
+    constexpr Vector4 operator*(const Vector4& rhs) const;
     constexpr Vector4 operator*(T scalar) const;
     constexpr Vector4 operator/(T scalar) const;
 
     // Compound assignment
     constexpr Vector4& operator+=(const Vector4& rhs);
     constexpr Vector4& operator-=(const Vector4& rhs);
+    constexpr Vector4& operator*=(const Vector4& rhs);
     constexpr Vector4& operator*=(T scalar);
     constexpr Vector4& operator/=(T scalar);
 
@@ -74,6 +76,12 @@ namespace hc
   }
 
   template <typename T>
+  constexpr Vector4<T> Vector4<T>::operator*(const Vector4& rhs) const
+  {
+    return { x * rhs.x, y * rhs.y, z * rhs.z, w * rhs.w };
+  }
+
+  template <typename T>
   constexpr Vector4<T> Vector4<T>::operator*(T scalar) const
   {
     return { x * scalar, y * scalar, z * scalar, w * scalar };
@@ -96,6 +104,13 @@ namespace hc
   constexpr Vector4<T>& Vector4<T>::operator-=(const Vector4& rhs)
   {
     x -= rhs.x; y -= rhs.y; z -= rhs.z; w -= rhs.w;
+    return *this;
+  }
+
+  template <typename T>
+  constexpr Vector4<T>& Vector4<T>::operator*=(const Vector4& rhs)
+  {
+    x *= rhs.x; y *= rhs.y; z *= rhs.z; w *= rhs.w;
     return *this;
   }
 
