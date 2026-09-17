@@ -1,0 +1,105 @@
+newmtl default
+Kd 0.8 0.8 0.8
+newmtl part_00
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139544.png
+
+newmtl part_01
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139541.png
+
+newmtl part_02
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139542.png
+
+newmtl part_03
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139517.png
+
+newmtl part_04
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139518.png
+
+newmtl part_05
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139518.png
+
+newmtl part_06
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139543.png
+
+newmtl part_07
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139548.png
+
+newmtl part_08
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139548.png
+
+newmtl part_09
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139521.png
+
+newmtl part_10
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_11
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_12
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_13
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_14
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_15
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_16
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_17
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_18
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_19
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_20
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_21
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_22
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_23
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_24
+Kd 1.0000 1.0000 1.0000
+map_Kd tex_139522.png
+
+newmtl part_25
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_26
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_27
+Kd 0.9451 0.9451 0.9451
+
+newmtl part_28
+Kd 0.9451 0.9451 0.9451
+
