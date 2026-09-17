@@ -76,6 +76,7 @@ add_subdirectory(hcGraphicsOpenGL)
 add_subdirectory(hcUtilities)
 add_subdirectory(hcUtilitiesUTests)
 add_subdirectory(hcWindowSfml)
+add_subdirectory(egRaytracingApp)
 
 # Editor as startup project
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT hcEditor)
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT egRaytracingApp)
