@@ -102,76 +102,59 @@ namespace hc::editor
     if (!modelMetaManager.has(pathToModel))
       create(pathToModel);
 
-    modelMetaManager.removeMaterialOverride(
-      pathToModel,
-      materialName
-    );
-
-    Path matSourcePath = material->getSourcePath();
-    if (matSourcePath.empty()) // Embedded Material
+    try
     {
-      SharedPtr<MaterialDescriptor> descriptor = createMaterialDescriptor(material);
-      if (!descriptor)
-      {
-        LogService::Error(
-          String::Format(
-            "EditorModelMetadataManager::saveMaterialForOverride: Failed to create material descriptor for model '%s', material name '%s'",
-            pathToModel.toGenericString().c_str(),
-            materialName.c_str()
-          )
-        );
-        return false;
-      }
+      hc::assets::metadata::ModelMetadata modelMeta = modelMetaManager.load(pathToModel);
+      modelMeta.removeMaterialOverride(materialName);
 
-      try
+      Path matSourcePath = material->getSourcePath();
+      if (matSourcePath.empty()) // Embedded Material
       {
-        modelMetaManager.saveEmbeddedMaterialOverride(
-          pathToModel,
+        SharedPtr<MaterialDescriptor> descriptor = createMaterialDescriptor(material);
+        if (!descriptor)
+        {
+          LogService::Error(
+            String::Format(
+              "EditorModelMetadataManager::saveMaterialForOverride: Failed to create material descriptor for model '%s', material name '%s'",
+              pathToModel.toGenericString().c_str(),
+              materialName.c_str()
+            )
+          );
+          return false;
+        }
+
+        modelMeta.addEmbeddedMaterialOverride(
           materialName,
           materialIndex,
           *descriptor
         );
       }
-      catch (const Exception& e)
+      else // External Material
       {
-        LogService::Error(
-          String::Format(
-            "EditorModelMetadataManager::saveMaterialForOverride: Failed to save material override for model '%s', material name '%s'. Error: %s",
-            pathToModel.toGenericString().c_str(),
-            materialName.c_str(),
-            e.what()
-          )
-        );
-        return false;
-      }
-    }
-    else // External Material
-    {
-      Path resolvedSourcePath = matSourcePath;
-      if (resolvedSourcePath.isAbsolute())
-        resolvedSourcePath = resolvedSourcePath.toRelative(m_assetManager.getRootPath());
+        Path resolvedSourcePath = matSourcePath;
+        if (resolvedSourcePath.isAbsolute())
+          resolvedSourcePath = resolvedSourcePath.toRelative(m_assetManager.getRootPath());
 
-      try
-      {
-        modelMetaManager.saveExternalMaterialOverride(
-          pathToModel,
+        modelMeta.addExternalMaterialOverride(
           materialName,
           materialIndex,
           resolvedSourcePath
         );
       }
-      catch (const Exception& e)
-      {
-        LogService::Error(
-          String::Format(
-            "EditorModelMetadataManager::saveMaterialForOverride: Failed to save external material override for model '%s', material name '%s'. Error: %s",
-            pathToModel.toGenericString().c_str(),
-            materialName.c_str(),
-            e.what()
-          )
-        );
-        return false;
-      }
+
+      modelMetaManager.save(pathToModel, modelMeta);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "EditorModelMetadataManager::saveMaterialForOverride: Failed to remove material override for model '%s', material name '%s'. Error: %s",
+          pathToModel.toGenericString().c_str(),
+          materialName.c_str(),
+          e.what()
+        )
+      );
+      return false;
     }
     return true;
   }
