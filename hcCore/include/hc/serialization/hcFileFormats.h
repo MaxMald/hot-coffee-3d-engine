@@ -38,6 +38,12 @@ namespace hc::serialization
     {
       static constexpr const char* FILE_EXTENSION = ".hcModel";
     };
+
+    struct HC_CORE_EXPORT MaterialDescriptor
+    {
+      static constexpr UInt32 MAGIC_NUMBER = 0x48434D44;  // "HCMD" in hex
+      static constexpr const char* FILE_EXTENSION = ".hcMaterial";
+    };
     
     /**
      * @brief Prefab file format (.hcprefab).

@@ -13,33 +13,42 @@ namespace hc
   static constexpr const char* SUFFIX_ALPHA_CUTOUT = "_AlphaCutout";
   static constexpr const char* SUFFIX_DOUBLE_SIDED = "_DoubleSided";
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::Parse(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::Parse(
     const Path& fileDirectory,
     const aiMaterial* material
   )
   {
     materialType::Type type = GetMaterialTypeFromMaterial(material);
     String name = GetMaterialNameFromMaterial(material);
-    SharedPtr<AMaterialDescriptor> matDescriptor;
+    SharedPtr<MaterialDescriptor> matDescriptor;
 
-    switch (type)
+    try
     {
-    case materialType::Unlit:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
-      break;
-    case materialType::BlinnPhong:
-      matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
-      break;
-    case materialType::Hair:
-      matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
-      break;
-    default:
-      matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
-      break;
-    }
+      switch (type)
+      {
+      case materialType::Unlit:
+        matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
+        break;
+      case materialType::BlinnPhong:
+        matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
+        break;
+      case materialType::Hair:
+        matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
+        break;
+      default:
+        matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
+        break;
+      }
 
-    ParseCommonMaterialPropertiesFromMaterial(material, matDescriptor);
-    return matDescriptor;
+      ParseCommonMaterialPropertiesFromMaterial(material, matDescriptor);
+      return matDescriptor;
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException(
+        "Failed to parse material descriptor for material '"
+        + name + "': " + e.what());
+    }
   }
 
   materialType::Type AssimpMaterialDescriptorParser::GetMaterialTypeFromMaterial(const aiMaterial* material)
@@ -84,52 +93,65 @@ namespace hc
     return String();
   }
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseUnlitMaterialDescriptor(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseUnlitMaterialDescriptor(
     const Path& fileDirectory,
     const String& name,
     const aiMaterial* material
   )
   {
-    return MakeShared<UnlitMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE)
-    );
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Unlit, "");
+    desc->name = name;
+
+    assets::materialDescriptor::UnlitData* unlitData = desc->getIfUnlitData();
+    if (!unlitData)
+      throw RuntimeErrorException("Failed to get UnlitData from material descriptor.");
+
+    
+    unlitData->color = GetVertexColorDiffuseFromMaterial(material);
+    unlitData->textureImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    return desc;
   }
 
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
-    const Path& fileDirectory,
-    const String& name,
-    const aiMaterial* material
-  )
-  { 
-    return MakeShared<BlinnPhongMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetShininessFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
-    );
-  }
-
-  SharedPtr<AMaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
     const Path& fileDirectory,
     const String& name,
     const aiMaterial* material
   )
   {
-    return MakeShared<HairMaterialDescriptor>(
-      "",
-      name,
-      GetVertexColorDiffuseFromMaterial(material),
-      GetShininessFromMaterial(material),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS),
-      GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR)
-    );
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::BlinnPhong, "");
+    desc->name = name;
+
+    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getIfBlinnPhongData();
+    if (!blinnPhongData)
+      throw RuntimeErrorException("Failed to get BlinnPhongData from material descriptor.");
+
+    blinnPhongData->color = GetVertexColorDiffuseFromMaterial(material);
+    blinnPhongData->shininess = GetShininessFromMaterial(material);
+    blinnPhongData->diffuseImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    blinnPhongData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    blinnPhongData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+    return desc;
+  }
+
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseHairMaterialDescriptor(
+    const Path& fileDirectory,
+    const String& name,
+    const aiMaterial* material
+  )
+  {
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::Hair, "");
+    desc->name = name;
+
+    assets::materialDescriptor::HairData* hairData = desc->getIfHairData();
+    if (!hairData)
+      throw RuntimeErrorException("Failed to get HairData from material descriptor.");
+
+    hairData->color = GetVertexColorDiffuseFromMaterial(material);
+    hairData->shininess = GetShininessFromMaterial(material);
+    hairData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+    hairData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+    hairData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
+    return desc;
   }
 
   Color AssimpMaterialDescriptorParser::GetVertexColorDiffuseFromMaterial(
@@ -176,16 +198,16 @@ namespace hc
 
   void AssimpMaterialDescriptorParser::ParseCommonMaterialPropertiesFromMaterial(
     const aiMaterial* material,
-    SharedPtr<AMaterialDescriptor>& materialDescriptor
+    SharedPtr<MaterialDescriptor>& materialDescriptor
   )
   {
-    materialDescriptor->setDoubleSided(GetDoubleSidedFromMaterial(material));
+    materialDescriptor->doubleSided = GetDoubleSidedFromMaterial(material);
 
     materialRenderMode::Type renderMode = GetRenderModeFromMaterial(material);
-    materialDescriptor->setRenderMode(renderMode);
+    materialDescriptor->renderMode = renderMode;
 
     if (renderMode == materialRenderMode::Type::AlphaCutout)
-      materialDescriptor->setAlphaCutoutThreshold(GetAlphaCutoutThresholdFromMaterial(material));
+      materialDescriptor->alphaCutoutThreshold = GetAlphaCutoutThresholdFromMaterial(material);
   }
 
   bool AssimpMaterialDescriptorParser::GetDoubleSidedFromMaterial(

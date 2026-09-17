@@ -2,10 +2,10 @@
 
 namespace hc
 {
-  Path::Path() : m_path(), m_type(pathType::Undefined) {}
-  Path::Path(const std::filesystem::path& path, pathType::Type type) : m_path(path), m_type(type) {}
-  Path::Path(const String& path, pathType::Type type) : m_path(path.c_str()), m_type(type) {}
-  Path::Path(const char* path, pathType::Type type) : m_path(path), m_type(type) {}
+  Path::Path() : m_path(){}
+  Path::Path(const std::filesystem::path& path) : m_path(path) {}
+  Path::Path(const String& path) : m_path(path.c_str()) {}
+  Path::Path(const char* path) : m_path(path) {}
 
   Path::operator std::filesystem::path() const
   {
@@ -19,7 +19,7 @@ namespace hc
 
   Path Path::operator/ (const Path& other) const
   {
-    return Path(m_path / other.m_path, m_type);
+    return Path(m_path / other.m_path);
   }
 
   Path& Path::operator/= (const Path& other)
@@ -30,7 +30,7 @@ namespace hc
 
   Path Path::operator/(const String& other) const
   {
-    return Path(m_path / other.c_str(), m_type);
+    return Path(m_path / other.c_str());
   }
 
   Path& Path::operator/=(const String& other)
@@ -41,7 +41,7 @@ namespace hc
 
   Path Path::operator/(const Char* other) const
   {
-    return Path(m_path / other, m_type);
+    return Path(m_path / other);
   }
 
   Path& Path::operator/=(const Char* other)

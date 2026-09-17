@@ -5,10 +5,10 @@ namespace hc
   static constexpr UInt16 ABASE_COMPONENT_VERSION = 1;
 
   ABaseComponent::ABaseComponent(componentType::Type type) :
+    m_uuid(UUID::Generate()),
     m_gameObject(nullptr),
     m_type(type)
-  {
-  }
+  {}
 
   void ABaseComponent::setGameObject(GameObject* gameObject)
   {
@@ -29,8 +29,8 @@ namespace hc
   void ABaseComponent::serialize(io::BinaryWriter& writer) const
   {
     UInt32 composedVersion = (static_cast<UInt32>(ABASE_COMPONENT_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
-
     writer.startWritingObject(static_cast<UInt32>(getType()), composedVersion);
+    writer.writeUUID(m_uuid);
     onSerialize(writer);
     writer.finishWritingObject();
   }
@@ -57,6 +57,7 @@ namespace hc
       );
     }
 
+    m_uuid = reader.readUUID();
     onDeserialize(reader);
     reader.finishReadingObject();
   }

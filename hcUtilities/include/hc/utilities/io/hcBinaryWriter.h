@@ -9,6 +9,7 @@
 #include "hc/utilities/hcMatrix4.h"
 #include "hc/utilities/hcColor.h"
 #include "hc/utilities/hcAngle.h"
+#include "hc/utilities/hcUUID.h"
 
 namespace hc
 {
@@ -30,13 +31,24 @@ namespace hc
     class HC_UTILITY_EXPORT BinaryWriter
     {
     public:
+      explicit BinaryWriter();
+      virtual ~BinaryWriter();
+
       /**
-       * @brief Constructs a BinaryWriter with the specified output stream.
+       * @brief Prepares the binary writer by opening a binary file for writing.
        *
-       * @param stream Reference to the output stream to write to.
+       * @param filePath The path to the binary file to open.
+       * @param outError A string to receive an error message if preparation fails.
+       *
+       * @return True if the file was opened successfully, false otherwise.
        */
-      explicit BinaryWriter(std::ostream& stream);
-      virtual ~BinaryWriter() = default;
+      bool prepare(const Path& filePath, String& outError);
+
+      /**
+       * @brief Safely shuts down the binary writer, closing any open streams and
+       * releasing resources.
+       */
+      void shutdown();
 
       /**
        * @brief Writes a boolean value as a single byte.
@@ -159,6 +171,15 @@ namespace hc
       void writeSizeT(SizeT value);
 
       /**
+       * @brief Writes a UUID to the stream.
+       *
+       * Writes the UUID as a length-prefixed byte array (16 bytes).
+       *
+       * @param value The UUID to write.
+       */
+      void writeUUID(const UUID& value);
+
+      /**
        * @brief Writes a filesystem path in cross-platform format.
        *
        * Converts the path to a generic string format using forward slashes
@@ -244,7 +265,7 @@ namespace hc
       bool isValid() const;
 
     protected:
-      std::ostream& m_stream;
+      UniquePtr<std::ostream> m_stream;
       UniquePtr<ObjectData> m_currentObject;
       Stack<UniquePtr<ObjectData>> m_objectStack;
 

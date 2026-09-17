@@ -138,5 +138,12 @@ namespace hc
      * @return Pointer to the native texture handle.
      */
     virtual void* getNativeHandle() const = 0;
+
+    /**
+     * @brief Gets the source path of the texture if it was loaded from a file.
+     *
+     * @return Reference to the source path of the texture.
+     */
+    virtual inline const Path& getSourcePath() const = 0;
   };
 }

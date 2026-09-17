@@ -22,13 +22,6 @@ namespace hc
     ~OpenGlMesh() override;
 
     /**
-     * @brief Returns the unique identifier of the mesh.
-     *
-     * @return Reference to the mesh Id.
-     */
-    const Id& getId() const override;
-
-    /**
      * @brief Draws the mesh using the provided render context.
      *
      * @param renderContext The rendering context for the draw call.
@@ -48,22 +41,24 @@ namespace hc
     ) override;
 
     /**
-     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<SharedPtr<IMaterial>>&)
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<SharedPtr<IMaterial>>&, const Path&)
      */
     void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) override;
 
     /**
-     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<ModelSubMesh>&, const Vector<SharedPtr<IMaterial>>&)
+     * @copydoc IMesh::initialize(const Buffer<Vertex>&, const BufferUInt32&, const Vector<ModelSubMesh>&, const Vector<SharedPtr<IMaterial>>&, const Path&)
      */
     void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) override;
 
     /**
@@ -106,7 +101,7 @@ namespace hc
      *
      * @return Vector of shared pointers to materials.
      */
-    const Vector<SharedPtr<IMaterial>> getMaterials() override;
+    const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
      * @copydoc IMesh::getDrawType
@@ -119,19 +114,17 @@ namespace hc
     void setTopologyType(topologyType::Type topologyType) override;
 
     /**
+     * @copydoc IGraphicResource::getSourcePath
+     */
+    inline const Path& getSourcePath() const override
+    {
+      return m_sourcePath;
+    }
+
+    /**
      * @copydoc IGraphicResource::isValid
      */
     bool isValid() const override;
-
-    /**
-     * @copydoc IGraphicResource::getSourcePath
-     */
-    Path getSourcePath() const override;
-
-    /**
-     * @copydoc IGraphicResource::setSourcePath
-     */
-    void setSourcePath(const Path& path) override;
 
     /**
      * @brief Binds the mesh's VAO for rendering.
@@ -158,8 +151,7 @@ namespace hc
     UInt32 getDrawMode() const;
 
   private:
-    Id m_id;
-    bool m_valid;
+    IGraphicsManager& m_graphicsManager;
     Path m_sourcePath;
     Vector<SharedPtr<IMaterial>> m_materials;
     Vector<ModelSubMesh> m_subMeshes;
@@ -167,7 +159,7 @@ namespace hc
     UInt32 m_vbo;
     UInt32 m_ebo;
     UInt32 m_drawMode;
-    IGraphicsManager& m_graphicsManager;
+    bool m_valid;
 
     void assertIsValid() const;
     void createBuffers();

@@ -17,6 +17,7 @@
 #include <chrono>
 #include <ratio>
 #include <concepts>
+#include <span>
 
 namespace hc
 {
@@ -33,7 +34,7 @@ namespace hc
   using Char16 = char16_t;
   using Char32 = char32_t;
   using UChar = unsigned char;
-  using Byte = UInt8;
+  using Byte = std::byte;
 
   using Bool = bool;
   using SizeT = std::size_t;
@@ -59,6 +60,9 @@ namespace hc
 
   template<typename T, std::size_t N>
   using Array = std::array<T, N>;
+
+  template <class T, std::size_t N>
+  using Span = std::span<T, N>;
 
   template<typename T>
   using WeakPtr = std::weak_ptr<T>;

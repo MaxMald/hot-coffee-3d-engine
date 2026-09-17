@@ -17,8 +17,7 @@ namespace hc
     Path parsePath(const Json& json)
     {
       String pathStr = json["path"].getString();
-      Int32 pathTypeInt = json["type"].getInt32();
-      return Path(pathStr, static_cast<pathType::Type>(pathTypeInt));
+      return Path(pathStr);
     }
   }
 }

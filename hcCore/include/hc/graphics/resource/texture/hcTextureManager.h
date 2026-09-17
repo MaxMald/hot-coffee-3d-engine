@@ -13,7 +13,7 @@ namespace hc
    */
   class HC_CORE_EXPORT TextureManager :
     public ITextureManager,
-    private ResourcesCache<Id, ITexture>
+    private ResourcesCache<UUID, ITexture>
   {
   public:
     /**

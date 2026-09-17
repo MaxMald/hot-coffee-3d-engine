@@ -27,7 +27,6 @@
 #include "hc/utilities/hcILogServiceListener.h"
 #include "hc/utilities/hcNonCopyable.h"
 #include "hc/utilities/hcNonMovable.h"
-#include "hc/utilities/hcId.h"
 #include "hc/utilities/hcServiceManager.h"
 #include "hc/utilities/hcTime.h"
 #include "hc/utilities/hcClock.h"

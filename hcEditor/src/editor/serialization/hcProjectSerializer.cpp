@@ -1,5 +1,4 @@
 #include "hc/editor/serialization/hcProjectSerializer.h"
-#include <fstream>
 #include "hc/editor/services/projectManager/hcProject.h"
 
 namespace hc::editor::serialization
@@ -10,16 +9,16 @@ namespace hc::editor::serialization
     {
       UniquePtr<Project> project = MakeUnique<Project>();
 
-      std::ifstream fileStream(filePath, std::ios::binary);
-      if (!fileStream.is_open())
+      String error;
+      io::BinaryReader reader;
+      if (!reader.prepare(filePath, error))
       {
         LogService::Error(
-          "Failed to open project file for reading: " + filePath.toString()
+          "Failed to prepare binary reader for project file: " + filePath.toString() + " Error: " + error
         );
         return nullptr;
       }
 
-      io::BinaryReader reader(fileStream);
       project->deserialize(reader);
       return project;
     }
@@ -35,16 +34,16 @@ namespace hc::editor::serialization
   {
     try
     {
-      std::ofstream fileStream(filePath, std::ios::binary);
-      if (!fileStream.is_open())
+      String error;
+      io::BinaryWriter writer;
+      if (!writer.prepare(filePath, error))
       {
         LogService::Error(
-          "Failed to open project file for writing: " + filePath.toString()
+          "Failed to prepare binary writer for project file: " + filePath.toString() + " Error: " + error
         );
         return false;
-      }        
+      }
 
-      io::BinaryWriter writer(fileStream);
       project.serialize(writer);
       return true;
     }

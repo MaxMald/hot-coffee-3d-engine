@@ -21,7 +21,6 @@ namespace hc
   }
 
   OpenGlShader::OpenGlShader() :
-    m_id(Id::Create()),
     m_stageType(shaderStageType::Vertex),
     m_valid(false),
     m_shaderId(0)
@@ -30,11 +29,6 @@ namespace hc
   OpenGlShader::~OpenGlShader()
   {
     destroy();
-  }
-
-  const Id& OpenGlShader::getId() const
-  {
-    return m_id;
   }
 
   void OpenGlShader::destroy()

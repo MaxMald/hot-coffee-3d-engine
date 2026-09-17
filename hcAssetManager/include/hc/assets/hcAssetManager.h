@@ -5,6 +5,7 @@
 #include "hc/assets/image/hcImageAssetManager.h"
 #include "hc/assets/materialDescriptor/hcMaterialDescriptorAssetManager.h"
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptorAssetManager.h"
+#include <hc/assets/metadata/hcModelMetadataManager.h>
 
 namespace hc
 {
@@ -43,6 +44,14 @@ namespace hc
     ICubeMapDescriptorAssetManager& getCubeMapDescriptorAssetManager() override;
 
     /**
+     * @copydoc IAssetManager::getModelMetadataManager
+     */
+    inline assets::metadata::ModelMetadataManager& getModelMetadataManager() override
+    {
+      return m_modelMetaManager;
+    }
+
+    /**
      * @copydoc IAssetManager::clear
      */
     void clear() override;
@@ -68,6 +77,7 @@ namespace hc
     bool hasRootPath() const override;
 
   private:
+    assets::metadata::ModelMetadataManager m_modelMetaManager;
     MaterialDescriptorAssetManager m_materialDescriptorAssetManager;
     ModelAssetManager m_modelAssetManager;
     ImageAssetManager m_imageAssetManager;

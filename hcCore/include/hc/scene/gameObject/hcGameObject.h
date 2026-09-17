@@ -256,7 +256,16 @@ namespace hc
      */
     void clear();
 
+    /**
+     * @brief Gets the UUID of this GameObject.
+     *
+     * @return The UUID.
+     */
+    inline const UUID& getUUID() const
+    { return m_uuid; }
+
   private:
+    UUID m_uuid;
     String m_name;
     GameObject* m_parent = nullptr;
     IGameObjectFactory& m_gameObjectFactory;

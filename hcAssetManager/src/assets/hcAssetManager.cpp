@@ -3,8 +3,9 @@
 namespace hc
 {
   AssetManager::AssetManager() :
+    m_modelMetaManager(*this),
     m_materialDescriptorAssetManager(),
-    m_modelAssetManager(m_materialDescriptorAssetManager),
+    m_modelAssetManager(m_modelMetaManager, m_materialDescriptorAssetManager),
     m_imageAssetManager(),
     m_cubeMapDescriptorAssetManager(),
     m_rootPath()

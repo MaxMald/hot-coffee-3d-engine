@@ -5,7 +5,6 @@
 namespace hc
 {
   OpenGlShaderProgram::OpenGlShaderProgram() :
-    m_id(Id::Create()),
     m_programId(0),
     m_valid(false)
   {
@@ -14,11 +13,6 @@ namespace hc
   OpenGlShaderProgram::~OpenGlShaderProgram()
   {
     destroy();
-  }
-
-  const Id& OpenGlShaderProgram::getId() const
-  {
-    return m_id;
   }
 
   void OpenGlShaderProgram::initialize(const Vector<SharedPtr<IShader>>& shaders)

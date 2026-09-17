@@ -8,10 +8,7 @@
 #include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
 #include "hc/graphics/resource/material/hcHairMaterial.h"
 #include "hc/assets/hcIAssetManager.h"
-#include "hc/assets/materialDescriptor/hcAMaterialDescriptor.h"
-#include "hc/assets/materialDescriptor/hcUnlitMaterialDescriptor.h"
-#include "hc/assets/materialDescriptor/hcBlinnPhongMaterialDescriptor.h"
-#include "hc/assets/materialDescriptor/hcHairMaterialDescriptor.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 #include <limits>
 
 namespace hc
@@ -39,7 +36,7 @@ namespace hc
     const Path& materialDescriptorPath
   )
   {
-    SharedPtr<AMaterialDescriptor> mat = m_assetManager
+    SharedPtr<MaterialDescriptor> mat = m_assetManager
       .getMaterialDescriptorAssetManager()
       .load(materialDescriptorPath);
 
@@ -58,7 +55,7 @@ namespace hc
   }
 
   SharedPtr<IMaterial> MaterialManager::createMaterialFromDescriptor(
-    SharedPtr<AMaterialDescriptor> descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)
@@ -70,78 +67,42 @@ namespace hc
     }
 
     const materialType::Type materialType = descriptor->getType();
-
-    if (materialType == materialType::Unlit)
+    switch (materialType)
     {
-      const UnlitMaterialDescriptor* unlitDescriptor =
-        dynamic_cast<const UnlitMaterialDescriptor*>(descriptor.get());
-
-      if (!unlitDescriptor)
-      {
-        LogService::Error(
-          String::Format(
-            "Failed to cast MaterialDescriptor to UnlitMaterialDescriptor for material type 'Unlit'."
-          )
-        );
-        return nullptr;
-      }
-
-      return createUnlitMaterial(*unlitDescriptor);
+    case materialType::Unlit:
+      return createUnlitMaterial(descriptor);
+    case materialType::BlinnPhong:
+      return createBlinnPhongMaterial(descriptor);
+    case materialType::Hair:
+      return createHairMaterial(descriptor);
+    default:
+      throw RuntimeErrorException(
+        String::Format(
+          "MaterialManager: Unsupported material type '%u' in MaterialDescriptor; cannot create material.",
+          static_cast<UInt32>(materialType)
+        )
+      );
     }
-    else if (materialType == materialType::BlinnPhong)
-    {
-      const BlinnPhongMaterialDescriptor* blinnPhongDescriptor =
-        dynamic_cast<const BlinnPhongMaterialDescriptor*>(descriptor.get());
-
-      if (!blinnPhongDescriptor)
-      {
-        LogService::Error(
-          String::Format(
-            "Failed to cast MaterialDescriptor to BlinnPhongMaterialDescriptor for material type 'Blinn-Phong'."
-          )
-        );
-        return nullptr;
-      }
-
-      return createBlinnPhongMaterial(*blinnPhongDescriptor);
-    }
-    else if (materialType == materialType::Hair)
-    {
-      const HairMaterialDescriptor* hairDescriptor =
-        dynamic_cast<const HairMaterialDescriptor*>(descriptor.get());
-
-      if (!hairDescriptor)
-      {
-        LogService::Error(
-          String::Format(
-            "Failed to cast MaterialDescriptor to HairMaterialDescriptor for material type 'Hair'."
-          )
-        );
-        return nullptr;
-      }
-
-      return createHairMaterial(*hairDescriptor);
-    }
-
-    throw RuntimeErrorException(
-      String::Format(
-        "Not implemented material type '%u' in MaterialDescriptor; cannot create material.",
-        static_cast<UInt32>(materialType)
-      )
-    );
   }
 
   SharedPtr<UnlitMaterial> MaterialManager::createUnlitMaterial(
-    const UnlitMaterialDescriptor& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
-    SharedPtr<ITexture> mainTexture = getTextureFromPath(descriptor.getMainImagePath());
+    if (!descriptor)
+      throw InvalidArgumentException("MaterialManager::createUnlitMaterial: null descriptor.");
+
+    const assets::materialDescriptor::UnlitData* matData = descriptor->getIfUnlitData();
+    if (!matData)
+      throw InvalidArgumentException("MaterialManager::createUnlitMaterial: descriptor does not contain UnlitData.");
+
+    SharedPtr<ITexture> mainTexture = getTextureFromPath(matData->textureImagePath);
     if (!mainTexture)
       mainTexture = m_whiteTexture;
 
     SharedPtr<UnlitMaterial> material = MakeShared<UnlitMaterial>(generateMaterialId());
     material->initialize(
-      descriptor,
+      *descriptor,
       m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::Unlit),
       mainTexture
     );
@@ -151,15 +112,22 @@ namespace hc
   }
 
   SharedPtr<BlinnPhongMaterial> MaterialManager::createBlinnPhongMaterial(
-    const BlinnPhongMaterialDescriptor& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
-    SharedPtr<ITexture> albedoTexture = getTextureFromPath(descriptor.getAlbedoImagePath());
+    if (!descriptor)
+      throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: null descriptor.");
+
+    const assets::materialDescriptor::BlinnPhongData* matData = descriptor->getIfBlinnPhongData();
+    if (!matData)
+      throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: descriptor does not contain BlinnPhongData.");
+
+    SharedPtr<ITexture> albedoTexture = getTextureFromPath(matData->diffuseImagePath);
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
     SharedPtr<ITexture> normalTexture = getTextureFromPath(
-      descriptor.getNormalImagePath(),
+      matData->normalImagePath,
       colorSpaceType::Linear
     );
 
@@ -167,7 +135,7 @@ namespace hc
       normalTexture = m_defaultNormalTexture;
 
     SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      descriptor.getSpecularImagePath(),
+      matData->specularImagePath,
       colorSpaceType::Linear
     );
 
@@ -176,7 +144,7 @@ namespace hc
 
     SharedPtr<BlinnPhongMaterial> material = MakeShared<BlinnPhongMaterial>(generateMaterialId());
     material->initialize(
-      descriptor,
+      *descriptor,
       albedoTexture,
       normalTexture,
       specularTexture,
@@ -189,18 +157,25 @@ namespace hc
   }
 
   SharedPtr<HairMaterial> MaterialManager::createHairMaterial(
-    const HairMaterialDescriptor& descriptor
+    const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
+    if (!descriptor)
+      throw InvalidArgumentException("MaterialManager::createHairMaterial: null descriptor.");
+
+    const assets::materialDescriptor::HairData* matData = descriptor->getIfHairData();
+    if (!matData)
+      throw InvalidArgumentException("MaterialManager::createHairMaterial: descriptor does not contain HairData.");
+
     SharedPtr<ITexture> albedoTexture = getTextureFromPath(
-      descriptor.getAlbedoImagePath()
+      matData->albedoImagePath
     );
 
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
     SharedPtr<ITexture> normalTexture = getTextureFromPath(
-      descriptor.getNormalImagePath(),
+      matData->normalImagePath,
       colorSpaceType::Linear
     );
 
@@ -208,7 +183,7 @@ namespace hc
       normalTexture = m_defaultNormalTexture;
 
     SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      descriptor.getSpecularImagePath(),
+      matData->specularImagePath,
       colorSpaceType::Linear
     );
 
@@ -217,7 +192,7 @@ namespace hc
 
     SharedPtr<HairMaterial> material = MakeShared<HairMaterial>(generateMaterialId());
     material->initialize(
-      descriptor,
+      *descriptor,
       albedoTexture,
       normalTexture,
       specularTexture,

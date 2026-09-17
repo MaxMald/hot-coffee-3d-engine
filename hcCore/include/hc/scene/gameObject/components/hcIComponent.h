@@ -36,6 +36,13 @@ namespace hc
      */
     virtual componentType::Type getType() const = 0;
 
+    /**
+     * Gets the UUID of this component.
+     *
+     * @return The UUID.
+     */
+    virtual inline const UUID& getUUID() const = 0;
+
   protected:
     IComponent() = default;
   };

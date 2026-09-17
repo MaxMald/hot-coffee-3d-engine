@@ -76,7 +76,7 @@ namespace hc
     writer.writeBool(hasCamera);
 
     if (hasCamera)
-      m_camera->getUUID().serialize(writer);
+      writer.writeUUID(m_camera->getUUID());
   }
 
   void CameraComponent::onDeserialize(io::BinaryReader& reader)
@@ -84,8 +84,7 @@ namespace hc
     bool hasCamera = reader.readBool();
     if (hasCamera)
     {
-      UUID cameraId;
-      cameraId.deserialize(reader);
+      UUID cameraId = reader.readUUID();
       CameraManager& cameraManager = getCameraManager();
       m_camera = cameraManager.getCamera(cameraId);
 

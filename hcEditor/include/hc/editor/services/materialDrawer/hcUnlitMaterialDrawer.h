@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/materialDrawer/hcABaseMaterialDrawer.h"
+#include "hc/editor/services/materialDrawer/hcABaseMaterialDrawer.h"
 
 namespace hc::editor
 {
@@ -18,15 +18,13 @@ namespace hc::editor
      * 
      * @return The material type as defined in materialType::Type.
      */
-    materialType::Type getMaterialType() const override;
+    inline materialType::Type getMaterialType() const override
+    {
+      return materialType::Unlit;
+    }
 
-  private:
-
-    /**
-     * @brief Draws the unlit material properties in the editor UI.
-     * 
-     * @param material Pointer to the unlit material to be drawn.
-     */
+  protected:
     void onDraw(UnlitMaterial* material) override;
+    void onDrawMeshMaterial(UnlitMaterial* material, Int32 slotIndex) override;
   };
 }

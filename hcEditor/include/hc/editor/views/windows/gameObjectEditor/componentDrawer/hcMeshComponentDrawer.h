@@ -5,6 +5,8 @@
 namespace hc::editor
 {
   class ProjectFileDialogView;
+  class MaterialDrawersManager;
+  class EditorMetadataManager;
 
   /**
    * @brief Drawer for MeshComponent in the editor.
@@ -14,18 +16,28 @@ namespace hc::editor
   public:
     MeshComponentDrawer(
       IMeshManager& meshManager,
-      ProjectFileDialogView& projectFileSelector
+      IAssetManager& assetManager,
+      ProjectFileDialogView& projectFileSelector,
+      MaterialDrawersManager& materialDrawerManager,
+      EditorMetadataManager& editorMetadataManager
     );
     virtual ~MeshComponentDrawer();
 
   protected:
     IMeshManager& m_meshManager;
+    IAssetManager& m_assetManager;
     ProjectFileDialogView& m_projectFileSelector;
+    MaterialDrawersManager& m_materialDrawerManager;
+    EditorMetadataManager& m_editorMetadataManager;
 
     void onDrawComponent(MeshComponent* component) override;
     void drawLoadMeshButton(MeshComponent* component);
-    void drawMaterialsInformation(const Vector<SharedPtr<IMaterial>>& materials);
-    void drawMaterialInformation(const SharedPtr<IMaterial>& material, Int32 materialSlotIndex);
+    void drawMaterialsInformation(const IMesh& mesh);
     void onMeshFileSelected(MeshComponent* component, const Path& selectedPath);
+    void onOverrideMaterialClicked(
+      const IMesh& mesh,
+      const SharedPtr<IMaterial> material,
+      SizeT materialIndex
+    );
   };
 }

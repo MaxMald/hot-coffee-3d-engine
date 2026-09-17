@@ -19,7 +19,7 @@ namespace hc
     Int32 width = 0;
     Int32 height = 0;
     Int32 channels = 0;
-    Byte* data = nullptr;
+    UChar* data = nullptr;
     SharedPtr<Image> image = nullptr;
 
     try
@@ -40,7 +40,7 @@ namespace hc
         * NUM_CHANNELS;
 
       BufferByte buffer(bufferSize);
-      buffer.initialize(data, bufferSize);
+      buffer.initialize(reinterpret_cast<Byte*>(data), bufferSize);
 
       image = MakeShared<Image>(
         path,

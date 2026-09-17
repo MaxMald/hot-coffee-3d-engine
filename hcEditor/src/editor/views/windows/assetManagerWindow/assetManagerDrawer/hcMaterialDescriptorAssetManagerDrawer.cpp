@@ -6,12 +6,12 @@ namespace hc::editor
   MaterialDescriptorAssetManagerDrawer::MaterialDescriptorAssetManagerDrawer(
     IMaterialDescriptorAssetManager& assetManager
   ) :
-    AAssetManagerDrawer<AMaterialDescriptor>(assetManager)
+    AAssetManagerDrawer<MaterialDescriptor>(assetManager)
   {
   }
 
   void MaterialDescriptorAssetManagerDrawer::drawAssetDetails(
-    const SharedPtr<AMaterialDescriptor>& asset
+    const SharedPtr<MaterialDescriptor>& asset
   )
   {
     String materialTypeStr = materialType::toString(asset->getType());

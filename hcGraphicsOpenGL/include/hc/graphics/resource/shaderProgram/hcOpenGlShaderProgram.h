@@ -15,11 +15,6 @@ namespace hc
     ~OpenGlShaderProgram() override;
 
     /**
-     * @copydoc IGraphicResource::getId
-     */
-    const Id& getId() const override;
-
-    /**
      * @copydoc IShaderProgram::initialize
      */
     void initialize(const Vector<SharedPtr<IShader>>& shaders) override;
@@ -80,7 +75,6 @@ namespace hc
     void destroy() override;
 
   private:
-    Id m_id;
     GLuint m_programId;
     bool m_valid;
     UnorderedMap<String, GLint> m_uniformLocationCache;

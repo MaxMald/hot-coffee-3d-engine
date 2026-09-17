@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/editor/materialDrawer/hcIMaterialDrawer.h"
+#include "hc/editor/services/materialDrawer/hcIMaterialDrawer.h"
 
 namespace hc::editor
 {
@@ -19,7 +19,10 @@ namespace hc::editor
      * 
      * @return The material type as defined in materialType::Type.
      */
-    materialType::Type getMaterialType() const override;
+    inline materialType::Type getMaterialType() const override
+    {
+      return materialType::Unknown;
+    }
 
     /**
      * @brief Draws a placeholder or warning for unsupported material types.
@@ -27,5 +30,10 @@ namespace hc::editor
      * @param material Pointer to the material to be drawn.
      */
     void drawMaterial(IMaterial* material) override;
+
+    /**
+     * @copydoc IMaterialDrawer::drawMeshMaterial
+     */
+    void drawMeshMaterial(IMaterial* material, Int32 materialSlotIndex) override;
   };
 }

@@ -47,7 +47,7 @@ namespace hc::editor
       SharedPtr<CubeMapDescriptor> cubeMapDescriptor = cubeMap.getCubeMapDescriptor();
       if (cubeMapDescriptor != nullptr)
       {
-        cubeMapDescriptorPath = cubeMapDescriptor->getPath();
+        cubeMapDescriptorPath = cubeMapDescriptor->path;
         cubeMapDescriptorSourcePath = cubeMapDescriptorPath.toGenericString();
       }
 

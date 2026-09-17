@@ -70,6 +70,8 @@ namespace hc
     size_t includeDepth
   )
   {
+    (void)includeDepth; // Unused parameter
+
     if (shaderc_include_type::shaderc_include_type_standard == type)
     {
       return CreateErrorResult("Standard includes are not supported.");

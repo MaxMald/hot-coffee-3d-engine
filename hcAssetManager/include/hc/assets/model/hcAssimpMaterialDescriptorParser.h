@@ -30,7 +30,7 @@ namespace hc
      * 
      * @return A shared pointer to the created material descriptor
      */
-    static SharedPtr<AMaterialDescriptor> Parse(
+    static SharedPtr<MaterialDescriptor> Parse(
       const Path& fileDirectory,
       const aiMaterial* material
     );
@@ -54,19 +54,19 @@ namespace hc
      */
     static String GetMaterialNameFromMaterial(const aiMaterial* material);
 
-    static SharedPtr<AMaterialDescriptor> ParseUnlitMaterialDescriptor(
+    static SharedPtr<MaterialDescriptor> ParseUnlitMaterialDescriptor(
       const Path& fileDirectory,
       const String& name,
       const aiMaterial* material
     );
 
-    static SharedPtr<AMaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
+    static SharedPtr<MaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
       const Path& fileDirectory,
       const String& name,
       const aiMaterial* material
     );
 
-    static SharedPtr<AMaterialDescriptor> ParseHairMaterialDescriptor(
+    static SharedPtr<MaterialDescriptor> ParseHairMaterialDescriptor(
       const Path& fileDirectory,
       const String& name,
       const aiMaterial* material
@@ -85,7 +85,7 @@ namespace hc
     // Common Properties
     static void ParseCommonMaterialPropertiesFromMaterial(
       const aiMaterial* material,
-      SharedPtr<AMaterialDescriptor>& materialDescriptor
+      SharedPtr<MaterialDescriptor>& materialDescriptor
     );
     static bool GetDoubleSidedFromMaterial(const aiMaterial* material);
     static materialRenderMode::Type GetRenderModeFromMaterial(const aiMaterial* material);

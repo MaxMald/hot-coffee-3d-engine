@@ -36,7 +36,7 @@ namespace hc::serialization
       return;
     }
 
-    Path descriptorSourcePath = cubeMapDescriptor->getPath();
+    Path descriptorSourcePath = cubeMapDescriptor->path;
     if (descriptorSourcePath.empty())
     {
       writer.writeBool(false);

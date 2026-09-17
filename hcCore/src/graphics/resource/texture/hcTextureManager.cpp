@@ -43,8 +43,8 @@ namespace hc
       return nullptr;
     }
 
-    if (hasCachedResource(image->getId()))
-      return getCachedResource(image->getId());
+    if (hasCachedResource(image->getUUID()))
+      return getCachedResource(image->getUUID());
 
     SharedPtr<ITexture> texture = m_textureFactory->createTexture(image);
     if (!texture)
@@ -52,14 +52,14 @@ namespace hc
       LogService::Error(
         String::Format(
           "Failed to create texture from image at path: %s",
-          image->getPath().c_str()
+          image->path.c_str()
         )
       );
 
       return nullptr;
     }
 
-    cacheResource(image->getId(), texture);
+    cacheResource(image->getUUID(), texture);
     m_textures.push_back(texture);
 
     return texture;

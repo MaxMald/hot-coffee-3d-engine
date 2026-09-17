@@ -19,7 +19,7 @@ namespace hc
    */
   class HC_CORE_EXPORT MeshManager :
     public IMeshManager,
-    private ResourcesCache<Id, IMesh>
+    private ResourcesCache<UUID, IMesh>
   {
   public:
     /**

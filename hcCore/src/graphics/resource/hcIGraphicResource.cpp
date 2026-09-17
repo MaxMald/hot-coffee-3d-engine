@@ -2,9 +2,15 @@
 
 namespace hc
 {
-  IGraphicResource::IGraphicResource()
+  IGraphicResource::IGraphicResource() :
+    m_uuid(UUID::Generate())
   {}
 
   IGraphicResource::~IGraphicResource()
   {}
+
+  const UUID& IGraphicResource::getUUID() const
+  {
+    return m_uuid;
+  }
 }

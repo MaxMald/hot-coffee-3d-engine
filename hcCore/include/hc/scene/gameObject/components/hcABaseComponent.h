@@ -38,6 +38,12 @@ namespace hc
     componentType::Type getType() const override;
 
     /**
+     * @copydoc IComponent::getUUID
+     */
+    inline const UUID& getUUID() const override
+    { return m_uuid; }
+
+    /**
      * @copydoc ISerializable::serialize
      */
     void serialize(io::BinaryWriter& writer) const override;
@@ -48,6 +54,7 @@ namespace hc
     void deserialize(io::BinaryReader& reader) override;
 
   protected:
+    UUID m_uuid;
     GameObject* m_gameObject;
     componentType::Type m_type;
 

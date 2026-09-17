@@ -13,6 +13,7 @@ namespace hc
     IGameObjectFactory& gameObjectFactory,
     ComponentFactoriesManager& componentFactoriesManager
   ) :
+    m_uuid(UUID::Generate()),
     m_name(name),
     m_parent(nullptr),
     m_gameObjectFactory(gameObjectFactory),
@@ -31,8 +32,10 @@ namespace hc
   void GameObject::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(0), GAME_OBJECT_VERSION);
+
     Transform::serialize(writer);
     writer.writeString(m_name);
+    writer.writeUUID(m_uuid);
 
     writer.writeSizeT(m_children.size());
     for (const auto& child : m_children)
@@ -60,6 +63,7 @@ namespace hc
 
     Transform::deserialize(reader);
     m_name = reader.readString();
+    m_uuid = reader.readUUID();
 
     SizeT childCount = reader.readSizeT();
     for (SizeT i = 0; i < childCount; ++i)

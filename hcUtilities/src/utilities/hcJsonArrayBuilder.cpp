@@ -79,9 +79,8 @@ namespace hc
   void JsonArrayBuilder::setPath(const Path& value)
   {
     String formattedValue = String::Format(
-      "{ \"path\": \"%s\", \"type\": %u }",
-      value.toGenericString().c_str(),
-      static_cast<UInt32>(value.getType())
+      "{ \"path\": \"%s\" }",
+      value.toGenericString().c_str()
     );
 
     m_properties.push_back(

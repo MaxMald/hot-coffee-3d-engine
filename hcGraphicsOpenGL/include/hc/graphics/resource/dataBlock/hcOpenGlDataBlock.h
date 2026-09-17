@@ -12,11 +12,6 @@ namespace hc
     virtual ~OpenGlDataBlock() override;
 
     /**
-     * @copydoc IGraphicResource::getId
-     */
-    const Id& getId() const override;
-
-    /**
      * @copydoc IGraphicResource::isValid
      */
     bool isValid() const override;
@@ -42,7 +37,6 @@ namespace hc
     void bind(UInt32 bindingIndex) override;
 
   private:
-    Id m_id;
     UInt32 m_ubo;
     SizeT m_dataSize;
     bool m_isInitialized;

@@ -60,8 +60,8 @@ namespace hc::editor
   void SceneViewportCameraInputController::localXYMovement()
   {
     Vector2i mouseDelta = m_inputManager.getMouseState().getDeltaPosition();
-    m_camera.truck(-mouseDelta.x);
-    m_camera.pedestal(mouseDelta.y);
+    m_camera.truck(static_cast<float>(-mouseDelta.x));
+    m_camera.pedestal(static_cast<float>(mouseDelta.y));
   }
 
   void SceneViewportCameraInputController::localZMovement()
@@ -102,7 +102,7 @@ namespace hc::editor
     if (mouseDelta.x == 0)
       return;
 
-    Angle rollAmount = Angle::FromRadians(-mouseDelta.x);
+    Angle rollAmount = Angle::FromRadians(static_cast<float>(-mouseDelta.x));
     m_camera.roll(rollAmount);
   }
 }

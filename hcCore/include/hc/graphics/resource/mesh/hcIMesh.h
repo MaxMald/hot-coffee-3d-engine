@@ -36,11 +36,13 @@ namespace hc
      * @param vertices The vertex buffer to use for this mesh.
      * @param indices The index buffer to use for this mesh.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -51,12 +53,14 @@ namespace hc
      * @param indices The index buffer to use for this mesh.
      * @param subMeshes The collection of submeshes to define the mesh's geometry.
      * @param materials A vector of shared pointers to the materials to use for this mesh.
+     * @param sourcePath The source path of the mesh, if it was loaded from a file.
      */
     virtual void initialize(
       const Buffer<Vertex>& vertices,
       const BufferUInt32& indices,
       const Vector<ModelSubMesh>& subMeshes,
-      const Vector<SharedPtr<IMaterial>>& materials
+      const Vector<SharedPtr<IMaterial>>& materials,
+      const Path& sourcePath
     ) = 0;
 
     /**
@@ -105,7 +109,7 @@ namespace hc
      * 
      * @return A vector of shared pointers to the materials.
      */
-    virtual const Vector<SharedPtr<IMaterial>> getMaterials() = 0;
+    virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
      * @brief Returns the topology type of this mesh.
@@ -129,25 +133,11 @@ namespace hc
     virtual bool isValid() const = 0;
 
     /**
-     * @brief Returns the file path of the source model asset used to create this mesh.
+     * @brief Returns the source path of the mesh, if it was loaded from a file.
      *
-     * @note This path might be empty if the mesh was created procedurally or does not
-     * have an associated source model file.
-     *
-     * @return The file path of the source model asset if available, otherwise an empty
-     * path.
+     * @return Reference to the source path of the mesh.
      */
-    virtual Path getSourcePath() const = 0;
-
-    /**
-     * @brief Sets the file path of the source model asset used to create this mesh.
-     *
-     * This method allows updating the source path, which can be useful for tracking
-     * the origin of the mesh data or for debugging purposes.
-     *
-     * @param path The file path to set as the source of this mesh.
-     */
-    virtual void setSourcePath(const Path& path) = 0;
+    virtual inline const Path& getSourcePath() const = 0;
 
   protected:
     IMesh() = default;

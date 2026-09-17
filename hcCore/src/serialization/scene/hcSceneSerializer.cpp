@@ -1,6 +1,5 @@
 #include "hc/serialization/scene/hcSceneSerializer.h"
 
-#include <fstream>
 #include "hc/serialization/hcFileFormats.h"
 #include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 #include "hc/scene/hcScene.h"
@@ -18,17 +17,16 @@ namespace hc
     {
       try
       {
-        // Open the file for binary writing
-        std::ofstream outputFile(filePath, std::ios::binary);
-        if (!outputFile)
+        String error;
+        io::BinaryWriter writer;
+        if (!writer.prepare(filePath, error))
         {
           LogService::Error(
-            "Failed to open file for writing: " + filePath.toString()
+            "Exception during scene serialization: " + error +
+            " in file: " + filePath.toString()
           );
           return false;
         }
-
-        io::BinaryWriter writer(outputFile);
 
         SerializeHeader(writer);
         scene.serialize(writer);
@@ -57,16 +55,15 @@ namespace hc
       {
         scene.destroy();
 
-        std::ifstream inputFile(filePath, std::ios::binary);
-        if (!inputFile)
+        String error;
+        io::BinaryReader reader;
+        if (!reader.prepare(filePath, error))
         {
           LogService::Error(
-            "Failed to open file for reading: " + filePath.toString()
+            "Failed to prepare binary reader for scene file: " + filePath.toString() + " Error: " + error
           );
           return false;
         }
-
-        io::BinaryReader reader(inputFile);
 
         VerifyHeader(reader);
         scene.deserialize(reader);
