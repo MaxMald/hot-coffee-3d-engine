@@ -27,7 +27,16 @@ namespace hc
 
     constexpr bool operator==(const Color& rhs) const;
     constexpr bool operator!=(const Color& rhs) const;
-    Color& operator+=(const Color& rhs);
+
+    constexpr Color operator+(const Color& rhs) const;
+    constexpr Color operator-(const Color& rhs) const;
+    constexpr Color operator*(float scalar) const;
+    constexpr Color operator/(float scalar) const;
+
+    constexpr Color& operator+=(const Color& rhs);
+    constexpr Color& operator-=(const Color& rhs);
+    constexpr Color& operator*=(float scalar);
+    constexpr Color& operator/=(float scalar);
 
     constexpr Vector4f toVector() const;
 
@@ -63,12 +72,47 @@ namespace hc
     return !(*this == rhs);
   }
 
-  Color& Color::operator+=(const Color& rhs)
+  constexpr Color Color::operator+(const Color& rhs) const
   {
-    r += rhs.r;
-    g += rhs.g;
-    b += rhs.b;
-    a += rhs.a;
+    return Color(r + rhs.r, g + rhs.g, b + rhs.b, a + rhs.a);
+  }
+
+  constexpr Color Color::operator-(const Color& rhs) const
+  {
+    return Color(r - rhs.r, g - rhs.g, b - rhs.b, a - rhs.a);
+  }
+
+  constexpr Color Color::operator*(float scalar) const
+  {
+    return Color(r * scalar, g * scalar, b * scalar, a * scalar);
+  }
+
+  constexpr Color Color::operator/(float scalar) const
+  {
+    return Color(r / scalar, g / scalar, b / scalar, a / scalar);
+  }
+
+  constexpr Color& Color::operator+=(const Color& rhs)
+  {
+    r += rhs.r; g += rhs.g; b += rhs.b; a += rhs.a;
+    return *this;
+  }
+
+  constexpr Color& Color::operator-=(const Color& rhs)
+  {
+    r -= rhs.r; g -= rhs.g; b -= rhs.b; a -= rhs.a;
+    return *this;
+  }
+
+  constexpr Color& Color::operator*=(float scalar)
+  {
+    r *= scalar; g *= scalar; b *= scalar; a *= scalar;
+    return *this;
+  }
+
+  constexpr Color& Color::operator/=(float scalar)
+  {
+    r /= scalar; g /= scalar; b /= scalar; a /= scalar;
     return *this;
   }
 
