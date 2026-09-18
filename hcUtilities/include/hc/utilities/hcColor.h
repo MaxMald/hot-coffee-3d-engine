@@ -27,6 +27,7 @@ namespace hc
 
     constexpr bool operator==(const Color& rhs) const;
     constexpr bool operator!=(const Color& rhs) const;
+    Color& operator+=(const Color& rhs);
 
     constexpr Vector4f toVector() const;
 
@@ -60,6 +61,15 @@ namespace hc
   constexpr bool Color::operator!=(const Color& rhs) const
   {
     return !(*this == rhs);
+  }
+
+  Color& Color::operator+=(const Color& rhs)
+  {
+    r += rhs.r;
+    g += rhs.g;
+    b += rhs.b;
+    a += rhs.a;
+    return *this;
   }
 
   constexpr Vector4f Color::toVector() const
