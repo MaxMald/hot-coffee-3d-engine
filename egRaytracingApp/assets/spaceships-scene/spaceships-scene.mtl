@@ -1,0 +1,35 @@
+# Blender 5.0.1 MTL File: 'spaceships-scene.blend'
+# www.blender.org
+
+newmtl drenkendship_DrenkendShip
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+illum 2
+map_Kd F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship03/DrenkendShip_DIF.png .png
+map_Ke F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship03/DrenkendShip_EMIS.png .png
+map_d F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship03/DrenkendShip_DIF.png .png
+map_Bump -bm 1.000000 F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship03/DrenkendShip_NORMW.png .png
+
+newmtl menkmackspaceship_MenkMackSpaceShip
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ni 1.500000
+illum 2
+map_Kd F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship02/MenkMackSpaceShip_DIF.png
+map_Ke F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship02/MenkMackSpaceShip_EMIS.png
+map_d F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship02/MenkMackSpaceShip_DIF.png
+map_Bump -bm 1.000000 F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship02/MenkMackSpaceShip_NORMW.png
+
+newmtl scryveship_ScryveShip
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+illum 2
+map_Kd F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship01/ScryveShip_Root_DIF.png
+map_d F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship01/ScryveShip_Root_DIF.png
+map_Bump -bm 1.000000 F:/Repositories/MaxMald/hot-coffee-3d-engine/egRaytracingApp/assets/ship01/ScryveShip_Root_NORMW.png
