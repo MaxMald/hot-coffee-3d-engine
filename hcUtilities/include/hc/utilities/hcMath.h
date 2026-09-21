@@ -14,27 +14,28 @@ namespace hc
     static constexpr float InvPi = 0.31830988618379067154f; // 1 / Pi
     static constexpr float DegToRad = 0.01745329252f;
     static constexpr float RadToDeg = 57.2957795131f;
+    static constexpr float Epsilon = 1e-6f;
 
     template<typename T>
-    static constexpr T Min(T a, T b)
+    static inline constexpr T Min(T a, T b)
     {
-      return (a < b) ? a : b;
+      return std::min(a, b);
     }
 
     template<typename T>
-    static constexpr T Max(T a, T b)
+    static inline constexpr T Max(T a, T b)
     {
-      return (a > b) ? a : b;
+      return std::max(a, b);
     }
 
     template<typename T>
-    static constexpr T Clamp(T value, T minValue, T maxValue)
+    static inline constexpr T Clamp(T value, T minValue, T maxValue)
     {
       return Min(Max(value, minValue), maxValue);
     }
 
     template<typename T>
-    static constexpr T Abs(T value)
+    static inline constexpr T Abs(T value)
     {
       return std::abs(value);
     }
@@ -45,39 +46,39 @@ namespace hc
       return a + (b - a) * t;
     }
 
-    static constexpr float Sign(float value)
+    static inline constexpr float Sign(float value)
     {
       return (value > 0.0f) ? 1.0f : ((value < 0.0f) ? -1.0f : 0.0f);
     }
 
-    static float Sin(float radians)
+    static inline float Sin(float radians)
     {
       return std::sin(radians);
     }
 
-    static float Cos(float radians)
+    static inline float Cos(float radians)
     {
       return std::cos(radians);
     }
 
-    static float Tan(float radians)
+    static inline float Tan(float radians)
     {
       return std::tan(radians);
     }
 
-    static float Sqrt(float value)
+    static inline float Sqrt(float value)
     {
       return std::sqrt(value);
     }
 
-    static bool IsNearlyEqual(
-      float a, float b, float epsilon = 1e-6f
+    static inline bool IsNearlyEqual(
+      float a, float b, float epsilon = Epsilon
     )
     {
       return std::abs(a - b) <= epsilon;
     }
 
-    static bool IsNearlyZero(float value, float epsilon = 1e-6f)
+    static inline bool IsNearlyZero(float value, float epsilon = Epsilon)
     {
       return std::abs(value) <= epsilon;
     }
