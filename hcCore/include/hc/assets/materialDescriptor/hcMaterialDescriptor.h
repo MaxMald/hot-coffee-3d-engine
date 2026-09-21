@@ -224,6 +224,16 @@ namespace hc
      *
      * @return A pointer to the PBRData if the material type is PBR; otherwise, nullptr.
      */
+    inline const assets::materialDescriptor::PBRData* getIfPBRData() const
+    {
+      return std::get_if<assets::materialDescriptor::PBRData>(&variantData);
+    }
+
+    /**
+     * Retrieves a pointer to the PBRData if the material type is PBR.
+     *
+     * @return A pointer to the PBRData if the material type is PBR; otherwise, nullptr.
+     */
     inline assets::materialDescriptor::PBRData* getIfPBRData()
     {
       return std::get_if<assets::materialDescriptor::PBRData>(&variantData);
