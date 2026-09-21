@@ -13,6 +13,18 @@ using hc::Vector4f;
 using hc::Color;
 using hc::Vector;
 
+struct Material
+{
+  Color albedo;
+  float metallic = 0.0f;
+  float roughness = 0.0f; // 0.0 roughness does not exist, always minimum to 0.04;
+
+  // Index of Refraction for most dielectrics Depending on the type of material, the IOR
+  // can vary. For example, water has an IOR of 1.33, glass has an IOR of 1.5, and diamond
+  // has an IOR of 2.42.
+  float ior = 1.5f; // Index of Refraction
+};
+
 class AABB
 {
 public:
@@ -63,22 +75,17 @@ public:
   Sphere(
     const Vector3f& center,
     float radius,
-    const Color& color,
-    float kA,
-    float kD,
-    float kS
+    const Material& material
   )
     : center(center),
     radius(radius),
-    color(color),
-    coeffs(kA, kD, kS) // ambient diffuse specular coefficients
+    material(material)
   {
   }
 
 public:
-  Color color;
   Vector3f center;
-  Vector3f coeffs;
+  Material material;
   float radius;
 };
 
@@ -89,23 +96,18 @@ public:
   Plane(
     const Vector3f& point,
     const Vector3f& normal,
-    const Color& color,
-    float kA,
-    float kD,
-    float kS
+    const Material& material
   )
     : point(point),
     normal(normal.normalized()),
-    color(color),
-    coeffs(kA, kD, kS) // ambient diffuse specular coefficients
+    material(material)
   {
   }
 
 public:
   Vector3f point;
   Vector3f normal;
-  Color color;
-  Vector3f coeffs;
+  Material material;
 };
 
 class Triangle
@@ -116,17 +118,13 @@ public:
     const Vector3f& v0,
     const Vector3f& v1,
     const Vector3f& v2,
-    const Color& color,
-    float kA,
-    float kD,
-    float kS,
+    const Material& material,
     const AABB& aabb
   )
     : v0(v0),
     v1(v1),
     v2(v2),
-    color(color),
-    coeffs(kA, kD, kS), // ambient diffuse specular coefficients
+    material(material),
     aabb(aabb)
   {
   }
@@ -135,8 +133,7 @@ public:
   Vector3f v0;
   Vector3f v1;
   Vector3f v2;
-  Color color;
-  Vector3f coeffs;
+  Material material;
   AABB aabb;
 };
 
