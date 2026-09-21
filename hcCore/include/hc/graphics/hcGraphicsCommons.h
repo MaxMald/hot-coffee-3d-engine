@@ -131,6 +131,7 @@ namespace hc
       HairDeferredGeometryFragment,
       HairForwardSpecularFragment,
       HairForwardTransparentFragment,
+      PBRDeferredGeometryFragment,
       Count
     };
 
@@ -157,6 +158,7 @@ namespace hc
       HairDeferredGeometry,
       HairForwardSpecular,
       HairForwardTransparent,
+      PBRDeferredGeometry,
       Count
     };
 

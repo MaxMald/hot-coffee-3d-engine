@@ -209,6 +209,7 @@ namespace hc
       case Type::HairDeferredGeometryFragment: return "HairDeferredGeometryFragment";
       case Type::HairForwardSpecularFragment: return "HairForwardSpecularFragment";
       case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
+      case Type::PBRDeferredGeometryFragment: return "PBRDeferredGeometryFragment";
 
       default:
         throw InvalidArgumentException(
@@ -234,6 +235,7 @@ namespace hc
       else if (str == "HairDeferredGeometryFragment") return Type::HairDeferredGeometryFragment;
       else if (str == "HairForwardSpecularFragment") return Type::HairForwardSpecularFragment;
       else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
+      else if (str == "PBRDeferredGeometryFragment") return Type::PBRDeferredGeometryFragment;
 
       throw InvalidArgumentException(
         String::Format("builtInShaderType::FromString : Invalid built-in shader type string: %s", str.c_str())
@@ -261,6 +263,7 @@ namespace hc
       case Type::HairDeferredGeometryFragment:
       case Type::HairForwardSpecularFragment:
       case Type::HairForwardTransparentFragment:
+      case Type::PBRDeferredGeometryFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -287,6 +290,7 @@ namespace hc
       case Type::HairDeferredGeometry: return "HairDeferredGeometry";
       case Type::HairForwardSpecular: return "HairForwardSpecular";
       case Type::HairForwardTransparent: return "HairForwardTransparent";
+      case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -306,6 +310,8 @@ namespace hc
       else if (str == "HairDeferredGeometry") return Type::HairDeferredGeometry;
       else if (str == "HairForwardSpecular") return Type::HairForwardSpecular;
       else if (str == "HairForwardTransparent") return Type::HairForwardTransparent;
+      else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
+      else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())
       );
