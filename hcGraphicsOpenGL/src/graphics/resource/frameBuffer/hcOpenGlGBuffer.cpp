@@ -20,10 +20,9 @@ namespace hc
     m_gBufferId(0),
     m_depthStencilBufferId(0),
     m_positionAndDepthTexture(),
-    m_normalRoughnessTexture(),
+    m_normalTexture(),
     m_albedoAlphaTexture(),
-    m_materialParametersTexture(),
-    m_specularColorAndShininessTexture()
+    m_ORMIORTexture()
   {}
 
   OpenGlGBuffer::~OpenGlGBuffer()
@@ -59,13 +58,13 @@ namespace hc
       if (!m_positionAndDepthTexture.isValid())
         throw RuntimeErrorException("Failed to create position and depth texture for GBuffer.");
 
-      m_normalRoughnessTexture.initialize(
+      m_normalTexture.initialize(
         width, height,
         textureFormatType::RGBA16F, colorSpaceType::Linear
       );
 
-      if (!m_normalRoughnessTexture.isValid())
-        throw RuntimeErrorException("Failed to create normal and roughness texture for GBuffer.");
+      if (!m_normalTexture.isValid())
+        throw RuntimeErrorException("Failed to create normal texture for GBuffer.");
 
       m_albedoAlphaTexture.initialize(
         width, height,
@@ -75,21 +74,13 @@ namespace hc
       if (!m_albedoAlphaTexture.isValid())
         throw RuntimeErrorException("Failed to create albedo and alpha texture for GBuffer.");
 
-      m_materialParametersTexture.initialize(
+      m_ORMIORTexture.initialize(
         width, height,
         textureFormatType::RGBA8, colorSpaceType::Linear
       );
 
-      if (!m_materialParametersTexture.isValid())
-        throw RuntimeErrorException("Failed to create material parameters texture for GBuffer.");
-
-      m_specularColorAndShininessTexture.initialize(
-        width, height,
-        textureFormatType::RGBA8, colorSpaceType::Linear
-      );
-
-      if (!m_specularColorAndShininessTexture.isValid())
-        throw RuntimeErrorException("Failed to create specular color and shininess texture for GBuffer.");
+      if (!m_ORMIORTexture.isValid())
+        throw RuntimeErrorException("Failed to create ORM/IOR texture for GBuffer.");
 
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
@@ -98,7 +89,7 @@ namespace hc
 
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D,
-        m_normalRoughnessTexture.getTextureId(), 0
+        m_normalTexture.getTextureId(), 0
       );
 
       glFramebufferTexture2D(
@@ -108,15 +99,10 @@ namespace hc
 
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D,
-        m_materialParametersTexture.getTextureId(), 0
+        m_ORMIORTexture.getTextureId(), 0
       );
 
-      glFramebufferTexture2D(
-        GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, GL_TEXTURE_2D,
-        m_specularColorAndShininessTexture.getTextureId(), 0
-      );
-
-      glDrawBuffers(5, GBufferColorAttachments);
+      glDrawBuffers(4, GBufferColorAttachments);
 
       glGenRenderbuffers(1, &m_depthStencilBufferId);
       glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
@@ -178,10 +164,9 @@ namespace hc
   {
     assertIsValid();
     m_positionAndDepthTexture.unbind(0);
-    m_normalRoughnessTexture.unbind(1);
+    m_normalTexture.unbind(1);
     m_albedoAlphaTexture.unbind(2);
-    m_materialParametersTexture.unbind(3);
-    m_specularColorAndShininessTexture.unbind(4);
+    m_ORMIORTexture.unbind(3);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
   }
 
@@ -205,10 +190,9 @@ namespace hc
     try
     {
       m_positionAndDepthTexture.resize(width, height);
-      m_normalRoughnessTexture.resize(width, height);
+      m_normalTexture.resize(width, height);
       m_albedoAlphaTexture.resize(width, height);
-      m_materialParametersTexture.resize(width, height);
-      m_specularColorAndShininessTexture.resize(width, height);
+      m_ORMIORTexture.resize(width, height);
 
       glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencilBufferId);
       glRenderbufferStorage(
@@ -271,8 +255,7 @@ namespace hc
       glClearBufferfv(GL_COLOR, 0, IGBuffer::CLEAR_COLOR_POSITION_AND_DEPTH);
       glClearBufferfv(GL_COLOR, 1, IGBuffer::CLEAR_COLOR_NORMAL);
       glClearBufferfv(GL_COLOR, 2, IGBuffer::CLEAR_COLOR_ALBEDO_AND_ALPHA);
-      glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_OMRIOR);
-      glClearBufferfv(GL_COLOR, 4, IGBuffer::CLEAR_COLOR_SPECULAR_COLOR_AND_SHININESS);
+      glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_ORMIOR);
       glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
     catch (...)
@@ -321,10 +304,9 @@ namespace hc
     }
 
     m_positionAndDepthTexture.destroy();
-    m_normalRoughnessTexture.destroy();
+    m_normalTexture.destroy();
     m_albedoAlphaTexture.destroy();
-    m_materialParametersTexture.destroy();
-    m_specularColorAndShininessTexture.destroy();
+    m_ORMIORTexture.destroy();
 
     m_width = 0;
     m_height = 0;
@@ -367,18 +349,16 @@ namespace hc
 
   void OpenGlGBuffer::bindGTexturesForReading(
     UInt8 positionAndDepthTextureUnit,
-    UInt8 normalAndRoughnessTextureUnit,
+    UInt8 normalTextureUnit,
     UInt8 albedoAndAlphaTextureUnit,
-    UInt8 materialParametersTextureUnit,
-    UInt8 specularColorAndShininessTextureUnit
+    UInt8 ORMIORTextureUnit
   )
   {
     assertIsValid();
     m_positionAndDepthTexture.bind(positionAndDepthTextureUnit);
-    m_normalRoughnessTexture.bind(normalAndRoughnessTextureUnit);
+    m_normalTexture.bind(normalTextureUnit);
     m_albedoAlphaTexture.bind(albedoAndAlphaTextureUnit);
-    m_materialParametersTexture.bind(materialParametersTextureUnit);
-    m_specularColorAndShininessTexture.bind(specularColorAndShininessTextureUnit);
+    m_ORMIORTexture.bind(ORMIORTextureUnit);
   }
 
   const ITexture& OpenGlGBuffer::getPositionAndDepth() const
@@ -391,19 +371,14 @@ namespace hc
     return m_albedoAlphaTexture;
   }
 
-  const ITexture& OpenGlGBuffer::getNormalRoughness() const
+  const ITexture& OpenGlGBuffer::getNormal() const
   {
-    return m_normalRoughnessTexture;
+    return m_normalTexture;
   }
 
-  const ITexture& OpenGlGBuffer::getMaterialParameters() const
+  const ITexture& OpenGlGBuffer::getORMIOR() const
   {
-    return m_materialParametersTexture;
-  }
-
-  const ITexture& OpenGlGBuffer::getSpecularColorAndShininess() const
-  {
-    return m_specularColorAndShininessTexture;
+    return m_ORMIORTexture;
   }
 
   void OpenGlGBuffer::assertIsValid() const
