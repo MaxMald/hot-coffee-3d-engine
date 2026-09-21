@@ -182,21 +182,6 @@ namespace hc
     static_assert(sizeof(MaterialUnlit) % 16 == 0, "MaterialUnlit must be 16-byte aligned");
 
     /**
-     * @brief GPU-aligned data for a Blinn-Phong material.
-     */
-    struct alignas(16) HC_CORE_EXPORT MaterialBlinnPhong
-    {
-      Color color;              ///< Base color of the Blinn-Phong material.
-
-      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
-      float shininess = 0.0f;   ///< Shininess factor for specular highlights.
-      float padding0 = 0.0f;
-      float padding1 = 0.0f;
-    };
-
-    static_assert(sizeof(MaterialBlinnPhong) % 16 == 0, "MaterialBlinnPhong must be 16-byte aligned");
-
-    /**
      * @brief GPU-aligned data for a hair material.
      */
     struct alignas(16) HC_CORE_EXPORT MaterialHair

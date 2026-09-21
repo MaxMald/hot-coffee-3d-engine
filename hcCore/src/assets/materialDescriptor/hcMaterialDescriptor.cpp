@@ -38,49 +38,6 @@ namespace hc
       color = Color::White();
     }
 
-    // ------------ BLINN PHONG DATA 
-
-    static constexpr UInt32 BLINN_PHONG_DATA_VERSION = 1;
-
-    void BlinnPhongData::serialize(io::BinaryWriter& writer) const
-    {
-      writer.startWritingObject(materialType::Type::BlinnPhong, BLINN_PHONG_DATA_VERSION);
-      writer.writePath(diffuseImagePath);
-      writer.writePath(normalImagePath);
-      writer.writePath(specularImagePath);
-      writer.writeColor(color);
-      writer.writeFloat(shininess);
-      writer.finishWritingObject();
-    }
-
-    void BlinnPhongData::deserialize(io::BinaryReader& reader)
-    {
-      clear();
-
-      io::ObjectHeader header = reader.startReadingObject();
-      if (!header.match(materialType::Type::BlinnPhong, BLINN_PHONG_DATA_VERSION))
-      {
-        reader.finishReadingObject();
-        return;
-      }
-
-      diffuseImagePath = reader.readPath();
-      normalImagePath = reader.readPath();
-      specularImagePath = reader.readPath();
-      color = reader.readColor();
-      shininess = reader.readFloat();
-      reader.finishReadingObject();
-    }
-
-    void BlinnPhongData::clear()
-    {
-      diffuseImagePath.clear();
-      normalImagePath.clear();
-      specularImagePath.clear();
-      color = Color::White();
-      shininess = 32.0f;
-    }
-
     // ------------ HAIR DATA
 
     static constexpr UInt32 HAIR_DATA_VERSION = 1;
@@ -241,11 +198,9 @@ namespace hc
     case materialType::Type::Unlit:
       variantData = assets::materialDescriptor::UnlitData();
       break;
-    case materialType::Type::BlinnPhong:
-      variantData = assets::materialDescriptor::BlinnPhongData();
-      break;
     case materialType::Type::Hair:
       variantData = assets::materialDescriptor::HairData();
+      break;
       break;
     case materialType::Type::PBR:
       variantData = assets::materialDescriptor::PBRData();
@@ -298,13 +253,6 @@ namespace hc
       assets::materialDescriptor::UnlitData unlit;
       unlit.deserialize(reader);
       variantData = unlit;
-      break;
-    }
-    case materialType::Type::BlinnPhong:
-    {
-      assets::materialDescriptor::BlinnPhongData blinnPhong;
-      blinnPhong.deserialize(reader);
-      variantData = blinnPhong;
       break;
     }
     case materialType::Type::Hair:

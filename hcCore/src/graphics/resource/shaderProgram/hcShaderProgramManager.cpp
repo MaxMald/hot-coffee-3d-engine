@@ -90,22 +90,6 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::UnlitFragment)
       );
     }
-    else if (type == builtInShaderProgramType::BlinnPhongForward)
-    {
-      createBuiltInShaderProgram(
-        type,
-        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
-        m_shaderManager.getBuiltInShader(builtInShaderType::BlinnPhongForwardFragment)
-      );
-    }
-    else if (type == builtInShaderProgramType::BlinnPhongDeferredGeometry)
-    {
-      createBuiltInShaderProgram(
-        type,
-        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
-        m_shaderManager.getBuiltInShader(builtInShaderType::BlinnPhongDeferredFragment)
-      );
-    }
     else if (type == builtInShaderProgramType::DeferredLighting)
     {
       createBuiltInShaderProgram(
@@ -160,6 +144,22 @@ namespace hc
         type,
         m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
         m_shaderManager.getBuiltInShader(builtInShaderType::HairForwardTransparentFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::PBRDeferredGeometry)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::PBRDeferredGeometryFragment)
+      );
+    }
+    else if (type == builtInShaderProgramType::PBRForward)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::LitVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::PBRForwardFragment)
       );
     }
     else

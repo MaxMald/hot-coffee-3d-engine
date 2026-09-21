@@ -119,8 +119,6 @@ namespace hc
       UnlitVertex = 0,
       UnlitFragment,
       LitVertex,
-      BlinnPhongForwardFragment,
-      BlinnPhongDeferredFragment,
       FullScreenTriangleVertex,
       DeferredLightingFragment,
       SkyboxVertex,
@@ -132,6 +130,7 @@ namespace hc
       HairForwardSpecularFragment,
       HairForwardTransparentFragment,
       PBRDeferredGeometryFragment,
+      PBRForwardFragment,
       Count
     };
 
@@ -149,8 +148,6 @@ namespace hc
     enum HC_CORE_EXPORT Type : UInt8
     {
       Unlit = 0,
-      BlinnPhongForward,
-      BlinnPhongDeferredGeometry,
       DeferredLighting,
       Skybox,
       FinalPass,
@@ -159,6 +156,7 @@ namespace hc
       HairForwardSpecular,
       HairForwardTransparent,
       PBRDeferredGeometry,
+      PBRForward,
       Count
     };
 
@@ -175,9 +173,8 @@ namespace hc
     enum Type : UInt8
     {
       Unlit = 0,
-      BlinnPhong = 1,
-      Hair = 2,
-      PBR = 3,
+      Hair = 1,
+      PBR = 2,
       Unknown = 255
     };
 
@@ -223,9 +220,8 @@ namespace hc
       Object = 3,
       LightViewProjection = 4,
       MaterialUnlit = 5,
-      MaterialBlinnPhong = 6,
-      MaterialHair = 7,
-      MaterialPBR = 8,
+      MaterialHair = 6,
+      MaterialPBR = 7,
       Count
     };
   }

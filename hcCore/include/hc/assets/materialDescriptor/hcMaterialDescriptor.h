@@ -7,23 +7,12 @@ namespace hc
 {
   namespace assets::materialDescriptor
   {
+    static constexpr float MAXIMUM_IOR = 5.0f;
+
     struct UnlitData : public hc::io::ISerializable
     {
       Path textureImagePath;        ///< The path to the texture used by the unlit material
       Color color = Color::White(); ///< The base color of the unlit material
-
-      void serialize(io::BinaryWriter& writer) const override;
-      void deserialize(io::BinaryReader& reader) override;
-      void clear();
-    };
-
-    struct BlinnPhongData : public hc::io::ISerializable
-    {
-      Path diffuseImagePath;        ///< The path to the diffuse texture
-      Path normalImagePath;         ///< The path to the normal texture
-      Path specularImagePath;       ///< The path to the specular texture
-      Color color = Color::White(); ///< The diffuse color of the Blinn-Phong material
-      float shininess = 32.0f;      ///< The shininess factor for specular highlights
 
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;
@@ -67,7 +56,6 @@ namespace hc
 
   using MaterialDescriptorVariant = std::variant<
     assets::materialDescriptor::UnlitData,
-    assets::materialDescriptor::BlinnPhongData,
     assets::materialDescriptor::HairData,
     assets::materialDescriptor::PBRData
   >;
@@ -175,28 +163,6 @@ namespace hc
     inline assets::materialDescriptor::UnlitData* getIfUnlitData()
     {
       return std::get_if<assets::materialDescriptor::UnlitData>(&variantData);
-    }
-
-    /**
-     * Retrieves a pointer to the BlinnPhongData if the material type is BlinnPhong.
-     *
-     * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
-     * otherwise, nullptr.
-     */
-    inline const assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData() const
-    {
-      return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
-    }
-
-    /**
-     * Retrieves a pointer to the BlinnPhongData if the material type is BlinnPhong.
-     *
-     * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
-     * otherwise, nullptr.
-     */
-    inline assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData()
-    {
-      return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
     }
 
     /**

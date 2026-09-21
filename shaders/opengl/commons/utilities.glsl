@@ -1,3 +1,5 @@
+#define MAXIMUM_IOR 5
+
 /**
 * @brief Clamps a value between 0.0 and 1.0.
 *

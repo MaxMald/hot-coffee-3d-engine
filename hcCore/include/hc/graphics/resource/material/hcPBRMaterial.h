@@ -71,13 +71,16 @@ namespace hc
      * @param omrTexture The occlusion-metallic-roughness (OMR) texture for the material.
      * @param deferredGeometryShaderProgram The shader program used for deferred geometry
      * rendering of this material.
+     * @param forwardShaderProgram The shader program used for forward rendering of this
+     * material.
      */
     void initialize(
       const MaterialDescriptor& descriptor,
       const SharedPtr<ITexture>& albedoTexture,
       const SharedPtr<ITexture>& normalTexture,
       const SharedPtr<ITexture>& omrTexture,
-      const SharedPtr<IShaderProgram>& deferredGeometryShaderProgram
+      const SharedPtr<IShaderProgram>& deferredGeometryShaderProgram,
+      const SharedPtr<IShaderProgram>& forwardShaderProgram
     );
 
     /**
@@ -235,8 +238,10 @@ namespace hc
     SharedPtr<ITexture> m_normalTexture;
     SharedPtr<ITexture> m_omrTexture;
     SharedPtr<IShaderProgram> m_deferredGeometryShaderProgram;
+    SharedPtr<IShaderProgram> m_forwardShaderProgram;
 
     void assertIsValid() const;
     void bindForDeferredGeometryPass(IDataBlockManager& dataBlockManager);
+    void bindForForwardPass(IDataBlockManager& dataBlockManager);
   };
 }

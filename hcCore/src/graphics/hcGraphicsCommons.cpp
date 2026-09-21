@@ -197,8 +197,6 @@ namespace hc
       case Type::UnlitVertex: return "UnlitVertex";
       case Type::UnlitFragment: return "UnlitFragment";
       case Type::LitVertex: return "LitVertex";
-      case Type::BlinnPhongForwardFragment: return "BlinnPhongForwardFragment";
-      case Type::BlinnPhongDeferredFragment: return "BlinnPhongDeferredFragment";
       case Type::FullScreenTriangleVertex: return "FullScreenTriangleVertex";
       case Type::DeferredLightingFragment: return "DeferredLightingFragment";
       case Type::SkyboxVertex: return "SkyboxVertex";
@@ -210,6 +208,7 @@ namespace hc
       case Type::HairForwardSpecularFragment: return "HairForwardSpecularFragment";
       case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
       case Type::PBRDeferredGeometryFragment: return "PBRDeferredGeometryFragment";
+      case Type::PBRForwardFragment: return "PBRForwardFragment";
 
       default:
         throw InvalidArgumentException(
@@ -223,8 +222,6 @@ namespace hc
       if (str == "UnlitVertex") return Type::UnlitVertex;
       else if (str == "UnlitFragment") return Type::UnlitFragment;
       else if (str == "LitVertex") return Type::LitVertex;
-      else if (str == "BlinnPhongForwardFragment") return Type::BlinnPhongForwardFragment;
-      else if (str == "BlinnPhongDeferredFragment") return Type::BlinnPhongDeferredFragment;
       else if (str == "FullScreenTriangleVertex") return Type::FullScreenTriangleVertex;
       else if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
       else if (str == "SkyboxVertex") return Type::SkyboxVertex;
@@ -236,6 +233,8 @@ namespace hc
       else if (str == "HairForwardSpecularFragment") return Type::HairForwardSpecularFragment;
       else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
       else if (str == "PBRDeferredGeometryFragment") return Type::PBRDeferredGeometryFragment;
+      else if (str == "PBRForwardFragment") return Type::PBRForwardFragment;
+      else
 
       throw InvalidArgumentException(
         String::Format("builtInShaderType::FromString : Invalid built-in shader type string: %s", str.c_str())
@@ -254,8 +253,6 @@ namespace hc
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
-      case Type::BlinnPhongForwardFragment:
-      case Type::BlinnPhongDeferredFragment:
       case Type::DeferredLightingFragment:
       case Type::SkyboxFragment:
       case Type::FinalPassFragment:
@@ -264,6 +261,7 @@ namespace hc
       case Type::HairForwardSpecularFragment:
       case Type::HairForwardTransparentFragment:
       case Type::PBRDeferredGeometryFragment:
+      case Type::PBRForwardFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -281,8 +279,6 @@ namespace hc
       switch (type)
       {
       case Type::Unlit: return "Unlit";
-      case Type::BlinnPhongForward: return "BlinnPhongForward";
-      case Type::BlinnPhongDeferredGeometry: return "BlinnPhongDeferredGeometry";
       case Type::DeferredLighting: return "DeferredLighting";
       case Type::Skybox: return "Skybox";
       case Type::FinalPass: return "FinalPass";
@@ -291,6 +287,7 @@ namespace hc
       case Type::HairForwardSpecular: return "HairForwardSpecular";
       case Type::HairForwardTransparent: return "HairForwardTransparent";
       case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
+      case Type::PBRForward: return "PBRForward";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -301,8 +298,6 @@ namespace hc
     Type FromString(const String& str)
     {
       if (str == "Unlit") return Type::Unlit;
-      else if (str == "BlinnPhongForward") return Type::BlinnPhongForward;
-      else if (str == "BlinnPhongDeferredGeometry") return Type::BlinnPhongDeferredGeometry;
       else if (str == "DeferredLighting") return Type::DeferredLighting;
       else if (str == "Skybox") return Type::Skybox;
       else if (str == "FinalPass") return Type::FinalPass;
@@ -311,6 +306,7 @@ namespace hc
       else if (str == "HairForwardSpecular") return Type::HairForwardSpecular;
       else if (str == "HairForwardTransparent") return Type::HairForwardTransparent;
       else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
+      else if (str == "PBRForward") return Type::PBRForward;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())
@@ -326,8 +322,6 @@ namespace hc
       {
       case Unlit:
         return "Unlit";
-      case BlinnPhong:
-        return "BlinnPhong";
       case Hair:
         return "Hair";
       case PBR:
@@ -341,8 +335,6 @@ namespace hc
     {
       if (str == "Unlit")
         return Unlit;
-      else if (str == "BlinnPhong")
-        return BlinnPhong;
       else if (str == "Hair")
         return Hair;
       else if (str == "PBR")

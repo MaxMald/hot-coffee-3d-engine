@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/material/hcUnlitMaterial.h"
-#include "hc/graphics/resource/material/hcBlinnPhongMaterial.h"
+#include "hc/graphics/resource/material/hcPBRMaterial.h"
 #include "hc/graphics/resource/material/hcHairMaterial.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
@@ -71,8 +71,8 @@ namespace hc
     {
     case materialType::Unlit:
       return createUnlitMaterial(descriptor);
-    case materialType::BlinnPhong:
-      return createBlinnPhongMaterial(descriptor);
+    case materialType::PBR:
+      return createPBRMaterial(descriptor);
     case materialType::Hair:
       return createHairMaterial(descriptor);
     default:
@@ -111,18 +111,18 @@ namespace hc
     return material;
   }
 
-  SharedPtr<BlinnPhongMaterial> MaterialManager::createBlinnPhongMaterial(
+  SharedPtr<PBRMaterial> MaterialManager::createPBRMaterial(
     const SharedPtr<MaterialDescriptor>& descriptor
   )
   {
     if (!descriptor)
-      throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: null descriptor.");
+      throw InvalidArgumentException("MaterialManager::createPBRMaterial: null descriptor.");
 
-    const assets::materialDescriptor::BlinnPhongData* matData = descriptor->getIfBlinnPhongData();
+    const assets::materialDescriptor::PBRData* matData = descriptor->getIfPBRData();
     if (!matData)
-      throw InvalidArgumentException("MaterialManager::createBlinnPhongMaterial: descriptor does not contain BlinnPhongData.");
+      throw InvalidArgumentException("MaterialManager::createPBRMaterial: descriptor does not contain PBRData.");
 
-    SharedPtr<ITexture> albedoTexture = getTextureFromPath(matData->diffuseImagePath);
+    SharedPtr<ITexture> albedoTexture = getTextureFromPath(matData->albedoImagePath);
     if (!albedoTexture)
       albedoTexture = m_whiteTexture;
 
@@ -130,26 +130,24 @@ namespace hc
       matData->normalImagePath,
       colorSpaceType::Linear
     );
-
     if (!normalTexture)
       normalTexture = m_defaultNormalTexture;
 
-    SharedPtr<ITexture> specularTexture = getTextureFromPath(
-      matData->specularImagePath,
+    SharedPtr<ITexture> ormTexture = getTextureFromPath(
+      matData->ormImagePath,
       colorSpaceType::Linear
     );
+    if (!ormTexture)
+      ormTexture = m_defaultORMTexture;
 
-    if (!specularTexture)
-      specularTexture = m_whiteTexture;
-
-    SharedPtr<BlinnPhongMaterial> material = MakeShared<BlinnPhongMaterial>(generateMaterialId());
+    SharedPtr<PBRMaterial> material = MakeShared<PBRMaterial>(generateMaterialId());
     material->initialize(
       *descriptor,
       albedoTexture,
       normalTexture,
-      specularTexture,
-      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongForward),
-      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BlinnPhongDeferredGeometry)
+      ormTexture,
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::PBRDeferredGeometry),
+      m_shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::PBRForward)
     );
 
     m_materials.push_back(material);
@@ -220,9 +218,9 @@ namespace hc
     return m_defaultNormalTexture;
   }
 
-  const SharedPtr<ITexture>& MaterialManager::getDefaultSpecularTexture() const
+  const SharedPtr<ITexture>& MaterialManager::getDefaultORMTexture() const
   {
-    return m_whiteTexture;
+    return m_defaultORMTexture;
   }
 
   void MaterialManager::clear()
@@ -268,6 +266,16 @@ namespace hc
     ); // 1x1 normal texture (0.5, 0.5, 1.0)
 
     coreAssertions::AssertTextureIsValid(m_defaultNormalTexture, "Default normal texture");
+
+    m_defaultORMTexture = m_textureManager.createTexture();
+    m_defaultORMTexture->initialize(
+      1, 1,
+      textureFormatType::RGBA8,
+      colorSpaceType::Linear,
+      Color(1.0f, 1.0f, 0.0f, 1.0f)
+    ); // 1x1 ORM texture
+
+    coreAssertions::AssertTextureIsValid(m_defaultORMTexture, "Default ORM texture");
   }
 
   SharedPtr<ITexture> MaterialManager::getTextureFromPath(const Path& texturePath)
