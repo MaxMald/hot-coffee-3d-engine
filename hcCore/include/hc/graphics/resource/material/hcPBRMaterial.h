@@ -225,7 +225,7 @@ namespace hc
      */
     inline void setIOR(float ior)
     {
-      m_ior = Math::Max(Math::Epsilon, ior);
+      m_ior = Math::Clamp(ior, Math::Epsilon, assets::materialDescriptor::MAXIMUM_IOR);
     }
 
   private:
