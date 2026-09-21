@@ -217,5 +217,17 @@ namespace hc
     };
 
     static_assert(sizeof(MaterialHair) % 16 == 0, "MaterialHair must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT MaterialPBR
+    {
+      Color baseColor;        ///< Base color of the PBR material.
+
+      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
+      float metallic = 0.0f;    ///< Metallic factor for PBR shading.
+      float roughness = 0.0f;   ///< Roughness factor for PBR shading.
+      float ior = 1.5f;         ///< Index of refraction for PBR shading.
+    };
+
+    static_assert(sizeof(MaterialPBR) % 16 == 0, "MaterialPBR must be 16-byte aligned");
   }
 }

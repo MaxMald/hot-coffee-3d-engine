@@ -220,6 +220,7 @@ namespace hc
       MaterialUnlit = 5,
       MaterialBlinnPhong = 6,
       MaterialHair = 7,
+      MaterialPBR = 8,
       Count
     };
   }
