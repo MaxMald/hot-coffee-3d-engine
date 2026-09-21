@@ -2,12 +2,12 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/material/hcAMaterial.h"
+#include "hc/assets/materialDescriptor/hcMaterialDescriptor.h"
 
 namespace hc
 {
   class ITexture;
   class IShaderProgram;
-  class MaterialDescriptor;
 
   /**
    * @brief Represents a material that uses the Physically Based Rendering (PBR) shading

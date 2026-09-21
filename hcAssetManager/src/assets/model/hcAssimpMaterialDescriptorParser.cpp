@@ -7,7 +7,6 @@ namespace hc
 {
   static constexpr const char* SUFFIX_SHADING_TYPE_HAIR = "_matHair";
   static constexpr const char* SUFFIX_SHADING_TYPE_UNLIT = "_matUL";
-  static constexpr const char* SUFFIX_SHADING_TYPE_BLINN_PHONG = "_matBP";
   static constexpr const char* SUFFIX_SHADING_TYPE_PBR = "_matPBR";
 
   static constexpr const char* SUFFIX_TRANSPARENT = "_Transparent";
@@ -29,9 +28,6 @@ namespace hc
       {
       case materialType::Unlit:
         matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
-        break;
-      case materialType::BlinnPhong:
-        matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
         break;
       case materialType::Hair:
         matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
@@ -67,8 +63,6 @@ namespace hc
       return materialType::Hair;
     else if (matName.find(SUFFIX_SHADING_TYPE_UNLIT) != String::npos)
       return materialType::Unlit;
-    else if (matName.find(SUFFIX_SHADING_TYPE_BLINN_PHONG) != String::npos)
-      return materialType::BlinnPhong;
     else if (matName.find(SUFFIX_SHADING_TYPE_PBR) != String::npos)
       return  materialType::PBR;
 
@@ -81,9 +75,7 @@ namespace hc
     switch (shadingModel)
     {
     case aiShadingMode_Phong:
-      return materialType::BlinnPhong;
     case aiShadingMode_Blinn:
-      return materialType::BlinnPhong;
     case aiShadingMode_NoShading:
       return materialType::Unlit;
     case aiShadingMode_PBR_BRDF:
@@ -117,27 +109,6 @@ namespace hc
     
     unlitData->color = GetVertexColorDiffuseFromMaterial(material);
     unlitData->textureImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    return desc;
-  }
-
-  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
-    const Path& fileDirectory,
-    const String& name,
-    const aiMaterial* material
-  )
-  {
-    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::BlinnPhong, "");
-    desc->name = name;
-
-    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getIfBlinnPhongData();
-    if (!blinnPhongData)
-      throw RuntimeErrorException("Failed to get BlinnPhongData from material descriptor.");
-
-    blinnPhongData->color = GetVertexColorDiffuseFromMaterial(material);
-    blinnPhongData->shininess = GetShininessFromMaterial(material);
-    blinnPhongData->diffuseImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    blinnPhongData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
-    blinnPhongData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
     return desc;
   }
 

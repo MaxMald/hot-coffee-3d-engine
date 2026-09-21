@@ -60,12 +60,6 @@ namespace hc
       const aiMaterial* material
     );
 
-    static SharedPtr<MaterialDescriptor> ParseBlinnPhongMaterialDescriptor(
-      const Path& fileDirectory,
-      const String& name,
-      const aiMaterial* material
-    );
-
     static SharedPtr<MaterialDescriptor> ParseHairMaterialDescriptor(
       const Path& fileDirectory,
       const String& name,
