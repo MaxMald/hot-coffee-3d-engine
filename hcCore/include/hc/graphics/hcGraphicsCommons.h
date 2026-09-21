@@ -211,6 +211,9 @@ namespace hc
      * @brief Enumeration of data block types used in the rendering engine.
      *
      * This enum defines the various types of data blocks that can be used for rendering.
+     *
+     * @note The index of each type also represents the binding point for the
+     * corresponding data block in the shader.
      */
     enum Type : UInt8
     {
