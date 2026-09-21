@@ -32,6 +32,7 @@ namespace hc
       float specularSecondaryShift = 0.0f;            ///< The shift of the secondary specular highlight
       float specularWidth = 1.0f;                     ///< The width of the specular highlight
       float specularStrength = 1.0f;                  ///< The strength of the specular highlight
+      bool invertNormalMapY = false;                  ///< Whether to invert the Y channel of the normal map
 
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;
@@ -47,6 +48,7 @@ namespace hc
       float metallic = 0.0f;            ///< The metallic factor for PBR shading
       float roughness = 1.0f;           ///< The roughness factor for PBR shading
       float ior = 1.5f;                 ///< The index of refraction for PBR shading
+      bool invertNormalMapY = false;    ///< Whether to invert the Y channel of the normal map
 
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;

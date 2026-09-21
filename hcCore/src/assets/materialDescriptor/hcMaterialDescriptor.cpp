@@ -56,6 +56,7 @@ namespace hc
       writer.writeFloat(specularSecondaryShift);
       writer.writeFloat(specularWidth);
       writer.writeFloat(specularStrength);
+      writer.writeBool(invertNormalMapY);
       writer.finishWritingObject();
     }
 
@@ -81,6 +82,7 @@ namespace hc
       specularSecondaryShift = reader.readFloat();
       specularWidth = reader.readFloat();
       specularStrength = reader.readFloat();
+      invertNormalMapY = reader.readBool();
       reader.finishReadingObject();
     }
 
@@ -97,6 +99,7 @@ namespace hc
       specularSecondaryShift = 0.0f;
       specularWidth = 1.0f;
       specularStrength = 1.0f;
+      invertNormalMapY = false;
     }
 
     // ------------ PBR DATA
@@ -113,6 +116,7 @@ namespace hc
       writer.writeFloat(metallic);
       writer.writeFloat(roughness);
       writer.writeFloat(ior);
+      writer.writeBool(invertNormalMapY);
       writer.finishWritingObject();
     }
 
@@ -134,6 +138,7 @@ namespace hc
       metallic = reader.readFloat();
       roughness = reader.readFloat();
       ior = reader.readFloat();
+      invertNormalMapY = reader.readBool();
       reader.finishReadingObject();
     }
 
@@ -146,6 +151,7 @@ namespace hc
       metallic = 0.0f;
       roughness = 1.0f;
       ior = 1.5f;
+      invertNormalMapY = false;
     }
   }
 
