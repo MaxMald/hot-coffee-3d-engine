@@ -151,8 +151,7 @@ namespace hc
       writer.startWritingObject(materialType::Type::PBR, PBR_DATA_VERSION);
       writer.writePath(albedoImagePath);
       writer.writePath(normalImagePath);
-      writer.writePath(metallicImagePath);
-      writer.writePath(roughnessImagePath);
+      writer.writePath(ormImagePath);
       writer.writeColor(baseColor);
       writer.writeFloat(metallic);
       writer.writeFloat(roughness);
@@ -173,8 +172,7 @@ namespace hc
 
       albedoImagePath = reader.readPath();
       normalImagePath = reader.readPath();
-      metallicImagePath = reader.readPath();
-      roughnessImagePath = reader.readPath();
+      ormImagePath = reader.readPath();
       baseColor = reader.readColor();
       metallic = reader.readFloat();
       roughness = reader.readFloat();
@@ -186,8 +184,7 @@ namespace hc
     {
       albedoImagePath.clear();
       normalImagePath.clear();
-      metallicImagePath.clear();
-      roughnessImagePath.clear();
+      ormImagePath.clear();
       baseColor = Color::White();
       metallic = 0.0f;
       roughness = 1.0f;

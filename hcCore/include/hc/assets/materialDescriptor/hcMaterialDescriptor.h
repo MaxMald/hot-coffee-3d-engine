@@ -53,8 +53,7 @@ namespace hc
     {
       Path albedoImagePath;             ///< The path to the albedo texture for PBR material
       Path normalImagePath;             ///< The path to the normal texture for PBR material
-      Path metallicImagePath;           ///< The path to the metallic texture for PBR material
-      Path roughnessImagePath;          ///< The path to the roughness texture for PBR material
+      Path ormImagePath;                ///< The path to the ORM (Occlusion-Roughness-Metallic) texture for PBR material
       Color baseColor = Color::White(); ///< The base color of the PBR material
       float metallic = 0.0f;            ///< The metallic factor for PBR shading
       float roughness = 1.0f;           ///< The roughness factor for PBR shading
@@ -218,6 +217,16 @@ namespace hc
     inline assets::materialDescriptor::HairData* getIfHairData()
     {
       return std::get_if<assets::materialDescriptor::HairData>(&variantData);
+    }
+
+    /**
+     * Retrieves a pointer to the PBRData if the material type is PBR.
+     *
+     * @return A pointer to the PBRData if the material type is PBR; otherwise, nullptr.
+     */
+    inline assets::materialDescriptor::PBRData* getIfPBRData()
+    {
+      return std::get_if<assets::materialDescriptor::PBRData>(&variantData);
     }
 
     /**
