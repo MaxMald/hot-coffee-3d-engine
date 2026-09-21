@@ -141,6 +141,58 @@ namespace hc
       specularWidth = 1.0f;
       specularStrength = 1.0f;
     }
+
+    // ------------ PBR DATA
+
+    static constexpr UInt32 PBR_DATA_VERSION = 1;
+
+    void PBRData::serialize(io::BinaryWriter& writer) const
+    {
+      writer.startWritingObject(materialType::Type::PBR, PBR_DATA_VERSION);
+      writer.writePath(albedoImagePath);
+      writer.writePath(normalImagePath);
+      writer.writePath(metallicImagePath);
+      writer.writePath(roughnessImagePath);
+      writer.writeColor(baseColor);
+      writer.writeFloat(metallic);
+      writer.writeFloat(roughness);
+      writer.writeFloat(ior);
+      writer.finishWritingObject();
+    }
+
+    void PBRData::deserialize(io::BinaryReader& reader)
+    {
+      clear();
+
+      io::ObjectHeader header = reader.startReadingObject();
+      if (!header.match(materialType::Type::PBR, PBR_DATA_VERSION))
+      {
+        reader.finishReadingObject();
+        return;
+      }
+
+      albedoImagePath = reader.readPath();
+      normalImagePath = reader.readPath();
+      metallicImagePath = reader.readPath();
+      roughnessImagePath = reader.readPath();
+      baseColor = reader.readColor();
+      metallic = reader.readFloat();
+      roughness = reader.readFloat();
+      ior = reader.readFloat();
+      reader.finishReadingObject();
+    }
+
+    void PBRData::clear()
+    {
+      albedoImagePath.clear();
+      normalImagePath.clear();
+      metallicImagePath.clear();
+      roughnessImagePath.clear();
+      baseColor = Color::White();
+      metallic = 0.0f;
+      roughness = 1.0f;
+      ior = 1.5f;
+    }
   }
 
   // ------------ MATERIAL DESCRIPTOR
@@ -155,7 +207,8 @@ namespace hc
     doubleSided(false),
     renderMode(materialRenderMode::Type::Opaque),
     type(materialType::Type::Unlit)
-  {}
+  {
+  }
 
   MaterialDescriptor::MaterialDescriptor(const Path& path) :
     Asset(path),
@@ -165,11 +218,12 @@ namespace hc
     doubleSided(false),
     renderMode(materialRenderMode::Type::Opaque),
     type(materialType::Type::Unlit)
-  {}
+  {
+  }
 
   MaterialDescriptor::MaterialDescriptor(
     materialType::Type _type,
-    const Path & _path
+    const Path& _path
   ) :
     Asset(_path),
     variantData(assets::materialDescriptor::UnlitData()),
@@ -196,6 +250,9 @@ namespace hc
     case materialType::Type::Hair:
       variantData = assets::materialDescriptor::HairData();
       break;
+    case materialType::Type::PBR:
+      variantData = assets::materialDescriptor::PBRData();
+      break;
     default:
       throw RuntimeErrorException("AMaterialDescriptor::setType: Unsupported material type.");
     }
@@ -213,7 +270,7 @@ namespace hc
 
     std::visit([&writer](const auto& variant) {
       variant.serialize(writer);
-    }, variantData);
+      }, variantData);
 
     writer.finishWritingObject();
   }
@@ -239,30 +296,37 @@ namespace hc
 
     switch (type)
     {
-      case materialType::Type::Unlit:
-      {
-        assets::materialDescriptor::UnlitData unlit;
-        unlit.deserialize(reader);
-        variantData = unlit;
-        break;
-      }
-      case materialType::Type::BlinnPhong:
-      {
-        assets::materialDescriptor::BlinnPhongData blinnPhong;
-        blinnPhong.deserialize(reader);
-        variantData = blinnPhong;
-        break;
-      }
-      case materialType::Type::Hair:
-      {
-        assets::materialDescriptor::HairData hair;
-        hair.deserialize(reader);
-        variantData = hair;
-        break;
-      }
-      default:
-        reader.finishReadingObject();
-        throw RuntimeErrorException("AMaterialDescriptor::deserialize: Unsupported material type during deserialization.");
+    case materialType::Type::Unlit:
+    {
+      assets::materialDescriptor::UnlitData unlit;
+      unlit.deserialize(reader);
+      variantData = unlit;
+      break;
+    }
+    case materialType::Type::BlinnPhong:
+    {
+      assets::materialDescriptor::BlinnPhongData blinnPhong;
+      blinnPhong.deserialize(reader);
+      variantData = blinnPhong;
+      break;
+    }
+    case materialType::Type::Hair:
+    {
+      assets::materialDescriptor::HairData hair;
+      hair.deserialize(reader);
+      variantData = hair;
+      break;
+    }
+    case materialType::Type::PBR:
+    {
+      assets::materialDescriptor::PBRData pbr;
+      pbr.deserialize(reader);
+      variantData = pbr;
+      break;
+    }
+    default:
+      reader.finishReadingObject();
+      throw RuntimeErrorException("AMaterialDescriptor::deserialize: Unsupported material type during deserialization.");
     }
 
     reader.finishReadingObject();
@@ -277,6 +341,6 @@ namespace hc
 
     std::visit([](auto& variant) {
       variant.clear();
-    }, variantData);
+      }, variantData);
   }
 }

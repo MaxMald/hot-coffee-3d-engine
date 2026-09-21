@@ -324,6 +324,8 @@ namespace hc
         return "BlinnPhong";
       case Hair:
         return "Hair";
+      case PBR:
+        return "PBR";
       default:
         throw RuntimeErrorException("Unknown shading type.");
       }
@@ -337,6 +339,8 @@ namespace hc
         return BlinnPhong;
       else if (str == "Hair")
         return Hair;
+      else if (str == "PBR")
+        return PBR;
       else
         throw RuntimeErrorException("Unknown shading type string: " + str);
     }

@@ -175,6 +175,7 @@ namespace hc
       Unlit = 0,
       BlinnPhong = 1,
       Hair = 2,
+      PBR = 3,
       Unknown = 255
     };
 

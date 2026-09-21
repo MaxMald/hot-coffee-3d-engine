@@ -48,12 +48,29 @@ namespace hc
       void deserialize(io::BinaryReader& reader) override;
       void clear();
     };
+
+    struct PBRData : public hc::io::ISerializable
+    {
+      Path albedoImagePath;             ///< The path to the albedo texture for PBR material
+      Path normalImagePath;             ///< The path to the normal texture for PBR material
+      Path metallicImagePath;           ///< The path to the metallic texture for PBR material
+      Path roughnessImagePath;          ///< The path to the roughness texture for PBR material
+      Color baseColor = Color::White(); ///< The base color of the PBR material
+      float metallic = 0.0f;            ///< The metallic factor for PBR shading
+      float roughness = 1.0f;           ///< The roughness factor for PBR shading
+      float ior = 1.5f;                 ///< The index of refraction for PBR shading
+
+      void serialize(io::BinaryWriter& writer) const override;
+      void deserialize(io::BinaryReader& reader) override;
+      void clear();
+    };
   }
 
   using MaterialDescriptorVariant = std::variant<
     assets::materialDescriptor::UnlitData,
     assets::materialDescriptor::BlinnPhongData,
-    assets::materialDescriptor::HairData
+    assets::materialDescriptor::HairData,
+    assets::materialDescriptor::PBRData
   >;
 
   /**
