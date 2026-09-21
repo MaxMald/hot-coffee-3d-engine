@@ -26,4 +26,3 @@ namespace hc::editor
     void onDrawMeshMaterial(HairMaterial* material, Int32 slotIndex) override;
   };
 }
-

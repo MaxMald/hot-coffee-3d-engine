@@ -55,7 +55,7 @@ namespace hc::editor
 
     SharedPtr<MaterialDescriptor> createMaterialDescriptor(const SharedPtr<IMaterial>& material);
     void copyUnlitDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
-    void copyBlinnPhongDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
+    void copyPBRDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
     void copyHairDataFromMaterial(const SharedPtr<IMaterial>& material, SharedPtr<MaterialDescriptor> descriptor);
   };
 }

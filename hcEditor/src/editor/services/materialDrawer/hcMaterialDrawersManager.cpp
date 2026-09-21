@@ -5,8 +5,8 @@
 #include "hc/editor/hcEditorCommons.h"
 #include "hc/editor/services/materialDrawer/hcIMaterialDrawer.h"
 #include "hc/editor/services/materialDrawer/hcUnlitMaterialDrawer.h"
-#include "hc/editor/services/materialDrawer/hcBlinnPhongMaterialDrawer.h"
 #include "hc/editor/services/materialDrawer/hcHairMaterialDrawer.h"
+#include "hc/editor/services/materialDrawer/hcPBRMaterialDrawer.h"
 
 namespace hc::editor
 {
@@ -17,7 +17,7 @@ namespace hc::editor
   void MaterialDrawersManager::prepare()
   {
     addDrawer(MakeUnique<UnlitMaterialDrawer>());
-    addDrawer(MakeUnique<BlinnPhongMaterialDrawer>());
+    addDrawer(MakeUnique<PBRMaterialDrawer>());
     addDrawer(MakeUnique<HairMaterialDrawer>());
   }
 

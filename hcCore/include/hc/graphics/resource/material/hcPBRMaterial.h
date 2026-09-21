@@ -124,25 +124,25 @@ namespace hc
     }
 
     /**
-     * @brief Gets the occlusion-metallic-roughness (OMR) texture associated with the PBR
+     * @brief Gets the occlusion-roughness-metallic (ORM) texture associated with the PBR
      * material.
      *
-     * @return Shared pointer to the OMR texture resource.
+     * @return Shared pointer to the ORM texture resource.
      */
-    inline const SharedPtr<ITexture>& getOMRTexture() const
+    inline const SharedPtr<ITexture>& getORMTexture() const
     {
-      return m_omrTexture;
+      return m_ormTexture;
     }
 
     /**
-     * @brief Sets the occlusion-metallic-roughness (OMR) texture associated with the PBR
+     * @brief Sets the occlusion-roughness-metallic (ORM) texture associated with the PBR
      * material.
      *
-     * @param omrTexture Shared pointer to the OMR texture resource.
+     * @param ormTexture Shared pointer to the ORM texture resource.
      */
-    inline void setOMRTexture(const SharedPtr<ITexture>& omrTexture)
+    inline void setORMTexture(const SharedPtr<ITexture>& ormTexture)
     {
-      m_omrTexture = omrTexture;
+      m_ormTexture = ormTexture;
     }
 
     /**
@@ -236,7 +236,7 @@ namespace hc
     float m_ior;
     SharedPtr<ITexture> m_albedoTexture;
     SharedPtr<ITexture> m_normalTexture;
-    SharedPtr<ITexture> m_omrTexture;
+    SharedPtr<ITexture> m_ormTexture;
     SharedPtr<IShaderProgram> m_deferredGeometryShaderProgram;
     SharedPtr<IShaderProgram> m_forwardShaderProgram;
 

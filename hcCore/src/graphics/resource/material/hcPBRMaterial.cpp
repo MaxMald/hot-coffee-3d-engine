@@ -18,7 +18,7 @@ namespace hc
     m_ior(1.5f),
     m_albedoTexture(nullptr),
     m_normalTexture(nullptr),
-    m_omrTexture(nullptr),
+    m_ormTexture(nullptr),
     m_deferredGeometryShaderProgram(nullptr),
     m_forwardShaderProgram(nullptr)
   {
@@ -33,7 +33,7 @@ namespace hc
     m_sourcePath.clear();
     m_albedoTexture.reset();
     m_normalTexture.reset();
-    m_omrTexture.reset();
+    m_ormTexture.reset();
     m_deferredGeometryShaderProgram.reset();
     m_forwardShaderProgram.reset();
   }
@@ -116,7 +116,7 @@ namespace hc
     setIOR(pbrData->ior);
     m_albedoTexture = albedoTexture;
     m_normalTexture = normalTexture;
-    m_omrTexture = omrTexture;
+    m_ormTexture = omrTexture;
     m_deferredGeometryShaderProgram = deferredGeometryShaderProgram;
     m_forwardShaderProgram = forwardShaderProgram;
   }
@@ -133,7 +133,7 @@ namespace hc
   {
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
-    coreAssertions::AssertTextureIsValid(m_omrTexture, "OMR");
+    coreAssertions::AssertTextureIsValid(m_ormTexture, "OMR");
     coreAssertions::AssertShaderProgramIsValid(
       m_deferredGeometryShaderProgram,
       "PBR deferred geometry shader program"
@@ -143,7 +143,7 @@ namespace hc
 
     m_albedoTexture->bind(0);
     m_normalTexture->bind(1);
-    m_omrTexture->bind(2);
+    m_ormTexture->bind(2);
 
     dataBlockStructure::MaterialPBR materialData;
     materialData.baseColor = m_baseColor;
@@ -162,7 +162,7 @@ namespace hc
   {
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
-    coreAssertions::AssertTextureIsValid(m_omrTexture, "OMR");
+    coreAssertions::AssertTextureIsValid(m_ormTexture, "OMR");
     coreAssertions::AssertShaderProgramIsValid(
       m_forwardShaderProgram,
       "PBR forward shader program"
@@ -172,7 +172,7 @@ namespace hc
 
     m_albedoTexture->bind(0);
     m_normalTexture->bind(1);
-    m_omrTexture->bind(2);
+    m_ormTexture->bind(2);
 
     dataBlockStructure::MaterialPBR materialData;
     materialData.baseColor = m_baseColor;

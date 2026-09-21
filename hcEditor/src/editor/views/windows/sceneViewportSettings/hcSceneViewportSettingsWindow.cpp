@@ -9,16 +9,15 @@ namespace hc::editor
   static const char* RENDER_TARGET_NAMES[] = {
     "Final Color",
     "GBuffer Position + Depth",
-    "GBuffer Normal + Roughness",
+    "GBuffer Normal",
     "GBuffer Albedo + Alpha",
-    "GBuffer Material Parameters",
-    "GBuffer Specular Color + Shininess"
+    "GBuffer ORM + IOR"
   };
 
   SceneViewportSettingsWindow::SceneViewportSettingsWindow(
     SceneViewportWindow& viewportWindow,
     IGraphicsManager& graphicsManager
-  ) : AWindowView("Scene Viewport Settings", false, Vector2f(300.0f, 200.0f)),
+  ) : AWindowView("Scene Viewport Settings", true, Vector2f(300.0f, 200.0f)),
     m_viewportWindow(viewportWindow),
     m_graphicsManager(graphicsManager)
   {}
