@@ -269,9 +269,9 @@ namespace hc
     {
       glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
       glClearBufferfv(GL_COLOR, 0, IGBuffer::CLEAR_COLOR_POSITION_AND_DEPTH);
-      glClearBufferfv(GL_COLOR, 1, IGBuffer::CLEAR_COLOR_NORMAL_AND_ROUGHNESS);
+      glClearBufferfv(GL_COLOR, 1, IGBuffer::CLEAR_COLOR_NORMAL);
       glClearBufferfv(GL_COLOR, 2, IGBuffer::CLEAR_COLOR_ALBEDO_AND_ALPHA);
-      glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_MATERIAL_PARAMETERS);
+      glClearBufferfv(GL_COLOR, 3, IGBuffer::CLEAR_COLOR_OMRIOR);
       glClearBufferfv(GL_COLOR, 4, IGBuffer::CLEAR_COLOR_SPECULAR_COLOR_AND_SHININESS);
       glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
