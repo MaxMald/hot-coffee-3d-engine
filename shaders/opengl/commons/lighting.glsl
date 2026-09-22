@@ -120,7 +120,7 @@ vec4 evaluatePBR(
   kD *= 1.0 - metallic; // Metals do not have a diffuse component, so we multiply kD by (1 - metallic)
 
   vec4 diffuse = kD * baseColor * lightColor;
-  return (diffuse + specular);
+  return (diffuse + specular) * NdotL;
 }
 
 /**
