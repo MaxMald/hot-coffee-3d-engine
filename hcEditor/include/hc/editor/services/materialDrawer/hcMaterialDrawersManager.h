@@ -47,7 +47,6 @@ namespace hc::editor
      * @param slotIndex The index of the material slot being drawn.
      */
     void drawMeshMaterial(
-      ProjectFileDialogView& fileDialogView,
       IMaterial* material,
       SizeT slotIndex
     );

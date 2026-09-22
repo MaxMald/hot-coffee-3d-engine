@@ -68,8 +68,7 @@ namespace hc::editor
         [this](const Path& selectedPath)
         {
           updateSkyboxCubeMap(selectedPath);
-        },
-        false
+        }
       );
     }
 

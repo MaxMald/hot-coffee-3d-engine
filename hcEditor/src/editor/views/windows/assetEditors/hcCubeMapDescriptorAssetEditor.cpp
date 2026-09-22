@@ -141,6 +141,7 @@ namespace hc::editor
             setOpen(false);
           }
         },
+        []() {},
         true
       );
     }
@@ -153,8 +154,7 @@ namespace hc::editor
       m_fileDialog.openFileSelector(
         "Load Cube Map Descriptor",
         m_cubeMapDescriptorExtensions,
-        [this](const Path& path) { load(path); },
-        false
+        [this](const Path& path) { load(path); }
       );
     }
 

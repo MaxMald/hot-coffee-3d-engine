@@ -40,7 +40,6 @@ namespace hc::editor
   }
 
   void MaterialDrawersManager::drawMeshMaterial(
-    ProjectFileDialogView& fileDialogView,
     IMaterial* material,
     SizeT slotIndex
   )
