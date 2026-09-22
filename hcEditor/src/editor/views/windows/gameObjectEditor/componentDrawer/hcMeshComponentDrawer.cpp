@@ -78,7 +78,11 @@ namespace hc::editor
         String name = material->getName();
         if (ImGui::TreeNode(name.c_str()))
         {
-          m_materialDrawerManager.drawMeshMaterial(material.get(), i);
+          m_materialDrawerManager.drawMeshMaterial(
+            material.get(),
+            i,
+            m_projectFileSelector
+          );
 
           if (ImGui::Button("Override Material"))
             onOverrideMaterialClicked(mesh, material, i);

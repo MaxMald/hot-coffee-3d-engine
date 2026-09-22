@@ -24,7 +24,18 @@ namespace hc::editor
     }
 
   protected:
+    /**
+     * @copydoc IMaterialDrawer::drawMaterial
+     */
     void onDraw(UnlitMaterial* material) override;
-    void onDrawMeshMaterial(UnlitMaterial* material, Int32 slotIndex) override;
+
+    /**
+     * @copydoc IMaterialDrawer::drawMeshMaterial
+     */
+    void onDrawMeshMaterial(
+      UnlitMaterial* material,
+      Int32 slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) override;
   };
 }

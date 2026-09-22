@@ -21,26 +21,18 @@ namespace hc::editor
     virtual ~ABaseMaterialDrawer() = default;
 
     /**
-     * @brief Draws the material properties in the editor UI.
-     *
-     * Performs a type check and delegates the drawing logic to onDraw if the
-     * material is of the expected type. This method cannot be overridden
-     * further.
-     *
-     * @param material Pointer to the material to be drawn.
+     * @copydoc IMaterialDrawer::drawMaterial
      */
     void drawMaterial(IMaterial* material) final;
 
     /**
-     * @brief Draws the material properties for a specific material slot in the editor UI.
-     *
-     * Performs a type check and delegates the drawing logic to onDrawMeshMaterial if the
-     * material is of the expected type. This method cannot be overridden further.
-     *
-     * @param material Pointer to the material to be drawn.
-     * @param slotIndex The index of the material slot being drawn.
+     * @copydoc IMaterialDrawer::drawMeshMaterial
      */
-    void drawMeshMaterial(IMaterial* material, Int32 slotIndex) final;
+    void drawMeshMaterial(
+      IMaterial* material,
+      Int32 slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) final;
 
   protected:
     ABaseMaterialDrawer() = default;
@@ -58,13 +50,19 @@ namespace hc::editor
     /**
      * @brief Draws the material properties for a specific material slot in the editor UI.
      *
-     * This pure virtual method must be implemented by derived classes to handle
-     * the actual drawing logic for materials of type T in a specific material slot.
+     * This pure virtual method must be implemented by derived classes to handle the
+     * actual drawing logic for materials of type T in a specific material slot.
      *
      * @param material Pointer to the material of type T.
      * @param slotIndex The index of the material slot being drawn.
+     * @param projectFileDialogView Reference to the ProjectFileDialogView for file
+     * selection.
      */
-    virtual void onDrawMeshMaterial(T* material, INT32 slotIndex) = 0;
+    virtual void onDrawMeshMaterial(
+      T* material,
+      Int32 slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) = 0;
   };
 
   template<typename T>
@@ -88,7 +86,8 @@ namespace hc::editor
   template<typename T>
   inline void ABaseMaterialDrawer<T>::drawMeshMaterial(
     IMaterial* material,
-    Int32 slotIndex
+    Int32 slotIndex,
+    ProjectFileDialogView& projectFileDialogView
   )
   {
     if (!material)
@@ -103,6 +102,6 @@ namespace hc::editor
       return;
     }
 
-    onDrawMeshMaterial(typedMaterial, slotIndex);
+    onDrawMeshMaterial(typedMaterial, slotIndex, projectFileDialogView);
   }
 }

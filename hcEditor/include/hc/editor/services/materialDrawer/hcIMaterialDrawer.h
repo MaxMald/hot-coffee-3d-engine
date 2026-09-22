@@ -4,6 +4,8 @@
 
 namespace hc::editor
 {
+  class ProjectFileDialogView;
+
   /**
    * @brief Interface for material drawer implementations in the editor.
    *
@@ -35,8 +37,14 @@ namespace hc::editor
      *
      * @param material Pointer to the material to be drawn.
      * @param materialSlotIndex The index of the material slot being drawn.
+     * @param projectFileDialogView Reference to the ProjectFileDialogView for file
+     * selection.
      */
-    virtual void drawMeshMaterial(IMaterial* material, Int32 materialSlotIndex) = 0;
+    virtual void drawMeshMaterial(
+      IMaterial* material,
+      Int32 materialSlotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) = 0;
 
   protected:
     IMaterialDrawer() = default;

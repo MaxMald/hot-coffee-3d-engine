@@ -29,26 +29,32 @@ namespace hc::editor
     virtual void destroy() override;
 
     /**
-     * @brief Draws the material using the appropriate drawer for its shading
-     * type. If no drawer is registered for the material's shading type, a
-     * "not implemented" drawer is used.
-     * 
+     * @brief Draws the material using the appropriate drawer for its shading type.
+     *
+     * @note If no drawer is registered for the material's shading type, a "not
+     * implemented" drawer is used.
+     *
      * @param material Pointer to the material to be drawn.
      */
     void drawMaterial(IMaterial* material);
 
     /**
-     * @brief Draws the material for a specific material slot using the appropriate
-     * drawer for its shading type. If no drawer is registered for the material's
-     * shading type, a "not implemented" drawer is used.
+     * @brief Draws the material for a specific material slot using the appropriate drawer
+     * for its shading type. This drawer allows the user to modify material parameters and
+     * load different material textures.
      *
-     * @param fileDialogView Reference to the ProjectFileDialogView for file selection.
+     * @note If no drawer is registered for the material's shading type, a "not
+     * implemented" drawer is used.
+     *
      * @param material Pointer to the material to be drawn.
      * @param slotIndex The index of the material slot being drawn.
+     * @param projectFileDialogView Reference to the ProjectFileDialogView for file
+     * selection.
      */
     void drawMeshMaterial(
       IMaterial* material,
-      SizeT slotIndex
+      SizeT slotIndex,
+      ProjectFileDialogView& projectFileDialogView
     );
 
     /**

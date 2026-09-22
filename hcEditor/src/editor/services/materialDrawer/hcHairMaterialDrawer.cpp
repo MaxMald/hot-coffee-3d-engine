@@ -1,7 +1,10 @@
 #include "hc/editor/services/materialDrawer/hcHairMaterialDrawer.h"
+
 #include <imgui.h>
+
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "hc/editor/hcEditorCommons.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {
@@ -15,7 +18,8 @@ namespace hc::editor
 
   void HairMaterialDrawer::onDrawMeshMaterial(
     HairMaterial* material,
-    Int32 slotIndex
+    Int32 slotIndex,
+    ProjectFileDialogView& projectFileDialogView
   )
   {
     (void)slotIndex; // unused parameter

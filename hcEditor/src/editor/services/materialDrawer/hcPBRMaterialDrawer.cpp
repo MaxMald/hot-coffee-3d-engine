@@ -1,8 +1,10 @@
 #include "hc/editor/services/materialDrawer/hcPBRMaterialDrawer.h"
 
 #include <imgui.h>
+
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "hc/editor/hcEditorCommons.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {
@@ -16,7 +18,8 @@ namespace hc::editor
 
   void PBRMaterialDrawer::onDrawMeshMaterial(
     PBRMaterial* material,
-    Int32 slotIndex
+    Int32 slotIndex,
+    ProjectFileDialogView& projectFileDialogView
   )
   {
     (void)slotIndex; // unused parameter
