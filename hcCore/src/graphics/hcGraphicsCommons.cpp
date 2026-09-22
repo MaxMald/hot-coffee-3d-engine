@@ -379,4 +379,37 @@ namespace hc
         );
     }
   }
+
+  namespace textureType
+  {
+    String ToString(Type type)
+    {
+      switch (type)
+      {
+      case None:
+        return "None";
+      case BaseColor:
+        return "BaseColor";
+      case Normal:
+        return "Normal";
+      case ORM:
+        return "ORM";
+      default:
+        throw RuntimeErrorException("Unknown texture type.");
+      }
+    }
+    Type FromString(const String& str)
+    {
+      if (str == "None")
+        return None;
+      if (str == "BaseColor")
+        return BaseColor;
+      else if (str == "Normal")
+        return Normal;
+      else if (str == "ORM")
+        return ORM;
+      else
+        throw RuntimeErrorException("Unknown texture type string: " + str);
+    }
+  }
 }

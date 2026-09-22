@@ -33,6 +33,20 @@ namespace hc
     return materialType::Unlit;
   }
 
+  void UnlitMaterial::setTexture(textureType::Type type, const SharedPtr<ITexture>& texture)
+  {
+    if (type == textureType::BaseColor)
+    {
+      m_mainTexture = texture;
+    }
+    else
+    {
+      throw InvalidArgumentException(
+        "UnlitMaterial::setTexture - UnlitMaterial only supports BaseColor texture type."
+      );
+    }
+  }
+
   void UnlitMaterial::bind(
     renderPassType::Type renderPass,
     IDataBlockManager& dataBlockManager

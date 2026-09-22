@@ -8,6 +8,7 @@ namespace hc
 {
   class MaterialDescriptor;
   class IDataBlockManager;
+  class ITexture;
 
   /**
    * @brief Interface for material objects in the engine.
@@ -93,6 +94,14 @@ namespace hc
      * @param doubleSided True to make the material double-sided, false for single-sided.
      */
     virtual void setDoubleSided(bool doubleSided) = 0;
+
+    /**
+     * @brief Gets the texture associated with the specified texture type.
+     *
+     * @param type The type of texture to retrieve.
+     * @return Shared pointer to the texture, or nullptr if not set.
+     */
+    virtual void setTexture(textureType::Type type, const SharedPtr<ITexture>& texture) = 0;
 
     /**
      * @brief Binds the material for rendering.

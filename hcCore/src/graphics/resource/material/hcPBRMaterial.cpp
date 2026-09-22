@@ -43,6 +43,29 @@ namespace hc
     return materialType::Type::PBR;
   }
 
+  void PBRMaterial::setTexture(textureType::Type type, const SharedPtr<ITexture>& texture)
+  {
+    switch (type)
+    {
+    case textureType::BaseColor:
+      m_albedoTexture = texture;
+      break;
+    case textureType::Normal:
+      m_normalTexture = texture;
+      break;
+    case textureType::ORM:
+      m_ormTexture = texture;
+      break;
+    default:
+      throw InvalidArgumentException(
+        String::Format(
+          "PBRMaterial::setTexture - Unsupported texture type: %s",
+          textureType::ToString(type).c_str()
+        )
+      );
+    }
+  }
+
   void PBRMaterial::bind(
     renderPassType::Type renderPass,
     IDataBlockManager& dataBlockManager

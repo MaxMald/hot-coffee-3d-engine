@@ -31,6 +31,11 @@ namespace hc
     materialType::Type getMaterialType() const override;
 
     /**
+     * @copydoc IMaterial::setTexture
+     */
+    void setTexture(textureType::Type type, const SharedPtr<ITexture>& texture) override;
+
+    /**
      * @copydoc IMaterial::bind
      */
     void bind(
