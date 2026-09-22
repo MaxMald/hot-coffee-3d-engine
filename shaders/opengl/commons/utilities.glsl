@@ -1,4 +1,6 @@
 #define MAXIMUM_IOR 5
+#define PI 3.14159265359
+#define EPSILON 0.0001
 
 /**
 * @brief Clamps a value between 0.0 and 1.0.

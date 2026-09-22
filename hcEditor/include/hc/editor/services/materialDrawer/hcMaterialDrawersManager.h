@@ -6,6 +6,8 @@
 
 namespace hc::editor
 {
+  class ProjectFileDialogView;
+
   /**
    * @brief Manages material drawer instances for different shading types in the
    * editor.
@@ -40,10 +42,15 @@ namespace hc::editor
      * drawer for its shading type. If no drawer is registered for the material's
      * shading type, a "not implemented" drawer is used.
      *
+     * @param fileDialogView Reference to the ProjectFileDialogView for file selection.
      * @param material Pointer to the material to be drawn.
      * @param slotIndex The index of the material slot being drawn.
      */
-    void drawMeshMaterial(IMaterial* material, SizeT slotIndex);
+    void drawMeshMaterial(
+      ProjectFileDialogView& fileDialogView,
+      IMaterial* material,
+      SizeT slotIndex
+    );
 
     /**
      * @brief Registers a new material drawer for a specific shading type.

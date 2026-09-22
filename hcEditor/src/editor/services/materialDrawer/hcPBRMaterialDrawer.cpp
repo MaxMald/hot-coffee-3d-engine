@@ -37,26 +37,73 @@ namespace hc::editor
     if (ImGui::SliderFloat("Index of Refraction", &ior, Math::Epsilon, assets::materialDescriptor::MAXIMUM_IOR))
       material->setIOR(ior);
 
-    imguiUtilities::DrawTexture(
-      material->getAlbedoTexture().get(),
-      style::COMPONENT_MAT_TEXTURE_SIZE,
-      style::COMPONENT_MAT_TEXTURE_SIZE
-    );
+    ImGui::Text("Materials");
+    ImGui::Separator();
 
-    ImGui::SameLine();
+    if (ImGui::BeginTable("Textures", 3, ImGuiTableFlags_SizingFixedFit))
+    {
+      ImGui::TableNextRow(); // Labels
 
-    imguiUtilities::DrawTexture(
-      material->getNormalTexture().get(),
-      style::COMPONENT_MAT_TEXTURE_SIZE,
-      style::COMPONENT_MAT_TEXTURE_SIZE
-    );
+      ImGui::TableSetColumnIndex(0);
+      ImGui::Text("Albedo");
 
-    ImGui::SameLine();
+      ImGui::TableSetColumnIndex(1);
+      ImGui::Text("Normal");
 
-    imguiUtilities::DrawTexture(
-      material->getORMTexture().get(),
-      style::COMPONENT_MAT_TEXTURE_SIZE,
-      style::COMPONENT_MAT_TEXTURE_SIZE
-    );
+      ImGui::TableSetColumnIndex(2);
+      ImGui::Text("ORM");
+
+      ImGui::TableNextRow(); // Buttons
+
+      ImGui::TableSetColumnIndex(0);
+      ImGui::PushID("AlbedoLoadButton");
+      if (ImGui::Button("Load"))
+      {
+        // Handle albedo texture selection
+      }
+      ImGui::PopID();
+
+      ImGui::TableSetColumnIndex(1);
+      ImGui::PushID("NormalLoadButton");
+      if (ImGui::Button("Load"))
+      {
+        // Handle normal texture selection
+      }
+      ImGui::PopID();
+
+      ImGui::TableSetColumnIndex(2);
+      ImGui::PushID("ORMLoadButton");
+      if (ImGui::Button("Load"))
+      {
+        // Handle ORM texture selection
+      }
+      ImGui::PopID();
+
+      // Row 2: Textures
+      ImGui::TableNextRow();
+      ImGui::TableSetColumnIndex(0);
+
+      imguiUtilities::DrawTexture(
+        material->getAlbedoTexture().get(),
+        style::COMPONENT_MAT_TEXTURE_SIZE,
+        style::COMPONENT_MAT_TEXTURE_SIZE
+      );
+
+      ImGui::TableSetColumnIndex(1);
+      imguiUtilities::DrawTexture(
+        material->getNormalTexture().get(),
+        style::COMPONENT_MAT_TEXTURE_SIZE,
+        style::COMPONENT_MAT_TEXTURE_SIZE
+      );
+
+      ImGui::TableSetColumnIndex(2);
+      imguiUtilities::DrawTexture(
+        material->getORMTexture().get(),
+        style::COMPONENT_MAT_TEXTURE_SIZE,
+        style::COMPONENT_MAT_TEXTURE_SIZE
+      );
+
+      ImGui::EndTable();
+    }
   }
 }

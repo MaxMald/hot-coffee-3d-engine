@@ -107,7 +107,7 @@ namespace hc
       throw RuntimeErrorException("Failed to get UnlitData from material descriptor.");
 
     
-    unlitData->color = GetVertexColorDiffuseFromMaterial(material);
+    unlitData->color = GetDiffuseColorFromMaterial(material);
     unlitData->textureImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
     return desc;
   }
@@ -125,7 +125,7 @@ namespace hc
     if (!hairData)
       throw RuntimeErrorException("Failed to get HairData from material descriptor.");
 
-    hairData->color = GetVertexColorDiffuseFromMaterial(material);
+    hairData->color = GetDiffuseColorFromMaterial(material);
     hairData->shininess = GetShininessFromMaterial(material);
     hairData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
     hairData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
@@ -164,10 +164,11 @@ namespace hc
     if (material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness) == aiReturn_SUCCESS)
       pbrData->roughness = roughness;
 
+    pbrData->baseColor = GetDiffuseColorFromMaterial(material);
     return desc;
   }
 
-  Color AssimpMaterialDescriptorParser::GetVertexColorDiffuseFromMaterial(
+  Color AssimpMaterialDescriptorParser::GetDiffuseColorFromMaterial(
     const aiMaterial* material
   )
   {

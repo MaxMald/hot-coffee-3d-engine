@@ -39,7 +39,11 @@ namespace hc::editor
       m_notImplementedDrawer.drawMaterial(material);
   }
 
-  void MaterialDrawersManager::drawMeshMaterial(IMaterial* material, SizeT slotIndex)
+  void MaterialDrawersManager::drawMeshMaterial(
+    ProjectFileDialogView& fileDialogView,
+    IMaterial* material,
+    SizeT slotIndex
+  )
   {
     if (!material)
       return;

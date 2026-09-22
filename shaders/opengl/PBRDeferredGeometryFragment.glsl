@@ -35,7 +35,7 @@ void main()
   vec3 orm = texture(uORM, vTexCoord).xyz;
 
   OutPositionAndDepth = vec4(vWorldPos, gl_FragCoord.z);
-  OutNormal = vec4(normalWS, uIOR / MAXIMUM_IOR);
-  OutAlbedoAlpha = vec4(baseColor.rgb, baseColor.a);
-  OutORMIOR = vec4(orm, uIOR);
+  OutNormal = vec4(normalWS, 1.0);
+  OutAlbedoAlpha = baseColor;
+  OutORMIOR = vec4(orm, uIOR / MAXIMUM_IOR);
 }

@@ -100,7 +100,7 @@ namespace hc
     );
     coreAssertions::AssertTextureIsValid(albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(normalTexture, "Normal");
-    coreAssertions::AssertTextureIsValid(omrTexture, "OMR");
+    coreAssertions::AssertTextureIsValid(omrTexture, "ORM");
 
     const assets::materialDescriptor::PBRData* pbrData = descriptor.getIfPBRData();
     if (pbrData == nullptr)
@@ -134,7 +134,7 @@ namespace hc
   {
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
-    coreAssertions::AssertTextureIsValid(m_ormTexture, "OMR");
+    coreAssertions::AssertTextureIsValid(m_ormTexture, "ORM");
     coreAssertions::AssertShaderProgramIsValid(
       m_deferredGeometryShaderProgram,
       "PBR deferred geometry shader program"
@@ -157,13 +157,14 @@ namespace hc
       materialData.alphaCutoff = 0.0f;
 
     dataBlockManager.upload(dataBlockType::Type::MaterialPBR, &materialData);
+    dataBlockManager.bind(dataBlockType::Type::MaterialPBR);
   }
 
   void PBRMaterial::bindForForwardPass(IDataBlockManager& dataBlockManager)
   {
     coreAssertions::AssertTextureIsValid(m_albedoTexture, "Albedo");
     coreAssertions::AssertTextureIsValid(m_normalTexture, "Normal");
-    coreAssertions::AssertTextureIsValid(m_ormTexture, "OMR");
+    coreAssertions::AssertTextureIsValid(m_ormTexture, "ORM");
     coreAssertions::AssertShaderProgramIsValid(
       m_forwardShaderProgram,
       "PBR forward shader program"
@@ -186,5 +187,6 @@ namespace hc
       materialData.alphaCutoff = 0.0f;
 
     dataBlockManager.upload(dataBlockType::Type::MaterialPBR, &materialData);
+    dataBlockManager.bind(dataBlockType::Type::MaterialPBR);
   }
 }

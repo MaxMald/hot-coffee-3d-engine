@@ -29,7 +29,7 @@ void main()
   vec4 baseColor = vec4(albedoSample.rgb, 1.0);
   vec4 ambientColor = vec4(baseColor.rgb * 0.1, 1.0); // Ambient light contribution
 
-  vec3 normal = texture(uNormal, vTexCoord).xyz;
+  vec3 normal = normalize(texture(uNormal, vTexCoord).xyz);
   vec3 viewDir = normalize(cameraPosition - worldPos);
   
   vec4 ormiorSample = texture(uORMIOR, vTexCoord);
@@ -38,16 +38,15 @@ void main()
   float metallic = ormiorSample.z;
   float ior = ormiorSample.w * MAXIMUM_IOR;
   
-  /*
   vec4 lightedColor = calculateAllLightContribution(
     albedoSample,
     normal,
     viewDir,
     worldPos,
-    specularColor,
-    shininess
-  );*/
-  vec4 lightedColor = vec4(0.0); // TODO lighting for deferred shading
+    roughness,
+    metallic,
+    ior
+  );
 
   FragColor = vec4((ambientColor + lightedColor).rgb, alpha);
 }

@@ -5,12 +5,11 @@
 
 namespace hc
 {
-  inline static constexpr GLenum GBufferColorAttachments[5] = {
+  inline static constexpr GLenum GBufferColorAttachments[4] = {
     GL_COLOR_ATTACHMENT0,
     GL_COLOR_ATTACHMENT1,
     GL_COLOR_ATTACHMENT2,
-    GL_COLOR_ATTACHMENT3,
-    GL_COLOR_ATTACHMENT4
+    GL_COLOR_ATTACHMENT3
   };
 
   OpenGlGBuffer::OpenGlGBuffer() :

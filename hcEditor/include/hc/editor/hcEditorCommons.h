@@ -17,6 +17,6 @@ namespace hc::editor
 
   namespace style
   {
-    static float COMPONENT_MAT_TEXTURE_SIZE = 64.0f;
+    static float COMPONENT_MAT_TEXTURE_SIZE = 80.0f;
   }
 }
