@@ -54,17 +54,18 @@ namespace hc
       bindForDeferredGeometryPass(dataBlockManager);
       return;
     }
-    else if (renderPass == renderPassType::Type::Forward)
+    else if (renderPass == renderPassType::Type::Forward || renderPass == renderPassType::Type::ForwardTransparent)
     {
       bindForForwardPass(dataBlockManager);
       return;
     }
     else
     {
+      String strRenderPass = renderPassType::ToString(renderPass);
       throw InvalidArgumentException(
         String::Format(
-          "Unsupported render pass type for PBR material: {}",
-          static_cast<Int32>(renderPass)
+          "Unsupported render pass type for PBR material: %s",
+          strRenderPass.c_str()
         )
       );
     }

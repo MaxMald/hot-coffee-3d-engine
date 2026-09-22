@@ -2,7 +2,7 @@
 
 #include "commons/camera.glsl"
 #include "commons/lighting.glsl"
-#include "commons/materialBlinnPhong.glsl"
+#include "commons/materialPBRBlock.glsl"
 
 layout(location = 0) in vec2 vTexCoord;
 layout(location = 1) in vec3 vWorldPos;
@@ -31,7 +31,7 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
   vec3 viewDir = normalize(cameraPosition - vWorldPos);  
 
-  vec4 albedoColor = uColor * vColor * albedoTex;
+  vec4 albedoColor = uBaseColor * vColor * albedoTex;
   vec4 ambientColor = albedoColor * 0.1; // Ambient light contribution;
   
   // TODO Lighting

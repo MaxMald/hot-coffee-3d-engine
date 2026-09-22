@@ -24,7 +24,7 @@ void main()
   if (isAlphaLessThanCutoff(albedoTex, uAlphaCutoff))
     discard;
 
-  vec4 baseColor = uColor * vColor * albedoTex;
+  vec4 baseColor = uBaseColor * vColor * albedoTex;
 
   vec3 N = normalize(vNormal);
   vec3 T = normalize(vTangent - dot(vTangent, N) * N);
