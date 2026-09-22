@@ -10,15 +10,16 @@
 
 namespace hc::editor
 {
-  MaterialDrawersManager::MaterialDrawersManager() :
+  MaterialDrawersManager::MaterialDrawersManager(ITextureManager& textureManager) :
+    m_textureManager(textureManager),
     m_notImplementedDrawer()
   {}
 
   void MaterialDrawersManager::prepare()
   {
-    addDrawer(MakeUnique<UnlitMaterialDrawer>());
-    addDrawer(MakeUnique<PBRMaterialDrawer>());
-    addDrawer(MakeUnique<HairMaterialDrawer>());
+    addDrawer(MakeUnique<UnlitMaterialDrawer>(m_textureManager));
+    addDrawer(MakeUnique<PBRMaterialDrawer>(m_textureManager));
+    addDrawer(MakeUnique<HairMaterialDrawer>(m_textureManager));
   }
 
   void MaterialDrawersManager::destroy()

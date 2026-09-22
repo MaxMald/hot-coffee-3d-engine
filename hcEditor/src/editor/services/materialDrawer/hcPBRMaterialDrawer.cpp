@@ -8,6 +8,11 @@
 
 namespace hc::editor
 {
+  PBRMaterialDrawer::PBRMaterialDrawer(ITextureManager& textureManager) :
+    ABaseMaterialDrawer(textureManager)
+  {
+  }
+
   void PBRMaterialDrawer::onDraw(PBRMaterial* material)
   {
     if (!material)
@@ -48,7 +53,7 @@ namespace hc::editor
       ImGui::TableNextRow(); // Labels
 
       ImGui::TableSetColumnIndex(0);
-      ImGui::Text("Albedo");
+      ImGui::Text("Base Color");
 
       ImGui::TableSetColumnIndex(1);
       ImGui::Text("Normal");
@@ -59,10 +64,10 @@ namespace hc::editor
       ImGui::TableNextRow(); // Buttons
 
       ImGui::TableSetColumnIndex(0);
-      ImGui::PushID("AlbedoLoadButton");
+      ImGui::PushID("BaseColorLoadButton");
       if (ImGui::Button("Load"))
       {
-        // Handle albedo texture selection
+        onLoadTextureClicked(material, textureType::BaseColor, projectFileDialogView);
       }
       ImGui::PopID();
 
@@ -70,7 +75,7 @@ namespace hc::editor
       ImGui::PushID("NormalLoadButton");
       if (ImGui::Button("Load"))
       {
-        // Handle normal texture selection
+        onLoadTextureClicked(material, textureType::Normal, projectFileDialogView);
       }
       ImGui::PopID();
 
@@ -78,7 +83,7 @@ namespace hc::editor
       ImGui::PushID("ORMLoadButton");
       if (ImGui::Button("Load"))
       {
-        // Handle ORM texture selection
+        onLoadTextureClicked(material, textureType::ORM, projectFileDialogView);
       }
       ImGui::PopID();
 

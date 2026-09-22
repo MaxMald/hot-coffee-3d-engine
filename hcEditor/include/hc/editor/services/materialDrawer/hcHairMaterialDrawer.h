@@ -10,8 +10,8 @@ namespace hc::editor
   class HairMaterialDrawer : public ABaseMaterialDrawer<HairMaterial>
   {
   public:
-    HairMaterialDrawer() = default;
-    virtual  ~HairMaterialDrawer() = default;
+    HairMaterialDrawer(ITextureManager& textureManager);
+    ~HairMaterialDrawer() override = default;
 
     /**
      * @copydoc IMaterialDrawer::getMaterialType

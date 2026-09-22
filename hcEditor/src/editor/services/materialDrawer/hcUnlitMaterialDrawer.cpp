@@ -8,6 +8,11 @@
 
 namespace hc::editor
 {
+  UnlitMaterialDrawer::UnlitMaterialDrawer(ITextureManager& textureManager) :
+    ABaseMaterialDrawer(textureManager)
+  {
+  }
+
   void UnlitMaterialDrawer::onDraw(UnlitMaterial* material)
   {
     if (!material)

@@ -33,6 +33,8 @@ void main()
   vec3 normalTS = texture(uNormalMap, vTexCoord).xyz * 2.0 - 1.0;
   vec3 normalWS = normalize(TBN * normalTS);
   vec3 orm = texture(uORM, vTexCoord).xyz;
+  orm.g *= uRoughness;
+  orm.b *= uMetallic;
 
   OutPositionAndDepth = vec4(vWorldPos, gl_FragCoord.z);
   OutNormal = vec4(normalWS, 1.0);

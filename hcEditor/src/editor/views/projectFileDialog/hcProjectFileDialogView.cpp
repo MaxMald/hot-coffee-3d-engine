@@ -45,7 +45,7 @@ namespace hc::editor
 
   void ProjectFileDialogView::draw()
   {
-    if (!m_isDirectorySelectorOpen && !m_isFileSelectorOpen && !m_currentRequest)
+    if (!m_isDirectorySelectorOpen && !m_isFileSelectorOpen || m_currentRequest == nullptr)
       return;
 
     if (ImGui::Begin(m_currentRequest->getTitle().c_str()))

@@ -10,8 +10,8 @@ namespace hc::editor
   class PBRMaterialDrawer : public ABaseMaterialDrawer<PBRMaterial>
   {
   public:
-    PBRMaterialDrawer() = default;
-    virtual  ~PBRMaterialDrawer() = default;
+    PBRMaterialDrawer(ITextureManager& textureManager);
+    ~PBRMaterialDrawer() override = default;
 
     /**
      * @copydoc IMaterialDrawer::getMaterialType

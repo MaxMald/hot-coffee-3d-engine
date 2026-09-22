@@ -31,7 +31,7 @@ namespace hc::editor
         )
       );
       serviceManager.registerService<MaterialDrawersManager>(
-        MakeUnique<MaterialDrawersManager>()
+        MakeUnique<MaterialDrawersManager>(engine.getGraphicsManager().getTextureManager())
       );
       serviceManager.registerService<EditorMetadataManager>(
         MakeUnique<EditorMetadataManager>(engine.getAssetManager())

@@ -1,9 +1,29 @@
 #pragma once
 
 #include "hc/editor/services/materialDrawer/hcIMaterialDrawer.h"
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {
+  namespace materialDrawer
+  {
+    /**
+     * @brief Context structure for loading textures in the material drawer.
+     *
+     * This structure holds the necessary information for loading a texture
+     * for a specific material type T. It is used to pass context to the
+     * texture loading callback functions.
+     *
+     * @tparam T The material type associated with the texture being loaded.
+     */
+    template<typename T>
+    struct LoadTextureContext
+    {
+      T* material;                    ///< Pointer to the material of type T.
+      textureType::Type textureType;  ///< The type of texture being loaded.
+    };
+  }
+
   /**
    * @brief Abstract base class template for material drawer implementations.
    *
@@ -35,7 +55,16 @@ namespace hc::editor
     ) final;
 
   protected:
-    ABaseMaterialDrawer() = default;
+    ITextureManager& m_textureManager;
+
+    /**
+     * @brief Constructs an ABaseMaterialDrawer with the specified texture manager.
+     *
+     * @param textureManager Reference to the ITextureManager for managing textures.
+     */
+    ABaseMaterialDrawer(ITextureManager& textureManager)
+      : m_textureManager(textureManager)
+    {}
 
     /**
      * @brief Draws the material-specific properties in the editor UI.
@@ -63,6 +92,20 @@ namespace hc::editor
       Int32 slotIndex,
       ProjectFileDialogView& projectFileDialogView
     ) = 0;
+
+    /**
+     * @brief Handles the selection of a texture for the material.
+     *
+     * @param material Pointer to the material of type T.
+     * @param textureType The type of texture being selected.
+     * @param projectFileDialogView Reference to the ProjectFileDialogView for file
+     * selection.
+     */
+    void onLoadTextureClicked(
+      T* material,
+      textureType::Type textureType,
+      ProjectFileDialogView& projectFileDialogView
+    );
   };
 
   template<typename T>
@@ -103,5 +146,54 @@ namespace hc::editor
     }
 
     onDrawMeshMaterial(typedMaterial, slotIndex, projectFileDialogView);
+  }
+
+  template<typename T>
+  void ABaseMaterialDrawer<T>::onLoadTextureClicked(
+    T* material,
+    textureType::Type textureType,
+    ProjectFileDialogView& projectFileDialogView
+  )
+  {
+    projectFileDialogView.openImageFile(
+      [this](const Path& path, void* ctx)
+      {
+        auto* loadContext = static_cast<materialDrawer::LoadTextureContext<T>*>(ctx);
+        if (loadContext == nullptr)
+        {
+          LogService::Error("LoadTextureContext is null.");
+          return;
+        }
+
+        if (loadContext->material == nullptr)
+        {
+          LogService::Error("Material in LoadTextureContext is null.");
+          return;
+        }
+
+        try
+        {
+          SharedPtr<ITexture> texture = m_textureManager.createTextureFromFile(path);
+          if (texture != nullptr)
+            loadContext->material->setTexture(loadContext->textureType, texture);
+        }
+        catch (const std::exception& e)
+        {
+          LogService::Error("Failed to load texture: " + String(e.what()));
+        }
+      },
+      [](void*) // Cancel callback
+      {
+      },
+      [](void* ctx) // Destroy context callback
+      {
+        delete static_cast<materialDrawer::LoadTextureContext<T>*>(ctx);
+      },
+      new materialDrawer::LoadTextureContext<T>
+      {
+        material,
+        textureType
+      }
+    );
   }
 }

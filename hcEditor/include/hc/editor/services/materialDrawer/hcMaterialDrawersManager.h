@@ -15,7 +15,7 @@ namespace hc::editor
   class MaterialDrawersManager : public IEditorService
   {
   public:
-    MaterialDrawersManager();
+    MaterialDrawersManager(ITextureManager& textureManager);
     virtual ~MaterialDrawersManager() = default;
 
     /**
@@ -65,6 +65,7 @@ namespace hc::editor
     void addDrawer(UniquePtr<IMaterialDrawer> materialDrawer);
 
   private:
+    ITextureManager& m_textureManager;
     UnorderedMap<materialType::Type, UniquePtr<IMaterialDrawer>> m_drawers;
     NotImplementedMaterialDrawer m_notImplementedDrawer;
   };

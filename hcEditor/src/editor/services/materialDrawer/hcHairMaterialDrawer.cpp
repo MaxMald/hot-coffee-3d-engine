@@ -8,6 +8,11 @@
 
 namespace hc::editor
 {
+  HairMaterialDrawer::HairMaterialDrawer(ITextureManager& textureManager) :
+    ABaseMaterialDrawer(textureManager)
+  {
+  }
+
   void HairMaterialDrawer::onDraw(HairMaterial* material)
   {
     if (!material)
