@@ -23,6 +23,7 @@
 #include "hc/editor/views/windows/graphicsWindow/hcGraphicsWindow.h"
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 #include "hc/editor/views/windows/sceneSkybox/hcSceneSkyboxWindow.h"
+#include "hc/editor/views/windows/sceneSettings/hcSceneSettingsWindow.h"
 
 // Menu Items
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
@@ -73,6 +74,9 @@ namespace hc::editor
             ))
             .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
               *editorViewsManager.getView<SceneSkyboxWindow>()
+            ))
+            .addMenuItem(MakeUnique<ToggleWindowMenuItem>(
+              *editorViewsManager.getView<SceneSettingsWindow>()
             ))
           .endMenu()
           .build()
