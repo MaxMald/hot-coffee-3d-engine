@@ -45,7 +45,7 @@ namespace hc
       Path normalImagePath;             ///< The path to the normal texture for PBR material
       Path ormImagePath;                ///< The path to the ORM (Occlusion-Roughness-Metallic) texture for PBR material
       Color baseColor = Color::White(); ///< The base color of the PBR material
-      float metallic = 0.0f;            ///< The metallic factor for PBR shading
+      float metallic = 1.0f;            ///< The metallic factor for PBR shading
       float roughness = 1.0f;           ///< The roughness factor for PBR shading
       float ior = 1.5f;                 ///< The index of refraction for PBR shading
       bool invertNormalMapY = false;    ///< Whether to invert the Y channel of the normal map

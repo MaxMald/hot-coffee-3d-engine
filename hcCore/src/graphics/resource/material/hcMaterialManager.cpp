@@ -272,7 +272,7 @@ namespace hc
       1, 1,
       textureFormatType::RGBA8,
       colorSpaceType::Linear,
-      Color(1.0f, 1.0f, 0.0f, 1.0f)
+      Color(1.0f, 1.0f, 1.0f, 1.0f)
     ); // 1x1 ORM texture
 
     coreAssertions::AssertTextureIsValid(m_defaultORMTexture, "Default ORM texture");
