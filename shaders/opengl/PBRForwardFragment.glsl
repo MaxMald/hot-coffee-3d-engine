@@ -31,11 +31,23 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
   vec3 viewDir = normalize(cameraPosition - vWorldPos);  
 
-  vec4 albedoColor = uBaseColor * vColor * albedoTex;
-  vec4 ambientColor = albedoColor * 0.1; // Ambient light contribution;
-  
-  // TODO Lighting
-  vec4 lightedColor = vec4(0.0);
+  vec4 ormiorSample = texture(uORM, vTexCoord);
+  float occlusion = ormiorSample.x;
+  float roughness = ormiorSample.y;
+  float metallic = ormiorSample.z;
 
-  FragColor = vec4((ambientColor + lightedColor).rgb, albedoTex.a);
+  vec4 baseColor = uBaseColor * vColor * albedoTex;
+  vec4 ambientColor = baseColor * 0.1 * occlusion; // Ambient light contribution;
+  
+  vec4 oRadiance = evaluateOutgoingRadiance(
+    baseColor,
+    normalWS,
+    viewDir,
+    vWorldPos,
+    roughness,
+    metallic,
+    uIOR
+  );
+
+  FragColor = vec4((ambientColor + oRadiance).rgb, albedoTex.a);
 }

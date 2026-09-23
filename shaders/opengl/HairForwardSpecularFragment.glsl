@@ -99,17 +99,15 @@ vec4 computeSpecular(
       /*, uv */ // uncomment when using specular shift texture
     );
 
-    // Apply light intensity and color to the Kajiya-Kay specular term
-    kaySpecular *= lightIntensity * specularColor * light.color;
-
-    // Apply shadowing to the Kajiya-Kay specular term
-    kaySpecular = calculateDirectionalShadowContribution(
+    float shadowFactor = evaluateDirectionalShadowFactor(
       light.shadowFrameDataIndex, 
-      kaySpecular, 
       vWorldPos, 
       N, 
       LDir
     );
+
+    // Apply light intensity and color to the Kajiya-Kay specular term
+    kaySpecular *= lightIntensity * specularColor * light.color * shadowFactor;
 
     // Accumulate the Kajiya-Kay specular contribution from this directional light
     specular += kaySpecular;
@@ -148,11 +146,6 @@ vec4 computeSpecular(
     SpotLightData light = spotLights[i];
     vec3 LDir = normalize(light.position.xyz - vWorldPos);
 
-    // Spot light attenuation based on distance and range
-    float distance = length(light.position.xyz - vWorldPos);
-    float attenuation = calculateAttenuation(distance, light.range);
-    float lightIntensity = light.intensity;
-
     vec4 kaySpecular = calculateKajiyaKaySpecular(
       light.color,
       primaryColor, primaryShift,
@@ -164,17 +157,17 @@ vec4 computeSpecular(
       /*, uv */ // uncomment when using specular shift texture
     );
 
-    // Apply shadowing to the Kajiya-Kay specular term
-    kaySpecular = calculateSpotLightShadowContribution(
-      light.shadowFrameDataIndex, 
-      kaySpecular, 
+    float distance = length(light.position.xyz - vWorldPos);
+    float attenuation = calculateAttenuation(distance, light.range);
+
+    float shadowFactor = evaluateSpotLightShadowFactor(
+      light.shadowFrameDataIndex,
       vWorldPos, 
       N, 
       LDir
     );
 
-    // Apply light intensity, color, attenuation to the Kajiya-Kay specular term
-    kaySpecular *= attenuation * specularColor * light.color * lightIntensity;
+    kaySpecular *= attenuation * specularColor * light.color * light.intensity * shadowFactor;
 
     // Accumulate the Kajiya-Kay specular contribution from this spot light
     specular += kaySpecular;

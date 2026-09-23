@@ -27,7 +27,6 @@ void main()
     discard; // Transparent pixel
   
   vec4 baseColor = vec4(albedoSample.rgb, 1.0);
-  vec4 ambientColor = vec4(baseColor.rgb * 0.1, 1.0); // Ambient light contribution
 
   vec3 normal = normalize(texture(uNormal, vTexCoord).xyz);
   vec3 viewDir = normalize(cameraPosition - worldPos);
@@ -37,8 +36,8 @@ void main()
   float roughness = ormiorSample.y;
   float metallic = ormiorSample.z;
   float ior = ormiorSample.w * MAXIMUM_IOR;
-  
-  vec4 lightedColor = calculateAllLightContribution(
+
+  vec4 oRadiance = evaluateOutgoingRadiance(
     albedoSample,
     normal,
     viewDir,
@@ -48,5 +47,7 @@ void main()
     ior
   );
 
-  FragColor = vec4((ambientColor + lightedColor).rgb, alpha);
+  vec4 ambientColor = vec4(baseColor.rgb * 0.1 * occlusion, 1.0);
+  
+  FragColor = vec4((ambientColor + oRadiance).rgb, alpha);
 }

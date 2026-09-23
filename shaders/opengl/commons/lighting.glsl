@@ -51,17 +51,37 @@ layout(std140, binding = 1) uniform LightBlock
   int lPadding0;
 };
 
+/**
+ * @brief Calculates the Trowbridge-Reitz GGX normal distribution function for a
+ * given normal, half-vector, and roughness.
+ *
+ * @param N The surface normal vector.
+ * @param H The half-vector between the view and light directions.
+ * @param roughness The roughness of the surface.
+ *
+ * @return The GGX distribution value.
+ */
 float distributionGGX(vec3 N, vec3 H, float roughness)
 {
   float a = roughness * roughness;
   float a2 = a * a;
   float NdotH = max(dot(N, H), 0.0);
   float NdotH2 = NdotH * NdotH;
+
   float denom = NdotH2 * (a2 - 1.0) + 1.0;
   denom = PI * denom * denom;
   return a2 / max(denom, EPSILON);
 }
 
+/**
+ * @brief Calculates the Schlick-GGX geometry term for a given NdotX and
+ * roughness.
+ *
+ * @param NdotX The dot product of the normal and the view or light direction.
+ * @param roughness The roughness of the surface.
+ *
+ * @return The geometry term for the given NdotX and roughness.
+ */
 float geometrySchlickGGX(float NdotX, float roughness)
 {
   const float r = roughness + 1.0;
@@ -69,6 +89,17 @@ float geometrySchlickGGX(float NdotX, float roughness)
   return NdotX / max(NdotX * (1.0 - k) + k, EPSILON);
 }
 
+/**
+ * @brief Calculates the Smith geometry term for a given normal, view, light,
+ * and roughness.
+ *
+ * @param N The surface normal vector.
+ * @param V The view direction vector.
+ * @param L The light direction vector.
+ * @param roughness The roughness of the surface.
+ *
+ * @return The Smith geometry term for the given inputs.
+ */
 float geometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
 {
   float NdotV = max(dot(N, V), 0.0);
@@ -78,15 +109,42 @@ float geometrySmith(vec3 N, vec3 V, vec3 L, float roughness)
   return ggx1 * ggx2;
 }
 
+/**
+ * @brief Calculates the Fresnel-Schlick approximation for a given cosine of the
+ * angle and base reflectivity.
+ *
+ * @param cosTheta The cosine of the angle between the view direction and the
+ * half-vector.
+ * @param F0 The base reflectivity of the surface.
+ *
+ * @return The Fresnel term for the given inputs.
+ */
 vec4 fresnelSchlick(float cosTheta, vec4 F0)
 {
-  float fresnelFactor = pow(1.0 - saturate(cosTheta), 5.0);
+  float fresnelFactor = pow(saturate(1.0 - cosTheta), 5.0);
   return F0 + (vec4(1.0) - F0) * fresnelFactor;
 }
 
+/**
+ * @brief Evaluates the Physically Based Rendering (PBR) shading model for a
+ * given set of inputs.
+ *
+ * This function implements the Cook-Torrance microfacet model for PBR shading.
+ *
+ * @param baseColor The base color of the surface.
+ * @param radiance The incoming radiance from the light source.
+ * @param N The surface normal vector.
+ * @param V The view direction vector.
+ * @param L The light direction vector.
+ * @param F0 The base reflectivity of the surface.
+ * @param roughness The roughness of the surface.
+ * @param metallic The metallic property of the surface.
+ *
+ * @return The final color of the fragment after applying the PBR shading model.
+ */
 vec4 evaluatePBR(
   vec4 baseColor,
-  vec4 lightColor,
+  vec4 radiance,
   vec3 N, 
   vec3 V, 
   vec3 L, 
@@ -101,26 +159,26 @@ vec4 evaluatePBR(
   float NdotH = max(dot(N, H), 0.0);  // Specular area
   float VdotH = max(dot(V, H), 0.0);  // Specular area that I can see
 
-  if (NdotL <= 0.0 || NdotV <= 0.0)
-    return vec4(0.0, 0.0, 0.0, 1.0);
-
   float D = distributionGGX(N, H, roughness);
   float G = geometrySmith(N, V, L, roughness);
   vec4 F = fresnelSchlick(VdotH, F0);
 
   vec4 numerator = D * G * F;
-  float denominator = 4.0 * max(NdotV, EPSILON) * max(NdotL, EPSILON);
-  vec4 specular = numerator / denominator;
+  float denominator = 4.0 * max(NdotV, 0.0) * max(NdotL, 0.0);
+  vec4 specular = numerator / max(denominator, EPSILON);
 
-  // (kD * albedo) / PI
-  // We need KS, but to calculate it we need to know the Fresnel term F, which is already calculated above.
-  // To calculate the kD we use the formula kD = 1 - F. In other words, it is what is not reflected, but absorbed by the material.
+  // (kD * albedo) / PI We need KS, but to calculate it we need to know the
+  // Fresnel term F, which is already calculated above. To calculate the kD we
+  // use the formula kD = 1 - F. In other words, it is what is not reflected,
+  // but absorbed by the material.
   vec4 kS = F;
   vec4 kD = vec4(1.0) - kS;
-  kD *= 1.0 - metallic; // Metals do not have a diffuse component, so we multiply kD by (1 - metallic)
 
-  vec4 diffuse = kD * baseColor * lightColor;
-  return (diffuse + specular) * NdotL;
+  // Metals do not have a diffuse component, so we multiply kD by (1 - metallic)
+  kD *= 1.0 - metallic; 
+
+  vec4 diffuse = kD * baseColor;
+  return (diffuse + specular) * radiance * NdotL;
 }
 
 /**
@@ -170,31 +228,24 @@ vec4 calculateDirectionalLightContribution(
 
   DirectionalLightData light = directionalLights[lightIndex];
 
-  // Calculate PBR color for the directional light
-
   vec3 lightDir = normalize(-light.directionAndIntensity.xyz);
+  vec4 radiance = light.color * light.directionAndIntensity.w;
+
+  float shadowFactor = evaluateDirectionalShadowFactor(
+    light.shadowFrameDataIndex,
+    worldPos,
+    normal,
+    lightDir
+  );
+
+  radiance *= shadowFactor;
 
   vec4 pbrColor = evaluatePBR(
     baseColor,
-    light.color,
+    radiance,
     normal, viewDir, lightDir, F0,
     roughness,
     metallic
-  );
-
-  // Apply light intensity to the PBR color
-
-  float lightIntensity = light.directionAndIntensity.w;  
-  pbrColor *= lightIntensity;
-
-  // Calculate and apply shadow contribution for the directional light
-
-  pbrColor = calculateDirectionalShadowContribution(
-    light.shadowFrameDataIndex, 
-    pbrColor, 
-    worldPos, 
-    normal, 
-    lightDir
   );
 
   return pbrColor;
@@ -236,34 +287,32 @@ vec4 calculateSpotLightContribution(
   if (theta <= light.outerConeCos)
     return vec4(0.0, 0.0, 0.0, 1.0);
 
-  // PBR color calculation
-
-  vec4 pbrColor = evaluatePBR(
-    baseColor, 
-    light.color, 
-    normal, viewDir, lightDir, F0,
-    roughness, metallic
-  );
-
-  // Attenuation and spotlight cone calculations
+  // Light attenuation and spotlight cone calculations
 
   float distance = length(light.position.xyz - worldPos);
   float attenuation = calculateAttenuation(distance, light.range);
-  float attenuatedIntensity = light.intensity * attenuation;
 
   float epsilon = clamp(light.innerConeCos - light.outerConeCos, 0.001, 1.0);
   float spillLightIntensity = clamp((theta - light.outerConeCos) / epsilon, 0.0, 1.0);
 
-  pbrColor *= attenuatedIntensity * spillLightIntensity;
+  vec4 radiance = light.color * light.intensity * attenuation * spillLightIntensity;
 
-  // Shadow contribution
-
-  pbrColor = calculateSpotLightShadowContribution(
+  float shadowFactor = evaluateSpotLightShadowFactor(
     light.shadowFrameDataIndex, 
-    pbrColor, 
     worldPos, 
     normal, 
     lightDir
+  );
+
+  radiance *= shadowFactor;
+
+  // PBR color calculation
+
+  vec4 pbrColor = evaluatePBR(
+    baseColor, 
+    radiance, 
+    normal, viewDir, lightDir, F0,
+    roughness, metallic
   );
 
   return pbrColor;
@@ -301,6 +350,13 @@ vec4 calculateOmniLightContribution(
   OmniLightData light = omniLights[lightIndex];
   vec3 lightDir = normalize(light.position.xyz - worldPos);
 
+// Calculate attenuation based on distance and light range
+
+  float distance = length(light.position.xyz - worldPos);
+  float attenuation = calculateAttenuation(distance, light.range);
+
+  vec4 radiance = light.color * light.intensity * attenuation;
+
   // Evaluate the PBR color for the omni light
 
   vec4 pbrColor = evaluatePBR(
@@ -310,27 +366,24 @@ vec4 calculateOmniLightContribution(
     roughness, metallic
   );
 
-  // Calculate attenuation based on distance and light range
-
-  float distance = length(light.position.xyz - worldPos);
-  float attenuation = calculateAttenuation(distance, light.range);
-  float attenuatedIntensity = light.intensity * attenuation;
-
-  return pbrColor * attenuatedIntensity;
+  return pbrColor;
 }
 
 /**
-* @brief Calculates the total light contribution from all omni, directional, and
-* spot lights.
+* @brief Evaluates the outgoing radiance from a fragment considering all lights
+* in the scene.
 *
 * @param baseColor The base diffuse color of the fragment.
 * @param normal The normal vector at the fragment's surface.
 * @param viewDir The direction from the fragment to the camera/viewer.
 * @param worldPos The world position of the fragment.
+* @param roughness The roughness of the fragment's material.
+* @param metallic The metallic property of the fragment's material.
+* @param ior The index of refraction of the fragment's material.
 *
-* @return The final color contribution from all lights as a vec4.
+* @return The outgoing radiance from the fragment as a vec4.
 */
-vec4 calculateAllLightContribution(
+vec4 evaluateOutgoingRadiance(
   vec4 baseColor,
   vec3 normal,
   vec3 viewDir,
