@@ -1,6 +1,7 @@
 #version 420 core
 
 #include "commons/camera.glsl"
+#include "commons/sceneBlock.glsl"
 #include "commons/lighting.glsl"
 
 layout(binding = 0) uniform sampler2D uPositionAndDepth;
@@ -47,7 +48,10 @@ void main()
     ior
   );
 
-  vec4 ambientColor = vec4(baseColor.rgb * 0.1 * occlusion, 1.0);
-  
+  vec4 ambientColor = baseColor
+    * uSceneAmbientColor
+    * uSceneAmbientIntensity 
+    * occlusion;
+
   FragColor = vec4((ambientColor + oRadiance).rgb, alpha);
 }

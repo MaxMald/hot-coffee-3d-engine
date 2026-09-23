@@ -20,6 +20,26 @@ namespace hc
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
     void clear();
+
+    /**
+     * @brief Converts the SceneSettings to a data block structure for GPU usage.
+     *
+     * This method creates a dataBlockStructure::Scene instance and populates it
+     * with the ambient light color and intensity from the SceneSettings. The
+     * padding fields are set to zero to ensure proper alignment in GPU memory.
+     *
+     * @return dataBlockStructure::Scene The populated data block structure.
+     */
+    inline dataBlockStructure::Scene getSceneDataBlockStructure() const
+    {
+      dataBlockStructure::Scene sceneData;
+      sceneData.ambientLightColor = ambientColor.toVector();
+      sceneData.ambientIntensity = ambientIntensity;
+      sceneData.sPadding0 = 0.0f;
+      sceneData.sPadding1 = 0.0f;
+      sceneData.sPadding2 = 0.0f;
+      return sceneData;
+    }
   };
 
   class IGameObjectFactory;
@@ -65,6 +85,20 @@ namespace hc
      * @param reader The BinaryReader to deserialize from.
      */
     void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @brief Gets a const reference to the scene's settings.
+     *
+     * @return Const reference to the SceneSettings.
+     */
+    inline const SceneSettings& getSettings() const { return m_settings; }
+
+    /**
+     * @brief Gets a reference to the scene's settings.
+     *
+     * @return Reference to the SceneSettings.
+     */
+    inline SceneSettings& getSettings() { return m_settings; }
 
     /**
      * @brief Creates a new GameObject with the specified name.

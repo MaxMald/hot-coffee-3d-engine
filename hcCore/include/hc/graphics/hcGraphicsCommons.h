@@ -222,6 +222,7 @@ namespace hc
       MaterialUnlit = 5,
       MaterialHair = 6,
       MaterialPBR = 7,
+      Scene = 8,
       Count
     };
   }

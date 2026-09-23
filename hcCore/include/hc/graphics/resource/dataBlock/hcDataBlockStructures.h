@@ -214,5 +214,17 @@ namespace hc
     };
 
     static_assert(sizeof(MaterialPBR) % 16 == 0, "MaterialPBR must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT Scene
+    {
+      Vector4f ambientLightColor;     ///< Ambient light color for the scene.
+
+      float ambientIntensity = 0.1f;  ///< Ambient light intensity for the scene.
+      float sPadding0;
+      float sPadding1;
+      float sPadding2;
+    };
+
+    static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");
   }
 }

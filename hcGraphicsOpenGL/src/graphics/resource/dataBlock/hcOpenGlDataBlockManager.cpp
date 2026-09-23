@@ -17,6 +17,7 @@ namespace hc
     dataBlockStructure::MaterialUnlit materialUnlitInitData;
     dataBlockStructure::MaterialHair materialHairInitData;
     dataBlockStructure::MaterialPBR materialPBRInitData;
+    dataBlockStructure::Scene sceneInitData;
 
     try
     {
@@ -44,10 +45,13 @@ namespace hc
       UniquePtr<OpenGlDataBlock> materialHair = MakeUnique<OpenGlDataBlock>();
       materialHair->initialize(&materialHairInitData, sizeof(materialHairInitData));
 
+      UniquePtr<OpenGlDataBlock> scene = MakeUnique<OpenGlDataBlock>();
+      scene->initialize(&sceneInitData, sizeof(sceneInitData));
+
       if (!camera->isValid() || !lights->isValid() || !lightShadows->isValid()
         || !object->isValid() || !lightViewProjection->isValid()
         || !materialUnlit->isValid() || !materialPBR->isValid()
-        || !materialHair->isValid())
+        || !materialHair->isValid() || !scene->isValid())
       {
         throw RuntimeErrorException("Failed to initialize one or more OpenGL data blocks.");
       }
@@ -60,6 +64,7 @@ namespace hc
       m_dataBlocks[dataBlockType::MaterialUnlit] = std::move(materialUnlit);
       m_dataBlocks[dataBlockType::MaterialHair] = std::move(materialHair);
       m_dataBlocks[dataBlockType::MaterialPBR] = std::move(materialPBR);
+      m_dataBlocks[dataBlockType::Scene] = std::move(scene);
     }
     catch (const Exception& e)
     {
