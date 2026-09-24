@@ -361,7 +361,7 @@ vec4 calculateOmniLightContribution(
 
   vec4 pbrColor = evaluatePBR(
     baseColor, 
-    light.color, 
+    radiance, 
     normal, viewDir, lightDir, F0,
     roughness, metallic
   );
