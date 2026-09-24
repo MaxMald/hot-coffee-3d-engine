@@ -220,9 +220,9 @@ namespace hc
       Vector4f ambientLightColor;     ///< Ambient light color for the scene.
 
       float ambientIntensity = 0.1f;  ///< Ambient light intensity for the scene.
-      float sPadding0;
-      float sPadding1;
-      float sPadding2;
+      float sPadding0 = 0.0f;
+      float sPadding1 = 0.0f;
+      float sPadding2 = 0.0f;
     };
 
     static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");

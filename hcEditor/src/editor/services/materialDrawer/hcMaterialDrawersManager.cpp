@@ -76,9 +76,9 @@ namespace hc::editor
     materialType::Type materialType = material->getMaterialType();
     auto it = m_drawers.find(materialType);
     if (it != m_drawers.end())
-      it->second->drawMeshMaterial(material, slotIndex, projectFileDialogView);
+      it->second->drawMeshMaterial(material, static_cast<UInt32>(slotIndex), projectFileDialogView);
     else
-      m_notImplementedDrawer.drawMeshMaterial(material, slotIndex, projectFileDialogView);
+      m_notImplementedDrawer.drawMeshMaterial(material, static_cast<UInt32>(slotIndex), projectFileDialogView);
   }
 
   void MaterialDrawersManager::addDrawer(UniquePtr<IMaterialDrawer> materialDrawer)

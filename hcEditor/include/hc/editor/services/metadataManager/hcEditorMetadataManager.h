@@ -26,29 +26,24 @@ namespace hc::editor
     }
 
     /**
-     * @brief Retrieves the editor metadata.
-     *
-     * @return Reference to the EditorMetadata instance.
-     */
-    inline metadata::EditorMetadata& getEditorMetadata()
-    {
-      return m_editorMetadata;
-    }
-
-    /**
-     * @brief Retrieves the editor metadata (const version).
-     *
-     * @return Const reference to the EditorMetadata instance.
-     */
-    inline const metadata::EditorMetadata& getEditorMetadata() const
-    {
-      return m_editorMetadata;
-    }
-
-    /**
      * @brief Saves the editor metadata to the default file path.
      */
     void saveEditorMetadata() const;
+
+    /**
+     * @brief Saves the path of the last opened project to the editor metadata.
+     *
+     * @param projectPath The path of the last opened project.
+     */
+    void saveLastOpenedProjectPath(const Path& projectPath);
+
+    /**
+     * @brief Retrieves the paths of the last opened projects from the editor metadata.
+     */
+    inline const Vector<Path>& getLastOpenedProjectPaths() const
+    {
+      return m_editorMetadata.lastOpenedProjects;
+    }
 
     /**
      * @brief Loads the editor metadata from the default file path.

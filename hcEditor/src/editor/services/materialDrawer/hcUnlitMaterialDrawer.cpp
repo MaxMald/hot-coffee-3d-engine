@@ -30,7 +30,7 @@ namespace hc::editor
   void UnlitMaterialDrawer::onDrawMeshMaterial(
     UnlitMaterial* material,
     Int32 slotIndex,
-    ProjectFileDialogView& projectFileDialogView
+    ProjectFileDialogView&
   )
   {
     (void)slotIndex; // Unused parameter

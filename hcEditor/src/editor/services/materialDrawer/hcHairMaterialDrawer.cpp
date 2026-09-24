@@ -24,7 +24,7 @@ namespace hc::editor
   void HairMaterialDrawer::onDrawMeshMaterial(
     HairMaterial* material,
     Int32 slotIndex,
-    ProjectFileDialogView& projectFileDialogView
+    ProjectFileDialogView&
   )
   {
     (void)slotIndex; // unused parameter

@@ -10,23 +10,8 @@ namespace hc::editor::metadata
   {
     writer.startWritingObject(0, METADATA_VERSION);
 
-    // Filter out non-existent paths before serialization
-    Vector<Path> verifiedPaths;
+    writer.writeSizeT(lastOpenedProjects.size());
     for (const Path& projectPath : lastOpenedProjects)
-    {
-      if (projectPath.exists())
-        verifiedPaths.push_back(projectPath);
-    }
-
-    // Remove duplicate paths
-    std::sort(verifiedPaths.begin(), verifiedPaths.end());
-    verifiedPaths.erase(
-      std::unique(verifiedPaths.begin(), verifiedPaths.end()),
-      verifiedPaths.end()
-    );
-
-    writer.writeSizeT(verifiedPaths.size());
-    for (const Path& projectPath : verifiedPaths)
       writer.writePath(projectPath);
 
     writer.finishWritingObject();
@@ -47,8 +32,7 @@ namespace hc::editor::metadata
     for (SizeT i = 0; i < numProjects; ++i)
     {
       Path projectPath = reader.readPath();
-      if (projectPath.exists())
-        lastOpenedProjects.push_back(projectPath);
+      lastOpenedProjects.push_back(projectPath);
     }
     reader.finishReadingObject();
   }
