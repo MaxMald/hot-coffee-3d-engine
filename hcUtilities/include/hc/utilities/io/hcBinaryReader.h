@@ -66,6 +66,14 @@ namespace hc
       bool readBool();
 
       /**
+       * @brief Peeks at the next boolean value without advancing the stream
+       * position.
+       *
+       * @return The boolean value peeked from the stream.
+       */
+      bool peekBool();
+
+      /**
        * @brief Reads an 8-bit signed integer.
        *
        * @return The integer value read from the stream.
@@ -103,11 +111,27 @@ namespace hc
       Int32 readInt32();
 
       /**
+       * @brief Peeks at the next 32-bit signed integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      Int32 peekInt32();
+
+      /**
        * @brief Reads a 64-bit signed integer.
        *
        * @return The integer value read from the stream.
        */
       Int64 readInt64();
+
+      /**
+       * @brief Peeks at the next 64-bit signed integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      Int64 peekInt64();
 
       /**
        * @brief Reads an 8-bit unsigned integer.
@@ -147,11 +171,27 @@ namespace hc
       UInt32 readUInt32();
 
       /**
+       * @brief Peeks at the next 32-bit unsigned integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      UInt32 peekUInt32();
+
+      /**
        * @brief Reads a 64-bit unsigned integer.
        *
        * @return The integer value read from the stream.
        */
       UInt64 readUInt64();
+
+      /**
+       * @brief Peeks at the next 64-bit unsigned integer without advancing the
+       * stream position.
+       *
+       * @return The integer value peeked from the stream.
+       */
+      UInt64 peekUInt64();
 
       /**
        * @brief Reads a character.
@@ -161,11 +201,27 @@ namespace hc
       Char readChar();
 
       /**
+       * @brief Peeks at the next character without advancing the stream
+       * position.
+       *
+       * @return The character value peeked from the stream.
+       */
+      Char peekChar();
+
+      /**
        * @brief Reads a 16-bit character.
        *
        * @return The character value read from the stream.
        */
       Char16 readChar16();
+
+      /**
+       * @brief Peeks at the next 16-bit character without advancing the stream
+       * position.
+       *
+       * @return The character value peeked from the stream.
+       */
+      Char16 peekChar16();
 
       /**
        * @brief Reads a 32-bit character.
@@ -175,11 +231,27 @@ namespace hc
       Char32 readChar32();
 
       /**
+       * @brief Peeks at the next 32-bit character without advancing the stream
+       * position.
+       *
+       * @return The character value peeked from the stream.
+       */
+      Char32 peekChar32();
+
+      /**
        * @brief Reads an unsigned character.
        *
        * @return The character value read from the stream.
        */
       UChar readUChar();
+
+      /**
+       * @brief Peeks at the next unsigned character without advancing the stream
+       * position.
+       *
+       * @return The character value peeked from the stream.
+       */
+      UChar peekUChar();
 
       /**
        * @brief Reads a 32-bit floating point value.
@@ -189,11 +261,26 @@ namespace hc
       float readFloat();
 
       /**
+       * @brief Peeks at the next 32-bit floating point value without advancing
+       * the stream position.
+       *
+       * @return The float value peeked from the stream.
+       */
+      float peekFloat();
+
+      /**
        * @brief Reads a byte.
        *
        * @return The byte value read from the stream.
        */
       Byte readByte();
+
+      /**
+       * @brief Peeks at the next byte without advancing the stream position.
+       *
+       * @return The byte value peeked from the stream.
+       */
+      Byte peekByte();
 
       /**
        * @brief Reads a specified number of bytes into a buffer.
@@ -219,6 +306,14 @@ namespace hc
       SizeT readSizeT();
 
       /**
+       * @brief Peeks at the next size_t value without advancing the stream
+       * position.
+       *
+       * @return The size value peeked from the stream.
+       */
+      SizeT peekSizeT();
+
+      /**
        * @brief Reads a UUID from the stream.
        *
        * Reads a 16-byte UUID and constructs a UUID object.
@@ -226,6 +321,16 @@ namespace hc
        * @return The UUID read from the stream.
        */
       UUID readUUID();
+
+      /**
+       * @brief Peeks at the next UUID without advancing the stream position.
+       *
+       * Reads a 16-byte UUID and constructs a UUID object, but does not consume
+       * the bytes from the stream.
+       *
+       * @return The UUID peeked from the stream.
+       */
+      UUID peekUUID();
 
       /**
        * @brief Reads a filesystem path from the stream.
@@ -238,13 +343,35 @@ namespace hc
       Path readPath();
 
       /**
+       * @brief Peeks at the next filesystem path without advancing the stream
+       * position.
+       *
+       * Reads a length-prefixed string and converts it to a Path object, but
+       * does not consume the bytes from the stream.
+       *
+       * @return The path peeked from the stream.
+       */
+      Path peekPath();
+
+      /**
        * @brief Reads a length-prefixed string from the stream.
        *
-       * Reads a UInt32 length value followed by the string data.
+       * Reads a UInt64 length value followed by the string data.
        *
        * @return The string read from the stream.
        */
       String readString();
+
+      /**
+       * @brief Peeks at the next length-prefixed string without advancing the
+       * stream position.
+       *
+       * Reads a UInt64 length value followed by the string data, but does not
+       * consume the bytes from the stream.
+       *
+       * @return The string peeked from the stream.
+       */
+      String peekString();
 
       /**
        * @brief Reads a 3D vector with float components.
@@ -254,11 +381,27 @@ namespace hc
       Vector3f readVector3f();
 
       /**
+       * @brief Peeks at the next 3D vector with float components without
+       * advancing the stream position.
+       *
+       * @return The vector peeked from the stream.
+       */
+      Vector3f peekVector3f();
+
+      /**
        * @brief Reads a 4D vector with float components.
        *
        * @return The vector read from the stream.
        */
       Vector4f readVector4f();
+
+      /**
+       * @brief Peeks at the next 4D vector with float components without
+       * advancing the stream position.
+       *
+       * @return The vector peeked from the stream.
+       */
+      Vector4f peekVector4f();
 
       /**
        * @brief Reads a 4x4 matrix with float components.
@@ -268,11 +411,27 @@ namespace hc
       Matrix4 readMatrix4();
 
       /**
+       * @brief Peeks at the next 4x4 matrix with float components without
+       * advancing the stream position.
+       *
+       * @return The matrix peeked from the stream.
+       */
+      Matrix4 peekMatrix4();
+
+      /**
        * @brief Reads an angle value stored in radians.
        *
        * @return The angle read from the stream.
        */
       Angle readAngle();
+
+      /**
+       * @brief Peeks at the next angle value stored in radians without advancing
+       * the stream position.
+       *
+       * @return The angle peeked from the stream.
+       */
+      Angle peekAngle();
 
       /**
        * @brief Reads a color with four float components (RGBA).
@@ -282,6 +441,14 @@ namespace hc
       Color readColor();
 
       /**
+       * @brief Peeks at the next color with four float components (RGBA) without
+       * advancing the stream position.
+       *
+       * @return The color peeked from the stream.
+       */
+      Color peekColor();
+
+      /**
        * @brief Peeks at the next object header without advancing the stream position.
        *
        * This method reads the object header from the stream but does not consume it,
@@ -289,7 +456,7 @@ namespace hc
        *
        * @return The ObjectHeader of the next object in the stream.
        */
-      ObjectHeader peekObjectHeader() const;
+      ObjectHeader peekObjectHeader();
 
       /**
        * @brief Starts reading an object from the stream.
@@ -297,9 +464,9 @@ namespace hc
        * Reads the object header (name, version, size) and prepares for reading
        * the object's data.
        *
-       * @return A constant reference to the ObjectHeader of the object being read.
+       * @return The ObjectHeader of the object being read.
        */
-      const ObjectHeader& startReadingObject();
+      ObjectHeader startReadingObject();
 
       /**
        * @brief Finishes reading an object from the stream.
@@ -314,29 +481,137 @@ namespace hc
        * @return True if the stream is valid and ready for reading, false
        *         otherwise.
        */
-      bool isValid() const;
+      inline bool isValid() const
+      {
+        return m_stream != nullptr && m_stream->good();
+      }
 
       /**
-       * @brief Checks if there is more data available in the stream. If it is reading an
-       * object, it checks if there is more data in the current object.
+       * @brief Checks if the end of the stream has been reached.
        *
-       * @return True if there is more data to read, false otherwise.
+       * @return True if the end of the stream has been reached, false otherwise.
        */
-      bool hasMoreData() const;
+      inline bool isEndOfStream() const
+      {
+        if (m_stream == nullptr)
+          throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
+        return m_stream->peek() == EOF;
+      }
+
+      /**
+       * @brief Checks if the end of the current object has been reached.
+       *
+       * @return True if the end of the current object has been reached, false otherwise.
+       */
+      inline bool isEndOfObject() const
+      {
+        assertStreamValid();
+        if (m_objectStack.empty())
+          throw RuntimeErrorException("No object is currently being read.");
+
+        std::streampos currentPos = m_stream->tellg();
+        return currentPos >= m_objectStack.top().endPosition;
+      }
 
       /**
        * @brief Checks if the reader is currently reading an object.
        *
        * @return True if reading an object, false otherwise.
        */
-      bool isReadingObject() const;
+      inline bool isReadingObject() const
+      {
+        assertStreamValid();
+        return !m_objectStack.empty();
+      }
+
+      /**
+       * @brief Returns the number of bytes remaining to be read in the current object.
+       *
+       * @return The number of bytes remaining in the current object.
+       *
+       * @throws RuntimeErrorException if no object is currently being read or if the
+       *         current stream position exceeds the end of the current object.
+       */
+      inline SizeT remainingObjectBytes() const
+      {
+        assertStreamValid();
+        if (m_objectStack.empty())
+          throw RuntimeErrorException("No object is currently being read.");
+
+        std::streampos currentPos = m_stream->tellg();
+        std::streampos endPos = m_objectStack.top().endPosition;
+
+        if (currentPos > endPos)
+          throw RuntimeErrorException("Current stream position exceeds the end of the current object.");
+
+        return static_cast<SizeT>(endPos - currentPos);
+      }
+
+      /**
+       * @brief Returns the number of bytes remaining to be read in the entire stream.
+       *
+       * @return The number of bytes remaining in the stream.
+       *
+       * @throws RuntimeErrorException if the stream is not valid for reading.
+       */
+      inline SizeT remainingStreamBytes() const
+      {
+        assertStreamValid();
+
+        std::streampos currentPos = m_stream->tellg();
+
+        m_stream->seekg(0, std::ios::end);
+        std::streampos endPos = m_stream->tellg();
+        m_stream->seekg(currentPos);
+
+        return static_cast<SizeT>(endPos - currentPos);
+      }
 
     protected:
       UniquePtr<std::istream> m_stream;
-      UniquePtr<ObjectData> m_currentObject;
-      Stack<UniquePtr<ObjectData>> m_objectStack;
+      Stack<ObjectTrackingInfo> m_objectStack;
 
       ObjectHeader readObjectHeader();
+
+      /**
+       * @brief Asserts that the stream is valid for reading.
+       *
+       * Throws a RuntimeErrorException if the stream is null or not in a good state.
+       */
+      inline void assertStreamValid() const
+      {
+        if (m_stream == nullptr || !m_stream->good())
+          throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
+      }
+
+      /**
+       * @brief Reads a specified number of bytes from the stream into a buffer.
+       *
+       * This method checks if the read operation would exceed the bounds of the
+       * current object being read (if any). If it does, an exception is thrown.
+       *
+       * @param buffer The buffer to read data into.
+       * @param size The number of bytes to read.
+       *
+       * @throws RuntimeErrorException if the read operation exceeds the current
+       *         object's bounds or if the stream is not valid.
+       */
+      inline void readStream(char* buffer, SizeT size)
+      {
+        assertStreamValid();
+
+        if (m_objectStack.size() > 0)
+        {
+          std::streampos currentPos = m_stream->tellg();
+          std::streampos endPos = m_objectStack.top().endPosition;
+          if (currentPos + static_cast<std::streampos>(size) > endPos)
+            throw RuntimeErrorException("BinaryReader: Attempt to read beyond the end of the current object.");
+        }
+
+        m_stream->read(buffer, static_cast<std::streamsize>(size));
+        if (m_stream->fail())
+          throw RuntimeErrorException("BinaryReader: Failed to read from the stream.");
+      }
     };
   }
 }
