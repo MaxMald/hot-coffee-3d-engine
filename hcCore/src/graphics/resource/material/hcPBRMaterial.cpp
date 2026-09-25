@@ -101,7 +101,8 @@ namespace hc
 
   bool PBRMaterial::isValid() const
   {
-    return m_deferredGeometryShaderProgram != nullptr && m_deferredGeometryShaderProgram->isValid();
+    return m_deferredGeometryShaderProgram != nullptr && m_deferredGeometryShaderProgram->isValid()
+      && m_forwardShaderProgram != nullptr && m_forwardShaderProgram->isValid();
   }
 
   void PBRMaterial::initialize(

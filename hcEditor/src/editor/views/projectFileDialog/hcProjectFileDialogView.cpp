@@ -156,6 +156,7 @@ namespace hc::editor
         filters,
         [this](const Path& newFilePath)
         {
+          m_isFileSelectorOpen = false;
           if (m_currentRequest != nullptr)
           {
             m_currentRequest->onFileSelected(newFilePath);
@@ -193,6 +194,7 @@ namespace hc::editor
         filters,
         [this](const Path& newFilePath)
         {
+          m_isFileSelectorOpen = false;
           if (m_currentRequest != nullptr)
           {
             m_currentRequest->onFileSelected(newFilePath);
@@ -412,13 +414,13 @@ namespace hc::editor
     if (!m_isDirectorySelectorOpen)
       return false;
 
+    m_isDirectorySelectorOpen = false;
     if (m_currentRequest != nullptr)
     {
       m_currentRequest->onFileSelected(directory.getFullPath());
       m_currentRequest->destroy();
       m_currentRequest.reset();
     }
-    
     return true;
   }
 
@@ -429,13 +431,13 @@ namespace hc::editor
     if (!m_isFileSelectorOpen)
       return false;
 
+    m_isFileSelectorOpen = false;
     if (m_currentRequest != nullptr)
     {
       m_currentRequest->onFileSelected(file.getFullPath());
       m_currentRequest->destroy();
       m_currentRequest.reset();
     }
-
     return true;
   }
 }

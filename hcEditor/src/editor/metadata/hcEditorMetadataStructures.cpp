@@ -1,4 +1,5 @@
 #include "hc/editor/metadata/hcEditorMetadataStructures.h"
+#include "hc/editor/metadata/hcEditorMetadataCommons.h"
 
 namespace hc::editor::metadata
 {
@@ -8,7 +9,7 @@ namespace hc::editor::metadata
 
   void EditorMetadata::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(0, EDITOR_METADATA_VERSION);
+    writer.startWritingObject(fileFormat::EditorMetadata::MAGIC_NUMBER, EDITOR_METADATA_VERSION);
 
     writer.writeSizeT(lastOpenedProjects.size());
     for (const Path& projectPath : lastOpenedProjects)
@@ -22,6 +23,13 @@ namespace hc::editor::metadata
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchType(fileFormat::EditorMetadata::MAGIC_NUMBER))
+    {
+      LogService::Error("EditorMetadata::deserialize - invalid object.");
+      reader.finishReadingObject();
+      return;
+    }
+
     if (!header.matchVersion(EDITOR_METADATA_VERSION))
     {
       reader.finishReadingObject();
@@ -48,7 +56,7 @@ namespace hc::editor::metadata
 
   void ProjectMetadata::serialize(io::BinaryWriter& writer) const
   {
-    writer.startWritingObject(0, PROJECT_METADATA_VERSION);
+    writer.startWritingObject(fileFormat::ProjectMetadata::MAGIC_NUMBER, PROJECT_METADATA_VERSION);
 
     writer.writeSizeT(lastOpenedScenes.size());
     for (const Path& scenePath : lastOpenedScenes)
@@ -62,6 +70,13 @@ namespace hc::editor::metadata
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
+    if (!header.matchType(fileFormat::ProjectMetadata::MAGIC_NUMBER))
+    {
+      LogService::Error("ProjectMetadata::deserialize - invalid object.");
+      reader.finishReadingObject();
+      return;
+    }
+
     if (!header.matchVersion(PROJECT_METADATA_VERSION))
     {
       reader.finishReadingObject();

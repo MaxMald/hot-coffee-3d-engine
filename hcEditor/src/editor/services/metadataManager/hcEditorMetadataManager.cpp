@@ -144,13 +144,6 @@ namespace hc::editor
         validProjectPaths.push_back(projectPath);
     }
 
-    // remove duplicates
-    std::sort(validProjectPaths.begin(), validProjectPaths.end());
-    validProjectPaths.erase(
-      std::unique(validProjectPaths.begin(), validProjectPaths.end()),
-      validProjectPaths.end()
-    );
-
     m_editorMetadata.lastOpenedProjects = validProjectPaths;
   }
 }

@@ -74,10 +74,10 @@ namespace hc
 
     switch (shadingModel)
     {
-    case aiShadingMode_Phong:
-    case aiShadingMode_Blinn:
     case aiShadingMode_NoShading:
       return materialType::Unlit;
+    case aiShadingMode_Phong:
+    case aiShadingMode_Blinn:
     case aiShadingMode_PBR_BRDF:
       return materialType::PBR;
     default:
