@@ -41,7 +41,7 @@ namespace hc::editor
           if (selectedPath.empty())
             return;
 
-          if (!m_editorSceneManager.saveScene(selectedPath))
+          if (!m_editorSceneManager.createNewScene(selectedPath))
           {
             LogService::Error(
               String::Format(

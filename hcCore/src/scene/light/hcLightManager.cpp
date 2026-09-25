@@ -91,9 +91,14 @@ namespace hc
     m_generatedSpotLightShadows.clear();
   }
 
+  void LightManager::clear()
+  {
+    // clear light manager resources if needed
+  }
+
   void LightManager::destroy()
   {
-    // TODO: destroy
+    // destroy light manager if needed
   }
 
   void LightManager::gatherLightWorkItems(

@@ -33,8 +33,15 @@ namespace hc::editor
 
   void EditorSceneManager::destroy()
   {
+    clearScene();
     m_projectManager.unsubscribeListener(this);
     m_listeners.clear();
+  }
+
+  bool EditorSceneManager::createNewScene(const Path& scenePath)
+  {
+    clearScene();
+    return saveScene(scenePath);
   }
 
   bool EditorSceneManager::openScene(const Path& scenePath)
@@ -61,18 +68,16 @@ namespace hc::editor
       m_currentScenePath = scenePath;
       addLastOpenedSceneToMetadata(scenePath);
 
-      LogService::Message(
-        "Scene opened successfully: " + scenePath.toString()
-      );
+      LogService::Message("Scene opened successfully: " + scenePath.toString());
 
       for (auto* listener : m_listeners)
-      {
         if (listener)
           listener->onSceneOpened();
-      }
 
       return true;
     }
+
+    clearScene();
     return false;
   }
 
@@ -94,30 +99,20 @@ namespace hc::editor
       m_currentScenePath = scenePath;
       addLastOpenedSceneToMetadata(scenePath);
 
-      LogService::Message(
-        "Scene saved successfully: " + scenePath.toString()
-      );
-
+      LogService::Message("Scene saved successfully: " + scenePath.toString());
       return true;
     }
+
     return false;
   }
 
   void EditorSceneManager::closeScene()
   {
-    if (!isSceneOpen())
-      return;
-
-    assertSceneIsValid();
-
-    m_editorScene->clear();
-    m_currentScenePath.clear();
+    clearScene();
 
     for (auto* listener : m_listeners)
-    {
       if (listener)
         listener->onSceneClosed();
-    }
   }
 
   bool EditorSceneManager::isSceneOpen() const
@@ -218,5 +213,13 @@ namespace hc::editor
   {
     if (!m_editorScene)
       throw RuntimeErrorException("EditorSceneManager requires a valid Scene pointer");
+  }
+
+  void EditorSceneManager::clearScene()
+  {
+    m_currentScenePath.clear();
+    if (m_editorScene != nullptr)
+      m_editorScene->clear();
+    m_assetManager.clear();
   }
 }

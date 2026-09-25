@@ -221,6 +221,9 @@ namespace hc
   {
     m_sceneGraph.clear();
     m_cameraManager.clear();
+    m_lightManager.clear();
+    m_skybox.clear();
+    m_settings.clear();
   }
 
   void Scene::onInitialized()

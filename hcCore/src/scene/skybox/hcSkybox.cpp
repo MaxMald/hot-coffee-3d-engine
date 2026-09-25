@@ -43,8 +43,13 @@ namespace hc
     return *m_cubeMap;
   }
 
+  void Skybox::clear()
+  {
+    m_cubeMap.reset();
+  }
+
   void Skybox::destroy()
   {
-    m_cubeMap = nullptr;
+    m_cubeMap.reset();
   }
 }
