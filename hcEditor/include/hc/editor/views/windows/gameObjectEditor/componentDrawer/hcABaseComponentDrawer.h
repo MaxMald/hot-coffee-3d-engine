@@ -73,6 +73,16 @@ namespace hc::editor
       String::Format("%s Component", componentStr.c_str()).c_str()
     ))
     {
+      if (ImGui::Button("Remove Component"))
+      {
+        GameObject* gameObject = component->getGameObject();
+        if (gameObject)
+        {
+          gameObject->removeComponent(component);
+          return;
+        }
+      }
+
       T* typedComponent = dynamic_cast<T*>(component);
       if (typedComponent)
       {
