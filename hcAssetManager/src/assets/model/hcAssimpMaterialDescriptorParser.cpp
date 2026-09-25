@@ -5,9 +5,9 @@
 
 namespace hc
 {
-  static constexpr const char* SUFFIX_SHADING_TYPE_HAIR = "_stHair";
-  static constexpr const char* SUFFIX_SHADING_TYPE_UNLIT = "_stUL";
-  static constexpr const char* SUFFIX_SHADING_TYPE_BLINN_PHONG = "_stBP";
+  static constexpr const char* SUFFIX_SHADING_TYPE_HAIR = "_matHair";
+  static constexpr const char* SUFFIX_SHADING_TYPE_UNLIT = "_matUL";
+  static constexpr const char* SUFFIX_SHADING_TYPE_PBR = "_matPBR";
 
   static constexpr const char* SUFFIX_TRANSPARENT = "_Transparent";
   static constexpr const char* SUFFIX_ALPHA_CUTOUT = "_AlphaCutout";
@@ -29,11 +29,11 @@ namespace hc
       case materialType::Unlit:
         matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
         break;
-      case materialType::BlinnPhong:
-        matDescriptor = ParseBlinnPhongMaterialDescriptor(fileDirectory, name, material);
-        break;
       case materialType::Hair:
         matDescriptor = ParseHairMaterialDescriptor(fileDirectory, name, material);
+        break;
+      case materialType::PBR:
+        matDescriptor = ParsePBRMaterialDescriptor(fileDirectory, name, material);
         break;
       default:
         matDescriptor = ParseUnlitMaterialDescriptor(fileDirectory, name, material);
@@ -63,8 +63,8 @@ namespace hc
       return materialType::Hair;
     else if (matName.find(SUFFIX_SHADING_TYPE_UNLIT) != String::npos)
       return materialType::Unlit;
-    else if (matName.find(SUFFIX_SHADING_TYPE_BLINN_PHONG) != String::npos)
-      return materialType::BlinnPhong;
+    else if (matName.find(SUFFIX_SHADING_TYPE_PBR) != String::npos)
+      return  materialType::PBR;
 
     // Fallback to checking the shading model property
 
@@ -74,12 +74,12 @@ namespace hc
 
     switch (shadingModel)
     {
-    case aiShadingMode_Phong:
-      return materialType::BlinnPhong;
-    case aiShadingMode_Blinn:
-      return materialType::BlinnPhong;
     case aiShadingMode_NoShading:
       return materialType::Unlit;
+    case aiShadingMode_Phong:
+    case aiShadingMode_Blinn:
+    case aiShadingMode_PBR_BRDF:
+      return materialType::PBR;
     default:
       return materialType::Unknown;
     }
@@ -107,29 +107,8 @@ namespace hc
       throw RuntimeErrorException("Failed to get UnlitData from material descriptor.");
 
     
-    unlitData->color = GetVertexColorDiffuseFromMaterial(material);
+    unlitData->color = GetDiffuseColorFromMaterial(material);
     unlitData->textureImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    return desc;
-  }
-
-  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParseBlinnPhongMaterialDescriptor(
-    const Path& fileDirectory,
-    const String& name,
-    const aiMaterial* material
-  )
-  {
-    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::BlinnPhong, "");
-    desc->name = name;
-
-    assets::materialDescriptor::BlinnPhongData* blinnPhongData = desc->getIfBlinnPhongData();
-    if (!blinnPhongData)
-      throw RuntimeErrorException("Failed to get BlinnPhongData from material descriptor.");
-
-    blinnPhongData->color = GetVertexColorDiffuseFromMaterial(material);
-    blinnPhongData->shininess = GetShininessFromMaterial(material);
-    blinnPhongData->diffuseImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
-    blinnPhongData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
-    blinnPhongData->specularImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_SPECULAR);
     return desc;
   }
 
@@ -146,7 +125,7 @@ namespace hc
     if (!hairData)
       throw RuntimeErrorException("Failed to get HairData from material descriptor.");
 
-    hairData->color = GetVertexColorDiffuseFromMaterial(material);
+    hairData->color = GetDiffuseColorFromMaterial(material);
     hairData->shininess = GetShininessFromMaterial(material);
     hairData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
     hairData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
@@ -154,7 +133,42 @@ namespace hc
     return desc;
   }
 
-  Color AssimpMaterialDescriptorParser::GetVertexColorDiffuseFromMaterial(
+  SharedPtr<MaterialDescriptor> AssimpMaterialDescriptorParser::ParsePBRMaterialDescriptor(
+    const Path& fileDirectory,
+    const String& name,
+    const aiMaterial* material
+  )
+  {
+    SharedPtr<MaterialDescriptor> desc = MakeShared<MaterialDescriptor>(materialType::PBR, "");
+    desc->name = name;
+
+    assets::materialDescriptor::PBRData* pbrData = desc->getIfPBRData();
+    if (!pbrData)
+      throw RuntimeErrorException("Failed to get PBRData from material descriptor.");
+
+    pbrData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_BASE_COLOR);
+    if (pbrData->albedoImagePath.empty())
+      pbrData->albedoImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_DIFFUSE);
+
+    pbrData->normalImagePath = GetTexturePathFromMaterial(fileDirectory, material, aiTextureType_NORMALS);
+
+    float ior = 1.5f;
+    if (material->Get(AI_MATKEY_REFRACTI, ior) == aiReturn_SUCCESS)
+      pbrData->ior = ior;
+
+    float metallic = 0.0f;
+    if (material->Get(AI_MATKEY_METALLIC_FACTOR, metallic) == aiReturn_SUCCESS)
+      pbrData->metallic = metallic;
+
+    float roughness = 1.0f;
+    if (material->Get(AI_MATKEY_ROUGHNESS_FACTOR, roughness) == aiReturn_SUCCESS)
+      pbrData->roughness = roughness;
+
+    pbrData->baseColor = GetDiffuseColorFromMaterial(material);
+    return desc;
+  }
+
+  Color AssimpMaterialDescriptorParser::GetDiffuseColorFromMaterial(
     const aiMaterial* material
   )
   {

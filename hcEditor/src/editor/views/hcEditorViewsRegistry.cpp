@@ -33,6 +33,7 @@
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAssetManagerDrawersRegistry.h"
 #include "hc/editor/views/windows/sceneSkybox/hcSceneSkyboxWindow.h"
+#include "hc/editor/views/windows/sceneSettings/hcSceneSettingsWindow.h"
 
 namespace hc::editor
 {
@@ -121,6 +122,9 @@ namespace hc::editor
       viewsManager.registerView(std::move(assetManagerWindow));
       viewsManager.registerView(std::move(projectFileSelector));
       viewsManager.registerView(std::move(sceneViewportWindow));
+      viewsManager.registerView(MakeUnique<SceneSettingsWindow>(
+        editorServiceManager.getService<EditorSceneManager>()
+      ));
 
       // The main menu bar is registered last to ensure it can access all other views when
       // being created.

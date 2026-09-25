@@ -168,6 +168,12 @@ namespace hc
 
     try
     {
+      // Upload scene data
+      dataBlockStructure::Scene sceneDataBlock
+        = m_settings.getSceneDataBlockStructure();
+      dataBlockManager.upload(dataBlockType::Scene, &sceneDataBlock);
+      dataBlockManager.bind(dataBlockType::Scene);
+
       // Upload camera data
       camera->update();
       dataBlockStructure::Camera cameraDataBlock

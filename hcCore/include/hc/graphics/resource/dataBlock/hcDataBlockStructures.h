@@ -182,21 +182,6 @@ namespace hc
     static_assert(sizeof(MaterialUnlit) % 16 == 0, "MaterialUnlit must be 16-byte aligned");
 
     /**
-     * @brief GPU-aligned data for a Blinn-Phong material.
-     */
-    struct alignas(16) HC_CORE_EXPORT MaterialBlinnPhong
-    {
-      Color color;              ///< Base color of the Blinn-Phong material.
-
-      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
-      float shininess = 0.0f;   ///< Shininess factor for specular highlights.
-      float padding0 = 0.0f;
-      float padding1 = 0.0f;
-    };
-
-    static_assert(sizeof(MaterialBlinnPhong) % 16 == 0, "MaterialBlinnPhong must be 16-byte aligned");
-
-    /**
      * @brief GPU-aligned data for a hair material.
      */
     struct alignas(16) HC_CORE_EXPORT MaterialHair
@@ -217,5 +202,29 @@ namespace hc
     };
 
     static_assert(sizeof(MaterialHair) % 16 == 0, "MaterialHair must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT MaterialPBR
+    {
+      Color baseColor;        ///< Base color of the PBR material.
+
+      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
+      float metallic = 0.0f;    ///< Metallic factor for PBR shading.
+      float roughness = 0.0f;   ///< Roughness factor for PBR shading.
+      float ior = 1.5f;         ///< Index of refraction for PBR shading.
+    };
+
+    static_assert(sizeof(MaterialPBR) % 16 == 0, "MaterialPBR must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT Scene
+    {
+      Vector4f ambientLightColor;     ///< Ambient light color for the scene.
+
+      float ambientIntensity = 0.1f;  ///< Ambient light intensity for the scene.
+      float sPadding0 = 0.0f;
+      float sPadding1 = 0.0f;
+      float sPadding2 = 0.0f;
+    };
+
+    static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");
   }
 }

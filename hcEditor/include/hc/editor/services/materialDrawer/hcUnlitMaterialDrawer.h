@@ -10,8 +10,8 @@ namespace hc::editor
   class UnlitMaterialDrawer : public ABaseMaterialDrawer<UnlitMaterial>
   {
   public:
-    UnlitMaterialDrawer() = default;
-    virtual ~UnlitMaterialDrawer() = default;
+    UnlitMaterialDrawer(ITextureManager& textureManager);
+    ~UnlitMaterialDrawer() override = default;
 
     /**
      * @brief Returns the material type handled by this drawer.
@@ -24,7 +24,18 @@ namespace hc::editor
     }
 
   protected:
+    /**
+     * @copydoc IMaterialDrawer::drawMaterial
+     */
     void onDraw(UnlitMaterial* material) override;
-    void onDrawMeshMaterial(UnlitMaterial* material, Int32 slotIndex) override;
+
+    /**
+     * @copydoc IMaterialDrawer::drawMeshMaterial
+     */
+    void onDrawMeshMaterial(
+      UnlitMaterial* material,
+      Int32 slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) override;
   };
 }

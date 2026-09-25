@@ -5,6 +5,7 @@
 
 namespace hc::editor
 {
+  class EditorMetadataManager;
   class IProjectManagerListener;
 
   /**
@@ -14,12 +15,17 @@ namespace hc::editor
   {
   public:
     /**
-     * @brief Constructs a ProjectManager with the given AssetManager reference.
+     * @brief Creates a ProjectManager instance.
      *
      * @param assetManager Reference to the AssetManager for loading and saving project
      * assets.
+     * @param editorMetadataManager Reference to the EditorMetadataManager for managing
+     * editor metadata.
      */
-    ProjectManager(IAssetManager& assetManager);
+    ProjectManager(
+      IAssetManager& assetManager,
+      EditorMetadataManager& editorMetadataManager
+    );
     virtual ~ProjectManager() = default;
 
     /**
@@ -100,6 +106,7 @@ namespace hc::editor
 
   private:
     IAssetManager& m_assetManager;
+    EditorMetadataManager& m_editorMetadataManager;
     bool m_isProjectOpen;
     UniquePtr<Project> m_currentProject;
     Vector<IProjectManagerListener*> m_listeners;

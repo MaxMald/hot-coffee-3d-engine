@@ -10,8 +10,8 @@ namespace hc::editor
   class HairMaterialDrawer : public ABaseMaterialDrawer<HairMaterial>
   {
   public:
-    HairMaterialDrawer() = default;
-    virtual  ~HairMaterialDrawer() = default;
+    HairMaterialDrawer(ITextureManager& textureManager);
+    ~HairMaterialDrawer() override = default;
 
     /**
      * @copydoc IMaterialDrawer::getMaterialType
@@ -22,8 +22,19 @@ namespace hc::editor
     }
 
   protected:
+
+    /**
+     * @copydoc IMaterialDrawer::drawMaterial
+     */
     void onDraw(HairMaterial* material) override;
-    void onDrawMeshMaterial(HairMaterial* material, Int32 slotIndex) override;
+
+    /**
+     * @copydoc IMaterialDrawer::drawMeshMaterial
+     */
+    void onDrawMeshMaterial(
+      HairMaterial* material,
+      Int32 slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) override;
   };
 }
-

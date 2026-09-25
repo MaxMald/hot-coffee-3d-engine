@@ -1,12 +1,17 @@
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/services/projectManager/hcProject.h"
 #include "hc/editor/services/projectManager/hcIProjectManagerListener.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 #include "hc/editor/serialization/hcProjectSerializer.h"
 
 namespace hc::editor
 {
-  ProjectManager::ProjectManager(IAssetManager& assetManager) :
+  ProjectManager::ProjectManager(
+    IAssetManager& assetManager,
+    EditorMetadataManager& editorMetadataManager
+  ) :
     m_assetManager(assetManager),
+    m_editorMetadataManager(editorMetadataManager),
     m_isProjectOpen(false),
     m_currentProject(nullptr),
     m_listeners()
@@ -36,6 +41,8 @@ namespace hc::editor
 
       m_currentProject->setProjectFilePath(projectPath);
       m_assetManager.setRootPath(projectPath.parentPath());
+      m_editorMetadataManager.saveLastOpenedProjectPath(Path(projectPath));
+      m_editorMetadataManager.getProjectMetadataManager().loadProjectMetadata(projectPath);
       m_isProjectOpen = true;
 
       LogService::Message(
@@ -98,6 +105,11 @@ namespace hc::editor
   {
     if (m_isProjectOpen && m_currentProject)
     {
+      m_editorMetadataManager
+        .getProjectMetadataManager()
+        .saveProjectMetadata(m_currentProject->getProjectFilePath());
+      m_editorMetadataManager.getProjectMetadataManager().clearProjectMetadata();
+
       m_currentProject = nullptr;
       m_isProjectOpen = false;
       m_assetManager.setRootPath(Path());

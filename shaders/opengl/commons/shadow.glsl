@@ -65,26 +65,26 @@ float linearizeDepth(float depth, float nearPlane, float farPlane)
 }
 
 /**
-* @brief Computes the shadowed color contribution of a directional light.
-*
-* @param lightShadowIndex Index into the directional shadow data array.
-* @param color The incoming light contribution color to be modulated by shadow.
-* @param fragPos Fragment world position used to project into light space.
-* @param normal Surface normal used to compute a bias that reduces acne.
-* @param lightDir Direction from the surface toward the directional light.
-*
-* @return The original color multiplied by the shadow attenuation factor.
-*/
-vec4 calculateDirectionalShadowContribution(
+ * @brief Evaluates the shadow factor for a directional light at a given
+ * fragment position.
+ *
+ * @param lightShadowIndex Index into the directional shadow data array.
+ * @param fragPos Fragment world position used to project into light space.
+ * @param normal Surface normal used to compute a bias that reduces acne.
+ * @param lightDir Direction from the surface toward the directional light.
+ *
+ * @return The shadow factor, where 1.0 means fully lit and 0.0 means fully in
+ * shadow.
+ */
+float evaluateDirectionalShadowFactor(
   int lightShadowIndex,
-  vec4 color,
   vec3 fragPos,
   vec3 normal,
   vec3 lightDir
 )
 {
   if (lightShadowIndex < 0 || lightShadowIndex >= MAX_DIRECTIONAL_LIGHTS_SHADOW_DATA)
-    return color;
+    return 1.0;
 
   DirectionalLightShadowFrameData shadowData = directionalLightShadowData[lightShadowIndex];
   mat4 lightSpaceMatrix = shadowData.lightViewProjectionMatrix;
@@ -95,11 +95,10 @@ vec4 calculateDirectionalShadowContribution(
   projCoords = projCoords * 0.5 + 0.5;
 
   if (projCoords.z > 1.0)
-    return color;
+    return 1.0;
 
   if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0)
-    return color;
-
+    return 1.0;
   
   // PCF for soft shadows
   // Sampling 9 neighboring texels in the shadow map
@@ -126,30 +125,19 @@ vec4 calculateDirectionalShadowContribution(
   // Average the shadow factor over the 9 samples
   shadow /= 9.0;
 
-  return color * (1.0 - shadow * shadowData.shadowStrength);
+  return 1.0 - shadow * shadowData.shadowStrength;
 }
 
-/**
-* @brief Computes the shadowed color contribution of a spot light.
-*
-* @param lightShadowIndex Index into the spot shadow data array.
-* @param color The incoming light contribution color to be modulated by shadow.
-* @param fragPos Fragment world position used to project into light space.
-* @param normal Surface normal used to compute a bias that reduces acne.
-* @param lightDir Direction from the surface toward the spot light.
-*
-* @return The original color multiplied by the shadow attenuation factor.
-*/
-vec4 calculateSpotLightShadowContribution(
+
+float evaluateSpotLightShadowFactor(
   int lightShadowIndex,
-  vec4 color,
   vec3 fragPos,
   vec3 normal,
   vec3 lightDir
 )
 {
   if (lightShadowIndex < 0 || lightShadowIndex >= MAX_SPOT_LIGHTS_SHADOW_DATA)
-    return color;
+    return 1.0;
 
   SpotLightShadowFrameData shadowData = spotLightShadowData[lightShadowIndex];
   mat4 lightSpaceMatrix = shadowData.lightViewProjectionMatrix;
@@ -160,10 +148,10 @@ vec4 calculateSpotLightShadowContribution(
   projCoords = projCoords * 0.5 + 0.5;
 
   if (projCoords.z > 1.0)
-    return color;
+    return 1.0;
 
   if (projCoords.x < 0.0 || projCoords.x > 1.0 || projCoords.y < 0.0 || projCoords.y > 1.0)
-    return color;
+    return 1.0;
 
   // PCF for soft shadows
   // Sampling 9 neighboring texels in the shadow map
@@ -196,5 +184,5 @@ vec4 calculateSpotLightShadowContribution(
   // Average the shadow factor over the 9 samples
   shadow /= 9.0;
 
-  return color * (1.0 - shadow * shadowData.shadowStrength);
+  return 1.0 - shadow * shadowData.shadowStrength;
 }

@@ -106,8 +106,8 @@ namespace hc
     : r(0.0f), g(0.0f), b(0.0f), a(1.0f) {
   }
 
-  constexpr Color::Color(float r, float g, float b, float a)
-    : r(r), g(g), b(b), a(a) {
+  constexpr Color::Color(float _r, float _g, float _b, float _a)
+    : r(_r), g(_g), b(_b), a(_a) {
   }
 
   constexpr Color::Color(const Vector4f& v)
@@ -195,12 +195,12 @@ namespace hc
     return Vector4f(r, g, b, a);
   }
 
-  inline Color& Color::setRGBA(UInt8 r, UInt8 g, UInt8 b, UInt8 a)
+  inline Color& Color::setRGBA(UInt8 _r, UInt8 _g, UInt8 _b, UInt8 _a)
   {
-    this->r = r / 255.0f;
-    this->g = g / 255.0f;
-    this->b = b / 255.0f;
-    this->a = a / 255.0f;
+    this->r = _r / 255.0f;
+    this->g = _g / 255.0f;
+    this->b = _b / 255.0f;
+    this->a = _a / 255.0f;
     return *this;
   }
 

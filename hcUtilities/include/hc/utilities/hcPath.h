@@ -49,104 +49,192 @@ namespace hc
     /**
      * @brief Converts the Path to a std::filesystem::path.
      */
-    operator std::filesystem::path() const;
+    inline operator std::filesystem::path() const
+    {
+      return m_path;
+    }
 
     /**
      * @brief Converts the Path to a String representation.
      */
-    operator String() const;
+    inline operator String() const
+    {
+      return String(m_path.string().c_str());
+    }
 
     /**
      * @brief Appends a path component to this path (non-modifying).
      * @param other The path to append.
      * @return A new Path with the appended component
      */
-    Path operator/ (const Path& other) const;
+    inline Path operator/ (const Path& other) const
+    {
+      return Path(m_path / other.m_path);
+    }
 
     /**
      * @brief Appends a path component to this path (in-place).
      * @param other The path to append.
      * @return Reference to this Path
      */
-    Path& operator/= (const Path& other);
+    inline Path& operator/= (const Path& other)
+    {
+      m_path /= other.m_path;
+      return *this;
+    }
 
     /**
      * @brief Appends a String path component to this path (non-modifying).
      * @param other The path component as a String
      * @return A new Path with the appended component
      */
-    Path operator/ (const String& other) const;
+    inline Path operator/ (const String& other) const
+    {
+      return Path(m_path / std::filesystem::path(other.c_str()));
+    }
 
     /**
      * @brief Appends a String path component to this path (in-place).
      * @param other The path component as a String
      * @return Reference to this Path
      */
-    Path& operator/= (const String& other);
+    inline Path& operator/= (const String& other)
+    {
+      m_path /= std::filesystem::path(other.c_str());
+      return *this;
+    }
 
     /**
      * @brief Appends a C-string path component to this path (non-modifying).
      * @param other The path component as a C-string
      * @return A new Path with the appended component
      */
-    Path operator/ (const Char* other) const;
+    inline Path operator/ (const Char* other) const
+    {
+      return Path(m_path / std::filesystem::path(other));
+    }
 
     /**
      * @brief Appends a C-string path component to this path (in-place).
      * @param other The path component as a C-string
      * @return Reference to this Path
      */
-    Path& operator/= (const Char* other);
+    inline Path& operator/= (const Char* other)
+    {
+      m_path /= std::filesystem::path(other);
+      return *this;
+    }
 
     /**
      * @brief Checks equality with another Path.
      * @param other The Path to compare with
-     * @return true if the path string values are equal (type is not compared), false otherwise
-     * @note This compares only the path string content, not the path type.
+     * @return true if the path string values are equal, false otherwise
      */
-    bool operator== (const Path& other) const;
+    inline bool operator== (const Path& other) const
+    {
+      return m_path == other.m_path;
+    }
 
     /**
      * @brief Checks inequality with another Path.
      * @param other The Path to compare with
      * @return true if the path string values differ, false otherwise
-     * @note This compares only the path string content, not the path type.
      */
-    bool operator!= (const Path& other) const;
+    inline bool operator!= (const Path& other) const
+    {
+      return !(*this == other);
+    }
 
     /**
      * @brief Checks equality with a String path.
      * @param other The String to compare with
      * @return true if the path matches the string, false otherwise
      */
-    bool operator== (const String& other) const;
+    inline bool operator== (const String& other) const
+    {
+      return m_path == std::filesystem::path(other.c_str());
+    }
 
     /**
      * @brief Checks inequality with a String path.
      * @param other The String to compare with
      * @return true if the path does not match the string, false otherwise
      */
-    bool operator!= (const String& other) const;
+    inline bool operator!= (const String& other) const
+    {
+      return !(*this == other);
+    }
 
     /**
      * @brief Checks equality with a C-string path.
      * @param other The C-string to compare with
      * @return true if the path matches the string, false otherwise
      */
-    bool operator== (const Char* other) const;
+    inline bool operator== (const Char* other) const
+    {
+      return m_path == std::filesystem::path(other);
+    }
 
     /**
      * @brief Checks inequality with a C-string path.
      * @param other The C-string to compare with
      * @return true if the path does not match the string, false otherwise
      */
-    bool operator!= (const Char* other) const;
+    inline bool operator!= (const Char* other) const
+    {
+      return !(*this == other);
+    }
+
+    /**
+     * @brief Compares this Path with another for ordering.
+     *
+     * @param other The Path to compare with
+     * 
+     * @return true if this path is lexicographically less than the other, false otherwise
+     */
+    inline bool operator< (const Path& other) const
+    {
+      return m_path < other.m_path;
+    }
+
+    /**
+     * @brief Compares this Path with another for ordering.
+     * @param other The Path to compare with
+     * @return true if this path is lexicographically greater than the other, false otherwise
+     */
+    inline bool operator> (const Path& other) const
+    {
+      return m_path > other.m_path;
+    }
+
+    /**
+     * @brief Compares this Path with another for ordering.
+     * @param other The Path to compare with
+     * @return true if this path is lexicographically less than or equal to the other, false otherwise
+     */
+    inline bool operator<= (const Path& other) const
+    {
+      return m_path <= other.m_path;
+    }
+
+    /**
+     * @brief Compares this Path with another for ordering.
+     * @param other The Path to compare with
+     * @return true if this path is lexicographically greater than or equal to the other, false otherwise
+     */
+    inline bool operator>= (const Path& other) const
+    {
+      return m_path >= other.m_path;
+    }
 
     /**
      * @brief Retrieves the underlying std::filesystem::path.
      * @return Const reference to the internal filesystem path
      */
-    const std::filesystem::path& getPath() const;
+    inline const std::filesystem::path& getPath() const
+    {
+      return m_path;
+    }
 
     /**
      * @brief Sets the path from a String and type.
@@ -349,7 +437,10 @@ namespace hc
    * @return A new Path with the appended component
    * @throws InvalidArgumentException if right is an absolute path
    */
-  HC_UTILITY_EXPORT Path operator/ (const String& left, const Path& right);
+  inline Path operator/ (const String& left, const Path& right)
+  {
+    return Path(left) / right;
+  }
 
   /**
    * @brief Appends a Path to a C-string (free function overload).
@@ -358,7 +449,10 @@ namespace hc
    * @return A new Path with the appended component
    * @throws InvalidArgumentException if right is an absolute path
    */
-  HC_UTILITY_EXPORT Path operator/ (const Char* left, const Path& right);
+  inline Path operator/ (const Char* left, const Path& right)
+  {
+    return Path(left) / right;
+  }
 }
 
 namespace std

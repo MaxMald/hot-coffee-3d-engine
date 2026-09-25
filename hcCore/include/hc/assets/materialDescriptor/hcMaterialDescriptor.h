@@ -7,23 +7,12 @@ namespace hc
 {
   namespace assets::materialDescriptor
   {
+    static constexpr float MAXIMUM_IOR = 5.0f;
+
     struct UnlitData : public hc::io::ISerializable
     {
       Path textureImagePath;        ///< The path to the texture used by the unlit material
       Color color = Color::White(); ///< The base color of the unlit material
-
-      void serialize(io::BinaryWriter& writer) const override;
-      void deserialize(io::BinaryReader& reader) override;
-      void clear();
-    };
-
-    struct BlinnPhongData : public hc::io::ISerializable
-    {
-      Path diffuseImagePath;        ///< The path to the diffuse texture
-      Path normalImagePath;         ///< The path to the normal texture
-      Path specularImagePath;       ///< The path to the specular texture
-      Color color = Color::White(); ///< The diffuse color of the Blinn-Phong material
-      float shininess = 32.0f;      ///< The shininess factor for specular highlights
 
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;
@@ -43,6 +32,23 @@ namespace hc
       float specularSecondaryShift = 0.0f;            ///< The shift of the secondary specular highlight
       float specularWidth = 1.0f;                     ///< The width of the specular highlight
       float specularStrength = 1.0f;                  ///< The strength of the specular highlight
+      bool invertNormalMapY = false;                  ///< Whether to invert the Y channel of the normal map
+
+      void serialize(io::BinaryWriter& writer) const override;
+      void deserialize(io::BinaryReader& reader) override;
+      void clear();
+    };
+
+    struct PBRData : public hc::io::ISerializable
+    {
+      Path albedoImagePath;             ///< The path to the albedo texture for PBR material
+      Path normalImagePath;             ///< The path to the normal texture for PBR material
+      Path ormImagePath;                ///< The path to the ORM (Occlusion-Roughness-Metallic) texture for PBR material
+      Color baseColor = Color::White(); ///< The base color of the PBR material
+      float metallic = 1.0f;            ///< The metallic factor for PBR shading
+      float roughness = 1.0f;           ///< The roughness factor for PBR shading
+      float ior = 1.5f;                 ///< The index of refraction for PBR shading
+      bool invertNormalMapY = false;    ///< Whether to invert the Y channel of the normal map
 
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;
@@ -52,8 +58,8 @@ namespace hc
 
   using MaterialDescriptorVariant = std::variant<
     assets::materialDescriptor::UnlitData,
-    assets::materialDescriptor::BlinnPhongData,
-    assets::materialDescriptor::HairData
+    assets::materialDescriptor::HairData,
+    assets::materialDescriptor::PBRData
   >;
 
   /**
@@ -162,28 +168,6 @@ namespace hc
     }
 
     /**
-     * Retrieves a pointer to the BlinnPhongData if the material type is BlinnPhong.
-     *
-     * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
-     * otherwise, nullptr.
-     */
-    inline const assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData() const
-    {
-      return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
-    }
-
-    /**
-     * Retrieves a pointer to the BlinnPhongData if the material type is BlinnPhong.
-     *
-     * @return A pointer to the BlinnPhongData if the material type is BlinnPhong;
-     * otherwise, nullptr.
-     */
-    inline assets::materialDescriptor::BlinnPhongData* getIfBlinnPhongData()
-    {
-      return std::get_if<assets::materialDescriptor::BlinnPhongData>(&variantData);
-    }
-
-    /**
      * Retrieves a pointer to the HairData if the material type is Hair.
      *
      * @return A pointer to the HairData if the material type is Hair; otherwise, nullptr.
@@ -201,6 +185,26 @@ namespace hc
     inline assets::materialDescriptor::HairData* getIfHairData()
     {
       return std::get_if<assets::materialDescriptor::HairData>(&variantData);
+    }
+
+    /**
+     * Retrieves a pointer to the PBRData if the material type is PBR.
+     *
+     * @return A pointer to the PBRData if the material type is PBR; otherwise, nullptr.
+     */
+    inline const assets::materialDescriptor::PBRData* getIfPBRData() const
+    {
+      return std::get_if<assets::materialDescriptor::PBRData>(&variantData);
+    }
+
+    /**
+     * Retrieves a pointer to the PBRData if the material type is PBR.
+     *
+     * @return A pointer to the PBRData if the material type is PBR; otherwise, nullptr.
+     */
+    inline assets::materialDescriptor::PBRData* getIfPBRData()
+    {
+      return std::get_if<assets::materialDescriptor::PBRData>(&variantData);
     }
 
     /**

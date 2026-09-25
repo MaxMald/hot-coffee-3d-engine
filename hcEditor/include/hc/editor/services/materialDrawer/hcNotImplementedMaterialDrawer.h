@@ -34,6 +34,10 @@ namespace hc::editor
     /**
      * @copydoc IMaterialDrawer::drawMeshMaterial
      */
-    void drawMeshMaterial(IMaterial* material, Int32 materialSlotIndex) override;
+    void drawMeshMaterial(
+      IMaterial* material,
+      Int32 materialSlotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    ) override;
   };
 }

@@ -10,10 +10,9 @@ namespace hc::editor
     {
       FinalColor = 0,
       GBufferPositionAndDepth,
-      GBufferNormalRoughness,
+      GBufferNormal,
       GBufferAlbedoAlpha,
-      GBufferMaterialParameters,
-      GBufferSpecularColorAndShininess,
+      GBufferORMIOR,
       Count
     };
 

@@ -162,21 +162,17 @@ namespace hc::editor
       {
         drawRenderTarget(gBuffer.getPositionAndDepth());
       }
-      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferNormalRoughness)
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferNormal)
       {
-        drawRenderTarget(gBuffer.getNormalRoughness());
+        drawRenderTarget(gBuffer.getNormal());
       }
       else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferAlbedoAlpha)
       {
         drawRenderTarget(gBuffer.getAlbedoAlpha());
       }
-      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferMaterialParameters)
+      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferORMIOR)
       {
-        drawRenderTarget(gBuffer.getMaterialParameters());
-      }
-      else if (m_currentRenderTarget == sceneViewportRenderTargetType::GBufferSpecularColorAndShininess)
-      {
-        drawRenderTarget(gBuffer.getSpecularColorAndShininess());
+        drawRenderTarget(gBuffer.getORMIOR());
       }
     }
 

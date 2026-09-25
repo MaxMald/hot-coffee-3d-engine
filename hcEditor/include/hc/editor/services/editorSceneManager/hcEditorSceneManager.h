@@ -7,6 +7,7 @@ namespace hc::editor
 {
   class ProjectManager;
   class IEditorSceneManagerListener;
+  class EditorMetadataManager;
 
   /**
    * @brief Manages the editor's scene, allowing opening, saving, and closing scenes.
@@ -29,12 +30,14 @@ namespace hc::editor
      * @param graphicsManager Reference to the graphics manager for rendering.
      * @param projectManager Reference to the ProjectManager for subscribing to project
      * events.
+     * @param editorMetadataManager Reference to the EditorMetadataManager.
      */
     EditorSceneManager(
       Scene* editorScene,
       IAssetManager& assetManager,
       IGraphicsManager& graphicsManager,
-      ProjectManager& projectManager
+      ProjectManager& projectManager,
+      EditorMetadataManager& editorMetadataManager
     );
     virtual ~EditorSceneManager() = default;
 
@@ -52,7 +55,7 @@ namespace hc::editor
     /**
      * @brief Opens a scene from the specified path.
      *
-     * @param scenePath The file path to the scene to open.
+     * @param scenePath The absolute file path to the scene to open.
      * @return True if the scene was successfully opened, false otherwise.
      */
     bool openScene(const Path& scenePath);
@@ -60,7 +63,7 @@ namespace hc::editor
     /**
      * @brief Saves the current scene to the specified path.
      *
-     * @param scenePath The file path where the scene should be saved.
+     * @param scenePath The absolute file path where the scene should be saved.
      * @return True if the scene was successfully saved, false otherwise.
      */
     bool saveScene(const Path& scenePath);
@@ -78,9 +81,9 @@ namespace hc::editor
     bool isSceneOpen() const;
 
     /**
-     * @brief Retrieves the path of the currently open scene.
+     * @brief Retrieves the absolute path of the currently open scene.
      *
-     * @return A reference to the path of the current scene.
+     * @return A reference to the absolute path of the current scene.
      */
     const Path& getCurrentScenePath() const;
 
@@ -123,11 +126,16 @@ namespace hc::editor
     IAssetManager& m_assetManager;
     IGraphicsManager& m_graphicsManager;
     ProjectManager& m_projectManager;
+    EditorMetadataManager& m_editorMetadataManager;
     Scene* m_editorScene;
     Path m_currentScenePath;
     Vector<IEditorSceneManagerListener*> m_listeners;
 
-    void updateLastOpenedSceneInProject();
+    /**
+     * @brief Adds the last opened scene path to the editor metadata.
+     * @param absoluteScenePath The absolute path of the scene to add to metadata.
+     */
+    void addLastOpenedSceneToMetadata(const Path& absoluteScenePath);
     void assertSceneIsValid() const;
   };
 }

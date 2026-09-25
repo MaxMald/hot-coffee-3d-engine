@@ -4,10 +4,15 @@
 
 #include "hc/editor/imgui/hcImguiUtilities.h"
 #include "hc/editor/hcEditorCommons.h"
-
+#include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
 namespace hc::editor
 {
+  UnlitMaterialDrawer::UnlitMaterialDrawer(ITextureManager& textureManager) :
+    ABaseMaterialDrawer(textureManager)
+  {
+  }
+
   void UnlitMaterialDrawer::onDraw(UnlitMaterial* material)
   {
     if (!material)
@@ -22,7 +27,11 @@ namespace hc::editor
       ImGui::Text("Main Texture: None");
   }
 
-  void UnlitMaterialDrawer::onDrawMeshMaterial(UnlitMaterial* material, Int32 slotIndex)
+  void UnlitMaterialDrawer::onDrawMeshMaterial(
+    UnlitMaterial* material,
+    Int32 slotIndex,
+    ProjectFileDialogView&
+  )
   {
     (void)slotIndex; // Unused parameter
 

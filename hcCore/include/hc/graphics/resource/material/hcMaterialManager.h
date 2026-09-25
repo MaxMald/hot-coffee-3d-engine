@@ -52,9 +52,9 @@ namespace hc
     ) override;
 
     /**
-     * @copydoc IMaterialManager::createBlinnPhongMaterial
+     * @copydoc IMaterialManager::createPBRMaterial
      */
-    SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
+    SharedPtr<PBRMaterial> createPBRMaterial(
       const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
@@ -81,9 +81,9 @@ namespace hc
     const SharedPtr<ITexture>& getDefaultNormalTexture() const override;
 
     /**
-     * @copydoc IMaterialManager::getDefaultSpecularTexture
+     * @copydoc IMaterialManager::getDefaultORMTexture
      */
-    const SharedPtr<ITexture>& getDefaultSpecularTexture() const override;
+    const SharedPtr<ITexture>& getDefaultORMTexture() const override;
 
     /**
      * @copydoc IMaterialManager::clear
@@ -102,6 +102,7 @@ namespace hc
     Vector<SharedPtr<IMaterial>> m_materials;
     SharedPtr<ITexture> m_whiteTexture;
     SharedPtr<ITexture> m_defaultNormalTexture;
+    SharedPtr<ITexture> m_defaultORMTexture;
 
     UInt16 generateMaterialId();
     void createDefaultTextures();

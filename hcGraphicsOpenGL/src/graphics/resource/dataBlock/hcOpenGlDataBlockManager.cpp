@@ -15,8 +15,9 @@ namespace hc
     dataBlockStructure::ObjectData objectInitData;
     dataBlockStructure::LightViewProjection lightViewProjectionInitData;
     dataBlockStructure::MaterialUnlit materialUnlitInitData;
-    dataBlockStructure::MaterialBlinnPhong materialBlinnPhongInitData;
     dataBlockStructure::MaterialHair materialHairInitData;
+    dataBlockStructure::MaterialPBR materialPBRInitData;
+    dataBlockStructure::Scene sceneInitData;
 
     try
     {
@@ -38,16 +39,19 @@ namespace hc
       UniquePtr<OpenGlDataBlock> materialUnlit = MakeUnique<OpenGlDataBlock>();
       materialUnlit->initialize(&materialUnlitInitData, sizeof(materialUnlitInitData));
 
-      UniquePtr<OpenGlDataBlock> materialBlinnPhong = MakeUnique<OpenGlDataBlock>();
-      materialBlinnPhong->initialize(&materialBlinnPhongInitData, sizeof(materialBlinnPhongInitData));
+      UniquePtr<OpenGlDataBlock> materialPBR = MakeUnique<OpenGlDataBlock>();
+      materialPBR->initialize(&materialPBRInitData, sizeof(materialPBRInitData));
 
       UniquePtr<OpenGlDataBlock> materialHair = MakeUnique<OpenGlDataBlock>();
       materialHair->initialize(&materialHairInitData, sizeof(materialHairInitData));
 
+      UniquePtr<OpenGlDataBlock> scene = MakeUnique<OpenGlDataBlock>();
+      scene->initialize(&sceneInitData, sizeof(sceneInitData));
+
       if (!camera->isValid() || !lights->isValid() || !lightShadows->isValid()
         || !object->isValid() || !lightViewProjection->isValid()
-        || !materialUnlit->isValid() || !materialBlinnPhong->isValid()
-        || !materialHair->isValid())
+        || !materialUnlit->isValid() || !materialPBR->isValid()
+        || !materialHair->isValid() || !scene->isValid())
       {
         throw RuntimeErrorException("Failed to initialize one or more OpenGL data blocks.");
       }
@@ -58,8 +62,9 @@ namespace hc
       m_dataBlocks[dataBlockType::Object] = std::move(object);
       m_dataBlocks[dataBlockType::LightViewProjection] = std::move(lightViewProjection);
       m_dataBlocks[dataBlockType::MaterialUnlit] = std::move(materialUnlit);
-      m_dataBlocks[dataBlockType::MaterialBlinnPhong] = std::move(materialBlinnPhong);
       m_dataBlocks[dataBlockType::MaterialHair] = std::move(materialHair);
+      m_dataBlocks[dataBlockType::MaterialPBR] = std::move(materialPBR);
+      m_dataBlocks[dataBlockType::Scene] = std::move(scene);
     }
     catch (const Exception& e)
     {

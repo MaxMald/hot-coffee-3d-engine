@@ -119,8 +119,6 @@ namespace hc
       UnlitVertex = 0,
       UnlitFragment,
       LitVertex,
-      BlinnPhongForwardFragment,
-      BlinnPhongDeferredFragment,
       FullScreenTriangleVertex,
       DeferredLightingFragment,
       SkyboxVertex,
@@ -131,6 +129,8 @@ namespace hc
       HairDeferredGeometryFragment,
       HairForwardSpecularFragment,
       HairForwardTransparentFragment,
+      PBRDeferredGeometryFragment,
+      PBRForwardFragment,
       Count
     };
 
@@ -148,8 +148,6 @@ namespace hc
     enum HC_CORE_EXPORT Type : UInt8
     {
       Unlit = 0,
-      BlinnPhongForward,
-      BlinnPhongDeferredGeometry,
       DeferredLighting,
       Skybox,
       FinalPass,
@@ -157,6 +155,8 @@ namespace hc
       HairDeferredGeometry,
       HairForwardSpecular,
       HairForwardTransparent,
+      PBRDeferredGeometry,
+      PBRForward,
       Count
     };
 
@@ -173,8 +173,8 @@ namespace hc
     enum Type : UInt8
     {
       Unlit = 0,
-      BlinnPhong = 1,
-      Hair = 2,
+      Hair = 1,
+      PBR = 2,
       Unknown = 255
     };
 
@@ -208,6 +208,9 @@ namespace hc
      * @brief Enumeration of data block types used in the rendering engine.
      *
      * This enum defines the various types of data blocks that can be used for rendering.
+     *
+     * @note The index of each type also represents the binding point for the
+     * corresponding data block in the shader.
      */
     enum Type : UInt8
     {
@@ -217,8 +220,9 @@ namespace hc
       Object = 3,
       LightViewProjection = 4,
       MaterialUnlit = 5,
-      MaterialBlinnPhong = 6,
-      MaterialHair = 7,
+      MaterialHair = 6,
+      MaterialPBR = 7,
+      Scene = 8,
       Count
     };
   }
@@ -234,41 +238,16 @@ namespace hc
     enum Type : UInt8
     {
       None = 0,
-      Diffuse = 1,
-      Specular = 2,
-      Ambient = 3,
-      Emissive = 4,
-      Height = 5,
-      Normals = 6,
-      Shininess = 7,
-      Opacity = 8,
-      Displacement = 9,
-      Lightmap = 10,
-      Reflection = 11,
 
-      // PBR
-      BaseColor = 12,
-      NormalCamera = 13,
-      EmissionColor = 14,
-      Metalness = 15,
-      DiffuseRoughness = 16,
-      AmbientOcclusion = 17,
-
-      Sheen = 19,
-      Clearcoat = 20,
-      Transmission = 21,
-
-      // Maya material declarations
-
-      MayaBase = 22,
-      MayaSpecular = 23,
-      MayaSpecularColor = 24,
-      MayaSpecularRoughness = 25,
-
-      Anisotropy = 26,
-      GltfMetallicRoughness = 27,
+      BaseColor = 1,
+      Normal = 2,
+      ORM = 3, // Occlusion, Roughness, Metallic
+      Specular = 4,
 
       Unknown = 255
     };
+
+    String HC_CORE_EXPORT ToString(Type textureType);
+    Type HC_CORE_EXPORT FromString(const String& str);
   }
 }

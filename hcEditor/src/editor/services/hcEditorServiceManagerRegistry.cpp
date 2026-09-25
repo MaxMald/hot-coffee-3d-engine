@@ -16,8 +16,15 @@ namespace hc::editor
       Scene* editorScene
     )
     {
+      // Services are registered in the order of their dependencies. Services that depend
+      // on other services should be registered after their dependencies.
+
+      UniquePtr<EditorMetadataManager> editorMetadataManager = MakeUnique<EditorMetadataManager>(
+        engine.getAssetManager()
+      );
+
       serviceManager.registerService<ProjectManager>(
-        MakeUnique<ProjectManager>(engine.getAssetManager())
+        MakeUnique<ProjectManager>(engine.getAssetManager(), *editorMetadataManager)
       );
       serviceManager.registerService<GameObjectSelectionService>(
         MakeUnique<GameObjectSelectionService>()
@@ -27,15 +34,18 @@ namespace hc::editor
           editorScene,
           engine.getAssetManager(),
           engine.getGraphicsManager(),
-          serviceManager.getService<ProjectManager>()
+          serviceManager.getService<ProjectManager>(),
+          *editorMetadataManager
         )
       );
       serviceManager.registerService<MaterialDrawersManager>(
-        MakeUnique<MaterialDrawersManager>()
+        MakeUnique<MaterialDrawersManager>(engine.getGraphicsManager().getTextureManager())
       );
-      serviceManager.registerService<EditorMetadataManager>(
-        MakeUnique<EditorMetadataManager>(engine.getAssetManager())
-      );
+
+      // Register services that do not have dependencies on other services after all
+      // dependent services have been registered.
+
+      serviceManager.registerService<EditorMetadataManager>(std::move(editorMetadataManager));
     }
   }
 }

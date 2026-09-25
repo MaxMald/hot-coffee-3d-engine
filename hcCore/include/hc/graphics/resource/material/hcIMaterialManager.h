@@ -9,7 +9,7 @@ namespace hc
   class ITexture;
   class IMaterial;
   class UnlitMaterial;
-  class BlinnPhongMaterial;
+  class PBRMaterial;
   class HairMaterial;
 
   class HC_CORE_EXPORT IMaterialManager : public NonCopyable
@@ -55,16 +55,16 @@ namespace hc
     virtual SharedPtr<UnlitMaterial> createUnlitMaterial(
       const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
-    
+
     /**
-     * @brief Creates a Blinn-Phong material.
+     * @brief Creates a default PBR material.
      *
-     * @param descriptor Reference to the Blinn-Phong material descriptor containing the
-     * properties for the Blinn-Phong material to be created.
-     * 
-     * @return Shared pointer to the created Blinn-Phong material.
+     * @param descriptor Reference to the PBR material descriptor containing the
+     * properties for the PBR material to be created.
+     *
+     * @return Shared pointer to the created PBR material.
      */
-    virtual SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
+    virtual SharedPtr<PBRMaterial> createPBRMaterial(
       const SharedPtr<MaterialDescriptor>& descriptor
     ) = 0;
 
@@ -100,10 +100,10 @@ namespace hc
     virtual const SharedPtr<ITexture>& getDefaultNormalTexture() const = 0;
 
     /**
-     * @brief Gets the default specular texture used when a material does not have a
-     * specific specular texture assigned.
+     * @brief Gets the default ORM (Occlusion-Roughness-Metallic) texture used when a
+     * material does not have a specific ORM texture assigned.
      */
-    virtual const SharedPtr<ITexture>& getDefaultSpecularTexture() const = 0;
+    virtual const SharedPtr<ITexture>& getDefaultORMTexture() const = 0;
 
     /**
      * @brief Clears all materials.
