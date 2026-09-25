@@ -534,7 +534,7 @@ namespace hc::io
     if (m_stream == nullptr)
       throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
 
-    return m_stream->eof();
+    return m_stream->peek() == EOF;
   }
 
   bool BinaryReader::isEndOfObject() const

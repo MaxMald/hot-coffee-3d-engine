@@ -56,7 +56,8 @@ namespace hc::io
   };
 
   /**
-   * @brief Represents a serialized object with its header and data.
+   * @brief Represents tracking information for an object being read or written in a
+   * binary stream.
    */
   struct ObjectTrackingInfo
   {

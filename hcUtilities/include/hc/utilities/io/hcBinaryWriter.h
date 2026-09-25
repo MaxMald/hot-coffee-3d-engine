@@ -269,9 +269,9 @@ namespace hc
       Stack<ObjectTrackingInfo> m_objectStack;
 
       /**
-       * @brief Writes the object data to the stream, including its header.
+       * @brief Writes the object header to the stream.
        *
-       * @param object The object data to write.
+       * @param object The object header to write.
        */
       void writeObjectHeader(const ObjectHeader& header);
 

@@ -356,7 +356,7 @@ namespace hc
       /**
        * @brief Reads a length-prefixed string from the stream.
        *
-       * Reads a UInt32 length value followed by the string data.
+       * Reads a UInt64 length value followed by the string data.
        *
        * @return The string read from the stream.
        */
@@ -366,7 +366,7 @@ namespace hc
        * @brief Peeks at the next length-prefixed string without advancing the
        * stream position.
        *
-       * Reads a UInt32 length value followed by the string data, but does not
+       * Reads a UInt64 length value followed by the string data, but does not
        * consume the bytes from the stream.
        *
        * @return The string peeked from the stream.
