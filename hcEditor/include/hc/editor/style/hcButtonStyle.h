@@ -9,7 +9,8 @@ namespace hc::editor::style::buttons
    */
   enum Type : UInt32
   {
-    AggressiveRed = 0
+    Default = 0,
+    AggressiveRed
   };
 
   /**
