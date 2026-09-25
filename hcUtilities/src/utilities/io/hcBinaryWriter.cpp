@@ -68,114 +68,96 @@ namespace hc::io
 
   void BinaryWriter::writeBool(bool value)
   {
-    assertStreamValid();
     UInt8 byteValue = value ? 1 : 0;
-    m_stream->write(reinterpret_cast<const char*>(&byteValue), sizeof(UInt8));
+    writeStream(reinterpret_cast<const char*>(&byteValue), sizeof(UInt8));
   }
 
   void BinaryWriter::writeInt8(Int8 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int8));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Int8));
   }
 
   void BinaryWriter::writeInt16(Int16 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int16));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Int16));
   }
 
   void BinaryWriter::writeInt32(Int32 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int32));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Int32));
   }
 
   void BinaryWriter::writeInt64(Int64 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int64));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Int64));
   }
 
   void BinaryWriter::writeUInt8(UInt8 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt8));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(UInt8));
   }
 
   void BinaryWriter::writeUInt16(UInt16 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt16));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(UInt16));
   }
 
   void BinaryWriter::writeUInt32(UInt32 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt32));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(UInt32));
   }
 
   void BinaryWriter::writeUInt64(UInt64 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt64));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(UInt64));
   }
 
   void BinaryWriter::writeChar(Char value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Char));
   }
 
   void BinaryWriter::writeChar16(Char16 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char16));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Char16));
   }
 
   void BinaryWriter::writeChar32(Char32 value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char32));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Char32));
   }
 
   void BinaryWriter::writeUChar(UChar value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UChar));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(UChar));
   }
 
   void BinaryWriter::writeFloat(float value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(float));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(float));
   }
 
   void BinaryWriter::writeByte(Byte value)
   {
-    assertStreamValid();
-    m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Byte));
+    writeStream(reinterpret_cast<const char*>(&value), sizeof(Byte));
   }
 
   void BinaryWriter::writeBytes(const Byte* data, SizeT size)
   {
-    assertStreamValid();
     if (data == nullptr || size == 0)
       return;
 
-    m_stream->write(reinterpret_cast<const char*>(data), size);
+    writeStream(reinterpret_cast<const char*>(data), size);
   }
 
   void BinaryWriter::writeSizeT(SizeT value)
   {
-    assertStreamValid();
     UInt64 fixedValue = static_cast<UInt64>(value);
     writeUInt64(fixedValue);
   }
 
   void BinaryWriter::writeUUID(const UUID& value)
   {
-    assertStreamValid();
     auto bytes = value.asBytes();
     if (bytes.size() != UUID::UUID_BYTE_SIZE)
       throw RuntimeErrorException(
@@ -201,8 +183,7 @@ namespace hc::io
     if (length == 0)
       return;
 
-    assertStreamValid();
-    m_stream->write(value.c_str(), length);
+    writeStream(value.c_str(), length);
   }
 
   void BinaryWriter::writeVector3f(const Vector3f& value)
@@ -288,7 +269,6 @@ namespace hc::io
 
   void BinaryWriter::writeObjectHeader(const ObjectHeader& header)
   {
-    assertStreamValid();
     writeUInt64(header.size);
     writeUInt32(header.type);
     writeUInt32(header.version);

@@ -280,7 +280,7 @@ namespace hc
        *
        * @return The byte value peeked from the stream.
        */
-      Byte peakByte();
+      Byte peekByte();
 
       /**
        * @brief Reads a specified number of bytes into a buffer.
@@ -484,18 +484,18 @@ namespace hc
       bool isValid() const;
 
       /**
-       * @brief Checks either the stream or the current object for more data to read.
-       *
-       * @return True if there is more data to read, false otherwise.
-       */
-      bool hasMoreData() const;
-
-      /**
        * @brief Checks if the end of the stream has been reached.
        *
        * @return True if the end of the stream or object has been reached, false otherwise.
        */
       bool isEndOfStream() const;
+
+      /**
+       * @brief Checks if the end of the current object has been reached.
+       *
+       * @return True if the end of the current object has been reached, false otherwise.
+       */
+      bool isEndOfObject() const;
 
       /**
        * @brief Checks if the reader is currently reading an object.
@@ -519,6 +519,33 @@ namespace hc
       {
         if (m_stream == nullptr || !m_stream->good())
           throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
+      }
+
+      /**
+       * @brief Reads a specified number of bytes from the stream into a buffer.
+       *
+       * This method checks if the read operation would exceed the bounds of the
+       * current object being read (if any). If it does, an exception is thrown.
+       *
+       * @param buffer The buffer to read data into.
+       * @param size The number of bytes to read.
+       *
+       * @throws RuntimeErrorException if the read operation exceeds the current
+       *         object's bounds or if the stream is not valid.
+       */
+      inline void readStream(char* buffer, SizeT size)
+      {
+        assertStreamValid();
+
+        if (m_objectStack.size() > 0)
+        {
+          std::streampos currentPos = m_stream->tellg();
+          std::streampos endPos = m_objectStack.top().endPosition;
+          if (currentPos + static_cast<std::streampos>(size) > endPos)
+            throw RuntimeErrorException("BinaryReader: Attempt to read beyond the end of the current object.");
+        }
+
+        m_stream->read(buffer, static_cast<std::streamsize>(size));
       }
     };
   }

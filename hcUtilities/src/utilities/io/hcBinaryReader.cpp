@@ -57,9 +57,8 @@ namespace hc::io
 
   bool BinaryReader::readBool()
   {
-    assertStreamValid();
     UInt8 byteValue = 0;
-    m_stream->read(reinterpret_cast<char*>(&byteValue), sizeof(UInt8));
+    readStream(reinterpret_cast<char*>(&byteValue), sizeof(UInt8));
     return byteValue != 0;
   }
 
@@ -74,9 +73,8 @@ namespace hc::io
 
   Int8 BinaryReader::readInt8()
   {
-    assertStreamValid();
     Int8 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int8));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int8));
     return value;
   }
 
@@ -91,9 +89,8 @@ namespace hc::io
 
   Int16 BinaryReader::readInt16()
   {
-    assertStreamValid();
     Int16 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int16));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int16));
     return value;
   }
 
@@ -108,9 +105,8 @@ namespace hc::io
 
   Int32 BinaryReader::readInt32()
   {
-    assertStreamValid();
     Int32 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int32));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int32));
     return value;
   }
 
@@ -125,9 +121,8 @@ namespace hc::io
 
   Int64 BinaryReader::readInt64()
   {
-    assertStreamValid();
     Int64 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int64));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int64));
     return value;
   }
 
@@ -142,9 +137,8 @@ namespace hc::io
 
   UInt8 BinaryReader::readUInt8()
   {
-    assertStreamValid();
     UInt8 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt8));
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt8));
     return value;
   }
 
@@ -159,9 +153,8 @@ namespace hc::io
 
   UInt16 BinaryReader::readUInt16()
   {
-    assertStreamValid();
     UInt16 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt16));
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt16));
     return value;
   }
 
@@ -176,9 +169,8 @@ namespace hc::io
 
   UInt32 BinaryReader::readUInt32()
   {
-    assertStreamValid();
     UInt32 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt32));
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt32));
     return value;
   }
 
@@ -193,9 +185,8 @@ namespace hc::io
 
   UInt64 BinaryReader::readUInt64()
   {
-    assertStreamValid();
     UInt64 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt64));
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt64));
     return value;
   }
 
@@ -210,9 +201,8 @@ namespace hc::io
 
   Char BinaryReader::readChar()
   {
-    assertStreamValid();
     Char value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char));
     return value;
   }
 
@@ -227,9 +217,8 @@ namespace hc::io
 
   Char16 BinaryReader::readChar16()
   {
-    assertStreamValid();
     Char16 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char16));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char16));
     return value;
   }
 
@@ -244,9 +233,8 @@ namespace hc::io
 
   Char32 BinaryReader::readChar32()
   {
-    assertStreamValid();
     Char32 value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char32));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char32));
     return value;
   }
 
@@ -261,9 +249,8 @@ namespace hc::io
 
   UChar BinaryReader::readUChar()
   {
-    assertStreamValid();
     UChar value = 0;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(UChar));
+    readStream(reinterpret_cast<char*>(&value), sizeof(UChar));
     return value;
   }
 
@@ -278,9 +265,8 @@ namespace hc::io
 
   float BinaryReader::readFloat()
   {
-    assertStreamValid();
     float value = 0.0f;
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(float));
+    readStream(reinterpret_cast<char*>(&value), sizeof(float));
     return value;
   }
 
@@ -295,13 +281,12 @@ namespace hc::io
 
   Byte BinaryReader::readByte()
   {
-    assertStreamValid();
     Byte value = static_cast<Byte>(0);
-    m_stream->read(reinterpret_cast<char*>(&value), sizeof(Byte));
+    readStream(reinterpret_cast<char*>(&value), sizeof(Byte));
     return value;
   }
 
-  Byte BinaryReader::peakByte()
+  Byte BinaryReader::peekByte()
   {
     assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
@@ -317,7 +302,7 @@ namespace hc::io
 
     assertStreamValid();
     buffer.resize(size);
-    m_stream->read(reinterpret_cast<char*>(buffer.data()), size);
+    readStream(reinterpret_cast<char*>(buffer.data()), size);
   }
 
   void BinaryReader::readBytes(Byte* buffer, SizeT size)
@@ -328,8 +313,7 @@ namespace hc::io
     if (buffer == nullptr)
       throw RuntimeErrorException("BinaryReader: Cannot read bytes into the given buffer. Buffer pointer is null.");
 
-    assertStreamValid();
-    m_stream->read(reinterpret_cast<char*>(buffer), size);
+    readStream(reinterpret_cast<char*>(buffer), size);
   }
 
   SizeT BinaryReader::readSizeT()
@@ -394,7 +378,6 @@ namespace hc::io
 
   String BinaryReader::readString()
   {
-    assertStreamValid();
     SizeT length = readSizeT();
     if (length == 0)
       return String();
@@ -402,7 +385,7 @@ namespace hc::io
     String value;
     value.resize(length);
 
-    m_stream->read(reinterpret_cast<char*>(&value[0]), length);
+    readStream(reinterpret_cast<char*>(&value[0]), length);
     return value;
   }
 
@@ -417,7 +400,6 @@ namespace hc::io
 
   Vector3f BinaryReader::readVector3f()
   {
-    assertStreamValid();
     Vector3f value;
     value.x = readFloat();
     value.y = readFloat();
@@ -436,7 +418,6 @@ namespace hc::io
 
   Vector4f BinaryReader::readVector4f()
   {
-    assertStreamValid();
     Vector4f value;
     value.x = readFloat();
     value.y = readFloat();
@@ -456,7 +437,6 @@ namespace hc::io
 
   Matrix4 BinaryReader::readMatrix4()
   {
-    assertStreamValid();
     Matrix4 value;
     for (int i = 0; i < 16; ++i)
     {
@@ -476,7 +456,6 @@ namespace hc::io
 
   Angle BinaryReader::readAngle()
   {
-    assertStreamValid();
     float radians = readFloat();
     return Angle::FromRadians(radians);
   }
@@ -492,7 +471,6 @@ namespace hc::io
 
   Color BinaryReader::readColor()
   {
-    assertStreamValid();
     Color value;
     value.r = readFloat();
     value.g = readFloat();
@@ -551,24 +529,22 @@ namespace hc::io
   {
     return m_stream != nullptr && m_stream->good();
   }
-
-  bool BinaryReader::hasMoreData() const
-  {
-    assertStreamValid();
-    if (!m_objectStack.empty())
-    {
-      std::streampos currentPos = m_stream->tellg();
-      return currentPos < m_objectStack.top().endPosition;
-    }
-    return m_stream->peek() != EOF;
-  }
-
   bool BinaryReader::isEndOfStream() const
   {
     if (m_stream == nullptr)
       throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
 
     return m_stream->eof();
+  }
+
+  bool BinaryReader::isEndOfObject() const
+  {
+    assertStreamValid();
+    if (m_objectStack.empty())
+      throw RuntimeErrorException("No object is currently being read.");
+
+    std::streampos currentPos = m_stream->tellg();
+    return currentPos >= m_objectStack.top().endPosition;
   }
 
   bool BinaryReader::isReadingObject() const
@@ -579,7 +555,6 @@ namespace hc::io
 
   ObjectHeader BinaryReader::readObjectHeader()
   {
-    assertStreamValid();
     ObjectHeader header;
     header.size = readUInt64();
     header.type = readUInt32();

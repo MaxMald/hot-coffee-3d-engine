@@ -285,6 +285,20 @@ namespace hc
         if (m_stream == nullptr || !m_stream->good())
           throw RuntimeErrorException("BinaryWriter: Stream is not valid for writing.");
       }
+
+      /**
+       * @brief Writes raw data to the stream.
+       *
+       * @param data Pointer to the data to write.
+       * @param size The number of bytes to write.
+       */
+      inline void writeStream(const char* data, SizeT size)
+      {
+        assertStreamValid();
+        m_stream->write(data, static_cast<std::streamsize>(size));
+        if (m_stream->fail())
+          throw RuntimeErrorException("BinaryWriter: Failed to write to the stream.");
+      }
     };
   }
 }
