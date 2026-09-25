@@ -2,6 +2,7 @@
 
 #include "hc/editor/services/editorSceneManager/hcIEditorSceneManagerListener.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 
 using hc::serialization::SceneSerializer;
 
@@ -11,11 +12,13 @@ namespace hc::editor
     Scene* editorScene,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager,
-    ProjectManager& projectManager
+    ProjectManager& projectManager,
+    EditorMetadataManager& editorMetadataManager
   ) :
     m_assetManager(assetManager),
     m_graphicsManager(graphicsManager),
     m_projectManager(projectManager),
+    m_editorMetadataManager(editorMetadataManager),
     m_editorScene(editorScene),
     m_currentScenePath(),
     m_listeners()
@@ -39,6 +42,15 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
+    if (!scenePath.exists())
+    {
+      LogService::Error(
+        "Failed to open scene: " + scenePath.toString() +
+        ". File does not exist."
+      );
+      return false;
+    }
+
     if (SceneSerializer::Deserialize(
       *m_editorScene,
       scenePath,
@@ -47,7 +59,7 @@ namespace hc::editor
     ))
     {
       m_currentScenePath = scenePath;
-      updateLastOpenedSceneInProject();
+      addLastOpenedSceneToMetadata(scenePath);
 
       LogService::Message(
         "Scene opened successfully: " + scenePath.toString()
@@ -61,17 +73,26 @@ namespace hc::editor
 
       return true;
     }
-
     return false;
   }
 
   bool EditorSceneManager::saveScene(const Path& scenePath)
   {
     assertSceneIsValid();
+
+    if (!scenePath.isCreatable())
+    {
+      LogService::Error(
+        "Failed to save scene: " + scenePath.toString() +
+        ". File path is not creatable."
+      );
+      return false;
+    }
+
     if (SceneSerializer::Serialize(*m_editorScene, scenePath, m_assetManager))
     {
       m_currentScenePath = scenePath;
-      updateLastOpenedSceneInProject();
+      addLastOpenedSceneToMetadata(scenePath);
 
       LogService::Message(
         "Scene saved successfully: " + scenePath.toString()
@@ -141,18 +162,38 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
-    Project* currentProject = m_projectManager.getCurrentProject();
-    if (!currentProject)
+    const Vector<Path>& recentOpenedScenes = m_editorMetadataManager
+      .getProjectMetadataManager()
+      .getLastOpenedScenePaths();
+
+    if (recentOpenedScenes.empty())
       return;
 
-    String relativeScenePath = currentProject->getPathToLastOpenedScene();
-    if (relativeScenePath.empty())
+    Path lastOpenedScenePath = recentOpenedScenes.front();
+    if (lastOpenedScenePath.empty())
       return;
 
-    Path lastOpenedScenePath(relativeScenePath);
-    lastOpenedScenePath = lastOpenedScenePath.toAbsolute(m_projectManager.getCurrentProjectDirectory());
+    try
+    {
+      Path projectDirectory = m_projectManager.getCurrentProjectDirectory();
+      Path absoluteScenePath = lastOpenedScenePath.toAbsolute(projectDirectory);
 
-    openScene(lastOpenedScenePath);
+      if (!absoluteScenePath.exists())
+        return;
+
+      openScene(absoluteScenePath);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to open last opened scene: '%s' for project '%s'. Error: %s",
+          lastOpenedScenePath.toString().c_str(),
+          m_projectManager.getCurrentProjectDirectory().toString().c_str(),
+          e.what()
+        )
+      );
+    }
   }
 
   void EditorSceneManager::onProjectClosed()
@@ -161,11 +202,16 @@ namespace hc::editor
       closeScene();
   }
 
-  void EditorSceneManager::updateLastOpenedSceneInProject()
+  void EditorSceneManager::addLastOpenedSceneToMetadata(const Path& scenePath)
   {
     Project* currentProject = m_projectManager.getCurrentProject();
-    if (currentProject)
-      currentProject->setPathToLastOpenedScene(m_currentScenePath);
+    if (currentProject == nullptr)
+      return;
+
+    m_editorMetadataManager.getProjectMetadataManager().saveLastOpenedScenePath(
+      currentProject->getProjectFilePath(),
+      scenePath
+    );
   }
 
   void EditorSceneManager::assertSceneIsValid() const

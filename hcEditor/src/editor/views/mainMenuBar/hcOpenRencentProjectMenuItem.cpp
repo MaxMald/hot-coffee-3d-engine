@@ -31,7 +31,7 @@ namespace hc::editor
 
         String projectName = projectPath.filename().toString();
         if (ImGui::MenuItem(projectName.c_str()))
-          m_projectManager.openProject(projectPath);
+          m_projectManager.openProject(Path(projectPath));
 
         if (ImGui::IsItemHovered())
           ImGui::SetTooltip("%s", projectPath.toString().c_str());

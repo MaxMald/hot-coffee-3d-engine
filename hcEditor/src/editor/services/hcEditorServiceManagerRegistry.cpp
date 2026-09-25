@@ -34,7 +34,8 @@ namespace hc::editor
           editorScene,
           engine.getAssetManager(),
           engine.getGraphicsManager(),
-          serviceManager.getService<ProjectManager>()
+          serviceManager.getService<ProjectManager>(),
+          *editorMetadataManager
         )
       );
       serviceManager.registerService<MaterialDrawersManager>(

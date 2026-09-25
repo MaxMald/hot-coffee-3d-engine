@@ -15,4 +15,13 @@ namespace hc::editor::metadata
     void deserialize(io::BinaryReader& reader) override;
     void clear();
   };
+
+  struct ProjectMetadata : public hc::io::ISerializable
+  {
+    Vector<Path> lastOpenedScenes;  ///< List of paths to the last opened scenes in the project
+
+    void serialize(io::BinaryWriter& writer) const override;
+    void deserialize(io::BinaryReader& reader) override;
+    void clear();
+  };
 }

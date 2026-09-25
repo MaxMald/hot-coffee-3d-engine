@@ -30,9 +30,13 @@
 #include "hc/editor/views/mainMenuBar/hcOpenProjectMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcSaveProjectMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcToggleWindowMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcCreateSceneMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcSaveSceneMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcSaveAsSceneMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcOpenSceneMenuItem.h"
+#include "hc/editor/views/mainMenuBar/hcOpenRecentSceneMenuItem.h"
 #include "hc/editor/views/mainMenuBar/hcOpenRecentProjectMenuItem.h"
+
 
 namespace hc::editor
 {
@@ -68,12 +72,27 @@ namespace hc::editor
       mainMenuBar->addMenu(
         menuBuilder
           .beginMenu("Scene")
+            .addMenuItem(MakeUnique<CreateSceneMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              editorServiceManager.getService<EditorSceneManager>(),
+              *editorViewsManager.getView<ProjectFileDialogView>()
+            ))
             .addMenuItem(MakeUnique<OpenSceneMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               editorServiceManager.getService<EditorSceneManager>(),
               *editorViewsManager.getView<ProjectFileDialogView>()
             ))
+            .addMenuItem(MakeUnique<OpenRecentSceneMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              editorServiceManager.getService<EditorSceneManager>(),
+              editorServiceManager.getService<EditorMetadataManager>()
+            ))
             .addMenuItem(MakeUnique<SaveSceneMenuItem>(
+              editorServiceManager.getService<ProjectManager>(),
+              editorServiceManager.getService<EditorSceneManager>(),
+              *editorViewsManager.getView<ProjectFileDialogView>()
+            ))
+            .addMenuItem(MakeUnique<SaveAsSceneMenuItem>(
               editorServiceManager.getService<ProjectManager>(),
               editorServiceManager.getService<EditorSceneManager>(),
               *editorViewsManager.getView<ProjectFileDialogView>()

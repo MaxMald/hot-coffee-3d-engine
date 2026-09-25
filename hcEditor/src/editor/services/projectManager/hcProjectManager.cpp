@@ -42,6 +42,7 @@ namespace hc::editor
       m_currentProject->setProjectFilePath(projectPath);
       m_assetManager.setRootPath(projectPath.parentPath());
       m_editorMetadataManager.saveLastOpenedProjectPath(Path(projectPath));
+      m_editorMetadataManager.getProjectMetadataManager().loadProjectMetadata(projectPath);
       m_isProjectOpen = true;
 
       LogService::Message(
@@ -104,6 +105,11 @@ namespace hc::editor
   {
     if (m_isProjectOpen && m_currentProject)
     {
+      m_editorMetadataManager
+        .getProjectMetadataManager()
+        .saveProjectMetadata(m_currentProject->getProjectFilePath());
+      m_editorMetadataManager.getProjectMetadataManager().clearProjectMetadata();
+
       m_currentProject = nullptr;
       m_isProjectOpen = false;
       m_assetManager.setRootPath(Path());
