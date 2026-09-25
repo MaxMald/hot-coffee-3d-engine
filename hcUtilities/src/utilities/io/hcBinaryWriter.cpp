@@ -10,7 +10,6 @@ namespace hc::io
 {
   BinaryWriter::BinaryWriter() :
     m_stream(nullptr),
-    m_currentObject(nullptr),
     m_objectStack()
   {}
 
@@ -19,7 +18,6 @@ namespace hc::io
     if (m_stream != nullptr)
       m_stream.reset();
 
-    m_currentObject.reset();
     while (!m_objectStack.empty())
       m_objectStack.pop();
   }
@@ -37,6 +35,7 @@ namespace hc::io
         );
 
       m_stream = std::move(fileStream);
+      assertStreamValid();
       return true;
     }
     catch (const Exception& e)
@@ -63,207 +62,120 @@ namespace hc::io
       m_stream.reset();
     }
 
-    m_currentObject.reset();
     while (!m_objectStack.empty())
       m_objectStack.pop();
   }
 
   void BinaryWriter::writeBool(bool value)
   {
+    assertStreamValid();
     UInt8 byteValue = value ? 1 : 0;
-
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&byteValue, sizeof(UInt8));
-      return;
-    }
-
     m_stream->write(reinterpret_cast<const char*>(&byteValue), sizeof(UInt8));
   }
 
   void BinaryWriter::writeInt8(Int8 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Int8));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int8));
   }
 
   void BinaryWriter::writeInt16(Int16 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Int16));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int16));
   }
 
   void BinaryWriter::writeInt32(Int32 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Int32));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int32));
   }
 
   void BinaryWriter::writeInt64(Int64 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Int64));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Int64));
   }
 
   void BinaryWriter::writeUInt8(UInt8 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(UInt8));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt8));
   }
 
   void BinaryWriter::writeUInt16(UInt16 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(UInt16));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt16));
   }
 
   void BinaryWriter::writeUInt32(UInt32 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(UInt32));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt32));
   }
 
   void BinaryWriter::writeUInt64(UInt64 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(UInt64));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UInt64));
   }
 
   void BinaryWriter::writeChar(Char value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Char));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char));
   }
 
   void BinaryWriter::writeChar16(Char16 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Char16));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char16));
   }
 
   void BinaryWriter::writeChar32(Char32 value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Char32));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Char32));
   }
 
   void BinaryWriter::writeUChar(UChar value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(UChar));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(UChar));
   }
 
   void BinaryWriter::writeFloat(float value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(float));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(float));
   }
 
   void BinaryWriter::writeByte(Byte value)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&value, sizeof(Byte));
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(reinterpret_cast<const char*>(&value), sizeof(Byte));
   }
 
   void BinaryWriter::writeBytes(const Byte* data, SizeT size)
   {
+    assertStreamValid();
     if (data == nullptr || size == 0)
       return;
-
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(reinterpret_cast<const Byte*>(data), size);
-      return;
-    }
 
     m_stream->write(reinterpret_cast<const char*>(data), size);
   }
 
   void BinaryWriter::writeSizeT(SizeT value)
   {
+    assertStreamValid();
     UInt64 fixedValue = static_cast<UInt64>(value);
-
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(&fixedValue, sizeof(UInt64));
-      return;
-    }
-
     writeUInt64(fixedValue);
   }
 
   void BinaryWriter::writeUUID(const UUID& value)
   {
+    assertStreamValid();
     auto bytes = value.asBytes();
     if (bytes.size() != UUID::UUID_BYTE_SIZE)
       throw RuntimeErrorException(
@@ -282,19 +194,14 @@ namespace hc::io
   }
 
   void BinaryWriter::writeString(const String& value)
-  {
+  { 
     SizeT length = static_cast<SizeT>(value.length());
     writeSizeT(length);
 
     if (length == 0)
       return;
 
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->append(reinterpret_cast<const void*>(value.c_str()), length);
-      return;
-    }
-
+    assertStreamValid();
     m_stream->write(value.c_str(), length);
   }
 
@@ -336,38 +243,42 @@ namespace hc::io
 
   void BinaryWriter::startWritingObject(UInt32 type, UInt32 version)
   {
-    if (m_currentObject != nullptr)
-    {
-      m_objectStack.push(std::move(m_currentObject));
-      m_currentObject = MakeUnique<ObjectData>(type, version);
-    }
-    else
-    {
-      m_currentObject = MakeUnique<ObjectData>(type, version);
-    }
+    assertStreamValid();
+
+    ObjectTrackingInfo trackingInfo;
+    trackingInfo.startPosition = m_stream->tellp();
+
+    ObjectHeader header;
+    header.size = 0; // Placeholder, will be updated later
+    header.type = type;
+    header.version = version;
+
+    writeObjectHeader(header);
+    m_objectStack.push(trackingInfo);
   }
 
   void BinaryWriter::finishWritingObject()
   {
-    if (m_currentObject == nullptr)
+    assertStreamValid();
+
+    if (m_objectStack.empty())
       throw RuntimeErrorException("No object is currently being written.");
 
-    UniquePtr<ObjectData> finishedObject = std::move(m_currentObject);
-    m_currentObject.reset();
+    ObjectTrackingInfo currentObject = m_objectStack.top();
+    m_objectStack.pop();
 
-    if (!m_objectStack.empty())
-    {
-      m_currentObject = std::move(m_objectStack.top());
-      m_objectStack.pop();
-    }
+    std::streampos endPosition = m_stream->tellp();
+    std::streampos size = endPosition - currentObject.startPosition;
 
-    writeObject(*finishedObject);
-    finishedObject.reset();
+    m_stream->seekp(currentObject.startPosition);
+    writeUInt64(static_cast<UInt64>(size));
+
+    m_stream->seekp(endPosition);
   }
   
   bool BinaryWriter::isWritingObject() const
   {
-    return m_currentObject != nullptr;
+    return m_objectStack.size() > 0;
   }
 
   bool BinaryWriter::isValid() const
@@ -375,15 +286,11 @@ namespace hc::io
     return m_stream != nullptr && m_stream->good();
   }
 
-  void BinaryWriter::writeObject(const ObjectData& objectData)
+  void BinaryWriter::writeObjectHeader(const ObjectHeader& header)
   {
-    const ObjectHeader& header = objectData.getHeader();
-    writeBytes(reinterpret_cast<const Byte*>(&header), sizeof(ObjectHeader));
-
-    const Vector<Byte>& data = objectData.getData();
-    if (data.empty())
-      return;
-
-    writeBytes(data.data(), data.size());
+    assertStreamValid();
+    writeUInt64(header.size);
+    writeUInt32(header.type);
+    writeUInt32(header.version);
   }
 }
