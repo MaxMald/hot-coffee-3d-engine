@@ -382,6 +382,29 @@ namespace hc::io
     if (length == 0)
       return String();
 
+    if (isReadingObject())
+    {
+      SizeT remainingBytes = remainingObjectBytes();
+      if (length > remainingBytes)
+        throw RuntimeErrorException(
+          String::Format("BinaryReader: Attempted to read a string of length %zu, but only %zu bytes remain in the current object.",
+            length,
+            remainingBytes
+          )
+        );
+    }
+    else
+    {
+      SizeT remainingBytes = remainingStreamBytes();
+      if (length > remainingBytes)
+        throw RuntimeErrorException(
+          String::Format("BinaryReader: Attempted to read a string of length %zu, but only %zu bytes remain in the stream.",
+            length,
+            remainingBytes
+          )
+        );
+    }
+
     String value;
     value.resize(length);
 
@@ -523,34 +546,6 @@ namespace hc::io
     std::streampos currentPos = m_stream->tellg();
     if (currentPos < currentObject.endPosition)
       m_stream->seekg(currentObject.endPosition);
-  }
-
-  bool BinaryReader::isValid() const
-  {
-    return m_stream != nullptr && m_stream->good();
-  }
-  bool BinaryReader::isEndOfStream() const
-  {
-    if (m_stream == nullptr)
-      throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
-
-    return m_stream->peek() == EOF;
-  }
-
-  bool BinaryReader::isEndOfObject() const
-  {
-    assertStreamValid();
-    if (m_objectStack.empty())
-      throw RuntimeErrorException("No object is currently being read.");
-
-    std::streampos currentPos = m_stream->tellg();
-    return currentPos >= m_objectStack.top().endPosition;
-  }
-
-  bool BinaryReader::isReadingObject() const
-  {
-    assertStreamValid();
-    return !m_objectStack.empty();
   }
 
   ObjectHeader BinaryReader::readObjectHeader()

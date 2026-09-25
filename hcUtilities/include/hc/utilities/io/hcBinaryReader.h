@@ -481,28 +481,91 @@ namespace hc
        * @return True if the stream is valid and ready for reading, false
        *         otherwise.
        */
-      bool isValid() const;
+      inline bool isValid() const
+      {
+        return m_stream != nullptr && m_stream->good();
+      }
 
       /**
        * @brief Checks if the end of the stream has been reached.
        *
-       * @return True if the end of the stream or object has been reached, false otherwise.
+       * @return True if the end of the stream has been reached, false otherwise.
        */
-      bool isEndOfStream() const;
+      inline bool isEndOfStream() const
+      {
+        if (m_stream == nullptr)
+          throw RuntimeErrorException("BinaryReader: Stream is not valid for reading.");
+        return m_stream->peek() == EOF;
+      }
 
       /**
        * @brief Checks if the end of the current object has been reached.
        *
        * @return True if the end of the current object has been reached, false otherwise.
        */
-      bool isEndOfObject() const;
+      inline bool isEndOfObject() const
+      {
+        assertStreamValid();
+        if (m_objectStack.empty())
+          throw RuntimeErrorException("No object is currently being read.");
+
+        std::streampos currentPos = m_stream->tellg();
+        return currentPos >= m_objectStack.top().endPosition;
+      }
 
       /**
        * @brief Checks if the reader is currently reading an object.
        *
        * @return True if reading an object, false otherwise.
        */
-      bool isReadingObject() const;
+      inline bool isReadingObject() const
+      {
+        assertStreamValid();
+        return !m_objectStack.empty();
+      }
+
+      /**
+       * @brief Returns the number of bytes remaining to be read in the current object.
+       *
+       * @return The number of bytes remaining in the current object.
+       *
+       * @throws RuntimeErrorException if no object is currently being read or if the
+       *         current stream position exceeds the end of the current object.
+       */
+      inline SizeT remainingObjectBytes() const
+      {
+        assertStreamValid();
+        if (m_objectStack.empty())
+          throw RuntimeErrorException("No object is currently being read.");
+
+        std::streampos currentPos = m_stream->tellg();
+        std::streampos endPos = m_objectStack.top().endPosition;
+
+        if (currentPos > endPos)
+          throw RuntimeErrorException("Current stream position exceeds the end of the current object.");
+
+        return static_cast<SizeT>(endPos - currentPos);
+      }
+
+      /**
+       * @brief Returns the number of bytes remaining to be read in the entire stream.
+       *
+       * @return The number of bytes remaining in the stream.
+       *
+       * @throws RuntimeErrorException if the stream is not valid for reading.
+       */
+      inline SizeT remainingStreamBytes() const
+      {
+        assertStreamValid();
+
+        std::streampos currentPos = m_stream->tellg();
+
+        m_stream->seekg(0, std::ios::end);
+        std::streampos endPos = m_stream->tellg();
+        m_stream->seekg(currentPos);
+
+        return static_cast<SizeT>(endPos - currentPos);
+      }
 
     protected:
       UniquePtr<std::istream> m_stream;
@@ -546,6 +609,8 @@ namespace hc
         }
 
         m_stream->read(buffer, static_cast<std::streamsize>(size));
+        if (m_stream->fail())
+          throw RuntimeErrorException("BinaryReader: Failed to read from the stream.");
       }
     };
   }
