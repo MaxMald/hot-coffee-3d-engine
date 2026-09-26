@@ -1,11 +1,10 @@
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 #include <cstdio>
 
 namespace hc::editor
 {
-  namespace imguiUtilities
+  namespace hcImGui
   {
     bool DrawInputText(const String& label, String& text)
     {

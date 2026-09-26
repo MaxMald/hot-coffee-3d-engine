@@ -1,6 +1,6 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
-#include <imgui.h>
-#include "hc/editor/imgui/hcImguiUtilities.h"
+
+#include "hc/editor/imgui/hcImgui.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 #include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 #include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"

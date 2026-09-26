@@ -251,6 +251,23 @@ namespace hc
     void getComponents(Vector<IComponent*>& outComponents) const;
 
     /**
+     * @brief Removes the component of the specified type from this GameObject.
+     *
+     * @tparam ComponentType The type of component to remove.
+     */
+    template<typename ComponentType>
+    void removeComponent();
+
+    /**
+     * @brief Removes the specified component from this GameObject.
+     *
+     * @param component Pointer to the component to remove.
+     *
+     * @return True if the component was found and removed, false otherwise.
+     */
+    bool removeComponent(IComponent* component);
+
+    /**
      * @brief Removes all children and components from this GameObject, releasing
      * ownership and resources.
      */

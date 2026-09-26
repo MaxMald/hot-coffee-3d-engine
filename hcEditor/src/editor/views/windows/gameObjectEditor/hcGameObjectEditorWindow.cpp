@@ -6,8 +6,7 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -51,7 +50,7 @@ namespace hc::editor
       return;
 
     String name = gameObject->getName();
-    if (imguiUtilities::DrawInputText("Name", name))
+    if (hcImGui::DrawInputText("Name", name))
       gameObject->setName(name);
 
     ImGui::Separator();
@@ -84,7 +83,7 @@ namespace hc::editor
 
       if (ImGui::TreeNode("World Matrix"))
       {
-        imguiUtilities::DrawMatrix("World Matrix", gameObject->getWorldMatrix());
+        hcImGui::DrawMatrix("World Matrix", gameObject->getWorldMatrix());
         ImGui::TreePop();
       }
     }

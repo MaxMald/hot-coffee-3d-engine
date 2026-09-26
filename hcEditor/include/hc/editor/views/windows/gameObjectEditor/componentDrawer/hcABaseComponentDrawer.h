@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcIComponentDrawer.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -73,14 +73,11 @@ namespace hc::editor
       String::Format("%s Component", componentStr.c_str()).c_str()
     ))
     {
-      if (ImGui::Button("Remove Component"))
+      if (hcImGui::Button("Remove Component", style::buttons::AggressiveRed))
       {
         GameObject* gameObject = component->getGameObject();
-        if (gameObject)
-        {
-          gameObject->removeComponent(component);
-          return;
-        }
+        gameObject->removeComponent(component);
+        // TODO should be added to a list of components to be deleted after the draw loop
       }
 
       T* typedComponent = dynamic_cast<T*>(component);

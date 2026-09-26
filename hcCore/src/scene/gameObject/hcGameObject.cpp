@@ -302,6 +302,33 @@ namespace hc
       outComponents.push_back(pair.second.get());
   }
 
+  bool GameObject::removeComponent(IComponent* component)
+  {
+    if (!component)
+      return false;
+
+    for (auto it = m_components.begin(); it != m_components.end(); ++it)
+    {
+      if (it->second.get() == component)
+      {
+        m_drawableComponents.erase(
+          std::remove(m_drawableComponents.begin(), m_drawableComponents.end(), component),
+          m_drawableComponents.end()
+        );
+
+        m_updatableComponents.erase(
+          std::remove(m_updatableComponents.begin(), m_updatableComponents.end(), component),
+          m_updatableComponents.end()
+        );
+
+        m_components.erase(it);
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void GameObject::clear()
   {
     m_components.clear();

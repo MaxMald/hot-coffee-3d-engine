@@ -1,8 +1,6 @@
 #include "hc/editor/services/materialDrawer/hcPBRMaterialDrawer.h"
 
-#include <imgui.h>
-
-#include "hc/editor/imgui/hcImguiUtilities.h"
+#include "hc/editor/imgui/hcImgui.h"
 #include "hc/editor/hcEditorCommons.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
@@ -30,7 +28,7 @@ namespace hc::editor
     (void)slotIndex; // unused parameter
 
     Color baseColor = material->getBaseColor();
-    if (imguiUtilities::DrawColorEdit3("Base Color", baseColor))
+    if (hcImGui::DrawColorEdit3("Base Color", baseColor))
       material->setBaseColor(baseColor);
 
     float metallic = material->getMetallic();
@@ -91,21 +89,21 @@ namespace hc::editor
       ImGui::TableNextRow();
       ImGui::TableSetColumnIndex(0);
 
-      imguiUtilities::DrawTexture(
+      hcImGui::DrawTexture(
         material->getAlbedoTexture().get(),
         style::COMPONENT_MAT_TEXTURE_SIZE,
         style::COMPONENT_MAT_TEXTURE_SIZE
       );
 
       ImGui::TableSetColumnIndex(1);
-      imguiUtilities::DrawTexture(
+      hcImGui::DrawTexture(
         material->getNormalTexture().get(),
         style::COMPONENT_MAT_TEXTURE_SIZE,
         style::COMPONENT_MAT_TEXTURE_SIZE
       );
 
       ImGui::TableSetColumnIndex(2);
-      imguiUtilities::DrawTexture(
+      hcImGui::DrawTexture(
         material->getORMTexture().get(),
         style::COMPONENT_MAT_TEXTURE_SIZE,
         style::COMPONENT_MAT_TEXTURE_SIZE
