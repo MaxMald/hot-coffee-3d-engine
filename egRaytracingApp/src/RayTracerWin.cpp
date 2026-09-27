@@ -66,6 +66,37 @@ Color FresnelSchlick(float cosTheta, const Color& F0)
   return F0 + (Color::White() - F0) * fresnelFactor;
 }
 
+bool Refract(
+  const Vector3f& incident,
+  const Vector3f& normal,
+  float eta,                  // 
+  Vector3f& refractedDir
+)
+{
+  const float cosi = std::max(-1.0f, std::min(1.0f, incident.dot(normal)));
+  float sinThetaSquared = 1.0f - cosi * cosi;
+  const float discriminant = 1.0f - eta * eta * sinThetaSquared;
+
+  if (discriminant < 0.0f)
+  {
+    return false; // total internal reflection
+  }
+
+  refractedDir = incident * eta + normal * (eta * cosi - std::sqrt(discriminant));
+  refractedDir = refractedDir.normalized();
+  return true;
+}
+
+Color ComputeVolumeTransmittance(const Color& absorptionColor, float distance)
+{
+  return Color(
+    std::exp(-absorptionColor.r * distance),
+    std::exp(-absorptionColor.r * distance),
+    std::exp(-absorptionColor.r * distance),
+    1.0f
+  );
+}
+
 Color EvaluatePBR(
   const Vector3f& N,
   const Vector3f& V, // remember V points towards the camera
@@ -74,7 +105,8 @@ Color EvaluatePBR(
 )
 {
   const float metallic = Saturate(material.metallic);
-  const float roughness = std::max(Saturate(material.roughness), 0.04f); // Clamp roughness to avoid division by zero)
+  const float roughness = std::max(Saturate(material.roughness), EPSILON); // Clamp roughness to avoid division by zero)
+  const float transmission = Saturate(material.transmission);
 
   const Vector3f H = (V + L).normalized();
 
@@ -104,6 +136,7 @@ Color EvaluatePBR(
   // To calculate the kD we use the formula kD = 1 - F. In other words, it is what is not reflected, but absorbed by the material.
   Color kD = Color::White() - F;
   kD *= (1.0f - metallic); // Metals have no diffuse component, so we multiply by (1 - metallic)
+  kD *= (1.0f - transmission); // Transmission reduces the diffuse component
 
   const Color diffuse = (kD * material.albedo);
   return diffuse + specular;
@@ -142,9 +175,10 @@ AABB ComputeSceneAABB(const Vector<Triangle>& sceneTriangles);
 // SCENE PROPERTIES
 
 const UInt32 g_antialiasingSamples = 1;
-const float g_cameraRotation = 30.0f;
-//const String g_modelPath = "spunky/Spunky.obj";
-const String g_modelPath = "spaceships-scene/spaceships-scene.objs"; // I misspelled the extesion to not use meshes for now.
+const float g_cameraRotation = 180.0f;
+const UInt32 g_numBounces = 6;
+const String g_modelPath = "spunky/Spunky.obj";
+//const String g_modelPath = "ship03/Drenkend.fbx"; // I misspelled the extesion to not use meshes for now.
 /////////////////////////////////////////////////////////////////////////////////////////
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -249,27 +283,59 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
   redMaterial.metallic = 0.5f;
   redMaterial.roughness = 0.4f;
 
-  Material tealMaterial = g_materials[1];
-  tealMaterial.albedo = Color::RandomHSV(1.0f, 0.0f);
-  tealMaterial.metallic = 0.3f;
-  tealMaterial.roughness = 0.5f;
-
   Material floorMaterial = g_materials[2];
   floorMaterial.albedo = Color::RandomHSV(1.0f, 0.0f);
-  floorMaterial.metallic = 0.1f;
-  floorMaterial.roughness = 0.5f;
+  floorMaterial.metallic = 0.0f;
+  floorMaterial.roughness = 1.0f;
 
   g_sceneSpheres.push_back(
     Sphere(
-      Vector3f(3.0f, 0.0f, 0.0f),
+      Vector3f(3.0f, 3.0f, -3.0f),
       1.0f,
       redMaterial
     )
   );
 
+  // RING OF SPHERES
+
+  Material tealMaterial = g_materials[1];
+  tealMaterial.albedo = Color::RandomHSV(1.0f, 0.0f);
+  tealMaterial.metallic = 0.0f;
+  tealMaterial.roughness = 0.005f;
+  tealMaterial.opacity = 1.0f;
+  tealMaterial.transmission = 1.0f;
+  tealMaterial.ior = 1.5f; // Index of Refraction for water
+  tealMaterial.transmissionColor = Color::Red();
+
+  float angleSteps = 45.0f;
+  float ringRadius = 6.0f;
+  float initHeight = 1.0f;
+  float finalHeight = 3.0f;
+  float heightDelta = finalHeight - initHeight;
+
+  hc::Angle angle = hc::Angle::FromDegrees(angleSteps);
+  hc::Int32 numSpheres = 360.0f / angleSteps;
+  for (hc::Int32 i = 0; i < numSpheres; ++i)
+  {
+    float x = ringRadius * std::cos(angle.toRadians() * i);
+    float z = ringRadius * std::sin(angle.toRadians() * i);
+
+    float t = static_cast<float>(i) / static_cast<float>(numSpheres);
+    float height = initHeight + heightDelta * t;
+
+    g_sceneSpheres.push_back(
+      Sphere(
+        Vector3f(x, height, z),
+        1.0f,
+        tealMaterial
+      )
+    );
+  }
+
+  /*
   g_sceneSpheres.push_back(
     Sphere(
-      Vector3f(3.0f, 5.0f, 0.0f),
+      Vector3f(-1.0f, 3.0f, -5.0f),
       1.0f,
       tealMaterial
     )
@@ -277,11 +343,11 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
   g_sceneSpheres.push_back(
     Sphere(
-      Vector3f(-3.0f, 0.0f, 0.0f),
+      Vector3f(-3.0f, 3.0f, -3.0f),
       1.0f,
       tealMaterial
     )
-  );
+  );*/
 
   /*
   g_sceneSpheres.push_back(
@@ -476,99 +542,93 @@ Vector4f FindColorForRay(
   Int32 maxBounces
 )
 {
-  const Vector3f lightPosition(5.0f, 5.0f, -5.0f);
+  const Vector3f lightPosition(5.0f, 5.0f, 5.0f);
   const Color lightColor(1.0f, 1.0f, 1.0f, 1.0f);
   const Color backgroundColor(0.5f, 0.7f, 1.0f, 1.0f); // Light blue background
 
-  // Radiance accumulation
-  Color radiance(0.0f, 0.0f, 0.0f, 1.0f); // Initialize radiance to black
+  HitInfo closestHit = FindClosestHit(ray, minT, maxT);
+  if (closestHit.pSphere == nullptr && closestHit.pPlane == nullptr && closestHit.pTriangle == nullptr)
+    return backgroundColor.vec4; // Return background color if no hit
 
-  // Ammount of energy that keeps traveling after each bounce
-  Color throughput(1.0f, 1.0f, 1.0f, 1.0f); // Initialize throughput to white
+  Material& material = closestHit.pSphere ? closestHit.pSphere->material :
+                       (closestHit.pPlane ? closestHit.pPlane->material :
+                       closestHit.pTriangle->material);
 
-  int depth = 0;
-  Ray currentRay = ray;
+  const Vector3f incidentDirection = ray.direction.normalized();
+  const bool frontFace = incidentDirection.dot(closestHit.normal) < 0.0f;
+  const Vector3f surfaceNormal = frontFace ? closestHit.normal : closestHit.normal * -1.0f;
+  const Vector3f viewDirection = incidentDirection * -1.0f;
 
-  while (depth < maxBounces)
+  // Direct Lighting
+  Color radiance = Color::Black();
+
+  const Vector3f lightDirection = (lightPosition - closestHit.position).normalized();
+  const float Ndl = std::max(surfaceNormal.dot(lightDirection), 0.0f);
+
+  if (Ndl > 0.0f && !IsInShadow(closestHit, lightPosition))
   {
-    HitInfo closestHitInfo = FindClosestHit(currentRay, minT, maxT);
-    if (closestHitInfo.pSphere == nullptr && closestHitInfo.pPlane == nullptr && closestHitInfo.pTriangle == nullptr)
+    const Color brdf = EvaluatePBR(surfaceNormal, viewDirection, lightDirection, material);
+    const float distanceToLight = (lightPosition - closestHit.position).length();
+    //const float attenuation = 1.0f / (distanceToLight * distanceToLight);
+    const float attenuation = 1.0f;
+    radiance += brdf * lightColor * Ndl * attenuation;
+  }
+
+  if (maxBounces <= 0)
+    return radiance.vec4;
+
+  // Fresnel-Schlick for reflection and refraction
+  const float metallic = Saturate(material.metallic);
+  const float IOR = std::max(material.ior, 1.0001f); // Avoid division by zero
+  const float transmission = Saturate(material.transmission);
+  float dielectricF0 = std::pow((IOR - 1.0f) / (IOR + 1.0f), 2.0f); // Fresnel reflectance at normal incidence for dielectrics
+  const Color F0 = Color::Lerp(Color(dielectricF0, dielectricF0, dielectricF0), material.albedo, metallic);
+  const float NdV = std::max(surfaceNormal.dot(viewDirection), 0.0f);
+  Color fresnel = FresnelSchlick(NdV, F0);
+
+  // Reflected Ray
+  Vector3f reflectedDirection =
+    (incidentDirection - surfaceNormal * 2.0f * incidentDirection.dot(surfaceNormal)).normalized();
+  const Ray reflectedRay(closestHit.position + reflectedDirection * EPSILON, reflectedDirection);
+  const Color reflectedRadiance = FindColorForRay(reflectedRay, minT, maxT, maxBounces - 1);
+
+  // Transmitted Ray
+  Color transmittedRadiance = Color::Black();
+  bool hasRefraction = false;
+
+  if (transmission > 0.0f && metallic < 1.0f)
+  {
+    // For now, lets assume that outside is air, IOR = 1.0
+    const float incidentIOR = frontFace ? 1.0f : IOR;
+    const float transmittedIOR = frontFace ? IOR : 1.0f;
+    const float eta = incidentIOR / std::max(transmittedIOR, EPSILON);
+
+    Vector3f refractedDirection;
+    hasRefraction = Refract(incidentDirection, surfaceNormal, eta, refractedDirection);
+    if (hasRefraction)
     {
-      radiance = radiance + (throughput * backgroundColor); // Accumulate radiance
-      break;
+      const Ray transmittedRay(closestHit.position + refractedDirection * EPSILON, refractedDirection);
+      transmittedRadiance = FindColorForRay(transmittedRay, minT, maxT, maxBounces - 1);
     }
+  }
 
-    Color objectColor(0.0f, 0.0f, 0.0f, 1.0f);
-    if (closestHitInfo.pSphere)
-    {
-      const Sphere& sphere = *closestHitInfo.pSphere;
-      objectColor = sphere.material.albedo;
-    }
-    else if (closestHitInfo.pPlane)
-    {
-      const Plane& plane = *closestHitInfo.pPlane;
-      objectColor = plane.material.albedo;
-    }
-    else if (closestHitInfo.pTriangle)
-    {
-      const Triangle& triangle = *closestHitInfo.pTriangle;
-      objectColor = triangle.material.albedo;
-    }
+  // Internal reflection and refraction contribution
+  if (transmission > 0.0f && !hasRefraction)
+  {
+    fresnel = Color::White(); // Total internal reflection, treat as fully reflective
+  }
 
-    Material& material = closestHitInfo.pSphere ? closestHitInfo.pSphere->material :
-                        (closestHitInfo.pPlane ? closestHitInfo.pPlane->material :
-                        closestHitInfo.pTriangle->material);
+  // Energy integration
+  const Color reflectionWeight = fresnel;
+  const Color transmissionWeight = (Color::White() - fresnel) * (1.0f - metallic) * transmission;
 
-    float reflectivity = std::pow(material.ior - 1.0f, 2.0f) / std::pow(material.ior + 1.0f, 2.0f); // Fresnel reflectance at normal incidence
+  radiance += reflectedRadiance * reflectionWeight;
+  radiance += transmittedRadiance * transmissionWeight; // * material.transmissionColor;
 
-    const Vector3f lightDir = (lightPosition - closestHitInfo.position).normalized();
-    const Vector3f viewDir = currentRay.direction.normalized() * -1.0f;
-    const Vector3f halfVector = (lightDir + viewDir).normalized();
-
-    const float NdL = std::max(closestHitInfo.normal.dot(lightDir), 0.0f); // Lambertian reflection
-    const float NdH = std::max(closestHitInfo.normal.dot(halfVector), 0.0f); // Blinn-Phong reflection
-
-    float visibility = 0.0f;
-    if (NdL > 0.0f)
-    {
-      visibility = IsInShadow(closestHitInfo, lightPosition) ? 0.0f : 1.0f;
-    }
-
-    Color directLight = Color::Black();
-    if (visibility)
-    {
-      directLight = EvaluatePBR(
-        closestHitInfo.normal,
-        viewDir,
-        lightDir,
-        closestHitInfo.pSphere ? closestHitInfo.pSphere->material :
-                                 (closestHitInfo.pPlane ? closestHitInfo.pPlane->material :
-                                 closestHitInfo.pTriangle->material)
-      );
-      directLight = directLight * lightColor * NdL;
-    }
-
-    const Color pbrColor = objectColor * directLight;
-
-    const REAL_TYPE localWeight = 1.0f - reflectivity; // Weight for local color contribution
-
-    if (visibility)
-      radiance += throughput * pbrColor * localWeight * visibility; // Accumulate radiance
-    else
-      radiance += directLight * 0.03f;
-
-    throughput *= reflectivity; // Update throughput for the next bounce
-
-    const REAL_TYPE remainingEnergy = std::max(throughput.r, std::max(throughput.g, throughput.b));
-    if (remainingEnergy < 0.001f)
-    {
-      break; // Terminate the loop if the remaining energy is very low
-    }
-
-    Vector3f reflectedDir = currentRay.direction - 2.0f * closestHitInfo.normal * currentRay.direction.dot(closestHitInfo.normal);
-    constexpr REAL_TYPE epsilon = 1e-4f; // Small offset to avoid self-intersection
-    currentRay = Ray(closestHitInfo.position + reflectedDir * epsilon, reflectedDir); // Offset to avoid self-intersection
-    depth++;
+  if (!frontFace && transmission > 0.0f && closestHit.pSphere != nullptr)
+  {
+    const Color volumeTranmittance = ComputeVolumeTransmittance(material.absorptionColor, closestHit.distance);
+    radiance *= volumeTranmittance;
   }
 
   return radiance.vec4;
@@ -711,7 +771,7 @@ bool IsInShadow(const HitInfo& hit, const Vector3f& lightPosition)
 
 void RaytraceScreen(HDC hdc, int width, int height)
 {
-  Vector3f eyePosition(0.0f, 2.0f, -10.0f);
+  Vector3f eyePosition(0.0f, 2.0f, -13.0f);
   hc::Matrix4 rotationMatrix = hc::Matrix4::RotationY(hc::Math::DegToRad * g_cameraRotation);
   eyePosition = (rotationMatrix * Vector4f(eyePosition, 1.0f)).xyz();
 
@@ -766,7 +826,7 @@ void RaytraceScreen(HDC hdc, int width, int height)
           // PIXELES NDC COORDINATS
 
           const float ndcX = (pixelX / static_cast<float>(width)) * 2.0f - 1.0f;
-          const float ndcY = 1.0f - (pixelY / static_cast<float>(height) * 2.0f); // Invert Y axis for screen space, direct x coordinates
+          const float ndcY = 1.0f - (pixelY / static_cast<float>(height)) * 2.0f; // Invert Y axis for screen space, direct x coordinates
 
           // Posición sobre el plano de la imagen local
           const float cameraX = ndcX * halfWidth;
@@ -776,7 +836,7 @@ void RaytraceScreen(HDC hdc, int width, int height)
           Vector3f rayDirection = ((right * cameraX) + (up * cameraY) + forward).normalized();
 
           Ray ray(eyePosition, rayDirection);
-          finalColor = finalColor + FindColorForRay(ray, minRayDistance, maxRayDistance, 4);
+          finalColor = finalColor + FindColorForRay(ray, minRayDistance, maxRayDistance, g_numBounces);
         }
       }
 

@@ -23,6 +23,11 @@ struct Material
   // can vary. For example, water has an IOR of 1.33, glass has an IOR of 1.5, and diamond
   // has an IOR of 2.42.
   float ior = 1.5f; // Index of Refraction
+
+  float opacity = 1.0f;
+  float transmission = 0.0f;
+  Color transmissionColor = Color::White();
+  Color absorptionColor = Color::Black();
 };
 
 class AABB
