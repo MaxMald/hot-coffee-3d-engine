@@ -8,7 +8,7 @@ namespace hc::editor
     return componentType::Unknown;
   }
 
-  void NotImplementedComponentDrawer::drawComponent(IComponent* component)
+  void NotImplementedComponentDrawer::drawComponent(IComponent* component, bool&)
   {
     if (!component)
       return;

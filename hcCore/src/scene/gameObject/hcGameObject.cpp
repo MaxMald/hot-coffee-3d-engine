@@ -110,8 +110,9 @@ namespace hc
       localRenderContext.transform.m23
     );
 
-    for (IDrawable* drawableComponent : m_drawableComponents)
+    for (const auto& pair : m_drawableComponents)
     {
+      IDrawable* drawableComponent = pair.second;
       if (drawableComponent)
         drawableComponent->draw(localRenderContext, outDrawCommands);
     }
@@ -122,8 +123,9 @@ namespace hc
 
   void GameObject::preUpdate(const Time& elapsedTime)
   {
-    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    for (const auto& pair : m_updatableComponents)
     {
+      IUpdatableComponent* updatableComponent = pair.second;
       if (updatableComponent)
         updatableComponent->preUpdate(elapsedTime.toSeconds());
     }
@@ -134,8 +136,9 @@ namespace hc
 
   void GameObject::update(const Time& elapsedTime)
   {
-    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    for (const auto& pair : m_updatableComponents)
     {
+      IUpdatableComponent* updatableComponent = pair.second;
       if (updatableComponent)
         updatableComponent->update(elapsedTime.toSeconds());
     }
@@ -146,8 +149,9 @@ namespace hc
 
   void GameObject::postUpdate(const Time& elapsedTime)
   {
-    for (IUpdatableComponent* updatableComponent : m_updatableComponents)
+    for (const auto& pair : m_updatableComponents)
     {
+      IUpdatableComponent* updatableComponent = pair.second;
       if (updatableComponent)
         updatableComponent->postUpdate(elapsedTime.toSeconds());
     }
@@ -311,16 +315,9 @@ namespace hc
     {
       if (it->second.get() == component)
       {
-        m_drawableComponents.erase(
-          std::remove(m_drawableComponents.begin(), m_drawableComponents.end(), component),
-          m_drawableComponents.end()
-        );
-
-        m_updatableComponents.erase(
-          std::remove(m_updatableComponents.begin(), m_updatableComponents.end(), component),
-          m_updatableComponents.end()
-        );
-
+        UUID componentUUID = component->getUUID();
+        m_drawableComponents.erase(componentUUID);
+        m_updatableComponents.erase(componentUUID);
         m_components.erase(it);
         return true;
       }
@@ -347,14 +344,15 @@ namespace hc
 
     TypeIndex typeIndex(typeid(*component));
     IComponent* componentPtr = component.get();
+    UUID componentUUID = componentPtr->getUUID();
 
     m_components[typeIndex] = std::move(component);
 
     if (auto* drawable = dynamic_cast<IDrawable*>(componentPtr))
-      m_drawableComponents.push_back(drawable);
+      m_drawableComponents[componentUUID] = drawable;
 
     if (auto* updatable = dynamic_cast<IUpdatableComponent*>(componentPtr))
-      m_updatableComponents.push_back(updatable);
+      m_updatableComponents[componentUUID] = updatable;
 
     componentPtr->setGameObject(this);
   }

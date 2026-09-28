@@ -251,14 +251,6 @@ namespace hc
     void getComponents(Vector<IComponent*>& outComponents) const;
 
     /**
-     * @brief Removes the component of the specified type from this GameObject.
-     *
-     * @tparam ComponentType The type of component to remove.
-     */
-    template<typename ComponentType>
-    void removeComponent();
-
-    /**
      * @brief Removes the specified component from this GameObject.
      *
      * @param component Pointer to the component to remove.
@@ -289,8 +281,8 @@ namespace hc
     ComponentFactoriesManager& m_componentFactoriesManager;
     Vector<UniquePtr<GameObject>> m_children;
     UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
-    Vector<IDrawable*> m_drawableComponents;
-    Vector<IUpdatableComponent*> m_updatableComponents;
+    UnorderedMap<UUID, IDrawable*> m_drawableComponents;
+    UnorderedMap<UUID, IUpdatableComponent*> m_updatableComponents;
 
     void addComponent(UniquePtr<IComponent> component);
 

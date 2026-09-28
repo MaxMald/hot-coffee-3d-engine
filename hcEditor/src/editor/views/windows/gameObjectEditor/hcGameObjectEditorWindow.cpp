@@ -32,6 +32,7 @@ namespace hc::editor
   void GameObjectEditorWindow::destroy()
   {
     m_componentDrawersManager.clear();
+    m_componentsToRemove.clear();
   }
 
   void GameObjectEditorWindow::onDraw()
@@ -118,12 +119,22 @@ namespace hc::editor
     if (!gameObject)
       return;
 
+    m_componentsToRemove.clear();
     gameObject->getComponents(m_gameObjectComponents);
     for (IComponent* component : m_gameObjectComponents)
     {
       ImGui::PushID(component);
-      m_componentDrawersManager.drawComponent(component);
+
+      bool shouldRemove = false;
+      m_componentDrawersManager.drawComponent(component, shouldRemove);
+
+      if (shouldRemove)
+        m_componentsToRemove.push_back(component);
+
       ImGui::PopID();
     }
+
+    for (IComponent* componentToRemove : m_componentsToRemove)
+      gameObject->removeComponent(componentToRemove);
   }
 }
