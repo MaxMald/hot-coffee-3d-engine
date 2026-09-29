@@ -40,6 +40,12 @@ namespace hc::editor
 
   bool EditorSceneManager::createNewScene(const Path& scenePath)
   {
+    if (!scenePath.isCreatable())
+    {
+      LogService::Error("Path is not creatable: " + scenePath.toString());
+      return false;
+    }
+
     clearScene();
     return saveScene(scenePath);
   }
