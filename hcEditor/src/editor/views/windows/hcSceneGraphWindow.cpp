@@ -12,7 +12,9 @@ namespace hc::editor
   ) :
     AWindowView("Scene Graph", true),
     m_sceneManager(sceneManager),
-    m_gameObjectSelectionService(gameObjectSelectionService)
+    m_gameObjectSelectionService(gameObjectSelectionService),
+    m_rootChildren(),
+    m_gameObjectPopupMenuState()
   {
   }
 
@@ -40,37 +42,32 @@ namespace hc::editor
 
   void SceneGraphWindow::drawCreateLayerSection(Scene& scene)
   {
-    if (ImGui::CollapsingHeader("Create Root"))
+    static char layerNameBuffer[128] = "";
+    ImGui::InputText("Name", layerNameBuffer, sizeof(layerNameBuffer));
+    ImGui::SameLine();
+    if (ImGui::Button("Create"))
     {
-      static char layerNameBuffer[128] = "";
-      ImGui::InputText("Root Name", layerNameBuffer, sizeof(layerNameBuffer));
+      String layerName(layerNameBuffer);
+      if (layerName.empty())
+        layerName = "New Game Object";
 
-      if (ImGui::Button("Create"))
-      {
-        String layerName(layerNameBuffer);
-        if (layerName.empty())
-          layerName = "New Root";
-
-        scene.createRootGameObject(layerName);
-        layerNameBuffer[0] = '\0';
-      }
+      scene.createRootGameObject(layerName);
+      layerNameBuffer[0] = '\0';
     }
+    ImGui::Separator();
   }
 
   void SceneGraphWindow::drawSceneGraph(const SceneGraph& sceneGraph)
   {
-    const auto& roots = sceneGraph.getRoots();
-
-    if (roots.empty())
-    {
-      ImGui::Text("Scene graph is empty.");
+    GameObject* root = sceneGraph.getRoot();
+    if (root == nullptr)
       return;
-    }
 
-    for (const UniquePtr<GameObject>& root : roots)
+    root->getChildren(m_rootChildren);
+    for (GameObject* child : m_rootChildren)
     {
-      if (root)
-        drawGameObjectNode(root.get());
+      if (child)
+        drawGameObjectNode(child);
     }
   }
 
@@ -100,25 +97,50 @@ namespace hc::editor
       ImGui::OpenPopup("GameObjectMenu");
     }
 
-    // Popup menu for creating a child
-    if (ImGui::BeginPopup("GameObjectMenu"))
-    {
-      if (ImGui::MenuItem("Create Child"))
-        gameObject->createChild("New Child");
+    drawGameObjectPopupMenu(gameObject);
 
-      ImGui::EndPopup();
+    if (m_gameObjectPopupMenuState.clickedDelete)
+    {
+      m_gameObjectSelectionService.deselectGameObject(gameObject);
+      GameObject* parent = gameObject->getParent();
+      if (parent != nullptr)
+        parent->removeChild(gameObject->getUUID());
+
+      if (open)
+        ImGui::TreePop();
+      ImGui::PopID();
+      return;
     }
 
     if (open)
     {
-      const auto& children = gameObject->getChildren();
-      for (const auto& child : children)
+      Vector<GameObject*> children;
+      gameObject->getChildren(children);
+      for (GameObject* child : children)
       {
         if (child)
-          drawGameObjectNode(child.get());
+          drawGameObjectNode(child);
       }
       ImGui::TreePop();
     }
+
     ImGui::PopID();
+  }
+
+  void SceneGraphWindow::drawGameObjectPopupMenu(GameObject* gameObject)
+  {
+    m_gameObjectPopupMenuState.clear();
+
+    if (!gameObject)
+      return;
+
+    if (ImGui::BeginPopup("GameObjectMenu"))
+    {
+      if (ImGui::MenuItem("Create Child"))
+        gameObject->createChild("New Child");
+      if (ImGui::MenuItem("Delete"))
+        m_gameObjectPopupMenuState.clickedDelete = true;
+      ImGui::EndPopup();
+    }
   }
 }

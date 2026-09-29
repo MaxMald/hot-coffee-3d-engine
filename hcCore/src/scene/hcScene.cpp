@@ -111,7 +111,7 @@ namespace hc
     }
 
     GameObject* rootPtr = root.get();
-    m_sceneGraph.addRoot(std::move(root));
+    m_sceneGraph.addGameObject(std::move(root));
     return rootPtr;
   }
 

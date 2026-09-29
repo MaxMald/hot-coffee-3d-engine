@@ -105,21 +105,30 @@ namespace hc
      *
      * @param name The new name.
      */
-    void setName(const String& name);
+    inline void setName(const String& name)
+    {
+      m_name = name;
+    }
 
     /**
      * @brief Gets the name of the GameObject.
      *
      * @return The name.
      */
-    const String& getName() const;
+    inline const String& getName() const
+    {
+      return m_name;
+    }
 
     /**
      * @brief Gets the parent GameObject.
      *
      * @return Pointer to the parent, or nullptr if root.
      */
-    GameObject* getParent() const;
+    inline GameObject* getParent() const
+    {
+      return m_parent;
+    }
 
     /**
      * @brief Adds a child GameObject and takes ownership.
@@ -147,13 +156,70 @@ namespace hc
     UniquePtr<GameObject> removeChild(GameObject* child);
 
     /**
+     * @brief Removes a child GameObject by UUID and returns ownership.
+     *
+     * @param uuid UUID of the child to remove.
+     *
+     * @return Unique pointer to the removed child, or nullptr if not found.
+     */
+    UniquePtr<GameObject> removeChild(const UUID& uuid);
+
+    /**
+     * @brief Removes a descendant GameObject by UUID and returns ownership.
+     *
+     * @param uuid UUID of the descendant to remove.
+     *
+     * @return Unique pointer to the removed descendant, or nullptr if not found.
+     */
+    UniquePtr<GameObject> removeDescendant(const UUID& uuid);
+
+    /**
      * @brief Gets the first child GameObject with the specified name.
      *
      * @param name Name to search for.
      *
      * @return Pointer to the matching child, or nullptr if not found.
      */
-    GameObject* getChild(const String& name);
+    inline GameObject* getChild(const String& name) const
+    {
+      for (const auto& pair : m_children)
+        if (pair.second->getName() == name)
+          return pair.second.get();
+      return nullptr;
+    }
+
+    /**
+     * @brief Gets the child GameObject with the specified UUID.
+     *
+     * @param uuid UUID to search for.
+     *
+     * @return Pointer to the matching child, or nullptr if not found.
+     */
+    inline GameObject* getChild(const UUID& uuid) const
+    {
+      auto it = m_children.find(uuid);
+      if (it != m_children.end())
+        return it->second.get();
+      return nullptr;
+    }
+
+    /**
+     * @brief Gets the first descendant GameObject with the specified name.
+     *
+     * @param name Name to search for.
+     *
+     * @return Pointer to the matching descendant, or nullptr if not found.
+     */
+    GameObject* getDescendant(const String& name) const;
+
+    /**
+     * @brief Gets the descendant GameObject with the specified UUID.
+     *
+     * @param uuid UUID to search for.
+     *
+     * @return Pointer to the matching descendant, or nullptr if not found.
+     */
+    GameObject* getDescendant(const UUID& uuid) const;
 
     /**
      * @brief Gets all child GameObjects with the specified name.
@@ -162,14 +228,20 @@ namespace hc
      *
      * @return Vector of pointers to matching children.
      */
-    Vector<GameObject*> getChildrenByName(const String& name);
+    Vector<GameObject*> getChildrenByName(const String& name) const;
 
     /**
      * @brief Gets all children of this GameObject.
      *
-     * @return Vector of unique pointers to children.
+     * @param outChildren Vector to populate with pointers to children.
      */
-    const Vector<UniquePtr<GameObject>>& getChildren() const;
+    inline void getChildren(Vector<GameObject*>& outChildren) const
+    {
+      outChildren.clear();
+      outChildren.reserve(m_children.size());
+      for (const auto& pair : m_children)
+        outChildren.push_back(pair.second.get());
+    }
 
     /**
      * @brief Populates the provided vector with pointers to all descendants of
@@ -279,7 +351,7 @@ namespace hc
     GameObject* m_parent = nullptr;
     IGameObjectFactory& m_gameObjectFactory;
     ComponentFactoriesManager& m_componentFactoriesManager;
-    Vector<UniquePtr<GameObject>> m_children;
+    UnorderedMap<UUID, UniquePtr<GameObject>> m_children;
     UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
     UnorderedMap<UUID, IDrawable*> m_drawableComponents;
     UnorderedMap<UUID, IUpdatableComponent*> m_updatableComponents;

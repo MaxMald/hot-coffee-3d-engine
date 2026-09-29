@@ -4,10 +4,10 @@
 
 namespace hc
 {
-  static constexpr UInt32 SCENE_GRAPH_VERSION = 1;
+  static constexpr UInt32 SCENE_GRAPH_VERSION = 2;
 
   SceneGraph::SceneGraph() :
-    m_roots(),
+    m_root(nullptr),
     m_gameObjectFactory(nullptr)
   {
   }
@@ -18,42 +18,35 @@ namespace hc
 
   void SceneGraph::serialize(io::BinaryWriter& writer) const
   {
+    assertIsInitialized();
     writer.startWritingObject(static_cast<UInt32>(0), SCENE_GRAPH_VERSION);
-    writer.writeSizeT(m_roots.size());
-    for (const UniquePtr<GameObject>& root : m_roots)
-      root->serialize(writer);
+    m_root->serialize(writer);
     writer.finishWritingObject();
   }
 
   void SceneGraph::deserialize(io::BinaryReader& reader)
   {
-    if (m_gameObjectFactory == nullptr)
-    {
-      throw RuntimeErrorException(
-        "GameObjectFactory is not initialized. Cannot deserialize SceneGraph."
-      );
-    }
-
-    m_roots.clear();
+    assertIsInitialized();
+    m_root->clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.matchVersion(SCENE_GRAPH_VERSION))
+    if (header.version == 1)
     {
-      reader.finishReadingObject();
-      return;
+      SizeT rootCount = reader.readSizeT();
+      for (SizeT i = 0; i < rootCount; ++i)
+      {
+        UniquePtr<GameObject> rootGameObject = m_gameObjectFactory->create("_toDeserialize");
+        rootGameObject->deserialize(reader);
+        m_root->addChild(std::move(rootGameObject));
+      }
     }
-
-    SizeT rootCount = reader.readSizeT();
-    m_roots.reserve(rootCount);
-
-    for (SizeT i = 0; i < rootCount; ++i)
+    if (header.version == 2)
     {
-      UniquePtr<GameObject> root = m_gameObjectFactory->create("_toDeserialize");
-      root->deserialize(reader);
-      addRoot(std::move(root));
+      m_root->deserialize(reader);
     }
 
     reader.finishReadingObject();
+    return;
   }
 
   void SceneGraph::draw(
@@ -61,113 +54,76 @@ namespace hc
     Vector<DrawCommand>& outDrawCommands
   ) const
   {
-    for (const UniquePtr<GameObject>& root : m_roots)
-    {
-      if (root)
-        root->draw(renderContext, outDrawCommands);
-    }
+    if (m_root != nullptr)
+      m_root->draw(renderContext, outDrawCommands);
   }
 
   void SceneGraph::update(const Time& elapsedTime)
   {
-    for (const UniquePtr<GameObject>& root : m_roots)
+    if (m_root != nullptr)
     {
-      if (root)
-        root->preUpdate(elapsedTime);
-    }
-
-    for (const UniquePtr<GameObject>& root : m_roots)
-    {
-      if (root)
-        root->update(elapsedTime);
-    }
-
-    for (const UniquePtr<GameObject>& root : m_roots)
-    {
-      if (root)
-        root->postUpdate(elapsedTime);
+      m_root->preUpdate(elapsedTime);
+      m_root->update(elapsedTime);
+      m_root->postUpdate(elapsedTime);
     }
   }
 
-  void SceneGraph::addRoot(UniquePtr<GameObject> root)
+  void SceneGraph::addGameObject(UniquePtr<GameObject> go)
   {
-    if (!root)
-    {
-      throw RuntimeErrorException(
-        "Cannot add a null root GameObject to the SceneGraph."
-      );
-    }
+    if (go == nullptr)
+      throw InvalidArgumentException("Cannot add a null GameObject as root.");
 
-    if (root->getParent())
-    {
-      throw RuntimeErrorException(
-        String::Format(
-          "Cannot set GameObject with name '%s' because it already has a parent.",
-          root->getName().c_str()
-        )
-      );
-    }
-
-    m_roots.push_back(std::move(root));
+    assertIsInitialized();
+    m_root->addChild(std::move(go));
   }
 
-  UniquePtr<GameObject> SceneGraph::removeRoot(const String& name)
+  UniquePtr<GameObject> SceneGraph::removeGameObject(const String& name)
   {
-    auto it = std::find_if(
-      m_roots.begin(), m_roots.end(),
-      [&name](const UniquePtr<GameObject>& root) 
-      {
-        return root && root->getName() == name;
-      }
-    );
+    assertIsInitialized();
+    GameObject* go = m_root->getDescendant(name);
+    if (go == nullptr)
+      return nullptr;
 
-    if (it != m_roots.end())
-    {
-      UniquePtr<GameObject> removedRoot = std::move(*it);
-      m_roots.erase(it);
-      return removedRoot;
-    }
+    GameObject* parent = go->getParent();
+    if (parent == nullptr)
+      throw RuntimeErrorException("Cannot remove the GameObject. GameObject does not have a parent.");
 
-    return nullptr;
+    return parent->removeChild(go->getUUID());
   }
 
-  GameObject* SceneGraph::getRoot(const String& name) const
+  UniquePtr<GameObject> SceneGraph::removeGameObject(const UUID& uuid)
   {
-    auto it = std::find_if(
-      m_roots.begin(), m_roots.end(),
-      [&name](const UniquePtr<GameObject>& root) 
-      {
-        return root && root->getName() == name;
-      }
-    );
-
-    if (it != m_roots.end())
-      return it->get();
-
-    return nullptr;
+    assertIsInitialized();
+    return m_root->removeDescendant(uuid);
   }
 
-  const Vector<UniquePtr<GameObject>>& SceneGraph::getRoots() const
+  GameObject* SceneGraph::getGameObject(const String& name) const
   {
-    return m_roots;
+    assertIsInitialized();
+    return m_root->getDescendant(name);
+  }
+
+  GameObject* SceneGraph::getGameObject(const UUID& uuid) const
+  {
+    assertIsInitialized();
+    return m_root->getDescendant(uuid);
   }
 
   void SceneGraph::getAllGameObjects(Vector<GameObject*>& outGameObjects) const
   {
-    for (const UniquePtr<GameObject>& root : m_roots)
-    {
-      if (root)
-        root->getAllDescendants(outGameObjects);
-    }
+    assertIsInitialized();
+    m_root->getAllDescendants(outGameObjects);
   }
 
   void SceneGraph::clear()
   {
-    m_roots.clear();
+    if (m_root != nullptr)
+      m_root->clear();
   }
 
   void SceneGraph::initialize(IGameObjectFactory* gameObjectFactory)
   {
+    m_root = gameObjectFactory->create("Root");
     m_gameObjectFactory = gameObjectFactory;
   }
 }

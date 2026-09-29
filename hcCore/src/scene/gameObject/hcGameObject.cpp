@@ -1,8 +1,10 @@
 #include "hc/scene/gameObject/hcGameObject.h"
+
 #include <algorithm>
+
 #include "hc/scene/gameObject/components/hcIComponent.h"
-#include "hc/graphics/hcRenderContext.h"
 #include "hc/scene/gameObject/hcIGameObjectFactory.h"
+#include "hc/graphics/hcRenderContext.h"
 
 namespace hc
 {
@@ -38,8 +40,8 @@ namespace hc
     writer.writeUUID(m_uuid);
 
     writer.writeSizeT(m_children.size());
-    for (const auto& child : m_children)
-      child->serialize(writer);
+    for (const auto& pair : m_children)
+      pair.second->serialize(writer);
 
     writer.writeSizeT(m_components.size());
     for (const auto& pair : m_components)
@@ -117,8 +119,8 @@ namespace hc
         drawableComponent->draw(localRenderContext, outDrawCommands);
     }
 
-    for (auto& child : m_children)
-      child->draw(localRenderContext, outDrawCommands);
+    for (auto& pair : m_children)
+      pair.second->draw(localRenderContext, outDrawCommands);
   }
 
   void GameObject::preUpdate(const Time& elapsedTime)
@@ -130,8 +132,8 @@ namespace hc
         updatableComponent->preUpdate(elapsedTime.toSeconds());
     }
 
-    for (auto& child : m_children)
-      child->preUpdate(elapsedTime);
+    for (auto& pair : m_children)
+      pair.second->preUpdate(elapsedTime);
   }
 
   void GameObject::update(const Time& elapsedTime)
@@ -143,8 +145,8 @@ namespace hc
         updatableComponent->update(elapsedTime.toSeconds());
     }
 
-    for (auto& child : m_children)
-      child->update(elapsedTime);
+    for (auto& pair : m_children)
+      pair.second->update(elapsedTime);
   }
 
   void GameObject::postUpdate(const Time& elapsedTime)
@@ -156,39 +158,23 @@ namespace hc
         updatableComponent->postUpdate(elapsedTime.toSeconds());
     }
 
-    for (auto& child : m_children)
-      child->postUpdate(elapsedTime);
-  }
-
-  void GameObject::setName(const String& name)
-  {
-    m_name = name;
-  }
-
-  const String& GameObject::getName() const
-  {
-    return m_name;
-  }
-
-  GameObject* GameObject::getParent() const
-  {
-    return m_parent;
+    for (auto& pair : m_children)
+      pair.second->postUpdate(elapsedTime);
   }
 
   void GameObject::addChild(UniquePtr<GameObject> child)
   {
     if (!child)
-    {
-      throw InvalidArgumentException(
-        "Cannot add a null child GameObject."
-      );
-    }
+      throw InvalidArgumentException("Cannot add a null child GameObject.");
 
-    if (child->m_parent)
-      child->m_parent->removeChild(child.get());
+    if (child.get() == this)
+      throw InvalidArgumentException("Cannot add a GameObject as a child of itself.");
+
+    if (child->m_parent != nullptr)
+      throw InvalidArgumentException("The child GameObject already has a parent.");
 
     child->m_parent = this;
-    m_children.push_back(std::move(child));
+    m_children[child->getUUID()] = std::move(child);
   }
 
   GameObject* GameObject::createChild(const String& childName)
@@ -211,57 +197,96 @@ namespace hc
     if (!child)
       return nullptr;
 
-    auto it = std::find_if(
-      m_children.begin(), m_children.end(),
-      [child](const UniquePtr<GameObject>& ptr)
+    for (auto& pair : m_children)
+    {
+      if (pair.second.get() == child)
       {
-        return ptr.get() == child;
-      }
-    );
+        UniquePtr<GameObject> removedChild = std::move(pair.second);
+        removedChild->m_parent = nullptr;
 
+        m_children.erase(pair.first);
+        return removedChild;
+      }
+    }
+
+    return nullptr;
+  }
+
+  UniquePtr<GameObject> GameObject::removeChild(const UUID& uuid)
+  {
+    auto it = m_children.find(uuid);
     if (it != m_children.end())
     {
-      (*it)->m_parent = nullptr;
-      UniquePtr<GameObject> removed = std::move(*it);
+      UniquePtr<GameObject> removedChild = std::move(it->second);
+      removedChild->m_parent = nullptr;
       m_children.erase(it);
-      return removed;
+      return removedChild;
     }
-
     return nullptr;
   }
 
-  GameObject* GameObject::getChild(const String& name)
+  UniquePtr<GameObject> GameObject::removeDescendant(const UUID& uuid)
   {
-    for (const auto& child : m_children)
+    UniquePtr<GameObject> removedChild = removeChild(uuid);
+    if (removedChild != nullptr)
+      return removedChild;
+
+    for (auto& pair : m_children)
     {
-      if (child->getName() == name)
-        return child.get();
+      UniquePtr<GameObject> descendant = pair.second->removeDescendant(uuid);
+      if (descendant != nullptr)
+        return descendant;
     }
     return nullptr;
   }
 
-  Vector<GameObject*> GameObject::getChildrenByName(const String& name)
+  GameObject* GameObject::getDescendant(const String& name) const
+  {
+    for (const auto& pair : m_children)
+    {
+      if (pair.second->getName() == name)
+        return pair.second.get();
+
+      GameObject* descendant = pair.second->getDescendant(name);
+      if (descendant)
+        return descendant;
+    }
+    return nullptr;
+  }
+
+  GameObject* GameObject::getDescendant(const UUID& uuid) const
+  {
+    GameObject* child = getChild(uuid);
+    if (child)
+      return child;
+
+    for (const auto& pair : m_children)
+    {
+      GameObject* descendant = pair.second->getDescendant(uuid);
+      if (descendant)
+        return descendant;
+    }
+
+    return nullptr;
+  }
+
+  Vector<GameObject*> GameObject::getChildrenByName(const String& name) const
   {
     Vector<GameObject*> matchingChildren;
-    for (const auto& child : m_children)
+    for (const auto& pair : m_children)
     {
-      if (child->getName() == name)
-        matchingChildren.push_back(child.get());
+      if (pair.second->getName() == name)
+        matchingChildren.push_back(pair.second.get());
     }
     return matchingChildren;
   }
 
-  const Vector<UniquePtr<GameObject>>& GameObject::getChildren() const
-  {
-    return m_children;
-  }
-
   void GameObject::getAllDescendants(Vector<GameObject*>& outDescendants) const
   {
-    for (const auto& child : m_children)
+    for (const auto& pair : m_children)
     {
-      outDescendants.push_back(child.get());
-      child->getAllDescendants(outDescendants);
+      outDescendants.push_back(pair.second.get());
+      pair.second->getAllDescendants(outDescendants);
     }
   }
 
@@ -332,8 +357,8 @@ namespace hc
     m_drawableComponents.clear();
     m_updatableComponents.clear();
 
-    for (auto& child : m_children)
-      child->m_parent = nullptr;
+    for (auto& pair : m_children)
+      pair.second->m_parent = nullptr;
     m_children.clear();
   }
 

@@ -72,11 +72,13 @@ namespace hc::editor
     String componentStr = componentType::ToString(m_componentType);
     if (ImGui::CollapsingHeader(String::Format("%s Component", componentStr.c_str()).c_str()))
     {
-      if (hcImGui::Button("Remove Component", style::buttons::AggressiveRed))
+      if (hcImGui::Button("Remove", style::buttons::AggressiveRed))
       {
         shouldRemove = true;
         return;
       }
+
+      ImGui::Separator();
 
       T* typedComponent = dynamic_cast<T*>(component);
       if (typedComponent)

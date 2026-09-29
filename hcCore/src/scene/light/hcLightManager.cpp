@@ -108,11 +108,11 @@ namespace hc
     Vector<SpotLightWorkItem>& outSpotLights
   )
   {
-    const Vector<UniquePtr<GameObject>>& roots = sceneGraph.getRoots();
-    for (const UniquePtr<GameObject>& root : roots)
+    GameObject* root = sceneGraph.getRoot();
+    if (root != nullptr)
     {
       gatherLightWorkItemsFromGameObject(
-        root.get(),
+        root,
         outDirectionalLights,
         outOmniLights,
         outSpotLights
@@ -192,11 +192,12 @@ namespace hc
       }
     }
 
-    const Vector<UniquePtr<GameObject>>& children = gameObject->getChildren();
-    for (const UniquePtr<GameObject>& child : children)
+    Vector<GameObject*> children;
+    gameObject->getChildren(children);
+    for (GameObject* child : children)
     {
       gatherLightWorkItemsFromGameObject(
-        child.get(),
+        child,
         outDirectionalLights,
         outOmniLights,
         outSpotLights
