@@ -60,6 +60,7 @@
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
+#include "hc/graphics/generators/hcIEquirectangularToCubemapGenerator.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 
