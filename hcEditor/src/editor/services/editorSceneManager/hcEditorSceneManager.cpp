@@ -221,5 +221,9 @@ namespace hc::editor
     if (m_editorScene != nullptr)
       m_editorScene->clear();
     m_assetManager.clear();
+
+    for (auto* listener : m_listeners)
+      if (listener)
+        listener->onSceneCleared();
   }
 }

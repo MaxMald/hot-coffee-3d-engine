@@ -1,14 +1,40 @@
 #include "hc/editor/services/gameObjectSelection/hcGameObjectSelectionService.h"
 #include "hc/editor/services/gameObjectSelection/hcIGameObjectSelectionServiceListener.h"
+#include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
 
 namespace hc::editor
 {
+  GameObjectSelectionService::GameObjectSelectionService(
+    EditorSceneManager& editorSceneManager
+  ) :
+    m_selectedGameObjects(),
+    m_listeners(),
+    m_editorSceneManager(editorSceneManager)
+  {
+  }
+
   void GameObjectSelectionService::prepare()
   {
-    // No initialization logic needed for the GameObjectSelectionService at this time.
+    m_editorSceneManager.subscribeListener(this);
   }
 
   void GameObjectSelectionService::destroy()
+  {
+    m_editorSceneManager.unsubscribeListener(this);
+    clearSelection();
+  }
+
+  void GameObjectSelectionService::onSceneOpened()
+  {
+    clearSelection();
+  }
+
+  void GameObjectSelectionService::onSceneClosed()
+  {
+    clearSelection();
+  }
+
+  void GameObjectSelectionService::onSceneCleared()
   {
     clearSelection();
   }

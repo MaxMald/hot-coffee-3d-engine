@@ -23,20 +23,21 @@ namespace hc::editor
         engine.getAssetManager()
       );
 
-      serviceManager.registerService<ProjectManager>(
-        MakeUnique<ProjectManager>(engine.getAssetManager(), *editorMetadataManager)
+      UniquePtr<ProjectManager> projectManager = MakeUnique<ProjectManager>(
+        engine.getAssetManager(),
+        *editorMetadataManager
       );
+
+      UniquePtr<EditorSceneManager> editorSceneManager = MakeUnique<EditorSceneManager>(
+        editorScene,
+        engine.getAssetManager(),
+        engine.getGraphicsManager(),
+        *projectManager,
+        *editorMetadataManager
+      );
+
       serviceManager.registerService<GameObjectSelectionService>(
-        MakeUnique<GameObjectSelectionService>()
-      );
-      serviceManager.registerService<EditorSceneManager>(
-        MakeUnique<EditorSceneManager>(
-          editorScene,
-          engine.getAssetManager(),
-          engine.getGraphicsManager(),
-          serviceManager.getService<ProjectManager>(),
-          *editorMetadataManager
-        )
+        MakeUnique<GameObjectSelectionService>(*editorSceneManager)
       );
       serviceManager.registerService<MaterialDrawersManager>(
         MakeUnique<MaterialDrawersManager>(engine.getGraphicsManager().getTextureManager())
@@ -45,6 +46,8 @@ namespace hc::editor
       // Register services that do not have dependencies on other services after all
       // dependent services have been registered.
 
+      serviceManager.registerService<EditorSceneManager>(std::move(editorSceneManager));
+      serviceManager.registerService<ProjectManager>(std::move(projectManager));
       serviceManager.registerService<EditorMetadataManager>(std::move(editorMetadataManager));
     }
   }
