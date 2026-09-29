@@ -16,12 +16,14 @@ namespace hc::editor
     virtual ~ComponentDrawersManager();
 
     /**
-     * @brief Draws the specified component using its registered drawer. If no
-     * drawer is registered for the component type, uses the fallback drawer.
-     * 
+     * @brief Draws the specified component using its registered drawer. If no drawer is
+     * registered for the component type, uses the fallback drawer.
+     *
      * @param component Pointer to the component to be drawn.
+     * @param shouldRemove Reference to a bool indicating if the component should be
+     * removed.
      */
-    void drawComponent(IComponent* component);
+    void drawComponent(IComponent* component, bool& shouldRemove);
 
     /**
      * @brief Registers a new component drawer for a specific component type.

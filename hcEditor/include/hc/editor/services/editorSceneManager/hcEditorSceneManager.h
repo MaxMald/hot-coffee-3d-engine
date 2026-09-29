@@ -53,8 +53,14 @@ namespace hc::editor
     void destroy() override;
 
     /**
+     * @brief Creates a new scene at the specified path.
+     * @param scenePath The absolute file path where the new scene should be created.
+     * @return True if the scene was successfully created, false otherwise.
+     */
+    bool createNewScene(const Path& scenePath);
+
+    /**
      * @brief Opens a scene from the specified path.
-     *
      * @param scenePath The absolute file path to the scene to open.
      * @return True if the scene was successfully opened, false otherwise.
      */
@@ -136,6 +142,17 @@ namespace hc::editor
      * @param absoluteScenePath The absolute path of the scene to add to metadata.
      */
     void addLastOpenedSceneToMetadata(const Path& absoluteScenePath);
+
+    /**
+     * @brief Asserts that the editor scene is valid and throws an exception if not.
+     * @throw RuntimeErrorException If the editor scene is undefined or invalid.
+     */
     void assertSceneIsValid() const;
+
+    /**
+     * @brief Clears the current scene, removing all game objects and resetting the scene
+     * state.
+     */
+    void clearScene();
   };
 }

@@ -44,6 +44,7 @@ namespace hc
       ILightShadowMapManager& lightShadowMapManager,
       IDataBlockManager& blockDataManager
     );
+    void clear();
     void destroy();
 
   private:

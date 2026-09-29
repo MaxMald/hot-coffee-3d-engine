@@ -1,6 +1,7 @@
 #pragma once
 
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/style/hcStyle.h"
 
 namespace hc::editor
 {
@@ -13,10 +14,5 @@ namespace hc::editor
       "Transparent"
     };
     static Int32 RENDER_MODE_COUNT = sizeof(RENDER_MODE) / sizeof(RENDER_MODE[0]);
-  }
-
-  namespace style
-  {
-    static float COMPONENT_MAT_TEXTURE_SIZE = 80.0f;
   }
 }

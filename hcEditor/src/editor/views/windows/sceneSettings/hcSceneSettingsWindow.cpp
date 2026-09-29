@@ -1,9 +1,7 @@
 #include "hc/editor/views/windows/sceneSettings/hcSceneSettingsWindow.h"
 
-#include <imgui.h>
-
 #include "hc/editor/services/editorSceneManager/hcEditorSceneManager.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -30,7 +28,7 @@ namespace hc::editor
     Scene& scene = m_editorSceneManager.getEditorScene();
     SceneSettings& settings = scene.getSettings();
 
-    imguiUtilities::DrawColorEdit3("Ambient Color", settings.ambientColor);
+    hcImGui::DrawColorEdit3("Ambient Color", settings.ambientColor);
     ImGui::SliderFloat(
       "Ambient Intensity",
       &settings.ambientIntensity,

@@ -17,6 +17,7 @@ namespace hc
     bool hasCubeMap() const;
     const ICubeMap& getCubeMap() const;
     ICubeMap& getCubeMap();
+    void clear();
     void destroy();
 
   protected:

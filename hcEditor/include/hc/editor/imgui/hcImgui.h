@@ -1,11 +1,62 @@
 #pragma once
 
+#include <imgui.h>
+
 #include "hc/editor/hcEditorPrerequisites.h"
+#include "hc/editor/style/hcStyle.h"
+
 
 namespace hc::editor
 {
-  namespace imguiUtilities
+  namespace hcImGui
   {
+    /**
+     * @brief Converts a Color object to an ImVec4 object for ImGui.
+     * @param color The Color object to convert.
+     * @return An ImVec4 object representing the same color.
+     */
+    inline ImVec4 ColorToImVec4(const Color& color)
+    {
+      return ImVec4(color.r, color.g, color.b, color.a);
+    }
+
+    /**
+     * @brief Converts a Vector2u object to an ImVec2 object for ImGui.
+     * @param vec The Vector2u object to convert.
+     * @return An ImVec2 object representing the same 2D vector.
+     */
+    inline ImVec2 Vector2uToImVec2(const Vector2u& vec)
+    {
+      return ImVec2(static_cast<float>(vec.x), static_cast<float>(vec.y));
+    }
+
+    /**
+     * @brief Draws a button in ImGui with the specified text and style.
+     *
+     * @param text The text to display on the button.
+     * @param type The style type of the button (default is Default).
+     * @param size_arg The size of the button (default is Vector2u(0, 0) for automatic
+     * sizing).
+     *
+     * @return True if the button was clicked, false otherwise.
+     */
+    inline bool Button(
+      const String& text,
+      const style::buttons::Type type = style::buttons::Type::Default,
+      const Vector2u& size_arg = Vector2u(0, 0)
+    )
+    {
+      const style::buttons::ButtonStyle& buttonStyle = style::buttons::ButtonStyle::GetStyle(type);
+      ImGui::PushStyleColor(ImGuiCol_Button, ColorToImVec4(buttonStyle.normalColor));
+      ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ColorToImVec4(buttonStyle.hoverColor));
+      ImGui::PushStyleColor(ImGuiCol_ButtonActive, ColorToImVec4(buttonStyle.activeColor));
+      ImGui::PushStyleColor(ImGuiCol_Text, ColorToImVec4(buttonStyle.textColor));
+
+      bool clicked = ImGui::Button(text.c_str(), Vector2uToImVec2(size_arg));
+      ImGui::PopStyleColor(4);
+      return clicked;
+    }
+
     /**
      * @brief Draws an input text widget in ImGui.
      *

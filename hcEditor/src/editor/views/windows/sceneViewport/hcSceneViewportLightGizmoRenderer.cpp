@@ -72,15 +72,12 @@ namespace hc::editor
     if (!m_enabled)
       return;
 
-    const Vector<UniquePtr<GameObject>>& rootGameObjects = scene
+    GameObject* root = scene
       .getSceneGraph()
-      .getRoots();
+      .getRoot();
 
-    for (const UniquePtr<GameObject>& rootGameObject : rootGameObjects)
-    {
-      if (rootGameObject)
-        draw(*rootGameObject, camera, activeGameObject);
-    }
+    if (root != nullptr)
+      draw(*root, camera, activeGameObject);
   }
 
   void SceneViewportLightGizmoRenderer::draw(

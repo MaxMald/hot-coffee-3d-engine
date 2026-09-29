@@ -1,7 +1,7 @@
 #include "hc/editor/views/windows/sceneViewport/hcSceneViewportWindow.h"
+
 #include "hc/editor/scenes/hcEditorSceneNames.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include <imgui.h>
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -230,7 +230,7 @@ namespace hc::editor
 
   void SceneViewportWindow::drawRenderTarget(const ITexture& texture)
   {
-    imguiUtilities::DrawTexture(
+    hcImGui::DrawTexture(
       &texture,
       static_cast<float>(texture.getWidth()),
       static_cast<float>(texture.getHeight()),

@@ -1,8 +1,6 @@
 #include "hc/editor/services/materialDrawer/hcHairMaterialDrawer.h"
 
-#include <imgui.h>
-
-#include "hc/editor/imgui/hcImguiUtilities.h"
+#include "hc/editor/imgui/hcImgui.h"
 #include "hc/editor/hcEditorCommons.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
@@ -30,11 +28,11 @@ namespace hc::editor
     (void)slotIndex; // unused parameter
 
     Color specularPrimaryColor = material->getSpecularPrimaryColor();
-    if (imguiUtilities::DrawColorEdit3("Primary Specular Color", specularPrimaryColor))
+    if (hcImGui::DrawColorEdit3("Primary Specular Color", specularPrimaryColor))
       material->setSpecularPrimaryColor(specularPrimaryColor);
 
     Color specularSecondaryColor = material->getSpecularSecondaryColor();
-    if (imguiUtilities::DrawColorEdit3("Secondary Specular Color", specularSecondaryColor))
+    if (hcImGui::DrawColorEdit3("Secondary Specular Color", specularSecondaryColor))
       material->setSpecularSecondaryColor(specularSecondaryColor);
 
     float shininess = material->getShininess();
@@ -57,19 +55,19 @@ namespace hc::editor
     if (ImGui::SliderFloat("Specular Width", &specularWidth, 0.0f, 1.0f))
       material->setSpecularWidth(specularWidth);
 
-    imguiUtilities::DrawTexture(
+    hcImGui::DrawTexture(
       material->getAlbedoTexture().get(),
       style::COMPONENT_MAT_TEXTURE_SIZE,
       style::COMPONENT_MAT_TEXTURE_SIZE
     );
     ImGui::SameLine();
-    imguiUtilities::DrawTexture(
+    hcImGui::DrawTexture(
       material->getNormalTexture().get(),
       style::COMPONENT_MAT_TEXTURE_SIZE,
       style::COMPONENT_MAT_TEXTURE_SIZE
     );
     ImGui::SameLine();
-    imguiUtilities::DrawTexture(
+    hcImGui::DrawTexture(
       material->getSpecularTexture().get(),
       style::COMPONENT_MAT_TEXTURE_SIZE,
       style::COMPONENT_MAT_TEXTURE_SIZE

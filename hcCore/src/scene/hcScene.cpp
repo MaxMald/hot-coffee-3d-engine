@@ -111,7 +111,7 @@ namespace hc
     }
 
     GameObject* rootPtr = root.get();
-    m_sceneGraph.addRoot(std::move(root));
+    m_sceneGraph.addGameObject(std::move(root));
     return rootPtr;
   }
 
@@ -221,6 +221,9 @@ namespace hc
   {
     m_sceneGraph.clear();
     m_cameraManager.clear();
+    m_lightManager.clear();
+    m_skybox.clear();
+    m_settings.clear();
   }
 
   void Scene::onInitialized()

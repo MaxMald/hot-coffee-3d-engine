@@ -1,8 +1,7 @@
 #include "hc/editor/views/windows/hcCameraManagerWindow.h"
 
 #include "hc/editor/views/hcEditorViewsManager.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -75,7 +74,7 @@ namespace hc::editor
 
     if (ImGui::CollapsingHeader("Projection Matrix"))
     {
-      imguiUtilities::DrawMatrix(
+      hcImGui::DrawMatrix(
         "Projection",
         camera->getProjectionMatrix()
       );
@@ -83,7 +82,7 @@ namespace hc::editor
 
     if (ImGui::CollapsingHeader("View Matrix"))
     {
-      imguiUtilities::DrawMatrix(
+      hcImGui::DrawMatrix(
         "View",
         camera->getViewMatrix()
       );

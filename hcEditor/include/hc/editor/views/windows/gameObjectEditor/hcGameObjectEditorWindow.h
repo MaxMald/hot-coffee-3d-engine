@@ -29,6 +29,7 @@ namespace hc::editor
     CreateComponentSection m_createComponentSection;
     ComponentDrawersManager m_componentDrawersManager;
     Vector<IComponent*> m_gameObjectComponents;
+    Vector<IComponent*> m_componentsToRemove;
 
     void onDraw() override;
     void drawTransform(GameObject* gameObject);

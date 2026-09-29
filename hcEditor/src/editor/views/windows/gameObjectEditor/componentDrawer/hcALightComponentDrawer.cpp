@@ -1,5 +1,6 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcALightComponentDrawer.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
+
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -19,7 +20,7 @@ namespace hc::editor
       light.setEnabled(enabled);
 
     Color color = light.getColor();
-    if (imguiUtilities::DrawColorEdit3("Color", color))
+    if (hcImGui::DrawColorEdit3("Color", color))
       light.setColor(color);
 
     float intensity = light.getIntensity();
