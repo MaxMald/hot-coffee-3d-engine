@@ -25,13 +25,11 @@ namespace hc::editor
       bool changed = false;
 
       ImGui::BeginTable("LabelValueTable", 2, ImGuiTableFlags_SizingFixedFit);
-      ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthFixed, 60.0f);
-      ImGui::TableSetupColumn("Value", ImGuiTableColumnFlags_WidthStretch, 200.0f);
+      ImGui::TableSetupColumn("Color", ImGuiTableColumnFlags_WidthFixed, 200.0f);
+      ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
       ImGui::TableNextRow();
-      ImGui::TableSetColumnIndex(0);
-      ImGui::Text("%s", label.c_str());
-      ImGui::TableSetColumnIndex(1);
 
+      ImGui::TableSetColumnIndex(0);
       ImGui::SetNextItemWidth(200.0f);
       float col[3] = { color.r, color.g, color.b };
       if (ImGui::ColorEdit3("##Color", col))
@@ -41,6 +39,9 @@ namespace hc::editor
         color.b = col[2];
         changed = true;
       }
+
+      ImGui::TableSetColumnIndex(1);
+      ImGui::Text("%s", label.c_str());
 
       ImGui::EndTable();
       return changed;
