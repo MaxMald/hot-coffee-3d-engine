@@ -40,8 +40,8 @@ namespace hc
     writer.writeUUID(m_uuid);
 
     writer.writeSizeT(m_children.size());
-    for (const auto& pair : m_children)
-      pair.second->serialize(writer);
+    for (const auto& child : m_children)
+      child->serialize(writer);
 
     writer.writeSizeT(m_components.size());
     for (const auto& pair : m_components)
@@ -119,8 +119,8 @@ namespace hc
         drawableComponent->draw(localRenderContext, outDrawCommands);
     }
 
-    for (auto& pair : m_children)
-      pair.second->draw(localRenderContext, outDrawCommands);
+    for (auto& child : m_children)
+      child->draw(localRenderContext, outDrawCommands);
   }
 
   void GameObject::preUpdate(const Time& elapsedTime)
@@ -132,8 +132,8 @@ namespace hc
         updatableComponent->preUpdate(elapsedTime.toSeconds());
     }
 
-    for (auto& pair : m_children)
-      pair.second->preUpdate(elapsedTime);
+    for (auto& child : m_children)
+      child->preUpdate(elapsedTime);
   }
 
   void GameObject::update(const Time& elapsedTime)
@@ -145,8 +145,8 @@ namespace hc
         updatableComponent->update(elapsedTime.toSeconds());
     }
 
-    for (auto& pair : m_children)
-      pair.second->update(elapsedTime);
+    for (auto& child : m_children)
+      child->update(elapsedTime);
   }
 
   void GameObject::postUpdate(const Time& elapsedTime)
@@ -158,13 +158,13 @@ namespace hc
         updatableComponent->postUpdate(elapsedTime.toSeconds());
     }
 
-    for (auto& pair : m_children)
-      pair.second->postUpdate(elapsedTime);
+    for (auto& child : m_children)
+      child->postUpdate(elapsedTime);
   }
 
   void GameObject::addChild(UniquePtr<GameObject> child)
   {
-    if (!child)
+    if (child == nullptr)
       throw InvalidArgumentException("Cannot add a null child GameObject.");
 
     if (child.get() == this)
@@ -174,7 +174,8 @@ namespace hc
       throw InvalidArgumentException("The child GameObject already has a parent.");
 
     child->m_parent = this;
-    m_children[child->getUUID()] = std::move(child);
+    m_children.push_back(std::move(child));
+    updateChildrenIndexMap();
   }
 
   GameObject* GameObject::createChild(const String& childName)
@@ -197,14 +198,17 @@ namespace hc
     if (!child)
       return nullptr;
 
-    for (auto& pair : m_children)
+    Int32 size = static_cast<Int32>(m_children.size());
+    for (Int32 i = size - 1; i >= 0; --i)
     {
-      if (pair.second.get() == child)
+      auto& childPtr = m_children[i];
+      if (childPtr.get() == child)
       {
-        UniquePtr<GameObject> removedChild = std::move(pair.second);
+        UniquePtr<GameObject> removedChild = std::move(childPtr);
         removedChild->m_parent = nullptr;
 
-        m_children.erase(pair.first);
+        m_children.erase(m_children.begin() + i);
+        updateChildrenIndexMap();
         return removedChild;
       }
     }
@@ -214,12 +218,16 @@ namespace hc
 
   UniquePtr<GameObject> GameObject::removeChild(const UUID& uuid)
   {
-    auto it = m_children.find(uuid);
-    if (it != m_children.end())
+    auto it = m_childrenIndexMap.find(uuid);
+    if (it != m_childrenIndexMap.end())
     {
-      UniquePtr<GameObject> removedChild = std::move(it->second);
+      Int32 index = static_cast<Int32>(it->second);
+      auto& childPtr = m_children[index];
+      UniquePtr<GameObject> removedChild = std::move(childPtr);
       removedChild->m_parent = nullptr;
-      m_children.erase(it);
+
+      m_children.erase(m_children.begin() + index);
+      updateChildrenIndexMap();
       return removedChild;
     }
     return nullptr;
@@ -231,9 +239,9 @@ namespace hc
     if (removedChild != nullptr)
       return removedChild;
 
-    for (auto& pair : m_children)
+    for (auto& child : m_children)
     {
-      UniquePtr<GameObject> descendant = pair.second->removeDescendant(uuid);
+      UniquePtr<GameObject> descendant = child->removeDescendant(uuid);
       if (descendant != nullptr)
         return descendant;
     }
@@ -242,12 +250,12 @@ namespace hc
 
   GameObject* GameObject::getDescendant(const String& name) const
   {
-    for (const auto& pair : m_children)
+    for (const auto& child : m_children)
     {
-      if (pair.second->getName() == name)
-        return pair.second.get();
+      if (child->getName() == name)
+        return child.get();
 
-      GameObject* descendant = pair.second->getDescendant(name);
+      GameObject* descendant = child->getDescendant(name);
       if (descendant)
         return descendant;
     }
@@ -260,9 +268,9 @@ namespace hc
     if (child)
       return child;
 
-    for (const auto& pair : m_children)
+    for (const auto& child : m_children)
     {
-      GameObject* descendant = pair.second->getDescendant(uuid);
+      GameObject* descendant = child->getDescendant(uuid);
       if (descendant)
         return descendant;
     }
@@ -273,20 +281,20 @@ namespace hc
   Vector<GameObject*> GameObject::getChildrenByName(const String& name) const
   {
     Vector<GameObject*> matchingChildren;
-    for (const auto& pair : m_children)
+    for (const auto& child : m_children)
     {
-      if (pair.second->getName() == name)
-        matchingChildren.push_back(pair.second.get());
+      if (child->getName() == name)
+        matchingChildren.push_back(child.get());
     }
     return matchingChildren;
   }
 
-  void GameObject::getAllDescendants(Vector<GameObject*>& outDescendants) const
+  void GameObject::getDescendants(Vector<GameObject*>& outDescendants) const
   {
-    for (const auto& pair : m_children)
+    for (const auto& child : m_children)
     {
-      outDescendants.push_back(pair.second.get());
-      pair.second->getAllDescendants(outDescendants);
+      outDescendants.push_back(child.get());
+      child->getDescendants(outDescendants);
     }
   }
 
@@ -357,9 +365,14 @@ namespace hc
     m_drawableComponents.clear();
     m_updatableComponents.clear();
 
-    for (auto& pair : m_children)
-      pair.second->m_parent = nullptr;
+    for (auto& child : m_children)
+    {
+      child->m_parent = nullptr;
+      child->destroy();
+    }
+      
     m_children.clear();
+    m_childrenIndexMap.clear();
   }
 
   void GameObject::addComponent(UniquePtr<IComponent> component)

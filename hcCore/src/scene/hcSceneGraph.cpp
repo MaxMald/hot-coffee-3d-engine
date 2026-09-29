@@ -112,7 +112,7 @@ namespace hc
   void SceneGraph::getAllGameObjects(Vector<GameObject*>& outGameObjects) const
   {
     assertIsInitialized();
-    m_root->getAllDescendants(outGameObjects);
+    m_root->getDescendants(outGameObjects);
   }
 
   void SceneGraph::clear()

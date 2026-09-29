@@ -182,9 +182,9 @@ namespace hc
      */
     inline GameObject* getChild(const String& name) const
     {
-      for (const auto& pair : m_children)
-        if (pair.second->getName() == name)
-          return pair.second.get();
+      for (const auto& child : m_children)
+        if (child->getName() == name)
+          return child.get();
       return nullptr;
     }
 
@@ -197,9 +197,9 @@ namespace hc
      */
     inline GameObject* getChild(const UUID& uuid) const
     {
-      auto it = m_children.find(uuid);
-      if (it != m_children.end())
-        return it->second.get();
+      auto it = m_childrenIndexMap.find(uuid);
+      if (it != m_childrenIndexMap.end())
+        return m_children[it->second].get();
       return nullptr;
     }
 
@@ -239,8 +239,8 @@ namespace hc
     {
       outChildren.clear();
       outChildren.reserve(m_children.size());
-      for (const auto& pair : m_children)
-        outChildren.push_back(pair.second.get());
+      for (const auto& child : m_children)
+        outChildren.push_back(child.get());
     }
 
     /**
@@ -249,7 +249,7 @@ namespace hc
      *
      * @param outDescendants Vector to populate with descendant pointers.
      */
-    void getAllDescendants(Vector<GameObject*>& outDescendants) const;
+    void getDescendants(Vector<GameObject*>& outDescendants) const;
 
     /**
      * @brief Computes the world transformation matrix for this GameObject.
@@ -351,7 +351,8 @@ namespace hc
     GameObject* m_parent = nullptr;
     IGameObjectFactory& m_gameObjectFactory;
     ComponentFactoriesManager& m_componentFactoriesManager;
-    UnorderedMap<UUID, UniquePtr<GameObject>> m_children;
+    Vector<UniquePtr<GameObject>> m_children;                       // Stores child GameObjects for ownership and iteration
+    UnorderedMap<UUID, SizeT> m_childrenIndexMap;                   // Maps child UUIDs to their index in m_children for fast lookup
     UnorderedMap<TypeIndex, UniquePtr<IComponent>> m_components;
     UnorderedMap<UUID, IDrawable*> m_drawableComponents;
     UnorderedMap<UUID, IUpdatableComponent*> m_updatableComponents;
@@ -362,6 +363,17 @@ namespace hc
      * @brief Destroys this GameObject and all its children, releasing resources.
      */
     void destroy();
+
+    /**
+     * @brief Updates the m_childrenIndexMap to reflect the current state of m_children.
+     * This should be called whenever children are added or removed.
+     */
+    inline void updateChildrenIndexMap()
+    {
+      m_childrenIndexMap.clear();
+      for (SizeT i = 0; i < m_children.size(); ++i)
+        m_childrenIndexMap[m_children[i]->getUUID()] = i;
+    }
   };
 
   template<typename ComponentType>

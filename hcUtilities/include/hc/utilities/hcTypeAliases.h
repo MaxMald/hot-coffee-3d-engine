@@ -40,6 +40,15 @@ namespace hc
   using SizeT = std::size_t;
   using TypeIndex = std::type_index;
 
+  template <typename Ty1, typename Ty2>
+  using Pair = std::pair<Ty1, Ty2>;
+
+  template <typename Ty1, typename Ty2>
+  inline Pair<Ty1, Ty2> MakePair(Ty1&& first, Ty2&& second)
+  {
+    return std::make_pair(std::forward<Ty1>(first), std::forward<Ty2>(second));
+  }
+
   template<typename K, typename V>
   using UnorderedMap = std::unordered_map<K, V>;
 
