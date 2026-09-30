@@ -10,57 +10,14 @@ namespace hc
     if (isLoaded(path))
       return m_loadedImages.at(path);
 
-    // TODO
-    //
-    // Method should determine the color format and color space of the loaded image. For
-    // now, we will assume all loaded images are in RGBA8 format and sRGB color space, but
-    // this may not always be the case.
-
-    Int32 width = 0;
-    Int32 height = 0;
-    Int32 channels = 0;
-    UChar* data = nullptr;
-    SharedPtr<Image> image = nullptr;
-
-    try
-    {
-      data = stbi_load(
-        path.toString().c_str(),
-        reinterpret_cast<int*>(&width),
-        reinterpret_cast<int*>(&height),
-        reinterpret_cast<int*>(&channels),
-        STBI_rgb_alpha
-      );
-
-      if (!data)
-        return nullptr;
-
-      SizeT bufferSize = static_cast<SizeT>(width)
-        * static_cast<SizeT>(height)
-        * NUM_CHANNELS;
-
-      BufferByte buffer(bufferSize);
-      buffer.initialize(reinterpret_cast<Byte*>(data), bufferSize);
-
-      image = MakeShared<Image>(
-        path,
-        static_cast<UInt32>(width),
-        static_cast<UInt32>(height),
-        textureFormatType::RGBA8,
-        colorSpaceType::SRGB,
-        std::move(buffer)
-      );
-    }
-    catch (const Exception& e)
-    {
-      if (data)
-        stbi_image_free(data);
+    if (!path.exists())
       return nullptr;
-    }
 
-    stbi_image_free(data);
-    m_loadedImages[path] = image;
-    return image;
+    bool isHDR = stbi_is_hdr(path.toString().c_str());
+    if (isHDR)
+      return loadHDRImage(path);
+    else
+      return loadLDRImage(path);
   }
 
   SharedPtr<Image> ImageAssetManager::get(const Path& path) const
@@ -93,5 +50,99 @@ namespace hc
   void ImageAssetManager::clear()
   {
     m_loadedImages.clear();
+  }
+
+  SharedPtr<Image> ImageAssetManager::loadHDRImage(const Path& path)
+  {
+    Int32 width, height, channels;
+    float* data = stbi_loadf(
+      path.toString().c_str(),
+      &width,
+      &height,
+      &channels,
+      STBI_default
+    );
+
+    if (!data)
+      return nullptr;
+
+    textureFormatType::Type format = textureFormatType::RGBA32F;
+    if (channels == 3)
+      format = textureFormatType::RGB32F;
+    else if (channels == 4)
+      format = textureFormatType::RGBA32F;
+    else
+      throw RuntimeErrorException(
+        String::Format(
+          "Unsupported number of channels (%d) in HDR image: %s",
+          channels,
+          path.toString().c_str()
+        )
+      );
+
+    SizeT bufferSize = static_cast<SizeT>(width)
+      * static_cast<SizeT>(height)
+      * static_cast<SizeT>(channels)
+      * sizeof(float);
+
+    BufferByte buffer(bufferSize);
+    buffer.initialize(reinterpret_cast<Byte*>(data), bufferSize);
+    stbi_image_free(data);
+
+    SharedPtr<Image> image = MakeShared<Image>(
+      path,
+      static_cast<UInt32>(width),
+      static_cast<UInt32>(height),
+      format,
+      colorSpaceType::Linear,
+      std::move(buffer)
+    );
+
+    m_loadedImages[path] = image;
+    return image;
+  }
+
+  SharedPtr<Image> ImageAssetManager::loadLDRImage(const Path& path)
+  {
+    Int32 width, height, channels;
+    stbi_uc* data = stbi_load(
+      path.toString().c_str(),
+      &width,
+      &height,
+      &channels,
+      STBI_default
+    );
+
+    if (!data)
+      return nullptr;
+
+    textureFormatType::Type format = textureFormatType::RGBA8;
+    if (channels == 1)
+      format = textureFormatType::R8;
+    else if (channels == 2)
+      format = textureFormatType::RG8;
+    else if (channels == 3)
+      format = textureFormatType::RGB8;
+
+    SizeT bufferSize = static_cast<SizeT>(width)
+      * static_cast<SizeT>(height)
+      * static_cast<SizeT>(channels);
+
+    BufferByte buffer(bufferSize);
+    buffer.initialize(reinterpret_cast<Byte*>(data), bufferSize);
+
+    stbi_image_free(data);
+
+    SharedPtr<Image> image = MakeShared<Image>(
+      path,
+      static_cast<UInt32>(width),
+      static_cast<UInt32>(height),
+      format,
+      colorSpaceType::SRGB,
+      std::move(buffer)
+    );
+
+    m_loadedImages[path] = image;
+    return image;
   }
 }

@@ -13,6 +13,8 @@ namespace hc
     enum Type : UInt8
     {
       // Color formats
+      R8,
+      RG8,
       RGB8,
       RGBA8,
       RGB16F,
@@ -47,6 +49,9 @@ namespace hc
       case RGB16F:
       case RGB32F:
         return 3;
+      case RG8:
+        return 2;
+      case R8:
       case Depth16:
       case Depth24:
       case Depth32F:
@@ -69,6 +74,8 @@ namespace hc
       {
       case RGBA8:
       case RGB8:
+      case RG8:
+      case R8:
         return 8;
       case RGBA16F:
       case RGB16F:
@@ -98,6 +105,8 @@ namespace hc
       {
       case RGBA8:
       case RGB8:
+      case RG8:
+      case R8:
         return 1;
       case RGBA16F:
       case RGB16F:
@@ -119,10 +128,14 @@ namespace hc
     {
       switch (format)
       {
-      case RGBA8:
-        return "RGBA8";
+      case R8:
+        return "R8";
+      case RG8:
+        return "RG8";
       case RGB8:
         return "RGB8";
+      case RGBA8:
+        return "RGBA8";
       case RGBA16F:
         return "RGBA16F";
       case RGB16F:
@@ -145,6 +158,10 @@ namespace hc
 
     inline Type FromString(const String& str)
     {
+      if (str == "R8")
+        return R8;
+      if (str == "RG8")
+        return RG8;
       if (str == "RGBA8")
         return RGBA8;
       if (str == "RGB8")

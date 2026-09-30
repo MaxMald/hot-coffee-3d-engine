@@ -70,5 +70,23 @@ namespace hc
 
   private:
     UnorderedMap<Path, SharedPtr<Image>> m_loadedImages;
+
+    /**
+     * Loads an LDR (Low Dynamic Range) image from the specified path.
+     *
+     * @param path The file path to the LDR image
+     *
+     * @return A shared pointer to the loaded LDR image, or nullptr on failure
+     */
+    SharedPtr<Image> loadLDRImage(const Path& path);
+
+    /**
+     * Loads an HDR (High Dynamic Range) image from the specified path.
+     *
+     * @param path The file path to the HDR image
+     *
+     * @return A shared pointer to the loaded HDR image, or nullptr on failure
+     */
+    SharedPtr<Image> loadHDRImage(const Path& path);
   };
 }
