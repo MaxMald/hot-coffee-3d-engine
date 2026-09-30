@@ -6,6 +6,10 @@ namespace hc
 {
   namespace textureFormatType
   {
+    /**
+     * @brief Enumeration for different texture format types. These types represent the
+     * format in which the texture or image data is stored.
+     */
     enum Type : UInt8
     {
       // Color formats
@@ -23,6 +27,12 @@ namespace hc
       Undefined
     };
 
+    /**
+     * @brief Gets the number of channels for the specified texture format.
+     * @param format The texture format type.
+     * @return The number of channels (1 for depth formats, 3 for RGB, 4 for RGBA).
+     * @throws RuntimeErrorException if the format is not implemented.
+     */
     inline UInt8 GetChannelCount(Type format)
     {
       switch (format)
@@ -43,6 +53,12 @@ namespace hc
       }
     }
 
+    /**
+     * @brief Gets the number of bits per channel for the specified texture format.
+     * @param format The texture format type.
+     * @return The number of bits per channel (8, 16, 24, or 32).
+     * @throws RuntimeErrorException if the format is not implemented.
+     */
     inline UInt8 GetBitsPerChannel(Type format)
     {
       switch (format)
@@ -107,5 +123,57 @@ namespace hc
       throw RuntimeErrorException(
         String::Format("Not implemented: fromString for texture format type string '%s'", str.c_str()));
     }
+  }
+
+  namespace colorSpaceType
+  {
+    /**
+     * @brief Enumeration for different color space types. These types represent the
+     * color space in which the texture or image data is stored.
+     */
+    enum Type : UInt8
+    {
+      SRGB,
+      Linear,
+      Count
+    };
+
+    inline String ToString(Type colorSpace)
+    {
+      switch (colorSpace)
+      {
+      case SRGB:
+        return "SRGB";
+      case Linear:
+        return "Linear";
+      default:
+        throw RuntimeErrorException(
+          String::Format("Not implemented: toString for color space type %d", static_cast<UInt8>(colorSpace)));
+      }
+    }
+
+    inline Type FromString(const String& colorSpaceStr)
+    {
+      if (colorSpaceStr == "SRGB")
+        return SRGB;
+      else if (colorSpaceStr == "Linear")
+        return Linear;
+      else
+        throw RuntimeErrorException(
+          String::Format("Not implemented: getColorSpaceTypeFromString for color space type string '%s'", colorSpaceStr.c_str()));
+    }
+  }
+
+  namespace platformType
+  {
+    /**
+     * @brief Enumeration for different platform types. These types represent the
+     * operating system or platform on which the application is running.
+     */
+    enum Type : UInt8
+    {
+      UNKNOWN = 0,
+      WINDOWS
+    };
   }
 }

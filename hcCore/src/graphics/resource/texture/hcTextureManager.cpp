@@ -11,7 +11,9 @@ namespace hc
     IAssetManager& assetManager
   ) :
     m_textureFactory(std::move(textureFactory)),
-    m_assetManager(assetManager)
+    m_assetManager(assetManager),
+    m_textures(),
+    m_defaultTextures()
   {
   }
 
@@ -110,9 +112,53 @@ namespace hc
     return m_textures;
   }
 
+  SharedPtr<ITexture> TextureManager::getDefaultTexture(defaultTextureType::Type type)
+  {
+    auto it = m_defaultTextures.find(type);
+    if (it != m_defaultTextures.end())
+      return it->second;
+
+    if (type == defaultTextureType::White)
+    {
+      Image whiteImage(
+        1, 1,
+        textureFormatType::RGBA8, colorSpaceType::Linear,
+        Color(1.0f, 1.0f, 1.0f, 1.0f)
+      );
+      return createAndSaveDefaultTexture(type, whiteImage);
+    }
+    else if (type == defaultTextureType::NormalTangent)
+    {
+      Image normalImage(
+        1, 1,
+        textureFormatType::RGBA8, colorSpaceType::Linear,
+        Color(0.5f, 0.5f, 1.0f, 1.0f)
+      );
+      return createAndSaveDefaultTexture(type, normalImage);
+    }
+
+    throw RuntimeErrorException(
+      String::Format(
+        "TextureManager: Unsupported default texture type '%u'.",
+        static_cast<UInt32>(type)
+      )
+    );
+  }
+
   void TextureManager::clear()
   {
     m_textures.clear();
     clearCache();
+  }
+
+  SharedPtr<ITexture> TextureManager::createAndSaveDefaultTexture(
+    defaultTextureType::Type type,
+    const Image& image
+  )
+  {
+    SharedPtr<ITexture> texture = m_textureFactory->createTexture();
+    texture->initialize(image, Path());
+    m_defaultTextures[type] = texture;
+    return texture;
   }
 }

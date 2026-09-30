@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 
 namespace hc
@@ -71,21 +71,6 @@ namespace hc
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
-     * @copydoc IMaterialManager::getDefaultAlbedoTexture
-     */
-    const SharedPtr<ITexture>& getDefaultAlbedoTexture() const override;
-
-    /** 
-     * @copydoc IMaterialManager::getDefaultNormalTexture
-     */
-    const SharedPtr<ITexture>& getDefaultNormalTexture() const override;
-
-    /**
-     * @copydoc IMaterialManager::getDefaultORMTexture
-     */
-    const SharedPtr<ITexture>& getDefaultORMTexture() const override;
-
-    /**
      * @copydoc IMaterialManager::clear
      */
     void clear();
@@ -100,12 +85,8 @@ namespace hc
     IShaderProgramManager& m_shaderProgramManager;
     ITextureManager& m_textureManager;
     Vector<SharedPtr<IMaterial>> m_materials;
-    SharedPtr<ITexture> m_whiteTexture;
-    SharedPtr<ITexture> m_defaultNormalTexture;
-    SharedPtr<ITexture> m_defaultORMTexture;
 
     UInt16 generateMaterialId();
-    void createDefaultTextures();
     SharedPtr<ITexture> getTextureFromPath(const Path& texturePath);
     SharedPtr<ITexture> getTextureFromPath(
       const Path& texturePath,

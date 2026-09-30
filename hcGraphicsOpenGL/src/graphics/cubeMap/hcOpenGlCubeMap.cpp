@@ -1,14 +1,16 @@
 #include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
 
-#include <GL/glew.h>
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
 {
   OpenGlCubeMap::OpenGlCubeMap() :
+    m_sourcePath(),
     m_id(0),
-    m_valid(false),
-    m_descriptor(nullptr)
+    m_faceSize(0),
+    m_textureFormat(textureFormatType::RGBA8),
+    m_colorSpace(colorSpaceType::Linear),
+    m_valid(false)
   {}
 
   OpenGlCubeMap::~OpenGlCubeMap()
@@ -17,75 +19,34 @@ namespace hc
   }
 
   void OpenGlCubeMap::initialize(
-    SharedPtr<CubeMapDescriptor> cubeMapDescriptor,
-    IAssetManager& assetManager
+    const Image& rightFace,
+    const Image& leftFace,
+    const Image& topFace,
+    const Image& bottomFace,
+    const Image& backFace,
+    const Image& frontFace,
+    const Path& sourcePath
   )
   {
     if (m_valid)
       throw RuntimeErrorException("Cube map is already initialized");
 
-    if (!cubeMapDescriptor)
-      throw InvalidArgumentException("Cube map descriptor is null");
-
-    UInt32 faceSize = cubeMapDescriptor->faceSize;
-    if (faceSize == 0)
-      throw RuntimeErrorException("Cube map face size must be greater than zero");
-
-    IImageAssetManager& imageMng = assetManager.getImageAssetManager();
-
-    Path rightImagePath = cubeMapDescriptor->rightImagePath;
-    if (rightImagePath.isRelative())
-      rightImagePath = rightImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    Path leftImagePath = cubeMapDescriptor->leftImagePath;
-    if (leftImagePath.isRelative())
-      leftImagePath = leftImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    Path topImagePath = cubeMapDescriptor->topImagePath;
-    if (topImagePath.isRelative())
-      topImagePath = topImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    Path bottomImagePath = cubeMapDescriptor->bottomImagePath;
-    if (bottomImagePath.isRelative())
-      bottomImagePath = bottomImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    Path backImagePath = cubeMapDescriptor->backImagePath;
-    if (backImagePath.isRelative())
-      backImagePath = backImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    Path frontImagePath = cubeMapDescriptor->frontImagePath;
-    if (frontImagePath.isRelative())
-      frontImagePath = frontImagePath.toAbsolute(cubeMapDescriptor->path.parentPath());
-
-    SharedPtr<Image> rightImage = imageMng.load(rightImagePath);
-    SharedPtr<Image> leftImage = imageMng.load(leftImagePath);
-    SharedPtr<Image> topImage = imageMng.load(topImagePath);
-    SharedPtr<Image> bottomImage = imageMng.load(bottomImagePath);
-    SharedPtr<Image> backImage = imageMng.load(backImagePath);
-    SharedPtr<Image> frontImage = imageMng.load(frontImagePath);
-
-    if (rightImage == nullptr)
-      throw RuntimeErrorException("Failed to load right image for cube map");
-    if (leftImage == nullptr)
-      throw RuntimeErrorException("Failed to load left image for cube map");
-    if (topImage == nullptr)
-      throw RuntimeErrorException("Failed to load top image for cube map");
-    if (bottomImage == nullptr)
-      throw RuntimeErrorException("Failed to load bottom image for cube map");
-    if (backImage == nullptr)
-      throw RuntimeErrorException("Failed to load back image for cube map");
-    if (frontImage == nullptr)
-      throw RuntimeErrorException("Failed to load front image for cube map");
-
-    assertImageSize(*rightImage, faceSize, faceSize);
-    assertImageSize(*leftImage, faceSize, faceSize);
-    assertImageSize(*topImage, faceSize, faceSize);
-    assertImageSize(*bottomImage, faceSize, faceSize);
-    assertImageSize(*backImage, faceSize, faceSize);
-    assertImageSize(*frontImage, faceSize, faceSize);
+    UInt32 faceSize = rightFace.getWidth();
+    textureFormatType::Type format = rightFace.getFormat();
+    colorSpaceType::Type colorSpace = rightFace.getColorSpace();
+    assertImage(rightFace, faceSize, format, colorSpace);
+    assertImage(leftFace, faceSize, format, colorSpace);
+    assertImage(topFace, faceSize, format, colorSpace);
+    assertImage(bottomFace, faceSize, format, colorSpace);
+    assertImage(backFace, faceSize, format, colorSpace);
+    assertImage(frontFace, faceSize, format, colorSpace);
 
     GLint currentCubeMapTexture = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(format, colorSpace);
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(format);
+    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(format);
 
     try
     {
@@ -95,55 +56,55 @@ namespace hc
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(rightImage->getFormat(), rightImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(rightImage->getFormat()),
-        GL_UNSIGNED_BYTE, rightImage->getBuffer().data()
+        glFormat,
+        glType, rightFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(leftImage->getFormat(), leftImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(leftImage->getFormat()),
-        GL_UNSIGNED_BYTE, leftImage->getBuffer().data()
+        glFormat,
+        glType, leftFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(topImage->getFormat(), topImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(topImage->getFormat()),
-        GL_UNSIGNED_BYTE, topImage->getBuffer().data()
+        glFormat,
+        glType, topFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(bottomImage->getFormat(), bottomImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(bottomImage->getFormat()),
-        GL_UNSIGNED_BYTE, bottomImage->getBuffer().data()
+        glFormat,
+        glType, bottomFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(frontImage->getFormat(), frontImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(frontImage->getFormat()),
-        GL_UNSIGNED_BYTE, frontImage->getBuffer().data()
+        glFormat,
+        glType, frontFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
       glTexImage2D(
         GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0,
-        openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(backImage->getFormat(), backImage->getColorSpace()),
+        glInternalFormat,
         faceSize, faceSize, 0,
-        openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(backImage->getFormat()),
-        GL_UNSIGNED_BYTE, backImage->getBuffer().data()
+        glFormat,
+        glType, backFace.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -163,31 +124,16 @@ namespace hc
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
 
-    m_descriptor = cubeMapDescriptor;
+    m_faceSize = faceSize;
+    m_textureFormat = format;
+    m_colorSpace = colorSpace;
+    m_sourcePath = sourcePath;
     m_valid = true;
   }
 
   bool OpenGlCubeMap::isValid() const
   {
     return m_valid;
-  }
-
-  UInt32 OpenGlCubeMap::getFaceWidth() const
-  {
-    assertIsValid();
-    return m_descriptor->faceSize;
-  }
-
-  UInt32 OpenGlCubeMap::getFaceHeight() const
-  {
-    assertIsValid();
-    return m_descriptor->faceSize;
-  }
-
-  SharedPtr<CubeMapDescriptor> OpenGlCubeMap::getCubeMapDescriptor() const
-  {
-    assertIsValid();
-    return m_descriptor;
   }
 
   void OpenGlCubeMap::destroy()
@@ -203,28 +149,33 @@ namespace hc
       m_id = 0;
     }
 
-    m_descriptor.reset();
+    m_faceSize = 0;
+    m_sourcePath.clear();
     m_valid = false;
   }
 
-  UInt32 OpenGlCubeMap::getId() const
+  const UUID& OpenGlCubeMap::getUUID() const
   {
-    return m_id;
+    return m_uuid;
   }
 
-  void OpenGlCubeMap::assertImageSize(
-    const Image& image,
-    const UInt32 expectedWidth,
-    const UInt32 expectedHeight
-  )
+  UInt32 OpenGlCubeMap::getFaceSize() const
   {
-    if (image.getHeight() != expectedHeight || image.getWidth() != expectedWidth)
-      throw RuntimeErrorException("Cube map image has invalid dimensions");
+    return m_faceSize;
   }
 
-  void OpenGlCubeMap::assertIsValid() const
+  textureFormatType::Type OpenGlCubeMap::getTextureFormat() const
   {
-    if (!m_valid)
-      throw RuntimeErrorException("Cube map is not valid");
+    return m_textureFormat;
+  }
+
+  colorSpaceType::Type OpenGlCubeMap::getColorSpace() const
+  {
+    return m_colorSpace;
+  }
+
+  const Path& OpenGlCubeMap::getSourcePath() const
+  {
+    return m_sourcePath;
   }
 }

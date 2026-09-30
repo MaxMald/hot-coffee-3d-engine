@@ -1,9 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/utilities/hcTextureFormatType.h"
-#include "hc/utilities/hcColorSpaceType.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/plugins/hcIPlugin.h"

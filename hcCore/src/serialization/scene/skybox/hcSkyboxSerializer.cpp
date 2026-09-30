@@ -28,15 +28,7 @@ namespace hc::serialization
 
     
     const ICubeMap& cubeMap = skybox.getCubeMap();
-    SharedPtr<CubeMapDescriptor> cubeMapDescriptor = cubeMap.getCubeMapDescriptor();
-    if (cubeMapDescriptor == nullptr)
-    {
-      writer.writeBool(false);
-      writer.finishWritingObject();
-      return;
-    }
-
-    Path descriptorSourcePath = cubeMapDescriptor->path;
+    Path descriptorSourcePath = cubeMap.getSourcePath();
     if (descriptorSourcePath.empty())
     {
       writer.writeBool(false);

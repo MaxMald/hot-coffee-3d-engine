@@ -1,7 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcTextureFormatType.h"
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/assets/hcAsset.h"
 
 namespace hc
@@ -12,6 +11,17 @@ namespace hc
   class HC_CORE_EXPORT Image : public Asset
   {
   public:
+    /**
+     * @brief Constructs an Image asset with the specified file path, dimensions, format,
+     * color space, and pixel data buffer.
+     *
+     * @param path The file path to the image resource.
+     * @param width The width of the image.
+     * @param height The height of the image.
+     * @param format The texture format of this image.
+     * @param colorSpace The color space of this image.
+     * @param buffer The pixels data.
+     */
     Image(
       const Path& path,
       UInt32 width,
@@ -19,6 +29,24 @@ namespace hc
       textureFormatType::Type format,
       colorSpaceType::Type colorSpace,
       BufferByte&& buffer
+    );
+
+    /**
+     * @brief Constructs an Image asset with the specified dimensions, format, color space,
+     * and initial color.
+     *
+     * @param width The width of the image.
+     * @param height The height of the image.
+     * @param format The texture format of this image.
+     * @param colorSpace The color space of this image.
+     * @param initColor The initial color to fill the image with (default is transparent black).
+     */
+    Image(
+      UInt32 width,
+      UInt32 height,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace,
+      const Color& initColor = Color(0, 0, 0, 0)
     );
 
     virtual ~Image();

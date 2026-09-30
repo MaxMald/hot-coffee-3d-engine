@@ -17,6 +17,67 @@ namespace hc
     m_colorSpace(colorSpace),
     m_data(std::move(buffer))
   {
+    if (width == 0)
+      throw InvalidArgumentException("Image width cannot be zero.");
+    if (height == 0)
+      throw InvalidArgumentException("Image height cannot be zero.");
+
+    UInt8 numChannels = textureFormatType::GetChannelCount(format);
+    SizeT expectedBufferSize = static_cast<SizeT>(width)
+      * static_cast<SizeT>(height)
+      * static_cast<SizeT>(numChannels);
+
+    if (m_data.size() != expectedBufferSize)
+      throw InvalidArgumentException(
+        String::Format("Buffer size (%zu) does not match expected size (%zu) for image dimensions (%u x %u) and format type %d.",
+          m_data.size(),
+          expectedBufferSize,
+          width, height,
+          static_cast<UInt8>(format)
+        )
+      );
+  }
+
+  Image::Image(
+    UInt32 width,
+    UInt32 height,
+    textureFormatType::Type format,
+    colorSpaceType::Type colorSpace,
+    const Color& initColor
+  ) :
+    Asset(Path()),
+    m_width(width),
+    m_height(height),
+    m_format(format),
+    m_colorSpace(colorSpace),
+    m_data()
+  {
+    if (width == 0)
+      throw InvalidArgumentException("Image width cannot be zero.");
+    if (height == 0)
+      throw InvalidArgumentException("Image height cannot be zero.");
+
+    UInt8 numChannels = textureFormatType::GetChannelCount(format);
+    if (numChannels < 1 || numChannels > 4)
+      throw InvalidArgumentException(
+        String::Format("Unsupported number of channels (%u) for texture format type %d.", numChannels, static_cast<UInt8>(format))
+      );
+
+    UInt32 numPixels = width * height;
+    UInt32 bufferSize = numPixels * numChannels;
+    m_data.reset(bufferSize);
+
+    for (UInt32 i = 0; i < numPixels; ++i)
+    {
+      UInt32 pixelOffset = i * numChannels;
+      m_data[pixelOffset + 0] = static_cast<Byte>(initColor.r * 255.0f);
+      if (numChannels > 1)
+        m_data[pixelOffset + 1] = static_cast<Byte>(initColor.g * 255.0f);
+      if (numChannels > 2)
+        m_data[pixelOffset + 2] = static_cast<Byte>(initColor.b * 255.0f);
+      if (numChannels > 3)
+        m_data[pixelOffset + 3] = static_cast<Byte>(initColor.a * 255.0f);
+    }
   }
 
   Image::~Image()
