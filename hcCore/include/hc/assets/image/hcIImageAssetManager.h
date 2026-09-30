@@ -28,7 +28,8 @@ namespace hc
 
     /**
      * @brief Retrieves a default image based on the specified type, format, and color
-     * space.
+     * space. Default images have a size of 1x1 pixel and are used as placeholders or for
+     * specific rendering purposes.
      *
      * @param type The type of default image to retrieve.
      * @param format The texture format of the default image.
