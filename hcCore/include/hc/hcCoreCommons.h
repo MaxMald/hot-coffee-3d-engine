@@ -17,6 +17,8 @@ namespace hc
       RGBA8,
       RGB16F,
       RGBA16F,
+      RGB32F,
+      RGBA32F,
 
       // Depth formats
       Depth16,
@@ -39,9 +41,11 @@ namespace hc
       {
       case RGBA8:
       case RGBA16F:
+      case RGBA32F:
         return 4;
       case RGB8:
       case RGB16F:
+      case RGB32F:
         return 3;
       case Depth16:
       case Depth24:
@@ -72,11 +76,42 @@ namespace hc
         return 16;
       case Depth24:
         return 24;
+      case RGBA32F:
+      case RGB32F:
       case Depth32F:
         return 32;
       default:
         throw RuntimeErrorException(
           String::Format("Not implemented: getBitsPerChannel for texture format type %d", static_cast<UInt8>(format)));
+      }
+    }
+
+    /**
+     * @brief Gets the number of bytes per channel for the specified texture format.
+     * @param format The texture format type.
+     * @return The number of bytes per channel (1, 2, 3, or 4).
+     * @throws RuntimeErrorException if the format is not implemented.
+     */
+    inline UInt8 GetBytesPerChannel(Type format)
+    {
+      switch (format)
+      {
+      case RGBA8:
+      case RGB8:
+        return 1;
+      case RGBA16F:
+      case RGB16F:
+      case Depth16:
+        return 2;
+      case Depth24:
+        return 3;
+      case Depth32F:
+      case RGBA32F:
+      case RGB32F:
+        return 4;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Not implemented: getBytesPerChannel for texture format type %d", static_cast<UInt8>(format)));
       }
     }
 
@@ -94,6 +129,10 @@ namespace hc
         return "RGB16F";
       case Depth16:
         return "Depth16";
+      case RGB32F:
+        return "RGB32F";
+      case RGBA32F:
+        return "RGBA32F";
       case Depth24:
         return "Depth24";
       case Depth32F:
@@ -116,6 +155,10 @@ namespace hc
         return RGBA16F;
       if (str == "Depth16")
         return Depth16;
+      if (str == "RGB32F")
+        return RGB32F;
+      if (str == "RGBA32F")
+        return RGBA32F;
       if (str == "Depth24")
         return Depth24;
       if (str == "Depth32F")

@@ -21,11 +21,14 @@ namespace hc
       throw InvalidArgumentException("Image width cannot be zero.");
     if (height == 0)
       throw InvalidArgumentException("Image height cannot be zero.");
+    AssertValidTextureFormatType(format);
 
     UInt8 numChannels = textureFormatType::GetChannelCount(format);
+    UInt8 numBytes = textureFormatType::GetBytesPerChannel(format);
     SizeT expectedBufferSize = static_cast<SizeT>(width)
       * static_cast<SizeT>(height)
-      * static_cast<SizeT>(numChannels);
+      * static_cast<SizeT>(numChannels)
+      * static_cast<SizeT>(numBytes);
 
     if (m_data.size() != expectedBufferSize)
       throw InvalidArgumentException(
@@ -56,27 +59,63 @@ namespace hc
       throw InvalidArgumentException("Image width cannot be zero.");
     if (height == 0)
       throw InvalidArgumentException("Image height cannot be zero.");
+    AssertValidTextureFormatType(format);
 
     UInt8 numChannels = textureFormatType::GetChannelCount(format);
-    if (numChannels < 1 || numChannels > 4)
-      throw InvalidArgumentException(
-        String::Format("Unsupported number of channels (%u) for texture format type %d.", numChannels, static_cast<UInt8>(format))
-      );
-
+    UInt8 numBytes = textureFormatType::GetBytesPerChannel(format);
     UInt32 numPixels = width * height;
-    UInt32 bufferSize = numPixels * numChannels;
-    m_data.reset(bufferSize);
+    UInt32 pixelSize = static_cast<UInt32>(numChannels) * static_cast<UInt32>(numBytes);
 
-    for (UInt32 i = 0; i < numPixels; ++i)
+    m_data.reset(static_cast<SizeT>(numPixels) * static_cast<SizeT>(pixelSize));
+
+    if (format == textureFormatType::RGB8 || format == textureFormatType::RGBA8)
     {
-      UInt32 pixelOffset = i * numChannels;
-      m_data[pixelOffset + 0] = static_cast<Byte>(initColor.r * 255.0f);
-      if (numChannels > 1)
-        m_data[pixelOffset + 1] = static_cast<Byte>(initColor.g * 255.0f);
-      if (numChannels > 2)
-        m_data[pixelOffset + 2] = static_cast<Byte>(initColor.b * 255.0f);
-      if (numChannels > 3)
-        m_data[pixelOffset + 3] = static_cast<Byte>(initColor.a * 255.0f);
+      for (UInt32 i = 0; i < numPixels; ++i)
+      {
+        UInt32 pixelOffset = i * pixelSize;
+        m_data[pixelOffset + 0] = static_cast<Byte>(initColor.r * 255.0f);
+        if (numChannels > 1)
+          m_data[pixelOffset + 1] = static_cast<Byte>(initColor.g * 255.0f);
+        if (numChannels > 2)
+          m_data[pixelOffset + 2] = static_cast<Byte>(initColor.b * 255.0f);
+        if (numChannels > 3)
+          m_data[pixelOffset + 3] = static_cast<Byte>(initColor.a * 255.0f);
+      }
+    }
+    else if (format == textureFormatType::Depth16)
+    {
+      for (UInt32 i = 0; i < numPixels; ++i)
+      {
+        UInt32 pixelOffset = i * pixelSize;
+        UInt16* pixelData = reinterpret_cast<UInt16*>(&m_data[pixelOffset]);
+        pixelData[0] = static_cast<UInt16>(initColor.r * 65535.0f);
+      }
+    }
+    else if (
+      format == textureFormatType::RGB32F
+      || format == textureFormatType::RGBA32F
+      || format == textureFormatType::Depth32F)
+    {
+      for (UInt32 i = 0; i < numPixels; ++i)
+      {
+        UInt32 pixelOffset = i * pixelSize;
+        float* pixelData = reinterpret_cast<float*>(&m_data[pixelOffset]);
+        pixelData[0] = initColor.r;
+        if (numChannels > 1)
+          pixelData[1] = initColor.g;
+        if (numChannels > 2)
+          pixelData[2] = initColor.b;
+        if (numChannels > 3)
+          pixelData[3] = initColor.a;
+      }
+    }
+    else
+    {
+      throw InvalidArgumentException(
+        String::Format("Unsupported texture format type %s for image initialization.",
+          textureFormatType::ToString(format).c_str()
+        )
+      );
     }
   }
 

@@ -7,6 +7,9 @@ namespace hc
 {
   /**
    * @brief Represents a image asset in the engine.
+   *
+   * @note RGB16F, RGBA16F and Depth24 texture formats are not valid for image data. Use
+   * RGB32F, RGBA32F or Depth32F instead.
    */
   class HC_CORE_EXPORT Image : public Asset
   {
@@ -18,7 +21,8 @@ namespace hc
      * @param path The file path to the image resource.
      * @param width The width of the image.
      * @param height The height of the image.
-     * @param format The texture format of this image.
+     * @param format The texture format of this image. RGB16F, RGBA16F and Depth24 are not
+     * valid for image data.
      * @param colorSpace The color space of this image.
      * @param buffer The pixels data.
      */
@@ -32,14 +36,16 @@ namespace hc
     );
 
     /**
-     * @brief Constructs an Image asset with the specified dimensions, format, color space,
-     * and initial color.
+     * @brief Constructs an Image asset with the specified dimensions, format, color
+     * space, and initial color.
      *
      * @param width The width of the image.
      * @param height The height of the image.
-     * @param format The texture format of this image.
+     * @param format The texture format of this image. RGB16F, RGBA16F and Depth24 are not
+     * valid for image data.
      * @param colorSpace The color space of this image.
-     * @param initColor The initial color to fill the image with (default is transparent black).
+     * @param initColor The initial color to fill the image with (default is transparent
+     * black).
      */
     Image(
       UInt32 width,
@@ -106,5 +112,33 @@ namespace hc
     textureFormatType::Type m_format;
     colorSpaceType::Type m_colorSpace;
     BufferByte m_data;
+
+
+    /**
+     * @brief Asserts that the provided texture format type is valid for an image.
+     *
+     * @param format The texture format type to check.
+     *
+     * @throws InvalidArgumentException if the format is undefined, out of range, or not
+     * suitable for image data.
+     */
+    static inline void AssertValidTextureFormatType(textureFormatType::Type format)
+    {
+      if (
+        format == textureFormatType::Undefined
+        || format >= textureFormatType::Count
+        || format == textureFormatType::RGB16F
+        || format == textureFormatType::RGBA16F
+        || format == textureFormatType::Depth24
+        )
+      {
+        String formatStr = textureFormatType::ToString(format);
+        throw InvalidArgumentException(
+          String::Format(
+            "Cannot create an Image. Invalid texture format type: %s", formatStr.c_str()
+          )
+        );
+      }
+    }
   };
 }
