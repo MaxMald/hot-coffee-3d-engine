@@ -201,6 +201,15 @@ namespace hc
     return m_dataBlockManager;
   }
 
+  graphics::generators::IEquirectangularToCubeMapGenerator&
+  OpenGlGraphicsManager::getEquirectangularToCubeMapGenerator()
+  {
+    // TODO 
+    throw Exception(
+      "Equirectangular to cubemap generator is not implemented for OpenGL backend."
+    );
+  }
+
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
     return m_frameRenderer.getGBuffer();

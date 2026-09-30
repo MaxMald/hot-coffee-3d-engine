@@ -141,6 +141,12 @@ namespace hc
     IDataBlockManager& getDataBlockManager() override;
 
     /**
+     * @copydoc IGraphicsManager::getEquirectangularToCubeMapGenerator
+     */
+    graphics::generators::IEquirectangularToCubeMapGenerator&
+    getEquirectangularToCubeMapGenerator() override;
+
+    /**
      * @copydoc IGraphicsManager::getGBuffer
      */
     IGBuffer& getGBuffer() override;

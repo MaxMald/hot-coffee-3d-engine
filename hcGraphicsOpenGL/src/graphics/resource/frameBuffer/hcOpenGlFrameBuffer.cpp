@@ -37,11 +37,14 @@ namespace hc
 
     try
     {
-      m_colorTexture.initialize(
+      Image colorImage(
         width, height,
         textureFormatType::RGBA16F,
-        colorSpaceType::Linear
+        colorSpaceType::Linear,
+        Color(0.0f, 0.0f, 0.0f, 1.0f)
       );
+
+      m_colorTexture.initialize(colorImage, Path());
 
       if (!m_colorTexture.isValid())
         throw RuntimeErrorException("Failed to create color texture for framebuffer");

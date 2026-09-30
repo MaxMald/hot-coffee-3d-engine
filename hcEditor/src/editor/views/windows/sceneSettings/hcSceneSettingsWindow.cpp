@@ -59,16 +59,11 @@ namespace hc::editor
     {
       const ICubeMap& cubeMap = skybox.getCubeMap();
 
-      Path cubeMapDescriptorPath;
-      SharedPtr<CubeMapDescriptor> cubeMapDescriptor = cubeMap.getCubeMapDescriptor();
-      if (cubeMapDescriptor != nullptr)
-      {
-        cubeMapDescriptorPath = cubeMapDescriptor->path;
-        cubeMapDescriptorSourcePath = cubeMapDescriptorPath.toGenericString();
-      }
-
       if (!cubeMap.isValid())
         ImGui::Text("NOTE: Current skybox cube map is invalid. Please update the skybox with valid images.");
+
+      Path cubeMapDescriptorPath = cubeMap.getSourcePath();
+      cubeMapDescriptorSourcePath = cubeMapDescriptorPath.toGenericString();
     }
 
     ImGui::Text(
