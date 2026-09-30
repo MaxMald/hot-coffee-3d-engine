@@ -24,71 +24,24 @@ namespace hc
     const Path& sourcePath
   )
   {
-    if (m_created)
-      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+    initialize(
+      image.getWidth(),
+      image.getHeight(),
+      image.getFormat(),
+      image.getColorSpace(),
+      static_cast<const void*>(image.getBuffer().data()),
+      sourcePath
+    );
+  }
 
-    UInt32 width = image.getWidth();
-    UInt32 height = image.getHeight();
-    if (width == 0 || height == 0)
-      throw InvalidArgumentException(
-        String::Format(
-          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
-          width,
-          height
-        )
-      );
-
-    GLint currentTextureId = 0;
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId);
-
-    try
-    {
-      glGenTextures(1, &m_textureId);
-      openGlGraphicsUtilities::AssertOpenGlHasNoError();
-
-      glBindTexture(GL_TEXTURE_2D, m_textureId);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-      GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(image.getFormat(), image.getColorSpace());
-      GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(image.getFormat());
-      GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(image.getFormat());
-
-      glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        glInternalFormat,
-        static_cast<GLsizei>(width), static_cast<GLsizei>(height),
-        0,
-        glFormat,
-        glType,
-        image.getBuffer().data()
-      );
-
-      openGlGraphicsUtilities::AssertOpenGlHasNoError();
-    }
-    catch (...)
-    {
-      if (m_textureId)
-      {
-        glDeleteTextures(1, &m_textureId);
-        m_textureId = 0;
-      }
-
-      glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
-      throw;
-    }
-
-    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
-
-    m_width = width;
-    m_height = height;
-    m_colorSpace = image.getColorSpace();
-    m_textureFormat = image.getFormat();
-    m_sourcePath = sourcePath;
-    m_created = true;
+  void OpenGlTexture::initialize(
+    UInt32 width,
+    UInt32 height,
+    textureFormatType::Type format,
+    colorSpaceType::Type colorSpace
+  )
+  {
+    initialize(width, height, format, colorSpace, nullptr, Path());
   }
 
   UInt32 OpenGlTexture::getWidth() const
@@ -217,5 +170,78 @@ namespace hc
   GLuint OpenGlTexture::getTextureId() const
   {
     return m_textureId;
+  }
+
+  void OpenGlTexture::initialize(
+    UInt32 width, UInt32 height,
+    textureFormatType::Type format,
+    colorSpaceType::Type colorSpace,
+    const void* pixelData,
+    const Path& sourcePath
+  )
+  {
+    if (m_created)
+      throw RuntimeErrorException("Texture has already been created, cannot re-initialize.");
+
+    if (width == 0 || height == 0)
+      throw InvalidArgumentException(
+        String::Format(
+          "Invalid image dimensions (%u x %u) for texture creation. Dimensions must be greater than zero.",
+          width,
+          height
+        )
+      );
+
+    GLint currentTextureId = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentTextureId);
+
+    try
+    {
+      glGenTextures(1, &m_textureId);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glBindTexture(GL_TEXTURE_2D, m_textureId);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+      GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(format, colorSpace);
+      GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(format);
+      GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(format);
+
+      glTexImage2D(
+        GL_TEXTURE_2D,
+        0,
+        glInternalFormat,
+        static_cast<GLsizei>(width), static_cast<GLsizei>(height),
+        0,
+        glFormat,
+        glType,
+        pixelData
+      );
+
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      if (m_textureId)
+      {
+        glDeleteTextures(1, &m_textureId);
+        m_textureId = 0;
+      }
+
+      glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
+      throw;
+    }
+
+    glBindTexture(GL_TEXTURE_2D, static_cast<GLuint>(currentTextureId));
+
+    m_width = width;
+    m_height = height;
+    m_colorSpace = colorSpace;
+    m_textureFormat = format;
+    m_sourcePath = sourcePath;
+    m_created = true;
   }
 }

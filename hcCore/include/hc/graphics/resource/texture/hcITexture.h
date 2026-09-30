@@ -29,6 +29,22 @@ namespace hc
     ) = 0;
 
     /**
+     * @brief Initializes the texture with the specified width, height, format, and color space.
+     * This method is used to create an empty texture that can be filled later.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param format The texture format (e.g., RGBA8, RGB8).
+     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     */
+    virtual void initialize(
+      UInt32 width,
+      UInt32 height,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace
+    ) = 0;
+
+    /**
      * @brief Gets the width of the texture in pixels.
      *
      * @return Texture width as an unsigned 32-bit integer.

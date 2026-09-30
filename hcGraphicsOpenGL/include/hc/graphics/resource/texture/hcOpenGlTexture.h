@@ -28,6 +28,16 @@ namespace hc
     ) override;
 
     /**
+     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type)
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace
+    ) override;
+
+    /**
      * @brief Returns the width of the texture in pixels.
      *
      * @return Texture width.
@@ -116,6 +126,26 @@ namespace hc
     textureFormatType::Type m_textureFormat;
     colorSpaceType::Type m_colorSpace;
     bool m_created;
+
+    /**
+     * @brief Initializes the texture with the specified width, height, format, color
+     * space, and pixel data.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param format The texture format (e.g., RGBA8, RGB8).
+     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     * @param pixelData Pointer to the pixel data to initialize the texture with.
+     * @param sourcePath Optional source path of the texture if it was loaded from a file.
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace,
+      const void* pixelData,
+      const Path& sourcePath
+    );
 
     /**
      * @brief Asserts that the texture has been created before performing operations on it.

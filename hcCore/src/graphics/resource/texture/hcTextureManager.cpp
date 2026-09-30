@@ -2,6 +2,7 @@
 #include "hc/graphics/resource/texture/hcITextureFactory.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/assets/image/hcImage.h"
+#include "hc/assets/image/hcIImageAssetManager.h"
 #include "hc/assets/hcIAssetManager.h"
 
 namespace hc
@@ -118,31 +119,36 @@ namespace hc
     if (it != m_defaultTextures.end())
       return it->second;
 
+    IImageAssetManager& imageManager = m_assetManager.getImageAssetManager();
+    SharedPtr<Image> defaultImage;
+
     if (type == defaultTextureType::White)
     {
-      Image whiteImage(
-        1, 1,
-        textureFormatType::RGBA8, colorSpaceType::Linear,
-        Color(1.0f, 1.0f, 1.0f, 1.0f)
+      defaultImage = imageManager.getDefaultImage(
+        defaultImageType::White,
+        textureFormatType::RGBA8,
+        colorSpaceType::Linear
       );
-      return createAndSaveDefaultTexture(type, whiteImage);
     }
     else if (type == defaultTextureType::NormalTangent)
     {
-      Image normalImage(
-        1, 1,
-        textureFormatType::RGBA8, colorSpaceType::Linear,
-        Color(0.5f, 0.5f, 1.0f, 1.0f)
+      defaultImage = imageManager.getDefaultImage(
+        defaultImageType::NormalTangent,
+        textureFormatType::RGBA8,
+        colorSpaceType::Linear
       );
-      return createAndSaveDefaultTexture(type, normalImage);
+    }
+    else
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "TextureManager: Unsupported default texture type '%u'.",
+          static_cast<UInt32>(type)
+        )
+      );
     }
 
-    throw RuntimeErrorException(
-      String::Format(
-        "TextureManager: Unsupported default texture type '%u'.",
-        static_cast<UInt32>(type)
-      )
-    );
+    return createAndSaveDefaultTexture(type, *defaultImage);
   }
 
   void TextureManager::clear()
