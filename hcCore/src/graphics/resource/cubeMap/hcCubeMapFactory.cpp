@@ -1,4 +1,4 @@
-#include "hc/graphics/cubeMap/hcCubeMapFactory.h"
+#include "hc/graphics/resource/cubeMap/hcCubeMapFactory.h"
 
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptor.h"
@@ -6,7 +6,7 @@
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/image/hcIImageAssetManager.h"
 #include "hc/graphics/hcIGraphicsManager.h"
-#include "hc/graphics/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 
 namespace hc
 {

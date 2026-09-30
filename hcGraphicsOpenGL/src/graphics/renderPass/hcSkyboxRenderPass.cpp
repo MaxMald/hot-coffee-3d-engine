@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
 namespace hc
 {

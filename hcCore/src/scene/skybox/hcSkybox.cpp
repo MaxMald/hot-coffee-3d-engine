@@ -1,5 +1,5 @@
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/graphics/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 #include "hc/assets/image/hcImage.h"
 
 namespace hc

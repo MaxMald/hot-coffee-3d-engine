@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc

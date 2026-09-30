@@ -1,9 +1,9 @@
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
 
 #include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
 
 namespace hc
 {

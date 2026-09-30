@@ -1,18 +1,16 @@
 #include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
 
 #include "hc/graphics/resource/texture/hcOpenGlTexture.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
 namespace hc::graphics::generators
 {
   OpenGlEquirectangularToCubeMapGenerator::OpenGlEquirectangularToCubeMapGenerator()
   {
-
   }
 
   OpenGlEquirectangularToCubeMapGenerator::~OpenGlEquirectangularToCubeMapGenerator()
   {
-
   }
 
   void OpenGlEquirectangularToCubeMapGenerator::generate(
@@ -29,8 +27,5 @@ namespace hc::graphics::generators
       throw InvalidArgumentException("Cubemap face size must be greater than zero.");
 
 
-
-    // Implementation for generating a cubemap from an equirectangular texture using OpenGL.
-    // This is a placeholder for the actual OpenGL code that would perform the conversion.
   }
 }

@@ -1,4 +1,4 @@
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
