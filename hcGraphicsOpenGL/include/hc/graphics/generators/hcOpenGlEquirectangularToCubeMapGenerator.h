@@ -8,18 +8,58 @@ namespace hc::graphics::generators
     public IEquirectangularToCubeMapGenerator
   {
   public:
-    OpenGlEquirectangularToCubeMapGenerator();
+    OpenGlEquirectangularToCubeMapGenerator(IDataBlockManager& dataBlockManager);
     ~OpenGlEquirectangularToCubeMapGenerator() override;
 
     /**
      * @copydoc IEquirectangularToCubeMapGenerator::generate
      */
-    void generate(
+    SharedPtr<ICubeMap> generate(
       const ITexture& equirectangularTexture,
-      UInt32 cubeMapFaceSize,
-      ICubeMap& cubeMap
+      UInt32 faceSize
     ) override;
 
+    /**
+     * @copydoc IEquirectangularToCubeMapGenerator::destroy
+     */
+    void destroy() override;
+
+    /**
+     * @brief Initializes the generator.
+     * @param equirectangularToCubeMapShaderProgram The shader program used for the
+     * conversion.
+     * @param cubeModel The cube model used for rendering the cubemap faces.
+     */
+    void initialize(
+      SharedPtr<IShaderProgram> equirectangularToCubeMapShaderProgram,
+      SharedPtr<Model> cubeModel
+    );
+
   private:
+    IDataBlockManager& m_dataBlockManager;
+    SharedPtr<IShaderProgram> m_equirectangularToCubemapShaderProgram;
+    SharedPtr<Model> m_cube;
+    UInt32 m_fbo;
+    UInt32 m_rbo;
+    UInt32 m_currentRenderbufferSize;
+    UInt32 m_boxVao;
+    UInt32 m_boxVbo;
+    bool m_isValid;
+
+    /**
+     * @brief Resizes the renderbuffer to the specified size.
+     * @param faceSize The new size for the renderbuffer.
+     */
+    void resize(UInt32 faceSize);
+
+    /**
+     * @brief Creates the box geometry for rendering the cubemap faces.
+     */
+    void createBox();
+
+    /**
+     * @brief Creates the framebuffer object for rendering to the cubemap.
+     */
+    void createFramebuffer();
   };
 }

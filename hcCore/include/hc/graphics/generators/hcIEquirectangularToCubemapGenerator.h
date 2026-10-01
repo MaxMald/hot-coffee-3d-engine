@@ -21,14 +21,19 @@ namespace hc
        * @brief Generates a cubemap from the given equirectangular texture.
        *
        * @param equirectangularTexture The input equirectangular texture.
-       * @param cubeMapFaceSize The size of each face of the cubemap in pixels.
-       * @param cubeMap The output cubemap to be generated.
+       * @param faceSize The desired face size of the generated cubemap.
+       *
+       * @returns A shared pointer to the generated cubemap.
        */
-      virtual void generate(
+      virtual SharedPtr<ICubeMap>generate(
         const ITexture& equirectangularTexture,
-        UInt32 cubeMapFaceSize,
-        ICubeMap& cubeMap
+        UInt32 faceSize
       ) = 0;
+
+      /**
+       * @brief Destroys the generator and releases any associated resources.
+       */
+      virtual void destroy() = 0;
 
     protected:
       IEquirectangularToCubeMapGenerator();
