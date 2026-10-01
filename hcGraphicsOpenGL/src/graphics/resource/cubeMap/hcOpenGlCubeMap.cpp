@@ -131,6 +131,66 @@ namespace hc
     m_valid = true;
   }
 
+  void OpenGlCubeMap::initialize(
+    UInt32 faceSize,
+    textureFormatType::Type format,
+    colorSpaceType::Type colorSpace
+  )
+  {
+    if (m_valid)
+      throw RuntimeErrorException("Cube map is already initialized");
+
+    if (faceSize == 0)
+      throw InvalidArgumentException("Face size must be greater than zero.");
+
+    GLint currentCubeMapTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(format, colorSpace);
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(format);
+    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(format);
+
+    try
+    {
+      glGenTextures(1, &m_id);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+
+      for (int i = 0; i < 6; ++i)
+      {
+        glTexImage2D(
+          GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+          glInternalFormat,
+          faceSize, faceSize, 0,
+          glFormat,
+          glType, nullptr
+        );
+        openGlGraphicsUtilities::AssertOpenGlHasNoError();
+      }
+
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+      destroy();
+      throw;
+    }
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+
+    m_faceSize = faceSize;
+    m_textureFormat = format;
+    m_colorSpace = colorSpace;
+    m_sourcePath.clear();
+    m_valid = true;
+  }
+
   bool OpenGlCubeMap::isValid() const
   {
     return m_valid;

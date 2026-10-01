@@ -27,6 +27,15 @@ namespace hc
     ) override;
 
     /**
+     * @copydoc ICubeMap::initialize
+     */
+    void initialize(
+      UInt32 faceSize,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace
+    ) override;
+
+    /**
      * @copydoc IGraphicResource::isValid
      */
     bool isValid() const override;

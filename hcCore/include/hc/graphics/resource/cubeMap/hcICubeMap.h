@@ -44,6 +44,26 @@ namespace hc
     ) = 0;
 
     /**
+     * @brief Initializes the cube map with the specified face size, texture format, and
+     * color space. Data for the cube map faces will be uninitialized and must be filled
+     * later.
+     *
+     * @param faceSize The size of each face of the cube map (width and height).
+     * @param format The texture format of the cube map (e.g., RGB8, RGBA8, Depth24).
+     * @param colorSpace The color space of the cube map (e.g., sRGB, Linear).
+     *
+     * @throw InvalidArgumentException if the face size is zero or if the format/color
+     * space is invalid.
+     * @throw RuntimeException if the cube map fails to initialize due to graphics API
+     * errors.
+     */
+    virtual void initialize(
+      UInt32 faceSize,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace
+    ) = 0;
+
+    /**
      * @brief Gets the size of the faces of the cube map in pixels.
      * @return The size of each face of the cube map (width and height).
      */
