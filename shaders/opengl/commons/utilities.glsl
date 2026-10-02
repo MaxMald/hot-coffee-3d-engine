@@ -2,6 +2,23 @@
 #define PI 3.14159265359
 #define EPSILON 0.0001
 
+const vec2 invAtan = vec2(0.1591, 0.3183);
+
+/**
+ * @brief Samples a spherical map using a 3D direction vector.
+ *
+ * @param v The 3D normalized direction vector.
+ *
+ * @return The corresponding 2D UV coordinates in the spherical map.
+ */
+vec2 sampleSphericalMap(vec3 v)
+{
+    vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
+    uv *= invAtan;
+    uv += 0.5;
+    return uv;
+}
+
 /**
 * @brief Clamps a value between 0.0 and 1.0.
 *

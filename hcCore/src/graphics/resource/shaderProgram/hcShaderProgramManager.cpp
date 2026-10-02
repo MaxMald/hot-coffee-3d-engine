@@ -162,6 +162,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::PBRForwardFragment)
       );
     }
+    else if (type == builtInShaderProgramType::EquirectangularToCubeMap)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::EquirectangularToCubeMapVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::EquirectangularToCubeMapFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

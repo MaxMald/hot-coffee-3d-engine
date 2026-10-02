@@ -209,6 +209,8 @@ namespace hc
       case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
       case Type::PBRDeferredGeometryFragment: return "PBRDeferredGeometryFragment";
       case Type::PBRForwardFragment: return "PBRForwardFragment";
+      case Type::EquirectangularToCubeMapFragment: return "EquirectangularToCubeMapFragment";
+      case Type::EquirectangularToCubeMapVertex: return "EquirectangularToCubeMapVertex";
 
       default:
         throw InvalidArgumentException(
@@ -234,6 +236,8 @@ namespace hc
       else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
       else if (str == "PBRDeferredGeometryFragment") return Type::PBRDeferredGeometryFragment;
       else if (str == "PBRForwardFragment") return Type::PBRForwardFragment;
+      else if (str == "EquirectangularToCubeMapFragment") return Type::EquirectangularToCubeMapFragment;
+      else if (str == "EquirectangularToCubeMapVertex") return Type::EquirectangularToCubeMapVertex;
       else
 
       throw InvalidArgumentException(
@@ -250,6 +254,7 @@ namespace hc
       case Type::FullScreenTriangleVertex:
       case Type::SkyboxVertex:
       case Type::ShadowMapVertex:
+      case Type::EquirectangularToCubeMapVertex:
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
@@ -262,6 +267,7 @@ namespace hc
       case Type::HairForwardTransparentFragment:
       case Type::PBRDeferredGeometryFragment:
       case Type::PBRForwardFragment:
+      case Type::EquirectangularToCubeMapFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -288,6 +294,7 @@ namespace hc
       case Type::HairForwardTransparent: return "HairForwardTransparent";
       case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
       case Type::PBRForward: return "PBRForward";
+      case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -307,6 +314,7 @@ namespace hc
       else if (str == "HairForwardTransparent") return Type::HairForwardTransparent;
       else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
       else if (str == "PBRForward") return Type::PBRForward;
+      else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())

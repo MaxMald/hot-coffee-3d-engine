@@ -131,6 +131,8 @@ namespace hc
       HairForwardTransparentFragment,
       PBRDeferredGeometryFragment,
       PBRForwardFragment,
+      EquirectangularToCubeMapVertex,
+      EquirectangularToCubeMapFragment,
       Count
     };
 
@@ -157,6 +159,7 @@ namespace hc
       HairForwardTransparent,
       PBRDeferredGeometry,
       PBRForward,
+      EquirectangularToCubeMap,
       Count
     };
 
