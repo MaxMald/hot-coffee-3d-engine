@@ -7,6 +7,9 @@
 #include "hc/assets/image/hcIImageAssetManager.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/resource/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/texture/hcITextureManager.h"
+#include "hc/graphics/resource/texture/hcITexture.h"
+#include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 
 namespace hc
 {
@@ -186,6 +189,63 @@ namespace hc
         String::Format(
           "CubeMapFactory: Failed to create cube map from descriptor '%s': %s",
           cubeMapDescriptorSourcePath.toString().c_str(),
+          e.what()
+        )
+      );
+    }
+  }
+
+  SharedPtr<ICubeMap> CubeMapFactory::CreateFromEquirectangularImage(
+    const Path& equirectangularImageSourcePath,
+    UInt32 faceSize,
+    IAssetManager& assetManager,
+    IGraphicsManager& graphicsManager
+  )
+  {
+    IImageAssetManager& imageManager = assetManager.getImageAssetManager();
+    SharedPtr<Image> equirectangularImage = imageManager.load(equirectangularImageSourcePath);
+    if (!equirectangularImage)
+      throw RuntimeErrorException(
+        String::Format(
+          "CubeMapFactory: Failed to load equirectangular image from path '%s'.",
+          equirectangularImageSourcePath.toString().c_str()
+        )
+      );
+
+    try
+    {
+      SharedPtr<ITexture> equirectangularTexture = graphicsManager
+        .getTextureManager()
+        .createTextureFromImage(equirectangularImage);
+
+      if (equirectangularTexture == nullptr || !equirectangularTexture->isValid())
+        throw RuntimeErrorException(
+          String::Format(
+            "CubeMapFactory: Failed to create texture from equirectangular image '%s'.",
+            equirectangularImageSourcePath.toString().c_str()
+          )
+        );
+
+      SharedPtr<ICubeMap> cubeMap = graphicsManager
+        .getEquirectangularToCubeMapGenerator()
+        .generate(*equirectangularTexture, faceSize);
+
+      if (cubeMap == nullptr || !cubeMap->isValid())
+        throw RuntimeErrorException(
+          String::Format(
+            "CubeMapFactory: Failed to generate cube map from equirectangular image '%s'.",
+            equirectangularImageSourcePath.toString().c_str()
+          )
+        );
+
+      return cubeMap;
+    }
+    catch (const Exception& e)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "CubeMapFactory: Failed to create cube map from equirectangular image '%s': %s",
+          equirectangularImageSourcePath.toString().c_str(),
           e.what()
         )
       );

@@ -102,6 +102,20 @@ namespace hc
     return image;
   }
 
+  bool ImageAssetManager::isSupportedImage(const Path& path) const
+  {
+    if (!path.exists())
+      return false;
+
+    bool isHDR = stbi_is_hdr(path.toString().c_str());
+    if (isHDR)
+      return true;
+
+    Int32 width, height, channels;
+    Int32 ok = stbi_info(path.toString().c_str(), &width, &height, &channels);
+    return ok == 1;
+  }
+
   SharedPtr<Image> ImageAssetManager::loadLDRImage(const Path& path)
   {
     Int32 width, height, channels;

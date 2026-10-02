@@ -3,6 +3,8 @@
 #include <string>
 #include <cstdarg>
 #include <vector>
+#include <algorithm>
+#include <cctype>
 
 /**
  * @brief A string class that extends std::string with additional utilities.
@@ -12,7 +14,25 @@ class String : public std::string
 public:
   using std::string::string;
 
+  /**
+   * @brief Constructs a String from a std::string.
+   * @param s The std::string to initialize from.
+   */
   String(const std::string& s) : std::string(s) {}
+
+  /**
+   * @brief Converts the string to lowercase.
+   * @return A new String object with all characters converted to lowercase.
+   */
+  inline String toLowercase() const
+  {
+    std::string lowerStr = *this;
+    std::transform(
+      lowerStr.begin(), lowerStr.end(), lowerStr.begin(),
+      [](unsigned char c) { return static_cast<unsigned char>(std::tolower(c)); }
+    );
+    return String(lowerStr);
+  }
 
   /**
    * @brief Formats a string using printf-style formatting.

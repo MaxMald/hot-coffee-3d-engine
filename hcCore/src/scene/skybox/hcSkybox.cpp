@@ -4,7 +4,7 @@
 
 namespace hc
 {
-  Skybox::Skybox() : m_cubeMap(nullptr)
+  Skybox::Skybox() : sourcePath(), m_cubeMap(nullptr)
   {}
 
   Skybox::~Skybox()

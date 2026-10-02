@@ -68,6 +68,15 @@ namespace hc
      */
     void clear() override;
 
+    /**
+     * Checks if the specified image file is supported by the asset manager.
+     *
+     * @param path The file path to the image
+     *
+     * @return true if the image format is supported, false otherwise
+     */
+    bool isSupportedImage(const Path& path) const override;
+
   private:
     UnorderedMap<Path, SharedPtr<Image>> m_loadedImages;
 

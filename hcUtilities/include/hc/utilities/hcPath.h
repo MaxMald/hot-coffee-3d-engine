@@ -368,6 +368,17 @@ namespace hc
     }
 
     /**
+     * @brief Converts this path to lowercase.
+     * @return A new Path with all characters in lowercase
+     */
+    inline Path toLowercase() const
+    {
+      String lowerPath = toString();
+      lowerPath = lowerPath.toLowercase();
+      return Path(lowerPath.c_str());
+    }
+
+    /**
      * @brief Checks if this path is under a given root directory.
      * @param rootPath The root directory to check against
      * @return true if this path is under the root, false otherwise
