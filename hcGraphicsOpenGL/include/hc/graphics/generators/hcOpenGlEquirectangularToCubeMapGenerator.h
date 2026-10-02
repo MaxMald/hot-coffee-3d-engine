@@ -4,6 +4,9 @@
 
 namespace hc::graphics::generators
 {
+  /**
+   * @brief OpenGL implementation of the IEquirectangularToCubeMapGenerator interface.
+   */
   class HC_GRAPHICS_OPENGL_EXPORT OpenGlEquirectangularToCubeMapGenerator :
     public IEquirectangularToCubeMapGenerator
   {
@@ -28,17 +31,14 @@ namespace hc::graphics::generators
      * @brief Initializes the generator.
      * @param equirectangularToCubeMapShaderProgram The shader program used for the
      * conversion.
-     * @param cubeModel The cube model used for rendering the cubemap faces.
      */
     void initialize(
-      SharedPtr<IShaderProgram> equirectangularToCubeMapShaderProgram,
-      SharedPtr<Model> cubeModel
+      SharedPtr<IShaderProgram> equirectangularToCubeMapShaderProgram
     );
 
   private:
     IDataBlockManager& m_dataBlockManager;
     SharedPtr<IShaderProgram> m_equirectangularToCubemapShaderProgram;
-    SharedPtr<Model> m_cube;
     UInt32 m_fbo;
     UInt32 m_rbo;
     UInt32 m_currentRenderbufferSize;

@@ -26,7 +26,6 @@ namespace hc::graphics::generators
     IDataBlockManager& dataBlockManager
   ) : m_dataBlockManager(dataBlockManager),
     m_equirectangularToCubemapShaderProgram(nullptr),
-    m_cube(nullptr),
     m_fbo(0), m_rbo(0), m_currentRenderbufferSize(0),
     m_boxVao(0), m_boxVbo(0),
     m_isValid(false)
@@ -208,14 +207,12 @@ namespace hc::graphics::generators
     }
 
     m_equirectangularToCubemapShaderProgram.reset();
-    m_cube.reset();
     m_currentRenderbufferSize = 0;
     m_isValid = false;
   }
 
   void OpenGlEquirectangularToCubeMapGenerator::initialize(
-    SharedPtr<IShaderProgram> equirectangularToCubeMapShaderProgram,
-    SharedPtr<Model> cubeModel
+    SharedPtr<IShaderProgram> equirectangularToCubeMapShaderProgram
   )
   {
     destroy();
@@ -224,11 +221,6 @@ namespace hc::graphics::generators
       || !equirectangularToCubeMapShaderProgram->isValid())
       throw InvalidArgumentException(
         "Invalid shader program provided for equirectangular to cubemap conversion."
-      );
-
-    if (cubeModel == nullptr)
-      throw InvalidArgumentException(
-        "Invalid cube model provided for equirectangular to cubemap conversion."
       );
 
     try
@@ -244,7 +236,6 @@ namespace hc::graphics::generators
     
     m_equirectangularToCubemapShaderProgram = equirectangularToCubeMapShaderProgram;
     m_currentRenderbufferSize = 1;
-    m_cube = cubeModel;
     m_isValid = true;
   }
 

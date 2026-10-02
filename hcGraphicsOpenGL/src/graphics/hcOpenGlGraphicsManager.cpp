@@ -38,6 +38,7 @@ namespace hc
     m_viewportRect(0, 0, 1, 1),
     m_dataBlockManager(),
     m_frameRenderer(m_dataBlockManager),
+    m_equirectangularToCubeMapGenerator(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -71,6 +72,11 @@ namespace hc
       m_materialManager.initialize();
       m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
       m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
+      m_equirectangularToCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::EquirectangularToCubeMap
+        )
+      );
       setViewport(viewportRect);
     }
     catch (const Exception& e)
@@ -204,10 +210,7 @@ namespace hc
   graphics::generators::IEquirectangularToCubeMapGenerator&
   OpenGlGraphicsManager::getEquirectangularToCubeMapGenerator()
   {
-    // TODO 
-    throw Exception(
-      "Equirectangular to cubemap generator is not implemented for OpenGL backend."
-    );
+    return m_equirectangularToCubeMapGenerator;
   }
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
@@ -253,6 +256,7 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_equirectangularToCubeMapGenerator.destroy();
     m_frameRenderer.destroy();
     m_materialManager.clear();
     m_textureManager.clear();
