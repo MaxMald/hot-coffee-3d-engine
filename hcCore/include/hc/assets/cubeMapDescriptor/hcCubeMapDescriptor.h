@@ -9,12 +9,12 @@ namespace hc
   {
     UInt32 faceSize;                ///< Size of each face of the cube map texture (width and height)
     textureFormatType::Type format; ///< Format of the cube map texture
-    Path rightImagePath;            ///< Path to the right face image
-    Path leftImagePath;             ///< Path to the left face image
-    Path topImagePath;              ///< Path to the top face image
-    Path bottomImagePath;           ///< Path to the bottom face image
-    Path backImagePath;             ///< Path to the back face image
-    Path frontImagePath;            ///< Path to the front face image
+    Path pXImagePath;               ///< Path to the positive X face image
+    Path nXImagePath;               ///< Path to the negative X face image
+    Path pYImagePath;               ///< Path to the positive Y face image
+    Path nYImagePath;               ///< Path to the negative Y face image
+    Path pZImagePath;               ///< Path to the positive Z face image
+    Path nZImagePath;               ///< Path to the negative Z face image
 
     CubeMapDescriptor();
     CubeMapDescriptor(const Path& path);
@@ -22,7 +22,6 @@ namespace hc
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
-
     void clear();
   };
 }

@@ -19,7 +19,7 @@ namespace hc::graphics::generators
      */
     SharedPtr<ICubeMap> generate(
       const ITexture& equirectangularTexture,
-      UInt32 faceSize
+      const CubeMapGeneratorSettings& settings
     ) override;
 
     /**

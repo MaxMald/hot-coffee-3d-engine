@@ -30,12 +30,12 @@ namespace hc::editor
     Path m_assetPath;
     UInt32 m_faceSize;
     textureFormatType::Type m_format;
-    Path m_rightImagePath;
-    Path m_leftImagePath;
-    Path m_topImagePath;
-    Path m_bottomImagePath;
-    Path m_backImagePath;
-    Path m_frontImagePath;
+    Path m_pXImagePath;
+    Path m_nXImagePath;
+    Path m_pYImagePath;
+    Path m_nYImagePath;
+    Path m_pZImagePath;
+    Path m_nZImagePath;
     String m_formatStrings[textureFormatType::Count];
     const char* m_formatItems[textureFormatType::Count];
 

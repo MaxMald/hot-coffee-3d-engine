@@ -4,6 +4,11 @@
 
 namespace hc
 {
+  namespace graphics::generators
+  {
+    struct CubeMapGeneratorSettings;
+  }
+
   class ICubeMap;
   class IGraphicsManager;
   class IAssetManager;
@@ -42,7 +47,7 @@ namespace hc
      * generated cube map faces.
      *
      * @param equirectangularImageSourcePath The path to the equirectangular image file.
-     * @param faceSize The size of each face of the cube map (width and height in pixels).
+     * @param settings The settings for generating the cube map from the equirectangular image.
      * @param assetManager Reference to the asset manager for loading assets.
      * @param graphicsManager Reference to the graphics manager for creating the cube map.
      * @return A shared pointer to the created ICubeMap instance.
@@ -52,7 +57,7 @@ namespace hc
      */
     static SharedPtr<ICubeMap> CreateFromEquirectangularImage(
       const Path& equirectangularImageSourcePath,
-      UInt32 faceSize,
+      const graphics::generators::CubeMapGeneratorSettings& settings,
       IAssetManager& assetManager,
       IGraphicsManager& graphicsManager
     );

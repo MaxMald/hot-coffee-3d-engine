@@ -9,6 +9,7 @@
 #include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
+#include "hc/graphics/generators/hcCubeMapGeneratorSettings.h"
 #include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 
 namespace hc
@@ -30,142 +31,142 @@ namespace hc
         )
       );
 
-    Path rightFacePath = descriptor->rightImagePath;
-    Path leftFacePath = descriptor->leftImagePath;
-    Path topFacePath = descriptor->topImagePath;
-    Path bottomFacePath = descriptor->bottomImagePath;
-    Path backFacePath = descriptor->backImagePath;
-    Path frontFacePath = descriptor->frontImagePath;
+    Path pXImagePath = descriptor->pXImagePath;
+    Path nXImagePath = descriptor->nXImagePath;
+    Path pYImagePath = descriptor->pYImagePath;
+    Path nYImagePath = descriptor->nYImagePath;
+    Path pZImagePath = descriptor->pZImagePath;
+    Path nZImagePath = descriptor->nZImagePath;
 
     Path rootPath = assetManager.getRootPath();
     bool hasRootPath = assetManager.hasRootPath();
 
-    if (rightFacePath.isRelative())
+    if (pXImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for right face image; asset manager has no root path set.",
-            rightFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for positive X face image; asset manager has no root path set.",
+            pXImagePath.toString().c_str()
           )
         );
 
-      rightFacePath = rightFacePath.toAbsolute(rootPath);
+      pXImagePath = pXImagePath.toAbsolute(rootPath);
     }
 
-    if (leftFacePath.isRelative())
+    if (nXImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for left face image; asset manager has no root path set.",
-            leftFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for negative X face image; asset manager has no root path set.",
+            nXImagePath.toString().c_str()
           )
         );
 
-      leftFacePath = leftFacePath.toAbsolute(rootPath);
+      nXImagePath = nXImagePath.toAbsolute(rootPath);
     }
 
-    if (topFacePath.isRelative())
+    if (pYImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for top face image; asset manager has no root path set.",
-            topFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for positive Y face image; asset manager has no root path set.",
+            pYImagePath.toString().c_str()
           )
         );
-      topFacePath = topFacePath.toAbsolute(rootPath);
+      pYImagePath = pYImagePath.toAbsolute(rootPath);
     }
 
-    if (bottomFacePath.isRelative())
+    if (nYImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for bottom face image; asset manager has no root path set.",
-            bottomFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for negative Y face image; asset manager has no root path set.",
+            nYImagePath.toString().c_str()
           )
         );
-      bottomFacePath = bottomFacePath.toAbsolute(rootPath);
+      nYImagePath = nYImagePath.toAbsolute(rootPath);
     }
 
-    if (backFacePath.isRelative())
+    if (pZImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for back face image; asset manager has no root path set.",
-            backFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for positive Z face image; asset manager has no root path set.",
+            pZImagePath.toString().c_str()
           )
         );
-      backFacePath = backFacePath.toAbsolute(rootPath);
+      pZImagePath = pZImagePath.toAbsolute(rootPath);
     }
 
-    if (frontFacePath.isRelative())
+    if (nZImagePath.isRelative())
     {
       if (!hasRootPath)
         throw RuntimeErrorException(
           String::Format(
-            "CubeMapFactory: Cannot resolve relative path '%s' for front face image; asset manager has no root path set.",
-            frontFacePath.toString().c_str()
+            "CubeMapFactory: Cannot resolve relative path '%s' for negative Z face image; asset manager has no root path set.",
+            nZImagePath.toString().c_str()
           )
         );
-      frontFacePath = frontFacePath.toAbsolute(rootPath);
+      nZImagePath = nZImagePath.toAbsolute(rootPath);
     }
 
     IImageAssetManager& imageManager = assetManager.getImageAssetManager();
-    SharedPtr<Image> rightFace = imageManager.load(rightFacePath);
-    if (rightFace == nullptr)
+    SharedPtr<Image> pXImage = imageManager.load(pXImagePath);
+    if (pXImage == nullptr)
       throw RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load right face image from path '%s'.",
-          rightFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load positive X face image from path '%s'.",
+          pXImagePath.toString().c_str()
         )
       );
 
-    SharedPtr<Image> leftFace = imageManager.load(leftFacePath);
-    if (leftFace == nullptr)
+    SharedPtr<Image> nXImage = imageManager.load(nXImagePath);
+    if (nXImage == nullptr)
       throw RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load left face image from path '%s'.",
-          leftFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load negative X face image from path '%s'.",
+          nXImagePath.toString().c_str()
         )
       );
 
-    SharedPtr<Image> topFace = imageManager.load(topFacePath);
-    if (topFace == nullptr)
+    SharedPtr<Image> pYImage = imageManager.load(pYImagePath);
+    if (pYImage == nullptr)
       throw RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load top face image from path '%s'.",
-          topFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load positive Y face image from path '%s'.",
+          pYImagePath.toString().c_str()
         )
       );
 
-    SharedPtr<Image> bottomFace = imageManager.load(bottomFacePath);
-    if (bottomFace == nullptr)
+    SharedPtr<Image> nYImage = imageManager.load(nYImagePath);
+    if (nYImage == nullptr)
       throw RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load bottom face image from path '%s'.",
-          bottomFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load negative Y face image from path '%s'.",
+          nYImagePath.toString().c_str()
         )
       );
 
-    SharedPtr<Image> backFace = imageManager.load(backFacePath);
-    if (backFace == nullptr)
+    SharedPtr<Image> pZImage = imageManager.load(pZImagePath);
+    if (pZImage == nullptr)
       throw  RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load back face image from path '%s'.",
-          backFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load positive Z face image from path '%s'.",
+          pZImagePath.toString().c_str()
         )
       );
 
-    SharedPtr<Image> frontFace = imageManager.load(frontFacePath);
-    if (frontFace == nullptr)
+    SharedPtr<Image> nZImage = imageManager.load(nZImagePath);
+    if (nZImage == nullptr)
       throw  RuntimeErrorException(
         String::Format(
-          "CubeMapFactory: Failed to load front face image from path '%s'.",
-          frontFacePath.toString().c_str()
+          "CubeMapFactory: Failed to load negative Z face image from path '%s'.",
+          nZImagePath.toString().c_str()
         )
       );
 
@@ -173,12 +174,12 @@ namespace hc
     {
       SharedPtr<ICubeMap> cubeMap = graphicsManager.createCubeMap();
       cubeMap->initialize(
-        *rightFace,
-        *leftFace,
-        *topFace,
-        *bottomFace,
-        *backFace,
-        *frontFace,
+        *pXImage,
+        *nXImage,
+        *pYImage,
+        *nYImage,
+        *pZImage,
+        *nZImage,
         cubeMapDescriptorSourcePath
       );
       return cubeMap;
@@ -197,7 +198,7 @@ namespace hc
 
   SharedPtr<ICubeMap> CubeMapFactory::CreateFromEquirectangularImage(
     const Path& equirectangularImageSourcePath,
-    UInt32 faceSize,
+    const graphics::generators::CubeMapGeneratorSettings& settings,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager
   )
@@ -228,7 +229,7 @@ namespace hc
 
       SharedPtr<ICubeMap> cubeMap = graphicsManager
         .getEquirectangularToCubeMapGenerator()
-        .generate(*equirectangularTexture, faceSize);
+        .generate(*equirectangularTexture, settings);
 
       if (cubeMap == nullptr || !cubeMap->isValid())
         throw RuntimeErrorException(

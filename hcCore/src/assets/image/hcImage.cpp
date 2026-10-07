@@ -157,4 +157,24 @@ namespace hc
   {
     return m_data;
   }
+
+  void Image::flipVertically()
+  {
+    UInt8 numChannels = textureFormatType::GetChannelCount(m_format);
+    UInt8 numBytesPerChannel = textureFormatType::GetBytesPerChannel(m_format);
+    UInt32 rowSize = m_width
+      * static_cast<UInt32>(numChannels)
+      * static_cast<UInt32>(numBytesPerChannel);
+    UInt32 halfHeight = static_cast<UInt32>(m_height / 2);
+
+    BufferByte tempRow(rowSize);
+    for (UInt32 y = 0; y < halfHeight; ++y)
+    {
+      UInt32 topRowOffset = y * rowSize;
+      UInt32 bottomRowOffset = (m_height - 1 - y) * rowSize;
+      std::memcpy(tempRow.data(), &m_data[topRowOffset], rowSize);
+      std::memcpy(&m_data[topRowOffset], &m_data[bottomRowOffset], rowSize);
+      std::memcpy(&m_data[bottomRowOffset], tempRow.data(), rowSize);
+    }
+  }
 }

@@ -106,6 +106,14 @@ namespace hc
      */
     const BufferByte& getBuffer() const;
 
+    /**
+     * @brief Flips the image vertically in place.
+     *
+     * This method modifies the image data buffer to flip the image along the vertical
+     * axis. The top row of pixels becomes the bottom row, and vice versa.
+     */
+    void flipVertically();
+
   private:
     UInt32 m_width;
     UInt32 m_height;

@@ -10,14 +10,16 @@
 
 namespace hc
 {
-  static constexpr UInt16 SCENE_VERSION = 1;
-  static constexpr UInt32 SCENE_SETTINGS_VERSION = 1;
+  // ------------------------ SceneSettings Class Implementation -------------------------
+
+  static constexpr UInt32 SCENE_SETTINGS_VERSION = 3;
 
   void SceneSettings::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(0), SCENE_SETTINGS_VERSION);
     writer.writeColor(ambientColor);
     writer.writeFloat(ambientIntensity);
+    writer.writeVector3f(skyboxInvert);
     writer.finishWritingObject();
   }
 
@@ -26,14 +28,23 @@ namespace hc
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.matchVersion(SCENE_SETTINGS_VERSION))
-    {
-      reader.finishReadingObject();
-      return;
-    }
+    UInt32 sceneSettingsVersion = header.version;
 
-    ambientColor = reader.readColor();
-    ambientIntensity = reader.readFloat();
+    if (sceneSettingsVersion >= 1)
+    {
+      ambientColor = reader.readColor();
+      ambientIntensity = reader.readFloat();
+    }
+    if (sceneSettingsVersion == 2)
+    {
+      bool invertZ = reader.readBool();
+      skyboxInvert.z = (invertZ ? -1.0f : 1.0f);
+    }
+    if (sceneSettingsVersion >= 3)
+    {
+      skyboxInvert = reader.readVector3f();
+    }
+    
     reader.finishReadingObject();
   }
 
@@ -41,13 +52,19 @@ namespace hc
   {
     ambientColor = Color::White();
     ambientIntensity = 0.1f;
+    skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f);
   }
+
+  // ------------------------ Scene Class Implementation ---------------------------------
+
+  static constexpr UInt16 SCENE_VERSION = 2;
 
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
     m_lightManager(),
     m_settings(),
+    m_cubeMapGeneratorSettings(),
     m_gameObjectFactory(nullptr),
     m_skybox()
   {
@@ -65,7 +82,10 @@ namespace hc
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     m_settings.serialize(writer);
+    m_cubeMapGeneratorSettings.serialize(writer);
+
     onSerialize(writer);
+
     writer.finishWritingObject();
   }
 
@@ -74,17 +94,22 @@ namespace hc
     clear();
     io::ObjectHeader header = reader.startReadingObject();
 
-    UInt32 composedVersion = (static_cast<UInt32>(SCENE_VERSION) << 16) | static_cast<UInt32>(getDerivedVersion());
-    if (!header.matchVersion(composedVersion))
+    UInt32 version = header.version;
+    UInt32 sceneVersion = version >> 16;
+    if (sceneVersion >= 1)
     {
-      reader.finishReadingObject();
-      return;
+      m_cameraManager.deserialize(reader);
+      m_sceneGraph.deserialize(reader);
+      m_settings.deserialize(reader);
+    }
+    if (sceneVersion >= 2)
+    {
+      m_cubeMapGeneratorSettings.deserialize(reader);
     }
 
-    m_cameraManager.deserialize(reader);
-    m_sceneGraph.deserialize(reader);
-    m_settings.deserialize(reader);
-    onDeserialize(reader);
+    UInt32 derivedVersion = version & 0xFFFF;
+    onDeserialize(reader, derivedVersion);
+    
     reader.finishReadingObject();
   }
 
@@ -293,7 +318,7 @@ namespace hc
     // default camera.
   }
 
-  void Scene::onDeserialize(io::BinaryReader&)
+  void Scene::onDeserialize(io::BinaryReader&, UInt32)
   {
     // This method can be overridden by derived classes to read custom data during
     // deserialization. The base implementation deserializes the scene graph and

@@ -19,27 +19,27 @@ namespace hc
   }
 
   void OpenGlCubeMap::initialize(
-    const Image& rightFace,
-    const Image& leftFace,
-    const Image& topFace,
-    const Image& bottomFace,
-    const Image& backFace,
-    const Image& frontFace,
+    const Image& px,
+    const Image& nx,
+    const Image& py,
+    const Image& ny,
+    const Image& pz,
+    const Image& nz,
     const Path& sourcePath
   )
   {
     if (m_valid)
       throw RuntimeErrorException("Cube map is already initialized");
 
-    UInt32 faceSize = rightFace.getWidth();
-    textureFormatType::Type format = rightFace.getFormat();
-    colorSpaceType::Type colorSpace = rightFace.getColorSpace();
-    assertImage(rightFace, faceSize, format, colorSpace);
-    assertImage(leftFace, faceSize, format, colorSpace);
-    assertImage(topFace, faceSize, format, colorSpace);
-    assertImage(bottomFace, faceSize, format, colorSpace);
-    assertImage(backFace, faceSize, format, colorSpace);
-    assertImage(frontFace, faceSize, format, colorSpace);
+    UInt32 faceSize = px.getWidth();
+    textureFormatType::Type format = px.getFormat();
+    colorSpaceType::Type colorSpace = px.getColorSpace();
+    assertImage(px, faceSize, format, colorSpace);
+    assertImage(nx, faceSize, format, colorSpace);
+    assertImage(py, faceSize, format, colorSpace);
+    assertImage(ny, faceSize, format, colorSpace);
+    assertImage(pz, faceSize, format, colorSpace);
+    assertImage(nz, faceSize, format, colorSpace);
 
     GLint currentCubeMapTexture = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
@@ -59,7 +59,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, rightFace.getBuffer().data()
+        glType, px.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -68,7 +68,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, leftFace.getBuffer().data()
+        glType, nx.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -77,7 +77,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, topFace.getBuffer().data()
+        glType, py.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -86,7 +86,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, bottomFace.getBuffer().data()
+        glType, ny.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -95,7 +95,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, frontFace.getBuffer().data()
+        glType, pz.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
@@ -104,7 +104,7 @@ namespace hc
         glInternalFormat,
         faceSize, faceSize, 0,
         glFormat,
-        glType, backFace.getBuffer().data()
+        glType, nz.getBuffer().data()
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 

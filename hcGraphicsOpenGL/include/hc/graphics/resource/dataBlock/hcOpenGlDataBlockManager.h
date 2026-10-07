@@ -17,9 +17,10 @@ namespace hc
     void destroy() override;
 
   private:
-    bool m_isInitialized = false;
     UnorderedMap<dataBlockType::Type, UniquePtr<OpenGlDataBlock>> m_dataBlocks;
+    bool m_isInitialized = false;
 
-    OpenGlDataBlock* getData(dataBlockType::Type dataBlockType);
+    OpenGlDataBlock* getDataBlock(dataBlockType::Type dataBlockType);
+    void createDataBlock(dataBlockType::Type dataBlockType, const void* initialData);
   };
 }

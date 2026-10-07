@@ -82,9 +82,11 @@ namespace hc
     const void* data
   )
   {
-    OpenGlDataBlock* dataBlock = getData(dataBlockType);
-    if (dataBlock)
+    OpenGlDataBlock* dataBlock = getDataBlock(dataBlockType);
+    if (dataBlock != nullptr)
       dataBlock->upload(data);
+    else
+      createDataBlock(dataBlockType, data);
   }
 
   bool OpenGlDataBlockManager::shouldTransposeMatrices() const
@@ -94,9 +96,16 @@ namespace hc
 
   void OpenGlDataBlockManager::bind(dataBlockType::Type dataBlockType)
   {
-    OpenGlDataBlock* dataBlock = getData(dataBlockType);
-    if (dataBlock)
+    OpenGlDataBlock* dataBlock = getDataBlock(dataBlockType);
+    if (dataBlock != nullptr)
       dataBlock->bind(static_cast<UInt32>(dataBlockType));
+    else
+      throw RuntimeErrorException(
+        String::Format(
+          "Data block of type: %d is not initialized or invalid.",
+          static_cast<Int32>(dataBlockType)
+        )
+      );
   }
 
   void OpenGlDataBlockManager::bind(
@@ -104,7 +113,7 @@ namespace hc
     UInt32 bindingIndex
   )
   {
-    OpenGlDataBlock* dataBlock = getData(dataBlockType);
+    OpenGlDataBlock* dataBlock = getDataBlock(dataBlockType);
     if (dataBlock)
       dataBlock->bind(bindingIndex);
   }
@@ -122,15 +131,48 @@ namespace hc
     m_dataBlocks.clear();
   }
 
-  OpenGlDataBlock* OpenGlDataBlockManager::getData(dataBlockType::Type dataBlockType)
+  OpenGlDataBlock* OpenGlDataBlockManager::getDataBlock(dataBlockType::Type dataBlockType)
   {
     auto item = m_dataBlocks.find(dataBlockType);
     if (item == m_dataBlocks.end() || !item->second || !item->second->isValid())
+      return nullptr;
+    return item->second.get();
+  }
+
+  void OpenGlDataBlockManager::createDataBlock(
+    dataBlockType::Type dataBlockType,
+    const void* initialData
+  )
+  {
+    SizeT dataSize = dataBlockType::GetDataBlockSize(dataBlockType);
+    UniquePtr<OpenGlDataBlock> dataBlock = nullptr;
+
+    try
+    {
+      dataBlock = MakeUnique<OpenGlDataBlock>();
+      dataBlock->initialize(initialData, dataSize);
+      if (!dataBlock->isValid())
+      {
+        throw RuntimeErrorException(
+          String::Format(
+            "Failed to initialize data block of type %d.",
+            static_cast<Int32>(dataBlockType)
+          )
+        );
+      }
+    }
+    catch (const Exception& e)
     {
       throw RuntimeErrorException(
-        "Data block of type " + std::to_string(dataBlockType) + " is not initialized or invalid."
+        String::Format(
+          "Failed to create data block of type %d: %s",
+          static_cast<Int32>(dataBlockType),
+          e.what()
+        )
       );
     }
-    return item->second.get();
+
+    if (dataBlock != nullptr && dataBlock->isValid())
+      m_dataBlocks[dataBlockType] = std::move(dataBlock);
   }
 }

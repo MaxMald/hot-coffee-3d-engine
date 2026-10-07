@@ -1,8 +1,8 @@
 #include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
 
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include <hc/graphics/resource/dataBlock/hcDataBlockStructures.h>
 #include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
-#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 #include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
@@ -13,14 +13,50 @@ namespace hc::graphics::generators
     1.0f, 0.1f, 10.0f
   ).transpose();
 
+  /**
+   * Cubemap capture view matrices for the six faces.
+   *
+   * IMPORTANT: These matrices apply "coordinate tricks" to compensate for mismatches
+   * between the equirectangular sampling convention and OpenGL's cubemap layout:
+   *
+   * 1. HORIZONTAL AXIS SWAP (X ↔ Z):
+   *    The sampleSphericalMap() shader computes azimuth as atan(v.x, v.z).
+   *    To keep faces in their correct positions, we swap which axis each face looks at:
+   *    - GL_TEXTURE_CUBE_MAP_POSITIVE_X (face 0) targets +Z direction
+   *    - GL_TEXTURE_CUBE_MAP_NEGATIVE_X (face 1) targets -Z direction
+   *    - GL_TEXTURE_CUBE_MAP_POSITIVE_Z (face 4) targets +X direction
+   *    - GL_TEXTURE_CUBE_MAP_NEGATIVE_Z (face 5) targets -X direction
+   *
+   * 2. VERTICAL AXIS INVERSION (UP vectors):
+   *    OpenGL cubemaps expect bottom-left as origin, so UP vectors are negated for
+   *    horizon faces (X and Z). Additionally, the shader applies uv.y = 1.0 - uv.y
+   *    to handle the image coordinate system flip.
+   *
+   * 3. TOP/BOTTOM FACE SPECIAL HANDLING (Y faces):
+   *    Due to the vertical flip, top (+Y) and bottom (-Y) faces need their lookAt
+   *    targets and UP vectors inverted to maintain correct orientation.
+   *
+   * For a correct implementation of the Cubemap View Captures, please check:
+   * https://learnopengl.com/PBR/IBL/Diffuse-irradiance
+   */
   static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f)).transpose(),
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f)).transpose(),
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f)).transpose(),
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(0.0f,0.0f, 1.0f)).transpose(),
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, 1.0f, 0.0f)).transpose(),
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f, 1.0f, 0.0f)).transpose()
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +X (face 0)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),  // -X (face 1)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f)).transpose(),   // +Y (face 2)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(1.0f,0.0f, 0.0f)).transpose(),  // -Y (face 3)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +Z (face 4)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()   // -Z (face 5)
   };
+
+  /*
+  static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +X (face 0)
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),  // -X (face 1)
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f)).transpose(), // +Y (face 2)
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(-1.0f,0.0f, 0.0f)).transpose(),  // -Y (face 3)
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +Z (face 4)
+    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()   // -Z (face 5)
+  };*/
 
   OpenGlEquirectangularToCubeMapGenerator::OpenGlEquirectangularToCubeMapGenerator(
     IDataBlockManager& dataBlockManager
@@ -38,17 +74,41 @@ namespace hc::graphics::generators
 
   SharedPtr<ICubeMap> OpenGlEquirectangularToCubeMapGenerator::generate(
     const ITexture& equirectangularTexture,
-    UInt32 faceSize
+    const CubeMapGeneratorSettings& settings
   )
   {
     if (!equirectangularTexture.isValid())
       throw InvalidArgumentException("Invalid equirectangular texture provided.");
-    if (faceSize == 0)
-      throw InvalidArgumentException("Face size must be greater than zero.");
+    if (equirectangularTexture.getHeight() == 0 || equirectangularTexture.getWidth() == 0)
+      throw InvalidArgumentException("Equirectangular texture has invalid dimensions.");
     if (m_equirectangularToCubemapShaderProgram == nullptr)
       throw RuntimeErrorException("Equirectangular to cubemap shader program is not initialized.");
     if (!m_equirectangularToCubemapShaderProgram->isValid())
       throw RuntimeErrorException("Equirectangular to cubemap shader program is not valid.");
+
+    SizeT faceSize = 0;
+    if (settings.useCustomFaceSize)
+    {
+      if (settings.customFaceSize == 0)
+        throw InvalidArgumentException("Custom face size must be greater than zero.");
+
+      if (!Math::IsPowerOfTwo(settings.customFaceSize))
+        throw InvalidArgumentException("Custom face size must be a power of two.");
+
+      faceSize = settings.customFaceSize;
+    }
+    else
+    {
+      SizeT halfTextureHeight = static_cast<SizeT>(equirectangularTexture.getHeight() * 0.5f);
+      faceSize = Math::NextPowerOfTwo(halfTextureHeight);
+    }
+
+    GLint maxCubeMapSize = 0;
+    glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &maxCubeMapSize);
+    if (faceSize > static_cast<unsigned int>(maxCubeMapSize))
+      throw InvalidArgumentException(
+        String::Format("Custom face size exceeds the maximum supported cube map size of %d.", maxCubeMapSize)
+      );
 
     SharedPtr<OpenGlCubeMap> cubeMap = MakeShared<OpenGlCubeMap>();
     try
@@ -92,6 +152,11 @@ namespace hc::graphics::generators
     {
       m_equirectangularToCubemapShaderProgram->bind();
       equirectangularTexture.bind(0);
+
+      dataBlockStructure::CubeMapGenerator cubeMapGeneratorData
+        = settings.getCubeMapGeneratorDataBlockStructure();
+      m_dataBlockManager.upload(dataBlockType::CubeMapGenerator, &cubeMapGeneratorData);
+      m_dataBlockManager.bind(dataBlockType::CubeMapGenerator);
 
       dataBlockStructure::Camera cameraData;
       cameraData.projectionMatrix = CUBEMAP_CAPTURE_PROJECTION;

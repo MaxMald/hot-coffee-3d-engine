@@ -30,6 +30,8 @@ namespace hc::editor
     IGraphicsManager& m_graphicsManager;
     Vector<String> m_cubeMapDescriptorExtensions;
 
-    void updateSkyboxCubeMap(const Path& cubeMapDescriptorPath);
+    void onCubeMapDescriptorSelected(const Path& cubeMapDescriptorPath);
+    void onEquirectangularImageSelected(const Path& equirectangularImagePath);
+    void regenerateSkyboxFromEquirectangularImage(const Path& equirectangularImagePath);
   };
 }

@@ -88,6 +88,11 @@ namespace hc
     static Matrix4 LookAt(const Vector3f& position, const Vector3f& target, const Vector3f& up);
 
     /**
+     * @brief Builds a left-handed look-at view matrix.
+     */
+    static Matrix4 LookAtLH(const Vector3f& position, const Vector3f& target, const Vector3f& up);
+
+    /**
      * @brief Builds an orthographic projection matrix.
      */
     static Matrix4 Orthographic(
@@ -100,6 +105,16 @@ namespace hc
      * @brief Builds a right-handed perspective projection matrix.
      */
     static Matrix4 Perspective(
+      float fovYRadians,
+      float aspectRatio,
+      float nearPlane,
+      float farPlane
+    );
+
+    /**
+     * @brief Builds a left-handed perspective projection matrix.
+     */
+    static Matrix4 PerspectiveLH(
       float fovYRadians,
       float aspectRatio,
       float nearPlane,
@@ -296,6 +311,23 @@ namespace hc
     );
   }
 
+  inline Matrix4 Matrix4::LookAtLH(
+    const Vector3f& position,
+    const Vector3f& target,
+    const Vector3f& up
+  )
+  {
+    Vector3f zaxis = (target - position).normalized();
+    Vector3f xaxis = zaxis.cross(up).normalized();
+    Vector3f yaxis = xaxis.cross(zaxis);
+    return Matrix4(
+      xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(position),
+      yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(position),
+      zaxis.x, zaxis.y, zaxis.z, -zaxis.dot(position),
+      0.0f, 0.0f, 0.0f, 1.0f
+    );
+  }
+
   inline Matrix4 Matrix4::Orthographic(
     float left, float right,
     float bottom, float top,
@@ -328,6 +360,26 @@ namespace hc
       0.0f, f, 0.0f, 0.0f,
       0.0f, 0.0f, (nearPlane + farPlane) * nminusf, 2.0f * farPlane * nearPlane * nminusf,
       0.0f, 0.0f, -1.0f, 0.0f
+    );
+  }
+  
+  /**
+   * @brief Builds a left-handed perspective projection matrix.
+   */
+  inline Matrix4 Matrix4::PerspectiveLH(
+    float fovYRadians,
+    float aspectRatio,
+    float nearPlane, float farPlane
+  )
+  {
+    float f = 1.0f / tan(fovYRadians * 0.5f);
+    float fminusn = 1.0f / (farPlane - nearPlane);
+
+    return Matrix4(
+      f / aspectRatio, 0.0f, 0.0f, 0.0f,
+      0.0f, f, 0.0f, 0.0f,
+      0.0f, 0.0f, (nearPlane + farPlane) * fminusn, -2.0f * farPlane * nearPlane * fminusn,
+      0.0f, 0.0f, 1.0f, 0.0f
     );
   }
 

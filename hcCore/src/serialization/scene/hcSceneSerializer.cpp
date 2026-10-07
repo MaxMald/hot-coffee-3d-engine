@@ -67,7 +67,13 @@ namespace hc
 
         VerifyHeader(reader);
         scene.deserialize(reader);
-        SkyboxSerializer::Deserialize(scene.getSceneSkybox(), reader, assetManager, graphicsManager);
+        SkyboxSerializer::Deserialize(
+          scene.getSceneSkybox(),
+          reader,
+          assetManager,
+          graphicsManager,
+          scene.getCubeMapGeneratorSettings()
+        );
 
         return true;
       }

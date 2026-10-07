@@ -1,5 +1,7 @@
 #include "hc/graphics/hcGraphicsCommons.h"
 
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+
 namespace hc
 {
   namespace graphicsBackendType
@@ -385,6 +387,40 @@ namespace hc
         throw RuntimeErrorException(
           String::Format("Invalid material render mode string: '%s'", str.c_str())
         );
+    }
+  }
+
+  namespace dataBlockType
+  {
+    SizeT GetDataBlockSize(dataBlockType::Type type)
+    {
+      switch (type)
+      {
+      case dataBlockType::Camera:
+        return sizeof(dataBlockStructure::Camera);
+      case dataBlockType::Lights:
+        return sizeof(dataBlockStructure::Lights);
+      case dataBlockType::LightShadows:
+        return sizeof(dataBlockStructure::LightShadows);
+      case dataBlockType::Object:
+        return sizeof(dataBlockStructure::ObjectData);
+      case dataBlockType::LightViewProjection:
+        return sizeof(dataBlockStructure::LightViewProjection);
+      case dataBlockType::MaterialUnlit:
+        return sizeof(dataBlockStructure::MaterialUnlit);
+      case dataBlockType::MaterialHair:
+        return sizeof(dataBlockStructure::MaterialHair);
+      case dataBlockType::MaterialPBR:
+        return sizeof(dataBlockStructure::MaterialPBR);
+      case dataBlockType::Scene:
+        return sizeof(dataBlockStructure::Scene);
+      case dataBlockType::CubeMapGenerator:
+        return sizeof(dataBlockStructure::CubeMapGenerator);
+      default:
+        throw RuntimeErrorException(
+          String::Format("GetDataBlockSize: Unknown data block type: %d", static_cast<Int32>(type))
+        );
+      }
     }
   }
 

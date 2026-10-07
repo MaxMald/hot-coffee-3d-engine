@@ -24,8 +24,9 @@ namespace hc
     /**
      * @brief Initializes the skybox with the specified cube map.
      * @param cubeMap The cube map to be used for the skybox.
+     * @param sourcePath The source path of the skybox texture.
      */
-    void initialize(SharedPtr<ICubeMap> cubeMap);
+    void initialize(SharedPtr<ICubeMap> cubeMap, const Path& sourcePath = Path());
 
     /**
      * @brief Checks if the skybox is valid.

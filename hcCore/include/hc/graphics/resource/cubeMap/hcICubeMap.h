@@ -19,12 +19,12 @@ namespace hc
     /**
      * @brief Initializes the cube map with the given images for each face.
      *
-     * @param rightFace The image for the right face of the cube map.
-     * @param leftFace The image for the left face of the cube map.
-     * @param topFace The image for the top face of the cube map.
-     * @param bottomFace The image for the bottom face of the cube map.
-     * @param backFace The image for the back face of the cube map.
-     * @param frontFace The image for the front face of the cube map.
+     * @param px The image for the positive X face of the cube map.
+     * @param nx The image for the negative X face of the cube map.
+     * @param py The image for the positive Y face of the cube map.
+     * @param ny The image for the negative Y face of the cube map.
+     * @param pz The image for the positive Z face of the cube map.
+     * @param nz The image for the negative Z face of the cube map.
      * @param sourcePath Optional source path of the cube map if it was loaded from a file
      * descriptor.
      *
@@ -34,12 +34,12 @@ namespace hc
      * errors.
      */
     virtual void initialize(
-      const Image& rightFace,
-      const Image& leftFace,
-      const Image& topFace,
-      const Image& bottomFace,
-      const Image& backFace,
-      const Image& frontFace,
+      const Image& px,
+      const Image& nx,
+      const Image& py,
+      const Image& ny,
+      const Image& pz,
+      const Image& nz,
       const Path& sourcePath = Path()
     ) = 0;
 

@@ -226,8 +226,16 @@ namespace hc
       MaterialHair = 6,
       MaterialPBR = 7,
       Scene = 8,
+      CubeMapGenerator = 9,
       Count
     };
+
+    /**
+     * @brief Retrieves the size of the data block for the specified type.
+     * @param dataBlockType The type of the data block.
+     * @return The size of the data block in bytes.
+     */
+    SizeT HC_CORE_EXPORT GetDataBlockSize(Type dataBlockType);
   }
 
   namespace textureType

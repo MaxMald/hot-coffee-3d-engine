@@ -6,6 +6,7 @@
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/light/hcLightManager.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/generators/hcCubeMapGeneratorSettings.h"
 
 namespace hc
 {
@@ -15,6 +16,7 @@ namespace hc
   struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
   {
     Color ambientColor = Color::White();
+    Vector3f skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the skybox's cubemap sample direction.
     float ambientIntensity = 0.1f;
 
     void serialize(io::BinaryWriter& writer) const override;
@@ -23,17 +25,14 @@ namespace hc
 
     /**
      * @brief Converts the SceneSettings to a data block structure for GPU usage.
-     *
-     * This method creates a dataBlockStructure::Scene instance and populates it
-     * with the ambient light color and intensity from the SceneSettings. The
-     * padding fields are set to zero to ensure proper alignment in GPU memory.
-     *
      * @return dataBlockStructure::Scene The populated data block structure.
      */
     inline dataBlockStructure::Scene getSceneDataBlockStructure() const
     {
       dataBlockStructure::Scene sceneData;
       sceneData.ambientLightColor = ambientColor.toVector();
+      sceneData.invertSkybox = Vector4f(skyboxInvert, 1.0f);
+
       sceneData.ambientIntensity = ambientIntensity;
       sceneData.sPadding0 = 0.0f;
       sceneData.sPadding1 = 0.0f;
@@ -95,10 +94,23 @@ namespace hc
 
     /**
      * @brief Gets a reference to the scene's settings.
-     *
      * @return Reference to the SceneSettings.
      */
     inline SceneSettings& getSettings() { return m_settings; }
+
+    /**
+     * @brief Gets a const reference to the scene's cube map generator settings.
+     * @return Const reference to the CubeMapGeneratorSettings.
+     */
+    inline const graphics::generators::CubeMapGeneratorSettings&
+    getCubeMapGeneratorSettings() const { return m_cubeMapGeneratorSettings; }
+
+    /**
+     * @brief Gets a reference to the scene's cube map generator settings.
+     * @return Reference to the CubeMapGeneratorSettings.
+     */
+    inline graphics::generators::CubeMapGeneratorSettings&
+    getCubeMapGeneratorSettings() { return m_cubeMapGeneratorSettings; }
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -281,13 +293,13 @@ namespace hc
     /**
      * @brief Called during deserialization to read custom scene data.
      *
-     * Override to deserialize additional custom data for derived scene
-     * classes. Called after the base scene data (lights, cameras, scene
-     * graph) is deserialized.
+     * Override to deserialize additional custom data for derived scene classes. Called
+     * after the base scene data (lights, cameras, scene graph) is deserialized.
      *
      * @param reader The BinaryReader to deserialize custom data from.
+     * @param derivedVersion The version number of the derived scene class.
      */
-    virtual void onDeserialize(io::BinaryReader& reader);
+    virtual void onDeserialize(io::BinaryReader& reader, UInt32 derivedVersion);
 
     /**
      * @brief Gets the version number for the derived scene class.
@@ -305,6 +317,7 @@ namespace hc
     CameraManager m_cameraManager;
     LightManager m_lightManager;
     SceneSettings m_settings;
+    graphics::generators::CubeMapGeneratorSettings m_cubeMapGeneratorSettings;
     IGameObjectFactory* m_gameObjectFactory;
     Skybox m_skybox;
 

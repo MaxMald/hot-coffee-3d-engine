@@ -9,6 +9,8 @@ namespace hc
 
   namespace graphics::generators
   {
+    struct CubeMapGeneratorSettings;
+
     /**
      * @brief Interface for generating cubemaps from equirectangular textures.
      */
@@ -21,13 +23,13 @@ namespace hc
        * @brief Generates a cubemap from the given equirectangular texture.
        *
        * @param equirectangularTexture The input equirectangular texture.
-       * @param faceSize The desired face size of the generated cubemap.
+       * @param settings The settings for the generation of the cubemap.
        *
        * @returns A shared pointer to the generated cubemap.
        */
       virtual SharedPtr<ICubeMap>generate(
         const ITexture& equirectangularTexture,
-        UInt32 faceSize
+        const CubeMapGeneratorSettings& settings
       ) = 0;
 
       /**

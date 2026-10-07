@@ -48,7 +48,8 @@ namespace hc::serialization
     Skybox& skybox,
     io::BinaryReader& reader,
     IAssetManager& assetManager,
-    IGraphicsManager& graphicsManager
+    IGraphicsManager& graphicsManager,
+    const graphics::generators::CubeMapGeneratorSettings& settings
   )
   {
     skybox.destroy();
@@ -109,14 +110,14 @@ namespace hc::serialization
         SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromDescriptor(
           sourcePath, assetManager, graphicsManager
         );
-        skybox.initialize(cubeMap);
+        skybox.initialize(cubeMap, sourcePath);
       }
       else
       {
         SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromEquirectangularImage(
-          sourcePath, 2048, assetManager, graphicsManager
+          sourcePath, settings, assetManager, graphicsManager
         );
-        skybox.initialize(cubeMap);
+        skybox.initialize(cubeMap, sourcePath);
       }
     }
     catch (const Exception& ex)

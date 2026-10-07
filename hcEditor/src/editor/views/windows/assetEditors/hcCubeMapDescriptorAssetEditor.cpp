@@ -1,6 +1,6 @@
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 
-#include <imgui.h>
+#include "hc/editor/imgui/hcImgui.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 
@@ -17,12 +17,12 @@ namespace hc::editor
     m_assetPath(),
     m_faceSize(0),
     m_format(textureFormatType::RGBA8),
-    m_rightImagePath(),
-    m_leftImagePath(),
-    m_topImagePath(),
-    m_bottomImagePath(),
-    m_backImagePath(),
-    m_frontImagePath(),
+    m_pXImagePath(),
+    m_nXImagePath(),
+    m_pYImagePath(),
+    m_nYImagePath(),
+    m_pZImagePath(),
+    m_nZImagePath(),
     m_formatStrings(),
     m_formatItems()
   {
@@ -77,35 +77,35 @@ namespace hc::editor
 
     // Input fields for each cube map face
 
-    if (ImGui::Button("Select Right Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_rightImagePath = path; });
+    if (ImGui::Button("Select Positive X Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_pXImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Right Image", "%s", m_rightImagePath.empty() ? "No file selected" : m_rightImagePath.toGenericString().c_str());
+    hcImGui::Filename("Positive X Image", m_pXImagePath);
 
-    if (ImGui::Button("Select Left Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_leftImagePath = path; });
+    if (ImGui::Button("Select Negative X Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_nXImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Left Image", "%s", m_leftImagePath.empty() ? "No file selected" : m_leftImagePath.toGenericString().c_str());
+    hcImGui::Filename("Negative X Image", m_nXImagePath);
 
-    if (ImGui::Button("Select Top Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_topImagePath = path; });
+    if (ImGui::Button("Select Positive Y Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_pYImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Top Image", "%s", m_topImagePath.empty() ? "No file selected" : m_topImagePath.toGenericString().c_str());
+    hcImGui::Filename("Positive Y Image", m_pYImagePath);
 
-    if (ImGui::Button("Select Bottom Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_bottomImagePath = path; });
+    if (ImGui::Button("Select Negative Y Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_nYImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Bottom Image", "%s", m_bottomImagePath.empty() ? "No file selected" : m_bottomImagePath.toGenericString().c_str());
+    hcImGui::Filename("Negative Y Image", m_nYImagePath);
 
-    if (ImGui::Button("Select Back Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_backImagePath = path; });
+    if (ImGui::Button("Select Positive Z Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_pZImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Back Image", "%s", m_backImagePath.empty() ? "No file selected" : m_backImagePath.toGenericString().c_str());
+    hcImGui::Filename("Positive Z Image", m_pZImagePath);
 
-    if (ImGui::Button("Select Front Image"))
-      m_fileDialog.openImageFile([this](const Path& path) { m_frontImagePath = path; });
+    if (ImGui::Button("Select Negative Z Image"))
+      m_fileDialog.openImageFile([this](const Path& path) { m_nZImagePath = path; });
     ImGui::SameLine();
-    ImGui::LabelText("Front Image", "%s", m_frontImagePath.empty() ? "No file selected" : m_frontImagePath.toGenericString().c_str());
+    hcImGui::Filename("Negative Z Image", m_nZImagePath);
 
     // Action buttons
 
@@ -172,34 +172,34 @@ namespace hc::editor
     m_assetPath.clear();
     m_faceSize = 0;
     m_format = textureFormatType::RGBA8;
-    m_rightImagePath.clear();
-    m_leftImagePath.clear();
-    m_topImagePath.clear();
-    m_bottomImagePath.clear();
-    m_backImagePath.clear();
-    m_frontImagePath.clear();
+    m_pXImagePath.clear();
+    m_nXImagePath.clear();
+    m_pYImagePath.clear();
+    m_nYImagePath.clear();
+    m_pZImagePath.clear();
+    m_nZImagePath.clear();
   }
 
   bool CubeMapDescriptorAssetEditor::canSave() const
   {
     return !m_assetPath.empty() &&
-      !m_rightImagePath.empty() &&
-      !m_leftImagePath.empty() &&
-      !m_topImagePath.empty() &&
-      !m_bottomImagePath.empty() &&
-      !m_backImagePath.empty() &&
-      !m_frontImagePath.empty() &&
+      !m_pXImagePath.empty() &&
+      !m_nXImagePath.empty() &&
+      !m_pYImagePath.empty() &&
+      !m_nYImagePath.empty() &&
+      !m_pZImagePath.empty() &&
+      !m_nZImagePath.empty() &&
       m_faceSize > 0;
   }
 
   bool CubeMapDescriptorAssetEditor::canSaveAs() const
   {
-    return !m_rightImagePath.empty() &&
-      !m_leftImagePath.empty() &&
-      !m_topImagePath.empty() &&
-      !m_bottomImagePath.empty() &&
-      !m_backImagePath.empty() &&
-      !m_frontImagePath.empty() &&
+    return !m_pXImagePath.empty() &&
+      !m_nXImagePath.empty() &&
+      !m_pYImagePath.empty() &&
+      !m_nYImagePath.empty() &&
+      !m_pZImagePath.empty() &&
+      !m_nZImagePath.empty() &&
       m_faceSize > 0;
   }
 
@@ -213,12 +213,12 @@ namespace hc::editor
       descriptorToSave.format = m_format;
 
       Path baseDir = path.parentPath();
-      descriptorToSave.rightImagePath = m_rightImagePath.toRelative(baseDir);
-      descriptorToSave.leftImagePath = m_leftImagePath.toRelative(baseDir);
-      descriptorToSave.topImagePath = m_topImagePath.toRelative(baseDir);
-      descriptorToSave.bottomImagePath = m_bottomImagePath.toRelative(baseDir);
-      descriptorToSave.backImagePath = m_backImagePath.toRelative(baseDir);
-      descriptorToSave.frontImagePath = m_frontImagePath.toRelative(baseDir);
+      descriptorToSave.pXImagePath = m_pXImagePath.toRelative(baseDir);
+      descriptorToSave.nXImagePath = m_nXImagePath.toRelative(baseDir);
+      descriptorToSave.pYImagePath = m_pYImagePath.toRelative(baseDir);
+      descriptorToSave.nYImagePath = m_nYImagePath.toRelative(baseDir);
+      descriptorToSave.pZImagePath = m_pZImagePath.toRelative(baseDir);
+      descriptorToSave.nZImagePath = m_nZImagePath.toRelative(baseDir);
 
       String error;
       io::BinaryWriter writer;
@@ -255,12 +255,12 @@ namespace hc::editor
       m_format = descriptorFromFile.format;
 
       Path baseDir = path.parentPath();
-      m_rightImagePath = descriptorFromFile.rightImagePath.toAbsolute(baseDir);
-      m_leftImagePath = descriptorFromFile.leftImagePath.toAbsolute(baseDir);
-      m_topImagePath = descriptorFromFile.topImagePath.toAbsolute(baseDir);
-      m_bottomImagePath = descriptorFromFile.bottomImagePath.toAbsolute(baseDir);
-      m_backImagePath = descriptorFromFile.backImagePath.toAbsolute(baseDir);
-      m_frontImagePath = descriptorFromFile.frontImagePath.toAbsolute(baseDir);
+      m_pXImagePath = descriptorFromFile.pXImagePath.toAbsolute(baseDir);
+      m_nXImagePath = descriptorFromFile.nXImagePath.toAbsolute(baseDir);
+      m_pYImagePath = descriptorFromFile.pYImagePath.toAbsolute(baseDir);
+      m_nYImagePath = descriptorFromFile.nYImagePath.toAbsolute(baseDir);
+      m_pZImagePath = descriptorFromFile.pZImagePath.toAbsolute(baseDir);
+      m_nZImagePath = descriptorFromFile.nZImagePath.toAbsolute(baseDir);
       m_assetPath = path;
     }
     catch (const Exception & e)

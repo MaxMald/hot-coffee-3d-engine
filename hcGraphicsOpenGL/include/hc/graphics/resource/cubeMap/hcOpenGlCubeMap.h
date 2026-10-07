@@ -17,12 +17,12 @@ namespace hc
      * @copydoc ICubeMap::initialize
      */
     void initialize(
-      const Image& rightFace,
-      const Image& leftFace,
-      const Image& topFace,
-      const Image& bottomFace,
-      const Image& backFace,
-      const Image& frontFace,
+      const Image& px,
+      const Image& nx,
+      const Image& py,
+      const Image& ny,
+      const Image& pz,
+      const Image& nz,
       const Path& sourcePath = Path()
     ) override;
 

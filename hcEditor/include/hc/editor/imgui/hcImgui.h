@@ -31,6 +31,27 @@ namespace hc::editor
     }
 
     /**
+     * @brief Displays the filename extracted from the provided path, and when hovered, it
+     * shows a tooltip with the full path.
+     *
+     * @param label The label to display next to the filename.
+     * @param path The Path object from which to extract the filename.
+     */
+    inline void Filename(const String& label, const Path& path)
+    {
+      if (path.empty())
+      {
+        ImGui::Text("%s: (No file)", label.c_str());
+        return;
+      }
+
+      String fileName = path.filename().toString();
+      ImGui::Text("%s: %s", label.c_str(), fileName.c_str());
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip("%s", path.toString().c_str());
+    }
+
+    /**
      * @brief Draws a button in ImGui with the specified text and style.
      *
      * @param text The text to display on the button.
