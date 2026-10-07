@@ -12,5 +12,11 @@ void main()
 {
     vec2 uv = sampleSphericalMap(normalize(vLocalPosition));
     vec3 color = texture(uEquirectangularMap, uv).rgb;
+
+    // HDRI image usually comes from linear space, so we need to apply tone
+    // mapping and gamma correction    
+    color = color / (color + vec3(1.0));
+    color = pow(color, vec3(1.0/2.2)); // Apply gamma correction
+    
     OutFragColor = vec4(color, 1.0);
 }
