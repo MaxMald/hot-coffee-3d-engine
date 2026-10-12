@@ -27,7 +27,7 @@ namespace hc
        *
        * @returns A shared pointer to the generated cubemap.
        */
-      virtual SharedPtr<ICubeMap>generate(
+      virtual SharedPtr<ICubeMap> generate(
         const ITexture& equirectangularTexture,
         const CubeMapGeneratorSettings& settings
       ) = 0;
