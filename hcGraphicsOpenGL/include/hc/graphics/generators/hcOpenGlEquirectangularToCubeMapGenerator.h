@@ -6,6 +6,12 @@ namespace hc::graphics::generators
 {
   /**
    * @brief OpenGL implementation of the IEquirectangularToCubeMapGenerator interface.
+   *
+   * @note KNOWN ISSUE: For an sRGB LDR source this creates an sRGB cubemap render target,
+   * but the conversion never enables GL_FRAMEBUFFER_SRGB. The shader samples linearized
+   * source values and stores them unencoded; later sampling the sRGB cubemap decodes them
+   * again, darkening the result. Enable and restore framebuffer-sRGB conversion while
+   * rendering sRGB outputs, or render to a linear-format cubemap.
    */
   class HC_GRAPHICS_OPENGL_EXPORT OpenGlEquirectangularToCubeMapGenerator :
     public IEquirectangularToCubeMapGenerator

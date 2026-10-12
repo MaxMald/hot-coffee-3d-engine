@@ -79,6 +79,15 @@ namespace hc::graphics::generators
     SharedPtr<OpenGlCubeMap> cubeMap = MakeShared<OpenGlCubeMap>();
     try
     {
+      // KNOWN ISSUE:
+      // 
+      // For an sRGB LDR source this creates an sRGB cubemap render target,
+      // but the conversion never enables GL_FRAMEBUFFER_SRGB. The shader samples
+      // linearized source values and stores them unencoded; later sampling the sRGB
+      // cubemap decodes them again, darkening the result. Enable and restore
+      // framebuffer-sRGB conversion while rendering sRGB outputs, or render to a
+      // linear-format cubemap.
+
       cubeMap->initialize(
         faceSize,
         equirectangularTexture.getTextureFormat(),
