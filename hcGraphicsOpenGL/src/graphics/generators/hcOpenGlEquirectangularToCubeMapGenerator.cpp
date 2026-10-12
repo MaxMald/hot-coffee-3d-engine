@@ -13,50 +13,15 @@ namespace hc::graphics::generators
     1.0f, 0.1f, 10.0f
   ).transpose();
 
-  /**
-   * Cubemap capture view matrices for the six faces.
-   *
-   * IMPORTANT: These matrices apply "coordinate tricks" to compensate for mismatches
-   * between the equirectangular sampling convention and OpenGL's cubemap layout:
-   *
-   * 1. HORIZONTAL AXIS SWAP (X ↔ Z):
-   *    The sampleSphericalMap() shader computes azimuth as atan(v.x, v.z).
-   *    To keep faces in their correct positions, we swap which axis each face looks at:
-   *    - GL_TEXTURE_CUBE_MAP_POSITIVE_X (face 0) targets +Z direction
-   *    - GL_TEXTURE_CUBE_MAP_NEGATIVE_X (face 1) targets -Z direction
-   *    - GL_TEXTURE_CUBE_MAP_POSITIVE_Z (face 4) targets +X direction
-   *    - GL_TEXTURE_CUBE_MAP_NEGATIVE_Z (face 5) targets -X direction
-   *
-   * 2. VERTICAL AXIS INVERSION (UP vectors):
-   *    OpenGL cubemaps expect bottom-left as origin, so UP vectors are negated for
-   *    horizon faces (X and Z). Additionally, the shader applies uv.y = 1.0 - uv.y
-   *    to handle the image coordinate system flip.
-   *
-   * 3. TOP/BOTTOM FACE SPECIAL HANDLING (Y faces):
-   *    Due to the vertical flip, top (+Y) and bottom (-Y) faces need their lookAt
-   *    targets and UP vectors inverted to maintain correct orientation.
-   *
-   * For a correct implementation of the Cubemap View Captures, please check:
-   * https://learnopengl.com/PBR/IBL/Diffuse-irradiance
-   */
+  
   static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +X (face 0)
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),  // -X (face 1)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),   // +X (face 0)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),   // -X (face 1)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f)).transpose(),   // +Y (face 2)
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(1.0f,0.0f, 0.0f)).transpose(),  // -Y (face 3)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(1.0f,0.0f, 0.0f)).transpose(),    // -Y (face 3)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +Z (face 4)
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()   // -Z (face 5)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()     // -Z (face 5)
   };
-
-  /*
-  static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +X (face 0)
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),  // -X (face 1)
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f)).transpose(), // +Y (face 2)
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(-1.0f,0.0f, 0.0f)).transpose(),  // -Y (face 3)
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),  // +Z (face 4)
-    Matrix4::LookAtLH(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()   // -Z (face 5)
-  };*/
 
   OpenGlEquirectangularToCubeMapGenerator::OpenGlEquirectangularToCubeMapGenerator(
     IDataBlockManager& dataBlockManager
@@ -131,11 +96,14 @@ namespace hc::graphics::generators
     if (m_currentRenderbufferSize != faceSize)
       resize(faceSize);
 
-    GLint currentActiveTexture0;
-    GLint currentBindTexture;
+    GLint currentActiveTextureSlot;
+    glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTextureSlot);
+
+    glActiveTexture(GL_TEXTURE0);
+    GLint currentBindTexture0;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentBindTexture0);
+    
     GLint viewport[4];
-    glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTexture0);
-    glGetIntegerv(GL_TEXTURE_BINDING_2D, &currentBindTexture);
     glGetIntegerv(GL_VIEWPORT, viewport);
 
     GLint currentReadFrameBuffer = 0;
@@ -198,8 +166,9 @@ namespace hc::graphics::generators
       glViewport(viewport[0], viewport[1],
         static_cast<GLsizei>(viewport[2]), static_cast<GLsizei>(viewport[3])
       );
-      glActiveTexture(currentActiveTexture0);
-      glBindTexture(GL_TEXTURE_2D, currentBindTexture);
+
+      glBindTexture(GL_TEXTURE_2D, currentBindTexture0);
+      glActiveTexture(currentActiveTextureSlot);
 
       throw RuntimeErrorException(
         String::Format(
@@ -216,8 +185,9 @@ namespace hc::graphics::generators
     glViewport(viewport[0], viewport[1],
       static_cast<GLsizei>(viewport[2]), static_cast<GLsizei>(viewport[3])
     );
-    glActiveTexture(currentActiveTexture0);
-    glBindTexture(GL_TEXTURE_2D, currentBindTexture);
+
+    glBindTexture(GL_TEXTURE_2D, currentBindTexture0);
+    glActiveTexture(currentActiveTextureSlot);
 
     return cubeMap;
   }
