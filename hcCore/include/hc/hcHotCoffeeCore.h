@@ -1,9 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/utilities/hcCoreAssertions.h"
-#include "hc/utilities/hcTextureFormatType.h"
-#include "hc/utilities/hcColorSpaceType.h"
 #include "hc/hcHotCoffeeEngineSettings.h"
 #include "hc/hcHotCoffeeEngine.h"
 #include "hc/plugins/hcIPlugin.h"
@@ -41,8 +40,8 @@
 #include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/hcIGraphicsManager.h"
 #include "hc/graphics/hcIDrawable.h"
-#include "hc/graphics/cubeMap/hcICubeMap.h"
-#include "hc/graphics/cubeMap/hcCubeMapFactory.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcCubeMapFactory.h"
 #include "hc/graphics/resource/shader/hcIShader.h"
 #include "hc/graphics/resource/shaderProgram/hcIShaderProgram.h"
 #include "hc/graphics/resource/shader/hcIShaderManager.h"
@@ -60,6 +59,8 @@
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
+#include "hc/graphics/generators/hcCubeMapGeneratorSettings.h"
+#include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 

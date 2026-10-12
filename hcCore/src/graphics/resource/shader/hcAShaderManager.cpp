@@ -125,15 +125,13 @@ namespace hc
     }
     catch (const Exception& e)
     {
-      LogService::Error(
+      throw RuntimeErrorException(
         String::Format(
           "Failed to create built-in shader of type: %d. Error: %s",
           static_cast<int>(type),
           e.what()
         )
       );
-
-      return nullptr;
     }
   }
 

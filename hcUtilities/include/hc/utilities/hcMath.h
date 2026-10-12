@@ -82,5 +82,64 @@ namespace hc
     {
       return std::abs(value) <= epsilon;
     }
+
+    /**
+     * @brief Computes the next power of two greater than or equal to the given value.
+     * @param value The input value.
+     * @returns The next power of two greater than or equal to the input value.
+     */
+    static inline UInt32 NextPowerOfTwo(UInt32 value)
+    {
+      if (value == 0)
+        return 1;
+
+      value--;
+      value |= value >> 1;
+      value |= value >> 2;
+      value |= value >> 4;
+      value |= value >> 8;
+      value |= value >> 16;
+      return ++value;
+    }
+
+    /**
+     * @brief Computes the next power of two greater than or equal to the given value.
+     * @param value The input value.
+     * @returns The next power of two greater than or equal to the input value.
+     */
+    static inline SizeT NextPowerOfTwo(SizeT value)
+    {
+      if (value == 0)
+        return 1;
+      value--;
+      value |= value >> 1;
+      value |= value >> 2;
+      value |= value >> 4;
+      value |= value >> 8;
+      value |= value >> 16;
+      if constexpr (sizeof(SizeT) > 4)
+        value |= value >> 32; // For 64-bit SizeT
+      return ++value;
+    }
+
+    /**
+     * @brief Checks if a given value is a power of two.
+     * @param value The input value.
+     * @returns True if the value is a power of two, false otherwise.
+     */
+    static inline bool IsPowerOfTwo(UInt32 value)
+    {
+      return (value != 0) && ((value & (value - 1)) == 0);
+    }
+
+    /**
+     * @brief Checks if a given value is a power of two.
+     * @param value The input value.
+     * @returns True if the value is a power of two, false otherwise.
+     */
+    static inline bool IsPowerOfTwo(SizeT value)
+    {
+      return (value != 0) && ((value & (value - 1)) == 0);
+    }
   };
 }

@@ -2,6 +2,7 @@
 #include "hc/graphics/resource/texture/hcITextureFactory.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
 #include "hc/assets/image/hcImage.h"
+#include "hc/assets/image/hcIImageAssetManager.h"
 #include "hc/assets/hcIAssetManager.h"
 
 namespace hc
@@ -11,7 +12,9 @@ namespace hc
     IAssetManager& assetManager
   ) :
     m_textureFactory(std::move(textureFactory)),
-    m_assetManager(assetManager)
+    m_assetManager(assetManager),
+    m_textures(),
+    m_defaultTextures()
   {
   }
 
@@ -110,9 +113,59 @@ namespace hc
     return m_textures;
   }
 
+  SharedPtr<ITexture> TextureManager::getDefaultTexture(defaultTextureType::Type type)
+  {
+    auto it = m_defaultTextures.find(type);
+    if (it != m_defaultTextures.end())
+      return it->second;
+
+    IImageAssetManager& imageManager = m_assetManager.getImageAssetManager();
+    SharedPtr<Image> defaultImage;
+
+    if (type == defaultTextureType::White)
+    {
+      defaultImage = imageManager.getDefaultImage(
+        defaultImageType::White,
+        textureFormatType::RGBA8,
+        colorSpaceType::Linear
+      );
+    }
+    else if (type == defaultTextureType::NormalTangent)
+    {
+      defaultImage = imageManager.getDefaultImage(
+        defaultImageType::NormalTangent,
+        textureFormatType::RGBA8,
+        colorSpaceType::Linear
+      );
+    }
+    else
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "TextureManager: Unsupported default texture type '%u'.",
+          static_cast<UInt32>(type)
+        )
+      );
+    }
+
+    return createAndSaveDefaultTexture(type, *defaultImage);
+  }
+
   void TextureManager::clear()
   {
     m_textures.clear();
+    m_defaultTextures.clear();
     clearCache();
+  }
+
+  SharedPtr<ITexture> TextureManager::createAndSaveDefaultTexture(
+    defaultTextureType::Type type,
+    const Image& image
+  )
+  {
+    SharedPtr<ITexture> texture = m_textureFactory->createTexture();
+    texture->initialize(image, Path());
+    m_defaultTextures[type] = texture;
+    return texture;
   }
 }

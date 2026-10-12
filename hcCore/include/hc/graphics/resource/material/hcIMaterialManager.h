@@ -88,24 +88,6 @@ namespace hc
     virtual const Vector<SharedPtr<IMaterial>>& getMaterials() const = 0;
 
     /**
-     * @brief Gets the default textures used when a material does not have a specific
-     * texture assigned.
-     */
-    virtual const SharedPtr<ITexture>& getDefaultAlbedoTexture() const = 0;
-
-    /**
-     * @brief Gets the default normal texture used when a material does not have a
-     * specific normal texture assigned.
-     */
-    virtual const SharedPtr<ITexture>& getDefaultNormalTexture() const = 0;
-
-    /**
-     * @brief Gets the default ORM (Occlusion-Roughness-Metallic) texture used when a
-     * material does not have a specific ORM texture assigned.
-     */
-    virtual const SharedPtr<ITexture>& getDefaultORMTexture() const = 0;
-
-    /**
      * @brief Clears all materials.
      */
     virtual void clear() = 0;

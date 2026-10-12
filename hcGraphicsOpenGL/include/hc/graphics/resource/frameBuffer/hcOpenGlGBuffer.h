@@ -37,15 +37,15 @@ namespace hc
     const ITexture& getORMIOR() const override;
 
   private:
-    bool m_valid;
-    UInt32 m_width;
-    UInt32 m_height;
-    UInt32 m_gBufferId;
-    UInt32 m_depthStencilBufferId;
     OpenGlTexture m_positionAndDepthTexture;
     OpenGlTexture m_normalTexture;
     OpenGlTexture m_albedoAlphaTexture;
     OpenGlTexture m_ORMIORTexture;
+    UInt32 m_width;
+    UInt32 m_height;
+    UInt32 m_gBufferId;
+    UInt32 m_depthStencilBufferId;
+    bool m_valid;
 
     void assertIsValid() const;
   };

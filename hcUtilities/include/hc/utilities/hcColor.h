@@ -6,6 +6,10 @@
 
 namespace hc
 {
+  /**
+   * @brief Represents a RGBA color with floating-point components in the range [0.0,
+   * 1.0].
+   */
   struct Color
   {
     static constexpr Color Black();

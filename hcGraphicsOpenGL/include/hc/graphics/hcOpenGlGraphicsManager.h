@@ -9,6 +9,7 @@
 #include "hc/graphics/frameRenderer/hcFrameRenderer.h"
 #include "hc/graphics/resource/shader/hcOpenGlShaderManager.h"
 #include "hc/graphics/resource/dataBlock/hcOpenGlDataBlockManager.h"
+#include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
 
 namespace hc
 {
@@ -141,6 +142,12 @@ namespace hc
     IDataBlockManager& getDataBlockManager() override;
 
     /**
+     * @copydoc IGraphicsManager::getEquirectangularToCubeMapGenerator
+     */
+    graphics::generators::IEquirectangularToCubeMapGenerator&
+    getEquirectangularToCubeMapGenerator() override;
+
+    /**
      * @copydoc IGraphicsManager::getGBuffer
      */
     IGBuffer& getGBuffer() override;
@@ -179,6 +186,7 @@ namespace hc
     Rect<UInt32> m_viewportRect;
     OpenGlDataBlockManager m_dataBlockManager;
     FrameRenderer m_frameRenderer;
+    graphics::generators::OpenGlEquirectangularToCubeMapGenerator m_equirectangularToCubeMapGenerator;
     polygonFillType::Type m_polygonFillType;
 
     /**

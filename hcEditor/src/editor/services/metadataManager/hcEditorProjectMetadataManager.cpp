@@ -19,7 +19,7 @@ namespace hc::editor
       Path projectDirectory = projectFilepath.parentPath();
       Path relativePath = scenePath.toRelative(projectDirectory);
 
-      Int32 size = m_projectMetadata.lastOpenedScenes.size();
+      Int32 size = static_cast<Int32>(m_projectMetadata.lastOpenedScenes.size());
       for (Int32 i = size - 1; i >= 0; --i)
       {
         if (m_projectMetadata.lastOpenedScenes[i] == relativePath)

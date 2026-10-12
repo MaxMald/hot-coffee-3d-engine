@@ -22,15 +22,9 @@ namespace hc
     /**
      * @copydoc ITexture::initialize(const Image&)
      */
-    void initialize(const Image& image) override;
-
-    /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type)
-     */
     void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type colorFormat
+      const Image& image,
+      const Path& sourcePath = Path()
     ) override;
 
     /**
@@ -39,19 +33,8 @@ namespace hc
     void initialize(
       UInt32 width,
       UInt32 height,
-      textureFormatType::Type colorFormat,
+      textureFormatType::Type format,
       colorSpaceType::Type colorSpace
-    ) override;
-
-    /**
-     * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type, const Color&)
-     */
-    void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type colorFormat,
-      colorSpaceType::Type colorSpace,
-      const Color& initColor
     ) override;
 
     /**
@@ -123,7 +106,7 @@ namespace hc
     /**
      * @copydoc ITexture::getSourcePath
      */
-    inline const Path& getSourcePath() const override
+    const Path& getSourcePath() const override
     {
       return m_sourcePath;
     }
@@ -135,27 +118,6 @@ namespace hc
      */
     GLuint getTextureId() const;
 
-    /**
-     * @brief Internal method to initialize the texture with specified parameters. This is
-     * called by the public initialize methods after validating parameters.
-     *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param colorFormat The color format of the texture.
-     * @param colorSpace The color space of the texture.
-     * @param initData Optional pointer to initial pixel data to upload to the texture.
-     * @param sourcePath Optional path to the source file from which the texture was
-     * loaded.
-     */
-    void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type colorFormat,
-      colorSpaceType::Type colorSpace,
-      const void* initData,
-      const Path& sourcePath
-    );
-
   private:
     Path m_sourcePath;
     GLuint m_textureId;
@@ -165,8 +127,35 @@ namespace hc
     colorSpaceType::Type m_colorSpace;
     bool m_created;
 
-    static void assertDimensionsAreGreaterThanZero(UInt32 width, UInt32 height);
-    void assertIsCreated() const;
-    
+    /**
+     * @brief Initializes the texture with the specified width, height, format, color
+     * space, and pixel data.
+     *
+     * @param width The width of the texture in pixels.
+     * @param height The height of the texture in pixels.
+     * @param format The texture format (e.g., RGBA8, RGB8).
+     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     * @param pixelData Pointer to the pixel data to initialize the texture with.
+     * @param sourcePath Optional source path of the texture if it was loaded from a file.
+     */
+    void initialize(
+      UInt32 width,
+      UInt32 height,
+      textureFormatType::Type format,
+      colorSpaceType::Type colorSpace,
+      const void* pixelData,
+      const Path& sourcePath
+    );
+
+    /**
+     * @brief Asserts that the texture has been created before performing operations on it.
+     *
+     * @throws RuntimeErrorException if the texture has not been created yet.
+     */
+    inline void assertIsCreated() const
+    {
+      if (!m_created)
+        throw RuntimeErrorException("Texture has not been created yet.");
+    }
   };
 }

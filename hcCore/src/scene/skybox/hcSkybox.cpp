@@ -1,10 +1,10 @@
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/graphics/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 #include "hc/assets/image/hcImage.h"
 
 namespace hc
 {
-  Skybox::Skybox() : m_cubeMap(nullptr)
+  Skybox::Skybox() : sourcePath(), m_cubeMap(nullptr)
   {}
 
   Skybox::~Skybox()
@@ -12,11 +12,12 @@ namespace hc
     destroy();
   }
 
-  void Skybox::initialize(SharedPtr<ICubeMap> cubeMap)
+  void Skybox::initialize(SharedPtr<ICubeMap> cubeMap, const Path& _sourcePath)
   {
     if (cubeMap == nullptr)
       throw RuntimeErrorException("CubeMap is undefined.");
     m_cubeMap = cubeMap;
+    sourcePath = _sourcePath;
   }
 
   bool Skybox::isValid() const
@@ -46,10 +47,12 @@ namespace hc
   void Skybox::clear()
   {
     m_cubeMap.reset();
+    sourcePath.clear();
   }
 
   void Skybox::destroy()
   {
     m_cubeMap.reset();
+    sourcePath.clear();
   }
 }

@@ -268,13 +268,12 @@ namespace hc
     if (child)
       return child;
 
-    for (const auto& child : m_children)
+    for (const auto& childIt : m_children)
     {
-      GameObject* descendant = child->getDescendant(uuid);
+      GameObject* descendant = childIt->getDescendant(uuid);
       if (descendant)
         return descendant;
     }
-
     return nullptr;
   }
 

@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
@@ -38,6 +38,7 @@ namespace hc
     m_viewportRect(0, 0, 1, 1),
     m_dataBlockManager(),
     m_frameRenderer(m_dataBlockManager),
+    m_equirectangularToCubeMapGenerator(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -71,6 +72,11 @@ namespace hc
       m_materialManager.initialize();
       m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
       m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
+      m_equirectangularToCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::EquirectangularToCubeMap
+        )
+      );
       setViewport(viewportRect);
     }
     catch (const Exception& e)
@@ -201,6 +207,12 @@ namespace hc
     return m_dataBlockManager;
   }
 
+  graphics::generators::IEquirectangularToCubeMapGenerator&
+  OpenGlGraphicsManager::getEquirectangularToCubeMapGenerator()
+  {
+    return m_equirectangularToCubeMapGenerator;
+  }
+
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
     return m_frameRenderer.getGBuffer();
@@ -244,6 +256,7 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_equirectangularToCubeMapGenerator.destroy();
     m_frameRenderer.destroy();
     m_materialManager.clear();
     m_textureManager.clear();

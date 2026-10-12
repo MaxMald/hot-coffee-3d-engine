@@ -1,11 +1,13 @@
 #include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/graphics/cubeMap/hcICubeMap.h"
-#include "hc/graphics/cubeMap/hcCubeMapFactory.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcCubeMapFactory.h"
+#include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 #include "hc/assets/hcIAssetManager.h"
 #include "hc/assets/image/hcImage.h"
 #include "hc/assets/image/hcIImageAssetManager.h"
+#include "hc/serialization/hcFileFormats.h"
 
 namespace hc::serialization
 {
@@ -25,28 +27,17 @@ namespace hc::serialization
       writer.finishWritingObject();
       return;
     }
-
     
-    const ICubeMap& cubeMap = skybox.getCubeMap();
-    SharedPtr<CubeMapDescriptor> cubeMapDescriptor = cubeMap.getCubeMapDescriptor();
-    if (cubeMapDescriptor == nullptr)
+    if (skybox.sourcePath.empty())
     {
       writer.writeBool(false);
       writer.finishWritingObject();
       return;
     }
 
-    Path descriptorSourcePath = cubeMapDescriptor->path;
-    if (descriptorSourcePath.empty())
-    {
-      writer.writeBool(false);
-      writer.finishWritingObject();
-      return;
-    }
-
-    Path pathToSerialize = descriptorSourcePath;
+    Path pathToSerialize = skybox.sourcePath;
     if (assetManager.hasRootPath())
-      pathToSerialize = descriptorSourcePath.toRelative(assetManager.getRootPath());
+      pathToSerialize = skybox.sourcePath.toRelative(assetManager.getRootPath());
 
     writer.writeBool(true);
     writer.writePath(pathToSerialize);
@@ -57,7 +48,8 @@ namespace hc::serialization
     Skybox& skybox,
     io::BinaryReader& reader,
     IAssetManager& assetManager,
-    IGraphicsManager& graphicsManager
+    IGraphicsManager& graphicsManager,
+    const graphics::generators::CubeMapGeneratorSettings& settings
   )
   {
     skybox.destroy();
@@ -94,13 +86,39 @@ namespace hc::serialization
       sourcePath = sourcePath.toAbsolute(rootPath);
     }
 
+    IImageAssetManager& imageAssetManager = assetManager.getImageAssetManager();
+
+    bool isCubeMapDescriptor = false;
+    Path extension = sourcePath.extension().toLowercase();
+    if (extension == serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION)
+      isCubeMapDescriptor = true;
+    else if (imageAssetManager.isSupportedImage(sourcePath))
+      isCubeMapDescriptor = false;
+    else
+    {
+      throw RuntimeErrorException(
+        String::Format("Failed to deserialize skybox: source path '%s' is neither a supported image nor a cube map descriptor.",
+          sourcePath.toString().c_str()
+        )
+      );
+    }
+
     try
     {
-      SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromDescriptor(
-        sourcePath, assetManager, graphicsManager
-      );
-
-      skybox.initialize(cubeMap);
+      if (isCubeMapDescriptor)
+      {
+        SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromDescriptor(
+          sourcePath, assetManager, graphicsManager
+        );
+        skybox.initialize(cubeMap, sourcePath);
+      }
+      else
+      {
+        SharedPtr<ICubeMap> cubeMap = CubeMapFactory::CreateFromEquirectangularImage(
+          sourcePath, settings, assetManager, graphicsManager
+        );
+        skybox.initialize(cubeMap, sourcePath);
+      }
     }
     catch (const Exception& ex)
     {

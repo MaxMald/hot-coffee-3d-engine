@@ -1,7 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcTextureFormatType.h"
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
@@ -22,30 +21,20 @@ namespace hc
      *
      * @param image The image asset containing the pixel data and dimensions for the
      * texture.
-     */
-    virtual void initialize(const Image& image) = 0;
-
-    /**
-     * @brief Initializes the texture with the given dimensions. The texture will be
-     * created with empty pixel data. Color space will default to Linear.
-     *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The texture format of the texture.
+     * @param sourcePath Optional source path of the texture if it was loaded from a file.
      */
     virtual void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format
+      const Image& image,
+      const Path& sourcePath
     ) = 0;
 
     /**
-     * @brief Initializes the texture with the given dimensions and color space. The
-     * texture will be created with empty pixel data.
+     * @brief Initializes the texture with the specified width, height, format, and color space.
+     * This method is used to create an empty texture that can be filled later.
      *
      * @param width The width of the texture in pixels.
      * @param height The height of the texture in pixels.
-     * @param format The texture format of the texture.
+     * @param format The texture format (e.g., RGBA8, RGB8).
      * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
      */
     virtual void initialize(
@@ -53,25 +42,6 @@ namespace hc
       UInt32 height,
       textureFormatType::Type format,
       colorSpaceType::Type colorSpace
-    ) = 0;
-
-    /**
-     * @brief Initializes the texture with the given dimensions and fills it with the
-     * specified color. The texture will be created with pixel data initialized to the
-     * provided color.
-     *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The color format of the texture.
-     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
-     * @param initColor The color to initialize the texture's pixel data with.
-     */
-    virtual void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace,
-      const Color& initColor
     ) = 0;
 
     /**
@@ -144,6 +114,6 @@ namespace hc
      *
      * @return Reference to the source path of the texture.
      */
-    virtual inline const Path& getSourcePath() const = 0;
+    virtual const Path& getSourcePath() const = 0;
   };
 }

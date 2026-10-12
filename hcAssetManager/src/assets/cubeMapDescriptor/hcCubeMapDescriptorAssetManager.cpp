@@ -23,12 +23,12 @@ namespace hc
       descriptor->path = path;
 
       Path basePath = path.parentPath();
-      descriptor->rightImagePath = descriptor->rightImagePath.toAbsolute(basePath);
-      descriptor->leftImagePath = descriptor->leftImagePath.toAbsolute(basePath);
-      descriptor->topImagePath = descriptor->topImagePath.toAbsolute(basePath);
-      descriptor->bottomImagePath = descriptor->bottomImagePath.toAbsolute(basePath);
-      descriptor->backImagePath = descriptor->backImagePath.toAbsolute(basePath);
-      descriptor->frontImagePath = descriptor->frontImagePath.toAbsolute(basePath);
+      descriptor->pXImagePath = descriptor->pXImagePath.toAbsolute(basePath);
+      descriptor->nXImagePath = descriptor->nXImagePath.toAbsolute(basePath);
+      descriptor->pYImagePath = descriptor->pYImagePath.toAbsolute(basePath);
+      descriptor->nYImagePath = descriptor->nYImagePath.toAbsolute(basePath);
+      descriptor->pZImagePath = descriptor->pZImagePath.toAbsolute(basePath);
+      descriptor->nZImagePath = descriptor->nZImagePath.toAbsolute(basePath);
 
       m_loadedCubeMapDescriptors[path] = descriptor;
       return descriptor;

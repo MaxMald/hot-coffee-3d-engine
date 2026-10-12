@@ -1,5 +1,7 @@
 #include "hc/graphics/hcGraphicsCommons.h"
 
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+
 namespace hc
 {
   namespace graphicsBackendType
@@ -209,6 +211,8 @@ namespace hc
       case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
       case Type::PBRDeferredGeometryFragment: return "PBRDeferredGeometryFragment";
       case Type::PBRForwardFragment: return "PBRForwardFragment";
+      case Type::EquirectangularToCubeMapFragment: return "EquirectangularToCubeMapFragment";
+      case Type::EquirectangularToCubeMapVertex: return "EquirectangularToCubeMapVertex";
 
       default:
         throw InvalidArgumentException(
@@ -234,6 +238,8 @@ namespace hc
       else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
       else if (str == "PBRDeferredGeometryFragment") return Type::PBRDeferredGeometryFragment;
       else if (str == "PBRForwardFragment") return Type::PBRForwardFragment;
+      else if (str == "EquirectangularToCubeMapFragment") return Type::EquirectangularToCubeMapFragment;
+      else if (str == "EquirectangularToCubeMapVertex") return Type::EquirectangularToCubeMapVertex;
       else
 
       throw InvalidArgumentException(
@@ -250,6 +256,7 @@ namespace hc
       case Type::FullScreenTriangleVertex:
       case Type::SkyboxVertex:
       case Type::ShadowMapVertex:
+      case Type::EquirectangularToCubeMapVertex:
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
@@ -262,6 +269,7 @@ namespace hc
       case Type::HairForwardTransparentFragment:
       case Type::PBRDeferredGeometryFragment:
       case Type::PBRForwardFragment:
+      case Type::EquirectangularToCubeMapFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -288,6 +296,7 @@ namespace hc
       case Type::HairForwardTransparent: return "HairForwardTransparent";
       case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
       case Type::PBRForward: return "PBRForward";
+      case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -307,6 +316,7 @@ namespace hc
       else if (str == "HairForwardTransparent") return Type::HairForwardTransparent;
       else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
       else if (str == "PBRForward") return Type::PBRForward;
+      else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())
@@ -377,6 +387,40 @@ namespace hc
         throw RuntimeErrorException(
           String::Format("Invalid material render mode string: '%s'", str.c_str())
         );
+    }
+  }
+
+  namespace dataBlockType
+  {
+    SizeT GetDataBlockSize(dataBlockType::Type type)
+    {
+      switch (type)
+      {
+      case dataBlockType::Camera:
+        return sizeof(dataBlockStructure::Camera);
+      case dataBlockType::Lights:
+        return sizeof(dataBlockStructure::Lights);
+      case dataBlockType::LightShadows:
+        return sizeof(dataBlockStructure::LightShadows);
+      case dataBlockType::Object:
+        return sizeof(dataBlockStructure::ObjectData);
+      case dataBlockType::LightViewProjection:
+        return sizeof(dataBlockStructure::LightViewProjection);
+      case dataBlockType::MaterialUnlit:
+        return sizeof(dataBlockStructure::MaterialUnlit);
+      case dataBlockType::MaterialHair:
+        return sizeof(dataBlockStructure::MaterialHair);
+      case dataBlockType::MaterialPBR:
+        return sizeof(dataBlockStructure::MaterialPBR);
+      case dataBlockType::Scene:
+        return sizeof(dataBlockStructure::Scene);
+      case dataBlockType::CubeMapGenerator:
+        return sizeof(dataBlockStructure::CubeMapGenerator);
+      default:
+        throw RuntimeErrorException(
+          String::Format("GetDataBlockSize: Unknown data block type: %d", static_cast<Int32>(type))
+        );
+      }
     }
   }
 

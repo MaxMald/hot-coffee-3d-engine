@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
 namespace hc
 {
@@ -28,6 +28,7 @@ namespace hc
     m_skyboxShaderProgram = skyboxShaderProgram;
 
     float skyboxVertices[] = {
+      // (-Z)
       -1.0f,  1.0f, -1.0f,
       -1.0f, -1.0f, -1.0f,
        1.0f, -1.0f, -1.0f,
@@ -35,13 +36,15 @@ namespace hc
        1.0f,  1.0f, -1.0f,
       -1.0f,  1.0f, -1.0f,
 
+      // (-X)
       -1.0f, -1.0f,  1.0f,
       -1.0f, -1.0f, -1.0f,
       -1.0f,  1.0f, -1.0f,
       -1.0f,  1.0f, -1.0f,
       -1.0f,  1.0f,  1.0f,
       -1.0f, -1.0f,  1.0f,
-
+      
+      // (+X)
        1.0f, -1.0f, -1.0f,
        1.0f, -1.0f,  1.0f,
        1.0f,  1.0f,  1.0f,
@@ -49,6 +52,7 @@ namespace hc
        1.0f,  1.0f, -1.0f,
        1.0f, -1.0f, -1.0f,
 
+      // (+Z)
       -1.0f, -1.0f,  1.0f,
       -1.0f,  1.0f,  1.0f,
        1.0f,  1.0f,  1.0f,
@@ -56,6 +60,7 @@ namespace hc
        1.0f, -1.0f,  1.0f,
       -1.0f, -1.0f,  1.0f,
 
+      // (+Y)
       -1.0f,  1.0f, -1.0f,
        1.0f,  1.0f, -1.0f,
        1.0f,  1.0f,  1.0f,
@@ -63,6 +68,7 @@ namespace hc
       -1.0f,  1.0f,  1.0f,
       -1.0f,  1.0f, -1.0f,
 
+      // (-Y)
       -1.0f, -1.0f, -1.0f,
       -1.0f, -1.0f,  1.0f,
        1.0f, -1.0f, -1.0f,

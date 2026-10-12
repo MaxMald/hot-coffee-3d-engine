@@ -1,4 +1,4 @@
-#include "hc/graphics/cubeMap/hcICubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 
 hc::ICubeMap::~ICubeMap()
 {}

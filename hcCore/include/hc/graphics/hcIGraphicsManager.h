@@ -24,6 +24,11 @@ namespace hc
   struct CameraFrameData;
   struct LightFrameData;
 
+  namespace graphics::generators
+  {
+    class IEquirectangularToCubeMapGenerator;
+  }
+
   /**
    * @brief Interface for graphics manager classes.
    *
@@ -200,6 +205,14 @@ namespace hc
      * @return Reference to the IDataBlockManager instance.
      */
     virtual IDataBlockManager& getDataBlockManager() = 0;
+
+    /**
+     * @brief Returns the equirectangular to cubemap generator.
+     *
+     * @return Reference to the IEquirectangularToCubeMapGenerator instance.
+     */
+    virtual graphics::generators::IEquirectangularToCubeMapGenerator&
+    getEquirectangularToCubeMapGenerator() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

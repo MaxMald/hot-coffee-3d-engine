@@ -13,15 +13,15 @@ namespace hc
   };
 
   OpenGlGBuffer::OpenGlGBuffer() :
-    m_valid(false),
+    m_positionAndDepthTexture(),
+    m_normalTexture(),
+    m_albedoAlphaTexture(),
+    m_ORMIORTexture(),
     m_width(0),
     m_height(0),
     m_gBufferId(0),
     m_depthStencilBufferId(0),
-    m_positionAndDepthTexture(),
-    m_normalTexture(),
-    m_albedoAlphaTexture(),
-    m_ORMIORTexture()
+    m_valid(false)
   {}
 
   OpenGlGBuffer::~OpenGlGBuffer()
@@ -49,37 +49,23 @@ namespace hc
       glGenFramebuffers(1, &m_gBufferId);
       glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
 
-      m_positionAndDepthTexture.initialize(
-        width, height,
-        textureFormatType::RGBA16F, colorSpaceType::Linear
-      );
-
+      m_positionAndDepthTexture.initialize(width, height, textureFormatType::RGBA16F, colorSpaceType::Linear);
       if (!m_positionAndDepthTexture.isValid())
         throw RuntimeErrorException("Failed to create position and depth texture for GBuffer.");
 
-      m_normalTexture.initialize(
-        width, height,
-        textureFormatType::RGBA16F, colorSpaceType::Linear
-      );
-
+      m_normalTexture.initialize(width, height, textureFormatType::RGBA16F, colorSpaceType::Linear);
       if (!m_normalTexture.isValid())
         throw RuntimeErrorException("Failed to create normal texture for GBuffer.");
 
-      m_albedoAlphaTexture.initialize(
-        width, height,
-        textureFormatType::RGBA8, colorSpaceType::Linear
-      );
+      m_albedoAlphaTexture.initialize(width, height, textureFormatType::RGBA8, colorSpaceType::Linear);
 
       if (!m_albedoAlphaTexture.isValid())
         throw RuntimeErrorException("Failed to create albedo and alpha texture for GBuffer.");
 
-      m_ORMIORTexture.initialize(
-        width, height,
-        textureFormatType::RGBA8, colorSpaceType::Linear
-      );
-
+      m_ORMIORTexture.initialize(width, height, textureFormatType::RGBA8, colorSpaceType::Linear);
       if (!m_ORMIORTexture.isValid())
         throw RuntimeErrorException("Failed to create ORM/IOR texture for GBuffer.");
+
 
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
