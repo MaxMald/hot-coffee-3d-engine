@@ -72,6 +72,8 @@ namespace hc
     else if (channels == 4)
       format = textureFormatType::RGBA32F;
     else
+    {
+      stbi_image_free(data);
       throw RuntimeErrorException(
         String::Format(
           "Unsupported number of channels (%d) in HDR image: %s",
@@ -79,6 +81,7 @@ namespace hc
           path.toString().c_str()
         )
       );
+    }
 
     SizeT bufferSize = static_cast<SizeT>(width)
       * static_cast<SizeT>(height)
