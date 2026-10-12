@@ -28,7 +28,6 @@ namespace hc::editor
     ProjectFileDialogView& m_fileDialog;
     Vector<String> m_cubeMapDescriptorExtensions;
     Path m_assetPath;
-    UInt32 m_faceSize;
     textureFormatType::Type m_format;
     Path m_pXImagePath;
     Path m_nXImagePath;

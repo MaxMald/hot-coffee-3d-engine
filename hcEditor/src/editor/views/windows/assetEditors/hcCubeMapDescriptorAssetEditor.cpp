@@ -15,7 +15,6 @@ namespace hc::editor
     m_fileDialog(fileDialog),
     m_cubeMapDescriptorExtensions({ hc::serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION }),
     m_assetPath(),
-    m_faceSize(0),
     m_format(textureFormatType::RGBA8),
     m_pXImagePath(),
     m_nXImagePath(),
@@ -65,11 +64,6 @@ namespace hc::editor
     }
 
     ImGui::LabelText("Asset Path", "%s", m_assetPath.empty() ? "New Asset" : m_assetPath.toGenericString().c_str());
-
-    // Input fields for face dimensions and channels
-    Int32 faceSizeInput = static_cast<Int32>(m_faceSize);
-    if (ImGui::InputInt("Face Size", &faceSizeInput) && faceSizeInput > 0)
-      m_faceSize = static_cast<UInt32>(faceSizeInput);
 
     Int32 selectedFormat = static_cast<Int32>(m_format);
     if (ImGui::Combo("Format", &selectedFormat, m_formatItems, textureFormatType::Count))
@@ -170,7 +164,6 @@ namespace hc::editor
   void CubeMapDescriptorAssetEditor::clear()
   {
     m_assetPath.clear();
-    m_faceSize = 0;
     m_format = textureFormatType::RGBA8;
     m_pXImagePath.clear();
     m_nXImagePath.clear();
@@ -188,8 +181,7 @@ namespace hc::editor
       !m_pYImagePath.empty() &&
       !m_nYImagePath.empty() &&
       !m_pZImagePath.empty() &&
-      !m_nZImagePath.empty() &&
-      m_faceSize > 0;
+      !m_nZImagePath.empty();
   }
 
   bool CubeMapDescriptorAssetEditor::canSaveAs() const
@@ -199,8 +191,7 @@ namespace hc::editor
       !m_pYImagePath.empty() &&
       !m_nYImagePath.empty() &&
       !m_pZImagePath.empty() &&
-      !m_nZImagePath.empty() &&
-      m_faceSize > 0;
+      !m_nZImagePath.empty();
   }
 
   bool CubeMapDescriptorAssetEditor::save(const Path& path) const
@@ -208,8 +199,6 @@ namespace hc::editor
     try
     {
       CubeMapDescriptor descriptorToSave;
-
-      descriptorToSave.faceSize = m_faceSize;
       descriptorToSave.format = m_format;
 
       Path baseDir = path.parentPath();
@@ -251,7 +240,6 @@ namespace hc::editor
       CubeMapDescriptor descriptorFromFile;
       descriptorFromFile.deserialize(reader);
 
-      m_faceSize = descriptorFromFile.faceSize;
       m_format = descriptorFromFile.format;
 
       Path baseDir = path.parentPath();
