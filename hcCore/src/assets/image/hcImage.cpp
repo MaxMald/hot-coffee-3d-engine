@@ -68,7 +68,10 @@ namespace hc
 
     m_data.reset(static_cast<SizeT>(numPixels) * static_cast<SizeT>(pixelSize));
 
-    if (format == textureFormatType::RGB8 || format == textureFormatType::RGBA8)
+    if (format == textureFormatType::R8
+      || format == textureFormatType::RG8
+      || format == textureFormatType::RGB8
+      || format == textureFormatType::RGBA8)
     {
       for (UInt32 i = 0; i < numPixels; ++i)
       {
