@@ -312,6 +312,7 @@ namespace hc::graphics::generators
     glBindRenderbuffer(GL_RENDERBUFFER, currentRenderbuffer);
     glBindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFrameBuffer);
     glBindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFrameBuffer);
+    m_currentRenderbufferSize = faceSize;
   }
 
   void OpenGlEquirectangularToCubeMapGenerator::createBox()
