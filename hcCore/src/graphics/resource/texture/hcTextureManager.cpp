@@ -154,6 +154,7 @@ namespace hc
   void TextureManager::clear()
   {
     m_textures.clear();
+    m_defaultTextures.clear();
     clearCache();
   }
 
