@@ -35,6 +35,7 @@ namespace hc::graphics::generators
 
   OpenGlEquirectangularToCubeMapGenerator::~OpenGlEquirectangularToCubeMapGenerator()
   {
+    destroy();
   }
 
   SharedPtr<ICubeMap> OpenGlEquirectangularToCubeMapGenerator::generate(
