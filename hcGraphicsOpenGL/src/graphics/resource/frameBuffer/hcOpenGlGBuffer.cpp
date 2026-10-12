@@ -66,7 +66,6 @@ namespace hc
       if (!m_ORMIORTexture.isValid())
         throw RuntimeErrorException("Failed to create ORM/IOR texture for GBuffer.");
 
-      glFlush(); // Ensure GPU commands are completed before attaching textures to the framebuffer
 
       glFramebufferTexture2D(
         GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
