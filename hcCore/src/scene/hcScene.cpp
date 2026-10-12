@@ -244,6 +244,7 @@ namespace hc
 
   void Scene::clear()
   {
+    m_cubeMapGeneratorSettings.clear();
     m_sceneGraph.clear();
     m_cameraManager.clear();
     m_lightManager.clear();
