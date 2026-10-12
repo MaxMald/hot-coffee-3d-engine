@@ -318,8 +318,8 @@ namespace hc
   )
   {
     Vector3f zaxis = (target - position).normalized();
-    Vector3f xaxis = zaxis.cross(up).normalized();
-    Vector3f yaxis = xaxis.cross(zaxis);
+    Vector3f xaxis = up.cross(zaxis).normalized();
+    Vector3f yaxis = zaxis.cross(xaxis);
     return Matrix4(
       xaxis.x, xaxis.y, xaxis.z, -xaxis.dot(position),
       yaxis.x, yaxis.y, yaxis.z, -yaxis.dot(position),
