@@ -1,7 +1,6 @@
 #include "hc/serialization/scene/hcSceneSerializer.h"
 
 #include "hc/serialization/hcFileFormats.h"
-#include "hc/serialization/scene/skybox/hcSkyboxSerializer.h"
 #include "hc/scene/hcScene.h"
 #include "hc/hcVersion.h"
 
@@ -9,10 +8,9 @@ namespace hc
 {
   namespace serialization
   {
-    bool SceneSerializer::Serialize(
+    void SceneSerializer::Serialize(
       const Scene& scene,
-      const Path& filePath,
-      const IAssetManager& assetManager
+      const Path& filePath
     )
     {
       try
@@ -21,30 +19,25 @@ namespace hc
         io::BinaryWriter writer;
         if (!writer.prepare(filePath, error))
         {
-          LogService::Error(
-            "Exception during scene serialization: " + error +
+          throw RuntimeErrorException(
+            "SceneSerializer::Serialize: Error during scene serialization: " + error +
             " in file: " + filePath.toString()
           );
-          return false;
         }
 
         SerializeHeader(writer);
         scene.serialize(writer);
-        SkyboxSerializer::Serialize(scene.getSceneSkybox(), writer, assetManager);
-
-        return true;
       }
       catch (const std::exception& e)
       {
-        LogService::Error(
-          "Exception during scene serialization: " + String(e.what()) +
+        throw RuntimeErrorException(
+          "SceneSerializer::Serialize: Error during scene serialization: " + String(e.what()) +
           " in file: " + filePath.toString()
         );
-        return false;
       }
     }
 
-    bool SceneSerializer::Deserialize(
+    void SceneSerializer::Deserialize(
       Scene& scene,
       const Path& filePath,
       IAssetManager& assetManager,
@@ -53,37 +46,41 @@ namespace hc
     {
       try
       {
-        scene.destroy();
-
         String error;
         io::BinaryReader reader;
         if (!reader.prepare(filePath, error))
         {
-          LogService::Error(
-            "Failed to prepare binary reader for scene file: " + filePath.toString() + " Error: " + error
+          throw RuntimeErrorException(
+            "SceneSerializer::Deserialize: Failed to prepare binary reader for scene file: " + filePath.toString() + " Error: " + error
           );
-          return false;
         }
 
         VerifyHeader(reader);
+        scene.destroy();
         scene.deserialize(reader);
-        SkyboxSerializer::Deserialize(
-          scene.getSceneSkybox(),
-          reader,
-          assetManager,
-          graphicsManager,
-          scene.getCubeMapGeneratorSettings()
-        );
-
-        return true;
       }
-      catch (const std::exception& e)
+      catch (const Exception& e)
       {
-        LogService::Error(
-          "Exception during scene deserialization: " + String(e.what()) +
+        throw RuntimeErrorException(
+          "SceneSerializer::Deserialize: Error during scene deserialization: " + String(e.what()) +
           " in file: " + filePath.toString()
         );
-        return false;
+      }
+
+      try
+      {
+        scene.getSceneSkybox().initialize(
+          assetManager,
+          graphicsManager,
+          scene.getSettings().skyboxSettings
+        );
+      }
+      catch (const Exception& e)
+      {
+        throw RuntimeErrorException(
+          "SceneSerializer::Deserialize: Error during skybox initialization: " + String(e.what()) +
+          " in file: " + filePath.toString()
+        );
       }
     }
 
@@ -96,18 +93,15 @@ namespace hc
       try
       {
         UniquePtr<Scene> scene = MakeUnique<Scene>();
-        if (Deserialize(*scene, filePath, assetManager, graphicsManager))
-          return scene;
-        else
-          return nullptr;
+        Deserialize(*scene, filePath, assetManager, graphicsManager);
+        return scene;
       }
       catch (const std::exception& e)
       {
-        LogService::Error(
+        throw RuntimeErrorException(
           "Exception during scene deserialization: " + String(e.what()) +
           " in file: " + filePath.toString()
         );
-        return nullptr;
       }
     }
 
@@ -124,7 +118,7 @@ namespace hc
       if (magicNumber != fileFormat::Scene::MAGIC_NUMBER)
       {
         throw RuntimeErrorException(
-          String::Format("Invalid scene file format: expected magic number %u, got %u",
+          String::Format("SceneSerializer: Invalid scene file format: expected magic number %u, got %u",
             fileFormat::Scene::MAGIC_NUMBER,
             magicNumber
           )
@@ -135,7 +129,7 @@ namespace hc
       if (version != fileFormat::Scene::VERSION)
       {
         throw RuntimeErrorException(
-          String::Format("Unsupported scene file version: expected %u, got %u",
+          String::Format("SceneSerializer: Unsupported scene file version: expected %u, got %u",
             fileFormat::Scene::VERSION,
             version
           )
@@ -146,7 +140,7 @@ namespace hc
       if (engineVersion > EngineVersion::ToInt())
       {
         LogService::Warning(
-          "Scene file was created with a newer engine version: " +
+          "SceneSerializer: Scene file was created with a newer engine version: " +
           std::to_string(engineVersion) + ". Some features may not be supported."
         );
       }

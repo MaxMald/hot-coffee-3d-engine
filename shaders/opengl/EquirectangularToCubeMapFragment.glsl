@@ -17,6 +17,6 @@ void main()
     // mapping and gamma correction    
     //color = color / (color + vec3(1.0));
     //color = pow(color, vec3(1.0/2.2)); // Apply gamma correction
-    
+
     OutFragColor = vec4(color, 1.0);
 }
