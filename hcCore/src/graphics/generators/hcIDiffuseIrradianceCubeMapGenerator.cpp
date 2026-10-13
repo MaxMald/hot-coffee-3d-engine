@@ -7,6 +7,7 @@ namespace hc::graphics::generators
   void DiffuseIrradianceCubeMapGeneratorSettings::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(0, DIFFUSE_IRRADIANCE_CUBE_MAP_GENERATOR_SETTINGS_VERSION);
+    writer.writeSizeT(faceSize);
     writer.writeFloat(sampleDelta);
     writer.finishWritingObject();
   }
@@ -19,12 +20,14 @@ namespace hc::graphics::generators
     if (header.version != DIFFUSE_IRRADIANCE_CUBE_MAP_GENERATOR_SETTINGS_VERSION)
       reader.finishReadingObject();
 
+    faceSize = reader.readSizeT();
     sampleDelta = reader.readFloat();
     reader.finishReadingObject();
   }
 
   void DiffuseIrradianceCubeMapGeneratorSettings::clear()
   {
+    faceSize = 32;
     sampleDelta = 0.025f;
   }
 

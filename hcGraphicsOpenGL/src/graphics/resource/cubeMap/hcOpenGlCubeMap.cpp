@@ -234,6 +234,13 @@ namespace hc
     return m_colorSpace;
   }
 
+  void OpenGlCubeMap::bind(UInt32 slot) const
+  {
+    assertIsValid();
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+  }
+
   const Path& OpenGlCubeMap::getSourcePath() const
   {
     return m_sourcePath;

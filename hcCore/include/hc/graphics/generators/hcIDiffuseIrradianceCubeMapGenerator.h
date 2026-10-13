@@ -15,6 +15,7 @@ namespace hc
      */
     struct HC_CORE_EXPORT DiffuseIrradianceCubeMapGeneratorSettings : public io::ISerializable
     {
+      SizeT faceSize = 32;        ///< The size of each face of the generated cube map. Must be a power of two.
       float sampleDelta = 0.025f; ///< Smaller values result in higher quality but take longer to compute.
       
       void serialize(io::BinaryWriter& writer) const override;
@@ -57,6 +58,11 @@ namespace hc
         const ICubeMap& inputCubeMap,
         const DiffuseIrradianceCubeMapGeneratorSettings& settings
       ) = 0;
+
+      /**
+       * @brief Destroys the generator and releases any associated resources.
+       */
+      virtual void destroy() = 0;
 
     protected:
       IDiffuseIrradianceCubeMapGenerator();

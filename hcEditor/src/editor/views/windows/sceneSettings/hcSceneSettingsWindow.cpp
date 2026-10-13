@@ -52,9 +52,7 @@ namespace hc::editor
     ImGui::Text("Scene's Skybox");
     ImGui::Separator();
 
-    Skybox& skybox = m_editorSceneManager.getEditorScene().getSceneSkybox();
-    String skyboxSourcePath = skybox.sourcePath.toGenericString();
-
+    Skybox& skybox = scene.getSceneSkybox();
     if (skybox.hasCubeMap())
     {
       const ICubeMap& cubeMap = skybox.getCubeMap();
@@ -63,6 +61,7 @@ namespace hc::editor
         ImGui::Text("NOTE: Current skybox cube map is invalid. Please update the skybox with valid images.");
     }
 
+    Path skyboxSourcePath = settings.skyboxSettings.sourcePath;
     hcImGui::Filename("Skybox's source", skyboxSourcePath);
 
     ImGui::Text("Skybox Axis Inversion: ");
@@ -100,7 +99,7 @@ namespace hc::editor
         m_cubeMapDescriptorExtensions,
         [this](const Path& selectedPath)
         {
-          onCubeMapDescriptorSelected(selectedPath);
+          onSourcePathSelected(selectedPath);
         }
       );
     }
@@ -112,59 +111,59 @@ namespace hc::editor
       m_projectFileDialogView.openImageFile(
         [this](const Path& selectedPath)
         {
-          onEquirectangularImageSelected(selectedPath);
+          onSourcePathSelected(selectedPath);
         }
       );
     }
 
     if (ImGui::CollapsingHeader("CubeMap Generator Settings"))
     {
-      graphics::generators::CubeMapGeneratorSettings& cubeMapGenSettings
-        = scene.getCubeMapGeneratorSettings();
+      hc::graphics::generators::EquirectangularToCubeMapGeneratorSettings& equiToCubeMapSettings
+        = settings.skyboxSettings.cubeMapGeneratorSettings;
 
       ImGui::Text("Cube Axis Inversion: ");
 
-      invertX = cubeMapGenSettings.invert.x != 1.0f;
+      invertX = equiToCubeMapSettings.invert.x != 1.0f;
       ImGui::PushID("CubeMapGenInvertX");
       if (ImGui::Checkbox("X", &invertX))
-        cubeMapGenSettings.invert.x = invertX ? -1.0f : 1.0f;
+        equiToCubeMapSettings.invert.x = invertX ? -1.0f : 1.0f;
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Invert the X-Axis of the cube vertices.");
       ImGui::PopID();
 
       ImGui::SameLine();
 
-      invertY = cubeMapGenSettings.invert.y != 1.0f;
+      invertY = equiToCubeMapSettings.invert.y != 1.0f;
       ImGui::PushID("CubeMapGenInvertY");
       if (ImGui::Checkbox("Y", &invertY))
-        cubeMapGenSettings.invert.y = invertY ? -1.0f : 1.0f;
+        equiToCubeMapSettings.invert.y = invertY ? -1.0f : 1.0f;
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Invert the Y-Axis of the cube vertices.");
       ImGui::PopID();
 
       ImGui::SameLine();
-      invertZ = cubeMapGenSettings.invert.z != 1.0f;
+      invertZ = equiToCubeMapSettings.invert.z != 1.0f;
       ImGui::PushID("CubeMapGenInvertZ");
       if (ImGui::Checkbox("Z", &invertZ))
-        cubeMapGenSettings.invert.z = invertZ ? -1.0f : 1.0f;
+        equiToCubeMapSettings.invert.z = invertZ ? -1.0f : 1.0f;
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip("Invert the Z-Axis of the cube vertices.");
       ImGui::PopID();
 
-      bool useCustomFaceSize = cubeMapGenSettings.useCustomFaceSize;
+      bool useCustomFaceSize = equiToCubeMapSettings.useCustomFaceSize;
       if (ImGui::Checkbox("Use Custom Face Size", &useCustomFaceSize))
-        cubeMapGenSettings.useCustomFaceSize = useCustomFaceSize;
+        equiToCubeMapSettings.useCustomFaceSize = useCustomFaceSize;
 
       if (useCustomFaceSize)
       {
-        Int32 customFaceSize = static_cast<Int32>(cubeMapGenSettings.customFaceSize);
+        Int32 customFaceSize = static_cast<Int32>(equiToCubeMapSettings.customFaceSize);
         if (ImGui::InputInt("Custom Face Size", &customFaceSize))
         {
           customFaceSize = Math::Max(1, customFaceSize);
-          cubeMapGenSettings.customFaceSize = static_cast<UInt32>(customFaceSize);
+          equiToCubeMapSettings.customFaceSize = static_cast<UInt32>(customFaceSize);
         }
 
-        if (!Math::IsPowerOfTwo(cubeMapGenSettings.customFaceSize))
+        if (!Math::IsPowerOfTwo(equiToCubeMapSettings.customFaceSize))
         {
           ImGui::TextColored(
             ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
@@ -172,120 +171,109 @@ namespace hc::editor
           );
         }
       }
-
-      if (ImGui::Button("Regenerate Skybox From Image"))
-        regenerateSkyboxFromEquirectangularImage(Path(skybox.sourcePath));
     }
+
+    if (ImGui::CollapsingHeader("Diffuse Irradiance Cube Map Generator"))
+    {
+      hc::graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings& diffuseIrradianceSettings
+        = settings.skyboxSettings.diffuseIrradianceCubeMapGeneratorSettings;
+
+      ImGui::SliderFloat(
+        "Sample Delta",
+        &diffuseIrradianceSettings.sampleDelta,
+        0.001f,
+        Math::Pi * 2.0f
+      );
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "Smaller values result in higher quality but take longer to compute."
+        );
+
+      Int32 customFaceSize = static_cast<Int32>(diffuseIrradianceSettings.faceSize);
+      if (ImGui::InputInt("Custom Face Size", &customFaceSize))
+      {
+        customFaceSize = Math::Max(1, customFaceSize);
+        diffuseIrradianceSettings.faceSize = static_cast<UInt32>(customFaceSize);
+      }
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "The size of the face for the Diffuse Irradiance Cube Map. Usually a low resolution is sufficient. Must be power of two."
+        );
+
+      if (!Math::IsPowerOfTwo(diffuseIrradianceSettings.faceSize))
+      {
+        ImGui::TextColored(
+          ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
+          "Warning: Custom face size must be a power of two."
+        );
+      }
+    }
+
+    if (ImGui::Button("Regenerate Skybox"))
+      regenerateSkybox(Path(skyboxSourcePath));
   }
 
-  void SceneSettingsWindow::onCubeMapDescriptorSelected(const Path& cubeMapDescriptorPath)
+  void SceneSettingsWindow::onSourcePathSelected(
+    const Path& sourcePath
+  )
   {
     try
     {
-      if (!m_editorSceneManager.isSceneOpen())
-        throw RuntimeErrorException("No scene is currently open. Cannot update skybox cube map.");
-
-      SharedPtr<ICubeMap> newCubeMap = CubeMapFactory::CreateFromDescriptor(
-        cubeMapDescriptorPath,
-        m_assetManager,
-        m_graphicsManager
+      regenerateSkybox(sourcePath);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String("Error updating skybox from equirectangular image: ") + e.what()
       );
+    }
+  }
 
-      if (!newCubeMap)
-        throw RuntimeErrorException(
-          "Failed to create a cube map from the selected descriptor. Please check the descriptor and its referenced images."
-        );
+  void SceneSettingsWindow::regenerateSkybox(const Path& sourcePath)
+  {
+    if (sourcePath.empty())
+    {
+      LogService::Error("Cannot regenerate skybox: source path is empty.");
+      return;
+    }
 
-      if (!newCubeMap->isValid())
-        throw RuntimeErrorException(
-          "Failed to create a valid cube map from the selected descriptor. Please check the descriptor and its referenced images."
-        );
+    if (!m_editorSceneManager.isSceneOpen())
+    {
+      LogService::Error(
+        "No scene is currently open. Cannot update skybox from equirectangular image."
+      );
+      return;
+    }
 
-      Skybox& skybox = m_editorSceneManager.getEditorScene().getSceneSkybox();
+    Scene& scene = m_editorSceneManager.getEditorScene();
+    SceneSettings& sceneSettings = scene.getSettings();
+    Path previousSkyboxSourcePath = sceneSettings.skyboxSettings.sourcePath;
+    Skybox& skybox = scene.getSceneSkybox();
+
+    try
+    {
+      Path resolvedPath = sourcePath;
+      if (resolvedPath.isAbsolute())
+        resolvedPath = sourcePath.toRelative(m_assetManager.getRootPath());
+      
+      sceneSettings.skyboxSettings.sourcePath = resolvedPath;
+      
       skybox.destroy();
-      skybox.initialize(newCubeMap, cubeMapDescriptorPath);
-    }
-    catch (const Exception& e)
-    {
-      LogService::Error(String("Error updating skybox cube map: ") + e.what());
-    }
-  }
-
-  void SceneSettingsWindow::onEquirectangularImageSelected(
-    const Path& equirectangularImagePath
-  )
-  {
-    try
-    {
-      if (!m_editorSceneManager.isSceneOpen())
-        throw RuntimeErrorException("No scene is currently open. Cannot update skybox from equirectangular image.");
-
-      regenerateSkyboxFromEquirectangularImage(equirectangularImagePath);
-    }
-    catch (const Exception& e)
-    {
-      LogService::Error(
-        String("Error updating skybox from equirectangular image: ") + e.what()
-      );
-    }
-  }
-
-  void SceneSettingsWindow::regenerateSkyboxFromEquirectangularImage(
-    const Path& equirectangularImagePath
-  )
-  {
-    try
-    {
-      if (!m_editorSceneManager.isSceneOpen())
-        throw RuntimeErrorException(
-          "No scene is currently open. Cannot update skybox from equirectangular image."
-        );
-
-      if (!m_assetManager.getImageAssetManager().isSupportedImage(equirectangularImagePath))
-        throw RuntimeErrorException(
-          String::Format(
-            "The source path of the current skybox is not a supported image format. Cannot regenerate skybox. Source Path: %s",
-            equirectangularImagePath.c_str()
-          )
-        );
-
-      Scene& scene = m_editorSceneManager.getEditorScene();
-
-      SharedPtr<ICubeMap> newCubeMap = CubeMapFactory::CreateFromEquirectangularImage(
-        equirectangularImagePath,
-        scene.getCubeMapGeneratorSettings(),
+      skybox.initialize(
         m_assetManager,
-        m_graphicsManager
+        m_graphicsManager,
+        sceneSettings.skyboxSettings
       );
-
-      if (newCubeMap == nullptr)
-        throw RuntimeErrorException(
-          "Failed to create a cube map from the selected equirectangular image. Please check the image file."
-        );
-
-      if (!newCubeMap->isValid())
-        throw RuntimeErrorException(
-          "Failed to create a valid cube map from the selected equirectangular image. Please check the image file."
-        );
-
-      Skybox& skybox = scene.getSceneSkybox();
-
-      try
-      {
-        skybox.destroy();
-        skybox.initialize(newCubeMap, equirectangularImagePath);
-      }
-      catch (const Exception&)
-      {
-        skybox.destroy();
-        throw;
-      }
     }
     catch (const Exception& e)
     {
       LogService::Error(
-        String("Error updating skybox from equirectangular image: ") + e.what()
+        String("Error while updating skybox: ") + e.what()
       );
+      sceneSettings.skyboxSettings.sourcePath = previousSkyboxSourcePath;
+      skybox.destroy();
     }
   }
 }

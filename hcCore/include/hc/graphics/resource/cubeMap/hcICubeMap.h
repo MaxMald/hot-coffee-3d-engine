@@ -82,6 +82,12 @@ namespace hc
     virtual colorSpaceType::Type getColorSpace() const = 0;
 
     /**
+     * @brief Binds the cube map to the specified texture slot for rendering.
+     * @param slot The texture slot to bind the cube map to.
+     */
+    virtual void bind(UInt32 slot) const = 0;
+
+    /**
      * @brief Gets the source path of the CubeMap if it was loaded from a file descriptor.
      * @return The source path of the CubeMap or an empty path if it was not loaded from a
      * file descriptor.

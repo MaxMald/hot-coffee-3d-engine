@@ -64,27 +64,33 @@ namespace hc::editor
       return false;
     }
 
-    if (SceneSerializer::Deserialize(
-      *m_editorScene,
-      scenePath,
-      m_assetManager,
-      m_graphicsManager
-    ))
+    try
     {
-      m_currentScenePath = scenePath;
-      addLastOpenedSceneToMetadata(scenePath);
-
-      LogService::Message("Scene opened successfully: " + scenePath.toString());
-
-      for (auto* listener : m_listeners)
-        if (listener)
-          listener->onSceneOpened();
-
-      return true;
+      SceneSerializer::Deserialize(
+        *m_editorScene,
+        scenePath,
+        m_assetManager,
+        m_graphicsManager
+      );
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String("Failed to open scene: '") + scenePath.toString() + "'. Error: " + e.what()
+      );
+      clearScene();
+      return false;
     }
 
-    clearScene();
-    return false;
+    m_currentScenePath = scenePath;
+    addLastOpenedSceneToMetadata(scenePath);
+    LogService::Message("Scene opened successfully: " + scenePath.toString());
+
+    for (auto* listener : m_listeners)
+      if (listener)
+        listener->onSceneOpened();
+
+    return true;
   }
 
   bool EditorSceneManager::saveScene(const Path& scenePath)
@@ -100,16 +106,26 @@ namespace hc::editor
       return false;
     }
 
-    if (SceneSerializer::Serialize(*m_editorScene, scenePath, m_assetManager))
+    try
     {
-      m_currentScenePath = scenePath;
-      addLastOpenedSceneToMetadata(scenePath);
-
-      LogService::Message("Scene saved successfully: " + scenePath.toString());
-      return true;
+      SceneSerializer::Serialize(*m_editorScene, scenePath);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to save scene: '%s'. Error: %s",
+          scenePath.toString().c_str(),
+          e.what()
+        )
+      );
+      return false;
     }
 
-    return false;
+    m_currentScenePath = scenePath;
+    addLastOpenedSceneToMetadata(scenePath);
+    LogService::Message("Scene saved successfully: " + scenePath.toString());
+    return true;
   }
 
   void EditorSceneManager::closeScene()

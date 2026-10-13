@@ -25,7 +25,7 @@ namespace hc::graphics::generators
      */
     SharedPtr<ICubeMap> generate(
       const ITexture& equirectangularTexture,
-      const CubeMapGeneratorSettings& settings
+      const EquirectangularToCubeMapGeneratorSettings& settings
     ) override;
 
     /**

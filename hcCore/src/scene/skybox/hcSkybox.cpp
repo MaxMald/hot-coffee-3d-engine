@@ -46,7 +46,7 @@ namespace hc
 
   // ------------------------- Skybox Class Implementation -----------------------------
 
-  Skybox::Skybox() : 
+  Skybox::Skybox() :
     m_cubeMap(nullptr),
     m_diffuseIrradianceCubeMap(nullptr)
   {}
@@ -63,10 +63,8 @@ namespace hc
   {
     if (cubeMap == nullptr || !cubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: CubeMap is invalid.");
-
-    // TODO remove the comment slash below when the diffuse irradiance cube map generation is implemented.
-    //if (diffuseIrradianceCubeMap == nullptr || !diffuseIrradianceCubeMap->isValid())
-      //throw RuntimeErrorException("Skybox::initialize: DiffuseIrradianceCubeMap is invalid.");
+    if (diffuseIrradianceCubeMap == nullptr || !diffuseIrradianceCubeMap->isValid())
+      throw RuntimeErrorException("Skybox::initialize: DiffuseIrradianceCubeMap is invalid.");
 
     m_cubeMap = cubeMap;
     m_diffuseIrradianceCubeMap = diffuseIrradianceCubeMap;

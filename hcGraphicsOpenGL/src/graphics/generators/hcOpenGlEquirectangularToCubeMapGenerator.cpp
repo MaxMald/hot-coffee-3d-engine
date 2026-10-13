@@ -1,8 +1,8 @@
 #include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
 
-#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include <hc/graphics/resource/dataBlock/hcDataBlockStructures.h>
 #include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 #include "hc/graphics/resource/texture/hcOpenGlTexture.h"
 #include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 
@@ -13,7 +13,6 @@ namespace hc::graphics::generators
     1.0f, 0.1f, 10.0f
   ).transpose();
 
-  
   static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(),   // +X (face 0)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(),   // -X (face 1)
@@ -40,7 +39,7 @@ namespace hc::graphics::generators
 
   SharedPtr<ICubeMap> OpenGlEquirectangularToCubeMapGenerator::generate(
     const ITexture& equirectangularTexture,
-    const CubeMapGeneratorSettings& settings
+    const EquirectangularToCubeMapGeneratorSettings& settings
   )
   {
     if (!equirectangularTexture.isValid())
