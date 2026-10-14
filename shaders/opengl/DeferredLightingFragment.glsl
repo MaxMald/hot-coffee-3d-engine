@@ -45,13 +45,20 @@ void main()
     worldPos,
     roughness,
     metallic,
-    ior
+    ior,
+    occlusion
   );
 
+  // Flat ambient color is no longer used, as we rely on Image-Based Lighting
+  // (IBL) for ambient illumination.
+
+  /*
   vec4 ambientColor = baseColor
     * uSceneAmbientColor
     * uSceneAmbientIntensity 
     * occlusion;
+  */
 
-  FragColor = vec4((ambientColor + oRadiance).rgb, alpha);
+  // FragColor = vec4((ambientColor + oRadiance).rgb, alpha);
+  FragColor = vec4(oRadiance.rgb, alpha);
 }
