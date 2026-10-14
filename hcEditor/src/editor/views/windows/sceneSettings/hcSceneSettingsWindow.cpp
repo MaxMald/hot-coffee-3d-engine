@@ -17,8 +17,14 @@ namespace hc::editor
     m_projectFileDialogView(projectFileDialogView),
     m_assetManager(assetManager),
     m_graphicsManager(graphicsManager),
-    m_cubeMapDescriptorExtensions({ hc::serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION })
+    m_skyboxSourceExtensions()
   {
+    m_skyboxSourceExtensions.push_back(
+      hc::serialization::fileFormat::CubeMapDescriptor::FILE_EXTENSION
+    );
+
+    for (const Char* imageExtension : assetFileExtensions::SUPPORTED_IMAGES_EXTENSIONS)
+      m_skyboxSourceExtensions.push_back(imageExtension);
   }
 
   SceneSettingsWindow::~SceneSettingsWindow()
@@ -53,6 +59,20 @@ namespace hc::editor
         ImGui::Text("NOTE: Current skybox cube map is invalid. Please update the skybox with valid images.");
     }
 
+    if (ImGui::Button("Select"))
+    {
+      m_projectFileDialogView.openFileSelector(
+        "Select Skybox Source",
+        m_skyboxSourceExtensions,
+        [this](const Path& selectedPath)
+        {
+          onSourcePathSelected(selectedPath);
+        }
+      );
+    }
+
+    ImGui::SameLine();
+
     Path skyboxSourcePath = settings.skyboxSettings.sourcePath;
     hcImGui::Filename("Skybox's source", skyboxSourcePath);
 
@@ -81,32 +101,6 @@ namespace hc::editor
 
     if (ImGui::Button("Clear Skybox"))
       skybox.clear();
-
-    ImGui::Text("Skybox CubeMap Descriptor");
-    ImGui::Separator();
-    if (ImGui::Button("Select CubeMap Descriptor"))
-    {
-      m_projectFileDialogView.openFileSelector(
-        "Select Cubemap Descriptor",
-        m_cubeMapDescriptorExtensions,
-        [this](const Path& selectedPath)
-        {
-          onSourcePathSelected(selectedPath);
-        }
-      );
-    }
-
-    ImGui::Text("Skybox Equirectangular Image");
-    ImGui::Separator();
-    if (ImGui::Button("Select Equirectangular Image"))
-    {
-      m_projectFileDialogView.openImageFile(
-        [this](const Path& selectedPath)
-        {
-          onSourcePathSelected(selectedPath);
-        }
-      );
-    }
 
     if (ImGui::CollapsingHeader("CubeMap Generator Settings"))
     {
