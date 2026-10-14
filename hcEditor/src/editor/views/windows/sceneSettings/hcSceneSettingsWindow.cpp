@@ -178,16 +178,37 @@ namespace hc::editor
       hc::graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings& diffuseIrradianceSettings
         = settings.skyboxSettings.diffuseIrradianceCubeMapGeneratorSettings;
 
-      ImGui::SliderFloat(
+      float sampleDelta = diffuseIrradianceSettings.sampleDelta;
+      if (ImGui::InputFloat(
         "Sample Delta",
-        &diffuseIrradianceSettings.sampleDelta,
-        0.001f,
-        Math::Pi * 2.0f
-      );
+        &sampleDelta,
+        0.005f
+      ))
+      {
+        diffuseIrradianceSettings.sampleDelta = Math::Min(
+          Math::Max(sampleDelta, 0.005f),
+          2 * Math::Pi
+        );
+      }
 
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip(
           "Smaller values result in higher quality but take longer to compute."
+        );
+
+      float sourceMipLevel = diffuseIrradianceSettings.sourceMipLevel;
+      if (ImGui::InputFloat(
+        "Source Mip Level",
+        &sourceMipLevel,
+        0.1f
+      ))
+      {
+        diffuseIrradianceSettings.sourceMipLevel = Math::Max(0.0f, sourceMipLevel);
+      }
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "The mip level of the source cube map to sample from. Default is 0 (highest resolution)."
         );
 
       Int32 customFaceSize = static_cast<Int32>(diffuseIrradianceSettings.faceSize);

@@ -16,8 +16,8 @@ namespace hc::graphics::generators
   static const Array<Matrix4, 6> CUBEMAP_CAPTURE_VIEWS = {
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(1.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(), // +X (face 0)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose(), // -X (face 1)
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(-1.0f, 0.0f, 0.0f)).transpose(), // +Y (face 2)
-    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(1.0f,0.0f, 0.0f)).transpose(),  // -Y (face 3)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 1.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f)).transpose(),  // +Y (face 2)
+    Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, -1.0f, 0.0f), Vector3f(0.0f,0.0f, -1.0f)).transpose(), // -Y (face 3)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, 1.0f), Vector3f(0.0f, -1.0f, 0.0f)).transpose(), // +Z (face 4)
     Matrix4::LookAt(Vector3f(0.0f, 0.0f, 0.0f), Vector3f(0.0f, 0.0f, -1.0f), Vector3f(0.0f,-1.0f, 0.0f)).transpose()  // -Z (face 5)
   };
@@ -64,7 +64,7 @@ namespace hc::graphics::generators
     try
     {
       cubeMap->initialize(
-        settings.faceSize,
+        static_cast<UInt32>(settings.faceSize),
         textureFormatType::RGB32F,
         colorSpaceType::Linear
       );
@@ -79,7 +79,7 @@ namespace hc::graphics::generators
     }
 
     if (m_currentRenderbufferSize != settings.faceSize)
-      resize(settings.faceSize);
+      resize(static_cast<UInt32>(settings.faceSize));
 
     GLint currentActiveTextureSlot;
     glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTextureSlot);

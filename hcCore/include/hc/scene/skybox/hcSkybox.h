@@ -105,6 +105,15 @@ namespace hc
     }
 
     /**
+     * @brief Gets the shared pointer to the cube map associated with the skybox.
+     * @return Shared pointer to the cube map.
+     */
+    inline SharedPtr<ICubeMap> getCubeMapPtr() const
+    {
+      return m_cubeMap;
+    }
+
+    /**
      * @brief Gets the diffuse irradiance cube map associated with the skybox.
      * @return Reference to the diffuse irradiance cube map.
      */
@@ -124,6 +133,16 @@ namespace hc
       if (m_diffuseIrradianceCubeMap == nullptr)
         throw RuntimeErrorException("Skybox::getDiffuseIrradianceCubeMap: DiffuseIrradianceCubeMap is undefined.");
       return *m_diffuseIrradianceCubeMap;
+    }
+
+    /**
+     * @brief Gets the shared pointer to the diffuse irradiance cube map associated with
+     * the skybox.
+     * @return Shared pointer to the diffuse irradiance cube map.
+     */
+    inline SharedPtr<ICubeMap> getDiffuseIrradianceCubeMapPtr() const
+    {
+      return m_diffuseIrradianceCubeMap;
     }
 
     /**

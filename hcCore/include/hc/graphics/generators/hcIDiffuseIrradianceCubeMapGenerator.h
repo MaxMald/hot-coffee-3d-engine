@@ -15,8 +15,9 @@ namespace hc
      */
     struct HC_CORE_EXPORT DiffuseIrradianceCubeMapGeneratorSettings : public io::ISerializable
     {
-      SizeT faceSize = 32;        ///< The size of each face of the generated cube map. Must be a power of two.
-      float sampleDelta = 0.025f; ///< Smaller values result in higher quality but take longer to compute.
+      SizeT faceSize = 32;          ///< The size of each face of the generated cube map. Must be a power of two.
+      float sampleDelta = 0.025f;   ///< Smaller values result in higher quality but take longer to compute.
+      float sourceMipLevel = 0.0f;  ///< The mip level of the source cube map to sample from. Default is 0 (highest resolution).
       
       void serialize(io::BinaryWriter& writer) const override;
       void deserialize(io::BinaryReader& reader) override;
@@ -31,6 +32,7 @@ namespace hc
       {
         dataBlockStructure::CubeMapGenerator cmgData;
         cmgData.sampleDelta = sampleDelta;
+        cmgData.sourceMipLevel = sourceMipLevel;
         return cmgData;
       }
     };

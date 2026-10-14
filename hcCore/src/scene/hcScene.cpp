@@ -205,9 +205,9 @@ namespace hc
 
       // Skybox
       if (m_skybox.isValid())
-        graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
+        graphicsManager.setSkybox(m_skybox);
       else
-        graphicsManager.setSkybox(nullptr);
+        graphicsManager.clearSkybox();
 
       // Draw the scene graph with the provided render context
       RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
@@ -219,7 +219,7 @@ namespace hc
     }
     catch (const Exception& e)
     {
-      graphicsManager.setSkybox(nullptr);
+      graphicsManager.clearSkybox();
       graphicsManager.getLightShadowMapManager().clear();
 
       throw RuntimeErrorException(
@@ -227,7 +227,7 @@ namespace hc
       );
     }
 
-    graphicsManager.setSkybox(nullptr);
+    graphicsManager.clearSkybox();
     graphicsManager.getLightShadowMapManager().clear();
   }
 

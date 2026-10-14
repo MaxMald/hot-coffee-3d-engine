@@ -170,6 +170,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::EquirectangularToCubeMapFragment)
       );
     }
+    else if (type == builtInShaderProgramType::DiffuseIrradianceGenerator)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::DiffuseIrradianceGeneratorVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::DiffuseIrradianceGeneratorFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

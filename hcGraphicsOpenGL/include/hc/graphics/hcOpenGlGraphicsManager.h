@@ -10,6 +10,7 @@
 #include "hc/graphics/resource/shader/hcOpenGlShaderManager.h"
 #include "hc/graphics/resource/dataBlock/hcOpenGlDataBlockManager.h"
 #include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
+#include "hc/graphics/generators/hcOpenGlDiffuseIrradianceToCubeMapGenerator.h"
 
 namespace hc
 {
@@ -54,7 +55,12 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::setSkybox
      */
-    void setSkybox(ICubeMap* skyboxCubeMap) override;
+    void setSkybox(const Skybox& skybox) override;
+
+    /**
+     * @copydoc IGraphicsManager::clearSkybox
+     */
+    void clearSkybox() override;
 
     /**
      * @copydoc IGraphicsManager::queueDrawCommand
@@ -148,6 +154,12 @@ namespace hc
     getEquirectangularToCubeMapGenerator() override;
 
     /**
+     * @copydoc IGraphicsManager::getDiffuseIrradianceCubeMapGenerator
+     */
+    graphics::generators::IDiffuseIrradianceCubeMapGenerator&
+    getDiffuseIrradianceCubeMapGenerator() override;
+
+    /**
      * @copydoc IGraphicsManager::getGBuffer
      */
     IGBuffer& getGBuffer() override;
@@ -187,6 +199,7 @@ namespace hc
     OpenGlDataBlockManager m_dataBlockManager;
     FrameRenderer m_frameRenderer;
     graphics::generators::OpenGlEquirectangularToCubeMapGenerator m_equirectangularToCubeMapGenerator;
+    graphics::generators::OpenGlDiffuseIrradianceToCubeMapGenerator m_diffuseIrradianceCubeMapGenerator;
     polygonFillType::Type m_polygonFillType;
 
     /**

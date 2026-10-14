@@ -88,7 +88,7 @@ namespace hc::graphics::generators
       // linear-format cubemap.
 
       cubeMap->initialize(
-        faceSize,
+        static_cast<UInt32>(faceSize),
         equirectangularTexture.getTextureFormat(),
         equirectangularTexture.getColorSpace()
       );
@@ -103,7 +103,7 @@ namespace hc::graphics::generators
     }
 
     if (m_currentRenderbufferSize != faceSize)
-      resize(faceSize);
+      resize(static_cast<UInt32>(faceSize));
 
     GLint currentActiveTextureSlot;
     glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTextureSlot);
@@ -198,6 +198,17 @@ namespace hc::graphics::generators
     glBindTexture(GL_TEXTURE_2D, currentBindTexture0);
     glActiveTexture(currentActiveTextureSlot);
 
+    try
+    {
+      cubeMap->generateMipmaps();
+    }
+    catch (...)
+    {
+      throw RuntimeErrorException(
+        "Failed to generate mipmaps for the generated cubemap."
+      );
+    }
+    
     return cubeMap;
   }
 

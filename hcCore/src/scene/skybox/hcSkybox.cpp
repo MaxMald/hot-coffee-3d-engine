@@ -133,8 +133,12 @@ namespace hc
     SharedPtr<ICubeMap> diffuseIrradianceCubeMap = nullptr;
     try
     {
-      // TODO: Implement the generation of the diffuse irradiance cube map from the cube
-      // map using the provided settings.
+      graphics::generators::IDiffuseIrradianceCubeMapGenerator& diffuseIrradianceGenerator =
+        graphicsManager.getDiffuseIrradianceCubeMapGenerator();
+
+      diffuseIrradianceCubeMap = diffuseIrradianceGenerator.generate(
+        *cubeMap, settings.diffuseIrradianceCubeMapGeneratorSettings
+      );
     }
     catch (const Exception& ex)
     {

@@ -9,6 +9,7 @@ namespace hc::graphics::generators
     writer.startWritingObject(0, DIFFUSE_IRRADIANCE_CUBE_MAP_GENERATOR_SETTINGS_VERSION);
     writer.writeSizeT(faceSize);
     writer.writeFloat(sampleDelta);
+    writer.writeFloat(sourceMipLevel);
     writer.finishWritingObject();
   }
 
@@ -22,6 +23,7 @@ namespace hc::graphics::generators
 
     faceSize = reader.readSizeT();
     sampleDelta = reader.readFloat();
+    sourceMipLevel = reader.readFloat();
     reader.finishReadingObject();
   }
 
@@ -29,6 +31,7 @@ namespace hc::graphics::generators
   {
     faceSize = 32;
     sampleDelta = 0.025f;
+    sourceMipLevel = 0.0f;
   }
 
   IDiffuseIrradianceCubeMapGenerator::~IDiffuseIrradianceCubeMapGenerator() = default;

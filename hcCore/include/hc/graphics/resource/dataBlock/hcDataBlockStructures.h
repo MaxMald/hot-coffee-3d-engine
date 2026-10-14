@@ -236,8 +236,8 @@ namespace hc
     {
       Vector4f invert = Vector4f(1.0f, 1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the cube's vertices. (Equirectangular to Cube Map Generator)
 
-      float sampleDelta = 0.025f; ///< Smaller values result in higher quality but take longer to compute. (Diffuse Irradiance Cube Map Generator)
-      float padding0;
+      float sampleDelta = 0.025f;   ///< Smaller values result in higher quality but take longer to compute. (Diffuse Irradiance Cube Map Generator)
+      float sourceMipLevel = 0.0f;  ///< The mip level of the source cube map to sample from. Default is 0 (highest resolution). (Diffuse Irradiance Cube Map Generator)
       float padding1;
       float padding2;
     };

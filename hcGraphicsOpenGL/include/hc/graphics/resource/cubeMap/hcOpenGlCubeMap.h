@@ -71,6 +71,11 @@ namespace hc
     void bind(UInt32 slot) const override;
 
     /**
+     * @copydoc ICubeMap::generateMipmaps
+     */
+    void generateMipmaps() override;
+
+    /**
      * @copydoc ICubeMap::getSourcePath
      */
     const Path& getSourcePath() const override;

@@ -39,6 +39,7 @@ namespace hc
     m_dataBlockManager(),
     m_frameRenderer(m_dataBlockManager),
     m_equirectangularToCubeMapGenerator(m_dataBlockManager),
+    m_diffuseIrradianceCubeMapGenerator(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -77,6 +78,11 @@ namespace hc
           builtInShaderProgramType::EquirectangularToCubeMap
         )
       );
+      m_diffuseIrradianceCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::DiffuseIrradianceGenerator
+        )
+      );
       setViewport(viewportRect);
     }
     catch (const Exception& e)
@@ -108,12 +114,14 @@ namespace hc
     return m_frameRenderer.getRenderTarget();
   }
 
-  void OpenGlGraphicsManager::setSkybox(ICubeMap* skyboxCubeMap)
+  void OpenGlGraphicsManager::setSkybox(const Skybox& skybox)
   {
-    if (skyboxCubeMap)
-      m_frameRenderer.setSkybox(reinterpret_cast<OpenGlCubeMap*>(skyboxCubeMap));
-    else
-      m_frameRenderer.removeSkybox();
+    m_frameRenderer.setSkybox(skybox);
+  }
+
+  void OpenGlGraphicsManager::clearSkybox()
+  {
+    m_frameRenderer.clearSkybox();
   }
 
   void OpenGlGraphicsManager::queueDrawCommand(const DrawCommand& command)
@@ -211,6 +219,12 @@ namespace hc
   OpenGlGraphicsManager::getEquirectangularToCubeMapGenerator()
   {
     return m_equirectangularToCubeMapGenerator;
+  }
+
+  graphics::generators::IDiffuseIrradianceCubeMapGenerator&
+  OpenGlGraphicsManager::getDiffuseIrradianceCubeMapGenerator()
+  {
+    return m_diffuseIrradianceCubeMapGenerator;
   }
 
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
