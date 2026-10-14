@@ -18,8 +18,6 @@ namespace hc
   {
     writer.startWritingObject(static_cast<UInt32>(0), SCENE_SETTINGS_VERSION);
     skyboxSettings.serialize(writer);
-    writer.writeColor(ambientColor);
-    writer.writeFloat(ambientIntensity);
     writer.writeVector3f(skyboxInvert);
     writer.finishWritingObject();
   }
@@ -34,8 +32,6 @@ namespace hc
     if (sceneSettingsVersion >= 4)
     {
       skyboxSettings.deserialize(reader);
-      ambientColor = reader.readColor();
-      ambientIntensity = reader.readFloat();
       skyboxInvert = reader.readVector3f();
     }
     
@@ -45,8 +41,6 @@ namespace hc
   void SceneSettings::clear()
   {
     skyboxSettings.clear();
-    ambientColor = Color::White();
-    ambientIntensity = 0.1f;
     skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f);
   }
 

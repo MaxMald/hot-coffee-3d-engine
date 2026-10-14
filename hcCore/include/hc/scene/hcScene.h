@@ -15,9 +15,7 @@ namespace hc
   struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
   {
     SkyboxSettings skyboxSettings;                      ///< Settings for the scene's skybox.
-    Color ambientColor = Color::White();                ///< Ambient light color.
     Vector3f skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the skybox's cubemap sample direction.
-    float ambientIntensity = 0.1f;                      ///< Ambient light intensity.
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
@@ -30,13 +28,7 @@ namespace hc
     inline dataBlockStructure::Scene getSceneDataBlockStructure() const
     {
       dataBlockStructure::Scene sceneData;
-      sceneData.ambientLightColor = ambientColor.toVector();
       sceneData.invertSkybox = Vector4f(skyboxInvert, 1.0f);
-
-      sceneData.ambientIntensity = ambientIntensity;
-      sceneData.sPadding0 = 0.0f;
-      sceneData.sPadding1 = 0.0f;
-      sceneData.sPadding2 = 0.0f;
       return sceneData;
     }
   };

@@ -41,14 +41,6 @@ namespace hc::editor
     Scene& scene = m_editorSceneManager.getEditorScene();
     SceneSettings& settings = scene.getSettings();
 
-    hcImGui::DrawColorEdit3("Ambient Color", settings.ambientColor);
-    ImGui::SliderFloat(
-      "Ambient Intensity",
-      &settings.ambientIntensity,
-      0.0f,
-      1.0f
-    );
-
     ImGui::Text("Scene's Skybox");
     ImGui::Separator();
 

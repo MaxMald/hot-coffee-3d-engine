@@ -217,13 +217,7 @@ namespace hc
 
     struct alignas(16) HC_CORE_EXPORT Scene
     {
-      Vector4f ambientLightColor;     ///< Ambient light color for the scene.
       Vector4f invertSkybox;          ///< Inversion factors for the X, Y, and Z axes of the cube's vertices.
-
-      float ambientIntensity = 0.1f;  ///< Ambient light intensity for the scene.
-      float sPadding0 = 0.0f;
-      float sPadding1 = 0.0f;
-      float sPadding2 = 0.0f;
     };
 
     static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");
