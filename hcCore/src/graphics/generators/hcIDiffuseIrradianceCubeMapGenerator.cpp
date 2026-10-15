@@ -19,7 +19,10 @@ namespace hc::graphics::generators
 
     io::ObjectHeader header = reader.startReadingObject();
     if (header.version != DIFFUSE_IRRADIANCE_CUBE_MAP_GENERATOR_SETTINGS_VERSION)
+    {
       reader.finishReadingObject();
+      return;
+    }
 
     faceSize = reader.readSizeT();
     sampleDelta = reader.readFloat();
