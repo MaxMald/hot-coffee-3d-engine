@@ -83,6 +83,16 @@ namespace hc
 
     UInt32 version = header.version;
     UInt32 sceneVersion = version >> 16;
+
+    if (sceneVersion < 3)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Scene::deserialize: Unsupported scene version %u. Minimum supported version is 3.", sceneVersion
+        )
+      );
+      return;
+    }
     if (sceneVersion >= 3)
     {
       m_cameraManager.deserialize(reader);
