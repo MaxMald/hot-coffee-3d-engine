@@ -69,11 +69,14 @@ namespace hc
 
       try
       {
-        scene.getSceneSkybox().initialize(
-          assetManager,
-          graphicsManager,
-          scene.getSettings().skyboxSettings
-        );
+        if (scene.getSettings().skyboxSettings.sourcePath.empty() != true)
+        {
+          scene.getSceneSkybox().initialize(
+            assetManager,
+            graphicsManager,
+            scene.getSettings().skyboxSettings
+          );
+        }
       }
       catch (const Exception& e)
       {

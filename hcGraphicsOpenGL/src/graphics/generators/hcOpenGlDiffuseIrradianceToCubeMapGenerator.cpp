@@ -60,6 +60,17 @@ namespace hc::graphics::generators
         String::Format("Custom face size exceeds the maximum supported cube map size of %d.", maxCubeMapSize)
       );
 
+    if (settings.sampleDelta < generators::DiffuseIrradianceCubeMapGeneratorSettings::MINIMUM_SAMPLE_DELTA
+      || settings.sampleDelta > generators::DiffuseIrradianceCubeMapGeneratorSettings::MAXIMUM_SAMPLE_DELTA)
+    {
+      throw InvalidArgumentException(
+        String::Format(
+          "Sample delta must be between %f and %f.",
+          generators::DiffuseIrradianceCubeMapGeneratorSettings::MINIMUM_SAMPLE_DELTA,
+          generators::DiffuseIrradianceCubeMapGeneratorSettings::MAXIMUM_SAMPLE_DELTA
+        ));
+    }
+
     SharedPtr<OpenGlCubeMap> cubeMap = MakeShared<OpenGlCubeMap>();
     try
     {

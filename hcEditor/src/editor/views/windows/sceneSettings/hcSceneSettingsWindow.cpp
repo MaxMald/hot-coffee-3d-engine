@@ -172,14 +172,21 @@ namespace hc::editor
       ))
       {
         diffuseIrradianceSettings.sampleDelta = Math::Min(
-          Math::Max(sampleDelta, 0.005f),
-          2 * Math::Pi
+          graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings::MAXIMUM_SAMPLE_DELTA,
+          Math::Max(
+            graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings::MINIMUM_SAMPLE_DELTA,
+            sampleDelta
+          )
         );
       }
 
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip(
-          "Smaller values result in higher quality but take longer to compute."
+          String::Format(
+            "The sample delta. Lower values result in higher quality but take longer to compute. Must be between %f and %f.",
+            graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings::MINIMUM_SAMPLE_DELTA,
+            graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings::MAXIMUM_SAMPLE_DELTA
+          ).c_str()
         );
 
       float sourceMipLevel = diffuseIrradianceSettings.sourceMipLevel;
@@ -194,7 +201,7 @@ namespace hc::editor
 
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip(
-          "The mip level of the source cube map to sample from. Default is 0 (highest resolution)."
+          "The mip level of the source cube map to sample from. Default is 0 (highest resolution). Increase to reduce \"firefly\" artifacts."
         );
 
       Int32 customFaceSize = static_cast<Int32>(diffuseIrradianceSettings.faceSize);
