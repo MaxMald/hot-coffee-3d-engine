@@ -270,6 +270,7 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_diffuseIrradianceCubeMapGenerator.destroy();
     m_equirectangularToCubeMapGenerator.destroy();
     m_frameRenderer.destroy();
     m_materialManager.clear();
