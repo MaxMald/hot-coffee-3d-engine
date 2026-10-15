@@ -4,9 +4,9 @@ layout(location = 0) in vec3 vDirection;
 
 layout(location = 0) out vec4 FragColor;
 
-layout(binding = 0) uniform samplerCube uSkybox;
+layout(binding = 8) uniform samplerCube uEnviromentCubeMap;
 
 void main()
 {
-  FragColor = texture(uSkybox, vDirection);
+  FragColor = texture(uEnviromentCubeMap, vDirection);
 }

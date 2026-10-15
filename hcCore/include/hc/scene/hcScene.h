@@ -6,7 +6,6 @@
 #include "hc/scene/skybox/hcSkybox.h"
 #include "hc/scene/light/hcLightManager.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
-#include "hc/graphics/generators/hcCubeMapGeneratorSettings.h"
 
 namespace hc
 {
@@ -15,9 +14,8 @@ namespace hc
    */
   struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
   {
-    Color ambientColor = Color::White();
+    SkyboxSettings skyboxSettings;                      ///< Settings for the scene's skybox.
     Vector3f skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the skybox's cubemap sample direction.
-    float ambientIntensity = 0.1f;
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
@@ -30,13 +28,7 @@ namespace hc
     inline dataBlockStructure::Scene getSceneDataBlockStructure() const
     {
       dataBlockStructure::Scene sceneData;
-      sceneData.ambientLightColor = ambientColor.toVector();
       sceneData.invertSkybox = Vector4f(skyboxInvert, 1.0f);
-
-      sceneData.ambientIntensity = ambientIntensity;
-      sceneData.sPadding0 = 0.0f;
-      sceneData.sPadding1 = 0.0f;
-      sceneData.sPadding2 = 0.0f;
       return sceneData;
     }
   };
@@ -97,20 +89,6 @@ namespace hc
      * @return Reference to the SceneSettings.
      */
     inline SceneSettings& getSettings() { return m_settings; }
-
-    /**
-     * @brief Gets a const reference to the scene's cube map generator settings.
-     * @return Const reference to the CubeMapGeneratorSettings.
-     */
-    inline const graphics::generators::CubeMapGeneratorSettings&
-    getCubeMapGeneratorSettings() const { return m_cubeMapGeneratorSettings; }
-
-    /**
-     * @brief Gets a reference to the scene's cube map generator settings.
-     * @return Reference to the CubeMapGeneratorSettings.
-     */
-    inline graphics::generators::CubeMapGeneratorSettings&
-    getCubeMapGeneratorSettings() { return m_cubeMapGeneratorSettings; }
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -317,7 +295,6 @@ namespace hc
     CameraManager m_cameraManager;
     LightManager m_lightManager;
     SceneSettings m_settings;
-    graphics::generators::CubeMapGeneratorSettings m_cubeMapGeneratorSettings;
     IGameObjectFactory* m_gameObjectFactory;
     Skybox m_skybox;
 

@@ -28,10 +28,9 @@ namespace hc::editor
     ProjectFileDialogView& m_projectFileDialogView;
     IAssetManager& m_assetManager;
     IGraphicsManager& m_graphicsManager;
-    Vector<String> m_cubeMapDescriptorExtensions;
+    Vector<String> m_skyboxSourceExtensions;
 
-    void onCubeMapDescriptorSelected(const Path& cubeMapDescriptorPath);
-    void onEquirectangularImageSelected(const Path& equirectangularImagePath);
-    void regenerateSkyboxFromEquirectangularImage(const Path& equirectangularImagePath);
+    void onSourcePathSelected(const Path& equirectangularImagePath);
+    void regenerateSkybox(const Path& sourcePath);
   };
 }

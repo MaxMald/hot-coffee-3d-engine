@@ -6,7 +6,7 @@ namespace hc
 {
   namespace graphics::generators
   {
-    struct CubeMapGeneratorSettings;
+    struct EquirectangularToCubeMapGeneratorSettings;
   }
 
   class ICubeMap;
@@ -57,7 +57,7 @@ namespace hc
      */
     static SharedPtr<ICubeMap> CreateFromEquirectangularImage(
       const Path& equirectangularImageSourcePath,
-      const graphics::generators::CubeMapGeneratorSettings& settings,
+      const graphics::generators::EquirectangularToCubeMapGeneratorSettings& settings,
       IAssetManager& assetManager,
       IGraphicsManager& graphicsManager
     );

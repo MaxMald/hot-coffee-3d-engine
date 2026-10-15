@@ -12,13 +12,12 @@ namespace hc
 {
   // ------------------------ SceneSettings Class Implementation -------------------------
 
-  static constexpr UInt32 SCENE_SETTINGS_VERSION = 3;
+  static constexpr UInt32 SCENE_SETTINGS_VERSION = 4;
 
   void SceneSettings::serialize(io::BinaryWriter& writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(0), SCENE_SETTINGS_VERSION);
-    writer.writeColor(ambientColor);
-    writer.writeFloat(ambientIntensity);
+    skyboxSettings.serialize(writer);
     writer.writeVector3f(skyboxInvert);
     writer.finishWritingObject();
   }
@@ -30,18 +29,9 @@ namespace hc
     io::ObjectHeader header = reader.startReadingObject();
     UInt32 sceneSettingsVersion = header.version;
 
-    if (sceneSettingsVersion >= 1)
+    if (sceneSettingsVersion >= 4)
     {
-      ambientColor = reader.readColor();
-      ambientIntensity = reader.readFloat();
-    }
-    if (sceneSettingsVersion == 2)
-    {
-      bool invertZ = reader.readBool();
-      skyboxInvert.z = (invertZ ? -1.0f : 1.0f);
-    }
-    if (sceneSettingsVersion >= 3)
-    {
+      skyboxSettings.deserialize(reader);
       skyboxInvert = reader.readVector3f();
     }
     
@@ -50,21 +40,19 @@ namespace hc
 
   void SceneSettings::clear()
   {
-    ambientColor = Color::White();
-    ambientIntensity = 0.1f;
+    skyboxSettings.clear();
     skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f);
   }
 
   // ------------------------ Scene Class Implementation ---------------------------------
 
-  static constexpr UInt16 SCENE_VERSION = 2;
+  static constexpr UInt16 SCENE_VERSION = 3;
 
   Scene::Scene() :
     m_sceneGraph(),
     m_cameraManager(),
     m_lightManager(),
     m_settings(),
-    m_cubeMapGeneratorSettings(),
     m_gameObjectFactory(nullptr),
     m_skybox()
   {
@@ -82,7 +70,6 @@ namespace hc
     m_cameraManager.serialize(writer);
     m_sceneGraph.serialize(writer);
     m_settings.serialize(writer);
-    m_cubeMapGeneratorSettings.serialize(writer);
 
     onSerialize(writer);
 
@@ -96,15 +83,21 @@ namespace hc
 
     UInt32 version = header.version;
     UInt32 sceneVersion = version >> 16;
-    if (sceneVersion >= 1)
+
+    if (sceneVersion < 3)
+    {
+      throw RuntimeErrorException(
+        String::Format(
+          "Scene::deserialize: Unsupported scene version %u. Minimum supported version is 3.", sceneVersion
+        )
+      );
+      return;
+    }
+    if (sceneVersion >= 3)
     {
       m_cameraManager.deserialize(reader);
       m_sceneGraph.deserialize(reader);
       m_settings.deserialize(reader);
-    }
-    if (sceneVersion >= 2)
-    {
-      m_cubeMapGeneratorSettings.deserialize(reader);
     }
 
     UInt32 derivedVersion = version & 0xFFFF;
@@ -216,9 +209,9 @@ namespace hc
 
       // Skybox
       if (m_skybox.isValid())
-        graphicsManager.setSkybox(&(m_skybox.getCubeMap()));
+        graphicsManager.setSkybox(m_skybox);
       else
-        graphicsManager.setSkybox(nullptr);
+        graphicsManager.clearSkybox();
 
       // Draw the scene graph with the provided render context
       RenderContext renderContext = RenderContext::Create(*camera, Matrix4::Identity());
@@ -230,7 +223,7 @@ namespace hc
     }
     catch (const Exception& e)
     {
-      graphicsManager.setSkybox(nullptr);
+      graphicsManager.clearSkybox();
       graphicsManager.getLightShadowMapManager().clear();
 
       throw RuntimeErrorException(
@@ -238,13 +231,12 @@ namespace hc
       );
     }
 
-    graphicsManager.setSkybox(nullptr);
+    graphicsManager.clearSkybox();
     graphicsManager.getLightShadowMapManager().clear();
   }
 
   void Scene::clear()
   {
-    m_cubeMapGeneratorSettings.clear();
     m_sceneGraph.clear();
     m_cameraManager.clear();
     m_lightManager.clear();

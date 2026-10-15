@@ -7,17 +7,13 @@
 
 namespace hc
 {
-  static constexpr UInt32 CAMERA_FRAME_UBO_BINDING_POINT = 1;
-  static constexpr UInt32 LIGHTS_UBO_BINDING_POINT = 2;
-  static constexpr UInt32 LIGHT_SHADOWS_UBO_BINDING_POINT = 3;
-
   FrameRenderer::FrameRenderer(IDataBlockManager& dataBlockManager) :
     m_lightShadowMapManager(dataBlockManager),
-    m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager),
+    m_enviromentManager(),
+    m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager, m_enviromentManager),
     m_finalRenderPass(),
     m_frameBufferA(),
     m_drawCommands(),
-    m_skybox(nullptr),
     m_currentRenderPipelineType(renderPipelineType::DeferredHybrid),
     m_currentRenderTarget(nullptr),
     m_initialized(false)
@@ -38,6 +34,7 @@ namespace hc
 
     try
     {
+      m_enviromentManager.initialize();
       m_lightShadowMapManager.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
       m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
@@ -62,16 +59,19 @@ namespace hc
     return m_currentRenderPipelineType;
   }
 
-  void FrameRenderer::setSkybox(OpenGlCubeMap* skybox)
+  void FrameRenderer::setSkybox(const Skybox& skybox)
   {
-    if (skybox && !skybox->isValid())
+    if (!skybox.isValid())
       throw InvalidArgumentException("Invalid skybox provided. The skybox must be initialized and valid.");
-    m_skybox = skybox;
+
+    m_enviromentManager.setEnviromentCubeMap(skybox.getCubeMapPtr());
+    m_enviromentManager.setDiffuseIrradianceCubeMap(skybox.getDiffuseIrradianceCubeMapPtr());
   }
 
-  void FrameRenderer::removeSkybox()
+  void FrameRenderer::clearSkybox()
   {
-    m_skybox = nullptr;
+    m_enviromentManager.clearDiffuseIrradianceCubeMap();
+    m_enviromentManager.clearEnviromentCubeMap();
   }
 
   void FrameRenderer::setRenderTarget(IFrameBuffer * frameBuffer)
@@ -138,7 +138,6 @@ namespace hc
 
     FrameRenderContext frameRenderContext;
     frameRenderContext.customFrameBuffer = &m_frameBufferA;
-    frameRenderContext.skyboxCubeMap = m_skybox;
 
     if (m_currentRenderPipelineType == renderPipelineType::DeferredHybrid)
       m_deferredHybridRenderPipeline.execute(m_drawCommands, frameRenderContext);
@@ -200,7 +199,7 @@ namespace hc
     m_finalRenderPass.destroy();
     m_frameBufferA.destroy();
     m_lightShadowMapManager.destroy();
-    m_skybox = nullptr;
+    m_enviromentManager.destroy();
     m_initialized = false;
   }
 

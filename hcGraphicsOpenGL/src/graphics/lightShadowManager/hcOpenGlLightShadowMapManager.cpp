@@ -24,13 +24,13 @@ namespace hc
 
   void OpenGlLightShadowMapManager::bindShadowTexturesForReading()
   {
-    glActiveTexture(GL_TEXTURE0 + SAMPLER_2D_BINDING_POINT_DIRECTIONAL_SHADOW_MAP);
+    glActiveTexture(GL_TEXTURE0 + graphics::SLOT_DIRECTIONAL_SHADOW_MAPS);
     glBindTexture(
       GL_TEXTURE_2D_ARRAY,
       static_cast<GLuint>(m_directionalShadowFrameBuffer.getTextureArrayId())
     );
 
-    glActiveTexture(GL_TEXTURE0 + SAMPLER_2D_BINDING_POINT_SPOT_LIGHT_SHADOW_MAP);
+    glActiveTexture(GL_TEXTURE0 + graphics::SLOT_SPOT_LIGHT_SHADOW_MAPS);
     glBindTexture(
       GL_TEXTURE_2D_ARRAY,
       static_cast<GLuint>(m_spotShadowFrameBuffer.getTextureArrayId())

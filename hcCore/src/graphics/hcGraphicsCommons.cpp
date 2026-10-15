@@ -213,6 +213,8 @@ namespace hc
       case Type::PBRForwardFragment: return "PBRForwardFragment";
       case Type::EquirectangularToCubeMapFragment: return "EquirectangularToCubeMapFragment";
       case Type::EquirectangularToCubeMapVertex: return "EquirectangularToCubeMapVertex";
+      case Type::DiffuseIrradianceGeneratorVertex: return "DiffuseIrradianceGeneratorVertex";
+      case Type::DiffuseIrradianceGeneratorFragment: return "DiffuseIrradianceGeneratorFragment";
 
       default:
         throw InvalidArgumentException(
@@ -240,6 +242,8 @@ namespace hc
       else if (str == "PBRForwardFragment") return Type::PBRForwardFragment;
       else if (str == "EquirectangularToCubeMapFragment") return Type::EquirectangularToCubeMapFragment;
       else if (str == "EquirectangularToCubeMapVertex") return Type::EquirectangularToCubeMapVertex;
+      else if (str == "DiffuseIrradianceGeneratorVertex") return Type::DiffuseIrradianceGeneratorVertex;
+      else if (str == "DiffuseIrradianceGeneratorFragment") return Type::DiffuseIrradianceGeneratorFragment;
       else
 
       throw InvalidArgumentException(
@@ -257,6 +261,7 @@ namespace hc
       case Type::SkyboxVertex:
       case Type::ShadowMapVertex:
       case Type::EquirectangularToCubeMapVertex:
+      case Type::DiffuseIrradianceGeneratorVertex:
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
@@ -270,6 +275,7 @@ namespace hc
       case Type::PBRDeferredGeometryFragment:
       case Type::PBRForwardFragment:
       case Type::EquirectangularToCubeMapFragment:
+      case Type::DiffuseIrradianceGeneratorFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -297,6 +303,7 @@ namespace hc
       case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
       case Type::PBRForward: return "PBRForward";
       case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
+      case Type::DiffuseIrradianceGenerator: return "DiffuseIrradianceGenerator";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -317,6 +324,7 @@ namespace hc
       else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
       else if (str == "PBRForward") return Type::PBRForward;
       else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
+      else if (str == "DiffuseIrradianceGenerator") return Type::DiffuseIrradianceGenerator;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())

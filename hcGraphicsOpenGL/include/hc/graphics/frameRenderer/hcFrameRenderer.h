@@ -5,11 +5,11 @@
 #include "hc/graphics/renderPass/hcFinalRenderPass.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
+#include "hc/graphics/enviroment/hcOpenGlEnviromentManager.h"
 
 namespace hc
 {
   class OpenGlGBuffer;
-  class OpenGlCubeMap;
   class IDataBlockManager;
 
   class FrameRenderer
@@ -21,8 +21,8 @@ namespace hc
     void initialize(const Rect<UInt32>& viewportRect, IShaderProgramManager& shaderProgramManager);
     void setRenderPipeline(renderPipelineType::Type);
     renderPipelineType::Type getCurrentRenderPipelineType() const;
-    void setSkybox(OpenGlCubeMap* skybox);
-    void removeSkybox();
+    void setSkybox(const Skybox& skybox);
+    void clearSkybox();
     void setRenderTarget(IFrameBuffer* frameBuffer);
     IFrameBuffer* getRenderTarget() const;
     void removeRenderTarget();
@@ -42,11 +42,11 @@ namespace hc
 
   private:
     OpenGlLightShadowMapManager m_lightShadowMapManager;
+    graphics::OpenGlEnviromentManager m_enviromentManager;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
     FinalRenderPass m_finalRenderPass;
     OpenGlFrameBuffer m_frameBufferA;
     Vector<DrawCommand> m_drawCommands;
-    OpenGlCubeMap* m_skybox;
     renderPipelineType::Type m_currentRenderPipelineType;
     IFrameBuffer* m_currentRenderTarget;
     bool m_initialized;

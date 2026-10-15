@@ -82,6 +82,19 @@ namespace hc
     virtual colorSpaceType::Type getColorSpace() const = 0;
 
     /**
+     * @brief Binds the cube map to the specified texture slot for rendering.
+     * @param slot The texture slot to bind the cube map to.
+     */
+    virtual void bind(UInt32 slot) const = 0;
+
+    /**
+     * @brief Generates mipmaps for the cube map. This should be called after the cube map
+     * has been initialized and filled with data.
+     * @throw RuntimeException if mipmap generation fails due to graphics API errors.
+     */
+    virtual void generateMipmaps() = 0;
+
+    /**
      * @brief Gets the source path of the CubeMap if it was loaded from a file descriptor.
      * @return The source path of the CubeMap or an empty path if it was not loaded from a
      * file descriptor.

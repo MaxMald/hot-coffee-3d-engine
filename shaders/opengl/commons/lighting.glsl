@@ -1,5 +1,6 @@
 #include "utilities.glsl"
 #include "shadow.glsl"
+#include "sceneBlock.glsl"
 
 #define MAX_OMNI_LIGHTS 16
 #define MAX_SPOT_LIGHTS 8
@@ -50,6 +51,9 @@ layout(std140, binding = 1) uniform LightBlock
   int numSpotLights;
   int lPadding0;
 };
+
+layout(binding = 8) uniform samplerCube uEnviromentCubeMap;
+layout(binding = 9) uniform samplerCube uDiffuseIrradianceMap;
 
 /**
  * @brief Calculates the Trowbridge-Reitz GGX normal distribution function for a
@@ -123,6 +127,23 @@ vec4 fresnelSchlick(float cosTheta, vec4 F0)
 {
   float fresnelFactor = pow(saturate(1.0 - cosTheta), 5.0);
   return F0 + (vec4(1.0) - F0) * fresnelFactor;
+}
+
+/**
+ * @brief Roughness-aware Fresnel-Schlick approximation used for image-based
+ * lighting, to avoid an unnaturally bright Fresnel "rim" on rough surfaces
+ * at grazing view angles.
+ *
+ * @param cosTheta The cosine of the angle between the normal and view direction.
+ * @param F0 The base reflectivity of the surface.
+ * @param roughness The roughness of the surface.
+ *
+ * @return The Fresnel term for the given inputs, dampened by roughness.
+ */
+vec4 fresnelSchlickRoughness(float cosTheta, vec4 F0, float roughness)
+{
+  float fresnelFactor = pow(saturate(1.0 - cosTheta), 5.0);
+  return F0 + (max(vec4(1.0 - roughness), F0) - F0) * fresnelFactor;
 }
 
 /**
@@ -370,6 +391,53 @@ vec4 calculateOmniLightContribution(
 }
 
 /**
+ * @brief Evaluates the diffuse image-based lighting contribution using a
+ * precomputed diffuse irradiance cube map.
+ *
+ * @param baseColor The base diffuse color of the fragment.
+ * @param F0 The base reflectivity of the fragment's material (used for the
+ * Fresnel-based diffuse/specular energy split).
+ * @param normal The surface normal vector at the fragment.
+ * @param viewDir The direction from the fragment to the camera/viewer.
+ * @param metallic The metallic property of the fragment's material.
+ * @param roughness The roughness of the fragment's material.
+ * @param occlusion Ambient occlusion factor to attenuate the IBL contribution.
+ *
+ * @return The diffuse ambient (image-based) contribution as a vec4.
+ */
+vec4 evaluateDiffuseIBL(
+  vec4 baseColor,
+  vec4 F0,
+  vec3 normal,
+  vec3 viewDir,
+  float metallic,
+  float roughness,
+  float occlusion
+)
+{
+  float NdoV = max(dot(normal, viewDir), 0.0);
+
+  // Use the Fresnel term (at normal/view angle) to split energy between
+  // diffuse and specular, same as direct lighting, so IBL stays energy
+  // consistent with the rest of the PBR model.
+
+  // Since plain fresnelSchlick(NdotV, F0) tends to overbrighten the
+  // diffuse/specular split at grazing angles for rough surfaces (because it
+  // doesn't account for the fact that rough materials scatter light more
+  // diffusely regardless of view angle). To correct for this, we use a
+  // roughness-aware Fresnel-Schlick approximation.
+  vec4 kS = fresnelSchlickRoughness(NdoV, F0, roughness);
+  vec4 kD = (vec4(1.0) - kS) * (1.0 - metallic);
+
+  // Modify the normal based on the skybox inversion setting.
+  vec3 modifiedNormal = normal * usInvertSkybox.xyz;
+
+  vec4 irradiance = texture(uDiffuseIrradianceMap, modifiedNormal);
+  vec4 color = kD * irradiance * baseColor * occlusion;
+  return vec4(color.rgb, 1.0);
+}
+
+/**
 * @brief Evaluates the outgoing radiance from a fragment considering all lights
 * in the scene.
 *
@@ -390,14 +458,24 @@ vec4 evaluateOutgoingRadiance(
   vec3 worldPos,
   float roughness,
   float metallic,
-  float ior
+  float ior,
+  float occlusion
 )
 {
 
   float F0 = pow((ior - 1.0) / (ior + 1.0), 2.0); // Fresnel reflectance at normal incidence
   vec4 F0Color = mix(vec4(F0), baseColor, metallic);
 
-  vec4 finalColor = vec4(0.0, 0.0, 0.0, 1.0);
+  vec4 finalColor = evaluateDiffuseIBL(
+    baseColor, 
+    F0Color, 
+    normal, 
+    viewDir, 
+    metallic, 
+    roughness, 
+    occlusion
+  );
+
   for (int i = 0; i < numOmniLights; ++i)
   {
     finalColor += calculateOmniLightContribution(

@@ -234,6 +234,36 @@ namespace hc
     return m_colorSpace;
   }
 
+  void OpenGlCubeMap::bind(UInt32 slot) const
+  {
+    assertIsValid();
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+  }
+
+  void OpenGlCubeMap::generateMipmaps()
+  {
+    assertIsValid();
+
+    GLint currentCubeMapTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    try
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+      glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+      throw RuntimeErrorException("Failed to generate mipmaps for the cube map.");
+    }
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+  }
+
   const Path& OpenGlCubeMap::getSourcePath() const
   {
     return m_sourcePath;

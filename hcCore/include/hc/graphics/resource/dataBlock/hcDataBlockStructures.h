@@ -217,20 +217,23 @@ namespace hc
 
     struct alignas(16) HC_CORE_EXPORT Scene
     {
-      Vector4f ambientLightColor;     ///< Ambient light color for the scene.
       Vector4f invertSkybox;          ///< Inversion factors for the X, Y, and Z axes of the cube's vertices.
-
-      float ambientIntensity = 0.1f;  ///< Ambient light intensity for the scene.
-      float sPadding0 = 0.0f;
-      float sPadding1 = 0.0f;
-      float sPadding2 = 0.0f;
     };
 
     static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");
 
+    /**
+     * @brief GPU-aligned data for generating cube maps. This structure holds data for
+     * multiple types of cube maps.
+     */
     struct alignas(16) HC_CORE_EXPORT CubeMapGenerator
     {
-      Vector4f invert = Vector4f(1.0f, 1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the cube's vertices.
+      Vector4f invert = Vector4f(1.0f, 1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the cube's vertices. (Equirectangular to Cube Map Generator)
+
+      float sampleDelta = 0.025f;   ///< Smaller values result in higher quality but take longer to compute. (Diffuse Irradiance Cube Map Generator)
+      float sourceMipLevel = 0.0f;  ///< The mip level of the source cube map to sample from. Default is 0 (highest resolution). (Diffuse Irradiance Cube Map Generator)
+      float padding1;
+      float padding2;
     };
 
     static_assert(sizeof(CubeMapGenerator) % 16 == 0, "CubeMapGenerator must be 16-byte aligned");

@@ -17,7 +17,7 @@ namespace hc
     destroy();
   }
 
-  void SkyboxRenderPass::initialize(const SharedPtr<IShaderProgram>&skyboxShaderProgram)
+  void SkyboxRenderPass::initialize(const SharedPtr<IShaderProgram>& skyboxShaderProgram)
   {
     if (m_isInitialized)
       throw RuntimeErrorException("SkyboxRenderPass is already initialized.");
@@ -112,15 +112,9 @@ namespace hc
     m_isInitialized = true;
   }
 
-  void SkyboxRenderPass::execute(OpenGlCubeMap* cubeMap, IFrameBuffer* frameBuffer)
+  void SkyboxRenderPass::execute(IFrameBuffer* frameBuffer)
   {
-    if (cubeMap == nullptr)
-      return;
-
     assertIsInitialized();
-
-    if (!cubeMap->isValid())
-      throw RuntimeErrorException("Invalid cube map provided to skybox render pass.");
 
     if (frameBuffer)
     {
@@ -129,14 +123,8 @@ namespace hc
       frameBuffer->bind();
     }
 
-    GLint currentTextureCubeMap = 0;
-    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentTextureCubeMap);
-
     GLint currentDepthFunc;
     glGetIntegerv(GL_DEPTH_FUNC, &currentDepthFunc);
-
-    GLint currentActiveTexture;
-    glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTexture);
 
     GLboolean depthMaskEnabled;
     glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskEnabled);
@@ -153,17 +141,12 @@ namespace hc
     try
     {
       m_skyboxShaderProgram->bind();
-
-      glActiveTexture(GL_TEXTURE0);
-      glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GLuint>(cubeMap->getId()));
       glBindVertexArray(m_boxVao);
       glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     catch (...)
     {
       glBindVertexArray(0);
-      glActiveTexture(static_cast<GLenum>(currentActiveTexture));
-      glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GLuint>(currentTextureCubeMap));
       glDepthFunc(currentDepthFunc);
       glDepthMask(depthMaskEnabled);
 
@@ -176,8 +159,6 @@ namespace hc
     }
 
     glBindVertexArray(0);
-    glActiveTexture(static_cast<GLenum>(currentActiveTexture));
-    glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GLuint>(currentTextureCubeMap));
     glDepthFunc(currentDepthFunc);
     glDepthMask(depthMaskEnabled);
 

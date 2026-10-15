@@ -4,8 +4,27 @@
 
 namespace hc
 {
-  static constexpr UInt32 SAMPLER_2D_BINDING_POINT_DIRECTIONAL_SHADOW_MAP = 5;
-  static constexpr UInt32 SAMPLER_2D_BINDING_POINT_SPOT_LIGHT_SHADOW_MAP = 6;
+  namespace graphics
+  {
+    /**
+     * @brief Binding slots for various textures used in the graphics pipeline.
+     *
+     * Although these slots are not strictly necessary, they provide a convenient way to
+     * manage texture bindings in shaders, specially for runtime shaders used during the
+     * frame rendering. Furthermore, it helps to see which slots are being used during the
+     * frame rendering in order to avoid conflicts.
+     */
+
+    static constexpr UInt32 SLOT_POSITION_DEPTH_TEXTURE = 0;
+    static constexpr UInt32 SLOT_NORMAL_TEXTURE = 1;
+    static constexpr UInt32 SLOT_ALBEDO_ALPHA_TEXTURE = 2;
+    static constexpr UInt32 SLOT_ORMIOR_TEXTURE = 3;
+    static constexpr UInt32 SLOT_DIRECTIONAL_SHADOW_MAPS = 5;
+    static constexpr UInt32 SLOT_SPOT_LIGHT_SHADOW_MAPS = 6;
+    static constexpr UInt32 SLOT_POINT_LIGHT_SHADOW_MAPS = 7;
+    static constexpr UInt32 SLOT_ENVIROMENT_CUBE_MAP = 8;
+    static constexpr UInt32 SLOT_ENVIROMENT_DIFFUSE_IRRADIANCE_CUBE_MAP = 9;
+  }
 
   namespace graphicsBackendType
   {
@@ -133,6 +152,8 @@ namespace hc
       PBRForwardFragment,
       EquirectangularToCubeMapVertex,
       EquirectangularToCubeMapFragment,
+      DiffuseIrradianceGeneratorVertex,
+      DiffuseIrradianceGeneratorFragment,
       Count
     };
 
@@ -160,6 +181,7 @@ namespace hc
       PBRDeferredGeometry,
       PBRForward,
       EquirectangularToCubeMap,
+      DiffuseIrradianceGenerator,
       Count
     };
 

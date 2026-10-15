@@ -1,7 +1,6 @@
 #version 420 core
 
 #include "commons/camera.glsl"
-#include "commons/sceneBlock.glsl"
 #include "commons/lighting.glsl"
 #include "commons/materialPBRBlock.glsl"
 
@@ -38,10 +37,6 @@ void main()
   float metallic = ormiorSample.z;
 
   vec4 baseColor = uBaseColor * vColor * albedoTex;
-  vec4 ambientColor = baseColor 
-    * uSceneAmbientColor
-    * uSceneAmbientIntensity 
-    * occlusion;
   
   vec4 oRadiance = evaluateOutgoingRadiance(
     baseColor,
@@ -50,8 +45,9 @@ void main()
     vWorldPos,
     roughness,
     metallic,
-    uIOR
+    uIOR,
+    occlusion
   );
 
-  FragColor = vec4((ambientColor + oRadiance).rgb, albedoTex.a);
+  FragColor = vec4(oRadiance.rgb, albedoTex.a);
 }

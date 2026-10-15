@@ -9,6 +9,6 @@ layout(location = 0) out vec3 vLocalPosition;
 
 void main()
 {
-    vLocalPosition = normalize(aPosition) * ucmgInvert.xyz;
+    vLocalPosition = aPosition * ucmgInvert.xyz;
     gl_Position = projection * view * vec4(aPosition, 1.0);
 }

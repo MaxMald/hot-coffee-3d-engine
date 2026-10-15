@@ -32,7 +32,15 @@ namespace hc
       Vector4f vec4;
     };
 
+    /**
+     * @brief Default constructor. Initializes the color to black (0, 0, 0, 1).
+     */
     constexpr Color();
+    /**
+     * @brief Constructs a Color with the same value for R, G, and B, and an alpha of 1.0.
+     * @param rgb The value for R, G, and B components.
+     */
+    constexpr Color(float rgb);
     constexpr Color(float r, float g, float b, float a = 1.0f);
     constexpr Color(const Vector4f& v);
 
@@ -108,6 +116,10 @@ namespace hc
 
   constexpr Color::Color()
     : r(0.0f), g(0.0f), b(0.0f), a(1.0f) {
+  }
+
+  constexpr Color::Color(float rgb)
+    : r(rgb), g(rgb), b(rgb), a(1.0f) {
   }
 
   constexpr Color::Color(float _r, float _g, float _b, float _a)

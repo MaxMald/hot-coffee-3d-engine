@@ -6,12 +6,14 @@
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
 #include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
+#include "hc/graphics/enviroment/hcOpenGlEnviromentManager.h"
 
 namespace hc
 {
   DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
     IDataBlockManager& dataBlockManager,
-    OpenGlLightShadowMapManager& lightShadowMapManager
+    OpenGlLightShadowMapManager& lightShadowMapManager,
+    graphics::OpenGlEnviromentManager& enviromentManager
   ) :
     m_deferredGeometryRenderPass(dataBlockManager),
     m_deferredLightingRenderPass(lightShadowMapManager),
@@ -25,6 +27,7 @@ namespace hc
     m_forwardTransparentCommands(),
     m_hairForwardSpecularCommands(),
     m_lightShadowMapManager(lightShadowMapManager),
+    m_enviromentManager(enviromentManager),
     m_initialized(false)
   {}
 
@@ -107,14 +110,13 @@ namespace hc
       m_hairForwardSpecularCommands
     );
 
+    m_enviromentManager.bindEnviromentResources();
     m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
     m_deferredLightingRenderPass.execute(frameRenderContext.customFrameBuffer);
     copyDepthBufferToCurrentRenderTarget(frameRenderContext.customFrameBuffer);
     m_forwardOpaqueRenderPass.execute(m_forwardOpaqueCommands, frameRenderContext.customFrameBuffer);
     m_hairForwardSpecularRenderPass.execute(m_hairForwardSpecularCommands, frameRenderContext.customFrameBuffer);
-
-    if (frameRenderContext.skyboxCubeMap)
-      m_skyboxRenderPass.execute(frameRenderContext.skyboxCubeMap, frameRenderContext.customFrameBuffer);
+    m_skyboxRenderPass.execute(frameRenderContext.customFrameBuffer);
 
     m_forwardTransparentRenderPass.execute(m_forwardTransparentCommands, frameRenderContext.customFrameBuffer);
   }

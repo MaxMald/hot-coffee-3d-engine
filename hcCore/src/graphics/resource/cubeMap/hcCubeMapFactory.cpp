@@ -9,7 +9,6 @@
 #include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 #include "hc/graphics/resource/texture/hcITextureManager.h"
 #include "hc/graphics/resource/texture/hcITexture.h"
-#include "hc/graphics/generators/hcCubeMapGeneratorSettings.h"
 #include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 
 namespace hc
@@ -198,7 +197,7 @@ namespace hc
 
   SharedPtr<ICubeMap> CubeMapFactory::CreateFromEquirectangularImage(
     const Path& equirectangularImageSourcePath,
-    const graphics::generators::CubeMapGeneratorSettings& settings,
+    const graphics::generators::EquirectangularToCubeMapGeneratorSettings& settings,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager
   )
