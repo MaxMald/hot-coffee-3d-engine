@@ -146,11 +146,14 @@ namespace hc::editor
       if (useCustomFaceSize)
       {
         Int32 customFaceSize = static_cast<Int32>(equiToCubeMapSettings.customFaceSize);
+
+        ImGui::PushID("CubeMapGenCustomFaceSize");
         if (ImGui::InputInt("Custom Face Size", &customFaceSize))
         {
           customFaceSize = Math::Max(1, customFaceSize);
           equiToCubeMapSettings.customFaceSize = static_cast<UInt32>(customFaceSize);
         }
+        ImGui::PopID();
 
         if (!Math::IsPowerOfTwo(equiToCubeMapSettings.customFaceSize))
         {
@@ -208,11 +211,14 @@ namespace hc::editor
         );
 
       Int32 customFaceSize = static_cast<Int32>(diffuseIrradianceSettings.faceSize);
+
+      ImGui::PushID("DiffuseIrradianceCustomFaceSize");
       if (ImGui::InputInt("Custom Face Size", &customFaceSize))
       {
         customFaceSize = Math::Max(1, customFaceSize);
         diffuseIrradianceSettings.faceSize = static_cast<UInt32>(customFaceSize);
       }
+      ImGui::PopID();
 
       if (ImGui::IsItemHovered())
         ImGui::SetTooltip(
