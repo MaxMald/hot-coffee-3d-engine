@@ -1,7 +1,6 @@
 #version 420 core
 
 #include "commons/camera.glsl"
-#include "commons/sceneBlock.glsl"
 #include "commons/lighting.glsl"
 #include "commons/materialPBRBlock.glsl"
 

@@ -1,5 +1,6 @@
 #include "utilities.glsl"
 #include "shadow.glsl"
+#include "sceneBlock.glsl"
 
 #define MAX_OMNI_LIGHTS 16
 #define MAX_SPOT_LIGHTS 8
@@ -428,7 +429,10 @@ vec4 evaluateDiffuseIBL(
   vec4 kS = fresnelSchlickRoughness(NdoV, F0, roughness);
   vec4 kD = (vec4(1.0) - kS) * (1.0 - metallic);
 
-  vec4 irradiance = texture(uDiffuseIrradianceMap, normal);
+  // Modify the normal based on the skybox inversion setting.
+  vec3 modifiedNormal = normal * usInvertSkybox.xyz;
+
+  vec4 irradiance = texture(uDiffuseIrradianceMap, modifiedNormal);
   vec4 color = kD * irradiance * baseColor * occlusion;
   return vec4(color.rgb, 1.0);
 }
