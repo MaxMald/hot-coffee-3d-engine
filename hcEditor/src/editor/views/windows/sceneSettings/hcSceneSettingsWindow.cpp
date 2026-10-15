@@ -100,7 +100,10 @@ namespace hc::editor
       ImGui::SetTooltip("Invert the Z-Axis of the skybox cubemap direction sample.");
 
     if (ImGui::Button("Clear Skybox"))
+    {
       skybox.clear();
+      settings.skyboxSettings.sourcePath.clear();
+    }
 
     if (ImGui::CollapsingHeader("CubeMap Generator Settings"))
     {
