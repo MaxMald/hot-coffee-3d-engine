@@ -29,6 +29,7 @@ namespace hc
   {
     class IEquirectangularToCubeMapGenerator;
     class IDiffuseIrradianceCubeMapGenerator;
+    class IPrefilteredEnvironmentCubeMapGenerator;
   }
 
   /**
@@ -225,6 +226,13 @@ namespace hc
      */
     virtual graphics::generators::IDiffuseIrradianceCubeMapGenerator&
       getDiffuseIrradianceCubeMapGenerator() = 0;
+
+    /**
+     * @brief Returns the prefiltered environment cubemap generator.
+     * @return Reference to the IPrefilteredEnvironmentCubeMapGenerator instance.
+     */
+    virtual graphics::generators::IPrefilteredEnvironmentCubeMapGenerator&
+      getPrefilteredEnvironmentCubeMapGenerator() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

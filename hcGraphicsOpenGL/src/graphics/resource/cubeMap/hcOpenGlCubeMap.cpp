@@ -25,6 +25,7 @@ namespace hc
     const Image& ny,
     const Image& pz,
     const Image& nz,
+    const CubeMapSamplingSettings& samplingSettings,
     const Path& sourcePath
   )
   {
@@ -108,11 +109,11 @@ namespace hc
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(samplingSettings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(samplingSettings.minFilter, samplingSettings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)
@@ -134,7 +135,8 @@ namespace hc
   void OpenGlCubeMap::initialize(
     UInt32 faceSize,
     textureFormatType::Type format,
-    colorSpaceType::Type colorSpace
+    colorSpaceType::Type colorSpace,
+    const CubeMapSamplingSettings& samplingSettings
   )
   {
     if (m_valid)
@@ -168,11 +170,11 @@ namespace hc
         openGlGraphicsUtilities::AssertOpenGlHasNoError();
       }
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(samplingSettings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(samplingSettings.minFilter, samplingSettings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)

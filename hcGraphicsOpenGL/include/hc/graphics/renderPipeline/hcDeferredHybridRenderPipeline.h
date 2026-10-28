@@ -13,7 +13,7 @@ namespace hc
 {
   namespace graphics
   {
-    class OpenGlEnviromentManager;
+    class OpenGlEnvironmentManager;
   }
 
   class IDataBlockManager;
@@ -26,7 +26,7 @@ namespace hc
     DeferredHybridRenderPipeline(
       IDataBlockManager& dataBlockManager,
       OpenGlLightShadowMapManager& lightShadowMapManager,
-      graphics::OpenGlEnviromentManager& enviromentManager
+      graphics::OpenGlEnvironmentManager& environmentManager
     );
     ~DeferredHybridRenderPipeline();
 
@@ -56,7 +56,7 @@ namespace hc
     Vector<DrawCommand> m_forwardTransparentCommands;
     Vector<DrawCommand> m_hairForwardSpecularCommands;
     OpenGlLightShadowMapManager& m_lightShadowMapManager;
-    graphics::OpenGlEnviromentManager& m_enviromentManager;
+    graphics::OpenGlEnvironmentManager& m_environmentManager;
     bool m_initialized;
 
     static void SplitDrawCommandsByRenderPass(

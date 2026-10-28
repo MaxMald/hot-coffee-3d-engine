@@ -11,6 +11,7 @@
 #include "hc/graphics/resource/dataBlock/hcOpenGlDataBlockManager.h"
 #include "hc/graphics/generators/hcOpenGlEquirectangularToCubeMapGenerator.h"
 #include "hc/graphics/generators/hcOpenGlDiffuseIrradianceToCubeMapGenerator.h"
+#include "hc/graphics/generators/hcOpenGlPrefilteredEnvironmentCubeMapGenerator.h"
 
 namespace hc
 {
@@ -160,6 +161,12 @@ namespace hc
     getDiffuseIrradianceCubeMapGenerator() override;
 
     /**
+     * @copydoc IGraphicsManager::getPrefilteredEnvironmentCubeMapGenerator
+     */
+    graphics::generators::IPrefilteredEnvironmentCubeMapGenerator&
+    getPrefilteredEnvironmentCubeMapGenerator() override;
+
+    /**
      * @copydoc IGraphicsManager::getGBuffer
      */
     IGBuffer& getGBuffer() override;
@@ -200,6 +207,7 @@ namespace hc
     FrameRenderer m_frameRenderer;
     graphics::generators::OpenGlEquirectangularToCubeMapGenerator m_equirectangularToCubeMapGenerator;
     graphics::generators::OpenGlDiffuseIrradianceToCubeMapGenerator m_diffuseIrradianceCubeMapGenerator;
+    graphics::generators::OpenGlPrefilteredEnvironmentCubeMapGenerator m_prefilteredEnvironmentCubeMapGenerator;
     polygonFillType::Type m_polygonFillType;
 
     /**

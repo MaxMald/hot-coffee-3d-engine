@@ -6,12 +6,14 @@
 #include "hc/graphics/resource/cubeMap/hcICubeMap.h"
 #include "hc/graphics/resource/cubeMap/hcCubeMapFactory.h"
 #include "hc/graphics/hcIGraphicsManager.h"
+#include "hc/graphics/generators/hcIDiffuseIrradianceCubeMapGenerator.h"
+#include "hc/graphics/generators/hcIPrefilteredEnvironmentCubeMapGenerator.h"
 
 namespace hc
 {
   // --------------------- Skybox Settings Struct Implementation -------------------------
 
-  static constexpr UInt32 SKYBOX_SETTINGS_VERSION = 1;
+  static constexpr UInt32 SKYBOX_SETTINGS_VERSION = 2;
 
   void SkyboxSettings::serialize(io::BinaryWriter& writer) const
   {
@@ -19,6 +21,7 @@ namespace hc
     writer.writePath(sourcePath);
     cubeMapGeneratorSettings.serialize(writer);
     diffuseIrradianceCubeMapGeneratorSettings.serialize(writer);
+    prefilteredEnvironmentCubeMapGeneratorSettings.serialize(writer);
     writer.finishWritingObject();
   }
 
@@ -34,6 +37,9 @@ namespace hc
       cubeMapGeneratorSettings.deserialize(reader);
       diffuseIrradianceCubeMapGeneratorSettings.deserialize(reader);
     }
+    if (version >= 2)
+      prefilteredEnvironmentCubeMapGeneratorSettings.deserialize(reader);
+
     reader.finishReadingObject();
   }
 
@@ -42,13 +48,15 @@ namespace hc
     sourcePath.clear();
     cubeMapGeneratorSettings.clear();
     diffuseIrradianceCubeMapGeneratorSettings.clear();
+    prefilteredEnvironmentCubeMapGeneratorSettings.clear();
   }
 
   // ------------------------- Skybox Class Implementation -----------------------------
 
   Skybox::Skybox() :
     m_cubeMap(nullptr),
-    m_diffuseIrradianceCubeMap(nullptr)
+    m_diffuseIrradianceCubeMap(nullptr),
+    m_prefilteredEnvironmentCubeMap(nullptr)
   {}
 
   Skybox::~Skybox()
@@ -58,16 +66,20 @@ namespace hc
 
   void Skybox::initialize(
     SharedPtr<ICubeMap> cubeMap,
-    SharedPtr<ICubeMap> diffuseIrradianceCubeMap
+    SharedPtr<ICubeMap> diffuseIrradianceCubeMap,
+    SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap
   )
   {
     if (cubeMap == nullptr || !cubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: CubeMap is invalid.");
     if (diffuseIrradianceCubeMap == nullptr || !diffuseIrradianceCubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: DiffuseIrradianceCubeMap is invalid.");
+    if (prefilteredEnvironmentCubeMap == nullptr || !prefilteredEnvironmentCubeMap->isValid())
+      throw RuntimeErrorException("Skybox::initialize: PrefilteredEnvironmentCubeMap is invalid.");
 
     m_cubeMap = cubeMap;
     m_diffuseIrradianceCubeMap = diffuseIrradianceCubeMap;
+    m_prefilteredEnvironmentCubeMap = prefilteredEnvironmentCubeMap;
   }
 
   void Skybox::initialize(
@@ -149,13 +161,33 @@ namespace hc
       );
     }
 
-    initialize(cubeMap, diffuseIrradianceCubeMap);
+    SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap = nullptr;
+    try
+    {
+      graphics::generators::IPrefilteredEnvironmentCubeMapGenerator& prefilteredEnvironmentGenerator =
+        graphicsManager.getPrefilteredEnvironmentCubeMapGenerator();
+
+      prefilteredEnvironmentCubeMap = prefilteredEnvironmentGenerator.generate(
+        *cubeMap, settings.prefilteredEnvironmentCubeMapGeneratorSettings
+      );
+    }
+    catch (const Exception& ex)
+    {
+      destroy();
+      throw RuntimeErrorException(
+        "Skybox::initialize: Failed to generate prefiltered environment cube map from cube map at path: " + resolvedPath.toString() +
+        ". Error: " + String(ex.what())
+      );
+    }
+
+    initialize(cubeMap, diffuseIrradianceCubeMap, prefilteredEnvironmentCubeMap);
   }
 
   bool Skybox::isValid() const
   {
     return m_cubeMap != nullptr && m_cubeMap->isValid()
-      && m_diffuseIrradianceCubeMap != nullptr && m_diffuseIrradianceCubeMap->isValid();
+      && m_diffuseIrradianceCubeMap != nullptr && m_diffuseIrradianceCubeMap->isValid()
+      && m_prefilteredEnvironmentCubeMap != nullptr && m_prefilteredEnvironmentCubeMap->isValid();
   }
 
   void Skybox::clear()

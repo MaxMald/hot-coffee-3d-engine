@@ -40,6 +40,7 @@ namespace hc
     m_frameRenderer(m_dataBlockManager),
     m_equirectangularToCubeMapGenerator(m_dataBlockManager),
     m_diffuseIrradianceCubeMapGenerator(m_dataBlockManager),
+    m_prefilteredEnvironmentCubeMapGenerator(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -63,6 +64,7 @@ namespace hc
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // Enable seamless cube map sampling for better quality when sampling across cube map faces.
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -81,6 +83,11 @@ namespace hc
       m_diffuseIrradianceCubeMapGenerator.initialize(
         m_shaderProgramManager.getBuiltInShaderProgram(
           builtInShaderProgramType::DiffuseIrradianceGenerator
+        )
+      );
+      m_prefilteredEnvironmentCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::PrefilteredEnvironmentGenerator
         )
       );
       setViewport(viewportRect);
@@ -227,6 +234,12 @@ namespace hc
     return m_diffuseIrradianceCubeMapGenerator;
   }
 
+  graphics::generators::IPrefilteredEnvironmentCubeMapGenerator&
+  OpenGlGraphicsManager::getPrefilteredEnvironmentCubeMapGenerator()
+  {
+    return m_prefilteredEnvironmentCubeMapGenerator;
+  }
+
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
     return m_frameRenderer.getGBuffer();
@@ -270,6 +283,7 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_prefilteredEnvironmentCubeMapGenerator.destroy();
     m_diffuseIrradianceCubeMapGenerator.destroy();
     m_equirectangularToCubeMapGenerator.destroy();
     m_frameRenderer.destroy();

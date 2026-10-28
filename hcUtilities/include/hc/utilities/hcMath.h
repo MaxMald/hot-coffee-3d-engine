@@ -46,6 +46,37 @@ namespace hc
       return a + (b - a) * t;
     }
 
+    template<typename T1, typename T2>
+    static inline auto Pow(T1 base, T2 exponent)
+    { 
+      return std::pow(base, exponent);
+    }
+
+    static inline float Pow(float base, float exponent)
+    {
+      return std::powf(base, exponent);
+    }
+
+    static inline long double Pow(long double base, long double exponent)
+    {
+      return std::powl(base, exponent);
+    }
+
+    static inline float Floor(float value)
+    {
+      return std::floor(value);
+    }
+
+    static inline double Floor(double value)
+    {
+      return std::floor(value);
+    }
+
+    static inline long double Floor(long double value)
+    {
+      return std::floor(value);
+    }
+
     static inline constexpr float Sign(float value)
     {
       return (value > 0.0f) ? 1.0f : ((value < 0.0f) ? -1.0f : 0.0f);
@@ -140,6 +171,21 @@ namespace hc
     static inline bool IsPowerOfTwo(SizeT value)
     {
       return (value != 0) && ((value & (value - 1)) == 0);
+    }
+
+    static inline float Log2(float value)
+    {
+      return std::log2(value);
+    }
+
+    static inline double Log2(double value)
+    {
+      return std::log2(value);
+    }
+
+    static inline long double Log2(long double value)
+    {
+      return std::log2(value);
     }
   };
 }

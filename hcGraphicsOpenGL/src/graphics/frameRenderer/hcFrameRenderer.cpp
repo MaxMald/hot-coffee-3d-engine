@@ -9,8 +9,8 @@ namespace hc
 {
   FrameRenderer::FrameRenderer(IDataBlockManager& dataBlockManager) :
     m_lightShadowMapManager(dataBlockManager),
-    m_enviromentManager(),
-    m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager, m_enviromentManager),
+    m_environmentManager(),
+    m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager, m_environmentManager),
     m_finalRenderPass(),
     m_frameBufferA(),
     m_drawCommands(),
@@ -34,7 +34,7 @@ namespace hc
 
     try
     {
-      m_enviromentManager.initialize();
+      m_environmentManager.initialize();
       m_lightShadowMapManager.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
       m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
@@ -64,14 +64,16 @@ namespace hc
     if (!skybox.isValid())
       throw InvalidArgumentException("Invalid skybox provided. The skybox must be initialized and valid.");
 
-    m_enviromentManager.setEnviromentCubeMap(skybox.getCubeMapPtr());
-    m_enviromentManager.setDiffuseIrradianceCubeMap(skybox.getDiffuseIrradianceCubeMapPtr());
+    m_environmentManager.setEnvironmentCubeMap(skybox.getCubeMapPtr());
+    m_environmentManager.setDiffuseIrradianceCubeMap(skybox.getDiffuseIrradianceCubeMapPtr());
+    m_environmentManager.setPrefilteredEnvironmentCubeMap(skybox.getPrefilteredEnvironmentCubeMapPtr());
   }
 
   void FrameRenderer::clearSkybox()
   {
-    m_enviromentManager.clearDiffuseIrradianceCubeMap();
-    m_enviromentManager.clearEnviromentCubeMap();
+    m_environmentManager.clearDiffuseIrradianceCubeMap();
+    m_environmentManager.clearEnvironmentCubeMap();
+    m_environmentManager.clearPrefilteredEnvironmentCubeMap();
   }
 
   void FrameRenderer::setRenderTarget(IFrameBuffer * frameBuffer)
@@ -199,7 +201,7 @@ namespace hc
     m_finalRenderPass.destroy();
     m_frameBufferA.destroy();
     m_lightShadowMapManager.destroy();
-    m_enviromentManager.destroy();
+    m_environmentManager.destroy();
     m_initialized = false;
   }
 

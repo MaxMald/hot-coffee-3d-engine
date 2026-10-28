@@ -1,12 +1,24 @@
 #pragma once
 
 #include "hc/hcCoreCommons.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/assets/cubeMapDescriptor/hcCubeMapDescriptor.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
 {
   class Image;
+
+  /**
+   * @brief Structure representing the sampling settings for a cube map.
+   */
+  struct CubeMapSamplingSettings
+  {
+    filterMode::Type minFilter = filterMode::Linear;  ///< The minification filter mode for the cube map. Determines how the texture is sampled when it is scaled down.
+    filterMode::Type magFilter = filterMode::Linear;  ///< The magnification filter mode for the cube map. Determines how the texture is sampled when it is scaled up.
+    mipmapMode::Type mipmapMode = mipmapMode::None;   ///< The mipmap mode for the cube map. Determines how mipmaps are sampled.
+    wrapMode::Type wrap = wrapMode::ClampToEdge;      ///< The wrap mode for the cube map. Determines how texture coordinates outside the [0, 1] range are handled.
+  };
 
   /**
    * @brief Interface for cube map resources in the graphics module.
@@ -25,9 +37,10 @@ namespace hc
      * @param ny The image for the negative Y face of the cube map.
      * @param pz The image for the positive Z face of the cube map.
      * @param nz The image for the negative Z face of the cube map.
+     * @param samplingSettings Optional sampling settings for the cube map.
      * @param sourcePath Optional source path of the cube map if it was loaded from a file
      * descriptor.
-     *
+     * 
      * @throw InvalidArgumentException if any of the provided images are invalid or if the
      * face sizes do not match.
      * @throw RuntimeException if the cube map fails to initialize due to graphics API
@@ -40,7 +53,8 @@ namespace hc
       const Image& ny,
       const Image& pz,
       const Image& nz,
-      const Path& sourcePath = Path()
+      const CubeMapSamplingSettings& samplingSettings = CubeMapSamplingSettings(),
+      const Path & sourcePath = Path()
     ) = 0;
 
     /**
@@ -51,6 +65,7 @@ namespace hc
      * @param faceSize The size of each face of the cube map (width and height).
      * @param format The texture format of the cube map (e.g., RGB8, RGBA8, Depth24).
      * @param colorSpace The color space of the cube map (e.g., sRGB, Linear).
+     * @param samplingSettings Optional sampling settings for the cube map.
      *
      * @throw InvalidArgumentException if the face size is zero or if the format/color
      * space is invalid.
@@ -60,7 +75,8 @@ namespace hc
     virtual void initialize(
       UInt32 faceSize,
       textureFormatType::Type format,
-      colorSpaceType::Type colorSpace
+      colorSpaceType::Type colorSpace,
+      const CubeMapSamplingSettings& samplingSettings = CubeMapSamplingSettings()
     ) = 0;
 
     /**

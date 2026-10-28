@@ -84,7 +84,7 @@ namespace hc::graphics::generators
     {
       throw RuntimeErrorException(
         String::Format(
-          "Failed to initialize cube map for equirectangular to cubemap conversion: %s",
+          "Failed to initialize cube map for Diffuse Irradiance: %s",
           e.what()
         ));
     }
@@ -168,7 +168,7 @@ namespace hc::graphics::generators
 
       throw RuntimeErrorException(
         String::Format(
-          "Failed during equirectangular to cubemap conversion: %s",
+          "Failed during Diffuse Irradiance generation: %s",
           e.what()
         ));
     }

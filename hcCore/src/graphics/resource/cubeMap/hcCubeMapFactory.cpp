@@ -179,6 +179,7 @@ namespace hc
         *nYImage,
         *pZImage,
         *nZImage,
+        CubeMapSamplingSettings(),    // TODO this should be configurable in the descriptor
         cubeMapDescriptorSourcePath
       );
       return cubeMap;

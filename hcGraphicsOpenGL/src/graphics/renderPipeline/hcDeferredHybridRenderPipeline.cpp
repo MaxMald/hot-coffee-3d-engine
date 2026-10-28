@@ -6,14 +6,14 @@
 #include "hc/graphics/hcDrawCommandUtilities.h"
 #include "hc/graphics/frameRenderer/hcFrameRenderContext.h"
 #include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
-#include "hc/graphics/enviroment/hcOpenGlEnviromentManager.h"
+#include "hc/graphics/environment/hcOpenGlEnvironmentManager.h"
 
 namespace hc
 {
   DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
     IDataBlockManager& dataBlockManager,
     OpenGlLightShadowMapManager& lightShadowMapManager,
-    graphics::OpenGlEnviromentManager& enviromentManager
+    graphics::OpenGlEnvironmentManager& environmentManager
   ) :
     m_deferredGeometryRenderPass(dataBlockManager),
     m_deferredLightingRenderPass(lightShadowMapManager),
@@ -27,7 +27,7 @@ namespace hc
     m_forwardTransparentCommands(),
     m_hairForwardSpecularCommands(),
     m_lightShadowMapManager(lightShadowMapManager),
-    m_enviromentManager(enviromentManager),
+    m_environmentManager(environmentManager),
     m_initialized(false)
   {}
 
@@ -110,7 +110,7 @@ namespace hc
       m_hairForwardSpecularCommands
     );
 
-    m_enviromentManager.bindEnviromentResources();
+    m_environmentManager.bindEnvironmentResources();
     m_deferredGeometryRenderPass.execute(m_deferredOpaqueCommands);
     m_deferredLightingRenderPass.execute(frameRenderContext.customFrameBuffer);
     copyDepthBufferToCurrentRenderTarget(frameRenderContext.customFrameBuffer);
