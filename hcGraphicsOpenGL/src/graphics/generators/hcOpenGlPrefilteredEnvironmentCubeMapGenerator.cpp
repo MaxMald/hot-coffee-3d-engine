@@ -50,31 +50,41 @@ namespace hc::graphics::generators
       throw RuntimeErrorException("Prefiltered environment generator shader program is not valid.");
     if (settings.faceSize == 0)
       throw InvalidArgumentException("Custom face size must be greater than zero.");
+    if (settings.numSamples == 0)
+      throw InvalidArgumentException("Number of samples must be greater than zero.");
     if (!Math::IsPowerOfTwo(settings.faceSize))
       throw InvalidArgumentException("Custom face size must be a power of two.");
 
     GLint maxCubeMapSize = 0;
     glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, &maxCubeMapSize);
-    if (settings.faceSize > static_cast<unsigned int>(maxCubeMapSize))
+    if (settings.faceSize > static_cast<UInt32>(maxCubeMapSize))
       throw InvalidArgumentException(
         String::Format("Custom face size exceeds the maximum supported cube map size of %d.", maxCubeMapSize)
       );
 
-    CubeMapSamplingSettings samplingSettings;
-    samplingSettings.minFilter = filterMode::Linear;
-    samplingSettings.magFilter = filterMode::Linear;
-    samplingSettings.mipmapMode = mipmapMode::Linear;
-    samplingSettings.wrap = wrapMode::ClampToEdge;
+    // Generate the mipmaps for the prefiltered environment cube map.
+    UInt32 numMipLevels = static_cast<UInt32>(
+      Math::Floor(
+        Math::Log2(static_cast<float>(settings.faceSize))
+      )) + 1;
+
+    if (settings.maxMipLevels > 0)
+      numMipLevels = Math::Min(numMipLevels, settings.maxMipLevels);
+
+    CubeMapInitializationSettings cubeSettings;
+    cubeSettings.faceSize = static_cast<UInt16>(settings.faceSize);
+    cubeSettings.format = textureFormatType::RGB16F;
+    cubeSettings.colorSpace = colorSpaceType::Linear;
+    cubeSettings.minFilter = filterMode::Linear;
+    cubeSettings.magFilter = filterMode::Linear;
+    cubeSettings.mipmapMode = mipmapMode::Linear;
+    cubeSettings.wrap = wrapMode::ClampToEdge;
+    cubeSettings.mipmapMaxLevel = static_cast<UInt16>(numMipLevels - 1);
 
     SharedPtr<OpenGlCubeMap> cubeMap = MakeShared<OpenGlCubeMap>();
     try
     {
-      cubeMap->initialize(
-        static_cast<UInt32>(settings.faceSize),
-        textureFormatType::RGB16F,
-        colorSpaceType::Linear,
-        samplingSettings
-      );
+      cubeMap->initialize(cubeSettings);
       cubeMap->generateMipmaps();
     }
     catch (const Exception& e)
@@ -87,7 +97,7 @@ namespace hc::graphics::generators
     }
 
     if (m_currentRenderbufferSize != settings.faceSize)
-      resize(static_cast<UInt32>(settings.faceSize));
+      resize(settings.faceSize);
 
     GLint currentActiveTextureSlot;
     glGetIntegerv(GL_ACTIVE_TEXTURE, &currentActiveTextureSlot);
@@ -124,17 +134,9 @@ namespace hc::graphics::generators
       glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
       glDepthFunc(GL_LEQUAL);
 
-      UInt32 numMipLevels = static_cast<UInt32>(
-        Math::Floor(
-          Math::Log2(static_cast<float>(settings.faceSize))
-        )) + 1;
-
-      if (settings.maxMipLevels > 0)
-        numMipLevels = Math::Min(numMipLevels, settings.maxMipLevels);
-
       for (UInt32 mipLevel = 0; mipLevel < numMipLevels; ++mipLevel)
       {
-        UInt32 mipSize = static_cast<UInt32>(settings.faceSize) >> mipLevel;
+        UInt32 mipSize = settings.faceSize >> mipLevel;
         resize(mipSize);
 
         glViewport(

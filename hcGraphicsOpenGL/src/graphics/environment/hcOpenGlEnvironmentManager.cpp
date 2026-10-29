@@ -25,13 +25,19 @@ namespace hc::graphics
 
     try
     {
+      CubeMapInitializationSettings cubeSettings;
+      cubeSettings.faceSize = static_cast<UInt16>(m_blackImage.getHeight());
+      cubeSettings.format = m_blackImage.getFormat();
+      cubeSettings.colorSpace = m_blackImage.getColorSpace();
+
       m_blackCubeMap.initialize(
         m_blackImage,
         m_blackImage,
         m_blackImage,
         m_blackImage,
         m_blackImage,
-        m_blackImage
+        m_blackImage,
+        cubeSettings
       );
     }
     catch (const Exception& e)

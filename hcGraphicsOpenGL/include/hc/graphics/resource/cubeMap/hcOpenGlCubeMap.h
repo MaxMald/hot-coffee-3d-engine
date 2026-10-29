@@ -23,7 +23,7 @@ namespace hc
       const Image& ny,
       const Image& pz,
       const Image& nz,
-      const CubeMapSamplingSettings& samplingSettings = CubeMapSamplingSettings(),
+      const CubeMapInitializationSettings& samplingSettings,
       const Path& sourcePath = Path()
     ) override;
 
@@ -31,10 +31,7 @@ namespace hc
      * @copydoc ICubeMap::initialize
      */
     void initialize(
-      UInt32 faceSize,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace,
-      const CubeMapSamplingSettings& samplingSettings = CubeMapSamplingSettings()
+      const CubeMapInitializationSettings& samplingSettings
     ) override;
 
     /**

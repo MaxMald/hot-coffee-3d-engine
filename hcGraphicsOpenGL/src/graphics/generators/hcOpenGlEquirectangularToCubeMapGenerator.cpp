@@ -87,11 +87,12 @@ namespace hc::graphics::generators
       // framebuffer-sRGB conversion while rendering sRGB outputs, or render to a
       // linear-format cubemap.
 
-      cubeMap->initialize(
-        static_cast<UInt32>(faceSize),
-        equirectangularTexture.getTextureFormat(),
-        equirectangularTexture.getColorSpace()
-      );
+      CubeMapInitializationSettings cubeSettings;
+      cubeSettings.faceSize = static_cast<UInt16>(faceSize);
+      cubeSettings.format = equirectangularTexture.getTextureFormat();
+      cubeSettings.colorSpace = equirectangularTexture.getColorSpace();
+
+      cubeMap->initialize(cubeSettings);
     }
     catch (const Exception& e)
     {

@@ -244,7 +244,7 @@ namespace hc::editor
       Int32 faceSize = static_cast<Int32>(prefilteredEnvSettings.faceSize);
       ImGui::PushID("PrefilteredEnvMapGenFaceSize");
       if (ImGui::InputInt("Face Size", &faceSize))
-        prefilteredEnvSettings.faceSize = static_cast<SizeT>(Math::Max(1, faceSize));
+        prefilteredEnvSettings.faceSize = static_cast<UInt32>(Math::Max(1, faceSize));
       ImGui::PopID();
 
       if (ImGui::IsItemHovered())

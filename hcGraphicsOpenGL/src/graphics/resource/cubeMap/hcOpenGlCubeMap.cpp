@@ -25,16 +25,18 @@ namespace hc
     const Image& ny,
     const Image& pz,
     const Image& nz,
-    const CubeMapSamplingSettings& samplingSettings,
+    const CubeMapInitializationSettings& settings,
     const Path& sourcePath
   )
   {
     if (m_valid)
       throw RuntimeErrorException("Cube map is already initialized");
+    if (settings.faceSize == 0)
+      throw InvalidArgumentException("Face size must be greater than zero.");
 
-    UInt32 faceSize = px.getWidth();
-    textureFormatType::Type format = px.getFormat();
-    colorSpaceType::Type colorSpace = px.getColorSpace();
+    UInt32 faceSize = settings.faceSize;
+    textureFormatType::Type format = settings.format;
+    colorSpaceType::Type colorSpace = settings.colorSpace;
     assertImage(px, faceSize, format, colorSpace);
     assertImage(nx, faceSize, format, colorSpace);
     assertImage(py, faceSize, format, colorSpace);
@@ -109,11 +111,13 @@ namespace hc
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(samplingSettings.magFilter));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(samplingSettings.minFilter, samplingSettings.mipmapMode));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, settings.mipmapBaseLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)
@@ -133,24 +137,21 @@ namespace hc
   }
 
   void OpenGlCubeMap::initialize(
-    UInt32 faceSize,
-    textureFormatType::Type format,
-    colorSpaceType::Type colorSpace,
-    const CubeMapSamplingSettings& samplingSettings
+    const CubeMapInitializationSettings& settings
   )
   {
     if (m_valid)
       throw RuntimeErrorException("Cube map is already initialized");
 
-    if (faceSize == 0)
+    if (settings.faceSize == 0)
       throw InvalidArgumentException("Face size must be greater than zero.");
 
     GLint currentCubeMapTexture = 0;
     glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
 
-    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(format, colorSpace);
-    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(format);
-    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(format);
+    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(settings.format, settings.colorSpace);
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(settings.format);
+    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(settings.format);
 
     try
     {
@@ -163,18 +164,20 @@ namespace hc
         glTexImage2D(
           GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
           glInternalFormat,
-          faceSize, faceSize, 0,
+          settings.faceSize, settings.faceSize, 0,
           glFormat,
           glType, nullptr
         );
         openGlGraphicsUtilities::AssertOpenGlHasNoError();
       }
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(samplingSettings.magFilter));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(samplingSettings.minFilter, samplingSettings.mipmapMode));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(samplingSettings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, settings.mipmapBaseLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)
@@ -186,9 +189,9 @@ namespace hc
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
 
-    m_faceSize = faceSize;
-    m_textureFormat = format;
-    m_colorSpace = colorSpace;
+    m_faceSize = settings.faceSize;
+    m_textureFormat = settings.format;
+    m_colorSpace = settings.colorSpace;
     m_sourcePath.clear();
     m_valid = true;
   }
