@@ -194,11 +194,13 @@ namespace hc
   {
     m_cubeMap.reset();
     m_diffuseIrradianceCubeMap.reset();
+    m_prefilteredEnvironmentCubeMap.reset();
   }
 
   void Skybox::destroy()
   {
     m_cubeMap.reset();
     m_diffuseIrradianceCubeMap.reset();
+    m_prefilteredEnvironmentCubeMap.reset();
   }
 }

@@ -282,15 +282,15 @@ namespace hc
       }
       else
       {
-        switch (filter)
+        switch (mipmap)
         {
-        case filterMode::Nearest:
+        case mipmapMode::Nearest:
           return GL_NEAREST_MIPMAP_NEAREST;
-        case filterMode::Linear:
+        case mipmapMode::Linear:
           return GL_LINEAR_MIPMAP_LINEAR;
         default:
           throw RuntimeErrorException(
-            String::Format("Unsupported filter mode: %d", static_cast<Int32>(filter))
+            String::Format("Unsupported mipmap mode: %d", static_cast<Int32>(mipmap))
           );
         }
       }

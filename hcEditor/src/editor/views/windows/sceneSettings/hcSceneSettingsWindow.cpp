@@ -278,7 +278,7 @@ namespace hc::editor
       Int32 maxMipLevels = static_cast<Int32>(prefilteredEnvSettings.maxMipLevels);
       ImGui::PushID("PrefilteredEnvMapGenMaxMipLevels");
       if (ImGui::InputInt("Max Mip Levels", &maxMipLevels))
-        prefilteredEnvSettings.maxMipLevels = static_cast<UInt32>(Math::Max(1, maxMipLevels));
+        prefilteredEnvSettings.maxMipLevels = static_cast<UInt32>(Math::Max(0, maxMipLevels));
       ImGui::PopID();
 
       if (ImGui::IsItemHovered())
