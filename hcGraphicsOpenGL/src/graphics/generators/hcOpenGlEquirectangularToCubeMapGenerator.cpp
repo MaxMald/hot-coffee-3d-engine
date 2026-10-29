@@ -91,6 +91,8 @@ namespace hc::graphics::generators
       cubeSettings.faceSize = static_cast<UInt16>(faceSize);
       cubeSettings.format = equirectangularTexture.getTextureFormat();
       cubeSettings.colorSpace = equirectangularTexture.getColorSpace();
+      cubeSettings.mipmapMode = mipmapMode::Linear;
+      cubeSettings.minFilter = filterMode::Linear;
 
       cubeMap->initialize(cubeSettings);
     }
