@@ -111,7 +111,6 @@ namespace hc
       );
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, settings.mipmapBaseLevel);
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
@@ -171,7 +170,6 @@ namespace hc
         openGlGraphicsUtilities::AssertOpenGlHasNoError();
       }
 
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, settings.mipmapBaseLevel);
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
       glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
@@ -257,7 +255,6 @@ namespace hc
     {
       glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
       glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
       openGlGraphicsUtilities::AssertOpenGlHasNoError();
     }
     catch (...)

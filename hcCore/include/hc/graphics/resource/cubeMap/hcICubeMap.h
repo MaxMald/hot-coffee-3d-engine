@@ -15,7 +15,6 @@ namespace hc
   struct CubeMapInitializationSettings
   {
     UInt16 faceSize = 128;                            ///< The size of each face of the cube map in pixels.
-    UInt16 mipmapBaseLevel = 0;                       ///< The base mipmap level for the cube map. This is the level that will be used for rendering when no mipmaps are generated.
     UInt16 mipmapMaxLevel = 1000;                     ///< The maximum mipmap level for the cube map. This is the highest level that will be generated when mipmaps are created.
     textureFormatType::Type format;                   ///< The texture format of the cube map (e.g., RGB8, RGBA8, Depth24).
     colorSpaceType::Type colorSpace;                  ///< The color space of the cube map (e.g., sRGB, Linear).
