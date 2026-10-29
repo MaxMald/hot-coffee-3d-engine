@@ -285,9 +285,9 @@ namespace hc
         switch (mipmap)
         {
         case mipmapMode::Nearest:
-          return GL_NEAREST_MIPMAP_NEAREST;
+          return filter == filterMode::Nearest ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_NEAREST;
         case mipmapMode::Linear:
-          return GL_LINEAR_MIPMAP_LINEAR;
+          return filter == filterMode::Nearest ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR_MIPMAP_LINEAR;
         default:
           throw RuntimeErrorException(
             String::Format("Unsupported mipmap mode: %d", static_cast<Int32>(mipmap))
