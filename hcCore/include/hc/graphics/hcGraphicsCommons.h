@@ -22,8 +22,9 @@ namespace hc
     static constexpr UInt32 SLOT_DIRECTIONAL_SHADOW_MAPS = 5;
     static constexpr UInt32 SLOT_SPOT_LIGHT_SHADOW_MAPS = 6;
     static constexpr UInt32 SLOT_POINT_LIGHT_SHADOW_MAPS = 7;
-    static constexpr UInt32 SLOT_ENVIROMENT_CUBE_MAP = 8;
-    static constexpr UInt32 SLOT_ENVIROMENT_DIFFUSE_IRRADIANCE_CUBE_MAP = 9;
+    static constexpr UInt32 SLOT_ENVIRONMENT_CUBE_MAP = 8;
+    static constexpr UInt32 SLOT_ENVIRONMENT_DIFFUSE_IRRADIANCE_CUBE_MAP = 9;
+    static constexpr UInt32 SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP = 10;
   }
 
   namespace graphicsBackendType
@@ -154,6 +155,8 @@ namespace hc
       EquirectangularToCubeMapFragment,
       DiffuseIrradianceGeneratorVertex,
       DiffuseIrradianceGeneratorFragment,
+      PrefilteredEnvironmentGeneratorVertex,
+      PrefilteredEnvironmentGeneratorFragment,
       Count
     };
 
@@ -182,6 +185,7 @@ namespace hc
       PBRForward,
       EquirectangularToCubeMap,
       DiffuseIrradianceGenerator,
+      PrefilteredEnvironmentGenerator,
       Count
     };
 
@@ -282,5 +286,53 @@ namespace hc
 
     String HC_CORE_EXPORT ToString(Type textureType);
     Type HC_CORE_EXPORT FromString(const String& str);
+  }
+
+  namespace filterMode
+  {
+    /**
+     * @brief Enumeration of texture filter modes used in the rendering engine.
+     *
+     * This enum defines the various filtering methods that can be applied to textures
+     * during sampling.
+     */
+    enum Type : UInt8
+    {
+      Nearest = 0,  // pick the nearest texel
+      Linear = 1    // blend between the four nearest texels (bilinear filtering)
+    };
+  }
+
+  namespace mipmapMode
+  {
+    /**
+     * @brief Enumeration of mipmap modes used in the rendering engine.
+     *
+     * This enum defines the various mipmap filtering methods that can be applied to
+     * textures during sampling.
+     */
+    enum Type : UInt8
+    {
+      None = 0,     // no mipmaps, single level
+      Nearest = 1,  // pick the nearest mipmap level
+      Linear = 2    // blend between the two nearest mipmap levels (trilinear when combined with linear filtering)
+    };
+  }
+
+  namespace wrapMode
+  {
+    /**
+     * @brief Enumeration of texture wrap modes used in the rendering engine.
+     *
+     * This enum defines how texture coordinates outside the [0, 1] range are handled
+     * during sampling.
+     */
+    enum Type : UInt8
+    {
+      ClampToEdge,    // Clamp the texture coordinates to the edge of the texture, resulting in the edge texels being stretched.
+      Repeat,         // Repeat the texture coordinates, causing the texture to tile across the surface.
+      MirroredRepeat, // Mirror the texture coordinates and repeat, creating a mirrored tiling effect.
+      ClampToBorder   // Clamp the texture coordinates to a specified border color
+    };
   }
 }

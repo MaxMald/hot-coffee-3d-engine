@@ -74,17 +74,18 @@ namespace hc::graphics::generators
     SharedPtr<OpenGlCubeMap> cubeMap = MakeShared<OpenGlCubeMap>();
     try
     {
-      cubeMap->initialize(
-        static_cast<UInt32>(settings.faceSize),
-        textureFormatType::RGB32F,
-        colorSpaceType::Linear
-      );
+      CubeMapInitializationSettings cubeSettings;
+      cubeSettings.faceSize = static_cast<UInt16>(settings.faceSize);
+      cubeSettings.format = textureFormatType::RGB32F;
+      cubeSettings.colorSpace = colorSpaceType::Linear;
+
+      cubeMap->initialize(cubeSettings);
     }
     catch (const Exception& e)
     {
       throw RuntimeErrorException(
         String::Format(
-          "Failed to initialize cube map for equirectangular to cubemap conversion: %s",
+          "Failed to initialize cube map for Diffuse Irradiance: %s",
           e.what()
         ));
     }
@@ -168,7 +169,7 @@ namespace hc::graphics::generators
 
       throw RuntimeErrorException(
         String::Format(
-          "Failed during equirectangular to cubemap conversion: %s",
+          "Failed during Diffuse Irradiance generation: %s",
           e.what()
         ));
     }

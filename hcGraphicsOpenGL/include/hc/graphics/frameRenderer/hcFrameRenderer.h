@@ -5,7 +5,7 @@
 #include "hc/graphics/renderPass/hcFinalRenderPass.h"
 #include "hc/graphics/renderPipeline/hcDeferredHybridRenderPipeline.h"
 #include "hc/graphics/lightShadowManager/hcOpenGlLightShadowMapManager.h"
-#include "hc/graphics/enviroment/hcOpenGlEnviromentManager.h"
+#include "hc/graphics/environment/hcOpenGlEnvironmentManager.h"
 
 namespace hc
 {
@@ -42,7 +42,7 @@ namespace hc
 
   private:
     OpenGlLightShadowMapManager m_lightShadowMapManager;
-    graphics::OpenGlEnviromentManager m_enviromentManager;
+    graphics::OpenGlEnvironmentManager m_environmentManager;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
     FinalRenderPass m_finalRenderPass;
     OpenGlFrameBuffer m_frameBufferA;

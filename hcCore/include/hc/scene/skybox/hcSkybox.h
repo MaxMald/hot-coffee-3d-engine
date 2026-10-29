@@ -3,6 +3,7 @@
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 #include "hc/graphics/generators/hcIDiffuseIrradianceCubeMapGenerator.h"
+#include "hc/graphics/generators/hcIPrefilteredEnvironmentCubeMapGenerator.h"
 
 namespace hc
 {
@@ -22,8 +23,9 @@ namespace hc
   struct HC_CORE_EXPORT SkyboxSettings : public io::ISerializable
   {
     Path sourcePath; ///< The source path of the skybox texture, can be an equirectangular image or cube map descriptor.
-    graphics::generators::EquirectangularToCubeMapGeneratorSettings cubeMapGeneratorSettings; ///< Settings for generating the skybox's cube map from an equirectangular image.
-    graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings diffuseIrradianceCubeMapGeneratorSettings; ///< Settings for generating the skybox's diffuse irradiance cube map.
+    graphics::generators::EquirectangularToCubeMapGeneratorSettings cubeMapGeneratorSettings;                             ///< Settings for generating the skybox's cube map from an equirectangular image.
+    graphics::generators::DiffuseIrradianceCubeMapGeneratorSettings diffuseIrradianceCubeMapGeneratorSettings;            ///< Settings for generating the skybox's diffuse irradiance cube map.
+    graphics::generators::PrefilteredEnvironmentCubeMapGeneratorSettings prefilteredEnvironmentCubeMapGeneratorSettings;  ///< Settings for generating the skybox's prefiltered environment cube map.
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
@@ -47,11 +49,14 @@ namespace hc
      * @param cubeMap The cube map to be used for the skybox.
      * @param diffuseIrradianceCubeMap The diffuse irradiance cube map to be used for the
      * skybox.
+     * @param prefilteredEnvironmentCubeMap The prefiltered environment cube map to be
+     * used for the skybox.
      * @throw RuntimeErrorException
      */
     void initialize(
       SharedPtr<ICubeMap> cubeMap,
-      SharedPtr<ICubeMap> diffuseIrradianceCubeMap
+      SharedPtr<ICubeMap> diffuseIrradianceCubeMap,
+      SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap
     );
 
     /**
@@ -146,6 +151,38 @@ namespace hc
     }
 
     /**
+     * @brief Gets the prefiltered environment cube map associated with the skybox.
+     * @return Reference to the prefiltered environment cube map.
+     */
+    inline const ICubeMap& getPrefilteredEnvironmentCubeMap() const
+    {
+      if (m_prefilteredEnvironmentCubeMap == nullptr)
+        throw RuntimeErrorException("Skybox::getPrefilteredEnvironmentCubeMap: PrefilteredEnvironmentCubeMap is undefined.");
+      return *m_prefilteredEnvironmentCubeMap;
+    }
+
+    /**
+     * @brief Gets the prefiltered environment cube map associated with the skybox.
+     * @return Reference to the prefiltered environment cube map.
+     */
+    inline ICubeMap& getPrefilteredEnvironmentCubeMap()
+    {
+      if (m_prefilteredEnvironmentCubeMap == nullptr)
+        throw RuntimeErrorException("Skybox::getPrefilteredEnvironmentCubeMap: PrefilteredEnvironmentCubeMap is undefined.");
+      return *m_prefilteredEnvironmentCubeMap;
+    }
+
+    /**
+     * @brief Gets the shared pointer to the prefiltered environment cube map associated
+     * with the skybox.
+     * @return Shared pointer to the prefiltered environment cube map.
+     */
+    inline SharedPtr<ICubeMap> getPrefilteredEnvironmentCubeMapPtr() const
+    {
+      return m_prefilteredEnvironmentCubeMap;
+    }
+
+    /**
      * @brief Clears the skybox, releasing any associated resources.
      */
     void clear();
@@ -158,5 +195,6 @@ namespace hc
   protected:
     SharedPtr<ICubeMap> m_cubeMap;
     SharedPtr<ICubeMap> m_diffuseIrradianceCubeMap;
+    SharedPtr<ICubeMap> m_prefilteredEnvironmentCubeMap;
   };
 }

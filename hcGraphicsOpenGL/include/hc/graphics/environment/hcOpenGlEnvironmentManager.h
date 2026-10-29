@@ -5,18 +5,20 @@
 
 namespace hc::graphics
 {
-  class OpenGlEnviromentManager
+  class OpenGlEnvironmentManager
   {
   public:
-    OpenGlEnviromentManager();
-    ~OpenGlEnviromentManager();
+    OpenGlEnvironmentManager();
+    ~OpenGlEnvironmentManager();
 
     void initialize();
-    void setEnviromentCubeMap(SharedPtr<ICubeMap> cubeMap);
+    void setEnvironmentCubeMap(SharedPtr<ICubeMap> cubeMap);
     void setDiffuseIrradianceCubeMap(SharedPtr<ICubeMap> cubeMap);
-    void clearEnviromentCubeMap();
+    void setPrefilteredEnvironmentCubeMap(SharedPtr<ICubeMap> cubeMap);
+    void clearEnvironmentCubeMap();
     void clearDiffuseIrradianceCubeMap();
-    void bindEnviromentResources() const;
+    void clearPrefilteredEnvironmentCubeMap();
+    void bindEnvironmentResources() const;
     inline bool isInitialized() const
     {
       return m_isInitialized;
@@ -24,8 +26,9 @@ namespace hc::graphics
     void destroy();
 
   private:
-    SharedPtr<ICubeMap> m_enviromentCubeMap;
+    SharedPtr<ICubeMap> m_environmentCubeMap;
     SharedPtr<ICubeMap> m_diffuseIrradianceCubeMap;
+    SharedPtr<ICubeMap> m_prefilteredEnvironmentCubeMap;
     Image m_blackImage;
     OpenGlCubeMap m_blackCubeMap;
     bool m_isInitialized;

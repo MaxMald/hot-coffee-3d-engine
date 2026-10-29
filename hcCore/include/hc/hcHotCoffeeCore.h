@@ -61,6 +61,7 @@
 #include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
 #include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 #include "hc/graphics/generators/hcIDiffuseIrradianceCubeMapGenerator.h"
+#include "hc/graphics/generators/hcIPrefilteredEnvironmentCubeMapGenerator.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 

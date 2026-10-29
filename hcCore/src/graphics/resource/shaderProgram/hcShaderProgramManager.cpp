@@ -178,6 +178,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::DiffuseIrradianceGeneratorFragment)
       );
     }
+    else if (type == builtInShaderProgramType::PrefilteredEnvironmentGenerator)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::PrefilteredEnvironmentGeneratorVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::PrefilteredEnvironmentGeneratorFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(

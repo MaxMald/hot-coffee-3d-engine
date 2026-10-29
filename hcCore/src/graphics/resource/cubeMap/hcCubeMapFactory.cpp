@@ -171,6 +171,11 @@ namespace hc
 
     try
     {
+      CubeMapInitializationSettings cubeSettings;
+      cubeSettings.faceSize = static_cast<UInt16>(pXImage->getWidth());
+      cubeSettings.format = pXImage->getFormat();
+      cubeSettings.colorSpace = pXImage->getColorSpace();
+
       SharedPtr<ICubeMap> cubeMap = graphicsManager.createCubeMap();
       cubeMap->initialize(
         *pXImage,
@@ -179,6 +184,7 @@ namespace hc
         *nYImage,
         *pZImage,
         *nZImage,
+        cubeSettings, // TODO this should be configurable in the descriptor
         cubeMapDescriptorSourcePath
       );
       return cubeMap;

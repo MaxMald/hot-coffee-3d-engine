@@ -257,5 +257,87 @@ namespace hc
         );
       }
     }
+
+    /**
+     * @brief Gets the OpenGL minification filter based on the specified filter and mipmap modes.
+     * @param filter The filter mode (nearest or linear).
+     * @param mipmap The mipmap mode (none, nearest, or linear).
+     * @return The corresponding OpenGL minification filter.
+     */
+    inline GLint GetOpenGlMinFilter(filterMode::Type filter, mipmapMode::Type mipmap)
+    {
+      if (mipmap == mipmapMode::None)
+      {
+        switch (filter)
+        {
+        case filterMode::Nearest:
+          return GL_NEAREST;
+        case filterMode::Linear:
+          return GL_LINEAR;
+        default:
+          throw RuntimeErrorException(
+            String::Format("Unsupported filter mode: %d", static_cast<Int32>(filter))
+          );
+        }
+      }
+      else
+      {
+        switch (mipmap)
+        {
+        case mipmapMode::Nearest:
+          return filter == filterMode::Nearest ? GL_NEAREST_MIPMAP_NEAREST : GL_LINEAR_MIPMAP_NEAREST;
+        case mipmapMode::Linear:
+          return filter == filterMode::Nearest ? GL_NEAREST_MIPMAP_LINEAR : GL_LINEAR_MIPMAP_LINEAR;
+        default:
+          throw RuntimeErrorException(
+            String::Format("Unsupported mipmap mode: %d", static_cast<Int32>(mipmap))
+          );
+        }
+      }
+    }
+
+    /**
+     * @brief Gets the OpenGL magnification filter based on the specified filter mode.
+     * @param filter The filter mode (nearest or linear).
+     * @return The corresponding OpenGL magnification filter.
+     */
+    inline GLint GetOpenGlMagFilter(filterMode::Type filter)
+    {
+      switch (filter)
+      {
+      case filterMode::Nearest:
+        return GL_NEAREST;
+      case filterMode::Linear:
+        return GL_LINEAR;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported filter mode: %d", static_cast<Int32>(filter))
+        );
+      }
+    }
+
+    /**
+     * @brief Gets the OpenGL wrap mode based on the specified wrap mode.
+     * @param wrap The wrap mode (repeat, mirrored repeat, clamp to edge, or clamp to border).
+     * @return The corresponding OpenGL wrap mode.
+     */
+    inline GLint GetOpenGlWrapMode(wrapMode::Type wrap)
+    {
+      switch (wrap)
+      {
+      case wrapMode::Repeat:
+        return GL_REPEAT;
+      case wrapMode::MirroredRepeat:
+        return GL_MIRRORED_REPEAT;
+      case wrapMode::ClampToEdge:
+        return GL_CLAMP_TO_EDGE;
+      case wrapMode::ClampToBorder:
+        return GL_CLAMP_TO_BORDER;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported wrap mode: %d", static_cast<Int32>(wrap))
+        );
+      }
+    }
   }
 }

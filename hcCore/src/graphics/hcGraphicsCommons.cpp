@@ -215,6 +215,8 @@ namespace hc
       case Type::EquirectangularToCubeMapVertex: return "EquirectangularToCubeMapVertex";
       case Type::DiffuseIrradianceGeneratorVertex: return "DiffuseIrradianceGeneratorVertex";
       case Type::DiffuseIrradianceGeneratorFragment: return "DiffuseIrradianceGeneratorFragment";
+      case Type::PrefilteredEnvironmentGeneratorVertex: return "PrefilteredEnvironmentGeneratorVertex";
+      case Type::PrefilteredEnvironmentGeneratorFragment: return "PrefilteredEnvironmentGeneratorFragment";
 
       default:
         throw InvalidArgumentException(
@@ -244,6 +246,8 @@ namespace hc
       else if (str == "EquirectangularToCubeMapVertex") return Type::EquirectangularToCubeMapVertex;
       else if (str == "DiffuseIrradianceGeneratorVertex") return Type::DiffuseIrradianceGeneratorVertex;
       else if (str == "DiffuseIrradianceGeneratorFragment") return Type::DiffuseIrradianceGeneratorFragment;
+      else if (str == "PrefilteredEnvironmentGeneratorVertex") return Type::PrefilteredEnvironmentGeneratorVertex;
+      else if (str == "PrefilteredEnvironmentGeneratorFragment") return Type::PrefilteredEnvironmentGeneratorFragment;
       else
 
       throw InvalidArgumentException(
@@ -262,6 +266,7 @@ namespace hc
       case Type::ShadowMapVertex:
       case Type::EquirectangularToCubeMapVertex:
       case Type::DiffuseIrradianceGeneratorVertex:
+      case Type::PrefilteredEnvironmentGeneratorVertex:
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
@@ -276,6 +281,7 @@ namespace hc
       case Type::PBRForwardFragment:
       case Type::EquirectangularToCubeMapFragment:
       case Type::DiffuseIrradianceGeneratorFragment:
+      case Type::PrefilteredEnvironmentGeneratorFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -304,6 +310,7 @@ namespace hc
       case Type::PBRForward: return "PBRForward";
       case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
       case Type::DiffuseIrradianceGenerator: return "DiffuseIrradianceGenerator";
+      case Type::PrefilteredEnvironmentGenerator: return "PrefilteredEnvironmentGenerator";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -325,6 +332,7 @@ namespace hc
       else if (str == "PBRForward") return Type::PBRForward;
       else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
       else if (str == "DiffuseIrradianceGenerator") return Type::DiffuseIrradianceGenerator;
+      else if (str == "PrefilteredEnvironmentGenerator") return Type::PrefilteredEnvironmentGenerator;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())

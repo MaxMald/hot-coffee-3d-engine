@@ -105,7 +105,7 @@ namespace hc::editor
       settings.skyboxSettings.sourcePath.clear();
     }
 
-    if (ImGui::CollapsingHeader("CubeMap Generator Settings"))
+    if (ImGui::CollapsingHeader("Environment CubeMap Generator Settings"))
     {
       hc::graphics::generators::EquirectangularToCubeMapGeneratorSettings& equiToCubeMapSettings
         = settings.skyboxSettings.cubeMapGeneratorSettings;
@@ -232,6 +232,59 @@ namespace hc::editor
           "Warning: Custom face size must be a power of two."
         );
       }
+    }
+
+    if (ImGui::CollapsingHeader("Prefiltered Environment Cube Map Generator"))
+    {
+      graphics::generators::PrefilteredEnvironmentCubeMapGeneratorSettings& prefilteredEnvSettings
+        = settings.skyboxSettings.prefilteredEnvironmentCubeMapGeneratorSettings;
+
+      // - Face Size
+
+      Int32 faceSize = static_cast<Int32>(prefilteredEnvSettings.faceSize);
+      ImGui::PushID("PrefilteredEnvMapGenFaceSize");
+      if (ImGui::InputInt("Face Size", &faceSize))
+        prefilteredEnvSettings.faceSize = static_cast<UInt32>(Math::Max(1, faceSize));
+      ImGui::PopID();
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "The size of each face of the generated cube map. Must be a power of two."
+        );
+
+      if (!Math::IsPowerOfTwo(prefilteredEnvSettings.faceSize))
+      {
+        ImGui::TextColored(
+          ImVec4(1.0f, 0.0f, 0.0f, 1.0f),
+          "Warning: Custom face size must be a power of two."
+        );
+      }
+
+      // - Number of Samples
+
+      Int32 numSamples = static_cast<Int32>(prefilteredEnvSettings.numSamples);
+      ImGui::PushID("PrefilteredEnvMapGenNumSamples");
+      if (ImGui::InputInt("Num Samples", &numSamples))
+        prefilteredEnvSettings.numSamples = static_cast<UInt32>(Math::Max(1, numSamples));
+      ImGui::PopID();
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "The number of samples to use for prefiltering. Higher values yield better quality but are more computationally expensive."
+        );
+
+      // - Maximum Mip Levels
+
+      Int32 maxMipLevels = static_cast<Int32>(prefilteredEnvSettings.maxMipLevels);
+      ImGui::PushID("PrefilteredEnvMapGenMaxMipLevels");
+      if (ImGui::InputInt("Max Mip Levels", &maxMipLevels))
+        prefilteredEnvSettings.maxMipLevels = static_cast<UInt32>(Math::Max(0, maxMipLevels));
+      ImGui::PopID();
+
+      if (ImGui::IsItemHovered())
+        ImGui::SetTooltip(
+          "The maximum number of mip levels to generate for the prefiltered environment cube map."
+        );
     }
 
     if (ImGui::Button("Regenerate Skybox"))
