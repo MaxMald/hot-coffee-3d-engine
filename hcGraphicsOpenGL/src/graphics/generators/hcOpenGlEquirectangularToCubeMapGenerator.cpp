@@ -93,6 +93,8 @@ namespace hc::graphics::generators
       cubeSettings.colorSpace = equirectangularTexture.getColorSpace();
       cubeSettings.mipmapMode = mipmapMode::Linear;
       cubeSettings.minFilter = filterMode::Linear;
+      cubeSettings.magFilter = filterMode::Linear;
+      cubeSettings.wrap = wrapMode::ClampToEdge;
 
       cubeMap->initialize(cubeSettings);
     }

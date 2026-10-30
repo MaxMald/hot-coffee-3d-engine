@@ -9,7 +9,7 @@ namespace hc
 {
   FrameRenderer::FrameRenderer(IDataBlockManager& dataBlockManager) :
     m_lightShadowMapManager(dataBlockManager),
-    m_environmentManager(),
+    m_environmentManager(dataBlockManager),
     m_deferredHybridRenderPipeline(dataBlockManager, m_lightShadowMapManager, m_environmentManager),
     m_finalRenderPass(),
     m_frameBufferA(),
@@ -34,10 +34,14 @@ namespace hc
 
     try
     {
-      m_environmentManager.initialize();
+      m_environmentManager.initialize(
+        shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::BrdfLutGenerator)
+      );
       m_lightShadowMapManager.initialize(shaderProgramManager);
       m_deferredHybridRenderPipeline.initialize(viewportRect, shaderProgramManager);
-      m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(builtInShaderProgramType::FinalPass));
+      m_finalRenderPass.initialize(shaderProgramManager.getBuiltInShaderProgram(
+        builtInShaderProgramType::FinalPass)
+      );
       m_frameBufferA.initialize(viewportRect.width, viewportRect.height);
     }
     catch (const Exception& e)

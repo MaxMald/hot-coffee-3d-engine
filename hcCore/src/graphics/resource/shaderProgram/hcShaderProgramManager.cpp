@@ -186,6 +186,14 @@ namespace hc
         m_shaderManager.getBuiltInShader(builtInShaderType::PrefilteredEnvironmentGeneratorFragment)
       );
     }
+    else if (type == builtInShaderProgramType::BrdfLutGenerator)
+    {
+      createBuiltInShaderProgram(
+        type,
+        m_shaderManager.getBuiltInShader(builtInShaderType::FullScreenTriangleVertex),
+        m_shaderManager.getBuiltInShader(builtInShaderType::BrdfLutGeneratorFragment)
+      );
+    }
     else
     {
       throw RuntimeErrorException(
