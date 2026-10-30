@@ -217,6 +217,7 @@ namespace hc
       case Type::DiffuseIrradianceGeneratorFragment: return "DiffuseIrradianceGeneratorFragment";
       case Type::PrefilteredEnvironmentGeneratorVertex: return "PrefilteredEnvironmentGeneratorVertex";
       case Type::PrefilteredEnvironmentGeneratorFragment: return "PrefilteredEnvironmentGeneratorFragment";
+      case Type::BrdfLutGeneratorFragment: return "BrdfLutGeneratorFragment";
 
       default:
         throw InvalidArgumentException(
@@ -248,6 +249,7 @@ namespace hc
       else if (str == "DiffuseIrradianceGeneratorFragment") return Type::DiffuseIrradianceGeneratorFragment;
       else if (str == "PrefilteredEnvironmentGeneratorVertex") return Type::PrefilteredEnvironmentGeneratorVertex;
       else if (str == "PrefilteredEnvironmentGeneratorFragment") return Type::PrefilteredEnvironmentGeneratorFragment;
+      else if (str == "BrdfLutGeneratorFragment") return Type::BrdfLutGeneratorFragment;
       else
 
       throw InvalidArgumentException(
@@ -282,6 +284,7 @@ namespace hc
       case Type::EquirectangularToCubeMapFragment:
       case Type::DiffuseIrradianceGeneratorFragment:
       case Type::PrefilteredEnvironmentGeneratorFragment:
+      case Type::BrdfLutGeneratorFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -311,6 +314,7 @@ namespace hc
       case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
       case Type::DiffuseIrradianceGenerator: return "DiffuseIrradianceGenerator";
       case Type::PrefilteredEnvironmentGenerator: return "PrefilteredEnvironmentGenerator";
+      case Type::BrdfLutGenerator: return "BrdfLutGenerator";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -333,6 +337,7 @@ namespace hc
       else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
       else if (str == "DiffuseIrradianceGenerator") return Type::DiffuseIrradianceGenerator;
       else if (str == "PrefilteredEnvironmentGenerator") return Type::PrefilteredEnvironmentGenerator;
+      else if (str == "BrdfLutGenerator") return Type::BrdfLutGenerator;
       else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())

@@ -49,20 +49,29 @@ namespace hc
       glGenFramebuffers(1, &m_gBufferId);
       glBindFramebuffer(GL_FRAMEBUFFER, m_gBufferId);
 
-      m_positionAndDepthTexture.initialize(width, height, textureFormatType::RGBA16F, colorSpaceType::Linear);
+      TextureInitializationSettings settings;
+      settings.width = static_cast<UInt16>(width);
+      settings.height = static_cast<UInt16>(height);
+      settings.colorSpace = colorSpaceType::Linear;
+
+      settings.format = textureFormatType::RGBA16F;
+      m_positionAndDepthTexture.initialize(settings);
       if (!m_positionAndDepthTexture.isValid())
         throw RuntimeErrorException("Failed to create position and depth texture for GBuffer.");
 
-      m_normalTexture.initialize(width, height, textureFormatType::RGBA16F, colorSpaceType::Linear);
+      settings.format = textureFormatType::RGBA16F;
+      m_normalTexture.initialize(settings);
       if (!m_normalTexture.isValid())
         throw RuntimeErrorException("Failed to create normal texture for GBuffer.");
 
-      m_albedoAlphaTexture.initialize(width, height, textureFormatType::RGBA8, colorSpaceType::Linear);
+      settings.format = textureFormatType::RGBA8;
+      m_albedoAlphaTexture.initialize(settings);
 
       if (!m_albedoAlphaTexture.isValid())
         throw RuntimeErrorException("Failed to create albedo and alpha texture for GBuffer.");
 
-      m_ORMIORTexture.initialize(width, height, textureFormatType::RGBA8, colorSpaceType::Linear);
+      settings.format = textureFormatType::RGBA8;
+      m_ORMIORTexture.initialize(settings);
       if (!m_ORMIORTexture.isValid())
         throw RuntimeErrorException("Failed to create ORM/IOR texture for GBuffer.");
 

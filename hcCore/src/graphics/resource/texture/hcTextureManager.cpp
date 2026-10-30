@@ -164,7 +164,8 @@ namespace hc
   )
   {
     SharedPtr<ITexture> texture = m_textureFactory->createTexture();
-    texture->initialize(image, Path());
+    TextureInitializationSettings settings(image);
+    texture->initialize(image, settings, Path());
     m_defaultTextures[type] = texture;
     return texture;
   }

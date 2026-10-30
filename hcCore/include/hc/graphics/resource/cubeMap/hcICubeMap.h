@@ -14,14 +14,14 @@ namespace hc
    */
   struct CubeMapInitializationSettings
   {
-    UInt16 faceSize = 128;                            ///< The size of each face of the cube map in pixels.
-    UInt16 mipmapMaxLevel = 1000;                     ///< The maximum mipmap level for the cube map. This is the highest level that will be generated when mipmaps are created.
-    textureFormatType::Type format;                   ///< The texture format of the cube map (e.g., RGB8, RGBA8, Depth24).
-    colorSpaceType::Type colorSpace;                  ///< The color space of the cube map (e.g., sRGB, Linear).
-    filterMode::Type minFilter = filterMode::Linear;  ///< The minification filter mode for the cube map. Determines how the texture is sampled when it is scaled down.
-    filterMode::Type magFilter = filterMode::Linear;  ///< The magnification filter mode for the cube map. Determines how the texture is sampled when it is scaled up.
-    mipmapMode::Type mipmapMode = mipmapMode::None;   ///< The mipmap mode for the cube map. Determines how mipmaps are sampled.
-    wrapMode::Type wrap = wrapMode::ClampToEdge;      ///< The wrap mode for the cube map. Determines how texture coordinates outside the [0, 1] range are handled.
+    UInt16 faceSize = 128;                                      ///< The size of each face of the cube map in pixels.
+    UInt16 mipmapMaxLevel = 1000;                               ///< The maximum mipmap level for the cube map. This is the highest level that will be generated when mipmaps are created.
+    textureFormatType::Type format = textureFormatType::RGBA8;  ///< The texture format of the cube map (e.g., RGB8, RGBA8, Depth24).
+    colorSpaceType::Type colorSpace = colorSpaceType::Linear;   ///< The color space of the cube map (e.g., sRGB, Linear).
+    filterMode::Type minFilter = filterMode::Linear;            ///< The minification filter mode for the cube map. Determines how the texture is sampled when it is scaled down.
+    filterMode::Type magFilter = filterMode::Linear;            ///< The magnification filter mode for the cube map. Determines how the texture is sampled when it is scaled up.
+    mipmapMode::Type mipmapMode = mipmapMode::None;             ///< The mipmap mode for the cube map. Determines how mipmaps are sampled.
+    wrapMode::Type wrap = wrapMode::ClampToEdge;                ///< The wrap mode for the cube map. Determines how texture coordinates outside the [0, 1] range are handled.
   };
 
   /**

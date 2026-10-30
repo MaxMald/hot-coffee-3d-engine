@@ -24,6 +24,7 @@ namespace hc
      */
     void initialize(
       const Image& image,
+      const TextureInitializationSettings& initializationSettings,
       const Path& sourcePath = Path()
     ) override;
 
@@ -31,10 +32,7 @@ namespace hc
      * @copydoc ITexture::initialize(UInt32, UInt32, textureFormatType::Type, colorSpaceType::Type)
      */
     void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace
+      const TextureInitializationSettings& initializationSettings
     ) override;
 
     /**
@@ -128,21 +126,15 @@ namespace hc
     bool m_created;
 
     /**
-     * @brief Initializes the texture with the specified width, height, format, color
-     * space, and pixel data.
+     * @brief Initializes the texture with the specified initialization settings, pixel
+     * data, and source path.
      *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The texture format (e.g., RGBA8, RGB8).
-     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     * @param initializationSettings The settings to use for initializing the texture.
      * @param pixelData Pointer to the pixel data to initialize the texture with.
      * @param sourcePath Optional source path of the texture if it was loaded from a file.
      */
     void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace,
+      const TextureInitializationSettings& initializationSettings,
       const void* pixelData,
       const Path& sourcePath
     );

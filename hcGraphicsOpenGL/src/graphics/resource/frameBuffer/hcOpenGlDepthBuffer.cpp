@@ -33,11 +33,13 @@ namespace hc
       glGenFramebuffers(1, &m_depthBufferId);
       glBindFramebuffer(GL_FRAMEBUFFER, m_depthBufferId);
 
-      m_depthTexture.initialize(
-        width, height,
-        textureFormatType::Depth24,
-        colorSpaceType::Linear
-      );
+      TextureInitializationSettings settings;
+      settings.width = static_cast<UInt16>(width);
+      settings.height = static_cast<UInt16>(height);
+      settings.format = textureFormatType::Depth24;
+      settings.colorSpace = colorSpaceType::Linear;
+
+      m_depthTexture.initialize(settings);
 
       if (!m_depthTexture.isValid())
         throw RuntimeErrorException("Failed to create depth texture for DepthBuffer.");
