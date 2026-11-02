@@ -1,6 +1,7 @@
 #include "utilities.glsl"
 #include "shadow.glsl"
 #include "sceneBlock.glsl"
+#include "environmentBlock.glsl"
 
 #define MAX_OMNI_LIGHTS 16
 #define MAX_SPOT_LIGHTS 8
@@ -54,6 +55,8 @@ layout(std140, binding = 1) uniform LightBlock
 
 layout(binding = 8) uniform samplerCube uEnviromentCubeMap;
 layout(binding = 9) uniform samplerCube uDiffuseIrradianceMap;
+layout(binding = 10) uniform samplerCube uPrefilteredEnvironment;
+layout(binding = 11) uniform sampler2D uBrdfLut;
 
 /**
  * @brief Calculates the Trowbridge-Reitz GGX normal distribution function for a
@@ -426,14 +429,25 @@ vec4 evaluateDiffuseIBL(
   // doesn't account for the fact that rough materials scatter light more
   // diffusely regardless of view angle). To correct for this, we use a
   // roughness-aware Fresnel-Schlick approximation.
-  vec4 kS = fresnelSchlickRoughness(NdoV, F0, roughness);
+  vec4 F = fresnelSchlickRoughness(NdoV, F0, roughness);
+  vec4 kS = F;
   vec4 kD = (vec4(1.0) - kS) * (1.0 - metallic);
 
   // Modify the normal based on the skybox inversion setting.
   vec3 modifiedNormal = normal * usInvertSkybox.xyz;
 
+  // Diffuse
   vec4 irradiance = texture(uDiffuseIrradianceMap, modifiedNormal);
-  vec4 color = kD * irradiance * baseColor * occlusion;
+  vec4 diffuse = kD * irradiance * baseColor;
+
+  // Specular
+  vec3 R = reflect(-viewDir, modifiedNormal);
+  vec4 prefilteredColor = textureLod(uPrefilteredEnvironment, R, roughness * float(uePrefilteredEnvironmentMaxLevel));
+  vec2 brdf = texture(uBrdfLut, vec2(max(dot(modifiedNormal, viewDir), 0.0), roughness)).rg;
+  vec4 specular = prefilteredColor * (F * brdf.x + brdf.y);
+
+  // Apply ambient occlusion to the diffuse component
+  vec4 color = (diffuse + specular) * occlusion;
   return vec4(color.rgb, 1.0);
 }
 

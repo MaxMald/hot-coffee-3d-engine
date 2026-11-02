@@ -232,10 +232,21 @@ namespace hc
 
       float sampleDelta = 0.025f;   ///< Smaller values result in higher quality but take longer to compute. (Diffuse Irradiance Cube Map Generator)
       float sourceMipLevel = 0.0f;  ///< The mip level of the source cube map to sample from. Default is 0 (highest resolution). (Diffuse Irradiance Cube Map Generator)
-      UInt32 sampleCount = 1024;   ///< The number of samples to use for prefiltering. Higher values yield better quality but are more computationally expensive. (Prefiltered Environment Cube Map Generator)
-      float roughness = 0.0f;      ///< Roughness factor for prefiltering. (Prefiltered Environment Cube Map Generator)
+      UInt32 sampleCount = 1024;    ///< The number of samples to use for prefiltering. Higher values yield better quality but are more computationally expensive. (Prefiltered Environment Cube Map Generator)
+      float roughness = 0.0f;       ///< Roughness factor for prefiltering. (Prefiltered Environment Cube Map Generator)
     };
 
     static_assert(sizeof(CubeMapGenerator) % 16 == 0, "CubeMapGenerator must be 16-byte aligned");
+
+    /**
+     * @brief GPU-aligned data for environment settings.
+     */
+    struct alignas(16) HC_CORE_EXPORT Environment
+    {
+      UInt32 prefilteredEnvironmentMaxLevel = 5; ///< The maximum mipmap level for the prefiltered environment map. (Prefiltered Environment Cube Map Generator)
+      float padding0 = 0.0f;
+      float padding1 = 0.0f;
+      float padding2 = 0.0f;
+    };
   }
 }

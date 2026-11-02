@@ -56,7 +56,7 @@ namespace hc
   Skybox::Skybox() :
     m_cubeMap(nullptr),
     m_diffuseIrradianceCubeMap(nullptr),
-    m_prefilteredEnvironmentCubeMap(nullptr)
+    m_prefilteredEnvironmentCubeMap()
   {}
 
   Skybox::~Skybox()
@@ -67,14 +67,14 @@ namespace hc
   void Skybox::initialize(
     SharedPtr<ICubeMap> cubeMap,
     SharedPtr<ICubeMap> diffuseIrradianceCubeMap,
-    SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap
+    graphics::environment::PrefilteredEnvironmentCubeMap prefilteredEnvironmentCubeMap
   )
   {
     if (cubeMap == nullptr || !cubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: CubeMap is invalid.");
     if (diffuseIrradianceCubeMap == nullptr || !diffuseIrradianceCubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: DiffuseIrradianceCubeMap is invalid.");
-    if (prefilteredEnvironmentCubeMap == nullptr || !prefilteredEnvironmentCubeMap->isValid())
+    if (prefilteredEnvironmentCubeMap.cubeMap == nullptr || !prefilteredEnvironmentCubeMap.cubeMap->isValid())
       throw RuntimeErrorException("Skybox::initialize: PrefilteredEnvironmentCubeMap is invalid.");
 
     m_cubeMap = cubeMap;
@@ -161,7 +161,7 @@ namespace hc
       );
     }
 
-    SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap = nullptr;
+    graphics::environment::PrefilteredEnvironmentCubeMap prefilteredEnvironmentCubeMap;
     try
     {
       graphics::generators::IPrefilteredEnvironmentCubeMapGenerator& prefilteredEnvironmentGenerator =
@@ -187,20 +187,19 @@ namespace hc
   {
     return m_cubeMap != nullptr && m_cubeMap->isValid()
       && m_diffuseIrradianceCubeMap != nullptr && m_diffuseIrradianceCubeMap->isValid()
-      && m_prefilteredEnvironmentCubeMap != nullptr && m_prefilteredEnvironmentCubeMap->isValid();
+      && m_prefilteredEnvironmentCubeMap.cubeMap != nullptr
+      && m_prefilteredEnvironmentCubeMap.cubeMap->isValid();
   }
 
   void Skybox::clear()
   {
     m_cubeMap.reset();
     m_diffuseIrradianceCubeMap.reset();
-    m_prefilteredEnvironmentCubeMap.reset();
+    m_prefilteredEnvironmentCubeMap = graphics::environment::PrefilteredEnvironmentCubeMap();
   }
 
   void Skybox::destroy()
   {
-    m_cubeMap.reset();
-    m_diffuseIrradianceCubeMap.reset();
-    m_prefilteredEnvironmentCubeMap.reset();
+    clear();
   }
 }

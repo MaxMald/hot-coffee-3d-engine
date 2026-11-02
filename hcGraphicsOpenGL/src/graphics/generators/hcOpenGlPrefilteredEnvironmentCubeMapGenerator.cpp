@@ -37,7 +37,8 @@ namespace hc::graphics::generators
     destroy();
   }
 
-  SharedPtr<ICubeMap> OpenGlPrefilteredEnvironmentCubeMapGenerator::generate(
+  graphics::environment::PrefilteredEnvironmentCubeMap
+  OpenGlPrefilteredEnvironmentCubeMapGenerator::generate(
     const ICubeMap& inputCubeMap,
     const PrefilteredEnvironmentCubeMapGeneratorSettings& settings
   )
@@ -61,8 +62,7 @@ namespace hc::graphics::generators
       throw InvalidArgumentException(
         String::Format("Custom face size exceeds the maximum supported cube map size of %d.", maxCubeMapSize)
       );
-
-    // Generate the mipmaps for the prefiltered environment cube map.
+    
     UInt32 numMipLevels = static_cast<UInt32>(
       Math::Floor(
         Math::Log2(static_cast<float>(settings.faceSize))
@@ -204,7 +204,11 @@ namespace hc::graphics::generators
     glBindTexture(GL_TEXTURE_CUBE_MAP, currentBindCubeMap0);
     glActiveTexture(currentActiveTextureSlot);
 
-    return cubeMap;
+    graphics::environment::PrefilteredEnvironmentCubeMap result;
+    result.cubeMap = cubeMap;
+    result.numMipLevels = numMipLevels;
+
+    return result;
   }
 
   void OpenGlPrefilteredEnvironmentCubeMapGenerator::destroy()

@@ -28,7 +28,7 @@ namespace hc::editor
     (void)slotIndex; // unused parameter
 
     Color baseColor = material->getBaseColor();
-    if (hcImGui::DrawColorEdit3("Base Color", baseColor))
+    if (hcImGui::DrawColorEdit4("Base Color", baseColor))
       material->setBaseColor(baseColor);
 
     float metallic = material->getMetallic();

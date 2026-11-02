@@ -56,7 +56,7 @@ namespace hc
     void initialize(
       SharedPtr<ICubeMap> cubeMap,
       SharedPtr<ICubeMap> diffuseIrradianceCubeMap,
-      SharedPtr<ICubeMap> prefilteredEnvironmentCubeMap
+      graphics::environment::PrefilteredEnvironmentCubeMap prefilteredEnvironmentCubeMap
     );
 
     /**
@@ -154,30 +154,18 @@ namespace hc
      * @brief Gets the prefiltered environment cube map associated with the skybox.
      * @return Reference to the prefiltered environment cube map.
      */
-    inline const ICubeMap& getPrefilteredEnvironmentCubeMap() const
+    inline const graphics::environment::PrefilteredEnvironmentCubeMap&
+    getPrefilteredEnvironmentCubeMap() const
     {
-      if (m_prefilteredEnvironmentCubeMap == nullptr)
-        throw RuntimeErrorException("Skybox::getPrefilteredEnvironmentCubeMap: PrefilteredEnvironmentCubeMap is undefined.");
-      return *m_prefilteredEnvironmentCubeMap;
+      return m_prefilteredEnvironmentCubeMap;
     }
 
     /**
      * @brief Gets the prefiltered environment cube map associated with the skybox.
      * @return Reference to the prefiltered environment cube map.
      */
-    inline ICubeMap& getPrefilteredEnvironmentCubeMap()
-    {
-      if (m_prefilteredEnvironmentCubeMap == nullptr)
-        throw RuntimeErrorException("Skybox::getPrefilteredEnvironmentCubeMap: PrefilteredEnvironmentCubeMap is undefined.");
-      return *m_prefilteredEnvironmentCubeMap;
-    }
-
-    /**
-     * @brief Gets the shared pointer to the prefiltered environment cube map associated
-     * with the skybox.
-     * @return Shared pointer to the prefiltered environment cube map.
-     */
-    inline SharedPtr<ICubeMap> getPrefilteredEnvironmentCubeMapPtr() const
+    inline graphics::environment::PrefilteredEnvironmentCubeMap&
+    getPrefilteredEnvironmentCubeMap()
     {
       return m_prefilteredEnvironmentCubeMap;
     }
@@ -195,6 +183,6 @@ namespace hc
   protected:
     SharedPtr<ICubeMap> m_cubeMap;
     SharedPtr<ICubeMap> m_diffuseIrradianceCubeMap;
-    SharedPtr<ICubeMap> m_prefilteredEnvironmentCubeMap;
+    graphics::environment::PrefilteredEnvironmentCubeMap m_prefilteredEnvironmentCubeMap;
   };
 }

@@ -70,7 +70,7 @@ namespace hc
 
     m_environmentManager.setEnvironmentCubeMap(skybox.getCubeMapPtr());
     m_environmentManager.setDiffuseIrradianceCubeMap(skybox.getDiffuseIrradianceCubeMapPtr());
-    m_environmentManager.setPrefilteredEnvironmentCubeMap(skybox.getPrefilteredEnvironmentCubeMapPtr());
+    m_environmentManager.setPrefilteredEnvironmentCubeMap(skybox.getPrefilteredEnvironmentCubeMap());
   }
 
   void FrameRenderer::clearSkybox()

@@ -256,6 +256,7 @@ namespace hc
       MaterialPBR = 7,
       Scene = 8,
       CubeMapGenerator = 9,
+      Environment = 10,
       Count
     };
 

@@ -4,10 +4,13 @@
 
 namespace hc
 {
+  static constexpr UInt16 OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL = 1000;
+
   OpenGlCubeMap::OpenGlCubeMap() :
     m_sourcePath(),
     m_id(0),
     m_faceSize(0),
+    m_mipmapMaxLevel(OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL),
     m_textureFormat(textureFormatType::RGBA8),
     m_colorSpace(colorSpaceType::Linear),
     m_valid(false)
@@ -131,6 +134,7 @@ namespace hc
     m_faceSize = faceSize;
     m_textureFormat = format;
     m_colorSpace = colorSpace;
+    m_mipmapMaxLevel = settings.mipmapMaxLevel;
     m_sourcePath = sourcePath;
     m_valid = true;
   }
@@ -190,6 +194,7 @@ namespace hc
     m_faceSize = settings.faceSize;
     m_textureFormat = settings.format;
     m_colorSpace = settings.colorSpace;
+    m_mipmapMaxLevel = settings.mipmapMaxLevel;
     m_sourcePath.clear();
     m_valid = true;
   }
@@ -213,6 +218,9 @@ namespace hc
     }
 
     m_faceSize = 0;
+    m_mipmapMaxLevel = OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL;
+    m_textureFormat = textureFormatType::RGBA8;
+    m_colorSpace = colorSpaceType::Linear;
     m_sourcePath.clear();
     m_valid = false;
   }
@@ -235,6 +243,11 @@ namespace hc
   colorSpaceType::Type OpenGlCubeMap::getColorSpace() const
   {
     return m_colorSpace;
+  }
+
+  UInt16 OpenGlCubeMap::getMipmapMaxLevel() const
+  {
+    return m_mipmapMaxLevel;
   }
 
   void OpenGlCubeMap::bind(UInt32 slot) const

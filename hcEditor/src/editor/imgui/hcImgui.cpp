@@ -20,6 +20,31 @@ namespace hc::editor
       return false;
     }
 
+    bool DrawColorEdit4(const String& label, Color& color)
+    {
+      bool changed = false;
+      ImGui::BeginTable("LabelValueTable", 2, ImGuiTableFlags_SizingFixedFit);
+      ImGui::TableSetupColumn("Color", ImGuiTableColumnFlags_WidthFixed, 200.0f);
+      ImGui::TableSetupColumn("Label", ImGuiTableColumnFlags_WidthStretch);
+      ImGui::TableNextRow();
+      ImGui::TableSetColumnIndex(0);
+      ImGui::SetNextItemWidth(200.0f);
+      float col[4] = { color.r, color.g, color.b, color.a };
+      if (ImGui::ColorEdit4("##Color", col))
+      {
+        color.r = col[0];
+        color.g = col[1];
+        color.b = col[2];
+        color.a = col[3];
+        changed = true;
+      }
+
+      ImGui::TableSetColumnIndex(1);
+      ImGui::Text("%s", label.c_str());
+      ImGui::EndTable();
+      return changed;
+    }
+
     bool DrawColorEdit3(const String& label, Color& color)
     {
       bool changed = false;

@@ -64,6 +64,7 @@
 #include "hc/graphics/generators/hcIEquirectangularToCubeMapGenerator.h"
 #include "hc/graphics/generators/hcIDiffuseIrradianceCubeMapGenerator.h"
 #include "hc/graphics/generators/hcIPrefilteredEnvironmentCubeMapGenerator.h"
+#include "hc/graphics/environment/hcPrefilteredEnvironmentCubeMap.h"
 #include "hc/graphics/hcRenderContext.h"
 #include "hc/graphics/hcDrawCommand.h"
 

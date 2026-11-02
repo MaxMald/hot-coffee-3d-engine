@@ -98,6 +98,12 @@ namespace hc
     virtual colorSpaceType::Type getColorSpace() const = 0;
 
     /**
+     * @brief Gets the maximum mipmap level of the cube map.
+     * @return The maximum mipmap level of the cube map.
+     */
+    virtual UInt16 getMipmapMaxLevel() const = 0;
+
+    /**
      * @brief Binds the cube map to the specified texture slot for rendering.
      * @param slot The texture slot to bind the cube map to.
      */
