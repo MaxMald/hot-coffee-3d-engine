@@ -20,7 +20,7 @@ Shadow mapping is currently used for shadow rendering. Support for omnidirection
 # PBR
 The engine implements Physically Based Rendering (PBR) using the Metallic-Roughness workflow.
 
-![hippo](https://media.giphy.com/media/z0eKCeaFV6nxA7RL89/giphy.gif)
+![hippo](https://media.giphy.com/media/F7LjNa5YoJXKIobJ4B/giphy.gif)
 
 # IBL
 Image-Based Lighting (IBL) techniques for environment lighting and reflections.
