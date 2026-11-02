@@ -15,7 +15,9 @@ namespace hc::graphics
     void initialize(SharedPtr<IShaderProgram> brdfLutGeneratorShaderProgram);
     void setEnvironmentCubeMap(SharedPtr<ICubeMap> cubeMap);
     void setDiffuseIrradianceCubeMap(SharedPtr<ICubeMap> cubeMap);
-    void setPrefilteredEnvironmentCubeMap(SharedPtr<ICubeMap> cubeMap);
+    void setPrefilteredEnvironmentCubeMap(
+      const graphics::environment::PrefilteredEnvironmentCubeMap& cubeMap
+    );
     void clearEnvironmentCubeMap();
     void clearDiffuseIrradianceCubeMap();
     void clearPrefilteredEnvironmentCubeMap();
@@ -30,7 +32,7 @@ namespace hc::graphics
     IDataBlockManager& m_dataBlockManager;
     SharedPtr<ICubeMap> m_environmentCubeMap;
     SharedPtr<ICubeMap> m_diffuseIrradianceCubeMap;
-    SharedPtr<ICubeMap> m_prefilteredEnvironmentCubeMap;
+    graphics::environment::PrefilteredEnvironmentCubeMap m_prefilteredEnvironmentCubeMap;
     SharedPtr<OpenGlTexture> m_brdfLutTexture;
     Image m_blackImage;
     OpenGlCubeMap m_blackCubeMap;

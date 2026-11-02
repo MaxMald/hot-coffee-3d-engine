@@ -19,7 +19,7 @@ layout(binding = 2) uniform sampler2D uORM;
 void main()
 {
   vec4 albedoTex = texture(uAlbedo, vTexCoord);
- if (isAlphaLessThanCutoff(albedoTex, uAlphaCutoff))
+  if (isAlphaLessThanCutoff(albedoTex, uAlphaCutoff))
     discard;
 
   vec3 N = normalize(vNormal);
@@ -33,8 +33,8 @@ void main()
 
   vec4 ormiorSample = texture(uORM, vTexCoord);
   float occlusion = ormiorSample.x;
-  float roughness = ormiorSample.y;
-  float metallic = ormiorSample.z;
+  float roughness = ormiorSample.y * uRoughness;
+  float metallic = ormiorSample.z * uMetallic;
 
   vec4 baseColor = uBaseColor * vColor * albedoTex;
   
@@ -49,5 +49,6 @@ void main()
     occlusion
   );
 
-  FragColor = vec4(oRadiance.rgb, albedoTex.a);
+  float alpha = albedoTex.a * uBaseColor.a * vColor.a;
+  FragColor = vec4(oRadiance.rgb, alpha);
 }

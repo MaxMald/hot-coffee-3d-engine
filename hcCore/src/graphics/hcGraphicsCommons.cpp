@@ -437,6 +437,8 @@ namespace hc
         return sizeof(dataBlockStructure::Scene);
       case dataBlockType::CubeMapGenerator:
         return sizeof(dataBlockStructure::CubeMapGenerator);
+      case dataBlockType::Environment:
+        return sizeof(dataBlockStructure::Environment);
       default:
         throw RuntimeErrorException(
           String::Format("GetDataBlockSize: Unknown data block type: %d", static_cast<Int32>(type))

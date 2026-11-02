@@ -8,7 +8,7 @@ namespace hc::graphics
     m_dataBlockManager(dataBlockManager),
     m_environmentCubeMap(nullptr),
     m_diffuseIrradianceCubeMap(nullptr),
-    m_prefilteredEnvironmentCubeMap(nullptr),
+    m_prefilteredEnvironmentCubeMap(),
     m_brdfLutTexture(nullptr),
     m_blackImage(1, 1, textureFormatType::RGB8, colorSpaceType::Linear, Color(0.0f)),
     m_blackCubeMap(),
@@ -71,11 +71,13 @@ namespace hc::graphics
     m_diffuseIrradianceCubeMap = cubeMap;
   }
 
-  void OpenGlEnvironmentManager::setPrefilteredEnvironmentCubeMap(SharedPtr<ICubeMap> cubeMap)
+  void OpenGlEnvironmentManager::setPrefilteredEnvironmentCubeMap(
+    const graphics::environment::PrefilteredEnvironmentCubeMap& prefilteredCubeMap
+  )
   {
-    if (cubeMap == nullptr || !cubeMap->isValid())
+    if (prefilteredCubeMap.cubeMap == nullptr || !prefilteredCubeMap.cubeMap->isValid())
       throw InvalidArgumentException("Invalid cube map provided for prefiltered environment textures.");
-    m_prefilteredEnvironmentCubeMap = cubeMap;
+    m_prefilteredEnvironmentCubeMap = prefilteredCubeMap;
   }
 
   void OpenGlEnvironmentManager::clearEnvironmentCubeMap()
@@ -90,7 +92,7 @@ namespace hc::graphics
 
   void OpenGlEnvironmentManager::clearPrefilteredEnvironmentCubeMap()
   {
-    m_prefilteredEnvironmentCubeMap.reset();
+    m_prefilteredEnvironmentCubeMap = graphics::environment::PrefilteredEnvironmentCubeMap();
   }
 
   void OpenGlEnvironmentManager::bindEnvironmentResources() const
@@ -113,10 +115,21 @@ namespace hc::graphics
     else
       m_blackCubeMap.bind(SLOT_ENVIRONMENT_DIFFUSE_IRRADIANCE_CUBE_MAP);
 
-    if (m_prefilteredEnvironmentCubeMap != nullptr && m_prefilteredEnvironmentCubeMap->isValid())
-      m_prefilteredEnvironmentCubeMap->bind(SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP);
+    UInt16 prefilteredNumMipLevels = 1;
+    if (m_prefilteredEnvironmentCubeMap.cubeMap != nullptr && m_prefilteredEnvironmentCubeMap.cubeMap->isValid())
+    {
+      m_prefilteredEnvironmentCubeMap.cubeMap->bind(SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP);
+      prefilteredNumMipLevels = m_prefilteredEnvironmentCubeMap.numMipLevels;
+    }
     else
       m_blackCubeMap.bind(SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP);
+
+    // ---- Upload environment data
+
+    dataBlockStructure::Environment environmentData;
+    environmentData.prefilteredEnvironmentMaxLevel = prefilteredNumMipLevels - 1;
+    m_dataBlockManager.upload(dataBlockType::Environment, &environmentData);
+    m_dataBlockManager.bind(dataBlockType::Environment);
   }
 
   void OpenGlEnvironmentManager::destroy()
@@ -150,7 +163,7 @@ namespace hc::graphics
 
     m_environmentCubeMap.reset();
     m_diffuseIrradianceCubeMap.reset();
-    m_prefilteredEnvironmentCubeMap.reset();
+    m_prefilteredEnvironmentCubeMap = graphics::environment::PrefilteredEnvironmentCubeMap();
     m_brdfLutTexture.reset();
     m_blackCubeMap.destroy();
     m_isInitialized = false;

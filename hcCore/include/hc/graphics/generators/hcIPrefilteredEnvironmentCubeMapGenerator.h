@@ -2,6 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+#include "hc/graphics/environment/hcPrefilteredEnvironmentCubeMap.h"
 
 namespace hc
 {
@@ -44,9 +45,10 @@ namespace hc
        * the specified settings.
        * @param inputCubeMap The input cube map to prefilter.
        * @param settings The settings to use for prefiltering.
-       * @return A shared pointer to the generated prefiltered environment cube map.
+       * @return The generated prefiltered environment cube map.
        */
-      virtual SharedPtr<ICubeMap> generate(
+      virtual graphics::environment::PrefilteredEnvironmentCubeMap
+      generate(
         const ICubeMap& inputCubeMap,
         const PrefilteredEnvironmentCubeMapGeneratorSettings& settings
       ) = 0;

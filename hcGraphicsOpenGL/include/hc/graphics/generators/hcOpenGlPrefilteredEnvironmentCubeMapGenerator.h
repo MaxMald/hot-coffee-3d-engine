@@ -18,7 +18,8 @@ namespace hc::graphics::generators
     /**
      * @copydoc IPrefilteredEnvironmentCubeMapGenerator::generate
      */
-    SharedPtr<ICubeMap> generate(
+    graphics::environment::PrefilteredEnvironmentCubeMap
+    generate(
       const ICubeMap& inputCubeMap,
       const PrefilteredEnvironmentCubeMapGeneratorSettings& settings
     ) override;

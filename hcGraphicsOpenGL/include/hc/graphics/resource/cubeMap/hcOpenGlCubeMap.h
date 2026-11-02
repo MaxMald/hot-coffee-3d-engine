@@ -65,6 +65,11 @@ namespace hc
     colorSpaceType::Type  getColorSpace() const override;
 
     /**
+     * @copydoc ICubeMap::getMipmapMaxLevel
+     */
+    UInt16 getMipmapMaxLevel() const override;
+
+    /**
      * @copydoc ICubeMap::bind
      */
     void bind(UInt32 slot) const override;
@@ -92,6 +97,7 @@ namespace hc
     Path m_sourcePath;
     UInt32 m_id;
     UInt32 m_faceSize;
+    UInt16  m_mipmapMaxLevel;
     textureFormatType::Type m_textureFormat;
     colorSpaceType::Type m_colorSpace;
     bool m_valid;

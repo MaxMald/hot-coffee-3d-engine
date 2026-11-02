@@ -91,6 +91,18 @@ namespace hc::editor
     bool DrawInputText(const String& label, String& text);
 
     /**
+     * @brief Draws a 4-component color editor widget in ImGui.
+     *
+     * Allows the user to edit the RGBA values of the provided color.
+     *
+     * @param label The label to display next to the widget.
+     * @param color Reference to the color to be edited.
+     *
+     * @return True if the color was modified, false otherwise.
+     */
+    bool DrawColorEdit4(const String& label, Color& color);
+
+    /**
      * @brief Draws a 3-component color editor widget in ImGui.
      *
      * Allows the user to edit the RGB values of the provided color.
