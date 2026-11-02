@@ -9,6 +9,10 @@ namespace hc::editor
    *
    * Provides a common interface and state for ImGui windows, including
    * open/close management.
+   *
+   * Derived classes must implement the following methos.
+   * - onDraw()
+   * - destroy()
    */
   class AWindowView : public IView
   {

@@ -49,7 +49,7 @@ namespace hc
     }
 
     m_deferredLightingShaderProgram->bind();
-    m_gBuffer->bindGTexturesForReading(0, 1, 2, 3, 4);
+    m_gBuffer->bindGTexturesForReading(0, 1, 2, 3);
     m_lightShadowMapManager.bindShadowTexturesForReading();
 
     glDrawArrays(GL_TRIANGLES, 0, 3);

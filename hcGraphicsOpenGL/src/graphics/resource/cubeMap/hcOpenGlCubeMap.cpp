@@ -1,0 +1,286 @@
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
+
+#include "hc/graphics/hcOpenGlGraphicsUtilities.h"
+
+namespace hc
+{
+  static constexpr UInt16 OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL = 1000;
+
+  OpenGlCubeMap::OpenGlCubeMap() :
+    m_sourcePath(),
+    m_id(0),
+    m_faceSize(0),
+    m_mipmapMaxLevel(OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL),
+    m_textureFormat(textureFormatType::RGBA8),
+    m_colorSpace(colorSpaceType::Linear),
+    m_valid(false)
+  {}
+
+  OpenGlCubeMap::~OpenGlCubeMap()
+  {
+    destroy();
+  }
+
+  void OpenGlCubeMap::initialize(
+    const Image& px,
+    const Image& nx,
+    const Image& py,
+    const Image& ny,
+    const Image& pz,
+    const Image& nz,
+    const CubeMapInitializationSettings& settings,
+    const Path& sourcePath
+  )
+  {
+    if (m_valid)
+      throw RuntimeErrorException("Cube map is already initialized");
+    if (settings.faceSize == 0)
+      throw InvalidArgumentException("Face size must be greater than zero.");
+
+    UInt32 faceSize = settings.faceSize;
+    textureFormatType::Type format = settings.format;
+    colorSpaceType::Type colorSpace = settings.colorSpace;
+    assertImage(px, faceSize, format, colorSpace);
+    assertImage(nx, faceSize, format, colorSpace);
+    assertImage(py, faceSize, format, colorSpace);
+    assertImage(ny, faceSize, format, colorSpace);
+    assertImage(pz, faceSize, format, colorSpace);
+    assertImage(nz, faceSize, format, colorSpace);
+
+    GLint currentCubeMapTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(format, colorSpace);
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(format);
+    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(format);
+
+    try
+    {
+      glGenTextures(1, &m_id);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, px.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, nx.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, py.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, ny.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, pz.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0,
+        glInternalFormat,
+        faceSize, faceSize, 0,
+        glFormat,
+        glType, nz.getBuffer().data()
+      );
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+      destroy();
+      throw;
+    }
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+
+    m_faceSize = faceSize;
+    m_textureFormat = format;
+    m_colorSpace = colorSpace;
+    m_mipmapMaxLevel = settings.mipmapMaxLevel;
+    m_sourcePath = sourcePath;
+    m_valid = true;
+  }
+
+  void OpenGlCubeMap::initialize(
+    const CubeMapInitializationSettings& settings
+  )
+  {
+    if (m_valid)
+      throw RuntimeErrorException("Cube map is already initialized");
+
+    if (settings.faceSize == 0)
+      throw InvalidArgumentException("Face size must be greater than zero.");
+
+    GLint currentCubeMapTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    GLint glInternalFormat = openGlGraphicsUtilities::GetOpenGLInternalFormatFromTextureFormatAndColorSpaceType(settings.format, settings.colorSpace);
+    GLenum glFormat = openGlGraphicsUtilities::GetOpenGlFormatFromTextureFormatType(settings.format);
+    GLenum glType = openGlGraphicsUtilities::GetOpenGLDataTypeFromTextureFormatType(settings.format);
+
+    try
+    {
+      glGenTextures(1, &m_id);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+
+      for (int i = 0; i < 6; ++i)
+      {
+        glTexImage2D(
+          GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0,
+          glInternalFormat,
+          settings.faceSize, settings.faceSize, 0,
+          glFormat,
+          glType, nullptr
+        );
+        openGlGraphicsUtilities::AssertOpenGlHasNoError();
+      }
+
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, settings.mipmapMaxLevel);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, openGlGraphicsUtilities::GetOpenGlMagFilter(settings.magFilter));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, openGlGraphicsUtilities::GetOpenGlMinFilter(settings.minFilter, settings.mipmapMode));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, openGlGraphicsUtilities::GetOpenGlWrapMode(settings.wrap));
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+      destroy();
+      throw;
+    }
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+
+    m_faceSize = settings.faceSize;
+    m_textureFormat = settings.format;
+    m_colorSpace = settings.colorSpace;
+    m_mipmapMaxLevel = settings.mipmapMaxLevel;
+    m_sourcePath.clear();
+    m_valid = true;
+  }
+
+  bool OpenGlCubeMap::isValid() const
+  {
+    return m_valid;
+  }
+
+  void OpenGlCubeMap::destroy()
+  {
+    if (m_id != 0)
+    {
+      GLint currentTexture = 0;
+      glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentTexture);
+      if (currentTexture == static_cast<GLint>(m_id))
+        glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+      glDeleteTextures(1, &m_id);
+      m_id = 0;
+    }
+
+    m_faceSize = 0;
+    m_mipmapMaxLevel = OPENGL_CUBE_MAP_MAX_MIPMAP_LEVEL;
+    m_textureFormat = textureFormatType::RGBA8;
+    m_colorSpace = colorSpaceType::Linear;
+    m_sourcePath.clear();
+    m_valid = false;
+  }
+
+  const UUID& OpenGlCubeMap::getUUID() const
+  {
+    return m_uuid;
+  }
+
+  UInt32 OpenGlCubeMap::getFaceSize() const
+  {
+    return m_faceSize;
+  }
+
+  textureFormatType::Type OpenGlCubeMap::getTextureFormat() const
+  {
+    return m_textureFormat;
+  }
+
+  colorSpaceType::Type OpenGlCubeMap::getColorSpace() const
+  {
+    return m_colorSpace;
+  }
+
+  UInt16 OpenGlCubeMap::getMipmapMaxLevel() const
+  {
+    return m_mipmapMaxLevel;
+  }
+
+  void OpenGlCubeMap::bind(UInt32 slot) const
+  {
+    assertIsValid();
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+  }
+
+  void OpenGlCubeMap::generateMipmaps()
+  {
+    assertIsValid();
+
+    GLint currentCubeMapTexture = 0;
+    glGetIntegerv(GL_TEXTURE_BINDING_CUBE_MAP, &currentCubeMapTexture);
+
+    try
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, m_id);
+      glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+      openGlGraphicsUtilities::AssertOpenGlHasNoError();
+    }
+    catch (...)
+    {
+      glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+      throw RuntimeErrorException("Failed to generate mipmaps for the cube map.");
+    }
+
+    glBindTexture(GL_TEXTURE_CUBE_MAP, currentCubeMapTexture);
+  }
+
+  const Path& OpenGlCubeMap::getSourcePath() const
+  {
+    return m_sourcePath;
+  }
+}

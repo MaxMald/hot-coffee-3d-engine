@@ -32,7 +32,7 @@
 #include "hc/editor/views/windows/assetEditors/hcCubeMapDescriptorAssetEditor.h"
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
 #include "hc/editor/views/windows/assetManagerWindow/assetManagerDrawer/hcAssetManagerDrawersRegistry.h"
-#include "hc/editor/views/windows/sceneSkybox/hcSceneSkyboxWindow.h"
+#include "hc/editor/views/windows/sceneSettings/hcSceneSettingsWindow.h"
 
 namespace hc::editor
 {
@@ -106,7 +106,7 @@ namespace hc::editor
         *projectFileSelector
       ));
 
-      viewsManager.registerView(MakeUnique<SceneSkyboxWindow>(
+      viewsManager.registerView(MakeUnique<SceneSettingsWindow>(
         editorServiceManager.getService<EditorSceneManager>(),
         *projectFileSelector,
         hotCoffeeEngine.getAssetManager(),

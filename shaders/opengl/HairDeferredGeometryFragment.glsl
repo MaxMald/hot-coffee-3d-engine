@@ -9,10 +9,9 @@ layout(location = 3) in vec3 vTangent;
 layout(location = 4) in vec4 vColor;
 
 layout(location = 0) out vec4 OutPositionAndDepth;
-layout(location = 1) out vec4 OutNormalRoughness;
+layout(location = 1) out vec4 OutNormal;
 layout(location = 2) out vec4 OutAlbedoAlpha;
-layout(location = 3) out vec4 OutMaterialParameters;
-layout(location = 4) out vec4 OutSpecularColorAndShininess;
+layout(location = 3) out vec4 OutORMIOR;
 
 layout(binding = 0) uniform sampler2D uAlbedo;
 layout(binding = 1) uniform sampler2D uNormalMap;
@@ -33,11 +32,7 @@ void main()
   vec3 normalWS = normalize(TBN * normalTS);
 
   OutPositionAndDepth = vec4(vWorldPos, gl_FragCoord.z);
-  OutNormalRoughness = vec4(normalWS, 1.0 - (uShininess / 256.0));
+  OutNormal = vec4(normalWS, 1.0);
   OutAlbedoAlpha = baseColor;
-  OutMaterialParameters = vec4(0.0, 0.0, 0.0, 1.0);
-  
-  // Specularity is not used for hair during deferred geometry pass, so we set
-  // it to 0.0.
-  OutSpecularColorAndShininess = vec4(0.0, 0.0, 0.0, 0.0);
+  OutORMIOR = vec4(0.0, 0.0, 0.0, 1.0);
 }

@@ -70,6 +70,11 @@ namespace hc
     const Vector<SharedPtr<ITexture>>& getTextures() override;
 
     /**
+     * @copydoc ITextureManager::getDefaultTexture
+     */
+    SharedPtr<ITexture> getDefaultTexture(defaultTextureType::Type type) override;
+
+    /**
      * @brief Clears all managed textures and cached resources.
      */
     void clear() override;
@@ -78,5 +83,19 @@ namespace hc
     UniquePtr<ITextureFactory> m_textureFactory;
     IAssetManager& m_assetManager;
     Vector<SharedPtr<ITexture>> m_textures;
+    UnorderedMap<defaultTextureType::Type, SharedPtr<ITexture>> m_defaultTextures;
+
+    /**
+     * @brief Creates default textures for the specified type and saves them in the
+     * default textures map.
+     * 
+     * @param type The type of default texture to create.
+     * @param image The image data to use for the default texture.
+     * @return Shared pointer to the created default texture.
+     */
+    SharedPtr<ITexture> createAndSaveDefaultTexture(
+      defaultTextureType::Type type,
+      const Image& image
+    );
   };
 }

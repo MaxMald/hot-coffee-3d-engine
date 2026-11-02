@@ -11,7 +11,7 @@ namespace hc::editor
     clear();
   }
 
-  void ComponentDrawersManager::drawComponent(IComponent* component)
+  void ComponentDrawersManager::drawComponent(IComponent* component, bool& shouldRemove)
   {
     if (!component)
       return;
@@ -20,11 +20,11 @@ namespace hc::editor
     auto it = m_componentViews.find(type);
     if (it != m_componentViews.end())
     {
-      it->second->drawComponent(component);
+      it->second->drawComponent(component, shouldRemove);
     }
     else
     {
-      m_notImplementedView.drawComponent(component);
+      m_notImplementedView.drawComponent(component, shouldRemove);
     }
   }
 

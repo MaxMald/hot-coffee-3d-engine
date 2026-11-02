@@ -29,12 +29,14 @@ namespace hc
     // Arithmetic operators
     constexpr Vector3 operator+(const Vector3& rhs) const;
     constexpr Vector3 operator-(const Vector3& rhs) const;
+    constexpr Vector3 operator*(const Vector3& rhs) const;
     constexpr Vector3 operator*(T scalar) const;
     constexpr Vector3 operator/(T scalar) const;
 
     // Compound assignment
     constexpr Vector3& operator+=(const Vector3& rhs);
     constexpr Vector3& operator-=(const Vector3& rhs);
+    constexpr Vector3& operator*=(const Vector3& rhs);
     constexpr Vector3& operator*=(T scalar);
     constexpr Vector3& operator/=(T scalar);
 
@@ -69,6 +71,12 @@ namespace hc
   }
 
   template <typename T>
+  constexpr Vector3<T> Vector3<T>::operator*(const Vector3& rhs) const
+  {
+    return { x * rhs.x, y * rhs.y, z * rhs.z };
+  }
+
+  template <typename T>
   constexpr Vector3<T> Vector3<T>::operator*(T scalar) const
   {
     return { x * scalar, y * scalar, z * scalar };
@@ -91,6 +99,13 @@ namespace hc
   constexpr Vector3<T>& Vector3<T>::operator-=(const Vector3& rhs)
   {
     x -= rhs.x; y -= rhs.y; z -= rhs.z;
+    return *this;
+  }
+
+  template <typename T>
+  constexpr Vector3<T>& Vector3<T>::operator*=(const Vector3& rhs)
+  {
+    x *= rhs.x; y *= rhs.y; z *= rhs.z;
     return *this;
   }
 

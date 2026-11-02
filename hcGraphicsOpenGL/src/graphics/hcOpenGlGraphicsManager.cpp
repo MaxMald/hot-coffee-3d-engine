@@ -5,7 +5,7 @@
 #include "hc/graphics/resource/shaderProgram/hcOpenGlShaderProgramFactory.h"
 #include "hc/graphics/resource/mesh/hcOpenGlMeshFactory.h"
 #include "hc/graphics/resource/frameBuffer/hcOpenGlFrameBuffer.h"
-#include "hc/graphics/cubeMap/hcOpenGlCubeMap.h"
+#include "hc/graphics/resource/cubeMap/hcOpenGlCubeMap.h"
 #include "hc/graphics/hcOpenGlGraphicsUtilities.h"
 
 namespace hc
@@ -38,6 +38,9 @@ namespace hc
     m_viewportRect(0, 0, 1, 1),
     m_dataBlockManager(),
     m_frameRenderer(m_dataBlockManager),
+    m_equirectangularToCubeMapGenerator(m_dataBlockManager),
+    m_diffuseIrradianceCubeMapGenerator(m_dataBlockManager),
+    m_prefilteredEnvironmentCubeMapGenerator(m_dataBlockManager),
     m_polygonFillType(polygonFillType::Solid)
   {}
 
@@ -61,6 +64,7 @@ namespace hc
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+    glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS); // Enable seamless cube map sampling for better quality when sampling across cube map faces.
     glCullFace(GL_BACK);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 
@@ -71,6 +75,21 @@ namespace hc
       m_materialManager.initialize();
       m_frameRenderer.initialize(viewportRect, m_shaderProgramManager);
       m_frameRenderer.setRenderPipeline(graphicsSettings.renderPipelineType);
+      m_equirectangularToCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::EquirectangularToCubeMap
+        )
+      );
+      m_diffuseIrradianceCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::DiffuseIrradianceGenerator
+        )
+      );
+      m_prefilteredEnvironmentCubeMapGenerator.initialize(
+        m_shaderProgramManager.getBuiltInShaderProgram(
+          builtInShaderProgramType::PrefilteredEnvironmentGenerator
+        )
+      );
       setViewport(viewportRect);
     }
     catch (const Exception& e)
@@ -102,12 +121,14 @@ namespace hc
     return m_frameRenderer.getRenderTarget();
   }
 
-  void OpenGlGraphicsManager::setSkybox(ICubeMap* skyboxCubeMap)
+  void OpenGlGraphicsManager::setSkybox(const Skybox& skybox)
   {
-    if (skyboxCubeMap)
-      m_frameRenderer.setSkybox(reinterpret_cast<OpenGlCubeMap*>(skyboxCubeMap));
-    else
-      m_frameRenderer.removeSkybox();
+    m_frameRenderer.setSkybox(skybox);
+  }
+
+  void OpenGlGraphicsManager::clearSkybox()
+  {
+    m_frameRenderer.clearSkybox();
   }
 
   void OpenGlGraphicsManager::queueDrawCommand(const DrawCommand& command)
@@ -201,6 +222,24 @@ namespace hc
     return m_dataBlockManager;
   }
 
+  graphics::generators::IEquirectangularToCubeMapGenerator&
+  OpenGlGraphicsManager::getEquirectangularToCubeMapGenerator()
+  {
+    return m_equirectangularToCubeMapGenerator;
+  }
+
+  graphics::generators::IDiffuseIrradianceCubeMapGenerator&
+  OpenGlGraphicsManager::getDiffuseIrradianceCubeMapGenerator()
+  {
+    return m_diffuseIrradianceCubeMapGenerator;
+  }
+
+  graphics::generators::IPrefilteredEnvironmentCubeMapGenerator&
+  OpenGlGraphicsManager::getPrefilteredEnvironmentCubeMapGenerator()
+  {
+    return m_prefilteredEnvironmentCubeMapGenerator;
+  }
+
   IGBuffer& OpenGlGraphicsManager::getGBuffer()
   {
     return m_frameRenderer.getGBuffer();
@@ -244,6 +283,9 @@ namespace hc
 
   void OpenGlGraphicsManager::destroy()
   {
+    m_prefilteredEnvironmentCubeMapGenerator.destroy();
+    m_diffuseIrradianceCubeMapGenerator.destroy();
+    m_equirectangularToCubeMapGenerator.destroy();
     m_frameRenderer.destroy();
     m_materialManager.clear();
     m_textureManager.clear();

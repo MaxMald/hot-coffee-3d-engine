@@ -9,12 +9,13 @@ namespace hc
     constexpr const Char* MATERIAL_DESCRIPTOR = ".hcmatdesc";
     constexpr const Char* SCENE = ".hcscene";
 
-    inline const Array<const Char*, 4> SUPPORTED_IMAGES_EXTENSIONS =
+    inline const Array<const Char*, 5> SUPPORTED_IMAGES_EXTENSIONS =
     {
       ".png",
       ".jpg",
       ".jpeg",
-      ".tga"
+      ".tga",
+      ".hdr"
     };
 
     inline const Array<const Char*, 3> SUPPORTED_MODEL_EXTENSIONS =

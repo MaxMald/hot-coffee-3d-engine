@@ -27,8 +27,9 @@ namespace hc::editor
      * @brief Draws the component in the editor.
      *
      * @param component Pointer to the component to draw.
+     * @param shouldRemove Reference to a bool indicating if the component should be removed.
      */
-    virtual void drawComponent(IComponent* component) = 0;
+    virtual void drawComponent(IComponent* component, bool& shouldRemove) = 0;
 
   protected:
     IComponentDrawer() = default;

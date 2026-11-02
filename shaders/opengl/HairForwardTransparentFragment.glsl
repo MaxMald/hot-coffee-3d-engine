@@ -31,6 +31,8 @@ void main()
   vec3 viewDir = normalize(cameraPosition - vWorldPos);
 
   vec4 baseColor = albedoTex * vColor * uColor * 0.1; // Base color with ambient light contribution
+
+  /*
   vec4 lightedColor = calculateAllLightContribution(
     baseColor, 
     normalWS, 
@@ -38,7 +40,10 @@ void main()
     vWorldPos, 
     vec3(0.0, 0.0, 0.0), // No specular contribution in this pass
     1.0
-  );
+  );*/
+
+  // TODO Implement lighting for transparent hair
+  vec4 lightedColor = vec4(0.0);
 
   FragColor = vec4(lightedColor.rgb, albedoTex.a);
 }

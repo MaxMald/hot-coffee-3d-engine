@@ -4,8 +4,29 @@
 
 namespace hc
 {
-  static constexpr UInt32 SAMPLER_2D_BINDING_POINT_DIRECTIONAL_SHADOW_MAP = 5;
-  static constexpr UInt32 SAMPLER_2D_BINDING_POINT_SPOT_LIGHT_SHADOW_MAP = 6;
+  namespace graphics
+  {
+    /**
+     * @brief Binding slots for various textures used in the graphics pipeline.
+     *
+     * Although these slots are not strictly necessary, they provide a convenient way to
+     * manage texture bindings in shaders, specially for runtime shaders used during the
+     * frame rendering. Furthermore, it helps to see which slots are being used during the
+     * frame rendering in order to avoid conflicts.
+     */
+
+    static constexpr UInt32 SLOT_POSITION_DEPTH_TEXTURE = 0;
+    static constexpr UInt32 SLOT_NORMAL_TEXTURE = 1;
+    static constexpr UInt32 SLOT_ALBEDO_ALPHA_TEXTURE = 2;
+    static constexpr UInt32 SLOT_ORMIOR_TEXTURE = 3;
+    static constexpr UInt32 SLOT_DIRECTIONAL_SHADOW_MAPS = 5;
+    static constexpr UInt32 SLOT_SPOT_LIGHT_SHADOW_MAPS = 6;
+    static constexpr UInt32 SLOT_POINT_LIGHT_SHADOW_MAPS = 7;
+    static constexpr UInt32 SLOT_ENVIRONMENT_CUBE_MAP = 8;
+    static constexpr UInt32 SLOT_ENVIRONMENT_DIFFUSE_IRRADIANCE_CUBE_MAP = 9;
+    static constexpr UInt32 SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP = 10;
+    static constexpr UInt32 SLOT_ENVIRONMENT_BRDF_LUT_TEXTURE = 11;
+  }
 
   namespace graphicsBackendType
   {
@@ -119,8 +140,6 @@ namespace hc
       UnlitVertex = 0,
       UnlitFragment,
       LitVertex,
-      BlinnPhongForwardFragment,
-      BlinnPhongDeferredFragment,
       FullScreenTriangleVertex,
       DeferredLightingFragment,
       SkyboxVertex,
@@ -131,6 +150,15 @@ namespace hc
       HairDeferredGeometryFragment,
       HairForwardSpecularFragment,
       HairForwardTransparentFragment,
+      PBRDeferredGeometryFragment,
+      PBRForwardFragment,
+      EquirectangularToCubeMapVertex,
+      EquirectangularToCubeMapFragment,
+      DiffuseIrradianceGeneratorVertex,
+      DiffuseIrradianceGeneratorFragment,
+      PrefilteredEnvironmentGeneratorVertex,
+      PrefilteredEnvironmentGeneratorFragment,
+      BrdfLutGeneratorFragment,
       Count
     };
 
@@ -148,8 +176,6 @@ namespace hc
     enum HC_CORE_EXPORT Type : UInt8
     {
       Unlit = 0,
-      BlinnPhongForward,
-      BlinnPhongDeferredGeometry,
       DeferredLighting,
       Skybox,
       FinalPass,
@@ -157,6 +183,12 @@ namespace hc
       HairDeferredGeometry,
       HairForwardSpecular,
       HairForwardTransparent,
+      PBRDeferredGeometry,
+      PBRForward,
+      EquirectangularToCubeMap,
+      DiffuseIrradianceGenerator,
+      PrefilteredEnvironmentGenerator,
+      BrdfLutGenerator,
       Count
     };
 
@@ -173,8 +205,8 @@ namespace hc
     enum Type : UInt8
     {
       Unlit = 0,
-      BlinnPhong = 1,
-      Hair = 2,
+      Hair = 1,
+      PBR = 2,
       Unknown = 255
     };
 
@@ -208,6 +240,9 @@ namespace hc
      * @brief Enumeration of data block types used in the rendering engine.
      *
      * This enum defines the various types of data blocks that can be used for rendering.
+     *
+     * @note The index of each type also represents the binding point for the
+     * corresponding data block in the shader.
      */
     enum Type : UInt8
     {
@@ -217,10 +252,20 @@ namespace hc
       Object = 3,
       LightViewProjection = 4,
       MaterialUnlit = 5,
-      MaterialBlinnPhong = 6,
-      MaterialHair = 7,
+      MaterialHair = 6,
+      MaterialPBR = 7,
+      Scene = 8,
+      CubeMapGenerator = 9,
+      Environment = 10,
       Count
     };
+
+    /**
+     * @brief Retrieves the size of the data block for the specified type.
+     * @param dataBlockType The type of the data block.
+     * @return The size of the data block in bytes.
+     */
+    SizeT HC_CORE_EXPORT GetDataBlockSize(Type dataBlockType);
   }
 
   namespace textureType
@@ -234,41 +279,64 @@ namespace hc
     enum Type : UInt8
     {
       None = 0,
-      Diffuse = 1,
-      Specular = 2,
-      Ambient = 3,
-      Emissive = 4,
-      Height = 5,
-      Normals = 6,
-      Shininess = 7,
-      Opacity = 8,
-      Displacement = 9,
-      Lightmap = 10,
-      Reflection = 11,
 
-      // PBR
-      BaseColor = 12,
-      NormalCamera = 13,
-      EmissionColor = 14,
-      Metalness = 15,
-      DiffuseRoughness = 16,
-      AmbientOcclusion = 17,
-
-      Sheen = 19,
-      Clearcoat = 20,
-      Transmission = 21,
-
-      // Maya material declarations
-
-      MayaBase = 22,
-      MayaSpecular = 23,
-      MayaSpecularColor = 24,
-      MayaSpecularRoughness = 25,
-
-      Anisotropy = 26,
-      GltfMetallicRoughness = 27,
+      BaseColor = 1,
+      Normal = 2,
+      ORM = 3, // Occlusion, Roughness, Metallic
+      Specular = 4,
 
       Unknown = 255
+    };
+
+    String HC_CORE_EXPORT ToString(Type textureType);
+    Type HC_CORE_EXPORT FromString(const String& str);
+  }
+
+  namespace filterMode
+  {
+    /**
+     * @brief Enumeration of texture filter modes used in the rendering engine.
+     *
+     * This enum defines the various filtering methods that can be applied to textures
+     * during sampling.
+     */
+    enum Type : UInt8
+    {
+      Nearest = 0,  // pick the nearest texel
+      Linear = 1    // blend between the four nearest texels (bilinear filtering)
+    };
+  }
+
+  namespace mipmapMode
+  {
+    /**
+     * @brief Enumeration of mipmap modes used in the rendering engine.
+     *
+     * This enum defines the various mipmap filtering methods that can be applied to
+     * textures during sampling.
+     */
+    enum Type : UInt8
+    {
+      None = 0,     // no mipmaps, single level
+      Nearest = 1,  // pick the nearest mipmap level
+      Linear = 2    // blend between the two nearest mipmap levels (trilinear when combined with linear filtering)
+    };
+  }
+
+  namespace wrapMode
+  {
+    /**
+     * @brief Enumeration of texture wrap modes used in the rendering engine.
+     *
+     * This enum defines how texture coordinates outside the [0, 1] range are handled
+     * during sampling.
+     */
+    enum Type : UInt8
+    {
+      ClampToEdge,    // Clamp the texture coordinates to the edge of the texture, resulting in the edge texels being stretched.
+      Repeat,         // Repeat the texture coordinates, causing the texture to tile across the surface.
+      MirroredRepeat, // Mirror the texture coordinates and repeat, creating a mirrored tiling effect.
+      ClampToBorder   // Clamp the texture coordinates to a specified border color
     };
   }
 }

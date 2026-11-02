@@ -16,26 +16,39 @@ namespace hc::editor
       Scene* editorScene
     )
     {
-      serviceManager.registerService<ProjectManager>(
-        MakeUnique<ProjectManager>(engine.getAssetManager())
+      // Services are registered in the order of their dependencies. Services that depend
+      // on other services should be registered after their dependencies.
+
+      UniquePtr<EditorMetadataManager> editorMetadataManager = MakeUnique<EditorMetadataManager>(
+        engine.getAssetManager()
       );
+
+      UniquePtr<ProjectManager> projectManager = MakeUnique<ProjectManager>(
+        engine.getAssetManager(),
+        *editorMetadataManager
+      );
+
+      UniquePtr<EditorSceneManager> editorSceneManager = MakeUnique<EditorSceneManager>(
+        editorScene,
+        engine.getAssetManager(),
+        engine.getGraphicsManager(),
+        *projectManager,
+        *editorMetadataManager
+      );
+
       serviceManager.registerService<GameObjectSelectionService>(
-        MakeUnique<GameObjectSelectionService>()
-      );
-      serviceManager.registerService<EditorSceneManager>(
-        MakeUnique<EditorSceneManager>(
-          editorScene,
-          engine.getAssetManager(),
-          engine.getGraphicsManager(),
-          serviceManager.getService<ProjectManager>()
-        )
+        MakeUnique<GameObjectSelectionService>(*editorSceneManager)
       );
       serviceManager.registerService<MaterialDrawersManager>(
-        MakeUnique<MaterialDrawersManager>()
+        MakeUnique<MaterialDrawersManager>(engine.getGraphicsManager().getTextureManager())
       );
-      serviceManager.registerService<EditorMetadataManager>(
-        MakeUnique<EditorMetadataManager>(engine.getAssetManager())
-      );
+
+      // Register services that do not have dependencies on other services after all
+      // dependent services have been registered.
+
+      serviceManager.registerService<EditorSceneManager>(std::move(editorSceneManager));
+      serviceManager.registerService<ProjectManager>(std::move(projectManager));
+      serviceManager.registerService<EditorMetadataManager>(std::move(editorMetadataManager));
     }
   }
 }

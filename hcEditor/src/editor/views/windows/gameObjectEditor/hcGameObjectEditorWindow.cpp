@@ -6,8 +6,7 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersManager.h"
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcComponentDrawersRegistry.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -33,6 +32,7 @@ namespace hc::editor
   void GameObjectEditorWindow::destroy()
   {
     m_componentDrawersManager.clear();
+    m_componentsToRemove.clear();
   }
 
   void GameObjectEditorWindow::onDraw()
@@ -51,7 +51,7 @@ namespace hc::editor
       return;
 
     String name = gameObject->getName();
-    if (imguiUtilities::DrawInputText("Name", name))
+    if (hcImGui::DrawInputText("Name", name))
       gameObject->setName(name);
 
     ImGui::Separator();
@@ -84,7 +84,7 @@ namespace hc::editor
 
       if (ImGui::TreeNode("World Matrix"))
       {
-        imguiUtilities::DrawMatrix("World Matrix", gameObject->getWorldMatrix());
+        hcImGui::DrawMatrix("World Matrix", gameObject->getWorldMatrix());
         ImGui::TreePop();
       }
     }
@@ -119,12 +119,22 @@ namespace hc::editor
     if (!gameObject)
       return;
 
+    m_componentsToRemove.clear();
     gameObject->getComponents(m_gameObjectComponents);
     for (IComponent* component : m_gameObjectComponents)
     {
       ImGui::PushID(component);
-      m_componentDrawersManager.drawComponent(component);
+
+      bool shouldRemove = false;
+      m_componentDrawersManager.drawComponent(component, shouldRemove);
+
+      if (shouldRemove)
+        m_componentsToRemove.push_back(component);
+
       ImGui::PopID();
     }
+
+    for (IComponent* componentToRemove : m_componentsToRemove)
+      gameObject->removeComponent(componentToRemove);
   }
 }

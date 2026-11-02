@@ -1,12 +1,41 @@
 #pragma once
 
-#include "hc/utilities/hcTextureFormatType.h"
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
+#include "hc/graphics/hcGraphicsCommons.h"
 #include "hc/graphics/resource/hcIGraphicResource.h"
 
 namespace hc
 {
   class Image;
+
+  /**
+   * @brief Structure representing the initialization settings for a texture.
+   */
+  struct HC_CORE_EXPORT TextureInitializationSettings
+  {
+    UInt16 width = 1;                                           ///< The width of the texture in pixels.
+    UInt16 height = 1;                                          ///< The height of the texture in pixels.
+    UInt16 mipmapMaxLevel = 1000;                               ///< The maximum mipmap level for the texture. This is the highest level that will be generated when mipmaps are created.
+    textureFormatType::Type format = textureFormatType::RGBA8;  ///< The texture format of the texture (e.g., RGB8, RGBA8, Depth24).
+    colorSpaceType::Type colorSpace = colorSpaceType::Linear;   ///< The color space of the texture (e.g., sRGB, Linear).
+    filterMode::Type minFilter = filterMode::Linear;            ///< The minification filter mode for the texture. Determines how the texture is sampled when it is scaled down.
+    filterMode::Type magFilter = filterMode::Linear;            ///< The magnification filter mode for the texture. Determines how the texture is sampled when it is scaled up.
+    mipmapMode::Type mipmapMode = mipmapMode::None;             ///< The mipmap mode for the texture. Determines how mipmaps are sampled.
+    wrapMode::Type wrap = wrapMode::Repeat;                     ///< The wrap mode for the texture. Determines how texture coordinates outside the [0, 1] range are handled.
+
+    /**
+     * @brief Default constructor for TextureInitializationSettings.
+     * Initializes the texture settings with default values.
+     */
+    TextureInitializationSettings();
+
+    /**
+     * @brief Constructor for TextureInitializationSettings that initializes the settings
+     * based on the provided image.
+     * @param image The image asset from which to derive the texture settings.
+     */
+    explicit TextureInitializationSettings(const Image& image);
+  };
 
   /**
    * @brief Interface for texture resources in the graphics module.
@@ -22,56 +51,23 @@ namespace hc
      *
      * @param image The image asset containing the pixel data and dimensions for the
      * texture.
-     */
-    virtual void initialize(const Image& image) = 0;
-
-    /**
-     * @brief Initializes the texture with the given dimensions. The texture will be
-     * created with empty pixel data. Color space will default to Linear.
-     *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The texture format of the texture.
+     * @param initializationSettings Initialization settings for the texture.
+     * @param sourcePath Optional source path of the texture if it was loaded from a file.
      */
     virtual void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format
+      const Image& image,
+      const TextureInitializationSettings& initializationSettings,
+      const Path& sourcePath
     ) = 0;
 
     /**
-     * @brief Initializes the texture with the given dimensions and color space. The
-     * texture will be created with empty pixel data.
+     * @brief Initializes the texture with the specified width, height, format, and color
+     * space. This method is used to create an empty texture that can be filled later.
      *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The texture format of the texture.
-     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
+     * @param initializationSettings Initialization settings for the texture.
      */
     virtual void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace
-    ) = 0;
-
-    /**
-     * @brief Initializes the texture with the given dimensions and fills it with the
-     * specified color. The texture will be created with pixel data initialized to the
-     * provided color.
-     *
-     * @param width The width of the texture in pixels.
-     * @param height The height of the texture in pixels.
-     * @param format The color format of the texture.
-     * @param colorSpace The color space of the texture (e.g., sRGB, Linear).
-     * @param initColor The color to initialize the texture's pixel data with.
-     */
-    virtual void initialize(
-      UInt32 width,
-      UInt32 height,
-      textureFormatType::Type format,
-      colorSpaceType::Type colorSpace,
-      const Color& initColor
+      const TextureInitializationSettings& initializationSettings
     ) = 0;
 
     /**
@@ -144,6 +140,6 @@ namespace hc
      *
      * @return Reference to the source path of the texture.
      */
-    virtual inline const Path& getSourcePath() const = 0;
+    virtual const Path& getSourcePath() const = 0;
   };
 }

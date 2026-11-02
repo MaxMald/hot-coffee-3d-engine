@@ -59,6 +59,7 @@ namespace hc::editor
           return;
         }
       },
+      []() {},
       true
     );
   }

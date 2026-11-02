@@ -5,20 +5,21 @@
 #include "hc/editor/hcEditorCommons.h"
 #include "hc/editor/services/materialDrawer/hcIMaterialDrawer.h"
 #include "hc/editor/services/materialDrawer/hcUnlitMaterialDrawer.h"
-#include "hc/editor/services/materialDrawer/hcBlinnPhongMaterialDrawer.h"
 #include "hc/editor/services/materialDrawer/hcHairMaterialDrawer.h"
+#include "hc/editor/services/materialDrawer/hcPBRMaterialDrawer.h"
 
 namespace hc::editor
 {
-  MaterialDrawersManager::MaterialDrawersManager() :
+  MaterialDrawersManager::MaterialDrawersManager(ITextureManager& textureManager) :
+    m_textureManager(textureManager),
     m_notImplementedDrawer()
   {}
 
   void MaterialDrawersManager::prepare()
   {
-    addDrawer(MakeUnique<UnlitMaterialDrawer>());
-    addDrawer(MakeUnique<BlinnPhongMaterialDrawer>());
-    addDrawer(MakeUnique<HairMaterialDrawer>());
+    addDrawer(MakeUnique<UnlitMaterialDrawer>(m_textureManager));
+    addDrawer(MakeUnique<PBRMaterialDrawer>(m_textureManager));
+    addDrawer(MakeUnique<HairMaterialDrawer>(m_textureManager));
   }
 
   void MaterialDrawersManager::destroy()
@@ -39,7 +40,11 @@ namespace hc::editor
       m_notImplementedDrawer.drawMaterial(material);
   }
 
-  void MaterialDrawersManager::drawMeshMaterial(IMaterial* material, SizeT slotIndex)
+  void MaterialDrawersManager::drawMeshMaterial(
+    IMaterial* material,
+    SizeT slotIndex,
+    ProjectFileDialogView& projectFileDialogView
+  )
   {
     if (!material)
       return;
@@ -71,9 +76,9 @@ namespace hc::editor
     materialType::Type materialType = material->getMaterialType();
     auto it = m_drawers.find(materialType);
     if (it != m_drawers.end())
-      it->second->drawMeshMaterial(material, slotIndex);
+      it->second->drawMeshMaterial(material, static_cast<UInt32>(slotIndex), projectFileDialogView);
     else
-      m_notImplementedDrawer.drawMeshMaterial(material, slotIndex);
+      m_notImplementedDrawer.drawMeshMaterial(material, static_cast<UInt32>(slotIndex), projectFileDialogView);
   }
 
   void MaterialDrawersManager::addDrawer(UniquePtr<IMaterialDrawer> materialDrawer)

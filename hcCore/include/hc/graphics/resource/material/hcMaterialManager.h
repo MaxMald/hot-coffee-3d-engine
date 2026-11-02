@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
 #include "hc/graphics/resource/material/hcIMaterialManager.h"
 
 namespace hc
@@ -52,9 +52,9 @@ namespace hc
     ) override;
 
     /**
-     * @copydoc IMaterialManager::createBlinnPhongMaterial
+     * @copydoc IMaterialManager::createPBRMaterial
      */
-    SharedPtr<BlinnPhongMaterial> createBlinnPhongMaterial(
+    SharedPtr<PBRMaterial> createPBRMaterial(
       const SharedPtr<MaterialDescriptor>& descriptor
     ) override;
 
@@ -71,21 +71,6 @@ namespace hc
     const Vector<SharedPtr<IMaterial>>& getMaterials() const override;
 
     /**
-     * @copydoc IMaterialManager::getDefaultAlbedoTexture
-     */
-    const SharedPtr<ITexture>& getDefaultAlbedoTexture() const override;
-
-    /** 
-     * @copydoc IMaterialManager::getDefaultNormalTexture
-     */
-    const SharedPtr<ITexture>& getDefaultNormalTexture() const override;
-
-    /**
-     * @copydoc IMaterialManager::getDefaultSpecularTexture
-     */
-    const SharedPtr<ITexture>& getDefaultSpecularTexture() const override;
-
-    /**
      * @copydoc IMaterialManager::clear
      */
     void clear();
@@ -100,11 +85,8 @@ namespace hc
     IShaderProgramManager& m_shaderProgramManager;
     ITextureManager& m_textureManager;
     Vector<SharedPtr<IMaterial>> m_materials;
-    SharedPtr<ITexture> m_whiteTexture;
-    SharedPtr<ITexture> m_defaultNormalTexture;
 
     UInt16 generateMaterialId();
-    void createDefaultTextures();
     SharedPtr<ITexture> getTextureFromPath(const Path& texturePath);
     SharedPtr<ITexture> getTextureFromPath(
       const Path& texturePath,

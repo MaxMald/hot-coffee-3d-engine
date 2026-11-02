@@ -71,40 +71,71 @@ namespace hc
     void update(const Time& elapsedTime);
 
     /**
-     * @brief Adds a root GameObject to the scene graph.
+     * @brief Gets the root GameObject of the scene graph.
      *
-     * The GameObject must not have a parent. Ownership is transferred to the
-     * SceneGraph.
-     *
-     * @param root Unique pointer to the root GameObject to add.
+     * @return Pointer to the root GameObject.
      */
-    void addRoot(UniquePtr<GameObject> root);
+    inline GameObject* getRoot() const
+    {
+      return m_root.get();
+    }
 
     /**
-     * @brief Removes the first root GameObject with the specified name from the
-     * scene graph and returns ownership to the caller.
+     * @brief Adds a GameObject to the root level of the scene graph.
      *
-     * @param name The name of the root GameObject to remove.
+     * @param gameObject Unique pointer to the root GameObject to add.
+     */
+    void addGameObject(UniquePtr<GameObject> gameObject);
+
+    /**
+     * @brief Removes the first found GameObject with the specified name from the scene
+     * graph and returns ownership of it.
+     *
+     * @note This method is recursive and will search through all GameObjects and their
+     * descendants to find a match.
+     *
+     * @param name The name of the GameObject to remove.
      *
      * @return Unique pointer to the removed GameObject, or nullptr if not found.
      */
-    UniquePtr<GameObject> removeRoot(const String& name);
+    UniquePtr<GameObject> removeGameObject(const String& name);
 
     /**
-     * @brief Retrieves the first root GameObject with the specified name.
+     * @brief Removes the GameObject with the specified UUID from the scene graph and
+     * returns ownership of it.
      *
-     * @param name The name of the root GameObject to retrieve.
+     * @note This method is recursive and will search through all GameObjects and their
+     * descendants to find a match.
      *
-     * @return Pointer to the GameObject, or nullptr if not found.
+     * @param uuid The UUID of the GameObject to remove.
+     *
+     * @return Unique pointer to the removed GameObject, or nullptr if not found.
      */
-    GameObject* getRoot(const String& name) const;
+    UniquePtr<GameObject> removeGameObject(const UUID& uuid);
 
     /**
-     * @brief Gets a const reference to all root GameObjects.
-     * 
-     * @return Const reference to the vector of root GameObjects.
+     * @brief Gets the first found GameObject with the specified name.
+     *
+     * @note This method is recursive and will search through all GameObjects and their
+     * descendants to find a match.
+     *
+     * @param name The name of the GameObject to find.
+     *
+     * @return Pointer to the found GameObject, or nullptr if not found.
      */
-    const Vector<UniquePtr<GameObject>>& getRoots() const;
+    GameObject* getGameObject(const String& name) const;
+
+    /**
+     * @brief Gets the GameObject with the specified UUID.
+     *
+     * @note This method is recursive and will search through all GameObjects and their
+     * descendants to find a match.
+     *
+     * @param uuid The UUID of the GameObject to find.
+     *
+     * @return Pointer to the found GameObject, or nullptr if not found.
+     */
+    GameObject* getGameObject(const UUID& uuid) const;
 
     /**
      * @brief Populates the provided vector with pointers to all GameObjects in the
@@ -121,9 +152,10 @@ namespace hc
 
   private:
     /**
-     * @brief Collection of root GameObjects owned by the SceneGraph.
+     * @brief Root GameObject of the scene graph. All other GameObjects are descendants of
+     * this root.
      */
-    Vector<UniquePtr<GameObject>> m_roots;
+    UniquePtr<GameObject> m_root;
 
     /**
      * @brief Pointer to the GameObjectFactory used for creating GameObjects during
@@ -137,6 +169,19 @@ namespace hc
      * @param gameObjectFactory Pointer to the factory to use for creating GameObjects.
      */
     void initialize(IGameObjectFactory* gameObjectFactory);
+
+    /**
+     * @brief Asserts that the SceneGraph is initialized and throws an exception if not.
+     *
+     * @throw RuntimeErrorException If the SceneGraph is not initialized.
+     */
+    inline void assertIsInitialized() const
+    {
+      if (m_root == nullptr)
+        throw RuntimeErrorException("Root GameObject is not initialized. Cannot perform operation.");
+      if (m_gameObjectFactory == nullptr)
+        throw RuntimeErrorException("GameObjectFactory is not initialized. Cannot perform operation.");
+    }
 
     friend class Scene;
   };

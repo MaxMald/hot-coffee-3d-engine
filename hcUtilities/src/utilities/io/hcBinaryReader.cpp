@@ -8,7 +8,6 @@ namespace hc::io
 {
   BinaryReader::BinaryReader() :
     m_stream(nullptr),
-    m_currentObject(nullptr),
     m_objectStack()
   {
   }
@@ -31,6 +30,8 @@ namespace hc::io
         );
 
       m_stream = std::move(fileStream);
+      assertStreamValid();
+
       return true;
     }
     catch (const Exception& e)
@@ -50,7 +51,6 @@ namespace hc::io
       m_stream.reset();
     }
 
-    m_currentObject.reset();
     while (!m_objectStack.empty())
       m_objectStack.pop();
   }
@@ -58,36 +58,29 @@ namespace hc::io
   bool BinaryReader::readBool()
   {
     UInt8 byteValue = 0;
-
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&byteValue), sizeof(UInt8));
-    else
-      m_stream->read(reinterpret_cast<char*>(&byteValue), sizeof(UInt8));
-
+    readStream(reinterpret_cast<char*>(&byteValue), sizeof(UInt8));
     return byteValue != 0;
+  }
+
+  bool BinaryReader::peekBool()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    bool value = readBool();
+    m_stream->seekg(originalPos);
+    return value;
   }
 
   Int8 BinaryReader::readInt8()
   {
     Int8 value = 0;
-
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Int8));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int8));
-
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int8));
     return value;
   }
 
   Int8 BinaryReader::peekInt8()
   {
-    if (m_currentObject != nullptr)
-    {
-      Int8 value = 0;
-      m_currentObject->peek(reinterpret_cast<Byte*>(&value), sizeof(Int8));
-      return value;
-    }
-
+    assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
     Int8 value = readInt8();
     m_stream->seekg(originalPos);
@@ -97,24 +90,13 @@ namespace hc::io
   Int16 BinaryReader::readInt16()
   {
     Int16 value = 0;
-
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Int16));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int16));
-
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int16));
     return value;
   }
 
   Int16 BinaryReader::peekInt16()
   {
-    if (m_currentObject != nullptr)
-    {
-      Int16 value = 0;
-      m_currentObject->peek(reinterpret_cast<Byte*>(&value), sizeof(Int16));
-      return value;
-    }
-
+    assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
     Int16 value = readInt16();
     m_stream->seekg(originalPos);
@@ -124,48 +106,45 @@ namespace hc::io
   Int32 BinaryReader::readInt32()
   {
     Int32 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int32));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Int32));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int32));
-
+  Int32 BinaryReader::peekInt32()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Int32 value = readInt32();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   Int64 BinaryReader::readInt64()
   {
     Int64 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(Int64));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Int64));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Int64));
-
+  Int64 BinaryReader::peekInt64()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Int64 value = readInt64();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   UInt8 BinaryReader::readUInt8()
   {
     UInt8 value = 0;
-
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(UInt8));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt8));
-
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt8));
     return value;
   }
 
   UInt8 BinaryReader::peekUInt8()
   {
-    if (m_currentObject != nullptr)
-    {
-      UInt8 value = 0;
-      m_currentObject->peek(reinterpret_cast<Byte*>(&value), sizeof(UInt8));
-      return value;
-    }
-
+    assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
     UInt8 value = readUInt8();
     m_stream->seekg(originalPos);
@@ -175,24 +154,13 @@ namespace hc::io
   UInt16 BinaryReader::readUInt16()
   {
     UInt16 value = 0;
-
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(UInt16));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt16));
-
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt16));
     return value;
   }
 
   UInt16 BinaryReader::peekUInt16()
   {
-    if (m_currentObject != nullptr)
-    {
-      UInt16 value = 0;
-      m_currentObject->peek(reinterpret_cast<Byte*>(&value), sizeof(UInt16));
-      return value;
-    }
-
+    assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
     UInt16 value = readUInt16();
     m_stream->seekg(originalPos);
@@ -202,96 +170,128 @@ namespace hc::io
   UInt32 BinaryReader::readUInt32()
   {
     UInt32 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt32));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(UInt32));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt32));
-
+  UInt32 BinaryReader::peekUInt32()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    UInt32 value = readUInt32();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   UInt64 BinaryReader::readUInt64()
   {
     UInt64 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(UInt64));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(UInt64));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(UInt64));
-
+  UInt64 BinaryReader::peekUInt64()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    UInt64 value = readUInt64();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   Char BinaryReader::readChar()
   {
     Char value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Char));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char));
-
+  Char BinaryReader::peekChar()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Char value = readChar();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   Char16 BinaryReader::readChar16()
   {
     Char16 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char16));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Char16));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char16));
-
+  Char16 BinaryReader::peekChar16()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Char16 value = readChar16();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   Char32 BinaryReader::readChar32()
   {
     Char32 value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(Char32));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(Char32));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Char32));
-
+  Char32 BinaryReader::peekChar32()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Char32 value = readChar32();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   UChar BinaryReader::readUChar()
   {
     UChar value = 0;
+    readStream(reinterpret_cast<char*>(&value), sizeof(UChar));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(UChar));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(UChar));
-
+  UChar BinaryReader::peekUChar()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    UChar value = readUChar();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   float BinaryReader::readFloat()
   {
     float value = 0.0f;
+    readStream(reinterpret_cast<char*>(&value), sizeof(float));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value), sizeof(float));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(float));
-
+  float BinaryReader::peekFloat()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    float value = readFloat();
+    m_stream->seekg(originalPos);
     return value;
   }
 
   Byte BinaryReader::readByte()
   {
     Byte value = static_cast<Byte>(0);
+    readStream(reinterpret_cast<char*>(&value), sizeof(Byte));
+    return value;
+  }
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(&value, sizeof(Byte));
-    else
-      m_stream->read(reinterpret_cast<char*>(&value), sizeof(Byte));
-
+  Byte BinaryReader::peekByte()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Byte value = readByte();
+    m_stream->seekg(originalPos);
     return value;
   }
 
@@ -300,11 +300,9 @@ namespace hc::io
     if (size == 0)
       return;
 
+    assertStreamValid();
     buffer.resize(size);
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(buffer.data(), size);
-    else
-      m_stream->read(reinterpret_cast<char*>(buffer.data()), size);
+    readStream(reinterpret_cast<char*>(buffer.data()), size);
   }
 
   void BinaryReader::readBytes(Byte* buffer, SizeT size)
@@ -315,20 +313,28 @@ namespace hc::io
     if (buffer == nullptr)
       throw RuntimeErrorException("BinaryReader: Cannot read bytes into the given buffer. Buffer pointer is null.");
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(buffer, size);
-    else
-      m_stream->read(reinterpret_cast<char*>(buffer), size);
+    readStream(reinterpret_cast<char*>(buffer), size);
   }
 
   SizeT BinaryReader::readSizeT()
   {
+    assertStreamValid();
     UInt64 fixedValue = readUInt64();
     return static_cast<SizeT>(fixedValue);
   }
 
+  SizeT BinaryReader::peekSizeT()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    SizeT value = readSizeT();
+    m_stream->seekg(originalPos);
+    return value;
+  }
+
   UUID BinaryReader::readUUID()
   {
+    assertStreamValid();
     SizeT byteSize = readSizeT();
     if (byteSize != UUID::UUID_BYTE_SIZE)
       throw RuntimeErrorException(
@@ -345,10 +351,29 @@ namespace hc::io
     return UUID(bytes);
   }
 
+  UUID BinaryReader::peekUUID()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    UUID value = readUUID();
+    m_stream->seekg(originalPos);
+    return value;
+  }
+
   Path BinaryReader::readPath()
   {
+    assertStreamValid();
     String pathString = readString();
     return Path(pathString.c_str());
+  }
+
+  Path BinaryReader::peekPath()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Path value = readPath();
+    m_stream->seekg(originalPos);
+    return value;
   }
 
   String BinaryReader::readString()
@@ -357,14 +382,42 @@ namespace hc::io
     if (length == 0)
       return String();
 
+    if (isReadingObject())
+    {
+      SizeT remainingBytes = remainingObjectBytes();
+      if (length > remainingBytes)
+        throw RuntimeErrorException(
+          String::Format("BinaryReader: Attempted to read a string of length %zu, but only %zu bytes remain in the current object.",
+            length,
+            remainingBytes
+          )
+        );
+    }
+    else
+    {
+      SizeT remainingBytes = remainingStreamBytes();
+      if (length > remainingBytes)
+        throw RuntimeErrorException(
+          String::Format("BinaryReader: Attempted to read a string of length %zu, but only %zu bytes remain in the stream.",
+            length,
+            remainingBytes
+          )
+        );
+    }
+
     String value;
     value.resize(length);
 
-    if (m_currentObject != nullptr)
-      m_currentObject->readAndConsume(reinterpret_cast<Byte*>(&value[0]), length);
-    else
-      m_stream->read(reinterpret_cast<char*>(&value[0]), length);
+    readStream(reinterpret_cast<char*>(&value[0]), length);
+    return value;
+  }
 
+  String BinaryReader::peekString()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    String value = readString();
+    m_stream->seekg(originalPos);
     return value;
   }
 
@@ -374,6 +427,15 @@ namespace hc::io
     value.x = readFloat();
     value.y = readFloat();
     value.z = readFloat();
+    return value;
+  }
+
+  Vector3f BinaryReader::peekVector3f()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Vector3f value = readVector3f();
+    m_stream->seekg(originalPos);
     return value;
   }
 
@@ -387,6 +449,15 @@ namespace hc::io
     return value;
   }
 
+  Vector4f BinaryReader::peekVector4f()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Vector4f value = readVector4f();
+    m_stream->seekg(originalPos);
+    return value;
+  }
+
   Matrix4 BinaryReader::readMatrix4()
   {
     Matrix4 value;
@@ -397,10 +468,28 @@ namespace hc::io
     return value;
   }
 
+  Matrix4 BinaryReader::peekMatrix4()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Matrix4 value = readMatrix4();
+    m_stream->seekg(originalPos);
+    return value;
+  }
+
   Angle BinaryReader::readAngle()
   {
     float radians = readFloat();
     return Angle::FromRadians(radians);
+  }
+
+  Angle BinaryReader::peekAngle()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    Angle value = readAngle();
+    m_stream->seekg(originalPos);
+    return value;
   }
 
   Color BinaryReader::readColor()
@@ -413,71 +502,58 @@ namespace hc::io
     return value;
   }
 
-  ObjectHeader BinaryReader::peekObjectHeader() const
+  Color BinaryReader::peekColor()
   {
-    ObjectHeader header;
-    if (m_currentObject != nullptr)
-    {
-      m_currentObject->peek(reinterpret_cast<Byte*>(&header), sizeof(ObjectHeader));
-      return header;
-    }
-
+    assertStreamValid();
     std::streampos originalPos = m_stream->tellg();
-    m_stream->read(reinterpret_cast<char*>(&header), sizeof(ObjectHeader));
+    Color value = readColor();
+    m_stream->seekg(originalPos);
+    return value;
+  }
+
+  ObjectHeader BinaryReader::peekObjectHeader()
+  {
+    assertStreamValid();
+    std::streampos originalPos = m_stream->tellg();
+    ObjectHeader header = readObjectHeader();
     m_stream->seekg(originalPos);
     return header;
   }
 
-  const ObjectHeader& BinaryReader::startReadingObject()
+  ObjectHeader BinaryReader::startReadingObject()
   {
+    assertStreamValid();
+    std::streampos startPos = m_stream->tellg();
     ObjectHeader header = readObjectHeader();
-    UniquePtr<ObjectData> newObject = MakeUnique<ObjectData>(header);
-    readBytes(newObject->getData(), static_cast<SizeT>(header.size));
 
-    if (m_currentObject != nullptr)
-    {
-      m_objectStack.push(std::move(m_currentObject));
-      m_currentObject.reset();
-    }
+    std::streampos endPos = startPos + static_cast<std::streampos>(header.size);
+    ObjectTrackingInfo trackingInfo;
+    trackingInfo.startPosition = startPos;
+    trackingInfo.endPosition = endPos;
+    m_objectStack.push(trackingInfo);
 
-    m_currentObject = std::move(newObject);
-    return m_currentObject->getHeader();
+    return header;
   }
 
   void BinaryReader::finishReadingObject()
   {
-    if (m_currentObject == nullptr)
+    if (m_objectStack.empty())
       throw RuntimeErrorException("No object is currently being read.");
 
-    m_currentObject.reset();
-    if (!m_objectStack.empty())
-    { 
-      m_currentObject = std::move(m_objectStack.top());
-      m_objectStack.pop();
-    }
-  }
+    ObjectTrackingInfo currentObject = m_objectStack.top();
+    m_objectStack.pop();
 
-  bool BinaryReader::isValid() const
-  {
-    return m_stream != nullptr && m_stream->good();
-  }
-
-  bool BinaryReader::hasMoreData() const
-  {
-    if (m_currentObject != nullptr)
-      return m_currentObject->getData().size() > 0;
-    return m_stream->peek() != EOF;
-  }
-
-  bool BinaryReader::isReadingObject() const
-  {
-    return m_currentObject != nullptr;
+    std::streampos currentPos = m_stream->tellg();
+    if (currentPos < currentObject.endPosition)
+      m_stream->seekg(currentObject.endPosition);
   }
 
   ObjectHeader BinaryReader::readObjectHeader()
   {
     ObjectHeader header;
-    readBytes(reinterpret_cast<Byte*>(&header), sizeof(ObjectHeader));
+    header.size = readUInt64();
+    header.type = readUInt32();
+    header.version = readUInt32();
     return header;
   }
 }

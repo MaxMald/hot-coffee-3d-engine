@@ -19,10 +19,18 @@ namespace hc
   class IMeshManager;
   class IGBuffer;
   class ICubeMap;
+  class Skybox;
   class ILightShadowMapManager;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
+
+  namespace graphics::generators
+  {
+    class IEquirectangularToCubeMapGenerator;
+    class IDiffuseIrradianceCubeMapGenerator;
+    class IPrefilteredEnvironmentCubeMapGenerator;
+  }
 
   /**
    * @brief Interface for graphics manager classes.
@@ -79,11 +87,15 @@ namespace hc
 
     /**
      * @brief Sets the skybox cube map to be used for rendering the skybox.
-     *
-     * @param skyboxCubeMap Pointer to the cube map texture to use as the skybox. Pass
-     * nullptr to disable skybox rendering.
+     * @param skybox Reference to the Skybox object containing the cube map and related
+     * data.
      */
-    virtual void setSkybox(ICubeMap* skyboxCubeMap) = 0;
+    virtual void setSkybox(const Skybox& skybox) = 0;
+
+    /**
+     * @brief Clears the currently set skybox, reverting to no skybox rendering.
+     */
+    virtual void clearSkybox() = 0;
 
     /**
      * @brief Queues a draw command to render graphics for the current frame.
@@ -200,6 +212,27 @@ namespace hc
      * @return Reference to the IDataBlockManager instance.
      */
     virtual IDataBlockManager& getDataBlockManager() = 0;
+
+    /**
+     * @brief Returns the equirectangular to cubemap generator.
+     * @return Reference to the IEquirectangularToCubeMapGenerator instance.
+     */
+    virtual graphics::generators::IEquirectangularToCubeMapGenerator&
+      getEquirectangularToCubeMapGenerator() = 0;
+
+    /**
+     * @brief Returns the diffuse irradiance cubemap generator.
+     * @return Reference to the IDiffuseIrradianceCubeMapGenerator instance.
+     */
+    virtual graphics::generators::IDiffuseIrradianceCubeMapGenerator&
+      getDiffuseIrradianceCubeMapGenerator() = 0;
+
+    /**
+     * @brief Returns the prefiltered environment cubemap generator.
+     * @return Reference to the IPrefilteredEnvironmentCubeMapGenerator instance.
+     */
+    virtual graphics::generators::IPrefilteredEnvironmentCubeMapGenerator&
+      getPrefilteredEnvironmentCubeMapGenerator() = 0;
 
     /**
      * @brief Returns the geometry buffer used for deferred rendering.

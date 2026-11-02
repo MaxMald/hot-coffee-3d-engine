@@ -1,7 +1,7 @@
 #pragma once
 
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcIComponentDrawer.h"
-#include "imgui.h"
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -34,8 +34,9 @@ namespace hc::editor
      * If successful, calls onDrawComponent. Otherwise, logs an error.
      * 
      * @param component Pointer to the component to draw.
+     * @param shouldRemove Reference to a bool indicating if the component should be removed.
      */
-    void drawComponent(IComponent* component) override;
+    void drawComponent(IComponent* component, bool& shouldRemove) override;
 
   protected:
     componentType::Type m_componentType;
@@ -66,13 +67,19 @@ namespace hc::editor
   }
 
   template<typename T>
-  void ABaseComponentDrawer<T>::drawComponent(IComponent* component)
+  void ABaseComponentDrawer<T>::drawComponent(IComponent* component, bool& shouldRemove)
   {
     String componentStr = componentType::ToString(m_componentType);
-    if (ImGui::CollapsingHeader(
-      String::Format("%s Component", componentStr.c_str()).c_str()
-    ))
+    if (ImGui::CollapsingHeader(String::Format("%s Component", componentStr.c_str()).c_str()))
     {
+      if (hcImGui::Button("Remove", style::buttons::AggressiveRed))
+      {
+        shouldRemove = true;
+        return;
+      }
+
+      ImGui::Separator();
+
       T* typedComponent = dynamic_cast<T*>(component);
       if (typedComponent)
       {

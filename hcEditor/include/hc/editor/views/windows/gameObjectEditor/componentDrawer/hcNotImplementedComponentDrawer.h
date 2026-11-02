@@ -15,6 +15,14 @@ namespace hc::editor
     virtual ~NotImplementedComponentDrawer() = default;
 
     virtual componentType::Type getComponentType() const override;
-    virtual void drawComponent(IComponent* component) override;
+
+    /**
+     * @brief Draws the specified component. Since this is the not implemented drawer,
+     * it typically indicates that no specific drawer is available for the component type.
+     *
+     * @param component Pointer to the component to be drawn.
+     * @param shouldRemove Reference to a bool indicating if the component should be removed.
+     */
+    virtual void drawComponent(IComponent* component, bool& shouldRemove) override;
   };
 }

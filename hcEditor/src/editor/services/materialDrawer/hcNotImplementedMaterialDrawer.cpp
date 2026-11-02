@@ -20,7 +20,8 @@ namespace hc::editor
 
   void NotImplementedMaterialDrawer::drawMeshMaterial(
     IMaterial* material,
-    Int32 materialSlotIndex
+    Int32 materialSlotIndex,
+    ProjectFileDialogView&
   )
   {
     if (!material)

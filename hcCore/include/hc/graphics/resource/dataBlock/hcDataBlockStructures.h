@@ -182,21 +182,6 @@ namespace hc
     static_assert(sizeof(MaterialUnlit) % 16 == 0, "MaterialUnlit must be 16-byte aligned");
 
     /**
-     * @brief GPU-aligned data for a Blinn-Phong material.
-     */
-    struct alignas(16) HC_CORE_EXPORT MaterialBlinnPhong
-    {
-      Color color;              ///< Base color of the Blinn-Phong material.
-
-      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
-      float shininess = 0.0f;   ///< Shininess factor for specular highlights.
-      float padding0 = 0.0f;
-      float padding1 = 0.0f;
-    };
-
-    static_assert(sizeof(MaterialBlinnPhong) % 16 == 0, "MaterialBlinnPhong must be 16-byte aligned");
-
-    /**
      * @brief GPU-aligned data for a hair material.
      */
     struct alignas(16) HC_CORE_EXPORT MaterialHair
@@ -217,5 +202,51 @@ namespace hc
     };
 
     static_assert(sizeof(MaterialHair) % 16 == 0, "MaterialHair must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT MaterialPBR
+    {
+      Color baseColor;        ///< Base color of the PBR material.
+
+      float alphaCutoff = 0.0f; ///< Alpha cutoff value for transparency.
+      float metallic = 0.0f;    ///< Metallic factor for PBR shading.
+      float roughness = 0.0f;   ///< Roughness factor for PBR shading.
+      float ior = 1.5f;         ///< Index of refraction for PBR shading.
+    };
+
+    static_assert(sizeof(MaterialPBR) % 16 == 0, "MaterialPBR must be 16-byte aligned");
+
+    struct alignas(16) HC_CORE_EXPORT Scene
+    {
+      Vector4f invertSkybox;          ///< Inversion factors for the X, Y, and Z axes of the cube's vertices.
+    };
+
+    static_assert(sizeof(Scene) % 16 == 0, "Scene must be 16-byte aligned");
+
+    /**
+     * @brief GPU-aligned data for generating cube maps. This structure holds data for
+     * multiple types of cube maps.
+     */
+    struct alignas(16) HC_CORE_EXPORT CubeMapGenerator
+    {
+      Vector4f invert = Vector4f(1.0f, 1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the cube's vertices. (Equirectangular to Cube Map Generator)
+
+      float sampleDelta = 0.025f;   ///< Smaller values result in higher quality but take longer to compute. (Diffuse Irradiance Cube Map Generator)
+      float sourceMipLevel = 0.0f;  ///< The mip level of the source cube map to sample from. Default is 0 (highest resolution). (Diffuse Irradiance Cube Map Generator)
+      UInt32 sampleCount = 1024;    ///< The number of samples to use for prefiltering. Higher values yield better quality but are more computationally expensive. (Prefiltered Environment Cube Map Generator)
+      float roughness = 0.0f;       ///< Roughness factor for prefiltering. (Prefiltered Environment Cube Map Generator)
+    };
+
+    static_assert(sizeof(CubeMapGenerator) % 16 == 0, "CubeMapGenerator must be 16-byte aligned");
+
+    /**
+     * @brief GPU-aligned data for environment settings.
+     */
+    struct alignas(16) HC_CORE_EXPORT Environment
+    {
+      UInt32 prefilteredEnvironmentMaxLevel = 5; ///< The maximum mipmap level for the prefiltered environment map. (Prefiltered Environment Cube Map Generator)
+      float padding0 = 0.0f;
+      float padding1 = 0.0f;
+      float padding2 = 0.0f;
+    };
   }
 }

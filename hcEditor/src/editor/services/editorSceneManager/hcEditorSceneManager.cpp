@@ -2,6 +2,7 @@
 
 #include "hc/editor/services/editorSceneManager/hcIEditorSceneManagerListener.h"
 #include "hc/editor/services/projectManager/hcProjectManager.h"
+#include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
 
 using hc::serialization::SceneSerializer;
 
@@ -11,11 +12,13 @@ namespace hc::editor
     Scene* editorScene,
     IAssetManager& assetManager,
     IGraphicsManager& graphicsManager,
-    ProjectManager& projectManager
+    ProjectManager& projectManager,
+    EditorMetadataManager& editorMetadataManager
   ) :
     m_assetManager(assetManager),
     m_graphicsManager(graphicsManager),
     m_projectManager(projectManager),
+    m_editorMetadataManager(editorMetadataManager),
     m_editorScene(editorScene),
     m_currentScenePath(),
     m_listeners()
@@ -30,8 +33,21 @@ namespace hc::editor
 
   void EditorSceneManager::destroy()
   {
+    clearScene();
     m_projectManager.unsubscribeListener(this);
     m_listeners.clear();
+  }
+
+  bool EditorSceneManager::createNewScene(const Path& scenePath)
+  {
+    if (!scenePath.isCreatable())
+    {
+      LogService::Error("Path is not creatable: " + scenePath.toString());
+      return false;
+    }
+
+    clearScene();
+    return saveScene(scenePath);
   }
 
   bool EditorSceneManager::openScene(const Path& scenePath)
@@ -39,64 +55,86 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
-    if (SceneSerializer::Deserialize(
-      *m_editorScene,
-      scenePath,
-      m_assetManager,
-      m_graphicsManager
-    ))
+    if (!scenePath.exists())
     {
-      m_currentScenePath = scenePath;
-      updateLastOpenedSceneInProject();
-
-      LogService::Message(
-        "Scene opened successfully: " + scenePath.toString()
+      LogService::Error(
+        "Failed to open scene: " + scenePath.toString() +
+        ". File does not exist."
       );
-
-      for (auto* listener : m_listeners)
-      {
-        if (listener)
-          listener->onSceneOpened();
-      }
-
-      return true;
+      return false;
     }
 
-    return false;
+    try
+    {
+      SceneSerializer::Deserialize(
+        *m_editorScene,
+        scenePath,
+        m_assetManager,
+        m_graphicsManager
+      );
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String("Failed to open scene: '") + scenePath.toString() + "'. Error: " + e.what()
+      );
+      clearScene();
+      return false;
+    }
+
+    m_currentScenePath = scenePath;
+    addLastOpenedSceneToMetadata(scenePath);
+    LogService::Message("Scene opened successfully: " + scenePath.toString());
+
+    for (auto* listener : m_listeners)
+      if (listener)
+        listener->onSceneOpened();
+
+    return true;
   }
 
   bool EditorSceneManager::saveScene(const Path& scenePath)
   {
     assertSceneIsValid();
-    if (SceneSerializer::Serialize(*m_editorScene, scenePath, m_assetManager))
+
+    if (!scenePath.isCreatable())
     {
-      m_currentScenePath = scenePath;
-      updateLastOpenedSceneInProject();
-
-      LogService::Message(
-        "Scene saved successfully: " + scenePath.toString()
+      LogService::Error(
+        "Failed to save scene: " + scenePath.toString() +
+        ". File path is not creatable."
       );
-
-      return true;
+      return false;
     }
-    return false;
+
+    try
+    {
+      SceneSerializer::Serialize(*m_editorScene, scenePath);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to save scene: '%s'. Error: %s",
+          scenePath.toString().c_str(),
+          e.what()
+        )
+      );
+      return false;
+    }
+
+    m_currentScenePath = scenePath;
+    addLastOpenedSceneToMetadata(scenePath);
+    LogService::Message("Scene saved successfully: " + scenePath.toString());
+    return true;
   }
 
   void EditorSceneManager::closeScene()
   {
-    if (!isSceneOpen())
-      return;
-
-    assertSceneIsValid();
-
-    m_editorScene->clear();
-    m_currentScenePath.clear();
+    clearScene();
 
     for (auto* listener : m_listeners)
-    {
       if (listener)
         listener->onSceneClosed();
-    }
   }
 
   bool EditorSceneManager::isSceneOpen() const
@@ -141,18 +179,38 @@ namespace hc::editor
     if (isSceneOpen())
       closeScene();
 
-    Project* currentProject = m_projectManager.getCurrentProject();
-    if (!currentProject)
+    const Vector<Path>& recentOpenedScenes = m_editorMetadataManager
+      .getProjectMetadataManager()
+      .getLastOpenedScenePaths();
+
+    if (recentOpenedScenes.empty())
       return;
 
-    String relativeScenePath = currentProject->getPathToLastOpenedScene();
-    if (relativeScenePath.empty())
+    Path lastOpenedScenePath = recentOpenedScenes.front();
+    if (lastOpenedScenePath.empty())
       return;
 
-    Path lastOpenedScenePath(relativeScenePath);
-    lastOpenedScenePath = lastOpenedScenePath.toAbsolute(m_projectManager.getCurrentProjectDirectory());
+    try
+    {
+      Path projectDirectory = m_projectManager.getCurrentProjectDirectory();
+      Path absoluteScenePath = lastOpenedScenePath.toAbsolute(projectDirectory);
 
-    openScene(lastOpenedScenePath);
+      if (!absoluteScenePath.exists())
+        return;
+
+      openScene(absoluteScenePath);
+    }
+    catch (const Exception& e)
+    {
+      LogService::Error(
+        String::Format(
+          "Failed to open last opened scene: '%s' for project '%s'. Error: %s",
+          lastOpenedScenePath.toString().c_str(),
+          m_projectManager.getCurrentProjectDirectory().toString().c_str(),
+          e.what()
+        )
+      );
+    }
   }
 
   void EditorSceneManager::onProjectClosed()
@@ -161,16 +219,33 @@ namespace hc::editor
       closeScene();
   }
 
-  void EditorSceneManager::updateLastOpenedSceneInProject()
+  void EditorSceneManager::addLastOpenedSceneToMetadata(const Path& scenePath)
   {
     Project* currentProject = m_projectManager.getCurrentProject();
-    if (currentProject)
-      currentProject->setPathToLastOpenedScene(m_currentScenePath);
+    if (currentProject == nullptr)
+      return;
+
+    m_editorMetadataManager.getProjectMetadataManager().saveLastOpenedScenePath(
+      currentProject->getProjectFilePath(),
+      scenePath
+    );
   }
 
   void EditorSceneManager::assertSceneIsValid() const
   {
     if (!m_editorScene)
       throw RuntimeErrorException("EditorSceneManager requires a valid Scene pointer");
+  }
+
+  void EditorSceneManager::clearScene()
+  {
+    m_currentScenePath.clear();
+    if (m_editorScene != nullptr)
+      m_editorScene->clear();
+    m_assetManager.clear();
+
+    for (auto* listener : m_listeners)
+      if (listener)
+        listener->onSceneCleared();
   }
 }

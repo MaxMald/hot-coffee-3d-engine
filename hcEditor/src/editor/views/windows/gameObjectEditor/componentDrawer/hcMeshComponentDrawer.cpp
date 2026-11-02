@@ -1,6 +1,6 @@
 #include "hc/editor/views/windows/gameObjectEditor/componentDrawer/hcMeshComponentDrawer.h"
-#include <imgui.h>
-#include "hc/editor/imgui/hcImguiUtilities.h"
+
+#include "hc/editor/imgui/hcImgui.h"
 #include "hc/editor/views/projectFileDialog/hcProjectFileDialogView.h"
 #include "hc/editor/services/materialDrawer/hcMaterialDrawersManager.h"
 #include "hc/editor/services/metadataManager/hcEditorMetadataManager.h"
@@ -78,7 +78,11 @@ namespace hc::editor
         String name = material->getName();
         if (ImGui::TreeNode(name.c_str()))
         {
-          m_materialDrawerManager.drawMeshMaterial(material.get(), i);
+          m_materialDrawerManager.drawMeshMaterial(
+            material.get(),
+            i,
+            m_projectFileSelector
+          );
 
           if (ImGui::Button("Override Material"))
             onOverrideMaterialClicked(mesh, material, i);

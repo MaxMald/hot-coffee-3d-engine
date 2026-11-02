@@ -27,28 +27,25 @@ namespace hc
     void destroySelf() override;
     void bindGTexturesForReading(
       UInt8 positionAndDepthTextureUnit,
-      UInt8 normalAndRoughnessTextureUnit,
+      UInt8 normalTextureUnit,
       UInt8 albedoAndAlphaTextureUnit,
-      UInt8 materialParametersTextureUnit,
-      UInt8 specularColorAndShininessTextureUnit
+      UInt8 ORMIORTextureUnit
     ) override;
     const ITexture& getPositionAndDepth() const override;
-    const ITexture& getNormalRoughness() const override;
+    const ITexture& getNormal() const override;
     const ITexture& getAlbedoAlpha() const override;
-    const ITexture& getMaterialParameters() const override;
-    const ITexture& getSpecularColorAndShininess() const override;
+    const ITexture& getORMIOR() const override;
 
   private:
-    bool m_valid;
+    OpenGlTexture m_positionAndDepthTexture;
+    OpenGlTexture m_normalTexture;
+    OpenGlTexture m_albedoAlphaTexture;
+    OpenGlTexture m_ORMIORTexture;
     UInt32 m_width;
     UInt32 m_height;
     UInt32 m_gBufferId;
     UInt32 m_depthStencilBufferId;
-    OpenGlTexture m_positionAndDepthTexture;
-    OpenGlTexture m_normalRoughnessTexture;
-    OpenGlTexture m_albedoAlphaTexture;
-    OpenGlTexture m_materialParametersTexture;
-    OpenGlTexture m_specularColorAndShininessTexture;
+    bool m_valid;
 
     void assertIsValid() const;
   };

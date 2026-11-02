@@ -18,11 +18,26 @@
 
 #pragma once
 
-#include "hc/hcCorePrerequisites.h"
-#include "hc/utilities/hcColorSpaceType.h"
+#include "hc/hcCoreCommons.h"
 
 namespace hc
 {
+  namespace defaultTextureType
+  {
+    /**
+     * @brief Enum representing the types of default textures.
+     *
+     * This enum is used to identify different default textures that can be
+     * created and managed by the texture manager.
+     */
+    enum Type : UInt8
+    {
+      White,
+      NormalTangent,
+      Count
+    };
+  }
+
   class Image;
   class ITexture;
 
@@ -85,6 +100,13 @@ namespace hc
      * @return Vector of shared pointers to the managed textures.
      */
     virtual const Vector<SharedPtr<ITexture>>& getTextures() = 0;
+
+    /**
+     * @brief Gets a default texture of the specified type.
+     * @param type The type of default texture to retrieve.
+     * @return Shared pointer to the default texture.
+     */
+    virtual SharedPtr<ITexture> getDefaultTexture(defaultTextureType::Type type) = 0;
 
     /**
      * @brief Clears all managed textures.

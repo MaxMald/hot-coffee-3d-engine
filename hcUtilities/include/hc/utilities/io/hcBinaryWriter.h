@@ -266,15 +266,39 @@ namespace hc
 
     protected:
       UniquePtr<std::ostream> m_stream;
-      UniquePtr<ObjectData> m_currentObject;
-      Stack<UniquePtr<ObjectData>> m_objectStack;
+      Stack<ObjectTrackingInfo> m_objectStack;
 
       /**
-       * @brief Writes an ObjectData instance to the stream.
+       * @brief Writes the object header to the stream.
        *
-       * @param objectData The ObjectData instance to write.
+       * @param object The object header to write.
        */
-      void writeObject(const ObjectData& objectData);
+      void writeObjectHeader(const ObjectHeader& header);
+
+      /**
+       * @brief Asserts that the stream is valid for writing.
+       *
+       * Throws a RuntimeErrorException if the stream is not valid.
+       */
+      inline void assertStreamValid() const
+      {
+        if (m_stream == nullptr || !m_stream->good())
+          throw RuntimeErrorException("BinaryWriter: Stream is not valid for writing.");
+      }
+
+      /**
+       * @brief Writes raw data to the stream.
+       *
+       * @param data Pointer to the data to write.
+       * @param size The number of bytes to write.
+       */
+      inline void writeStream(const char* data, SizeT size)
+      {
+        assertStreamValid();
+        m_stream->write(data, static_cast<std::streamsize>(size));
+        if (m_stream->fail())
+          throw RuntimeErrorException("BinaryWriter: Failed to write to the stream.");
+      }
     };
   }
 }

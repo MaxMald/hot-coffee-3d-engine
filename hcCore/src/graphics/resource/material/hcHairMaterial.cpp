@@ -49,6 +49,29 @@ namespace hc
     return materialType::Type::Hair;
   }
 
+  void HairMaterial::setTexture(textureType::Type type, const SharedPtr<ITexture>& texture)
+  {
+    switch (type)
+    {
+    case textureType::BaseColor:
+      m_albedoTexture = texture;
+      break;
+    case textureType::Normal:
+      m_normalTexture = texture;
+      break;
+    case textureType::Specular:
+      m_specularTexture = texture;
+      break;
+    default:
+      throw InvalidArgumentException(
+        String::Format(
+          "HairMaterial::setTexture - Unsupported texture type: %s",
+          textureType::ToString(type).c_str()
+        )
+      );
+    }
+  }
+
   void HairMaterial::bind(
     renderPassType::Type renderPass,
     IDataBlockManager& dataBlockManager

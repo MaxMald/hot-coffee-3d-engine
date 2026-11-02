@@ -1,18 +1,22 @@
 #pragma once
 
 #include "hc/editor/services/hcIEditorService.h"
+#include "hc/editor/services/editorSceneManager/hcIEditorSceneManagerListener.h"
 
 namespace hc::editor
 {
   class IGameObjectSelectionServiceListener;
+  class EditorSceneManager;
 
   /**
    * @brief Manages the selection state of GameObjects in the editor.
    */
-  class GameObjectSelectionService : public IEditorService
+  class GameObjectSelectionService :
+    public IEditorService,
+    public IEditorSceneManagerListener
   {
   public:
-    GameObjectSelectionService() = default;
+    GameObjectSelectionService(EditorSceneManager& editorSceneManager);
     virtual ~GameObjectSelectionService() = default;
 
     /**
@@ -24,6 +28,21 @@ namespace hc::editor
      * @copydoc IEditorService::destroy
      */
     void destroy() override;
+
+    /**
+     * @copydoc IEditorSceneManagerListener::onSceneOpened
+     */
+    void onSceneOpened() override;
+
+    /**
+     * @copydoc IEditorSceneManagerListener::onSceneClosed
+     */
+    void onSceneClosed() override;
+
+    /**
+     * @copydoc IEditorSceneManagerListener::onSceneCleared
+     */
+    void onSceneCleared() override;
 
     /**
      * @brief Returns the first selected GameObject, or nullptr if none are
@@ -91,6 +110,7 @@ namespace hc::editor
     void unsubscribe(IGameObjectSelectionServiceListener* listener);
 
   private:
+    EditorSceneManager& m_editorSceneManager;
     Vector<GameObject*> m_selectedGameObjects;
     Vector<IGameObjectSelectionServiceListener*> m_listeners;
   };

@@ -6,6 +6,8 @@
 
 namespace hc::editor
 {
+  class ProjectFileDialogView;
+
   /**
    * @brief Manages material drawer instances for different shading types in the
    * editor.
@@ -13,7 +15,7 @@ namespace hc::editor
   class MaterialDrawersManager : public IEditorService
   {
   public:
-    MaterialDrawersManager();
+    MaterialDrawersManager(ITextureManager& textureManager);
     virtual ~MaterialDrawersManager() = default;
 
     /**
@@ -27,23 +29,33 @@ namespace hc::editor
     virtual void destroy() override;
 
     /**
-     * @brief Draws the material using the appropriate drawer for its shading
-     * type. If no drawer is registered for the material's shading type, a
-     * "not implemented" drawer is used.
-     * 
+     * @brief Draws the material using the appropriate drawer for its shading type.
+     *
+     * @note If no drawer is registered for the material's shading type, a "not
+     * implemented" drawer is used.
+     *
      * @param material Pointer to the material to be drawn.
      */
     void drawMaterial(IMaterial* material);
 
     /**
-     * @brief Draws the material for a specific material slot using the appropriate
-     * drawer for its shading type. If no drawer is registered for the material's
-     * shading type, a "not implemented" drawer is used.
+     * @brief Draws the material for a specific material slot using the appropriate drawer
+     * for its shading type. This drawer allows the user to modify material parameters and
+     * load different material textures.
+     *
+     * @note If no drawer is registered for the material's shading type, a "not
+     * implemented" drawer is used.
      *
      * @param material Pointer to the material to be drawn.
      * @param slotIndex The index of the material slot being drawn.
+     * @param projectFileDialogView Reference to the ProjectFileDialogView for file
+     * selection.
      */
-    void drawMeshMaterial(IMaterial* material, SizeT slotIndex);
+    void drawMeshMaterial(
+      IMaterial* material,
+      SizeT slotIndex,
+      ProjectFileDialogView& projectFileDialogView
+    );
 
     /**
      * @brief Registers a new material drawer for a specific shading type.
@@ -53,6 +65,7 @@ namespace hc::editor
     void addDrawer(UniquePtr<IMaterialDrawer> materialDrawer);
 
   private:
+    ITextureManager& m_textureManager;
     UnorderedMap<materialType::Type, UniquePtr<IMaterialDrawer>> m_drawers;
     NotImplementedMaterialDrawer m_notImplementedDrawer;
   };

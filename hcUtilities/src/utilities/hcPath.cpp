@@ -7,84 +7,6 @@ namespace hc
   Path::Path(const String& path) : m_path(path.c_str()) {}
   Path::Path(const char* path) : m_path(path) {}
 
-  Path::operator std::filesystem::path() const
-  {
-    return m_path;
-  }
-
-  Path::operator String() const
-  {
-    return String(m_path.string());
-  }
-
-  Path Path::operator/ (const Path& other) const
-  {
-    return Path(m_path / other.m_path);
-  }
-
-  Path& Path::operator/= (const Path& other)
-  {
-    m_path /= other.m_path;
-    return *this;
-  }
-
-  Path Path::operator/(const String& other) const
-  {
-    return Path(m_path / other.c_str());
-  }
-
-  Path& Path::operator/=(const String& other)
-  {
-    m_path /= other.c_str();
-    return *this;
-  }
-
-  Path Path::operator/(const Char* other) const
-  {
-    return Path(m_path / other);
-  }
-
-  Path& Path::operator/=(const Char* other)
-  {
-    m_path /= other;
-    return *this;
-  }
-
-  bool Path::operator==(const Path& other) const
-  {
-    return m_path == other.m_path;
-  }
-
-  bool Path::operator!=(const Path& other) const
-  {
-    return !(*this == other);
-  }
-
-  bool Path::operator==(const String& other) const
-  { 
-    return m_path == other.c_str();
-  }
-
-  bool Path::operator!=(const String& other) const
-  {
-    return !(*this == other);
-  }
-
-  bool Path::operator==(const Char* other) const
-  {
-    return m_path == other;
-  }
-
-  bool Path::operator!=(const Char* other) const
-  {
-    return !(*this == other);
-  }
-
-  const std::filesystem::path& Path::getPath() const
-  {
-    return m_path;
-  }
-
   Path Path::toRelative(const Path& rootPath) const
   {
     if (!isUnderRoot(rootPath))
@@ -154,15 +76,5 @@ namespace hc
     );
 
     return rootEnd == canonicalRoot.end();
-  }
-
-  Path operator/ (const String& left, const Path& right)
-  {
-    return Path(left) / right;
-  }
-
-  Path operator/ (const Char* left, const Path& right)
-  {
-    return Path(left) / right;
   }
 }

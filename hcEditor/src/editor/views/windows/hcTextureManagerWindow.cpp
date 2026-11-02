@@ -1,6 +1,6 @@
 #include "hc/editor/views/windows/hcTextureManagerWindow.h"
-#include "hc/editor/imgui/hcImguiUtilities.h"
-#include "imgui.h"
+
+#include "hc/editor/imgui/hcImgui.h"
 
 namespace hc::editor
 {
@@ -34,7 +34,7 @@ namespace hc::editor
       {
         if (ImGui::TreeNode("Preview"))
         {
-          imguiUtilities::DrawTexture(texture.get(), 500, 500);
+          hcImGui::DrawTexture(texture.get(), 500, 500);
           ImGui::TreePop();
         }
 

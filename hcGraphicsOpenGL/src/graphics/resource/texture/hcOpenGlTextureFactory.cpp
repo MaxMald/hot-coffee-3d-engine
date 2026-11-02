@@ -16,7 +16,8 @@ namespace hc
       throw InvalidArgumentException("Image pointer cannot be null when creating a texture.");
 
     SharedPtr<OpenGlTexture> texture = MakeShared<OpenGlTexture>();
-    texture->initialize(*image);
+    TextureInitializationSettings settings(*image);
+    texture->initialize(*image, settings, image->path);
     return texture;
   }
 }

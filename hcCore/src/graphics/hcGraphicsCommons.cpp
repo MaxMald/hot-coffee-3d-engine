@@ -1,5 +1,7 @@
 #include "hc/graphics/hcGraphicsCommons.h"
 
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
+
 namespace hc
 {
   namespace graphicsBackendType
@@ -197,8 +199,6 @@ namespace hc
       case Type::UnlitVertex: return "UnlitVertex";
       case Type::UnlitFragment: return "UnlitFragment";
       case Type::LitVertex: return "LitVertex";
-      case Type::BlinnPhongForwardFragment: return "BlinnPhongForwardFragment";
-      case Type::BlinnPhongDeferredFragment: return "BlinnPhongDeferredFragment";
       case Type::FullScreenTriangleVertex: return "FullScreenTriangleVertex";
       case Type::DeferredLightingFragment: return "DeferredLightingFragment";
       case Type::SkyboxVertex: return "SkyboxVertex";
@@ -209,6 +209,15 @@ namespace hc
       case Type::HairDeferredGeometryFragment: return "HairDeferredGeometryFragment";
       case Type::HairForwardSpecularFragment: return "HairForwardSpecularFragment";
       case Type::HairForwardTransparentFragment: return "HairForwardTransparentFragment";
+      case Type::PBRDeferredGeometryFragment: return "PBRDeferredGeometryFragment";
+      case Type::PBRForwardFragment: return "PBRForwardFragment";
+      case Type::EquirectangularToCubeMapFragment: return "EquirectangularToCubeMapFragment";
+      case Type::EquirectangularToCubeMapVertex: return "EquirectangularToCubeMapVertex";
+      case Type::DiffuseIrradianceGeneratorVertex: return "DiffuseIrradianceGeneratorVertex";
+      case Type::DiffuseIrradianceGeneratorFragment: return "DiffuseIrradianceGeneratorFragment";
+      case Type::PrefilteredEnvironmentGeneratorVertex: return "PrefilteredEnvironmentGeneratorVertex";
+      case Type::PrefilteredEnvironmentGeneratorFragment: return "PrefilteredEnvironmentGeneratorFragment";
+      case Type::BrdfLutGeneratorFragment: return "BrdfLutGeneratorFragment";
 
       default:
         throw InvalidArgumentException(
@@ -222,8 +231,6 @@ namespace hc
       if (str == "UnlitVertex") return Type::UnlitVertex;
       else if (str == "UnlitFragment") return Type::UnlitFragment;
       else if (str == "LitVertex") return Type::LitVertex;
-      else if (str == "BlinnPhongForwardFragment") return Type::BlinnPhongForwardFragment;
-      else if (str == "BlinnPhongDeferredFragment") return Type::BlinnPhongDeferredFragment;
       else if (str == "FullScreenTriangleVertex") return Type::FullScreenTriangleVertex;
       else if (str == "DeferredLightingFragment") return Type::DeferredLightingFragment;
       else if (str == "SkyboxVertex") return Type::SkyboxVertex;
@@ -234,6 +241,16 @@ namespace hc
       else if (str == "HairDeferredGeometryFragment") return Type::HairDeferredGeometryFragment;
       else if (str == "HairForwardSpecularFragment") return Type::HairForwardSpecularFragment;
       else if (str == "HairForwardTransparentFragment") return Type::HairForwardTransparentFragment;
+      else if (str == "PBRDeferredGeometryFragment") return Type::PBRDeferredGeometryFragment;
+      else if (str == "PBRForwardFragment") return Type::PBRForwardFragment;
+      else if (str == "EquirectangularToCubeMapFragment") return Type::EquirectangularToCubeMapFragment;
+      else if (str == "EquirectangularToCubeMapVertex") return Type::EquirectangularToCubeMapVertex;
+      else if (str == "DiffuseIrradianceGeneratorVertex") return Type::DiffuseIrradianceGeneratorVertex;
+      else if (str == "DiffuseIrradianceGeneratorFragment") return Type::DiffuseIrradianceGeneratorFragment;
+      else if (str == "PrefilteredEnvironmentGeneratorVertex") return Type::PrefilteredEnvironmentGeneratorVertex;
+      else if (str == "PrefilteredEnvironmentGeneratorFragment") return Type::PrefilteredEnvironmentGeneratorFragment;
+      else if (str == "BrdfLutGeneratorFragment") return Type::BrdfLutGeneratorFragment;
+      else
 
       throw InvalidArgumentException(
         String::Format("builtInShaderType::FromString : Invalid built-in shader type string: %s", str.c_str())
@@ -249,11 +266,12 @@ namespace hc
       case Type::FullScreenTriangleVertex:
       case Type::SkyboxVertex:
       case Type::ShadowMapVertex:
+      case Type::EquirectangularToCubeMapVertex:
+      case Type::DiffuseIrradianceGeneratorVertex:
+      case Type::PrefilteredEnvironmentGeneratorVertex:
         return shaderStageType::Vertex;
 
       case Type::UnlitFragment:
-      case Type::BlinnPhongForwardFragment:
-      case Type::BlinnPhongDeferredFragment:
       case Type::DeferredLightingFragment:
       case Type::SkyboxFragment:
       case Type::FinalPassFragment:
@@ -261,6 +279,12 @@ namespace hc
       case Type::HairDeferredGeometryFragment:
       case Type::HairForwardSpecularFragment:
       case Type::HairForwardTransparentFragment:
+      case Type::PBRDeferredGeometryFragment:
+      case Type::PBRForwardFragment:
+      case Type::EquirectangularToCubeMapFragment:
+      case Type::DiffuseIrradianceGeneratorFragment:
+      case Type::PrefilteredEnvironmentGeneratorFragment:
+      case Type::BrdfLutGeneratorFragment:
         return shaderStageType::Fragment;
 
       default:
@@ -278,8 +302,6 @@ namespace hc
       switch (type)
       {
       case Type::Unlit: return "Unlit";
-      case Type::BlinnPhongForward: return "BlinnPhongForward";
-      case Type::BlinnPhongDeferredGeometry: return "BlinnPhongDeferredGeometry";
       case Type::DeferredLighting: return "DeferredLighting";
       case Type::Skybox: return "Skybox";
       case Type::FinalPass: return "FinalPass";
@@ -287,6 +309,12 @@ namespace hc
       case Type::HairDeferredGeometry: return "HairDeferredGeometry";
       case Type::HairForwardSpecular: return "HairForwardSpecular";
       case Type::HairForwardTransparent: return "HairForwardTransparent";
+      case Type::PBRDeferredGeometry: return "PBRDeferredGeometry";
+      case Type::PBRForward: return "PBRForward";
+      case Type::EquirectangularToCubeMap: return "EquirectangularToCubeMap";
+      case Type::DiffuseIrradianceGenerator: return "DiffuseIrradianceGenerator";
+      case Type::PrefilteredEnvironmentGenerator: return "PrefilteredEnvironmentGenerator";
+      case Type::BrdfLutGenerator: return "BrdfLutGenerator";
       default:
         throw InvalidArgumentException(
           String::Format("Invalid shader program type: %d", static_cast<Int32>(type))
@@ -297,8 +325,6 @@ namespace hc
     Type FromString(const String& str)
     {
       if (str == "Unlit") return Type::Unlit;
-      else if (str == "BlinnPhongForward") return Type::BlinnPhongForward;
-      else if (str == "BlinnPhongDeferredGeometry") return Type::BlinnPhongDeferredGeometry;
       else if (str == "DeferredLighting") return Type::DeferredLighting;
       else if (str == "Skybox") return Type::Skybox;
       else if (str == "FinalPass") return Type::FinalPass;
@@ -306,6 +332,13 @@ namespace hc
       else if (str == "HairDeferredGeometry") return Type::HairDeferredGeometry;
       else if (str == "HairForwardSpecular") return Type::HairForwardSpecular;
       else if (str == "HairForwardTransparent") return Type::HairForwardTransparent;
+      else if (str == "PBRDeferredGeometry") return Type::PBRDeferredGeometry;
+      else if (str == "PBRForward") return Type::PBRForward;
+      else if (str == "EquirectangularToCubeMap") return Type::EquirectangularToCubeMap;
+      else if (str == "DiffuseIrradianceGenerator") return Type::DiffuseIrradianceGenerator;
+      else if (str == "PrefilteredEnvironmentGenerator") return Type::PrefilteredEnvironmentGenerator;
+      else if (str == "BrdfLutGenerator") return Type::BrdfLutGenerator;
+      else
       throw InvalidArgumentException(
         String::Format("Invalid shader program type string: %s", str.c_str())
       );
@@ -320,10 +353,10 @@ namespace hc
       {
       case Unlit:
         return "Unlit";
-      case BlinnPhong:
-        return "BlinnPhong";
       case Hair:
         return "Hair";
+      case PBR:
+        return "PBR";
       default:
         throw RuntimeErrorException("Unknown shading type.");
       }
@@ -333,10 +366,10 @@ namespace hc
     {
       if (str == "Unlit")
         return Unlit;
-      else if (str == "BlinnPhong")
-        return BlinnPhong;
       else if (str == "Hair")
         return Hair;
+      else if (str == "PBR")
+        return PBR;
       else
         throw RuntimeErrorException("Unknown shading type string: " + str);
     }
@@ -375,6 +408,75 @@ namespace hc
         throw RuntimeErrorException(
           String::Format("Invalid material render mode string: '%s'", str.c_str())
         );
+    }
+  }
+
+  namespace dataBlockType
+  {
+    SizeT GetDataBlockSize(dataBlockType::Type type)
+    {
+      switch (type)
+      {
+      case dataBlockType::Camera:
+        return sizeof(dataBlockStructure::Camera);
+      case dataBlockType::Lights:
+        return sizeof(dataBlockStructure::Lights);
+      case dataBlockType::LightShadows:
+        return sizeof(dataBlockStructure::LightShadows);
+      case dataBlockType::Object:
+        return sizeof(dataBlockStructure::ObjectData);
+      case dataBlockType::LightViewProjection:
+        return sizeof(dataBlockStructure::LightViewProjection);
+      case dataBlockType::MaterialUnlit:
+        return sizeof(dataBlockStructure::MaterialUnlit);
+      case dataBlockType::MaterialHair:
+        return sizeof(dataBlockStructure::MaterialHair);
+      case dataBlockType::MaterialPBR:
+        return sizeof(dataBlockStructure::MaterialPBR);
+      case dataBlockType::Scene:
+        return sizeof(dataBlockStructure::Scene);
+      case dataBlockType::CubeMapGenerator:
+        return sizeof(dataBlockStructure::CubeMapGenerator);
+      case dataBlockType::Environment:
+        return sizeof(dataBlockStructure::Environment);
+      default:
+        throw RuntimeErrorException(
+          String::Format("GetDataBlockSize: Unknown data block type: %d", static_cast<Int32>(type))
+        );
+      }
+    }
+  }
+
+  namespace textureType
+  {
+    String ToString(Type type)
+    {
+      switch (type)
+      {
+      case None:
+        return "None";
+      case BaseColor:
+        return "BaseColor";
+      case Normal:
+        return "Normal";
+      case ORM:
+        return "ORM";
+      default:
+        throw RuntimeErrorException("Unknown texture type.");
+      }
+    }
+    Type FromString(const String& str)
+    {
+      if (str == "None")
+        return None;
+      if (str == "BaseColor")
+        return BaseColor;
+      else if (str == "Normal")
+        return Normal;
+      else if (str == "ORM")
+        return ORM;
+      else
+        throw RuntimeErrorException("Unknown texture type string: " + str);
     }
   }
 }

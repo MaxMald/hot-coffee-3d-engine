@@ -37,11 +37,13 @@ namespace hc
 
     try
     {
-      m_colorTexture.initialize(
-        width, height,
-        textureFormatType::RGBA16F,
-        colorSpaceType::Linear
-      );
+      TextureInitializationSettings settings;
+      settings.width = static_cast<UInt16>(width);
+      settings.height = static_cast<UInt16>(height);
+      settings.format = textureFormatType::RGBA16F;
+      settings.colorSpace = colorSpaceType::Linear;
+
+      m_colorTexture.initialize(settings);
 
       if (!m_colorTexture.isValid())
         throw RuntimeErrorException("Failed to create color texture for framebuffer");

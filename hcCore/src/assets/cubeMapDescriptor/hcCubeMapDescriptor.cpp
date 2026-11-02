@@ -2,33 +2,32 @@
 
 namespace hc
 {
-  static constexpr UInt32 CUBEMAP_DESCRIPTOR_VERSION = 1;
+  static constexpr UInt32 CUBEMAP_DESCRIPTOR_VERSION = 2;
 
   CubeMapDescriptor::CubeMapDescriptor() :
     Asset(""),
-    faceSize(0), format(textureFormatType::RGBA8),
-    rightImagePath(), leftImagePath(), topImagePath(),
-    bottomImagePath(), backImagePath(), frontImagePath()
+    pXImagePath(), nXImagePath(), pYImagePath(),
+    nYImagePath(), pZImagePath(), nZImagePath(),
+    format(textureFormatType::RGBA8)
   {}
 
   CubeMapDescriptor::CubeMapDescriptor(const Path& path) :
     Asset(path),
-    faceSize(0), format(textureFormatType::RGBA8),
-    rightImagePath(), leftImagePath(), topImagePath(),
-    bottomImagePath(), backImagePath(), frontImagePath()
+    pXImagePath(), nXImagePath(), pYImagePath(),
+    nYImagePath(), pZImagePath(), nZImagePath(),
+    format(textureFormatType::RGBA8)
   {}
 
   void CubeMapDescriptor::serialize(io::BinaryWriter & writer) const
   {
     writer.startWritingObject(static_cast<UInt32>(0), CUBEMAP_DESCRIPTOR_VERSION);
-    writer.writeUInt32(faceSize);
     writer.writeUInt8(static_cast<UInt8>(format));
-    writer.writePath(rightImagePath);
-    writer.writePath(leftImagePath);
-    writer.writePath(topImagePath);
-    writer.writePath(bottomImagePath);
-    writer.writePath(backImagePath);
-    writer.writePath(frontImagePath);
+    writer.writePath(pXImagePath);
+    writer.writePath(nXImagePath);
+    writer.writePath(pYImagePath);
+    writer.writePath(nYImagePath);
+    writer.writePath(pZImagePath);
+    writer.writePath(nZImagePath);
     writer.finishWritingObject();
   }
 
@@ -37,33 +36,34 @@ namespace hc
     clear();
 
     io::ObjectHeader header = reader.startReadingObject();
-    if (!header.matchVersion(CUBEMAP_DESCRIPTOR_VERSION))
+    UInt32 version = header.version;
+    if (version == 1)
     {
-      reader.finishReadingObject();
-      return;
+      reader.readUInt32(); // Read the face size but ignore it since it's not in further versions
+    }
+    if (version <= 2)
+    {
+      format = static_cast<textureFormatType::Type>(reader.readUInt8());
+      pXImagePath = reader.readPath();
+      nXImagePath = reader.readPath();
+      pYImagePath = reader.readPath();
+      nYImagePath = reader.readPath();
+      pZImagePath = reader.readPath();
+      nZImagePath = reader.readPath();
     }
 
-    faceSize = reader.readUInt32();
-    format = static_cast<textureFormatType::Type>(reader.readUInt8());
-    rightImagePath = reader.readPath();
-    leftImagePath = reader.readPath();
-    topImagePath = reader.readPath();
-    bottomImagePath = reader.readPath();
-    backImagePath = reader.readPath();
-    frontImagePath = reader.readPath();
     reader.finishReadingObject();
   }
 
   void CubeMapDescriptor::clear()
   {
     path.clear();
-    faceSize = 0;
     format = textureFormatType::RGBA8;
-    rightImagePath.clear();
-    leftImagePath.clear();
-    topImagePath.clear();
-    bottomImagePath.clear();
-    backImagePath.clear();
-    frontImagePath.clear();
+    pXImagePath.clear();
+    nXImagePath.clear();
+    pYImagePath.clear();
+    nYImagePath.clear();
+    pZImagePath.clear();
+    nZImagePath.clear();
   }
 }

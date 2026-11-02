@@ -14,12 +14,23 @@ namespace hc
    */
   struct HC_CORE_EXPORT SceneSettings : public io::ISerializable
   {
-    Color ambientColor = Color::White();
-    float ambientIntensity = 0.1f;
+    SkyboxSettings skyboxSettings;                      ///< Settings for the scene's skybox.
+    Vector3f skyboxInvert = Vector3f(1.0f, 1.0f, 1.0f); ///< Inversion factors for the X, Y, and Z axes of the skybox's cubemap sample direction.
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
     void clear();
+
+    /**
+     * @brief Converts the SceneSettings to a data block structure for GPU usage.
+     * @return dataBlockStructure::Scene The populated data block structure.
+     */
+    inline dataBlockStructure::Scene getSceneDataBlockStructure() const
+    {
+      dataBlockStructure::Scene sceneData;
+      sceneData.invertSkybox = Vector4f(skyboxInvert, 1.0f);
+      return sceneData;
+    }
   };
 
   class IGameObjectFactory;
@@ -65,6 +76,19 @@ namespace hc
      * @param reader The BinaryReader to deserialize from.
      */
     void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @brief Gets a const reference to the scene's settings.
+     *
+     * @return Const reference to the SceneSettings.
+     */
+    inline const SceneSettings& getSettings() const { return m_settings; }
+
+    /**
+     * @brief Gets a reference to the scene's settings.
+     * @return Reference to the SceneSettings.
+     */
+    inline SceneSettings& getSettings() { return m_settings; }
 
     /**
      * @brief Creates a new GameObject with the specified name.
@@ -247,13 +271,13 @@ namespace hc
     /**
      * @brief Called during deserialization to read custom scene data.
      *
-     * Override to deserialize additional custom data for derived scene
-     * classes. Called after the base scene data (lights, cameras, scene
-     * graph) is deserialized.
+     * Override to deserialize additional custom data for derived scene classes. Called
+     * after the base scene data (lights, cameras, scene graph) is deserialized.
      *
      * @param reader The BinaryReader to deserialize custom data from.
+     * @param derivedVersion The version number of the derived scene class.
      */
-    virtual void onDeserialize(io::BinaryReader& reader);
+    virtual void onDeserialize(io::BinaryReader& reader, UInt32 derivedVersion);
 
     /**
      * @brief Gets the version number for the derived scene class.

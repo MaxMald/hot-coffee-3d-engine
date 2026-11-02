@@ -1,4 +1,4 @@
-layout(std140, binding = 7) uniform MaterialHairBlock
+layout(std140, binding = 6) uniform MaterialHairBlock
 {
   vec4 uColor;
   vec4 uPrimaryColor;

@@ -178,8 +178,8 @@ namespace hc::editor
     case materialType::Unlit:
       copyUnlitDataFromMaterial(material, descriptor);
       break;
-    case materialType::BlinnPhong:
-      copyBlinnPhongDataFromMaterial(material, descriptor);
+    case materialType::PBR:
+      copyPBRDataFromMaterial(material, descriptor);
       break;
     case materialType::Hair:
       copyHairDataFromMaterial(material, descriptor);
@@ -234,49 +234,51 @@ namespace hc::editor
       unlitData->textureImagePath = mainTexture->getSourcePath();
   }
 
-  void EditorModelMetadataManager::copyBlinnPhongDataFromMaterial(
+  void EditorModelMetadataManager::copyPBRDataFromMaterial(
     const SharedPtr<IMaterial>& material,
     SharedPtr<MaterialDescriptor> descriptor
   )
   {
-    hc::assets::materialDescriptor::BlinnPhongData* matData = descriptor->getIfBlinnPhongData();
+    hc::assets::materialDescriptor::PBRData* matData = descriptor->getIfPBRData();
     if (!matData)
     {
       LogService::Error(
         String::Format(
-          "EditorMetadataManager::copyBlinnPhongDataFromMaterial: Material '%s' is not of type BlinnPhong. Cannot copy data.",
+          "EditorMetadataManager::copyPBRDataFromMaterial: Material '%s' is not of type PBR. Cannot copy data.",
           material->getName().c_str()
         )
       );
       return;
     }
 
-    const SharedPtr<BlinnPhongMaterial> blinnPhongMat = std::dynamic_pointer_cast<BlinnPhongMaterial>(material);
-    if (!blinnPhongMat)
+    const SharedPtr<PBRMaterial> pbrMat = std::dynamic_pointer_cast<PBRMaterial>(material);
+    if (!pbrMat)
     {
       LogService::Error(
         String::Format(
-          "EditorMetadataManager::copyBlinnPhongDataFromMaterial: Failed to cast material '%s' to BlinnPhongMaterial.",
+          "EditorMetadataManager::copyPBRDataFromMaterial: Failed to cast material '%s' to PBRMaterial.",
           material->getName().c_str()
         )
       );
       return;
     }
 
-    matData->color = blinnPhongMat->getColor();
-    matData->shininess = blinnPhongMat->getShininess();
+    matData->baseColor = pbrMat->getBaseColor();
+    matData->metallic = pbrMat->getMetallic();
+    matData->roughness = pbrMat->getRoughness();
+    matData->ior = pbrMat->getIOR();
 
-    SharedPtr<ITexture> pTexture = blinnPhongMat->getAlbedoTexture();
+    SharedPtr<ITexture> pTexture = pbrMat->getAlbedoTexture();
     if (pTexture)
-      matData->diffuseImagePath = pTexture->getSourcePath();
+      matData->albedoImagePath = pTexture->getSourcePath();
 
-    pTexture = blinnPhongMat->getNormalTexture();
+    pTexture = pbrMat->getNormalTexture();
     if (pTexture)
       matData->normalImagePath = pTexture->getSourcePath();
 
-    pTexture = blinnPhongMat->getSpecularTexture();
+    pTexture = pbrMat->getORMTexture();
     if (pTexture)
-      matData->specularImagePath = pTexture->getSourcePath();
+      matData->ormImagePath = pTexture->getSourcePath();
   }
 
   void EditorModelMetadataManager::copyHairDataFromMaterial(
