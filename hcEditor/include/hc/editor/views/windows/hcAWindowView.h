@@ -99,6 +99,15 @@ namespace hc::editor
      */
     bool isHovered() const;
 
+    /**
+     * @brief Returns whether the window is currently collapsed.
+     *
+     * A collapsed window is one that is minimized or reduced to its title bar.
+     *
+     * @return True if the window is collapsed, false otherwise.
+     */
+    bool isCollapsed() const;
+
   protected:
     String m_windowName;
     Vector2f m_windowSize;
@@ -108,6 +117,7 @@ namespace hc::editor
     bool m_isFocused;
     bool m_isHovered;
     bool m_isOpen;
+    bool m_isCollapsed;
 
     /**
      * @brief Constructs a WindowView with the given name.

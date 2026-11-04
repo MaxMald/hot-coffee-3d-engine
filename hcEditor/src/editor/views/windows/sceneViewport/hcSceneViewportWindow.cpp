@@ -145,6 +145,9 @@ namespace hc::editor
     if (!m_renderer.isValid())
       return;
 
+    if (m_isCollapsed)
+      return;
+
     updateFramebufferSize();
     renderSceneToTexture();
 
@@ -202,7 +205,7 @@ namespace hc::editor
     UInt32 width = static_cast<UInt32>(contentSize.x);
     UInt32 height = static_cast<UInt32>(contentSize.y);
 
-    if (width == 0 || height == 0)
+    if (width <= 0 || height <= 0)
       return;
 
     m_renderer.resize(width, height);
