@@ -14,7 +14,8 @@ namespace hc::editor
     m_defaultWindowSize(defaultWindowSize.x, defaultWindowSize.y),
     m_isFocused(false),
     m_isHovered(false),
-    m_isOpen(isOpen)
+    m_isOpen(isOpen),
+    m_isCollapsed(false)
   {
   }
 
@@ -91,6 +92,11 @@ namespace hc::editor
     return m_isHovered;
   }
 
+  bool AWindowView::isCollapsed() const
+  {
+    return m_isCollapsed;
+  }
+
   void AWindowView::onUpdate(const Time&)
   {
     // Derived classes can override this to implement custom update logic.
@@ -111,12 +117,13 @@ namespace hc::editor
       onWindowSizeChanged(m_windowSize);
     }
 
-    m_contentSize.x = ImGui::GetContentRegionAvail().x;
-    m_contentSize.y = ImGui::GetContentRegionAvail().y;
+    m_contentSize.x = Math::Max(0.0f, ImGui::GetContentRegionAvail().x);
+    m_contentSize.y = Math::Max(0.0f, ImGui::GetContentRegionAvail().y);
     m_windowPosition.x = ImGui::GetWindowPos().x;
     m_windowPosition.y = ImGui::GetWindowPos().y;
 
     m_isFocused = ImGui::IsWindowFocused();
     m_isHovered = ImGui::IsWindowHovered();
+    m_isCollapsed = ImGui::IsWindowCollapsed();
   }
 }
