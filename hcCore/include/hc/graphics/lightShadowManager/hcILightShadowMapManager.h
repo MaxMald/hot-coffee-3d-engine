@@ -66,6 +66,11 @@ namespace hc
       const SceneGraph& sceneGraph
     ) = 0;
 
+    virtual Int32 generateOmniLightCubeMapShadow(
+
+      const SceneGraph& sceneGraph
+    ) = 0;
+
     /**
      * @brief Clears the light shadow map manager.
      */
