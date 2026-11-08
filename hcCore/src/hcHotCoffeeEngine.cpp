@@ -194,7 +194,7 @@ namespace hc
             break;
       }
 
-      Time elapsedTime = m_frameClock.getElapsedTime();
+      Time elapsedTime = m_frameClock.restart();
 
       for (IGameLoopListener* listener : m_eventListeners)
         listener->onBeforeSceneUpdate(elapsedTime);
@@ -211,7 +211,6 @@ namespace hc
         listener->onAfterSceneRender();
 
       m_graphicsManager->endFrame(window);
-      m_frameClock.restart();
     }
   }
 
