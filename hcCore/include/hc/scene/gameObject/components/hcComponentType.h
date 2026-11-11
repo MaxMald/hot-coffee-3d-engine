@@ -10,9 +10,7 @@ namespace hc
     {
       Mesh = 0,
       Camera = 1,
-      OmniLight = 2,
-      SpotLight = 3,
-      DirectionalLight = 4,
+      Light = 2,
       Unknown = 65535
     };
 

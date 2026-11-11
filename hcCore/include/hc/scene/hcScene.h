@@ -4,7 +4,7 @@
 #include "hc/scene/hcSceneGraph.h"
 #include "hc/scene/camera/hcCameraManager.h"
 #include "hc/scene/skybox/hcSkybox.h"
-#include "hc/scene/light/hcLightManager.h"
+#include "hc/scene/lights/hcLightManager.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc

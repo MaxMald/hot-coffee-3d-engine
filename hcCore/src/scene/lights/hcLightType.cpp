@@ -1,6 +1,6 @@
-#include "hc/scene/light/hcLightType.h"
+#include "hc/scene/lights/hcLightType.h"
 
-namespace hc
+namespace hc::scene::lights
 {
   namespace lightType
   {

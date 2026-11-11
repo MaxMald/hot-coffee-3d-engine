@@ -1,12 +1,10 @@
-#include "hc/scene/light/hcLightManager.h"
+#include "hc/scene/lights/hcLightManager.h"
+
 #include "hc/scene/hcSceneGraph.h"
-#include "hc/scene/light/hcALight.h"
-#include "hc/scene/light/hcDirectionalLight.h"
-#include "hc/scene/light/hcOmniLight.h"
-#include "hc/scene/light/hcSpotLight.h"
+#include "hc/scene/lights/hcLight.h"
 #include "hc/scene/gameObject/hcGameObject.h"
 #include "hc/scene/gameObject/components/hcIComponent.h"
-#include "hc/scene/gameObject/components/hcALightComponent.h"
+#include "hc/scene/gameObject/components/hcLightComponent.h"
 #include "hc/graphics/lightShadowManager/hcILightShadowMapManager.h"
 #include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
 
@@ -63,8 +61,7 @@ namespace hc
       m_directionalLights,
       m_spotLights,
       m_generatedDirectionalLightShadows,
-      m_generatedSpotLightShadows,
-      dataBlockManager.shouldTransposeMatrices()
+      m_generatedSpotLightShadows
     );
 
     uploadLightDataToGPU(
@@ -133,62 +130,50 @@ namespace hc
     for (IComponent* component : m_components)
     {
       componentType::Type componentType = component->getType();
-      if (componentType == componentType::DirectionalLight)
+      if (componentType != componentType::Type::Light)
+        continue;
+
+      LightComponent* lightComponent = reinterpret_cast<LightComponent*>(component);
+      scene::lights::Light& light = lightComponent->getLight();
+      if (!light.enabled)
+        continue;
+
+      scene::lights::lightType::Type lightType = lightComponent->getLightType();
+      if (lightType == scene::lights::lightType::Type::Directional)
       {
         if (hasReachedMaxDirectionalLightData(outDirectionalLights.size()))
           continue;
 
-        ALightComponent* lightComponent = reinterpret_cast<ALightComponent*>(component);
-        ALight& light = lightComponent->getLight();
-
-        if (light.isEnabled())
-        {
-          DirectionalLight& directionalLight = static_cast<DirectionalLight&>(light);
-          DirectionalLightWorkItem pair;
-          pair.light = &directionalLight;
-          pair.lightData = directionalLight.getDataBlockStructure();
-          outDirectionalLights.push_back(pair);
-        }
-
-        continue;
+        scene::lights::DirectionalLight* directionalLight = light.getIfDirectionalLight();
+        DirectionalLightWorkItem pair;
+        pair.light = &light;
+        pair.directionalLight = directionalLight;
+        pair.lightData = light.getDirectionalLightDataBlockStructure();
+        outDirectionalLights.push_back(pair);
       }
-      else if (componentType == componentType::OmniLight)
+      else if (lightType == scene::lights::lightType::Type::Omni)
       {
         if (hasReachedMaxOmniLightData(outOmniLights.size()))
           continue;
 
-        ALightComponent* lightComponent = reinterpret_cast<ALightComponent*>(component);
-        ALight& light = lightComponent->getLight();
-
-        if (light.isEnabled())
-        {
-          OmniLight& omniLight = static_cast<OmniLight&>(light);
-          OmniLightWorkItem pair;
-          pair.light = &omniLight;
-          pair.lightData = omniLight.getDataBlockStructure();
-          outOmniLights.push_back(pair);
-        }
-
-        continue;
+        scene::lights::OmniLight* omniLight = light.getIfOmniLight();
+        OmniLightWorkItem pair;
+        pair.light = &light;
+        pair.omniLight = omniLight;
+        pair.lightData = light.getOmniLightDataBlockStructure();
+        outOmniLights.push_back(pair);
       }
-      else if (componentType == componentType::SpotLight)
+      else if (lightType == scene::lights::lightType::Type::Spot)
       {
         if (hasReachedMaxSpotLightData(outSpotLights.size()))
           continue;
 
-        ALightComponent* lightComponent = reinterpret_cast<ALightComponent*>(component);
-        ALight& light = lightComponent->getLight();
-
-        if (light.isEnabled())
-        {
-          SpotLight& spotLight = static_cast<SpotLight&>(light);
-          SpotLightWorkItem pair;
-          pair.light = &spotLight;
-          pair.lightData = spotLight.getDataBlockStructure();
-          outSpotLights.push_back(pair);
-        }
-
-        continue;
+        scene::lights::SpotLight* spotLight = light.getIfSpotLight();
+        SpotLightWorkItem pair;
+        pair.light = &light;
+        pair.spotLight = spotLight;
+        pair.lightData = light.getSpotLightDataBlockStructure();
+        outSpotLights.push_back(pair);
       }
     }
 
@@ -211,13 +196,12 @@ namespace hc
     Vector<DirectionalLightWorkItem>& directionalLights,
     Vector<SpotLightWorkItem>& spotLights,
     Vector<dataBlockStructure::DirectionalLightShadow>& outDirectionalLightShadows,
-    Vector<dataBlockStructure::SpotLightShadow>& outSpotLightShadows,
-    bool transposeMatrices
+    Vector<dataBlockStructure::SpotLightShadow>& outSpotLightShadows
   )
   {
     for (DirectionalLightWorkItem& directionalLightItem : directionalLights)
     {
-      if (!directionalLightItem.light->isShadowsEnabled()
+      if (!directionalLightItem.light->shadowsEnabled
         || hasReachedMaxDirectionalLightShadows(outDirectionalLightShadows.size())
         || lightShadowMapManager.hasReachedMaxDirectionalLightShadows())
       {
@@ -225,29 +209,25 @@ namespace hc
         continue;
       }
 
-      dataBlockStructure::DirectionalLightShadow lightShadowData
-        = directionalLightItem.light->getShadowDataBlockStructure(transposeMatrices);
+      dataBlockStructure::DirectionalLightShadow shadowData = lightShadowMapManager
+        .generateDirectionalLightShadowTexture(
+          *directionalLightItem.light,
+          sceneGraph
+        );
 
-      Int32 shadowMapIndex = lightShadowMapManager.generateDirectionalLightShadowTexture(
-        directionalLightItem.light->getPosition(),
-        lightShadowData.LightViewProjectionMatrix,
-        sceneGraph
-      );
-
-      if (shadowMapIndex < 0)
+      if (shadowData.shadowMapIndex < 0)
       {
         directionalLightItem.lightData.shadowFrameDataIndex = -1;
         continue;
       }
 
-      lightShadowData.shadowMapIndex = shadowMapIndex;
       directionalLightItem.lightData.shadowFrameDataIndex = static_cast<Int32>(outDirectionalLightShadows.size());
-      outDirectionalLightShadows.push_back(lightShadowData);
+      outDirectionalLightShadows.push_back(shadowData);
     }
 
     for (SpotLightWorkItem& spotLightItem : spotLights)
     {
-      if (!spotLightItem.light->isShadowsEnabled()
+      if (!spotLightItem.light->shadowsEnabled
         || hasReachedMaxSpotLightShadows(outSpotLightShadows.size())
         || lightShadowMapManager.hasReachedMaxSpotLightShadows())
       {
@@ -255,25 +235,22 @@ namespace hc
         continue;
       }
 
-      dataBlockStructure::SpotLightShadow lightShadowData
-        = spotLightItem.light->getShadowDataBlockStructure(transposeMatrices);
-
-      Int32 shadowMapIndex = lightShadowMapManager.generateSpotLightShadowTexture(
-        spotLightItem.light->getPosition(),
-        lightShadowData.lightViewProjectionMatrix,
+      dataBlockStructure::SpotLightShadow shadowData = lightShadowMapManager.generateSpotLightShadowTexture(
+        *spotLightItem.light,
         sceneGraph
       );
 
-      if (shadowMapIndex < 0)
+      if (shadowData.shadowMapIndex < 0)
       {
         spotLightItem.lightData.shadowFrameDataIndex = -1;
         continue;
       }
 
-      lightShadowData.shadowMapIndex = shadowMapIndex;
       spotLightItem.lightData.shadowFrameDataIndex = static_cast<Int32>(outSpotLightShadows.size());
-      outSpotLightShadows.push_back(lightShadowData);
+      outSpotLightShadows.push_back(shadowData);
     }
+
+    // TODO Omni lights
   }
 
   void LightManager::uploadLightDataToGPU(

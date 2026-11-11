@@ -26,6 +26,7 @@ namespace hc
     static constexpr UInt32 SLOT_ENVIRONMENT_DIFFUSE_IRRADIANCE_CUBE_MAP = 9;
     static constexpr UInt32 SLOT_ENVIRONMENT_PREFILTERED_CUBE_MAP = 10;
     static constexpr UInt32 SLOT_ENVIRONMENT_BRDF_LUT_TEXTURE = 11;
+    static constexpr UInt32 SLOT_OMNI_LIGHT_SHADOW_CUBE_MAPS = 12;
   }
 
   namespace graphicsBackendType

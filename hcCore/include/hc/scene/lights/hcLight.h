@@ -1,13 +1,15 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
-#include "hc/scene/light/hcLightType.h"
+#include "hc/scene/lights/hcLightType.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc::scene::lights
 {
   /**
    * @brief Represents an omni-directional light source in the engine.
+   *
+   * @note Use the setter methods to safely modify the properties of the OmniLight.
    */
   struct HC_CORE_EXPORT OmniLight : hc::io::ISerializable
   {
@@ -15,10 +17,21 @@ namespace hc::scene::lights
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @brief Sets the range of the OmniLight.
+     * @param newRange The new range value to set. Must be non-negative.
+     */
+    inline void setRange(float newRange)
+    {
+      range = Math::Max(newRange, 0.0f);
+    }
   };
 
   /**
    * @brief Represents a directional light source in the engine.
+   *
+   * @note Use the setter methods to safely modify the properties of the DirectionalLight.
    */
   struct HC_CORE_EXPORT DirectionalLight : hc::io::ISerializable
   {
@@ -31,10 +44,64 @@ namespace hc::scene::lights
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @brief Sets the direction of the DirectionalLight.
+     * @param newDirection The new direction vector to set. It will be normalized.
+     */
+    inline void setDirection(const Vector3f& newDirection)
+    {
+      direction = newDirection.normalized();
+    }
+
+    /**
+     * @brief Sets the shadow view target of the DirectionalLight.
+     * @param newTarget The new shadow view target position to set.
+     */
+    inline void setShadowViewDistance(float newDistance)
+    {
+      shadowViewDistance = Math::Max(newDistance, 0.0f);
+    }
+
+    /**
+     * @brief Sets the size of the shadow projection for the DirectionalLight.
+     * @param newSize The new size of the shadow projection to set. Must be non-negative.
+     */
+    inline void setShadowProjectionSize(float newSize)
+    {
+      shadowProjectionSize = Math::Max(newSize, 0.001f);
+    }
+
+    /**
+     * @brief Sets the near plane distance for the shadow projection of the
+     * DirectionalLight.
+     * @param newNearPlane The new near plane distance to set. Must be non-negative.
+     */
+    inline void setShadowProjectionNearPlane(float newNearPlane)
+    {
+      shadowProjectionNearPlane = Math::Min(
+        Math::Max(newNearPlane, 0.0f),
+        shadowProjectionFarPlane - 0.001f
+      );
+    }
+
+    /**
+     * @brief Sets the far plane distance for the shadow projection of the DirectionalLight.
+     * @param newFarPlane The new far plane distance to set. Must be non-negative.
+     */
+    inline void setShadowProjectionFarPlane(float newFarPlane)
+    {
+      shadowProjectionFarPlane = Math::Max(
+        newFarPlane,
+        shadowProjectionNearPlane + 0.001f
+      );
+    }
   };
 
   /**
    * @brief Represents a spotlight source in the engine.
+   *
+   * @note Use the setter methods to safely modify the properties of the SpotLight.
    */
   struct HC_CORE_EXPORT SpotLight : hc::io::ISerializable
   {
@@ -47,6 +114,55 @@ namespace hc::scene::lights
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @brief Sets the direction of the SpotLight.
+     * @param newDirection The new direction vector to set. It will be normalized.
+     */
+    inline void setInnerConeAngle(const Angle& newInnerConeAngle)
+    {
+      innerConeAngle = newInnerConeAngle < outerConeAngle ? newInnerConeAngle : outerConeAngle;
+      innerConeAngle = Math::Clamp(innerConeAngle, Angle::FromDegrees(0.0f), Angle::FromDegrees(90.0f));
+    }
+
+    /**
+     * @brief Sets the outer cone angle of the SpotLight.
+     * @param newOuterConeAngle The new outer cone angle to set. It must be greater than
+     * or equal to the inner cone angle.
+     */
+    inline void setOuterConeAngle(const Angle& newOuterConeAngle)
+    {
+      outerConeAngle = newOuterConeAngle > innerConeAngle ? newOuterConeAngle : innerConeAngle;
+      outerConeAngle = Math::Clamp(outerConeAngle, Angle::FromDegrees(0.0f), Angle::FromDegrees(90.0f));
+    }
+
+    /**
+     * @brief Sets the near plane distance for the shadow projection of the
+     * SpotLight.
+     * @param newNearPlane The new near plane distance to set. Must be non-negative.
+     */
+    inline void setShadowProjectionNearPlane(float newNearPlane)
+    {
+      shadowProjectionNearPlane = Math::Max(newNearPlane, 0.001f);
+    }
+
+    /**
+     * @brief Sets the far plane distance for the shadow projection of the SpotLight.
+     * @param newFarPlane The new far plane distance to set. Must be non-negative.
+     */
+    inline void setShadowProjectionFarPlane(float newFarPlane)
+    {
+      shadowProjectionFarPlane = Math::Max(newFarPlane, 0.002f);
+    }
+
+    /**
+     * @brief Sets the range of the SpotLight.
+     * @param newRange The new range value to set. Must be non-negative.
+     */
+    inline void setRange(float newRange)
+    {
+      range = Math::Max(newRange, 0.0f);
+    }
   };
 
   using LightVariant = std::variant<
@@ -57,6 +173,8 @@ namespace hc::scene::lights
 
   /**
    * @brief Represents a light source in the engine.
+   *
+   * @note Use the setter methods to safely modify the properties of the Light.
    */
   class HC_CORE_EXPORT Light : public io::ISerializable
   {
@@ -110,6 +228,34 @@ namespace hc::scene::lights
     inline lightType::Type getType() const
     {
       return m_type;
+    }
+    
+    /**
+     * @brief Sets the intensity of the light.
+     * @param newIntensity The new intensity value to set. Must be non-negative.
+     */
+    inline void setIntensity(float newIntensity)
+    {
+      intensity = Math::Max(newIntensity, 0.0f);
+    }
+
+    /**
+     * @brief Sets the shadow bias of the light.
+     * @param newShadowBias The new shadow bias value to set. Must be non-negative.
+     */
+    inline void setShadowBias(float newShadowBias)
+    {
+      shadowBias = Math::Max(newShadowBias, 0.0f);
+    }
+
+    /**
+     * @brief Sets the shadow strength of the light.
+     * @param newShadowStrength The new shadow strength value to set. Must be between
+     * 0.0 and 1.0.
+     */
+    inline void setShadowStrength(float newShadowStrength)
+    {
+      shadowStrength = Math::Clamp(newShadowStrength, 0.0f, 1.0f);
     }
 
     /**
@@ -201,5 +347,24 @@ namespace hc::scene::lights
      * @throws RuntimeErrorException if the current light type is not a SpotLight.
      */
     dataBlockStructure::SpotLight getSpotLightDataBlockStructure() const;
+
+    /**
+     * @brief Gets the GPU-aligned data structure representing this light's shadow
+     * properties as a DirectionalLightShadow.
+     * @return A DirectionalLightShadow data structure containing the light's shadow
+     * properties.
+     * @throws RuntimeErrorException if the current light type is not a DirectionalLight.
+     */
+    dataBlockStructure::DirectionalLightShadow
+      getDirectionalLightShadowDataBlockStructure() const;
+
+    /**
+     * @brief Gets the GPU-aligned data structure representing this light's shadow
+     * properties as a SpotLightShadow.
+     * @return A SpotLightShadow data structure containing the light's shadow
+     * properties.
+     * @throws RuntimeErrorException if the current light type is not a SpotLight.
+     */
+    dataBlockStructure::SpotLightShadow getSpotLightShadowDataBlockStructure() const;
   };
 }

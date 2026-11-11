@@ -37,14 +37,18 @@ namespace hc
     );
   }
 
-  Int32 OpenGlLightShadowMapManager::generateDirectionalLightShadowTexture(
-    Vector3f lightPosition,
-    Matrix4 lightViewProjectionMatrix,
-    const SceneGraph& sceneGraph
-  )
+  dataBlockStructure::DirectionalLightShadow
+    OpenGlLightShadowMapManager::generateDirectionalLightShadowTexture(
+      const scene::lights::Light& light,
+      const SceneGraph& sceneGraph
+    )
   {
+    const scene::lights::DirectionalLight* dirLight = light.getIfDirectionalLight();
+    if (dirLight == nullptr)
+      throw InvalidArgumentException("The provided light is not a DirectionalLight.");
+
     if (hasReachedMaxDirectionalLightShadows())
-      return -1;
+      return dataBlockStructure::DirectionalLightShadow();
 
     // Gather draw commands for the scene from the perspective of the light
 
@@ -55,7 +59,7 @@ namespace hc
     // operation or a spatial partitioning query.
 
     RenderContext renderContext;
-    renderContext.cameraWorldPosition = lightPosition;
+    renderContext.cameraWorldPosition = light.position;
     renderContext.transform = Matrix4::Identity();
     renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
 
@@ -80,8 +84,22 @@ namespace hc
     m_shadowMapShaderProgram->bind();
 
     // Upload the light's view-projection matrix to the shader program
+    float halfSize = dirLight->shadowProjectionSize * 0.5f;
+    Matrix4 projection = Matrix4::Orthographic(
+      -halfSize, halfSize,
+      -halfSize, halfSize,
+      dirLight->shadowProjectionNearPlane,
+      dirLight->shadowProjectionFarPlane
+    );
+
+    Matrix4 view = Matrix4::LookAt(
+      light.position,
+      dirLight->direction,
+      LinearAlgebra::CalculateUpFromDirection(dirLight->direction)
+    );
+
     dataBlockStructure::LightViewProjection lightViewProjectionData;
-    lightViewProjectionData.lightViewProjectionMatrix = lightViewProjectionMatrix;
+    lightViewProjectionData.lightViewProjectionMatrix = (projection * view).transposed();
     m_dataBlockManager.upload(
       dataBlockType::LightViewProjection,
       &lightViewProjectionData
@@ -119,19 +137,26 @@ namespace hc
     // restore viewport
     glViewport(viewportRect[0], viewportRect[1], viewportRect[2], viewportRect[3]);
 
-    Int32 shadowMapLayerIndex = static_cast<Int32>(m_currentDirectionalShadowMapLayer);
+    dataBlockStructure::DirectionalLightShadow lightShadowData
+      = light.getDirectionalLightShadowDataBlockStructure();
+    lightShadowData.shadowMapIndex = static_cast<Int32>(m_currentDirectionalShadowMapLayer);
     ++m_currentDirectionalShadowMapLayer;
-    return shadowMapLayerIndex;
+
+    return lightShadowData;
   }
 
-  Int32 OpenGlLightShadowMapManager::generateSpotLightShadowTexture(
-    Vector3f lightPosition,
-    Matrix4 lightViewProjectionMatrix,
-    const SceneGraph& sceneGraph
-  )
+  dataBlockStructure::SpotLightShadow
+    OpenGlLightShadowMapManager::generateSpotLightShadowTexture(
+      const scene::lights::Light& light,
+      const SceneGraph& sceneGraph
+    )
   {
+    const scene::lights::SpotLight* spotLight = light.getIfSpotLight();
+    if (spotLight == nullptr)
+      throw InvalidArgumentException("The provided light is not a SpotLight.");
+
     if (hasReachedMaxSpotLightShadows())
-      return -1;
+      return dataBlockStructure::SpotLightShadow();
 
     // Gather draw commands for the scene from the perspective of the light
 
@@ -142,7 +167,7 @@ namespace hc
     // operation or a spatial partitioning query.
 
     RenderContext renderContext;
-    renderContext.cameraWorldPosition = lightPosition;
+    renderContext.cameraWorldPosition = light.position;
     renderContext.transform = Matrix4::Identity();
     renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
 
@@ -166,9 +191,22 @@ namespace hc
     // Bind the shadow map shader program for rendering
     m_shadowMapShaderProgram->bind();
 
+    Matrix4 projection = Matrix4::Perspective(
+      spotLight->outerConeAngle.toRadians() * 2.0f,
+      1.0f,
+      spotLight->shadowProjectionNearPlane,
+      spotLight->shadowProjectionFarPlane
+    );
+
+    Matrix4 view = Matrix4::LookAt(
+      light.position,
+      light.position + spotLight->direction,
+      LinearAlgebra::CalculateUpFromDirection(spotLight->direction)
+    );
+
     // Upload the light's view-projection matrix to the shader program
     dataBlockStructure::LightViewProjection lightViewProjectionData;
-    lightViewProjectionData.lightViewProjectionMatrix = lightViewProjectionMatrix;
+    lightViewProjectionData.lightViewProjectionMatrix = (projection * view).transposed();
     m_dataBlockManager.upload(
       dataBlockType::LightViewProjection,
       &lightViewProjectionData
@@ -206,9 +244,21 @@ namespace hc
     // restore viewport
     glViewport(viewportRect[0], viewportRect[1], viewportRect[2], viewportRect[3]);
 
-    Int32 shadowMapLayerIndex = static_cast<Int32>(m_currentSpotShadowMapLayer);
+    dataBlockStructure::SpotLightShadow lightShadowData
+      = light.getSpotLightShadowDataBlockStructure();
+    lightShadowData.shadowMapIndex = static_cast<Int32>(m_currentSpotShadowMapLayer);
     ++m_currentSpotShadowMapLayer;
-    return shadowMapLayerIndex;
+    return lightShadowData;
+  }
+
+  dataBlockStructure::OmniLightShadow
+    OpenGlLightShadowMapManager::generateOmniLightCubeMapShadow(
+      const scene::lights::Light& light,
+      const SceneGraph& sceneGraph
+  )
+  {
+    // TODO
+    return dataBlockStructure::OmniLightShadow();
   }
 
   void OpenGlLightShadowMapManager::clear()
@@ -225,6 +275,12 @@ namespace hc
   bool OpenGlLightShadowMapManager::hasReachedMaxSpotLightShadows() const
   {
     return m_currentSpotShadowMapLayer >= m_spotShadowFrameBuffer.getNumLayers();
+  }
+
+  bool OpenGlLightShadowMapManager::hasReachedMaxOmniLightShadows() const
+  {
+    // TODO
+    return true;
   }
 
   void OpenGlLightShadowMapManager::destroy()

@@ -132,6 +132,22 @@ namespace hc
     static_assert(sizeof(SpotLightShadow) % 16 == 0, "SpotLightShadow must be 16-byte aligned");
 
     /**
+     * @brief GPU-aligned data for a single omni light's shadow metadata.
+     */
+    struct alignas(16) HC_CORE_EXPORT OmniLightShadow
+    {
+      float shadowBias = 0.005f;          ///< Bias to reduce shadow acne.
+      float shadowStrength = 1.0f;        ///< Strength of the shadow (0.0 to 1.0).
+      float projectionNearPlane = 0.1f;   ///< Near plane distance for the light's projection.
+      float projectionFarPlane = 100.0f;  ///< Far plane distance for the light's projection.
+
+      Int32 shadowMapIndex = -1;          ///< Index of the shadow map texture in the array.
+      Int32 padding0 = 0;
+      Int32 padding1 = 0;
+      Int32 padding2 = 0;
+    };
+
+    /**
      * @brief GPU-aligned data for all light shadows in a single frame, containing arrays of
      * directional and spot light shadow data.
      */

@@ -1,4 +1,4 @@
-#include "hc/scene/light/hcLight.h"
+#include "hc/scene/lights/hcLight.h"
 
 namespace hc::scene::lights
 {
@@ -176,7 +176,7 @@ namespace hc::scene::lights
   }
 
   void Light::setType(lightType::Type lightType)
-  { 
+  {
     switch (lightType)
     {
     case lightType::Type::Omni:
@@ -283,5 +283,83 @@ namespace hc::scene::lights
     data.outerConeAngle = Math::Cos(spotLight->outerConeAngle.toRadians());
 
     return data;
+  }
+
+  dataBlockStructure::DirectionalLightShadow
+    Light::getDirectionalLightShadowDataBlockStructure() const
+  {
+    const scene::lights::DirectionalLight* directionalLight
+      = std::get_if<scene::lights::DirectionalLight>(&m_variantData);
+    if (directionalLight == nullptr)
+      throw RuntimeErrorException(
+        "Light::getDirectionalLightShadowDataBlockStructure: Current light type is not a DirectionalLight."
+      );
+
+    float projectionSize = directionalLight->shadowProjectionSize * 0.5f;
+    Matrix4 projectionMatrix = Matrix4::Orthographic(
+      -projectionSize, projectionSize,
+      -projectionSize, projectionSize,
+      directionalLight->shadowProjectionNearPlane,
+      directionalLight->shadowProjectionFarPlane
+    );
+
+    // TODO
+    //
+    // Shadow target position and distance of a directional light should be calculated
+    // based on the scene's bounding box or the area of interest (like the center's of the
+    // camera's frustum), not just the origin.
+    //
+    // For now, we let the user specify the shadow target and distance in the
+    // DirectionalLight class.
+
+    Vector3f lightPosition = directionalLight->shadowViewTarget
+      - directionalLight->direction
+      * directionalLight->shadowViewDistance;
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(directionalLight->direction);
+
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      lightPosition,
+      directionalLight->shadowViewTarget,
+      up
+    );
+
+    dataBlockStructure::DirectionalLightShadow data;
+    data.shadowBias = shadowBias;
+    data.shadowStrength = shadowStrength;
+    data.LightViewProjectionMatrix = projectionMatrix * viewMatrix;
+    return data;
+  }
+
+  dataBlockStructure::SpotLightShadow
+    Light::getSpotLightShadowDataBlockStructure() const
+  {
+    const scene::lights::SpotLight* spotLight
+      = std::get_if<scene::lights::SpotLight>(&m_variantData);
+    if (spotLight == nullptr)
+      throw RuntimeErrorException(
+        "Light::getSpotLightShadowDataBlockStructure: Current light type is not a SpotLight."
+      );
+
+    Matrix4 projectionMatrix = Matrix4::Perspective(
+      spotLight->outerConeAngle.toRadians() * 2.0f,
+      1.0f,
+      spotLight->shadowProjectionNearPlane,
+      spotLight->shadowProjectionFarPlane
+    );
+
+    Vector3f up = LinearAlgebra::CalculateUpFromDirection(spotLight->direction);
+    Matrix4 viewMatrix = Matrix4::LookAt(
+      position,
+      position + spotLight->direction,
+      up
+    );
+
+    dataBlockStructure::SpotLightShadow shadowData;
+    shadowData.shadowBias = shadowBias;
+    shadowData.shadowStrength = shadowStrength;
+    shadowData.projectionFarPlane = spotLight->shadowProjectionFarPlane;
+    shadowData.projectionNearPlane = spotLight->shadowProjectionNearPlane;
+    shadowData.lightViewProjectionMatrix = projectionMatrix * viewMatrix;
+    return shadowData;
   }
 }

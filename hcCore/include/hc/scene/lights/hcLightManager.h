@@ -5,31 +5,39 @@
 
 namespace hc
 {
+  namespace scene::lights
+  {
+    class Light;
+    struct DirectionalLight;
+    struct OmniLight;
+    struct SpotLight;
+  }
+
   class SceneGraph;
   class GameObject;
   class IComponent;
-  class DirectionalLight;
-  class OmniLight;
-  class SpotLight;
   class ILightShadowMapManager;
   class IDataBlockManager;
 
-  struct alignas(16) DirectionalLightWorkItem
+  struct DirectionalLightWorkItem
   {
-    dataBlockStructure::DirectionalLight lightData;
-    DirectionalLight* light;
+    dataBlockStructure::DirectionalLight lightData;     ///< The data block structure representing the directional light's properties for GPU usage.
+    scene::lights::DirectionalLight* directionalLight;  ///< Pointer to the actual DirectionalLight object in the scene.
+    scene::lights::Light* light;                        ///< Pointer to the base Light object.
   };
 
-  struct alignas(16) OmniLightWorkItem
+  struct OmniLightWorkItem
   {
-    dataBlockStructure::OmniLight lightData;
-    OmniLight* light;
+    dataBlockStructure::OmniLight lightData;  ///< The data block structure representing the omni light's properties for GPU usage.
+    scene::lights::OmniLight* omniLight;      ///< Pointer to the actual OmniLight object in the scene.
+    scene::lights::Light* light;              ///< Pointer to the base Light object.
   };
 
-  struct alignas(16) SpotLightWorkItem
+  struct SpotLightWorkItem
   {
-    dataBlockStructure::SpotLight lightData;
-    SpotLight* light;
+    dataBlockStructure::SpotLight lightData;  ///< The data block structure representing the spot light's properties for GPU usage.
+    scene::lights::SpotLight* spotLight;      ///< Pointer to the actual SpotLight object in the scene.
+    scene::lights::Light* light;              ///< Pointer to the base Light object.
   };
 
   class HC_CORE_EXPORT LightManager
@@ -77,8 +85,7 @@ namespace hc
       Vector<DirectionalLightWorkItem>& directionalLights,
       Vector<SpotLightWorkItem>& spotLights,
       Vector<dataBlockStructure::DirectionalLightShadow>& outDirectionalLightShadows,
-      Vector<dataBlockStructure::SpotLightShadow>& outSpotLightShadows,
-      bool transposeMatrices
+      Vector<dataBlockStructure::SpotLightShadow>& outSpotLightShadows
     );
 
     void uploadLightDataToGPU(

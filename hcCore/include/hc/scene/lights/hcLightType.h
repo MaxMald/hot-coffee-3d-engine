@@ -2,7 +2,7 @@
 
 #include "hc/hcCorePrerequisites.h"
 
-namespace hc
+namespace hc::scene::lights
 {
   namespace lightType
   {

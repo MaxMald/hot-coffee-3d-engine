@@ -25,18 +25,24 @@ namespace hc
     /**
      * @copydoc ILightShadowMapManager::generateDirectionalLightShadowTexture()
      */
-    Int32 generateDirectionalLightShadowTexture(
-      Vector3f lightPosition,
-      Matrix4 lightViewProjectionMatrix,
+    dataBlockStructure::DirectionalLightShadow generateDirectionalLightShadowTexture(
+      const scene::lights::Light& directionalLight,
       const SceneGraph& sceneGraph
     ) override;
 
     /**
      * @copydoc ILightShadowMapManager::generateSpotLightShadowTexture()
      */
-    Int32 generateSpotLightShadowTexture(
-      Vector3f lightPosition,
-      Matrix4 lightViewProjectionMatrix,
+    dataBlockStructure::SpotLightShadow generateSpotLightShadowTexture(
+      const scene::lights::Light& spotLight,
+      const SceneGraph& sceneGraph
+    ) override;
+
+    /**
+     * @copydoc ILightShadowMapManager::generateOmniLightCubeMapShadow()
+     */
+    dataBlockStructure::OmniLightShadow generateOmniLightCubeMapShadow(
+      const scene::lights::Light& omniLight,
       const SceneGraph& sceneGraph
     ) override;
 
@@ -54,6 +60,11 @@ namespace hc
      * @copydoc ILightShadowMapManager::hasReachedMaxSpotLightShadows()
      */
     bool hasReachedMaxSpotLightShadows() const override;
+
+    /**
+     * @copydoc ILightShadowMapManager::hasReachedMaxOmniLightShadows()
+     */
+    bool hasReachedMaxOmniLightShadows() const override;
 
     /**
      * @copydoc ILightShadowMapManager::destroy()

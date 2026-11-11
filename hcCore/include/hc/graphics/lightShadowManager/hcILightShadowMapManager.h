@@ -1,6 +1,8 @@
 #pragma once
 
 #include "hc/hcCorePrerequisites.h"
+#include "hc/scene/lights/hcLight.h"
+#include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 
 namespace hc
 {
@@ -33,18 +35,16 @@ namespace hc
      * the maximum number of directional light shadows has been reached, this method
      * returns -1.
      *
-     * @param lightPosition The position of the directional light in world space.
-     * @param lightViewProjectionMatrix The view-projection matrix of the directional
-     * light.
+     * @param directionalLight The directional light for which to generate the shadow
+     * texture.
      * @param sceneGraph The scene graph containing the objects that may cast shadows for
      * this light.
      *
      * @return The index of the newly generated directional light shadow texture, or -1 if
      * the maximum number of shadows has been reached.
      */
-    virtual Int32 generateDirectionalLightShadowTexture(
-      Vector3f lightPosition,
-      Matrix4 lightViewProjectionMatrix,
+    virtual dataBlockStructure::DirectionalLightShadow generateDirectionalLightShadowTexture(
+      const scene::lights::Light& directionalLight,
       const SceneGraph& sceneGraph
     ) = 0;
 
@@ -52,22 +52,32 @@ namespace hc
      * @brief Generates a new spot light shadow texture and returns its index. If the
      * maximum number of spot light shadows has been reached, this method returns -1.
      *
-     * @param lightPosition The position of the spot light in world space.
-     * @param lightViewProjectionMatrix The view-projection matrix of the spot light.
+     * @param spotLight The spot light for which to generate the shadow texture.
      * @param sceneGraph The scene graph containing the objects that may cast shadows for
      * this light.
      *
      * @return The index of the newly generated spot light shadow texture, or -1 if the
      * maximum number of shadows has been reached.
      */
-    virtual Int32 generateSpotLightShadowTexture(
-      Vector3f lightPosition,
-      Matrix4 lightViewProjectionMatrix,
+    virtual dataBlockStructure::SpotLightShadow generateSpotLightShadowTexture(
+      const scene::lights::Light& spotLight,
       const SceneGraph& sceneGraph
     ) = 0;
 
-    virtual Int32 generateOmniLightCubeMapShadow(
-
+    /**
+     * @brief Generates a cube map shadow texture for an omni light and returns its index.
+     * If the maximum number of omni light shadows has been reached, this method returns
+     * -1.
+     *
+     * @param omniLight The omni light for which to generate the cube map shadow texture.
+     * @param sceneGraph The scene graph containing the objects that may cast shadows for
+     * this light.
+     *
+     * @return The index of the newly generated omni light cube map shadow texture, or -1
+     * if the maximum number of shadows has been reached.
+     */
+    virtual dataBlockStructure::OmniLightShadow generateOmniLightCubeMapShadow(
+      const scene::lights::Light& omniLight,
       const SceneGraph& sceneGraph
     ) = 0;
 
@@ -91,6 +101,14 @@ namespace hc
      * otherwise.
      */
     virtual bool hasReachedMaxSpotLightShadows() const = 0;
+
+    /**
+     * @brief Checks if the maximum number of omni light shadows has been reached.
+     *
+     * @return True if the maximum number of omni light shadows has been reached, false
+     * otherwise.
+     */
+    virtual bool hasReachedMaxOmniLightShadows() const = 0;
 
     /**
      * @brief Destroys the light shadow map manager and releases any allocated resources.
