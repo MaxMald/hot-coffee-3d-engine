@@ -40,28 +40,28 @@ namespace hc::editor
 
     void drawSpotLightGizmo(
       const GameObject& gameObject,
-      const SpotLightComponent& spotLightComponent,
+      const scene::lights::Light& spotLight,
       const Camera& camera,
       bool isSelected
     );
 
     void drawOmniLightGizmo(
       const GameObject& gameObject,
-      const OmniLightComponent& omniLightComponent,
+      const scene::lights::Light& omniLight,
       const Camera& camera,
       bool isSelected
     );
 
     void drawDirectionalLightGizmo(
       const GameObject& gameObject,
-      const DirectionalLightComponent& directionalLightComponent,
+      const scene::lights::Light& directionalLight,
       const Camera& camera,
       bool isSelected
     );
 
     void drawLightIcon(
       const GameObject& gameObject,
-      const ALightComponent& lightComponent,
+      const scene::lights::Light& light,
       const Camera& camera,
       bool isSelected
     );

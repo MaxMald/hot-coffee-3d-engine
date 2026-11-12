@@ -119,6 +119,15 @@ namespace hc::scene::lights
      * @brief Sets the direction of the SpotLight.
      * @param newDirection The new direction vector to set. It will be normalized.
      */
+    inline void setDirection(const Vector3f& newDirection)
+    {
+      direction = newDirection.normalized();
+    }
+
+    /**
+     * @brief Sets the direction of the SpotLight.
+     * @param newDirection The new direction vector to set. It will be normalized.
+     */
     inline void setInnerConeAngle(const Angle& newInnerConeAngle)
     {
       innerConeAngle = newInnerConeAngle < outerConeAngle ? newInnerConeAngle : outerConeAngle;

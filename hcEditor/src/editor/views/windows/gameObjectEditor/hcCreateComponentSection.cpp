@@ -1,17 +1,7 @@
 #include "hc/editor/views/windows/gameObjectEditor/hcCreateComponentSection.h"
-#include "imgui.h"
 
-namespace
-{
-  constexpr const hc::Char* COMPONENT_TYPES[] =
-  {
-    "Mesh",
-    "Camera",
-    "OmniLight",
-    "SpotLight",
-    "DirectionalLight"
-  };
-}
+#include <imgui.h>
+#include "hc/editor/hcEditorCommons.h"
 
 namespace hc::editor
 {
@@ -21,16 +11,18 @@ namespace hc::editor
   {
   }
 
-  CreateComponentSection::~CreateComponentSection() = default;
+  CreateComponentSection::~CreateComponentSection()
+  {
+  }
 
   void CreateComponentSection::draw()
   {
     m_userRequestedCreation = false;
 
     ImGui::Text("Create Component:");
-    
+
     ImGui::SetNextItemWidth(120.0f);
-    ImGui::Combo("Selected Type", &m_selectedComponentTypeIndex, COMPONENT_TYPES, IM_ARRAYSIZE(COMPONENT_TYPES));
+    ImGui::Combo("Selected Type", &m_selectedComponentTypeIndex, comboItems::COMPONENT_TYPES, comboItems::COMPONENT_TYPES_COUNT);
     
     ImGui::SameLine();
     ImGui::SetNextItemWidth(80.0f);
@@ -56,9 +48,8 @@ namespace hc::editor
 
     try
     {
-      componentType::Type selectedType = componentType::FromString(
-        COMPONENT_TYPES[m_selectedComponentTypeIndex]
-      );
+      componentType::Type selectedType
+        = static_cast<componentType::Type>(m_selectedComponentTypeIndex);
 
       switch (selectedType)
       {
@@ -68,21 +59,15 @@ namespace hc::editor
       case componentType::Type::Camera:
         createComponent<CameraComponent>(gameObject);
         break;
-      case componentType::Type::OmniLight:
-        createComponent<OmniLightComponent>(gameObject);
-        break;
-      case componentType::Type::SpotLight:
-        createComponent<SpotLightComponent>(gameObject);
-        break;
-      case componentType::Type::DirectionalLight:
-        createComponent<DirectionalLightComponent>(gameObject);
+      case componentType::Type::Light:
+        createComponent<LightComponent>(gameObject);
         break;
       default:
         LogService::Error(
           String::Format(
             "CreateComponentSection::createComponentFromSelection: "
             "Unknown component type selected (%s).",
-            COMPONENT_TYPES[m_selectedComponentTypeIndex]
+            comboItems::COMPONENT_TYPES[m_selectedComponentTypeIndex]
           )
         );
         break;
@@ -93,7 +78,7 @@ namespace hc::editor
       LogService::Error(
         String::Format(
           "Failed to create component of type %s. Error: %s",
-          COMPONENT_TYPES[m_selectedComponentTypeIndex],
+          comboItems::COMPONENT_TYPES[m_selectedComponentTypeIndex],
           e.what()
         )
       );

@@ -18,6 +18,21 @@ namespace hc
     ~LightComponent() override;
 
     /**
+     * @copydoc IUpdatableComponent::preUpdate
+     */
+    void preUpdate(float deltaTime) override;
+
+    /**
+     * @copydoc IUpdatableComponent::update
+     */
+    void update(float deltaTime) override;
+
+    /**
+     * @copydoc IUpdatableComponent::postUpdate
+     */
+    void postUpdate(float deltaTime) override;
+
+    /**
      * @brief Updates the light's properties based on the current state of the component.
      * This method should be called whenever the component's state changes and the light
      * needs to be updated accordingly.
@@ -60,5 +75,20 @@ namespace hc
 
   protected:
     scene::lights::Light m_light; ///< The light associated with this component.
+
+    /**
+     * @copydoc ABaseComponent::onSerialize
+     */
+    void onSerialize(io::BinaryWriter& writer) const override;
+
+    /**
+     * @copydoc ABaseComponent::onDeserialize
+     */
+    void onDeserialize(io::BinaryReader& reader) override;
+
+    /**
+     * @copydoc ABaseComponent::getDerivedVersion
+     */
+    UInt16 getDerivedVersion() const override;
   };
 }
