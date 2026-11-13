@@ -7,7 +7,7 @@
 namespace hc
 {
   HairForwardSpecularRenderPass::HairForwardSpecularRenderPass(
-    OpenGlLightShadowMapManager& lightShadowMapManager,
+    graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager,
     IDataBlockManager& dataBlockManager
   ) :
     m_lightShadowMapManager(lightShadowMapManager),

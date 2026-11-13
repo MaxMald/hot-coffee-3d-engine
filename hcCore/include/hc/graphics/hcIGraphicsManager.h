@@ -20,10 +20,14 @@ namespace hc
   class IGBuffer;
   class ICubeMap;
   class Skybox;
-  class ILightShadowMapManager;
   struct GraphicsSettings;
   struct CameraFrameData;
   struct LightFrameData;
+
+  namespace graphics::shadows
+  {
+    class ILightShadowMapManager;
+  }
 
   namespace graphics::generators
   {
@@ -204,7 +208,7 @@ namespace hc
      *
      * @return Reference to the ILightShadowMapManager instance.
      */
-    virtual ILightShadowMapManager& getLightShadowMapManager() = 0;
+    virtual graphics::shadows::ILightShadowMapManager& getLightShadowMapManager() = 0;
 
     /**
      * @brief Returns the data block manager.

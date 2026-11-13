@@ -7,7 +7,7 @@
 namespace hc
 {
   DeferredLightingRenderPass::DeferredLightingRenderPass(
-    OpenGlLightShadowMapManager& lightShadowMapManager
+    graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager
   ) :
     m_gBuffer(nullptr),
     m_lightShadowMapManager(lightShadowMapManager),

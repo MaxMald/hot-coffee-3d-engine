@@ -2,7 +2,7 @@
 
 #include "hc/scene/hcSceneGraph.h"
 
-namespace hc
+namespace hc::graphics::shadows
 {
   ILightShadowMapManager::ILightShadowMapManager()
   {}

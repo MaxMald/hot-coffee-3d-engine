@@ -141,7 +141,7 @@ namespace hc
     /**
      * @copydoc IGraphicsManager::getLightShadowMapManager
      */
-    ILightShadowMapManager& getLightShadowMapManager() override;
+    graphics::shadows::ILightShadowMapManager& getLightShadowMapManager() override;
 
     /**
      * @copydoc IGraphicsManager::getDataBlockManager

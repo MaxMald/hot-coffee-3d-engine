@@ -10,7 +10,10 @@
 namespace hc
 {
   class IDataBlockManager;
+}
 
+namespace hc::graphics::shadows
+{
   class OpenGlLightShadowMapManager : public ILightShadowMapManager
   {
   public:

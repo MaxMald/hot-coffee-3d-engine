@@ -2,17 +2,21 @@
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 
+namespace hc::graphics::shadows
+{
+  class OpenGlLightShadowMapManager;
+}
+
 namespace hc
 {
   class OpenGlGBuffer;
-  class OpenGlLightShadowMapManager;
   class IDataBlockManager;
 
   class HairForwardSpecularRenderPass
   {
   public:
     HairForwardSpecularRenderPass(
-      OpenGlLightShadowMapManager& lightShadowMapManager,
+      graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager,
       IDataBlockManager& dataBlockManager
     );
     ~HairForwardSpecularRenderPass();
@@ -23,7 +27,7 @@ namespace hc
     );
 
   private:
-    OpenGlLightShadowMapManager& m_lightShadowMapManager;
+    graphics::shadows::OpenGlLightShadowMapManager& m_lightShadowMapManager;
     IDataBlockManager& m_dataBlockManager;
 
     void executeTwoSidedDrawCommand(const DrawCommand& command);

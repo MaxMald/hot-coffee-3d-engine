@@ -321,6 +321,26 @@ namespace hc
      * @param wrap The wrap mode (repeat, mirrored repeat, clamp to edge, or clamp to border).
      * @return The corresponding OpenGL wrap mode.
      */
+    inline GLint GetOpenGlFilterMode(filterMode::Type filter)
+    {
+      switch (filter)
+      {
+      case filterMode::Nearest:
+        return GL_NEAREST;
+      case filterMode::Linear:
+        return GL_LINEAR;
+      default:
+        throw RuntimeErrorException(
+          String::Format("Unsupported filter mode: %d", static_cast<Int32>(filter))
+        );
+      }
+    }
+
+    /**
+     * @brief Gets the OpenGL wrap mode based on the specified wrap mode.
+     * @param wrap The wrap mode (repeat, mirrored repeat, clamp to edge, or clamp to border).
+     * @return The corresponding OpenGL wrap mode.
+     */
     inline GLint GetOpenGlWrapMode(wrapMode::Type wrap)
     {
       switch (wrap)

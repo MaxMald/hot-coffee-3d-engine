@@ -34,14 +34,14 @@ namespace hc
     void sortDrawCommands();
     const Vector<DrawCommand>& getDrawCommands() const;
     OpenGlGBuffer& getGBuffer();
-    ILightShadowMapManager& getLightShadowMapManager();
+    graphics::shadows::ILightShadowMapManager& getLightShadowMapManager();
     void clearFrame();
     void destroy();
 
     void onViewportChanged(const Rect<UInt32>& viewportRect);
 
   private:
-    OpenGlLightShadowMapManager m_lightShadowMapManager;
+    graphics::shadows::OpenGlLightShadowMapManager m_lightShadowMapManager;
     graphics::OpenGlEnvironmentManager m_environmentManager;
     DeferredHybridRenderPipeline m_deferredHybridRenderPipeline;
     FinalRenderPass m_finalRenderPass;

@@ -9,15 +9,19 @@
 #include "hc/graphics/renderPass/hcHairForwardSpecularRenderPass.h"
 #include "hc/graphics/renderPass/hcSkyboxRenderPass.h"
 
+namespace hc::graphics
+{
+  class OpenGlEnvironmentManager;
+
+  namespace shadows
+  {
+    class OpenGlLightShadowMapManager;
+  }
+}
+
 namespace hc
 {
-  namespace graphics
-  {
-    class OpenGlEnvironmentManager;
-  }
-
   class IDataBlockManager;
-  class OpenGlLightShadowMapManager;
   struct FrameRenderContext;
 
   class DeferredHybridRenderPipeline
@@ -25,7 +29,7 @@ namespace hc
   public:
     DeferredHybridRenderPipeline(
       IDataBlockManager& dataBlockManager,
-      OpenGlLightShadowMapManager& lightShadowMapManager,
+      graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager,
       graphics::OpenGlEnvironmentManager& environmentManager
     );
     ~DeferredHybridRenderPipeline();
@@ -55,7 +59,7 @@ namespace hc
     Vector<DrawCommand> m_forwardOpaqueCommands;
     Vector<DrawCommand> m_forwardTransparentCommands;
     Vector<DrawCommand> m_hairForwardSpecularCommands;
-    OpenGlLightShadowMapManager& m_lightShadowMapManager;
+    graphics::shadows::OpenGlLightShadowMapManager& m_lightShadowMapManager;
     graphics::OpenGlEnvironmentManager& m_environmentManager;
     bool m_initialized;
 

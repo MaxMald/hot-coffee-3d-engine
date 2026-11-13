@@ -3,7 +3,7 @@
 #include <hc/graphics/hcDrawCommandUtilities.h>
 #include <hc/graphics/resource/dataBlock/hcIDataBlockManager.h>
 
-namespace hc
+namespace hc::graphics::shadows
 {
   OpenGlLightShadowMapManager::OpenGlLightShadowMapManager(
     IDataBlockManager& dataBlockManager

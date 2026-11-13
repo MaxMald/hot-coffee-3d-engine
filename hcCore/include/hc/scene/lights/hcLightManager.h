@@ -13,10 +13,14 @@ namespace hc
     struct SpotLight;
   }
 
+  namespace graphics::shadows
+  {
+    class ILightShadowMapManager;
+  }
+
   class SceneGraph;
   class GameObject;
   class IComponent;
-  class ILightShadowMapManager;
   class IDataBlockManager;
 
   struct DirectionalLightWorkItem
@@ -49,7 +53,7 @@ namespace hc
     void initialize();
     void prepareLightDataForRendering(
       const SceneGraph& sceneGraph,
-      ILightShadowMapManager& lightShadowMapManager,
+      graphics::shadows::ILightShadowMapManager& lightShadowMapManager,
       IDataBlockManager& blockDataManager
     );
     void clear();
@@ -81,7 +85,7 @@ namespace hc
 
     void generateLightShadowData(
       const SceneGraph& sceneGraph,
-      ILightShadowMapManager& lightShadowManager,
+      graphics::shadows::ILightShadowMapManager& lightShadowManager,
       Vector<DirectionalLightWorkItem>& directionalLights,
       Vector<SpotLightWorkItem>& spotLights,
       Vector<dataBlockStructure::DirectionalLightShadow>& outDirectionalLightShadows,

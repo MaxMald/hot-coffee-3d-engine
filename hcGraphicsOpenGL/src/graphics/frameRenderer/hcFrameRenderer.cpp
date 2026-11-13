@@ -185,7 +185,7 @@ namespace hc
     return m_deferredHybridRenderPipeline.getGBuffer();
   }
 
-  ILightShadowMapManager& FrameRenderer::getLightShadowMapManager()
+  graphics::shadows::ILightShadowMapManager& FrameRenderer::getLightShadowMapManager()
   {
     return m_lightShadowMapManager;
   }

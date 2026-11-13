@@ -7,7 +7,10 @@
 namespace hc
 {
   class SceneGraph;
+}
 
+namespace hc::graphics::shadows
+{
   /**
    * @brief Interface for managing light shadow textures and their generation in the
    * rendering engine.

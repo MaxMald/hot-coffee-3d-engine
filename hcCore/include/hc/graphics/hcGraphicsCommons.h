@@ -340,4 +340,19 @@ namespace hc
       ClampToBorder   // Clamp the texture coordinates to a specified border color
     };
   }
+
+  namespace frameBufferBindingType
+  {
+    /**
+     * @brief Enumeration of framebuffer binding types used in the rendering engine.
+     * This enum defines the different types of framebuffer bindings that can be used
+     * during rendering.
+     */
+    enum Type : UInt8
+    {
+      Read = 0,     // Bind the framebuffer for reading operations.
+      Draw = 1,     // Bind the framebuffer for drawing operations.
+      ReadDraw = 2  // Bind the framebuffer for both reading and drawing operations.
+    };
+  }
 }

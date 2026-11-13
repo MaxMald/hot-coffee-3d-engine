@@ -12,7 +12,7 @@ namespace hc
 {
   DeferredHybridRenderPipeline::DeferredHybridRenderPipeline(
     IDataBlockManager& dataBlockManager,
-    OpenGlLightShadowMapManager& lightShadowMapManager,
+    graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager,
     graphics::OpenGlEnvironmentManager& environmentManager
   ) :
     m_deferredGeometryRenderPass(dataBlockManager),

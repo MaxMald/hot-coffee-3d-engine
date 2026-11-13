@@ -2,15 +2,19 @@
 
 #include "hc/hcGraphicsOpenGlPrerequisites.h"
 
+namespace hc::graphics::shadows
+{
+  class OpenGlLightShadowMapManager;
+}
+
 namespace hc
 {
   class OpenGlGBuffer;
-  class OpenGlLightShadowMapManager;
 
   class DeferredLightingRenderPass
   {
   public:
-    DeferredLightingRenderPass(OpenGlLightShadowMapManager& lightShadowMapManager);
+    DeferredLightingRenderPass(graphics::shadows::OpenGlLightShadowMapManager& lightShadowMapManager);
     ~DeferredLightingRenderPass();
 
     void initialize(
@@ -22,7 +26,7 @@ namespace hc
 
   private:
     OpenGlGBuffer* m_gBuffer;
-    OpenGlLightShadowMapManager& m_lightShadowMapManager;
+    graphics::shadows::OpenGlLightShadowMapManager& m_lightShadowMapManager;
     SharedPtr<IShaderProgram> m_deferredLightingShaderProgram;
   };
 }

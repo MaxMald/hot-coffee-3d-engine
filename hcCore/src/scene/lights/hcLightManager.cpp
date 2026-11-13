@@ -31,7 +31,7 @@ namespace hc
 
   void LightManager::prepareLightDataForRendering(
     const SceneGraph& sceneGraph,
-    ILightShadowMapManager& lightShadowManager,
+    graphics::shadows::ILightShadowMapManager& lightShadowManager,
     IDataBlockManager& dataBlockManager
   )
   {
@@ -192,7 +192,7 @@ namespace hc
 
   void LightManager::generateLightShadowData(
     const SceneGraph& sceneGraph,
-    ILightShadowMapManager& lightShadowMapManager,
+    graphics::shadows::ILightShadowMapManager& lightShadowMapManager,
     Vector<DirectionalLightWorkItem>& directionalLights,
     Vector<SpotLightWorkItem>& spotLights,
     Vector<dataBlockStructure::DirectionalLightShadow>& outDirectionalLightShadows,

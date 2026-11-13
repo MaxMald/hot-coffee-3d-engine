@@ -212,7 +212,7 @@ namespace hc
     return m_meshManager;
   }
 
-  ILightShadowMapManager& OpenGlGraphicsManager::getLightShadowMapManager()
+  graphics::shadows::ILightShadowMapManager& OpenGlGraphicsManager::getLightShadowMapManager()
   {
     return m_frameRenderer.getLightShadowMapManager();
   }
