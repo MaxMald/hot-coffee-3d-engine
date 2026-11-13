@@ -56,7 +56,7 @@
 #include "hc/graphics/resource/mesh/hcIMesh.h"
 #include "hc/graphics/resource/frameBuffer/hcIFrameBuffer.h"
 #include "hc/graphics/resource/frameBuffer/hcIGBuffer.h"
-#include "hc/graphics/resource/frameBuffer/hcIDepthBuffer.h"
+#include "hc/graphics/resource/frameBuffer/hcIDepthFrameBuffer.h"
 #include "hc/graphics/resource/dataBlock/hcDataBlockStructures.h"
 #include "hc/graphics/resource/dataBlock/hcIDataBlockManager.h"
 #include "hc/graphics/resource/textureArray/hcITextureArray.h"
