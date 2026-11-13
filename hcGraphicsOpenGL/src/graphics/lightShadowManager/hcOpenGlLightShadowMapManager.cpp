@@ -58,8 +58,11 @@ namespace hc
     // light's frustum and can cast shadows. This could be a scene graph's frustum culling
     // operation or a spatial partitioning query.
 
+    Vector3f lightPosition = dirLight->shadowViewTarget
+      - dirLight->direction * dirLight->shadowViewDistance;
+
     RenderContext renderContext;
-    renderContext.cameraWorldPosition = light.position;
+    renderContext.cameraWorldPosition = lightPosition;
     renderContext.transform = Matrix4::Identity();
     renderContext.modelPosition = Vector3f(0.0f, 0.0f, 0.0f);
 
@@ -93,7 +96,7 @@ namespace hc
     );
 
     Matrix4 view = Matrix4::LookAt(
-      light.position,
+      lightPosition,
       dirLight->direction,
       LinearAlgebra::CalculateUpFromDirection(dirLight->direction)
     );
@@ -139,6 +142,11 @@ namespace hc
 
     dataBlockStructure::DirectionalLightShadow lightShadowData
       = light.getDirectionalLightShadowDataBlockStructure();
+
+    // GLSL expects the light view-projection matrix to be column-major, so we transpose
+    // it before storing it in the data block structure.
+    lightShadowData.LightViewProjectionMatrix.transpose();
+
     lightShadowData.shadowMapIndex = static_cast<Int32>(m_currentDirectionalShadowMapLayer);
     ++m_currentDirectionalShadowMapLayer;
 
@@ -207,6 +215,7 @@ namespace hc
     // Upload the light's view-projection matrix to the shader program
     dataBlockStructure::LightViewProjection lightViewProjectionData;
     lightViewProjectionData.lightViewProjectionMatrix = (projection * view).transposed();
+
     m_dataBlockManager.upload(
       dataBlockType::LightViewProjection,
       &lightViewProjectionData
@@ -246,6 +255,11 @@ namespace hc
 
     dataBlockStructure::SpotLightShadow lightShadowData
       = light.getSpotLightShadowDataBlockStructure();
+
+    // GLSL expects the light view-projection matrix to be column-major, so we transpose
+    // it before storing it in the data block structure.
+    lightShadowData.lightViewProjectionMatrix.transpose();
+
     lightShadowData.shadowMapIndex = static_cast<Int32>(m_currentSpotShadowMapLayer);
     ++m_currentSpotShadowMapLayer;
     return lightShadowData;

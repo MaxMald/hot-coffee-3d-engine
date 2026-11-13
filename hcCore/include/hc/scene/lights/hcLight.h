@@ -37,10 +37,10 @@ namespace hc::scene::lights
   {
     Vector3f direction = Vector3f(0.0f, 0.0f, -1.0f);         ///< The direction vector of the directional light
     Vector3f shadowViewTarget = Vector3f(0.0f, 0.0f, 0.0f);   ///< The target point for the shadow view
-    float shadowViewDistance = 0.0f;                          ///< The distance for the shadow view
-    float shadowProjectionSize = 0.0f;                        ///< The size of the shadow projection
-    float shadowProjectionNearPlane = 0.0f;                   ///< The near plane distance for shadow projection
-    float shadowProjectionFarPlane = 0.0f;                    ///< The far plane distance for shadow projection
+    float shadowViewDistance = 5.0f;                          ///< The distance for the shadow view
+    float shadowProjectionSize = 10.0f;                        ///< The size of the shadow projection
+    float shadowProjectionNearPlane = 0.1f;                   ///< The near plane distance for shadow projection
+    float shadowProjectionFarPlane = 100.0f;                    ///< The far plane distance for shadow projection
 
     void serialize(io::BinaryWriter& writer) const override;
     void deserialize(io::BinaryReader& reader) override;
