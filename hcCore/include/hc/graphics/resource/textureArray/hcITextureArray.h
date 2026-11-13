@@ -21,6 +21,32 @@ namespace hc::graphics::resource::textureArray
     filterMode::Type magFilter = filterMode::Linear;            ///< The magnification filter mode for the texture array. Determines how the texture is sampled when it is scaled up.
     mipmapMode::Type mipmapMode = mipmapMode::None;             ///< The mipmap mode for the texture array. Determines how mipmaps are sampled.
     wrapMode::Type wrap = wrapMode::Repeat;                     ///< The wrap mode for the texture array. Determines how texture coordinates outside the [0, 1] range are handled.
+
+    /**
+     * @brief Indicates whether the initialization settings are valid.
+     * @param outErrorMessage A string to hold the error message if the settings are
+     * invalid.
+     * @returns True if the settings are valid, false otherwise.
+     */
+    inline bool isValid(String& outErrorMessage) const
+    {
+      if (width == 0)
+      {
+        outErrorMessage = "Width must be greater than zero.";
+        return false;
+      }
+      if (height == 0)
+      {
+        outErrorMessage = "Height must be greater than zero.";
+        return false;
+      }
+      if (layerCount == 0)
+      {
+        outErrorMessage = "Layer count must be greater than zero.";
+        return false;
+      }
+      return true;
+    }
   };
 
   /**
